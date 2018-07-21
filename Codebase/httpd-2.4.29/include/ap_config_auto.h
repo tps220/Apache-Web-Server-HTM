@@ -2,7 +2,7 @@
 /* include/ap_config_auto.h.in.  Generated from configure.in by autoheader.  */
 
 /* SuExec root directory */
-#define AP_DOC_ROOT "/usr/local/src/apache/www"
+#define AP_DOC_ROOT "/usr/local/src/github/Codebase/www/"
 
 /* Enable DTrace probes */
 /* #undef AP_ENABLE_DTRACE */
@@ -23,7 +23,7 @@
 #define AP_HTTPD_USER "apache"
 
 /* SuExec log file */
-#define AP_LOG_EXEC "/usr/local/src/apache/www/apache.log"
+#define AP_LOG_EXEC "/usr/local/src/github/Codebase/www/apache.log"
 
 /* Listening sockets are non-blocking when there are more than 1 */
 #define AP_NONBLOCK_WHEN_MULTI_LISTEN 1

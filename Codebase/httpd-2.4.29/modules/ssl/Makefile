@@ -1,8 +1,8 @@
-top_srcdir   = /usr/local/src/apache/httpd-2.4.29
-top_builddir = /usr/local/src/apache/httpd-2.4.29
-srcdir       = /usr/local/src/apache/httpd-2.4.29/modules/ssl
-builddir     = /usr/local/src/apache/httpd-2.4.29/modules/ssl
-VPATH        = /usr/local/src/apache/httpd-2.4.29/modules/ssl
+top_srcdir   = /usr/local/src/github/Codebase/httpd-2.4.29
+top_builddir = /usr/local/src/github/Codebase/httpd-2.4.29
+srcdir       = /usr/local/src/github/Codebase/httpd-2.4.29/modules/ssl
+builddir     = /usr/local/src/github/Codebase/httpd-2.4.29/modules/ssl
+VPATH        = /usr/local/src/github/Codebase/httpd-2.4.29/modules/ssl
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.

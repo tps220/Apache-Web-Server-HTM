@@ -1,8 +1,8 @@
-top_srcdir   = /usr/local/src/apache/httpd-2.4.29
-top_builddir = /usr/local/src/apache/httpd-2.4.29
-srcdir       = /usr/local/src/apache/httpd-2.4.29/test
-builddir     = /usr/local/src/apache/httpd-2.4.29/test
-VPATH        = /usr/local/src/apache/httpd-2.4.29/test
+top_srcdir   = /usr/local/src/github/Codebase/httpd-2.4.29
+top_builddir = /usr/local/src/github/Codebase/httpd-2.4.29
+srcdir       = /usr/local/src/github/Codebase/httpd-2.4.29/test
+builddir     = /usr/local/src/github/Codebase/httpd-2.4.29/test
+VPATH        = /usr/local/src/github/Codebase/httpd-2.4.29/test
 
 # no targets: we don't want to build anything by default. if you want the
 # test programs, then "make test"

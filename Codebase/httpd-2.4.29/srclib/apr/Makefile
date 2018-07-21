@@ -1,8 +1,8 @@
 
 srcdir=.
 
-top_srcdir=/usr/local/src/apache/httpd-2.4.29/srclib/apr
-top_blddir=/usr/local/src/apache/httpd-2.4.29/srclib/apr
+top_srcdir=/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr
+top_blddir=/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr
 
 #
 # APR (Apache Portable Runtime) library Makefile.
@@ -41,8 +41,8 @@ TARGETS = $(TARGET_LIB) include/private/apr_escape_test_char.h apr.exp apr-confi
 LT_VERSION = -version-info 6:3:6
 
 # bring in rules.mk for standard functionality
-include /usr/local/src/apache/httpd-2.4.29/srclib/apr/build/apr_rules.mk
-include /usr/local/src/apache/httpd-2.4.29/srclib/apr/build-outputs.mk
+include /usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr/build/apr_rules.mk
+include /usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr/build-outputs.mk
 
 CLEAN_TARGETS = apr-config.out apr.exp exports.c export_vars.c .make.dirs \
 	build/apr_rules.out tools/gen_test_char \
@@ -58,7 +58,7 @@ EXTRACLEAN_TARGETS = configure aclocal.m4 include/arch/unix/apr_private.h.in \
 	build/argz.m4 build/libtool.m4 build/ltoptions.m4 \
 	build/ltsugar.m4 build/ltversion.m4 build/lt~obsolete.m4
 
-prefix=/usr/local/apr/
+prefix=/usr/local/apr
 exec_prefix=${prefix}
 bindir=${exec_prefix}/bin
 libdir=${exec_prefix}/lib

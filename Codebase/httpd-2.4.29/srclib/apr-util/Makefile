@@ -10,7 +10,7 @@ APRUTIL_DOTTED_VERSION=1.6.1
 srcdir = .
 
 
-INCLUDES = -I/usr/local/src/apache/httpd-2.4.29/srclib/apr-util/include -I/usr/local/src/apache/httpd-2.4.29/srclib/apr-util/include/private  -I/usr/local/apr//include/apr-1  
+INCLUDES = -I/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util/include -I/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util/include/private  -I/usr/local/apr//include/apr-1  
 APRUTIL_LDFLAGS = 
 APRUTIL_LIBS = -lexpat /usr/local/apr//lib/libapr-1.la -luuid -lrt -lcrypt -lpthread -ldl
 
@@ -47,8 +47,8 @@ LDADD_crypto_commoncrypto =
 TARGETS = $(TARGET_LIB) aprutil.exp apu-config.out $(APU_MODULES)
 
 # bring in rules.mk for standard functionality
-include /usr/local/src/apache/httpd-2.4.29/srclib/apr-util/build/rules.mk
-include /usr/local/src/apache/httpd-2.4.29/srclib/apr-util/build-outputs.mk
+include /usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util/build/rules.mk
+include /usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util/build-outputs.mk
 
 CLEAN_SUBDIRS = test 
 
@@ -68,8 +68,8 @@ exec_prefix=${prefix}
 bindir=${exec_prefix}/bin
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include/apr-${APRUTIL_MAJOR_VERSION}
-top_srcdir=/usr/local/src/apache/httpd-2.4.29/srclib/apr-util
-top_blddir=/usr/local/src/apache/httpd-2.4.29/srclib/apr-util
+top_srcdir=/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util
+top_blddir=/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util
 
 # Create apu-config script suitable for the install tree
 apu-config.out: $(APU_CONFIG)

@@ -27,11 +27,11 @@
 # installation when using *external* copies of apr/apr-util,
 # the absolute path must be used, not DESTDIR-relocated.
 
-if test -f ${DESTDIR}/usr/local/apr//bin/apr-1-config; then
-   APR_CONFIG=${DESTDIR}/usr/local/apr//bin/apr-1-config
+if test -f ${DESTDIR}/usr/local/apr/bin/apr-1-config; then
+   APR_CONFIG=${DESTDIR}/usr/local/apr/bin/apr-1-config
    APU_CONFIG=${DESTDIR}/usr/local/apr/bin/apu-1-config
 else
-   APR_CONFIG=/usr/local/apr//bin/apr-1-config
+   APR_CONFIG=/usr/local/apr/bin/apr-1-config
    APU_CONFIG=/usr/local/apr/bin/apu-1-config
 fi
 

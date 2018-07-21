@@ -24,9 +24,9 @@
 #
 # Configuration variables
 #
-apr_builddir=/usr/local/src/apache/httpd-2.4.29/srclib/apr
-apr_builders=/usr/local/src/apache/httpd-2.4.29/srclib/apr/build
-top_builddir=/usr/local/src/apache/httpd-2.4.29/srclib/apr
+apr_builddir=/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr
+apr_builders=/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr/build
+top_builddir=/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr
 
 # Some layouts require knowing what version we are at.
 APR_MAJOR_VERSION=1

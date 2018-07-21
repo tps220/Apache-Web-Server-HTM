@@ -10,7 +10,7 @@ srcdir = .
 #   programs such as sockperf, that have to be invoked in a special sequence
 #   or with special parameters
 
-INCLUDES = -I/usr/local/src/apache/httpd-2.4.29/srclib/apr-util/include -I/usr/local/src/apache/httpd-2.4.29/srclib/apr-util/include/private  -I/usr/local/apr//include/apr-1  
+INCLUDES = -I/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util/include -I/usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util/include/private  -I/usr/local/apr//include/apr-1  
 
 STDTEST_PORTABLE = dbd testall
 
@@ -28,7 +28,7 @@ LOCAL_LIBS = ../libaprutil-${APRUTIL_MAJOR_VERSION}1.la
 CLEAN_TARGETS = manyfile.bin testfile.txt data/sqlite*.db
 
 # bring in rules.mk for standard functionality
-include /usr/local/src/apache/httpd-2.4.29/srclib/apr-util/build/rules.mk
+include /usr/local/src/github/Codebase/httpd-2.4.29/srclib/apr-util/build/rules.mk
 APRUTIL_LIBS = -lexpat /usr/local/apr//lib/libapr-1.la -luuid -lrt -lcrypt -lpthread -ldl
 APRUTIL_LDFLAGS = $(ALL_LDFLAGS) -no-install 
 
