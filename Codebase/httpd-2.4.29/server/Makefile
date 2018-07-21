@@ -1,8 +1,8 @@
-top_srcdir   = /usr/local/src/apache_normal/httpd-2.4.29
-top_builddir = /usr/local/src/apache_normal/httpd-2.4.29
-srcdir       = /usr/local/src/apache_normal/httpd-2.4.29/server
-builddir     = /usr/local/src/apache_normal/httpd-2.4.29/server
-VPATH        = /usr/local/src/apache_normal/httpd-2.4.29/server
+top_srcdir   = /usr/local/src/apache/httpd-2.4.29
+top_builddir = /usr/local/src/apache/httpd-2.4.29
+srcdir       = /usr/local/src/apache/httpd-2.4.29/server
+builddir     = /usr/local/src/apache/httpd-2.4.29/server
+VPATH        = /usr/local/src/apache/httpd-2.4.29/server
 
 CLEAN_TARGETS = gen_test_char test_char.h \
 	ApacheCoreOS2.def httpd.exp export_files \

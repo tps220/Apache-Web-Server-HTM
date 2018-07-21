@@ -1,8 +1,8 @@
-top_srcdir   = /usr/local/src/apache_normal/httpd-2.4.29
-top_builddir = /usr/local/src/apache_normal/httpd-2.4.29
-srcdir       = /usr/local/src/apache_normal/httpd-2.4.29/support
-builddir     = /usr/local/src/apache_normal/httpd-2.4.29/support
-VPATH        = /usr/local/src/apache_normal/httpd-2.4.29/support
+top_srcdir   = /usr/local/src/apache/httpd-2.4.29
+top_builddir = /usr/local/src/apache/httpd-2.4.29
+srcdir       = /usr/local/src/apache/httpd-2.4.29/support
+builddir     = /usr/local/src/apache/httpd-2.4.29/support
+VPATH        = /usr/local/src/apache/httpd-2.4.29/support
 DISTCLEAN_TARGETS = apxs apachectl dbmmanage log_server_status \
 	logresolve.pl phf_abuse_log.cgi split-logfile envvars-std
 

@@ -43,7 +43,7 @@ extern "C" {
 /* XXX: Even if store/retrieve/remove is atomic, isn't it useful to note
  * independently that status and iterate may or may not be?
  */
-#define AP_SOCACHE_FLAG_NOTMPSAFE (0x0001)
+#define AP_SOCACHE_FLAG_NOTMPSAFE (0x0000)
 
 /** A cache instance. */
 typedef struct ap_socache_instance_t ap_socache_instance_t;

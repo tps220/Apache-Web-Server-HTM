@@ -1,8 +1,8 @@
-top_srcdir   = /usr/local/src/apache_normal/httpd-2.4.29
-top_builddir = /usr/local/src/apache_normal/httpd-2.4.29
-srcdir       = /usr/local/src/apache_normal/httpd-2.4.29
-builddir     = /usr/local/src/apache_normal/httpd-2.4.29
-VPATH        = /usr/local/src/apache_normal/httpd-2.4.29
+top_srcdir   = /usr/local/src/apache/httpd-2.4.29
+top_builddir = /usr/local/src/apache/httpd-2.4.29
+srcdir       = /usr/local/src/apache/httpd-2.4.29
+builddir     = /usr/local/src/apache/httpd-2.4.29
+VPATH        = /usr/local/src/apache/httpd-2.4.29
 
 SUBDIRS = srclib os server modules support
 CLEAN_SUBDIRS = test
