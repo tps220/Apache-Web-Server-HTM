@@ -1,0 +1,192 @@
+\hypertarget{apr__random_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/random/unix/apr\+\_\+random.c File Reference}
+\label{apr__random_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/random/unix/apr\+\_\+random.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/random/unix/apr\+\_\+random.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+random.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+Include dependency graph for apr\+\_\+random.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{apr__random_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structapr__random__pool__t}{apr\+\_\+random\+\_\+pool\+\_\+t}
+\item 
+struct \hyperlink{structapr__random__t}{apr\+\_\+random\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{apr__random_8c_ac6afabdc09a49a433ee19d8a9486056d}{min}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~((\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}) $<$ (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}) ? (\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}) \+: (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))
+\item 
+\#define \hyperlink{apr__random_8c_aac1b53bc969a22049e46c24760703261}{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+O\+O\+LS}~32
+\item 
+\#define \hyperlink{apr__random_8c_aa7431ade223d7541b12c1546805edae9}{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+H\+A\+S\+H\+\_\+\+S\+I\+ZE}~1024
+\item 
+\#define \hyperlink{apr__random_8c_a60c0723fc0790226e3ed270a84607e3d}{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+S\+E\+E\+D\+\_\+\+S\+I\+ZE}~32
+\item 
+\#define \hyperlink{apr__random_8c_a534934c7b7f79c1b747fa09419ff76b5}{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+S\+H\+\_\+\+S\+E\+C\+R\+E\+T\+\_\+\+S\+I\+ZE}~32
+\item 
+\#define \hyperlink{apr__random_8c_a902537405846575c903cc269da1f6022}{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+I\+N\+S\+E\+C\+U\+RE}~32
+\item 
+\#define \hyperlink{apr__random_8c_a895be3acec677ce5f1591d5b17a5e5b6}{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+S\+E\+C\+U\+RE}~320
+\item 
+\#define \hyperlink{apr__random_8c_a1a5fd5601dd62cacb2aab0c32c28b51d}{hash\+\_\+init}(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h})~(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h})-\/$>$init(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h})
+\item 
+\#define \hyperlink{apr__random_8c_a640418801eb35f572e24870bf3488ac2}{hash\+\_\+add}(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h})-\/$>$add(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h},\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})
+\item 
+\#define \hyperlink{apr__random_8c_a0cec9d5731f65555316bd7167d817860}{hash\+\_\+finish}(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h},  \hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h})-\/$>$finish(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h},\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{apr__random_8c_a1961406c0af51085f634defe740cbf52}{hash}(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h},  \hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~\hyperlink{apr__random_8c_a1a5fd5601dd62cacb2aab0c32c28b51d}{hash\+\_\+init}(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h}),\hyperlink{apr__random_8c_a640418801eb35f572e24870bf3488ac2}{hash\+\_\+add}(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h},\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}),\hyperlink{apr__random_8c_a0cec9d5731f65555316bd7167d817860}{hash\+\_\+finish}(\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h},\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{apr__random_8c_a0cd00ebb109770207d586376dc388612}{crypt\+\_\+setkey}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  k)~(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})-\/$>$set\+\_\+key((\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})-\/$>$\hyperlink{structdata}{data},k)
+\item 
+\#define \hyperlink{apr__random_8c_a198fcc3a2a16254860137328aa8a5a0c}{crypt\+\_\+crypt}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{apr__sha1_8h_acc4166708bf1c388b137e1861496523e}{out},  \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in})~(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})-\/$>$crypt((\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})-\/$>$date,\hyperlink{apr__sha1_8h_acc4166708bf1c388b137e1861496523e}{out},\hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in})
+\item 
+\#define \hyperlink{apr__random_8c_af312b11774f43da21a85107fec55903c}{K\+\_\+size}(\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})~((\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})-\/$>$\hyperlink{group__apr__random_ga8cfe7466d86884deb41f9260608ef429}{key\+\_\+hash}-\/$>$\hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size})
+\item 
+\#define \hyperlink{apr__random_8c_aeab4a8b2450bbdcd7eddc958f3313598}{B\+\_\+size}(\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})~((\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})-\/$>$\hyperlink{group__apr__random_gac92511b46c28b5d66795bde787ad8f84}{prng\+\_\+hash}-\/$>$\hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size})
+\item 
+\#define \hyperlink{apr__random_8c_a742b0a421a54a0aa45eeba5fba9722b6}{H\+\_\+size}(\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})~(\hyperlink{apr__random_8c_aeab4a8b2450bbdcd7eddc958f3313598}{B\+\_\+size}(\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})+\hyperlink{apr__random_8c_af312b11774f43da21a85107fec55903c}{K\+\_\+size}(\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g}))
+\item 
+\#define \hyperlink{apr__random_8c_a94b39f3e55991444c14cdf54d2ef790a}{H\+\_\+current}(\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structapr__random__pool__t}{apr\+\_\+random\+\_\+pool\+\_\+t} \hyperlink{apr__random_8c_a788265fb68b7fbaed7e7bfa8869f8be0}{apr\+\_\+random\+\_\+pool\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__library_ga5bce35b8cafc88f9fbc9abfa1490265b}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{group__apr__random_ga7a5815c3aa0c70a34fe428af0dee40bb}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__random__t}{apr\+\_\+random\+\_\+t} $\ast$)
+\item 
+\hyperlink{group__apr__allocator_ga9cb19a118179bbd8625eacfec66a9ab8}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+I\+N\+S\+E\+C\+U\+RE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+I\+N\+S\+E\+C\+U\+RE}}
+\index{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+I\+N\+S\+E\+C\+U\+RE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+I\+N\+S\+E\+C\+U\+RE}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+I\+N\+S\+E\+C\+U\+RE}{APR_RANDOM_DEFAULT_G_FOR_INSECURE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+I\+N\+S\+E\+C\+U\+RE~32}\hypertarget{apr__random_8c_a902537405846575c903cc269da1f6022}{}\label{apr__random_8c_a902537405846575c903cc269da1f6022}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+S\+E\+C\+U\+RE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+S\+E\+C\+U\+RE}}
+\index{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+S\+E\+C\+U\+RE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+S\+E\+C\+U\+RE}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+S\+E\+C\+U\+RE}{APR_RANDOM_DEFAULT_G_FOR_SECURE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+\_\+\+F\+O\+R\+\_\+\+S\+E\+C\+U\+RE~320}\hypertarget{apr__random_8c_a895be3acec677ce5f1591d5b17a5e5b6}{}\label{apr__random_8c_a895be3acec677ce5f1591d5b17a5e5b6}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+S\+H\+\_\+\+S\+E\+C\+R\+E\+T\+\_\+\+S\+I\+ZE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+S\+H\+\_\+\+S\+E\+C\+R\+E\+T\+\_\+\+S\+I\+ZE}}
+\index{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+S\+H\+\_\+\+S\+E\+C\+R\+E\+T\+\_\+\+S\+I\+ZE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+S\+H\+\_\+\+S\+E\+C\+R\+E\+T\+\_\+\+S\+I\+ZE}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+S\+H\+\_\+\+S\+E\+C\+R\+E\+T\+\_\+\+S\+I\+ZE}{APR_RANDOM_DEFAULT_HASH_SECRET_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+S\+H\+\_\+\+S\+E\+C\+R\+E\+T\+\_\+\+S\+I\+ZE~32}\hypertarget{apr__random_8c_a534934c7b7f79c1b747fa09419ff76b5}{}\label{apr__random_8c_a534934c7b7f79c1b747fa09419ff76b5}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+O\+O\+LS@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+O\+O\+LS}}
+\index{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+O\+O\+LS@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+O\+O\+LS}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+O\+O\+LS}{APR_RANDOM_DEFAULT_POOLS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+O\+O\+LS~32}\hypertarget{apr__random_8c_aac1b53bc969a22049e46c24760703261}{}\label{apr__random_8c_aac1b53bc969a22049e46c24760703261}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+H\+A\+S\+H\+\_\+\+S\+I\+ZE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+H\+A\+S\+H\+\_\+\+S\+I\+ZE}}
+\index{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+H\+A\+S\+H\+\_\+\+S\+I\+ZE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+H\+A\+S\+H\+\_\+\+S\+I\+ZE}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+H\+A\+S\+H\+\_\+\+S\+I\+ZE}{APR_RANDOM_DEFAULT_REHASH_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+H\+A\+S\+H\+\_\+\+S\+I\+ZE~1024}\hypertarget{apr__random_8c_aa7431ade223d7541b12c1546805edae9}{}\label{apr__random_8c_aa7431ade223d7541b12c1546805edae9}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+S\+E\+E\+D\+\_\+\+S\+I\+ZE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+S\+E\+E\+D\+\_\+\+S\+I\+ZE}}
+\index{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+S\+E\+E\+D\+\_\+\+S\+I\+ZE@{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+S\+E\+E\+D\+\_\+\+S\+I\+ZE}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+S\+E\+E\+D\+\_\+\+S\+I\+ZE}{APR_RANDOM_DEFAULT_RESEED_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+R\+A\+N\+D\+O\+M\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+S\+E\+E\+D\+\_\+\+S\+I\+ZE~32}\hypertarget{apr__random_8c_a60c0723fc0790226e3ed270a84607e3d}{}\label{apr__random_8c_a60c0723fc0790226e3ed270a84607e3d}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!B\+\_\+size@{B\+\_\+size}}
+\index{B\+\_\+size@{B\+\_\+size}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{B\+\_\+size}{B_size}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+\_\+size(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf g}}
+\end{DoxyParamCaption}
+)~(({\bf g})-\/$>${\bf prng\+\_\+hash}-\/$>${\bf size})}\hypertarget{apr__random_8c_aeab4a8b2450bbdcd7eddc958f3313598}{}\label{apr__random_8c_aeab4a8b2450bbdcd7eddc958f3313598}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!crypt\+\_\+crypt@{crypt\+\_\+crypt}}
+\index{crypt\+\_\+crypt@{crypt\+\_\+crypt}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{crypt\+\_\+crypt}{crypt_crypt}}]{\setlength{\rightskip}{0pt plus 5cm}\#define crypt\+\_\+crypt(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf c}, }
+\item[{}]{{\bf out}, }
+\item[{}]{{\bf in}}
+\end{DoxyParamCaption}
+)~({\bf c})-\/$>$crypt(({\bf c})-\/$>$date,{\bf out},{\bf in})}\hypertarget{apr__random_8c_a198fcc3a2a16254860137328aa8a5a0c}{}\label{apr__random_8c_a198fcc3a2a16254860137328aa8a5a0c}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!crypt\+\_\+setkey@{crypt\+\_\+setkey}}
+\index{crypt\+\_\+setkey@{crypt\+\_\+setkey}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{crypt\+\_\+setkey}{crypt_setkey}}]{\setlength{\rightskip}{0pt plus 5cm}\#define crypt\+\_\+setkey(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf c}, }
+\item[{}]{k}
+\end{DoxyParamCaption}
+)~({\bf c})-\/$>$set\+\_\+key(({\bf c})-\/$>${\bf data},k)}\hypertarget{apr__random_8c_a0cd00ebb109770207d586376dc388612}{}\label{apr__random_8c_a0cd00ebb109770207d586376dc388612}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!H\+\_\+current@{H\+\_\+current}}
+\index{H\+\_\+current@{H\+\_\+current}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{H\+\_\+current}{H_current}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+\_\+current(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf g}}
+\end{DoxyParamCaption}
+)}\hypertarget{apr__random_8c_a94b39f3e55991444c14cdf54d2ef790a}{}\label{apr__random_8c_a94b39f3e55991444c14cdf54d2ef790a}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+(((\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})->insecure\_started && !(\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})->secure\_started) \(\backslash\)
+                      ? (\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})->H\_waiting : (\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g})->\hyperlink{pcregrep_8txt_a628ab430cad0d4a0741ded1e4fcbd2b9}{H})
+\end{DoxyCode}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!H\+\_\+size@{H\+\_\+size}}
+\index{H\+\_\+size@{H\+\_\+size}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{H\+\_\+size}{H_size}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+\_\+size(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf g}}
+\end{DoxyParamCaption}
+)~({\bf B\+\_\+size}({\bf g})+{\bf K\+\_\+size}({\bf g}))}\hypertarget{apr__random_8c_a742b0a421a54a0aa45eeba5fba9722b6}{}\label{apr__random_8c_a742b0a421a54a0aa45eeba5fba9722b6}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!hash@{hash}}
+\index{hash@{hash}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{hash}{hash}}]{\setlength{\rightskip}{0pt plus 5cm}\#define hash(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf h}, }
+\item[{}]{{\bf r}, }
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~{\bf hash\+\_\+init}({\bf h}),{\bf hash\+\_\+add}({\bf h},{\bf b},{\bf n}),{\bf hash\+\_\+finish}({\bf h},{\bf r})}\hypertarget{apr__random_8c_a1961406c0af51085f634defe740cbf52}{}\label{apr__random_8c_a1961406c0af51085f634defe740cbf52}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!hash\+\_\+add@{hash\+\_\+add}}
+\index{hash\+\_\+add@{hash\+\_\+add}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{hash\+\_\+add}{hash_add}}]{\setlength{\rightskip}{0pt plus 5cm}\#define hash\+\_\+add(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf h}, }
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~({\bf h})-\/$>$add({\bf h},{\bf b},{\bf n})}\hypertarget{apr__random_8c_a640418801eb35f572e24870bf3488ac2}{}\label{apr__random_8c_a640418801eb35f572e24870bf3488ac2}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!hash\+\_\+finish@{hash\+\_\+finish}}
+\index{hash\+\_\+finish@{hash\+\_\+finish}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{hash\+\_\+finish}{hash_finish}}]{\setlength{\rightskip}{0pt plus 5cm}\#define hash\+\_\+finish(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf h}, }
+\item[{}]{{\bf r}}
+\end{DoxyParamCaption}
+)~({\bf h})-\/$>$finish({\bf h},{\bf r})}\hypertarget{apr__random_8c_a0cec9d5731f65555316bd7167d817860}{}\label{apr__random_8c_a0cec9d5731f65555316bd7167d817860}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!hash\+\_\+init@{hash\+\_\+init}}
+\index{hash\+\_\+init@{hash\+\_\+init}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{hash\+\_\+init}{hash_init}}]{\setlength{\rightskip}{0pt plus 5cm}\#define hash\+\_\+init(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf h}}
+\end{DoxyParamCaption}
+)~({\bf h})-\/$>$init({\bf h})}\hypertarget{apr__random_8c_a1a5fd5601dd62cacb2aab0c32c28b51d}{}\label{apr__random_8c_a1a5fd5601dd62cacb2aab0c32c28b51d}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!K\+\_\+size@{K\+\_\+size}}
+\index{K\+\_\+size@{K\+\_\+size}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{K\+\_\+size}{K_size}}]{\setlength{\rightskip}{0pt plus 5cm}\#define K\+\_\+size(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf g}}
+\end{DoxyParamCaption}
+)~(({\bf g})-\/$>${\bf key\+\_\+hash}-\/$>${\bf size})}\hypertarget{apr__random_8c_af312b11774f43da21a85107fec55903c}{}\label{apr__random_8c_af312b11774f43da21a85107fec55903c}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!min@{min}}
+\index{min@{min}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{min}{min}}]{\setlength{\rightskip}{0pt plus 5cm}\#define min(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~(({\bf a}) $<$ ({\bf b}) ? ({\bf a}) \+: ({\bf b}))}\hypertarget{apr__random_8c_ac6afabdc09a49a433ee19d8a9486056d}{}\label{apr__random_8c_ac6afabdc09a49a433ee19d8a9486056d}
+
+
+\subsection{Typedef Documentation}
+\index{apr\+\_\+random.\+c@{apr\+\_\+random.\+c}!apr\+\_\+random\+\_\+pool\+\_\+t@{apr\+\_\+random\+\_\+pool\+\_\+t}}
+\index{apr\+\_\+random\+\_\+pool\+\_\+t@{apr\+\_\+random\+\_\+pool\+\_\+t}!apr\+\_\+random.\+c@{apr\+\_\+random.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+random\+\_\+pool\+\_\+t}{apr_random_pool_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+random\+\_\+pool\+\_\+t}  {\bf apr\+\_\+random\+\_\+pool\+\_\+t}}\hypertarget{apr__random_8c_a788265fb68b7fbaed7e7bfa8869f8be0}{}\label{apr__random_8c_a788265fb68b7fbaed7e7bfa8869f8be0}

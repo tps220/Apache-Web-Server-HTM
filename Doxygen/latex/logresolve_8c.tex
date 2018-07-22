@@ -1,0 +1,263 @@
+\hypertarget{logresolve_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/logresolve.c File Reference}
+\label{logresolve_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/logresolve.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/logresolve.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+getopt.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+network\+\_\+io.\+h\char`\"{}}\\*
+Include dependency graph for logresolve.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{logresolve_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{logresolve_8c_a4245ea3fba0358165b402a7a615419bb}{R\+E\+A\+D\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}~128$\ast$1024
+\item 
+\#define \hyperlink{logresolve_8c_adad24756bf4c417f225c47af5a6f0a94}{W\+R\+I\+T\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}~128$\ast$1024
+\item 
+\#define \hyperlink{logresolve_8c_a7aff5d16b9585c2a4e92b076b4dd778a}{L\+I\+N\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}~128$\ast$1024
+\item 
+\#define \hyperlink{logresolve_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{NL}~\hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{A\+P\+R\+\_\+\+E\+O\+L\+\_\+\+S\+TR}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{logresolve_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{logresolve.\+c@{logresolve.\+c}!L\+I\+N\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE@{L\+I\+N\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}}
+\index{L\+I\+N\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE@{L\+I\+N\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}!logresolve.\+c@{logresolve.\+c}}
+\subsubsection[{\texorpdfstring{L\+I\+N\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}{LINE_BUF_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define L\+I\+N\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE~128$\ast$1024}\hypertarget{logresolve_8c_a7aff5d16b9585c2a4e92b076b4dd778a}{}\label{logresolve_8c_a7aff5d16b9585c2a4e92b076b4dd778a}
+\index{logresolve.\+c@{logresolve.\+c}!NL@{NL}}
+\index{NL@{NL}!logresolve.\+c@{logresolve.\+c}}
+\subsubsection[{\texorpdfstring{NL}{NL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define NL~{\bf A\+P\+R\+\_\+\+E\+O\+L\+\_\+\+S\+TR}}\hypertarget{logresolve_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{}\label{logresolve_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}
+\index{logresolve.\+c@{logresolve.\+c}!R\+E\+A\+D\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE@{R\+E\+A\+D\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}}
+\index{R\+E\+A\+D\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE@{R\+E\+A\+D\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}!logresolve.\+c@{logresolve.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+A\+D\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}{READ_BUF_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+A\+D\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE~128$\ast$1024}\hypertarget{logresolve_8c_a4245ea3fba0358165b402a7a615419bb}{}\label{logresolve_8c_a4245ea3fba0358165b402a7a615419bb}
+\index{logresolve.\+c@{logresolve.\+c}!W\+R\+I\+T\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE@{W\+R\+I\+T\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}}
+\index{W\+R\+I\+T\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE@{W\+R\+I\+T\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}!logresolve.\+c@{logresolve.\+c}}
+\subsubsection[{\texorpdfstring{W\+R\+I\+T\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE}{WRITE_BUF_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+R\+I\+T\+E\+\_\+\+B\+U\+F\+\_\+\+S\+I\+ZE~128$\ast$1024}\hypertarget{logresolve_8c_adad24756bf4c417f225c47af5a6f0a94}{}\label{logresolve_8c_adad24756bf4c417f225c47af5a6f0a94}
+
+
+\subsection{Function Documentation}
+\index{logresolve.\+c@{logresolve.\+c}!main@{main}}
+\index{main@{main}!logresolve.\+c@{logresolve.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{logresolve_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{logresolve_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+132 \{
+133     \hyperlink{structapr__file__t}{apr\_file\_t} * outfile;
+134     \hyperlink{structapr__file__t}{apr\_file\_t} * \hyperlink{group__APACHE__CORE__MD5_ga3fb008193e92b33c1bb53a980b708b75}{infile};
+135     \hyperlink{structapr__getopt__t}{apr\_getopt\_t} * \hyperlink{pcregrep_8txt_a0f1f758594514cf4d93c83f0a3f92ec9}{o};
+136     \hyperlink{structapr__pool__t}{apr\_pool\_t} * \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+137     \hyperlink{structapr__pool__t}{apr\_pool\_t} *pline;
+138     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+139     \textcolor{keyword}{const} \textcolor{keywordtype}{char} * \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+140     \textcolor{keywordtype}{char} * \hyperlink{group__APR__Util__MC_gaff19ebd812fbce997074d41b1073c76e}{stats} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+141     \textcolor{keywordtype}{char} * inbuffer;
+142     \textcolor{keywordtype}{char} * outbuffer;
+143     \textcolor{keywordtype}{char} * \hyperlink{group__APACHE__CORE__LOG_gaa843820216dea79b53a16310cb08e8dd}{line};
+144     \textcolor{keywordtype}{int} doublelookups = 0;
+145 
+146     \textcolor{keywordflow}{if} (apr\_app\_initialize(&\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+147         \textcolor{keywordflow}{return} 1;
+148     \}
+149     atexit(apr\_terminate);
+150 
+151     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}) \{
+152         shortname = apr\_filepath\_name\_get(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+153     \}
+154 
+155     \textcolor{keywordflow}{if} (\hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pool, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+156         \textcolor{keywordflow}{return} 1;
+157     \}
+158     apr\_file\_open\_stderr(&errfile, pool);
+159     apr\_getopt\_init(&o, pool, \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+160 
+161     \textcolor{keywordflow}{while} (1) \{
+162         \textcolor{keywordtype}{char} \hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt};
+163         status = apr\_getopt(o, \textcolor{stringliteral}{"s:c"}, &opt, &arg);
+164         \textcolor{keywordflow}{if} (status == \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF}) \{
+165             \textcolor{keywordflow}{break};
+166         \}
+167         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+168             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+169         \}
+170         \textcolor{keywordflow}{else} \{
+171             \textcolor{keywordflow}{switch} (opt) \{
+172             \textcolor{keywordflow}{case} \textcolor{charliteral}{'c'}:
+173                 \textcolor{keywordflow}{if} (doublelookups) \{
+174                     \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+175                 \}
+176                 doublelookups = 1;
+177                 \textcolor{keywordflow}{break};
+178             \textcolor{keywordflow}{case} \textcolor{charliteral}{'s'}:
+179                 \textcolor{keywordflow}{if} (stats) \{
+180                     \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+181                 \}
+182                 stats = apr\_pstrdup(pool, arg);
+183                 \textcolor{keywordflow}{break};
+184             \} \textcolor{comment}{/* switch */}
+185         \} \textcolor{comment}{/* else */}
+186     \} \textcolor{comment}{/* while */}
+187 
+188     apr\_file\_open\_stdout(&outfile, pool);
+189     apr\_file\_open\_stdin(&infile, pool);
+190 
+191     \textcolor{comment}{/* Allocate two new 10k file buffers */}
+192     \textcolor{keywordflow}{if} (   (outbuffer = apr\_palloc(pool, \hyperlink{logresolve_8c_adad24756bf4c417f225c47af5a6f0a94}{WRITE\_BUF\_SIZE})) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}
+193         || (inbuffer  = apr\_palloc(pool, \hyperlink{logresolve_8c_a4245ea3fba0358165b402a7a615419bb}{READ\_BUF\_SIZE}))  == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}
+194         || (line      = apr\_palloc(pool, \hyperlink{logresolve_8c_a7aff5d16b9585c2a4e92b076b4dd778a}{LINE\_BUF\_SIZE}))  == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+195         \textcolor{keywordflow}{return} 1;
+196     \}
+197 
+198     \textcolor{comment}{/* Set the buffers */}
+199     apr\_file\_buffer\_set(infile, inbuffer, \hyperlink{logresolve_8c_a4245ea3fba0358165b402a7a615419bb}{READ\_BUF\_SIZE});
+200     apr\_file\_buffer\_set(outfile, outbuffer, \hyperlink{logresolve_8c_adad24756bf4c417f225c47af5a6f0a94}{WRITE\_BUF\_SIZE});
+201 
+202     \hyperlink{structcache}{cache} = apr\_hash\_make(pool);
+203     \textcolor{keywordflow}{if} (\hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pline, pool) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+204         \textcolor{keywordflow}{return} 1;
+205     \}
+206 
+207     \textcolor{keywordflow}{while} (apr\_file\_gets(line, \hyperlink{logresolve_8c_a7aff5d16b9585c2a4e92b076b4dd778a}{LINE\_BUF\_SIZE}, infile) == 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+208         \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_gaad01339e89106fdf68f57ef118956fa9}{hostname};
+209         \textcolor{keywordtype}{char} *\hyperlink{README_8txt_a19182255958ecd8b8391dae50d6673c1}{space};
+210         \hyperlink{structapr__sockaddr__t}{apr\_sockaddr\_t} *ip;
+211         \hyperlink{structapr__sockaddr__t}{apr\_sockaddr\_t} *ipdouble;
+212         \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__LISTEN_gafd856f29d11272d954fe05b9c1ca84dd}{dummy}[] = \textcolor{stringliteral}{" "} \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR};
+213 
+214         \textcolor{keywordflow}{if} (line[0] == \textcolor{charliteral}{'\(\backslash\)0'}) \{
+215             \textcolor{keywordflow}{continue};
+216         \}
+217 
+218         \textcolor{comment}{/* Count our log entries */}
+219         entries++;
+220 
+221         \textcolor{comment}{/* Check if this could even be an IP address */}
+222         \textcolor{keywordflow}{if} (!\hyperlink{group__apr__ctype_ga9d30f3c5d538c21c6d50565cda8654d0}{apr\_isxdigit}(line[0]) && line[0] != \textcolor{charliteral}{':'}) \{
+223             withname++;
+224             apr\_file\_puts(line, outfile);
+225             \textcolor{keywordflow}{continue};
+226         \}
+227 
+228         \textcolor{comment}{/* Terminate the line at the next space */}
+229         \textcolor{keywordflow}{if} ((space = strchr(line, \textcolor{charliteral}{' '})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+230             *space = \textcolor{charliteral}{'\(\backslash\)0'};
+231         \}
+232         \textcolor{keywordflow}{else} \{
+233             space = \hyperlink{group__APACHE__CORE__LISTEN_gafd856f29d11272d954fe05b9c1ca84dd}{dummy};
+234         \}
+235 
+236         \textcolor{comment}{/* See if we have it in our cache */}
+237         hostname = (\textcolor{keywordtype}{char} *) apr\_hash\_get(\hyperlink{structcache}{cache}, line, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+238         \textcolor{keywordflow}{if} (hostname) \{
+239             apr\_file\_printf(outfile, \textcolor{stringliteral}{"%s %s"}, hostname, space + 1);
+240             cachehits++;
+241             \textcolor{keywordflow}{continue};
+242         \}
+243 
+244         \textcolor{comment}{/* Parse the IP address */}
+245         status = apr\_sockaddr\_info\_get(&ip, line, \hyperlink{group__apr__network__io_gaa7a33b17a7d0820b09ef489bd3328f85}{APR\_UNSPEC}, 0, 0, pline);
+246         \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+247             \textcolor{comment}{/* Not an IP address */}
+248             withname++;
+249             *space = \textcolor{charliteral}{' '};
+250             apr\_file\_puts(line, outfile);
+251             \textcolor{keywordflow}{continue};
+252         \}
+253 
+254         \textcolor{comment}{/* This does not make much sense, but historically "resolves" means}
+255 \textcolor{comment}{         * "parsed as an IP address". It does not mean we actually resolved}
+256 \textcolor{comment}{         * the IP address into a hostname.}
+257 \textcolor{comment}{         */}
+258         resolves++;
+259 
+260         \textcolor{comment}{/* From here on our we cache each result, even if it was not}
+261 \textcolor{comment}{         * successful}
+262 \textcolor{comment}{         */}
+263         cachesize++;
+264 
+265         \textcolor{comment}{/* Try and perform a reverse lookup */}
+266         status = apr\_getnameinfo(&hostname, ip, 0) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+267         \textcolor{keywordflow}{if} (status || hostname == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+268             \textcolor{comment}{/* Could not perform a reverse lookup */}
+269             *space = \textcolor{charliteral}{' '};
+270             apr\_file\_puts(line, outfile);
+271             noreverse++;
+272 
+273             \textcolor{comment}{/* Add to cache */}
+274             *space = \textcolor{charliteral}{'\(\backslash\)0'};
+275             apr\_hash\_set(\hyperlink{structcache}{cache}, line, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+276                          apr\_pstrdup(apr\_hash\_pool\_get(\hyperlink{structcache}{cache}), line));
+277             \textcolor{keywordflow}{continue};
+278         \}
+279 
+280         \textcolor{comment}{/* Perform a double lookup */}
+281         \textcolor{keywordflow}{if} (doublelookups) \{
+282             \textcolor{comment}{/* Do a forward lookup on our hostname, and see if that matches our}
+283 \textcolor{comment}{             * original IP address.}
+284 \textcolor{comment}{             */}
+285             status = apr\_sockaddr\_info\_get(&ipdouble, hostname, ip->\hyperlink{structapr__sockaddr__t_ac17f6e803928cfc29069a6e62dcb3a52}{family}, 0,
+286                                            0, pline);
+287             \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} ||
+288                 memcmp(ipdouble->\hyperlink{structapr__sockaddr__t_a6e1b71121ada4047acde36c6777b5442}{ipaddr\_ptr}, ip->\hyperlink{structapr__sockaddr__t_a6e1b71121ada4047acde36c6777b5442}{ipaddr\_ptr}, ip->
+      \hyperlink{structapr__sockaddr__t_a81be21b2eb968b83ca36183213c99867}{ipaddr\_len})) \{
+289                 \textcolor{comment}{/* Double-lookup failed  */}
+290                 *space = \textcolor{charliteral}{' '};
+291                 apr\_file\_puts(line, outfile);
+292                 doublefailed++;
+293 
+294                 \textcolor{comment}{/* Add to cache */}
+295                 *space = \textcolor{charliteral}{'\(\backslash\)0'};
+296                 apr\_hash\_set(\hyperlink{structcache}{cache}, line, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+297                              apr\_pstrdup(apr\_hash\_pool\_get(\hyperlink{structcache}{cache}), line));
+298                 \textcolor{keywordflow}{continue};
+299             \}
+300         \}
+301 
+302         \textcolor{comment}{/* Outout the resolved name */}
+303         apr\_file\_printf(outfile, \textcolor{stringliteral}{"%s %s"}, hostname, space + 1);
+304 
+305         \textcolor{comment}{/* Store it in the cache */}
+306         apr\_hash\_set(\hyperlink{structcache}{cache}, line, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+307                      apr\_pstrdup(apr\_hash\_pool\_get(\hyperlink{structcache}{cache}), hostname));
+308 
+309         apr\_pool\_clear(pline);
+310     \}
+311 
+312     \textcolor{comment}{/* Flush any remaining output */}
+313     apr\_file\_flush(outfile);
+314 
+315     \textcolor{keywordflow}{if} (stats) \{
+316         \hyperlink{structapr__file__t}{apr\_file\_t} *statsfile;
+317         \textcolor{keywordflow}{if} (apr\_file\_open(&statsfile, stats,
+318                           \hyperlink{group__apr__file__open__flags_gac598bb95fc9476b0bf2ed0b1c308842c}{APR\_FOPEN\_WRITE} | \hyperlink{group__apr__file__open__flags_gafe94f21ccbf411172e70e7f473af251a}{APR\_FOPEN\_CREATE} | 
+      \hyperlink{group__apr__file__open__flags_ga09b05a5bd5db534b93794f7657bcb146}{APR\_FOPEN\_TRUNCATE},
+319                           \hyperlink{group__apr__file__permissions_ga8552adb50d545d5fc7faeabb4f4a388f}{APR\_OS\_DEFAULT}, pool) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+320             apr\_file\_printf(errfile, \textcolor{stringliteral}{"%s: Could not open %s for writing."},
+321                             shortname, stats);
+322             \textcolor{keywordflow}{return} 1;
+323         \}
+324         print\_statistics(statsfile);
+325         apr\_file\_close(statsfile);
+326     \}
+327 
+328     \textcolor{keywordflow}{return} 0;
+329 \}
+\end{DoxyCode}

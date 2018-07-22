@@ -1,0 +1,74 @@
+\hypertarget{sdbm__hash_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr-\/util/dbm/sdbm/sdbm\+\_\+hash.c File Reference}
+\label{sdbm__hash_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/dbm/sdbm/sdbm\+\_\+hash.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/dbm/sdbm/sdbm\+\_\+hash.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+sdbm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}sdbm\+\_\+private.\+h\char`\"{}}\\*
+Include dependency graph for sdbm\+\_\+hash.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sdbm__hash_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{sdbm__hash_8c_a4743bed1bee36f8709f57b061871f320}{D\+U\+FF}~/$\ast$ go ahead and use the loop-\/unrolled version $\ast$/
+\item 
+\#define \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{H\+A\+S\+HC}~\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n} = $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga6a62b60443be1d042194af15ce934193}{str}++ + 65599 $\ast$ \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+long \hyperlink{sdbm__hash_8c_a0576408541e7196b4e67f30b44e1f6c4}{sdbm\+\_\+hash} (const char $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga6a62b60443be1d042194af15ce934193}{str}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{sdbm\+\_\+hash.\+c@{sdbm\+\_\+hash.\+c}!D\+U\+FF@{D\+U\+FF}}
+\index{D\+U\+FF@{D\+U\+FF}!sdbm\+\_\+hash.\+c@{sdbm\+\_\+hash.\+c}}
+\subsubsection[{\texorpdfstring{D\+U\+FF}{DUFF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+U\+FF~/$\ast$ go ahead and use the loop-\/unrolled version $\ast$/}\hypertarget{sdbm__hash_8c_a4743bed1bee36f8709f57b061871f320}{}\label{sdbm__hash_8c_a4743bed1bee36f8709f57b061871f320}
+\index{sdbm\+\_\+hash.\+c@{sdbm\+\_\+hash.\+c}!H\+A\+S\+HC@{H\+A\+S\+HC}}
+\index{H\+A\+S\+HC@{H\+A\+S\+HC}!sdbm\+\_\+hash.\+c@{sdbm\+\_\+hash.\+c}}
+\subsubsection[{\texorpdfstring{H\+A\+S\+HC}{HASHC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+A\+S\+HC~{\bf n} = $\ast${\bf str}++ + 65599 $\ast$ {\bf n}}\hypertarget{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{}\label{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}
+
+
+\subsection{Function Documentation}
+\index{sdbm\+\_\+hash.\+c@{sdbm\+\_\+hash.\+c}!sdbm\+\_\+hash@{sdbm\+\_\+hash}}
+\index{sdbm\+\_\+hash@{sdbm\+\_\+hash}!sdbm\+\_\+hash.\+c@{sdbm\+\_\+hash.\+c}}
+\subsubsection[{\texorpdfstring{sdbm\+\_\+hash(const char $\ast$str, int len)}{sdbm_hash(const char *str, int len)}}]{\setlength{\rightskip}{0pt plus 5cm}long sdbm\+\_\+hash (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{str, }
+\item[{{\bf int}}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{sdbm__hash_8c_a0576408541e7196b4e67f30b44e1f6c4}{}\label{sdbm__hash_8c_a0576408541e7196b4e67f30b44e1f6c4}
+
+\begin{DoxyCode}
+37 \{
+38     \textcolor{keyword}{register} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = 0;
+39 
+40 \textcolor{preprocessor}{#define DUFF    }\textcolor{comment}{/* go ahead and use the loop-unrolled version */}\textcolor{preprocessor}{}
+41 \textcolor{preprocessor}{#ifdef DUFF}
+42 
+43 \textcolor{preprocessor}{#define HASHC   n = *str++ + 65599 * n}
+44 
+45     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} > 0) \{
+46         \textcolor{keyword}{register} \textcolor{keywordtype}{int} loop = (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} + 8 - 1) >> 3;
+47 
+48         \textcolor{keywordflow}{switch}(\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} & (8 - 1)) \{
+49         \textcolor{keywordflow}{case} 0: \textcolor{keywordflow}{do} \{
+50             \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{HASHC}; \textcolor{keywordflow}{case} 7: \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{HASHC};
+51         \textcolor{keywordflow}{case} 6: \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{HASHC}; \textcolor{keywordflow}{case} 5: \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{HASHC};
+52         \textcolor{keywordflow}{case} 4: \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{HASHC}; \textcolor{keywordflow}{case} 3: \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{HASHC};
+53         \textcolor{keywordflow}{case} 2: \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{HASHC}; \textcolor{keywordflow}{case} 1: \hyperlink{sdbm__hash_8c_aeb7071778435a4016d53d10393cd3b47}{HASHC};
+54             \} \textcolor{keywordflow}{while} (--loop);
+55         \}
+56 
+57     \}
+58 \textcolor{preprocessor}{#else}
+59     \textcolor{keywordflow}{while} (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}--)
+60         n = *\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str}++ + 65599 * \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n};
+61 \textcolor{preprocessor}{#endif}
+62     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n};
+63 \}
+\end{DoxyCode}

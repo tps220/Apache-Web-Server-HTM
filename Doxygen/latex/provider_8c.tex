@@ -1,0 +1,182 @@
+\hypertarget{provider_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/provider.c File Reference}
+\label{provider_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/provider.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/provider.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+tables.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+Include dependency graph for provider.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{provider_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{provider_8c_ad4e49a371518f348d13b2d4e83b79b9e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{provider_8c_afe7819768d9cc46e4ac0bf5d78307d6c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$)
+\item 
+\hyperlink{provider_8c_a5930c6947e2cbde3b4cbb34217265f5f}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{provider.\+c@{provider.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!provider.\+c@{provider.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t)}{AP_DECLARE(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{provider_8c_ad4e49a371518f348d13b2d4e83b79b9e}{}\label{provider_8c_ad4e49a371518f348d13b2d4e83b79b9e}
+
+\begin{DoxyCode}
+40 \{
+41     \hyperlink{structapr__hash__t}{apr\_hash\_t} *provider\_group\_hash, *provider\_version\_hash;
+42 
+43     \textcolor{keywordflow}{if} (global\_providers == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+44         global\_providers = apr\_hash\_make(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool});
+45         global\_providers\_names = apr\_hash\_make(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool});
+46         apr\_pool\_cleanup\_register(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, cleanup\_global\_providers,
+47                                   apr\_pool\_cleanup\_null);
+48     \}
+49 
+50     \textcolor{comment}{/* First, deal with storing the provider away */}
+51     provider\_group\_hash = apr\_hash\_get(global\_providers, \hyperlink{group__APACHE__CORE__PROVIDER_ga18132929f57a6c2d0891c61c1c0cb8d7}{provider\_group},
+52                                        \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+53 
+54     \textcolor{keywordflow}{if} (!provider\_group\_hash) \{
+55         provider\_group\_hash = apr\_hash\_make(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool});
+56         apr\_hash\_set(global\_providers, \hyperlink{group__APACHE__CORE__PROVIDER_ga18132929f57a6c2d0891c61c1c0cb8d7}{provider\_group}, 
+      \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+57                      provider\_group\_hash);
+58 
+59     \}
+60 
+61     provider\_version\_hash = apr\_hash\_get(provider\_group\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_gac9b5b8486ecec94f244ca0a7dd0dada4}{provider\_name},
+62                                          \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+63 
+64     \textcolor{keywordflow}{if} (!provider\_version\_hash) \{
+65         provider\_version\_hash = apr\_hash\_make(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool});
+66         apr\_hash\_set(provider\_group\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_gac9b5b8486ecec94f244ca0a7dd0dada4}{provider\_name}, 
+      \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+67                      provider\_version\_hash);
+68 
+69     \}
+70 
+71     \textcolor{comment}{/* just set it. no biggy if it was there before. */}
+72     apr\_hash\_set(provider\_version\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_ga291e44ce8408a927d2d5c4538fb0b600}{provider\_version}, 
+      \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+73                  \hyperlink{group__APACHE__CORE__PROVIDER_gaf2965ad047e50f953739b8977445ed88}{provider});
+74 
+75     \textcolor{comment}{/* Now, tuck away the provider names in an easy-to-get format */}
+76     provider\_group\_hash = apr\_hash\_get(global\_providers\_names, \hyperlink{group__APACHE__CORE__PROVIDER_ga18132929f57a6c2d0891c61c1c0cb8d7}{provider\_group},
+77                                        \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+78 
+79     \textcolor{keywordflow}{if} (!provider\_group\_hash) \{
+80         provider\_group\_hash = apr\_hash\_make(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool});
+81         apr\_hash\_set(global\_providers\_names, \hyperlink{group__APACHE__CORE__PROVIDER_ga18132929f57a6c2d0891c61c1c0cb8d7}{provider\_group}, 
+      \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+82                      provider\_group\_hash);
+83 
+84     \}
+85 
+86     provider\_version\_hash = apr\_hash\_get(provider\_group\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_ga291e44ce8408a927d2d5c4538fb0b600}{provider\_version},
+87                                          \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+88 
+89     \textcolor{keywordflow}{if} (!provider\_version\_hash) \{
+90         provider\_version\_hash = apr\_hash\_make(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool});
+91         apr\_hash\_set(provider\_group\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_ga291e44ce8408a927d2d5c4538fb0b600}{provider\_version}, 
+      \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+92                      provider\_version\_hash);
+93 
+94     \}
+95 
+96     \textcolor{comment}{/* just set it. no biggy if it was there before. */}
+97     apr\_hash\_set(provider\_version\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_gac9b5b8486ecec94f244ca0a7dd0dada4}{provider\_name}, 
+      \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+98                  \hyperlink{group__APACHE__CORE__PROVIDER_gac9b5b8486ecec94f244ca0a7dd0dada4}{provider\_name});
+99 
+100     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+101 \}
+\end{DoxyCode}
+\index{provider.\+c@{provider.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!provider.\+c@{provider.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(void $\ast$)}{AP_DECLARE(void *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{provider_8c_afe7819768d9cc46e4ac0bf5d78307d6c}{}\label{provider_8c_afe7819768d9cc46e4ac0bf5d78307d6c}
+
+\begin{DoxyCode}
+106 \{
+107     \hyperlink{structapr__hash__t}{apr\_hash\_t} *provider\_group\_hash, *provider\_name\_hash;
+108 
+109     \textcolor{keywordflow}{if} (global\_providers == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+110         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+111     \}
+112 
+113     provider\_group\_hash = apr\_hash\_get(global\_providers, \hyperlink{group__APACHE__CORE__PROVIDER_ga18132929f57a6c2d0891c61c1c0cb8d7}{provider\_group},
+114                                        \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+115 
+116     \textcolor{keywordflow}{if} (provider\_group\_hash == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+117         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+118     \}
+119 
+120     provider\_name\_hash = apr\_hash\_get(provider\_group\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_gac9b5b8486ecec94f244ca0a7dd0dada4}{provider\_name},
+121                                       \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+122 
+123     \textcolor{keywordflow}{if} (provider\_name\_hash == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+124         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+125     \}
+126 
+127     \textcolor{keywordflow}{return} apr\_hash\_get(provider\_name\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_ga291e44ce8408a927d2d5c4538fb0b600}{provider\_version},
+128                         \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+129 \}
+\end{DoxyCode}
+\index{provider.\+c@{provider.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!provider.\+c@{provider.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+array\+\_\+header\+\_\+t $\ast$)}{AP_DECLARE(apr_array_header_t *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+array\+\_\+header\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{provider_8c_a5930c6947e2cbde3b4cbb34217265f5f}{}\label{provider_8c_a5930c6947e2cbde3b4cbb34217265f5f}
+
+\begin{DoxyCode}
+134 \{
+135     \hyperlink{structapr__array__header__t}{apr\_array\_header\_t} *\hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret} = apr\_array\_make(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, 10, \textcolor{keyword}{sizeof}(
+      \hyperlink{structap__list__provider__names__t}{ap\_list\_provider\_names\_t}));
+136     \hyperlink{structap__list__provider__names__t}{ap\_list\_provider\_names\_t} *entry;
+137     \hyperlink{structapr__hash__t}{apr\_hash\_t} *provider\_group\_hash, *\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h};
+138     \hyperlink{structapr__hash__index__t}{apr\_hash\_index\_t} *hi;
+139     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val};
+140 
+141     \textcolor{keywordflow}{if} (global\_providers\_names == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+142         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+143     \}
+144 
+145     provider\_group\_hash = apr\_hash\_get(global\_providers\_names, \hyperlink{group__APACHE__CORE__PROVIDER_ga18132929f57a6c2d0891c61c1c0cb8d7}{provider\_group},
+146                                        \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+147 
+148     \textcolor{keywordflow}{if} (provider\_group\_hash == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+149         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+150     \}
+151 
+152     h = apr\_hash\_get(provider\_group\_hash, \hyperlink{group__APACHE__CORE__PROVIDER_ga291e44ce8408a927d2d5c4538fb0b600}{provider\_version},
+153                                       \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+154 
+155     \textcolor{keywordflow}{if} (h == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+156         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+157     \}
+158 
+159     \textcolor{keywordflow}{for} (hi = apr\_hash\_first(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, h); hi; hi = apr\_hash\_next(hi)) \{
+160         apr\_hash\_this(hi, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, (\textcolor{keywordtype}{void} *)&val);
+161         entry = apr\_array\_push(ret);
+162         entry->\hyperlink{structap__list__provider__names__t_aa319bf306aec1ce526f4e6e19c538ff9}{provider\_name} = apr\_pstrdup(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, val);
+163     \}
+164     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+165 \}
+\end{DoxyCode}

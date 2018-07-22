@@ -1,0 +1,67 @@
+\hypertarget{mod__auth__basic_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/aaa/mod\+\_\+auth\+\_\+basic.c File Reference}
+\label{mod__auth__basic_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/aaa/mod\+\_\+auth\+\_\+basic.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/aaa/mod\+\_\+auth\+\_\+basic.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+base64.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+expr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+auth.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+auth\+\_\+basic.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__auth__basic_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structauth__basic__config__rec}{auth\+\_\+basic\+\_\+config\+\_\+rec}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__auth__basic_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}~/$\ast$ for \hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp} $\ast$/
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__auth__basic_8c_a2384ae2789463aebea509bec523f924f}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (auth\+\_\+basic)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__auth__basic_8c_a793df0a9f3a2b515deb329662c21a0ff}{auth\+\_\+basic\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+auth\+\_\+basic.\+c@{mod\+\_\+auth\+\_\+basic.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+auth\+\_\+basic.\+c@{mod\+\_\+auth\+\_\+basic.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC~/$\ast$ for {\bf strcasecmp} $\ast$/}\hypertarget{mod__auth__basic_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__auth__basic_8c_a88a4bf7f483aad3f3945773f3383e713}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+auth\+\_\+basic.\+c@{mod\+\_\+auth\+\_\+basic.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+auth\+\_\+basic.\+c@{mod\+\_\+auth\+\_\+basic.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(auth\+\_\+basic)}{AP_DECLARE_MODULE(auth_basic)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{auth\+\_\+basic}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__auth__basic_8c_a2384ae2789463aebea509bec523f924f}{}\label{mod__auth__basic_8c_a2384ae2789463aebea509bec523f924f}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+auth\+\_\+basic.\+c@{mod\+\_\+auth\+\_\+basic.\+c}!auth\+\_\+basic\+\_\+module@{auth\+\_\+basic\+\_\+module}}
+\index{auth\+\_\+basic\+\_\+module@{auth\+\_\+basic\+\_\+module}!mod\+\_\+auth\+\_\+basic.\+c@{mod\+\_\+auth\+\_\+basic.\+c}}
+\subsubsection[{\texorpdfstring{auth\+\_\+basic\+\_\+module}{auth_basic_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} auth\+\_\+basic\+\_\+module}\hypertarget{mod__auth__basic_8c_a793df0a9f3a2b515deb329662c21a0ff}{}\label{mod__auth__basic_8c_a793df0a9f3a2b515deb329662c21a0ff}

@@ -1,0 +1,464 @@
+\hypertarget{props_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/dav/main/props.c File Reference}
+\label{props_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/props.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/props.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+dav.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+Include dependency graph for props.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{props_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdav__propdb}{dav\+\_\+propdb}
+\item 
+struct \hyperlink{structdav__rollback__item}{dav\+\_\+rollback\+\_\+item}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{props_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}
+\item 
+\#define \hyperlink{props_8c_a8190f5b47166b4efe3f7377915210250}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}
+\item 
+\#define \hyperlink{props_8c_a828c0ad700ba99fbd3d05a64eedcf62b}{D\+A\+V\+\_\+\+D\+I\+S\+A\+B\+L\+E\+\_\+\+W\+R\+I\+T\+A\+B\+L\+E\+\_\+\+P\+R\+O\+PS}~1
+\item 
+\#define \hyperlink{props_8c_a773a043db03bc97ace9d2d373e50c133}{D\+A\+V\+\_\+\+E\+M\+P\+T\+Y\+\_\+\+V\+A\+L\+UE}~\char`\"{}\textbackslash{}0\char`\"{}    /$\ast$ T\+WO null terms $\ast$/
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structdav__rollback__item}{dav\+\_\+rollback\+\_\+item} \hyperlink{props_8c_a047d2912071c62d6cac8729d9c666ea0}{dav\+\_\+rollback\+\_\+item}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \\*
+\hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a619646ae453a00c5e6186f021dd59516}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontenttype} = D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+RE, 
+\hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a69061a97e27e35a1e3f8019665993d0b}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontentlanguage}, 
+\hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a568cddeb31179b04faad95065f344ca9}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+lockdiscovery}, 
+\hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600ac3e2547416f37c1eaa10a7e0ec008304}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+supportedlock}, 
+\\*
+\hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a818eff638c568a4d2693f06411438f2c}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+\+U\+N\+K\+N\+O\+WN}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{props_8c_a6cf889c691920d48451a89dc46fef863}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__error}{dav\+\_\+error} $\ast$)
+\item 
+\hyperlink{props_8c_ab414dd1559a5a3e2d27c1120b55c2853}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{props_8c_ab3e92204420d77073189142a5ec8de4b}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__get__props__result}{dav\+\_\+get\+\_\+props\+\_\+result})
+\item 
+\hyperlink{props_8c_a93845153444839be34a230f182b66388}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{props.\+c@{props.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}{APR_WANT_BYTEFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}\hypertarget{props_8c_a8190f5b47166b4efe3f7377915210250}{}\label{props_8c_a8190f5b47166b4efe3f7377915210250}
+\index{props.\+c@{props.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}{APR_WANT_STDIO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}\hypertarget{props_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{}\label{props_8c_a4f3ace9204c571a34c0b2b9bd23b1133}
+\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+D\+I\+S\+A\+B\+L\+E\+\_\+\+W\+R\+I\+T\+A\+B\+L\+E\+\_\+\+P\+R\+O\+PS@{D\+A\+V\+\_\+\+D\+I\+S\+A\+B\+L\+E\+\_\+\+W\+R\+I\+T\+A\+B\+L\+E\+\_\+\+P\+R\+O\+PS}}
+\index{D\+A\+V\+\_\+\+D\+I\+S\+A\+B\+L\+E\+\_\+\+W\+R\+I\+T\+A\+B\+L\+E\+\_\+\+P\+R\+O\+PS@{D\+A\+V\+\_\+\+D\+I\+S\+A\+B\+L\+E\+\_\+\+W\+R\+I\+T\+A\+B\+L\+E\+\_\+\+P\+R\+O\+PS}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+I\+S\+A\+B\+L\+E\+\_\+\+W\+R\+I\+T\+A\+B\+L\+E\+\_\+\+P\+R\+O\+PS}{DAV_DISABLE_WRITABLE_PROPS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+D\+I\+S\+A\+B\+L\+E\+\_\+\+W\+R\+I\+T\+A\+B\+L\+E\+\_\+\+P\+R\+O\+PS~1}\hypertarget{props_8c_a828c0ad700ba99fbd3d05a64eedcf62b}{}\label{props_8c_a828c0ad700ba99fbd3d05a64eedcf62b}
+\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+E\+M\+P\+T\+Y\+\_\+\+V\+A\+L\+UE@{D\+A\+V\+\_\+\+E\+M\+P\+T\+Y\+\_\+\+V\+A\+L\+UE}}
+\index{D\+A\+V\+\_\+\+E\+M\+P\+T\+Y\+\_\+\+V\+A\+L\+UE@{D\+A\+V\+\_\+\+E\+M\+P\+T\+Y\+\_\+\+V\+A\+L\+UE}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+E\+M\+P\+T\+Y\+\_\+\+V\+A\+L\+UE}{DAV_EMPTY_VALUE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+E\+M\+P\+T\+Y\+\_\+\+V\+A\+L\+UE~\char`\"{}\textbackslash{}0\char`\"{}    /$\ast$ T\+WO null terms $\ast$/}\hypertarget{props_8c_a773a043db03bc97ace9d2d373e50c133}{}\label{props_8c_a773a043db03bc97ace9d2d373e50c133}
+
+
+\subsection{Typedef Documentation}
+\index{props.\+c@{props.\+c}!dav\+\_\+rollback\+\_\+item@{dav\+\_\+rollback\+\_\+item}}
+\index{dav\+\_\+rollback\+\_\+item@{dav\+\_\+rollback\+\_\+item}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+rollback\+\_\+item}{dav_rollback_item}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf dav\+\_\+rollback\+\_\+item}  {\bf dav\+\_\+rollback\+\_\+item}}\hypertarget{props_8c_a047d2912071c62d6cac8729d9c666ea0}{}\label{props_8c_a047d2912071c62d6cac8729d9c666ea0}
+
+
+\subsection{Enumeration Type Documentation}
+\subsubsection[{\texorpdfstring{anonymous enum}{anonymous enum}}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\hypertarget{props_8c_abed82baf7f470b522273a3e37c24c600}{}\label{props_8c_abed82baf7f470b522273a3e37c24c600}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontenttype@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontenttype}!props.\+c@{props.\+c}}\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontenttype@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontenttype}}\item[{\em 
+D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontenttype\hypertarget{props_8c_abed82baf7f470b522273a3e37c24c600a619646ae453a00c5e6186f021dd59516}{}\label{props_8c_abed82baf7f470b522273a3e37c24c600a619646ae453a00c5e6186f021dd59516}
+}]\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontentlanguage@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontentlanguage}!props.\+c@{props.\+c}}\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontentlanguage@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontentlanguage}}\item[{\em 
+D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+getcontentlanguage\hypertarget{props_8c_abed82baf7f470b522273a3e37c24c600a69061a97e27e35a1e3f8019665993d0b}{}\label{props_8c_abed82baf7f470b522273a3e37c24c600a69061a97e27e35a1e3f8019665993d0b}
+}]\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+lockdiscovery@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+lockdiscovery}!props.\+c@{props.\+c}}\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+lockdiscovery@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+lockdiscovery}}\item[{\em 
+D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+lockdiscovery\hypertarget{props_8c_abed82baf7f470b522273a3e37c24c600a568cddeb31179b04faad95065f344ca9}{}\label{props_8c_abed82baf7f470b522273a3e37c24c600a568cddeb31179b04faad95065f344ca9}
+}]\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+supportedlock@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+supportedlock}!props.\+c@{props.\+c}}\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+supportedlock@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+supportedlock}}\item[{\em 
+D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+supportedlock\hypertarget{props_8c_abed82baf7f470b522273a3e37c24c600ac3e2547416f37c1eaa10a7e0ec008304}{}\label{props_8c_abed82baf7f470b522273a3e37c24c600ac3e2547416f37c1eaa10a7e0ec008304}
+}]\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+\+U\+N\+K\+N\+O\+WN@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+\+U\+N\+K\+N\+O\+WN}!props.\+c@{props.\+c}}\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+\+U\+N\+K\+N\+O\+WN@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+\+U\+N\+K\+N\+O\+WN}}\item[{\em 
+D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+R\+E\+\_\+\+U\+N\+K\+N\+O\+WN\hypertarget{props_8c_abed82baf7f470b522273a3e37c24c600a818eff638c568a4d2693f06411438f2c}{}\label{props_8c_abed82baf7f470b522273a3e37c24c600a818eff638c568a4d2693f06411438f2c}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+204      \{
+205     \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a619646ae453a00c5e6186f021dd59516}{DAV\_PROPID\_CORE\_getcontenttype} = 
+      \hyperlink{group__MOD__DAV_gac4c19935b3c101a1aaae9d3bdbf85720}{DAV\_PROPID\_CORE},
+206     \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a69061a97e27e35a1e3f8019665993d0b}{DAV\_PROPID\_CORE\_getcontentlanguage},
+207     \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a568cddeb31179b04faad95065f344ca9}{DAV\_PROPID\_CORE\_lockdiscovery},
+208     \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600ac3e2547416f37c1eaa10a7e0ec008304}{DAV\_PROPID\_CORE\_supportedlock},
+209 
+210     \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a818eff638c568a4d2693f06411438f2c}{DAV\_PROPID\_CORE\_UNKNOWN}
+211 \};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(dav\+\_\+error $\ast$)}{DAV_DECLARE(dav_error *)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf dav\+\_\+error} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{props_8c_a6cf889c691920d48451a89dc46fef863}{}\label{props_8c_a6cf889c691920d48451a89dc46fef863}
+
+\begin{DoxyCode}
+526 \{
+527     \hyperlink{structdav__propdb}{dav\_propdb} *\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb} = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{keyword}{sizeof}(*propdb));
+528 
+529     *p\_propdb = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+530 
+531 \textcolor{preprocessor}{#if DAV\_DEBUG}
+532     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gace5ccd456846e6c0fdd4da4136bd9a44}{resource}->\hyperlink{structdav__resource_a2bc6c2d5b1b4c45493fcff35a07fbf31}{uri} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+533         \textcolor{keywordflow}{return} dav\_new\_error(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{HTTP\_INTERNAL\_SERVER\_ERROR}, 0, 0,
+534                              \textcolor{stringliteral}{"INTERNAL DESIGN ERROR: resource must define "}
+535                              \textcolor{stringliteral}{"its URI."});
+536     \}
+537 \textcolor{preprocessor}{#endif}
+538 
+539     propdb->\hyperlink{structdav__propdb_a72ed02c6c1e4c31ec9dba21e391aa455}{r} = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+540     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&propdb->\hyperlink{structdav__propdb_a6973ecc8f81aff87c31f924840e492b7}{p}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+541     propdb->\hyperlink{structdav__propdb_ae1c59a594efb948fc6ba0a046ad336c1}{resource} = \hyperlink{group__MOD__DAV_gace5ccd456846e6c0fdd4da4136bd9a44}{resource};
+542     propdb->\hyperlink{structdav__propdb_a346b1730a214b26be55c8ce1124ce16b}{ns\_xlate} = \hyperlink{group__MOD__DAV_gaa25c4e4aa77339ae2c25aeca085180c7}{ns\_xlate};
+543 
+544     propdb->\hyperlink{structdav__propdb_a1e52f1dc673f63827c00e13a651329f3}{db\_hooks} = \hyperlink{group__MOD__DAV_ga186a872deb178e4e1a28279277e1e8e3}{DAV\_GET\_HOOKS\_PROPDB}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+545 
+546     propdb->\hyperlink{structdav__propdb_af6bc223f74019af9d86189737b3b59b9}{lockdb} = \hyperlink{group__MOD__DAV_ga4d2e2ae951dbf7731ef129422cb95674}{lockdb};
+547 
+548     \textcolor{comment}{/* always defer actual open, to avoid expense of accessing db}
+549 \textcolor{comment}{     * when only live properties are involved}
+550 \textcolor{comment}{     */}
+551     propdb->\hyperlink{structdav__propdb_a5fc44d255b4349337a30308e3dd22ed2}{deferred} = 1;
+552 
+553     \textcolor{comment}{/* ### what to do about closing the propdb on server failure? */}
+554 
+555     *p\_propdb = \hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb};
+556     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+557 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{props_8c_a6cf889c691920d48451a89dc46fef863_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(void)}{DAV_DECLARE(void)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{props_8c_ab414dd1559a5a3e2d27c1120b55c2853}{}\label{props_8c_ab414dd1559a5a3e2d27c1120b55c2853}
+
+\begin{DoxyCode}
+560 \{
+561     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+562         (*\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db\_hooks->close)(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db);
+563     \}
+564 
+565     \textcolor{comment}{/* Currently, mod\_dav's pool usage doesn't allow clearing this pool. */}
+566 \textcolor{preprocessor}{#if 0}
+567     apr\_pool\_destroy(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->p);
+568 \textcolor{preprocessor}{#endif}
+569 \}
+\end{DoxyCode}
+\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(dav\+\_\+get\+\_\+props\+\_\+result)}{DAV_DECLARE(dav_get_props_result)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf dav\+\_\+get\+\_\+props\+\_\+result}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{props_8c_ab3e92204420d77073189142a5ec8de4b}{}\label{props_8c_ab3e92204420d77073189142a5ec8de4b}
+
+\begin{DoxyCode}
+573 \{
+574     \textcolor{keyword}{const} \hyperlink{structdav__hooks__propdb}{dav\_hooks\_db} *db\_hooks = \hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db\_hooks;
+575     \hyperlink{structapr__text__header}{apr\_text\_header} \hyperlink{group__APR__Util__XML_gacbb04b51077cdb37e6a8cfa4c93acb07}{hdr} = \{ 0 \};
+576     \hyperlink{structapr__text__header}{apr\_text\_header} hdr\_ns = \{ 0 \};
+577     \hyperlink{structdav__get__props__result}{dav\_get\_props\_result} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result} = \{ 0 \};
+578     \textcolor{keywordtype}{int} found\_contenttype = 0;
+579     \textcolor{keywordtype}{int} found\_contentlang = 0;
+580     \hyperlink{group__MOD__DAV_ga4c0cd73bce52d0eda981ce54973f27af}{dav\_prop\_insert} unused\_inserted;
+581 
+582     \textcolor{comment}{/* if not just getting supported live properties,}
+583 \textcolor{comment}{     * scan all properties in the dead prop database}
+584 \textcolor{comment}{     */}
+585     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what} != \hyperlink{group__MOD__DAV_gga4c0cd73bce52d0eda981ce54973f27afaf615c37a063c2d90eac2dad9e07438e3}{DAV\_PROP\_INSERT\_SUPPORTED}) \{
+586         \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->deferred) \{
+587             \textcolor{comment}{/* ### what to do with db open error? */}
+588             (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) dav\_really\_open\_db(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}, 1 \textcolor{comment}{/*ro*/});
+589         \}
+590 
+591         \textcolor{comment}{/* initialize the result with some start tags... */}
+592         apr\_text\_append(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->p, &hdr,
+593                         \textcolor{stringliteral}{"<D:propstat>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR}
+594                         \textcolor{stringliteral}{"<D:prop>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+595 
+596         \textcolor{comment}{/* if there ARE properties, then scan them */}
+597         \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+598             \hyperlink{structdav__xmlns__info}{dav\_xmlns\_info} *xi = dav\_xmlns\_create(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->p);
+599             \hyperlink{structdav__prop__name}{dav\_prop\_name} \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name};
+600             \hyperlink{structdav__error}{dav\_error} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+601 
+602             \textcolor{comment}{/* define (up front) any namespaces the db might need */}
+603             (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) (*db\_hooks->\hyperlink{structdav__hooks__propdb_ab54e309d9a5269e3bb3bd42a2198d42c}{define\_namespaces})(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db, xi);
+604 
+605             \textcolor{comment}{/* get the first property name, beginning the scan */}
+606             err = (*db\_hooks->\hyperlink{structdav__hooks__propdb_ae5f74e4694737191489f1b2d77bc91ba}{first\_name})(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db, &name);
+607             \textcolor{keywordflow}{while} (!err && name.\hyperlink{structdav__prop__name_ac32f7eed5e8b6b8fd7f193b253b036dc}{ns}) \{
+608 
+609                 \textcolor{comment}{/*}
+610 \textcolor{comment}{                ** We also look for <DAV:getcontenttype> and}
+611 \textcolor{comment}{                ** <DAV:getcontentlanguage>. If they are not stored as dead}
+612 \textcolor{comment}{                ** properties, then we need to perform a subrequest to get}
+613 \textcolor{comment}{                ** their values (if any).}
+614 \textcolor{comment}{                */}
+615                 \textcolor{keywordflow}{if} (*name.\hyperlink{structdav__prop__name_ac32f7eed5e8b6b8fd7f193b253b036dc}{ns} == \textcolor{charliteral}{'D'} && strcmp(name.\hyperlink{structdav__prop__name_ac32f7eed5e8b6b8fd7f193b253b036dc}{ns}, \textcolor{stringliteral}{"DAV:"}) == 0
+616                     && *name.\hyperlink{structdav__prop__name_ac6a5df59f29b22f0d9129257d49ef3e7}{name} == \textcolor{charliteral}{'g'}) \{
+617                     \textcolor{keywordflow}{if} (strcmp(name.\hyperlink{structdav__prop__name_ac6a5df59f29b22f0d9129257d49ef3e7}{name}, \textcolor{stringliteral}{"getcontenttype"}) == 0) \{
+618                         found\_contenttype = 1;
+619                     \}
+620                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(name.\hyperlink{structdav__prop__name_ac6a5df59f29b22f0d9129257d49ef3e7}{name}, \textcolor{stringliteral}{"getcontentlanguage"}) == 0) \{
+621                         found\_contentlang = 1;
+622                     \}
+623                 \}
+624 
+625                 \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what} == \hyperlink{group__MOD__DAV_gga4c0cd73bce52d0eda981ce54973f27afaac24aa1113cbab49a3fbc47398293d8f}{DAV\_PROP\_INSERT\_VALUE}) \{
+626                     \textcolor{keywordtype}{int} \hyperlink{pcregrep_8txt_a1fdac88190c7a3aca2735f0bf49094dd}{found};
+627 
+628                     \textcolor{keywordflow}{if} ((err = (*db\_hooks->\hyperlink{structdav__hooks__propdb_a203b6da3e9f82c0e3158461bf1a50b8d}{output\_value})(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db, &
+      \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name},
+629                                                          xi, &\hyperlink{group__APR__Util__XML_gacbb04b51077cdb37e6a8cfa4c93acb07}{hdr},
+630                                                          &\hyperlink{pcregrep_8txt_a1fdac88190c7a3aca2735f0bf49094dd}{found})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+631                         \textcolor{comment}{/* ### anything better to do? */}
+632                         \textcolor{comment}{/* ### probably should enter a 500 error */}
+633                         \textcolor{keywordflow}{goto} next\_key;
+634                     \}
+635                     \textcolor{comment}{/* assert: found == 1 */}
+636                 \}
+637                 \textcolor{keywordflow}{else} \{
+638                     \textcolor{comment}{/* the value was not requested, so just add an empty}
+639 \textcolor{comment}{                       tag specifying the property name. */}
+640                     dav\_output\_prop\_name(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->p, &name, xi, &hdr);
+641                 \}
+642 
+643               next\_key:
+644                 err = (*db\_hooks->\hyperlink{structdav__hooks__propdb_a39e972ee0f305da65f5d03dedea9f587}{next\_name})(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->db, &name);
+645             \}
+646 
+647             \textcolor{comment}{/* all namespaces have been entered into xi. generate them into}
+648 \textcolor{comment}{               the output now. */}
+649             dav\_xmlns\_generate(xi, &hdr\_ns);
+650 
+651         \} \textcolor{comment}{/* propdb->db != NULL */}
+652 
+653         \textcolor{comment}{/* add namespaces for all the liveprop providers */}
+654         dav\_add\_all\_liveprop\_xmlns(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->p, &hdr\_ns);
+655     \}
+656 
+657     \textcolor{comment}{/* ask the liveprop providers to insert their properties */}
+658     dav\_run\_insert\_all\_liveprops(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->r, \hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->resource, \hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what}, &hdr);
+659 
+660     \textcolor{comment}{/* insert the standard properties */}
+661     \textcolor{comment}{/* ### should be handling the return errors here */}
+662     (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})dav\_insert\_coreprop(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb},
+663                               \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600ac3e2547416f37c1eaa10a7e0ec008304}{DAV\_PROPID\_CORE\_supportedlock}, \textcolor{stringliteral}{"supportedlock"},
+664                               \hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what}, &hdr, &unused\_inserted);
+665     (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})dav\_insert\_coreprop(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb},
+666                               \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a568cddeb31179b04faad95065f344ca9}{DAV\_PROPID\_CORE\_lockdiscovery}, \textcolor{stringliteral}{"lockdiscovery"},
+667                               \hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what}, &hdr, &unused\_inserted);
+668 
+669     \textcolor{comment}{/* if we didn't find these, then do the whole subreq thing. */}
+670     \textcolor{keywordflow}{if} (!found\_contenttype) \{
+671         \textcolor{comment}{/* ### should be handling the return error here */}
+672         (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})dav\_insert\_coreprop(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb},
+673                                   \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a619646ae453a00c5e6186f021dd59516}{DAV\_PROPID\_CORE\_getcontenttype},
+674                                   \textcolor{stringliteral}{"getcontenttype"},
+675                                   \hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what}, &hdr, &unused\_inserted);
+676     \}
+677     \textcolor{keywordflow}{if} (!found\_contentlang) \{
+678         \textcolor{comment}{/* ### should be handling the return error here */}
+679         (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})dav\_insert\_coreprop(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb},
+680                                   \hyperlink{props_8c_abed82baf7f470b522273a3e37c24c600a69061a97e27e35a1e3f8019665993d0b}{DAV\_PROPID\_CORE\_getcontentlanguage},
+681                                   \textcolor{stringliteral}{"getcontentlanguage"},
+682                                   \hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what}, &hdr, &unused\_inserted);
+683     \}
+684 
+685     \textcolor{comment}{/* if not just reporting on supported live props,}
+686 \textcolor{comment}{     * terminate the result */}
+687     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what} != \hyperlink{group__MOD__DAV_gga4c0cd73bce52d0eda981ce54973f27afaf615c37a063c2d90eac2dad9e07438e3}{DAV\_PROP\_INSERT\_SUPPORTED}) \{
+688         apr\_text\_append(\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}->p, &hdr,
+689                         \textcolor{stringliteral}{"</D:prop>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR}
+690                         \textcolor{stringliteral}{"<D:status>HTTP/1.1 200 OK</D:status>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR}
+691                         \textcolor{stringliteral}{"</D:propstat>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+692     \}
+693 
+694     result.\hyperlink{structdav__get__props__result_a4b85233991b37cb03b36ef1bbf2a277f}{propstats} = hdr.\hyperlink{structapr__text__header_a6db03d272f5e56058c84e10e49624c0b}{first};
+695     result.\hyperlink{structdav__get__props__result_a1f3c2a589a3a3d3169b8f6cf473fabc8}{xmlns} = hdr\_ns.\hyperlink{structapr__text__header_a6db03d272f5e56058c84e10e49624c0b}{first};
+696     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+697 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=242pt]{props_8c_ab3e92204420d77073189142a5ec8de4b_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{props.\+c@{props.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!props.\+c@{props.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(void)}{DAV_DECLARE_NONSTD(void)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{props_8c_a93845153444839be34a230f182b66388}{}\label{props_8c_a93845153444839be34a230f182b66388}
+
+\begin{DoxyCode}
+913 \{
+914     \hyperlink{structdav__propdb}{dav\_propdb} *\hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb} = \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->propdb;
+915     \hyperlink{structapr__xml__elem}{apr\_xml\_elem} *prop = \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->prop;
+916     \hyperlink{structdav__elem__private}{dav\_elem\_private} *priv;
+917 
+918     priv = \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->prop->priv = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(propdb->\hyperlink{structdav__propdb_a6973ecc8f81aff87c31f924840e492b7}{p}, \textcolor{keyword}{sizeof}(*priv));
+919 
+920     \textcolor{comment}{/*}
+921 \textcolor{comment}{    ** Check to see if this is a live property, and fill the fields}
+922 \textcolor{comment}{    ** in the XML elem, as appropriate.}
+923 \textcolor{comment}{    **}
+924 \textcolor{comment}{    ** Verify that the property is read/write. If not, then it cannot}
+925 \textcolor{comment}{    ** be SET or DELETEd.}
+926 \textcolor{comment}{    */}
+927     \textcolor{keywordflow}{if} (priv->\hyperlink{structdav__elem__private_a36755d8669f1064c343a127e8e13ed99}{propid} == 0) \{
+928         dav\_find\_liveprop(propdb, prop);
+929 
+930         \textcolor{comment}{/* it's a liveprop if a provider was found */}
+931         \textcolor{comment}{/* ### actually the "core" props should really be liveprops, but}
+932 \textcolor{comment}{           ### there is no "provider" for those and the r/w props are}
+933 \textcolor{comment}{           ### treated as dead props anyhow */}
+934         \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->is\_liveprop = priv->\hyperlink{structdav__elem__private_a5e9b2bd2455d88e29e87f04e495adf1c}{provider} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+935     \}
+936 
+937     \textcolor{keywordflow}{if} (!dav\_rw\_liveprop(propdb, priv)) \{
+938         \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->err = dav\_new\_error(propdb->\hyperlink{structdav__propdb_a6973ecc8f81aff87c31f924840e492b7}{p}, \hyperlink{group__HTTP__Status_gaec883057ad9f0c80b611818dc33bc990}{HTTP\_CONFLICT},
+939                                  \hyperlink{group__MOD__DAV_ga32783f0b2676012e1ff5d3dceb52a6a9}{DAV\_ERR\_PROP\_READONLY}, 0,
+940                                  \textcolor{stringliteral}{"Property is read-only."});
+941         \textcolor{keywordflow}{return};
+942     \}
+943 
+944     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->is\_liveprop) \{
+945         \textcolor{keywordtype}{int} defer\_to\_dead = 0;
+946 
+947         \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->err = (*priv->\hyperlink{structdav__elem__private_a5e9b2bd2455d88e29e87f04e495adf1c}{provider}->\hyperlink{structdav__hooks__liveprop_a6c48781258f45a6fa4b3548c56557916}{patch\_validate})(propdb->
+      \hyperlink{structdav__propdb_ae1c59a594efb948fc6ba0a046ad336c1}{resource},
+948                                                      prop, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->operation,
+949                                                      &\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->liveprop\_ctx,
+950                                                      &defer\_to\_dead);
+951         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->err != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} || !defer\_to\_dead)
+952             \textcolor{keywordflow}{return};
+953 
+954         \textcolor{comment}{/* clear is\_liveprop -- act as a dead prop now */}
+955         \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->is\_liveprop = 0;
+956     \}
+957 
+958     \textcolor{comment}{/*}
+959 \textcolor{comment}{    ** The property is supposed to be stored into the dead-property}
+960 \textcolor{comment}{    ** database. Make sure the thing is truly open (and writable).}
+961 \textcolor{comment}{    */}
+962     \textcolor{keywordflow}{if} (propdb->\hyperlink{structdav__propdb_a5fc44d255b4349337a30308e3dd22ed2}{deferred}
+963         && (\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->err = dav\_really\_open\_db(propdb, 0 \textcolor{comment}{/* ro */})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+964         \textcolor{keywordflow}{return};
+965     \}
+966 
+967     \textcolor{comment}{/*}
+968 \textcolor{comment}{    ** There should be an open, writable database in here!}
+969 \textcolor{comment}{    **}
+970 \textcolor{comment}{    ** Note: the database would be NULL if it was opened readonly and it}
+971 \textcolor{comment}{    **       did not exist.}
+972 \textcolor{comment}{    */}
+973     \textcolor{keywordflow}{if} (propdb->\hyperlink{structdav__propdb_a49ea8f1bcbc105b8ce0b9b79707cb2d7}{db} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+974         \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->err = dav\_new\_error(propdb->\hyperlink{structdav__propdb_a6973ecc8f81aff87c31f924840e492b7}{p}, \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{HTTP\_INTERNAL\_SERVER\_ERROR},
+975                                  \hyperlink{group__MOD__DAV_gab29644c0253799bc3c8d72ea434a6aad}{DAV\_ERR\_PROP\_NO\_DATABASE}, 0,
+976                                  \textcolor{stringliteral}{"Attempted to set/remove a property "}
+977                                  \textcolor{stringliteral}{"without a valid, open, read/write "}
+978                                  \textcolor{stringliteral}{"property database."});
+979         \textcolor{keywordflow}{return};
+980     \}
+981 
+982     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->operation == \hyperlink{mod__dav_8h_af58dc57a374ca8cf5db3860de73e9f3f}{DAV\_PROP\_OP\_SET}) \{
+983         \textcolor{comment}{/*}
+984 \textcolor{comment}{        ** Prep the element => propdb namespace index mapping, inserting}
+985 \textcolor{comment}{        ** namespace URIs into the propdb that don't exist.}
+986 \textcolor{comment}{        */}
+987         (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) (*propdb->\hyperlink{structdav__propdb_a1e52f1dc673f63827c00e13a651329f3}{db\_hooks}->\hyperlink{structdav__hooks__propdb_a3501ba9aa616ed5883eb0e7689b50af3}{map\_namespaces})(propdb->
+      \hyperlink{structdav__propdb_a49ea8f1bcbc105b8ce0b9b79707cb2d7}{db},
+988                                                    propdb->\hyperlink{structdav__propdb_a346b1730a214b26be55c8ce1124ce16b}{ns\_xlate},
+989                                                    &propdb->\hyperlink{structdav__propdb_a28383422023a9d7f3407c3a19138fd37}{mapping});
+990     \}
+991     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}->operation == \hyperlink{mod__dav_8h_a6ebefa1599c2d120837209790e0aabef}{DAV\_PROP\_OP\_DELETE}) \{
+992         \textcolor{comment}{/*}
+993 \textcolor{comment}{        ** There are no checks to perform here. If a property exists, then}
+994 \textcolor{comment}{        ** we will delete it. If it does not exist, then it does not matter}
+995 \textcolor{comment}{        ** (see S12.13.1).}
+996 \textcolor{comment}{        **}
+997 \textcolor{comment}{        ** Note that if a property does not exist, that does not rule out}
+998 \textcolor{comment}{        ** that a SET will occur during this PROPPATCH (thusly creating it).}
+999 \textcolor{comment}{        */}
+1000     \}
+1001 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=290pt]{props_8c_a93845153444839be34a230f182b66388_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{props_8c_a93845153444839be34a230f182b66388_icgraph}
+\end{center}
+\end{figure}
+
+

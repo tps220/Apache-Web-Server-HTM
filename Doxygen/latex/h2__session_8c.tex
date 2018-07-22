@@ -1,0 +1,958 @@
+\hypertarget{h2__session_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http2/h2\+\_\+session.c File Reference}
+\label{h2__session_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+session.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+session.\+c}}
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$stddef.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+cond.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+base64.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+strings.\+h$>$}\\*
+{\ttfamily \#include $<$ap\+\_\+mpm.\+h$>$}\\*
+{\ttfamily \#include $<$httpd.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+core.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+config.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+log.\+h$>$}\\*
+{\ttfamily \#include $<$scoreboard.\+h$>$}\\*
+{\ttfamily \#include $<$mpm\+\_\+common.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+bucket\+\_\+beam.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+bucket\+\_\+eos.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+ctx.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+mplx.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+push.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+headers.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+stream.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+task.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+session.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+util.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+version.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+workers.\+h\char`\"{}}\\*
+Include dependency graph for h2\+\_\+session.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{h2__session_8c_af10adf4bb19ec8d5d911d01fd3dfae8c}{N\+G\+H2\+\_\+\+S\+E\+T\+\_\+\+C\+A\+L\+L\+B\+A\+CK}(callbacks,  \hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name},  fn)~nghttp2\+\_\+session\+\_\+callbacks\+\_\+set\+\_\+\#\#\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}\#\#\+\_\+callback(callbacks, fn)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$ \hyperlink{h2__session_8c_ad1d4897f2aa846843b8de9c00e1c75b3}{h2\+\_\+session\+\_\+stream\+\_\+get} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$session, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} stream\+\_\+id)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__session_8c_a5584e45f2ba9a38c876f3ea1c59ee703}{h2\+\_\+session\+\_\+event} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0}{h2\+\_\+session\+\_\+event\+\_\+t} ev, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__thread__proc_ga156fcecee9d33dd7b55c3d8fdaba7159}{err}, const char $\ast$msg)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__session_8c_affefcf731ecfbf2bad38b18e8f96c2c2}{h2\+\_\+session\+\_\+create} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$$\ast$psession, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{structh2__ctx}{h2\+\_\+ctx} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, \hyperlink{structh2__workers}{h2\+\_\+workers} $\ast$workers)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__session_8c_aae9b0b4724f7687e798c40d6fec41b9d}{h2\+\_\+session\+\_\+rcreate} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$$\ast$psession, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, \hyperlink{structh2__ctx}{h2\+\_\+ctx} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, \hyperlink{structh2__workers}{h2\+\_\+workers} $\ast$workers)
+\item 
+struct \hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$ \hyperlink{h2__session_8c_a963d3784514be3ea425a0cc87cf3aa42}{h2\+\_\+session\+\_\+push} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$session, \hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a2569119f3fd3f0d7d7ecea3c96acb0bf}{is}, \hyperlink{structh2__push}{h2\+\_\+push} $\ast$push)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__session_8c_a8f2507556c255cdde8cf388d0008ee88}{h2\+\_\+session\+\_\+set\+\_\+prio} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$session, \hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, const \hyperlink{structh2__priority}{h2\+\_\+priority} $\ast$prio)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__session_8c_a2827fca84388460b3e2859326a00a3c9}{h2\+\_\+session\+\_\+push\+\_\+enabled} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$session)
+\item 
+const char $\ast$ \hyperlink{h2__session_8c_a9d9a44308b54a90de8859bb96e30e81f}{h2\+\_\+session\+\_\+state\+\_\+str} (\hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23}{h2\+\_\+session\+\_\+state} state)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__session_8c_a9533cdc782ecc1f1fb81b724fabd9e77}{h2\+\_\+session\+\_\+process} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$session, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} async)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__session_8c_a77565c06a2d392e20a290becdb7e7941}{h2\+\_\+session\+\_\+pre\+\_\+close} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$session, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} async)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!N\+G\+H2\+\_\+\+S\+E\+T\+\_\+\+C\+A\+L\+L\+B\+A\+CK@{N\+G\+H2\+\_\+\+S\+E\+T\+\_\+\+C\+A\+L\+L\+B\+A\+CK}}
+\index{N\+G\+H2\+\_\+\+S\+E\+T\+\_\+\+C\+A\+L\+L\+B\+A\+CK@{N\+G\+H2\+\_\+\+S\+E\+T\+\_\+\+C\+A\+L\+L\+B\+A\+CK}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{N\+G\+H2\+\_\+\+S\+E\+T\+\_\+\+C\+A\+L\+L\+B\+A\+CK}{NGH2_SET_CALLBACK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+G\+H2\+\_\+\+S\+E\+T\+\_\+\+C\+A\+L\+L\+B\+A\+CK(
+\begin{DoxyParamCaption}
+\item[{}]{callbacks, }
+\item[{}]{{\bf name}, }
+\item[{}]{fn}
+\end{DoxyParamCaption}
+)~nghttp2\+\_\+session\+\_\+callbacks\+\_\+set\+\_\+\#\#{\bf name}\#\#\+\_\+callback(callbacks, fn)}\hypertarget{h2__session_8c_af10adf4bb19ec8d5d911d01fd3dfae8c}{}\label{h2__session_8c_af10adf4bb19ec8d5d911d01fd3dfae8c}
+
+
+\subsection{Function Documentation}
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+create@{h2\+\_\+session\+\_\+create}}
+\index{h2\+\_\+session\+\_\+create@{h2\+\_\+session\+\_\+create}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+create(h2\+\_\+session $\ast$$\ast$psession, conn\+\_\+rec $\ast$c, h2\+\_\+ctx $\ast$ctx, h2\+\_\+workers $\ast$workers)}{h2_session_create(h2_session **psession, conn_rec *c, h2_ctx *ctx, h2_workers *workers)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+session\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$$\ast$}]{psession, }
+\item[{{\bf conn\+\_\+rec} $\ast$}]{c, }
+\item[{struct {\bf h2\+\_\+ctx} $\ast$}]{ctx, }
+\item[{struct {\bf h2\+\_\+workers} $\ast$}]{workers}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_affefcf731ecfbf2bad38b18e8f96c2c2}{}\label{h2__session_8c_affefcf731ecfbf2bad38b18e8f96c2c2}
+Create a new \hyperlink{structh2__session}{h2\+\_\+session} for the given connection. The session will apply the configured parameter. 
+\begin{DoxyParams}{Parameters}
+{\em psession} & pointer receiving the created session on success or N\+U\+LL \\
+\hline
+{\em c} & the connection to work on \\
+\hline
+{\em cfg} & the module config to apply \\
+\hline
+{\em workers} & the worker pool to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the created session 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+886 \{
+887     \textcolor{keywordflow}{return} h2\_session\_create\_int(psession, c, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, ctx, workers);
+888 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_affefcf731ecfbf2bad38b18e8f96c2c2_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+event@{h2\+\_\+session\+\_\+event}}
+\index{h2\+\_\+session\+\_\+event@{h2\+\_\+session\+\_\+event}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+event(h2\+\_\+session $\ast$session, h2\+\_\+session\+\_\+event\+\_\+t ev, int err, const char $\ast$msg)}{h2_session_event(h2_session *session, h2_session_event_t ev, int err, const char *msg)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+session\+\_\+event (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$}]{session, }
+\item[{{\bf h2\+\_\+session\+\_\+event\+\_\+t}}]{ev, }
+\item[{{\bf int}}]{err, }
+\item[{const char $\ast$}]{msg}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_a5584e45f2ba9a38c876f3ea1c59ee703}{}\label{h2__session_8c_a5584e45f2ba9a38c876f3ea1c59ee703}
+
+\begin{DoxyCode}
+85 \{
+86     dispatch\_event(session, ev, \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err}, msg);
+87 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a5584e45f2ba9a38c876f3ea1c59ee703_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+pre\+\_\+close@{h2\+\_\+session\+\_\+pre\+\_\+close}}
+\index{h2\+\_\+session\+\_\+pre\+\_\+close@{h2\+\_\+session\+\_\+pre\+\_\+close}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+pre\+\_\+close(h2\+\_\+session $\ast$session, int async)}{h2_session_pre_close(h2_session *session, int async)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+session\+\_\+pre\+\_\+close (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$}]{session, }
+\item[{{\bf int}}]{async}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_a77565c06a2d392e20a290becdb7e7941}{}\label{h2__session_8c_a77565c06a2d392e20a290becdb7e7941}
+Last chance to do anything before the connection is closed. 
+\begin{DoxyCode}
+2272 \{
+2273     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+2274     
+2275     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+2276                   \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, \textcolor{stringliteral}{"pre\_close"}));
+2277     dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0a0c1d95376209697e4a5ca32a85ced7d6}{H2\_SESSION\_EV\_PRE\_CLOSE}, 0, 
+2278         (session->\hyperlink{structh2__session_abe17a5d4b3c3f9e796b73ec004edb72f}{state} == \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23a2387451088141be9daff4c8370b0f31f}{H2\_SESSION\_ST\_IDLE})? \textcolor{stringliteral}{"timeout"} : 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2279     status = session\_cleanup(session, \textcolor{stringliteral}{"pre\_close"});
+2280     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2281         \textcolor{comment}{/* no one should hold a reference to this session any longer and}
+2282 \textcolor{comment}{         * the h2\_ctx was removed from the connection.}
+2283 \textcolor{comment}{         * Take the pool (and thus all subpools etc. down now, instead of}
+2284 \textcolor{comment}{         * during cleanup of main connection pool. */}
+2285         apr\_pool\_destroy(session->\hyperlink{structh2__session_afdf0f242195dccfd3dca1bd779620cfb}{pool});
+2286     \}
+2287     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+2288 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a77565c06a2d392e20a290becdb7e7941_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+process@{h2\+\_\+session\+\_\+process}}
+\index{h2\+\_\+session\+\_\+process@{h2\+\_\+session\+\_\+process}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+process(h2\+\_\+session $\ast$session, int async)}{h2_session_process(h2_session *session, int async)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+session\+\_\+process (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$}]{session, }
+\item[{{\bf int}}]{async}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_a9533cdc782ecc1f1fb81b724fabd9e77}{}\label{h2__session_8c_a9533cdc782ecc1f1fb81b724fabd9e77}
+Process the given H\+T\+T\+P/2 session until it is ended or a fatal error occurred.
+
+
+\begin{DoxyParams}{Parameters}
+{\em session} & the sessionm to process \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1985 \{
+1986     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1987     \hyperlink{structconn__rec}{conn\_rec} *\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c} = session->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c};
+1988     \textcolor{keywordtype}{int} rv, mpm\_state, trace = \hyperlink{group__APACHE__CORE__LOG_gaaaa8ecc04f897a759c5125e4a3b3ddf8}{APLOGctrace3}(c);
+1989 
+1990     \textcolor{keywordflow}{if} (trace) \{
+1991         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}( \hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, status, c,
+1992                       \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, \textcolor{stringliteral}{"process start, async=%d"}), async);
+1993     \}
+1994                   
+1995     \textcolor{keywordflow}{while} (session->\hyperlink{structh2__session_abe17a5d4b3c3f9e796b73ec004edb72f}{state} != \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23a7920e1f9e5ddf03d5297ffb07871cf0a}{H2\_SESSION\_ST\_DONE}) \{
+1996         session->\hyperlink{structh2__session_abc16a59b34afed1ea2a9297107b01229}{have\_read} = session->\hyperlink{structh2__session_ab8e651535bc36b8db8768471332ce4fa}{have\_written} = 0;
+1997 
+1998         \textcolor{keywordflow}{if} (session->\hyperlink{structh2__session_ac2afb4ae0d9cfc53e91067652dac716c}{local}.\hyperlink{structh2__session__props_a22f923106761ebfd0e35a62d8882adfa}{accepting} 
+1999             && !ap\_mpm\_query(\hyperlink{group__APACHE__CORE__MPM_ga23b4d0d157612a17d54685fcd97d0341}{AP\_MPMQ\_MPM\_STATE}, &mpm\_state)) \{
+2000             \textcolor{keywordflow}{if} (mpm\_state == \hyperlink{group__APACHE__CORE__MPM_gafca606af8b4b151e421cd073c8467b5e}{AP\_MPMQ\_STOPPING}) \{
+2001                 dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ab0163f29f0c99eaffc1245751210982b}{H2\_SESSION\_EV\_MPM\_STOPPING}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2002             \}
+2003         \}
+2004         
+2005         session->\hyperlink{structh2__session_ab11699f2c77d30c38703009499a31708}{status}[0] = \textcolor{charliteral}{'\(\backslash\)0'};
+2006         
+2007         \textcolor{keywordflow}{switch} (session->\hyperlink{structh2__session_abe17a5d4b3c3f9e796b73ec004edb72f}{state}) \{
+2008             \textcolor{keywordflow}{case} \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23a0a3db723fb0e2dab7d44851002954e2e}{H2\_SESSION\_ST\_INIT}:
+2009                 ap\_update\_child\_status\_from\_conn(c->\hyperlink{structconn__rec_af0e434bcb2a0a47c13e94069431fb281}{sbh}, \hyperlink{scoreboard_8h_a55668fe45849951342100533d909b9d8}{SERVER\_BUSY\_READ}, c);
+2010                 \textcolor{keywordflow}{if} (!\hyperlink{h2__h2_8c_a10ac5d94730f9852a030b4eb0336fab2}{h2\_is\_acceptable\_connection}(c, 1)) \{
+2011                     update\_child\_status(session, \hyperlink{scoreboard_8h_a55668fe45849951342100533d909b9d8}{SERVER\_BUSY\_READ}, 
+2012                                         \textcolor{stringliteral}{"inadequate security"});
+2013                     h2\_session\_shutdown(session, 
+2014                                         NGHTTP2\_INADEQUATE\_SECURITY, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 1);
+2015                 \} 
+2016                 \textcolor{keywordflow}{else} \{
+2017                     update\_child\_status(session, \hyperlink{scoreboard_8h_a55668fe45849951342100533d909b9d8}{SERVER\_BUSY\_READ}, \textcolor{stringliteral}{"init"});
+2018                     status = h2\_session\_start(session, &rv);
+2019                     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, status, c, 
+2020                                   \hyperlink{h2__session_8h_a28df7ff9f5f9745ac52f65e5f216ed1f}{H2\_SSSN\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03079), session, 
+2021                                   \textcolor{stringliteral}{"started on %s:%d"}), 
+2022                                   session->\hyperlink{structh2__session_ad1d64aadf7d723fce3f895b708fb8e8e}{s}->\hyperlink{structserver__rec_aa4841163cff5e708d1e125ccbbd5fe35}{server\_hostname},
+2023                                   c->\hyperlink{structconn__rec_a221970681f89eb91eaa5ae591b606dd5}{local\_addr}->\hyperlink{structapr__sockaddr__t_a174c19138de9c208f13ed71b5892e505}{port});
+2024                     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2025                         dispatch\_event(session, 
+2026                                        \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2027                     \}
+2028                     dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0a4af6f7af504b7f2d87a1dc06a5bfe37c}{H2\_SESSION\_EV\_INIT}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2029                 \}
+2030                 \textcolor{keywordflow}{break};
+2031                 
+2032             \textcolor{keywordflow}{case} \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23a2387451088141be9daff4c8370b0f31f}{H2\_SESSION\_ST\_IDLE}:
+2033                 \textcolor{comment}{/* We trust our connection into the default timeout/keepalive}
+2034 \textcolor{comment}{                 * handling of the core filters/mpm iff:}
+2035 \textcolor{comment}{                 * - keep\_sync\_until is not set}
+2036 \textcolor{comment}{                 * - we have an async mpm}
+2037 \textcolor{comment}{                 * - we have no open streams to process}
+2038 \textcolor{comment}{                 * - we are not sitting on a Upgrade: request}
+2039 \textcolor{comment}{                 * - we already have seen at least one request}
+2040 \textcolor{comment}{                 */}
+2041                 \textcolor{keywordflow}{if} (!session->\hyperlink{structh2__session_a821fc14674cab8fc3ed1388876fd9522}{keep\_sync\_until} && async && !session->
+      \hyperlink{structh2__session_a604a5590a0033434c6def4d0ce7b4cfc}{open\_streams}
+2042                     && !session->\hyperlink{structh2__session_abd4313edcb03e33b65e6aa0cd3aa9d45}{r} && session->\hyperlink{structh2__session_a80fcd5b884ec0b7fb15339beda197f99}{remote}.\hyperlink{structh2__session__props_ae41fe68312a954de095d51f8dfe822d0}{emitted\_count}) \{
+2043                     \textcolor{keywordflow}{if} (trace) \{
+2044                         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, status, c,
+2045                                       \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, 
+2046                                       \textcolor{stringliteral}{"nonblock read, %d streams open"}), 
+2047                                       session->\hyperlink{structh2__session_a604a5590a0033434c6def4d0ce7b4cfc}{open\_streams});
+2048                     \}
+2049                     \hyperlink{h2__conn__io_8c_a8b40cf67d79195745379a7cdbcfd3d66}{h2\_conn\_io\_flush}(&session->\hyperlink{structh2__session_a04388fcbed566fdfc1b39df649b9b171}{io});
+2050                     status = h2\_session\_read(session, 0);
+2051                     
+2052                     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2053                         session->\hyperlink{structh2__session_abc16a59b34afed1ea2a9297107b01229}{have\_read} = 1;
+2054                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ac0c74219a6280718a18e15839668268a}{H2\_SESSION\_EV\_DATA\_READ}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2055                     \}
+2056                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga9dd578bfcd76a2d997395608ae5b3a4e}{APR\_STATUS\_IS\_EAGAIN}(status) 
+2057                         || \hyperlink{group__APR__STATUS__IS_ga864b207719c86ac4deeba696943262d0}{APR\_STATUS\_IS\_TIMEUP}(status)) \{
+2058                         \textcolor{keywordflow}{if} (apr\_time\_now() > session->\hyperlink{structh2__session_afd1f0cce4dfac9f26e4eee799db2051e}{idle\_until}) \{
+2059                             dispatch\_event(session, 
+2060                                            \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ac1d3f30f2c3781fd3f12d0cc108e424c}{H2\_SESSION\_EV\_CONN\_TIMEOUT}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2061                         \}
+2062                         \textcolor{keywordflow}{else} \{
+2063                             status = \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+2064                             \textcolor{keywordflow}{goto} \hyperlink{group__APACHE__CORE__MUTEX_gac9982b93474ad913f3fcbdcff95accf4}{out};
+2065                         \}
+2066                     \}
+2067                     \textcolor{keywordflow}{else} \{
+2068                         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, status, c,
+2069                                       \hyperlink{h2__session_8h_a28df7ff9f5f9745ac52f65e5f216ed1f}{H2\_SSSN\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03403), session, 
+2070                                       \textcolor{stringliteral}{"no data, error"}));
+2071                         dispatch\_event(session, 
+2072                                        \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 0, \textcolor{stringliteral}{"timeout"});
+2073                     \}
+2074                 \}
+2075                 \textcolor{keywordflow}{else} \{
+2076                     \textcolor{comment}{/* make certain, we send everything before we idle */}
+2077                     \hyperlink{h2__conn__io_8c_a8b40cf67d79195745379a7cdbcfd3d66}{h2\_conn\_io\_flush}(&session->\hyperlink{structh2__session_a04388fcbed566fdfc1b39df649b9b171}{io});
+2078                     \textcolor{keywordflow}{if} (trace) \{
+2079                         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, status, c,
+2080                                       \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, 
+2081                                       \textcolor{stringliteral}{"sync, stutter 1-sec, %d streams open"}), 
+2082                                       session->\hyperlink{structh2__session_a604a5590a0033434c6def4d0ce7b4cfc}{open\_streams});
+2083                     \}
+2084                     \textcolor{comment}{/* We wait in smaller increments, using a 1 second timeout.}
+2085 \textcolor{comment}{                     * That gives us the chance to check for MPMQ\_STOPPING often. }
+2086 \textcolor{comment}{                     */}
+2087                     status = \hyperlink{h2__mplx_8c_ab27042bae0b8cddb8049073f3153d28f}{h2\_mplx\_idle}(session->\hyperlink{structh2__session_a79ed4d816ae7efbb0f109875350c7b42}{mplx});
+2088                     \textcolor{keywordflow}{if} (status == \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN}) \{
+2089                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ac0c74219a6280718a18e15839668268a}{H2\_SESSION\_EV\_DATA\_READ}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2090                         \textcolor{keywordflow}{break};
+2091                     \}
+2092                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2093                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 
+2094                                        \hyperlink{h2_8h_acb37a714e7d3b6d5f3206d06663ea0f9}{H2\_ERR\_ENHANCE\_YOUR\_CALM}, \textcolor{stringliteral}{"less is more"});
+2095                     \}
+2096                     \hyperlink{h2__filter_8c_ac5868ab658a0d4a121eb506ae7c95dce}{h2\_filter\_cin\_timeout\_set}(session->
+      \hyperlink{structh2__session_a769e774a574d53062823fe2d798e060f}{cin}, \hyperlink{group__apr__time_gaec56c2c03299a750006bfcc08d64ec32}{apr\_time\_from\_sec}(1));
+2097                     status = h2\_session\_read(session, 1);
+2098                     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2099                         session->\hyperlink{structh2__session_abc16a59b34afed1ea2a9297107b01229}{have\_read} = 1;
+2100                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ac0c74219a6280718a18e15839668268a}{H2\_SESSION\_EV\_DATA\_READ}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2101                     \}
+2102                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (status == \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN}) \{
+2103                         \textcolor{comment}{/* nothing to read */}
+2104                     \}
+2105                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga864b207719c86ac4deeba696943262d0}{APR\_STATUS\_IS\_TIMEUP}(status)) \{
+2106                         \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\_time\_t} \hyperlink{group__MOD__CACHE_ga33504014e188d5d7506173cc14fb5801}{now} = apr\_time\_now();
+2107                         \textcolor{keywordflow}{if} (now > session->\hyperlink{structh2__session_a821fc14674cab8fc3ed1388876fd9522}{keep\_sync\_until}) \{
+2108                             \textcolor{comment}{/* if we are on an async mpm, now is the time that}
+2109 \textcolor{comment}{                             * we may dare to pass control to it. */}
+2110                             session->\hyperlink{structh2__session_a821fc14674cab8fc3ed1388876fd9522}{keep\_sync\_until} = 0;
+2111                         \}
+2112                         \textcolor{keywordflow}{if} (now > session->\hyperlink{structh2__session_afd1f0cce4dfac9f26e4eee799db2051e}{idle\_until}) \{
+2113                             \textcolor{keywordflow}{if} (trace) \{
+2114                                 \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, status, c,
+2115                                               \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, 
+2116                                               \textcolor{stringliteral}{"keepalive timeout"}));
+2117                             \}
+2118                             dispatch\_event(session, 
+2119                                            \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ac1d3f30f2c3781fd3f12d0cc108e424c}{H2\_SESSION\_EV\_CONN\_TIMEOUT}, 0, \textcolor{stringliteral}{"
+      timeout"});
+2120                         \}
+2121                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (trace) \{                        
+2122                             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, status, c,
+2123                                           \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, 
+2124                                           \textcolor{stringliteral}{"keepalive, %f sec left"}),
+2125                                           (session->\hyperlink{structh2__session_afd1f0cce4dfac9f26e4eee799db2051e}{idle\_until} - now) / 1000000.0f);
+2126                         \}
+2127                         \textcolor{comment}{/* continue reading handling */}
+2128                     \}
+2129                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga528a8032b13c75fbdeb9bf7e4c0be493}{APR\_STATUS\_IS\_ECONNABORTED}(status)
+2130                              || \hyperlink{group__APR__STATUS__IS_ga85e2cb1b4c904a9edfbc0d94203f76b6}{APR\_STATUS\_IS\_ECONNRESET}(status)
+2131                              || \hyperlink{group__APR__STATUS__IS_gaf4232cd96b47b76aec9607b1a78e694f}{APR\_STATUS\_IS\_EOF}(status)
+2132                              || \hyperlink{group__APR__STATUS__IS_gaa843153a73806cca500287940e9f175f}{APR\_STATUS\_IS\_EBADF}(status)) \{
+2133                         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}( \hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, status, c,
+2134                                       \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, \textcolor{stringliteral}{"input gone"}));
+2135                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2136                     \}
+2137                     \textcolor{keywordflow}{else} \{
+2138                         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}( \hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, status, c,
+2139                                       \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, 
+2140                                       \textcolor{stringliteral}{"(1 sec timeout) read failed"}));
+2141                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 0, \textcolor{stringliteral}{"error
+      "});
+2142                     \}
+2143                 \}
+2144                 \textcolor{keywordflow}{break};
+2145                 
+2146             \textcolor{keywordflow}{case} \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23afac442216da590ca0627605c1560bc32}{H2\_SESSION\_ST\_BUSY}:
+2147                 \textcolor{keywordflow}{if} (nghttp2\_session\_want\_read(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2})) \{
+2148                     ap\_update\_child\_status(session->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}->\hyperlink{structconn__rec_af0e434bcb2a0a47c13e94069431fb281}{sbh}, \hyperlink{scoreboard_8h_a55668fe45849951342100533d909b9d8}{SERVER\_BUSY\_READ}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2149                     \hyperlink{h2__filter_8c_ac5868ab658a0d4a121eb506ae7c95dce}{h2\_filter\_cin\_timeout\_set}(session->
+      \hyperlink{structh2__session_a769e774a574d53062823fe2d798e060f}{cin}, session->\hyperlink{structh2__session_ad1d64aadf7d723fce3f895b708fb8e8e}{s}->\hyperlink{structserver__rec_a34ba2512b6d2d1bdb08ca9bff3615b80}{timeout});
+2150                     status = h2\_session\_read(session, 0);
+2151                     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2152                         session->\hyperlink{structh2__session_abc16a59b34afed1ea2a9297107b01229}{have\_read} = 1;
+2153                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ac0c74219a6280718a18e15839668268a}{H2\_SESSION\_EV\_DATA\_READ}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2154                     \}
+2155                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (status == \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN}) \{
+2156                         \textcolor{comment}{/* nothing to read */}
+2157                     \}
+2158                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga864b207719c86ac4deeba696943262d0}{APR\_STATUS\_IS\_TIMEUP}(status)) \{
+2159                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ac1d3f30f2c3781fd3f12d0cc108e424c}{H2\_SESSION\_EV\_CONN\_TIMEOUT}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2160                         \textcolor{keywordflow}{break};
+2161                     \}
+2162                     \textcolor{keywordflow}{else} \{
+2163                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2164                     \}
+2165                 \}
+2166 
+2167                 status = dispatch\_master(session);
+2168                 \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && status != \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN}) \{
+2169                     \textcolor{keywordflow}{break};
+2170                 \}
+2171                 
+2172                 \textcolor{keywordflow}{if} (nghttp2\_session\_want\_write(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2})) \{
+2173                     ap\_update\_child\_status(session->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}->\hyperlink{structconn__rec_af0e434bcb2a0a47c13e94069431fb281}{sbh}, 
+      \hyperlink{scoreboard_8h_a4c26e0aa55b3f58f5ba6bd02427ce4a7}{SERVER\_BUSY\_WRITE}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2174                     status = h2\_session\_send(session);
+2175                     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2176                         status = \hyperlink{h2__conn__io_8c_a8b40cf67d79195745379a7cdbcfd3d66}{h2\_conn\_io\_flush}(&session->\hyperlink{structh2__session_a04388fcbed566fdfc1b39df649b9b171}{io});
+2177                     \}
+2178                     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2179                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 
+2180                                        \hyperlink{h2_8h_ae86a4b0a36a9976dd5e3060ea32d8023}{H2\_ERR\_INTERNAL\_ERROR}, \textcolor{stringliteral}{"writing"});
+2181                         \textcolor{keywordflow}{break};
+2182                     \}
+2183                 \}
+2184                 
+2185                 \textcolor{keywordflow}{if} (session->\hyperlink{structh2__session_abc16a59b34afed1ea2a9297107b01229}{have\_read} || session->\hyperlink{structh2__session_ab8e651535bc36b8db8768471332ce4fa}{have\_written}) \{
+2186                     \textcolor{keywordflow}{if} (session->\hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us}) \{
+2187                         session->\hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us} = 0;
+2188                     \}
+2189                 \}
+2190                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!nghttp2\_session\_want\_write(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2})) \{
+2191                     dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ae8ddb77bc626c3eafd2961651b7a7016}{H2\_SESSION\_EV\_NO\_IO}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2192                 \}
+2193                 \textcolor{keywordflow}{break};
+2194                 
+2195             \textcolor{keywordflow}{case} \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23aed0488740dd43777c78552ce5381f4fe}{H2\_SESSION\_ST\_WAIT}:
+2196                 \textcolor{keywordflow}{if} (session->\hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us} <= 0) \{
+2197                     session->\hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us} = 10;
+2198                     \textcolor{keywordflow}{if} (\hyperlink{h2__conn__io_8c_a8b40cf67d79195745379a7cdbcfd3d66}{h2\_conn\_io\_flush}(&session->\hyperlink{structh2__session_a04388fcbed566fdfc1b39df649b9b171}{io}) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2199                         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2200                         \textcolor{keywordflow}{break};
+2201                     \}
+2202                 \}
+2203                 \textcolor{keywordflow}{else} \{
+2204                     \textcolor{comment}{/* repeating, increase timer for graceful backoff */}
+2205                     session->\hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us} = \hyperlink{h2_8h_acd3215da569b00c8a029a4810bd48f50}{H2MIN}(session->\hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us}*2, MAX\_WAIT\_MICROS);
+2206                 \}
+2207 
+2208                 \textcolor{keywordflow}{if} (trace) \{
+2209                     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, 0, c,
+2210                                   \textcolor{stringliteral}{"h2\_session: wait for data, %ld micros"}, 
+2211                                   (\textcolor{keywordtype}{long})session->\hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us});
+2212                 \}
+2213                 status = \hyperlink{h2__mplx_8c_a0dafa503789e4dd6aaa7bdb906905721}{h2\_mplx\_out\_trywait}(session->\hyperlink{structh2__session_a79ed4d816ae7efbb0f109875350c7b42}{mplx}, session->
+      \hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us}, 
+2214                                              session->\hyperlink{structh2__session_ab9866598c740b22aa6019a36e531b421}{iowait});
+2215                 \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2216                     session->\hyperlink{structh2__session_a34ee9d398f9b88dbf2c3ee53ee97875a}{wait\_us} = 0;
+2217                     dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0ac0c74219a6280718a18e15839668268a}{H2\_SESSION\_EV\_DATA\_READ}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2218                 \}
+2219                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga864b207719c86ac4deeba696943262d0}{APR\_STATUS\_IS\_TIMEUP}(status)) \{
+2220                     \textcolor{comment}{/* go back to checking all inputs again */}
+2221                     transit(session, \textcolor{stringliteral}{"wait cycle"}, session->\hyperlink{structh2__session_ac2afb4ae0d9cfc53e91067652dac716c}{local}.\hyperlink{structh2__session__props_a14a0cc8252ddce4163ab21728177d060}{shutdown}? 
+2222                             \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23a7920e1f9e5ddf03d5297ffb07871cf0a}{H2\_SESSION\_ST\_DONE} : 
+      \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23afac442216da590ca0627605c1560bc32}{H2\_SESSION\_ST\_BUSY});
+2223                 \}
+2224                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga85e2cb1b4c904a9edfbc0d94203f76b6}{APR\_STATUS\_IS\_ECONNRESET}(status) 
+2225                          || \hyperlink{group__APR__STATUS__IS_ga528a8032b13c75fbdeb9bf7e4c0be493}{APR\_STATUS\_IS\_ECONNABORTED}(status)) \{
+2226                     dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2227                 \}
+2228                 \textcolor{keywordflow}{else} \{
+2229                     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_ga73e14aeff380a8a01c66d528162026fe}{APLOG\_WARNING}, status, c,
+2230                                   \hyperlink{h2__session_8h_a28df7ff9f5f9745ac52f65e5f216ed1f}{H2\_SSSN\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03404), session, 
+2231                                   \textcolor{stringliteral}{"waiting on conditional"}));
+2232                     h2\_session\_shutdown(session, \hyperlink{h2_8h_ae86a4b0a36a9976dd5e3060ea32d8023}{H2\_ERR\_INTERNAL\_ERROR}, 
+2233                                         \textcolor{stringliteral}{"cond wait error"}, 0);
+2234                 \}
+2235                 \textcolor{keywordflow}{break};
+2236                 
+2237             \textcolor{keywordflow}{default}:
+2238                 \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 
+      \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL}, c,
+2239                               \hyperlink{h2__session_8h_a28df7ff9f5f9745ac52f65e5f216ed1f}{H2\_SSSN\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03080), session, 
+2240                               \textcolor{stringliteral}{"unknown state"}));
+2241                 dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0a8c3e8f97ea774beec650313676ccae25}{H2\_SESSION\_EV\_PROTO\_ERROR}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2242                 \textcolor{keywordflow}{break};
+2243         \}
+2244 
+2245         \textcolor{keywordflow}{if} (!nghttp2\_session\_want\_read(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}) 
+2246                  && !nghttp2\_session\_want\_write(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2})) \{
+2247             dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0a0d84128988e6fb32338b86ee27fe33d0}{H2\_SESSION\_EV\_NGH2\_DONE}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}); 
+2248         \}
+2249         \textcolor{keywordflow}{if} (session->\hyperlink{structh2__session_a33f68aadb94445194546fc611380a203}{reprioritize}) \{
+2250             \hyperlink{h2__mplx_8c_ae4ec6ad53087e52140a02bf7fa4b238e}{h2\_mplx\_reprioritize}(session->\hyperlink{structh2__session_a79ed4d816ae7efbb0f109875350c7b42}{mplx}, stream\_pri\_cmp, session);
+2251             session->\hyperlink{structh2__session_a33f68aadb94445194546fc611380a203}{reprioritize} = 0;
+2252         \}
+2253     \}
+2254     
+2255 \hyperlink{group__APACHE__CORE__MUTEX_gac9982b93474ad913f3fcbdcff95accf4}{out}:
+2256     \textcolor{keywordflow}{if} (trace) \{
+2257         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}( \hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, status, c,
+2258                       \hyperlink{h2__session_8h_a81438cdc00363115c17b2dab73c2b74c}{H2\_SSSN\_MSG}(session, \textcolor{stringliteral}{"process returns"})); 
+2259     \}
+2260     
+2261     \textcolor{keywordflow}{if} ((session->\hyperlink{structh2__session_abe17a5d4b3c3f9e796b73ec004edb72f}{state} != \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23a7920e1f9e5ddf03d5297ffb07871cf0a}{H2\_SESSION\_ST\_DONE})
+2262         && (\hyperlink{group__APR__STATUS__IS_gaf4232cd96b47b76aec9607b1a78e694f}{APR\_STATUS\_IS\_EOF}(status)
+2263             || \hyperlink{group__APR__STATUS__IS_ga85e2cb1b4c904a9edfbc0d94203f76b6}{APR\_STATUS\_IS\_ECONNRESET}(status) 
+2264             || \hyperlink{group__APR__STATUS__IS_ga528a8032b13c75fbdeb9bf7e4c0be493}{APR\_STATUS\_IS\_ECONNABORTED}(status))) \{
+2265         dispatch\_event(session, \hyperlink{h2__session_8h_a808086b3c1dc629ff4cbcf45a2b722c0adea20e3148e8ee8e30c06469b6b5a6a3}{H2\_SESSION\_EV\_CONN\_ERROR}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2266     \}
+2267 
+2268     \textcolor{keywordflow}{return} (session->\hyperlink{structh2__session_abe17a5d4b3c3f9e796b73ec004edb72f}{state} == \hyperlink{h2_8h_ae2ebe57b68f1b311a5abbdb970061f23a7920e1f9e5ddf03d5297ffb07871cf0a}{H2\_SESSION\_ST\_DONE})? 
+      \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF} : \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+2269 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a9533cdc782ecc1f1fb81b724fabd9e77_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a9533cdc782ecc1f1fb81b724fabd9e77_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+push@{h2\+\_\+session\+\_\+push}}
+\index{h2\+\_\+session\+\_\+push@{h2\+\_\+session\+\_\+push}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+push(h2\+\_\+session $\ast$session, h2\+\_\+stream $\ast$is, h2\+\_\+push $\ast$push)}{h2_session_push(h2_session *session, h2_stream *is, h2_push *push)}}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf h2\+\_\+stream}$\ast$ h2\+\_\+session\+\_\+push (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$}]{session, }
+\item[{struct {\bf h2\+\_\+stream} $\ast$}]{is, }
+\item[{struct {\bf h2\+\_\+push} $\ast$}]{push}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_a963d3784514be3ea425a0cc87cf3aa42}{}\label{h2__session_8c_a963d3784514be3ea425a0cc87cf3aa42}
+Submit a push promise on the stream and schedule the new steam for processing..
+
+
+\begin{DoxyParams}{Parameters}
+{\em session} & the session to work in \\
+\hline
+{\em is} & the stream initiating the push \\
+\hline
+{\em push} & the push to promise \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the new promised stream or N\+U\+LL 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1082 \{
+1083     \hyperlink{structh2__stream}{h2\_stream} *stream;
+1084     \hyperlink{structh2__ngheader}{h2\_ngheader} *ngh;
+1085     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1086     \textcolor{keywordtype}{int} \hyperlink{ssl__engine__vars_8c_a7235ef62e89328f5155846dc59c6fc37}{nid} = 0;
+1087     
+1088     status = \hyperlink{h2__util_8c_abfea8ee29c3a402209ad4f92b215b989}{h2\_req\_create\_ngheader}(&ngh, is->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, push->
+      \hyperlink{structh2__push_a4541bdab05a10c6a58a413b0493c1a80}{req});
+1089     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1090         nid = nghttp2\_submit\_push\_promise(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, 0, is->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id}, 
+1091                                           ngh->\hyperlink{structh2__ngheader_abc9c88383e0dba833c21bd28d321c506}{nv}, ngh->\hyperlink{structh2__ngheader_ac9d42acb47185c2db1b68f684663e1a4}{nvlen}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1092     \}
+1093     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} || nid <= 0) \{
+1094         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, status, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+1095                       \hyperlink{h2__stream_8h_a7dfae6c324bcb99d7925e34edc7696e4}{H2\_STRM\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03075), is, 
+1096                       \textcolor{stringliteral}{"submitting push promise fail: %s"}), nghttp2\_strerror(nid));
+1097         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1098     \}
+1099     ++session->\hyperlink{structh2__session_ae51a5ef37580861fcaafccdb00352be8}{pushes\_promised};
+1100     
+1101     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+1102                   \hyperlink{h2__stream_8h_a7dfae6c324bcb99d7925e34edc7696e4}{H2\_STRM\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03076), is, \textcolor{stringliteral}{"SERVER\_PUSH %d for %s %s on %d"}),
+1103                   nid, push->\hyperlink{structh2__push_a4541bdab05a10c6a58a413b0493c1a80}{req}->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method}, push->\hyperlink{structh2__push_a4541bdab05a10c6a58a413b0493c1a80}{req}->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path}, is->
+      \hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id});
+1104                   
+1105     stream = h2\_session\_open\_stream(session, nid, is->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id});
+1106     \textcolor{keywordflow}{if} (!stream) \{
+1107         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+1108                       \hyperlink{h2__stream_8h_a7dfae6c324bcb99d7925e34edc7696e4}{H2\_STRM\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03077), stream, 
+1109                       \textcolor{stringliteral}{"failed to create stream obj %d"}), nid);
+1110         \textcolor{comment}{/* kill the push\_promise */}
+1111         nghttp2\_submit\_rst\_stream(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, NGHTTP2\_FLAG\_NONE, nid,
+1112                                   NGHTTP2\_INTERNAL\_ERROR);
+1113         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1114     \}
+1115     
+1116     \hyperlink{h2__session_8c_a8f2507556c255cdde8cf388d0008ee88}{h2\_session\_set\_prio}(session, stream, push->\hyperlink{structh2__push_a79d7ef1a9ad462fb988ee537a0d45662}{priority});
+1117     \hyperlink{h2__stream_8c_a2c7058536130c66cfa5f104cd2e27ccc}{h2\_stream\_set\_request}(stream, push->\hyperlink{structh2__push_a4541bdab05a10c6a58a413b0493c1a80}{req});
+1118     ++session->\hyperlink{structh2__session_abbd1515c131f6aa11b07a915fc3db0ab}{unsent\_promises};
+1119     \textcolor{keywordflow}{return} stream;
+1120 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a963d3784514be3ea425a0cc87cf3aa42_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a963d3784514be3ea425a0cc87cf3aa42_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+push\+\_\+enabled@{h2\+\_\+session\+\_\+push\+\_\+enabled}}
+\index{h2\+\_\+session\+\_\+push\+\_\+enabled@{h2\+\_\+session\+\_\+push\+\_\+enabled}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+push\+\_\+enabled(h2\+\_\+session $\ast$session)}{h2_session_push_enabled(h2_session *session)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+session\+\_\+push\+\_\+enabled (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$}]{session}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_a2827fca84388460b3e2859326a00a3c9}{}\label{h2__session_8c_a2827fca84388460b3e2859326a00a3c9}
+Returns if client settings have push enabled. 
+\begin{DoxyParams}{Parameters}
+{\em !=} & 0 iff push is enabled in client settings \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1229 \{
+1230     \textcolor{comment}{/* iff we can and they can and want */}
+1231     \textcolor{keywordflow}{return} (session->\hyperlink{structh2__session_a80fcd5b884ec0b7fb15339beda197f99}{remote}.\hyperlink{structh2__session__props_a22f923106761ebfd0e35a62d8882adfa}{accepting} \textcolor{comment}{/* remote GOAWAY received */}
+1232             && \hyperlink{h2__config_8c_a22d672856fe674becba5e4e07ba0ae04}{h2\_config\_geti}(session->\hyperlink{structh2__session_a6a834c27d772bd80f1837723e3ef04b8}{config}, \hyperlink{h2__config_8h_a9ba9f682e77cb3b39514432a14fce8d4ab10a86ee19ebd9ae79a772c4c8ba47ea}{H2\_CONF\_PUSH})
+1233             && nghttp2\_session\_get\_remote\_settings(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, 
+1234                    NGHTTP2\_SETTINGS\_ENABLE\_PUSH));
+1235 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a2827fca84388460b3e2859326a00a3c9_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a2827fca84388460b3e2859326a00a3c9_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+rcreate@{h2\+\_\+session\+\_\+rcreate}}
+\index{h2\+\_\+session\+\_\+rcreate@{h2\+\_\+session\+\_\+rcreate}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+rcreate(h2\+\_\+session $\ast$$\ast$psession, request\+\_\+rec $\ast$r, h2\+\_\+ctx $\ast$ctx, h2\+\_\+workers $\ast$workers)}{h2_session_rcreate(h2_session **psession, request_rec *r, h2_ctx *ctx, h2_workers *workers)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+session\+\_\+rcreate (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$$\ast$}]{psession, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r, }
+\item[{struct {\bf h2\+\_\+ctx} $\ast$}]{ctx, }
+\item[{struct {\bf h2\+\_\+workers} $\ast$}]{workers}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_aae9b0b4724f7687e798c40d6fec41b9d}{}\label{h2__session_8c_aae9b0b4724f7687e798c40d6fec41b9d}
+Create a new \hyperlink{structh2__session}{h2\+\_\+session} for the given request. The session will apply the configured parameter. 
+\begin{DoxyParams}{Parameters}
+{\em psession} & pointer receiving the created session on success or N\+U\+LL \\
+\hline
+{\em r} & the request that was upgraded \\
+\hline
+{\em cfg} & the module config to apply \\
+\hline
+{\em workers} & the worker pool to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the created session 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+892 \{
+893     \textcolor{keywordflow}{return} h2\_session\_create\_int(psession, r->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}, r, ctx, workers);
+894 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_aae9b0b4724f7687e798c40d6fec41b9d_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_aae9b0b4724f7687e798c40d6fec41b9d_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+set\+\_\+prio@{h2\+\_\+session\+\_\+set\+\_\+prio}}
+\index{h2\+\_\+session\+\_\+set\+\_\+prio@{h2\+\_\+session\+\_\+set\+\_\+prio}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+set\+\_\+prio(h2\+\_\+session $\ast$session, h2\+\_\+stream $\ast$stream, const h2\+\_\+priority $\ast$prio)}{h2_session_set_prio(h2_session *session, h2_stream *stream, const h2_priority *prio)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+session\+\_\+set\+\_\+prio (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$}]{session, }
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{const {\bf h2\+\_\+priority} $\ast$}]{prio}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_a8f2507556c255cdde8cf388d0008ee88}{}\label{h2__session_8c_a8f2507556c255cdde8cf388d0008ee88}
+
+\begin{DoxyCode}
+1131 \{
+1132     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1133 \textcolor{preprocessor}{#ifdef H2\_NG2\_CHANGE\_PRIO}
+1134     nghttp2\_stream *s\_grandpa, *s\_parent, *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+1135     
+1136     \textcolor{keywordflow}{if} (prio == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1137         \textcolor{comment}{/* we treat this as a NOP */}
+1138         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1139     \}
+1140     s = nghttp2\_session\_find\_stream(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id});
+1141     \textcolor{keywordflow}{if} (!s) \{
+1142         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+1143                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"lookup of nghttp2\_stream failed"}));
+1144         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL};
+1145     \}
+1146     
+1147     s\_parent = nghttp2\_stream\_get\_parent(s);
+1148     \textcolor{keywordflow}{if} (s\_parent) \{
+1149         nghttp2\_priority\_spec \hyperlink{group__APACHE__CORE__CONFIG_gac3433ab45961daa0aed079830e52d54b}{ps};
+1150         \textcolor{keywordtype}{int} id\_parent, id\_grandpa, w\_parent, \hyperlink{group__MOD__PROXY_gab9a0c51666082a4ca5dd995ee972f77e}{w};
+1151         \textcolor{keywordtype}{int} rv = 0;
+1152         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *ptype = \textcolor{stringliteral}{"AFTER"};
+1153         \hyperlink{h2_8h_a3b85fbe95e6fa95a738d8d8f2706c771}{h2\_dependency} dep = prio->\hyperlink{structh2__priority_ad0a95afad7af7a2dc4ffec78fc819f40}{dependency};
+1154         
+1155         id\_parent = nghttp2\_stream\_get\_stream\_id(s\_parent);
+1156         s\_grandpa = nghttp2\_stream\_get\_parent(s\_parent);
+1157         \textcolor{keywordflow}{if} (s\_grandpa) \{
+1158             id\_grandpa = nghttp2\_stream\_get\_stream\_id(s\_grandpa);
+1159         \}
+1160         \textcolor{keywordflow}{else} \{
+1161             \textcolor{comment}{/* parent of parent does not exist, }
+1162 \textcolor{comment}{             * only possible if parent == root */}
+1163             dep = \hyperlink{h2_8h_a3b85fbe95e6fa95a738d8d8f2706c771a0f41fa000e98ce62cde65148c4d78e58}{H2\_DEPENDANT\_AFTER};
+1164         \}
+1165         
+1166         \textcolor{keywordflow}{switch} (dep) \{
+1167             \textcolor{keywordflow}{case} \hyperlink{h2_8h_a3b85fbe95e6fa95a738d8d8f2706c771a14d93a933529ccca960043ab42fb40b2}{H2\_DEPENDANT\_INTERLEAVED}:
+1168                 \textcolor{comment}{/* PUSHed stream is to be interleaved with initiating stream.}
+1169 \textcolor{comment}{                 * It is made a sibling of the initiating stream and gets a}
+1170 \textcolor{comment}{                 * proportional weight [1, MAX\_WEIGHT] of the initiaing}
+1171 \textcolor{comment}{                 * stream weight.}
+1172 \textcolor{comment}{                 */}
+1173                 ptype = \textcolor{stringliteral}{"INTERLEAVED"};
+1174                 w\_parent = nghttp2\_stream\_get\_weight(s\_parent);
+1175                 w = valid\_weight(w\_parent * ((\textcolor{keywordtype}{float})prio->\hyperlink{structh2__priority_a3501a5e9d3cff58e1b18760fa100b1c3}{weight} / NGHTTP2\_MAX\_WEIGHT));
+1176                 nghttp2\_priority\_spec\_init(&ps, id\_grandpa, w, 0);
+1177                 \textcolor{keywordflow}{break};
+1178                 
+1179             \textcolor{keywordflow}{case} \hyperlink{h2_8h_a3b85fbe95e6fa95a738d8d8f2706c771aeebd0f1ee8c6ad87c4b5c7e6eea8067d}{H2\_DEPENDANT\_BEFORE}:
+1180                 \textcolor{comment}{/* PUSHed stream os to be sent BEFORE the initiating stream.}
+1181 \textcolor{comment}{                 * It gets the same weight as the initiating stream, replaces}
+1182 \textcolor{comment}{                 * that stream in the dependency tree and has the initiating}
+1183 \textcolor{comment}{                 * stream as child.}
+1184 \textcolor{comment}{                 */}
+1185                 ptype = \textcolor{stringliteral}{"BEFORE"};
+1186                 w = w\_parent = nghttp2\_stream\_get\_weight(s\_parent);
+1187                 nghttp2\_priority\_spec\_init(&ps, stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id}, w\_parent, 0);
+1188                 id\_grandpa = nghttp2\_stream\_get\_stream\_id(s\_grandpa);
+1189                 rv = nghttp2\_session\_change\_stream\_priority(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, id\_parent, &ps);
+1190                 \textcolor{keywordflow}{if} (rv < 0) \{
+1191                     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03202)
+1192                                   \textcolor{stringliteral}{"h2\_stream(%ld-%d): PUSH BEFORE, weight=%d, "}
+1193                                   \textcolor{stringliteral}{"depends=%d, returned=%d"},
+1194                                   session->\hyperlink{structh2__session_a00e5945662f1e1b72b9d22c384f5a46f}{id}, id\_parent, ps.weight, ps.stream\_id, rv);
+1195                     \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL};
+1196                 \}
+1197                 nghttp2\_priority\_spec\_init(&ps, id\_grandpa, w, 0);
+1198                 \textcolor{keywordflow}{break};
+1199                 
+1200             \textcolor{keywordflow}{case} \hyperlink{h2_8h_a3b85fbe95e6fa95a738d8d8f2706c771a0f41fa000e98ce62cde65148c4d78e58}{H2\_DEPENDANT\_AFTER}:
+1201                 \textcolor{comment}{/* The PUSHed stream is to be sent after the initiating stream.}
+1202 \textcolor{comment}{                 * Give if the specified weight and let it depend on the intiating}
+1203 \textcolor{comment}{                 * stream.}
+1204 \textcolor{comment}{                 */}
+1205                 \textcolor{comment}{/* fall through, it's the default */}
+1206             \textcolor{keywordflow}{default}:
+1207                 nghttp2\_priority\_spec\_init(&ps, id\_parent, valid\_weight(prio->
+      \hyperlink{structh2__priority_a3501a5e9d3cff58e1b18760fa100b1c3}{weight}), 0);
+1208                 \textcolor{keywordflow}{break};
+1209         \}
+1210 
+1211 
+1212         rv = nghttp2\_session\_change\_stream\_priority(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, stream->
+      \hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id}, &ps);
+1213         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+1214                       \textcolor{stringliteral}{""}\hyperlink{h2__stream_8h_a7dfae6c324bcb99d7925e34edc7696e4}{H2\_STRM\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03203), stream, 
+1215                       \textcolor{stringliteral}{"PUSH %s, weight=%d, depends=%d, returned=%d"}),
+1216                       ptype, ps.weight, ps.stream\_id, rv);
+1217         status = (rv < 0)? \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL} : \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1218     \}
+1219 \textcolor{preprocessor}{#else}
+1220     (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})session;
+1221     (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})stream;
+1222     (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})prio;
+1223     (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})valid\_weight;
+1224 \textcolor{preprocessor}{#endif}
+1225     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1226 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=257pt]{h2__session_8c_a8f2507556c255cdde8cf388d0008ee88_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a8f2507556c255cdde8cf388d0008ee88_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+state\+\_\+str@{h2\+\_\+session\+\_\+state\+\_\+str}}
+\index{h2\+\_\+session\+\_\+state\+\_\+str@{h2\+\_\+session\+\_\+state\+\_\+str}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+state\+\_\+str(h2\+\_\+session\+\_\+state state)}{h2_session_state_str(h2_session_state state)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ h2\+\_\+session\+\_\+state\+\_\+str (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session\+\_\+state}}]{state}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_a9d9a44308b54a90de8859bb96e30e81f}{}\label{h2__session_8c_a9d9a44308b54a90de8859bb96e30e81f}
+
+\begin{DoxyCode}
+1575 \{
+1576     \textcolor{keywordflow}{if} (state >= (\textcolor{keyword}{sizeof}(StateNames)/\textcolor{keyword}{sizeof}(StateNames[0]))) \{
+1577         \textcolor{keywordflow}{return} \textcolor{stringliteral}{"unknown"};
+1578     \}
+1579     \textcolor{keywordflow}{return} StateNames[state];
+1580 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_a9d9a44308b54a90de8859bb96e30e81f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=336pt]{h2__session_8c_a9d9a44308b54a90de8859bb96e30e81f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+session.\+c@{h2\+\_\+session.\+c}!h2\+\_\+session\+\_\+stream\+\_\+get@{h2\+\_\+session\+\_\+stream\+\_\+get}}
+\index{h2\+\_\+session\+\_\+stream\+\_\+get@{h2\+\_\+session\+\_\+stream\+\_\+get}!h2\+\_\+session.\+c@{h2\+\_\+session.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+session\+\_\+stream\+\_\+get(h2\+\_\+session $\ast$session, int stream\+\_\+id)}{h2_session_stream_get(h2_session *session, int stream_id)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+stream}$\ast$ h2\+\_\+session\+\_\+stream\+\_\+get (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+session} $\ast$}]{session, }
+\item[{{\bf int}}]{stream\+\_\+id}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__session_8c_ad1d4897f2aa846843b8de9c00e1c75b3}{}\label{h2__session_8c_ad1d4897f2aa846843b8de9c00e1c75b3}
+Look up the stream in this session with the given id. 
+\begin{DoxyCode}
+76 \{
+77     \textcolor{keywordflow}{return} nghttp2\_session\_get\_stream\_user\_data(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, stream\_id);
+78 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__session_8c_ad1d4897f2aa846843b8de9c00e1c75b3_icgraph}
+\end{center}
+\end{figure}
+
+

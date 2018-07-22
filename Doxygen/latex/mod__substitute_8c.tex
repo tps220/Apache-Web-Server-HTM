@@ -1,0 +1,132 @@
+\hypertarget{mod__substitute_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/filters/mod\+\_\+substitute.c File Reference}
+\label{mod__substitute_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/mod\+\_\+substitute.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/mod\+\_\+substitute.\+c}}
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strmatch.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+varbuf.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+substitute.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__substitute_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structsubst__pattern__t}{subst\+\_\+pattern\+\_\+t}
+\item 
+struct \hyperlink{structsubst__dir__conf}{subst\+\_\+dir\+\_\+conf}
+\item 
+struct \hyperlink{structsubstitute__module__ctx}{substitute\+\_\+module\+\_\+ctx}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__substitute_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__substitute_8c_a9e3ab642ad22f8f9923b38df9c6db72d}{A\+P\+\_\+\+S\+U\+B\+S\+T\+\_\+\+M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+E\+N\+G\+TH}~(1024$\ast$1024)
+\item 
+\#define \hyperlink{mod__substitute_8c_aa5a825d8b7b33d70f7e38297db46ff79}{A\+P\+\_\+\+M\+A\+X\+\_\+\+B\+U\+C\+K\+E\+TS}~1000
+\item 
+\#define \hyperlink{mod__substitute_8c_aa0668bfb64939980af2ceb5156d7af39}{S\+E\+D\+R\+M\+P\+A\+T\+B\+C\+KT}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{group__APR__Util__Bucket__Brigades_ga0feae9f93d4bc5dca392194c513e0921}{offset},  tmp\+\_\+b,  patlen)
+\item 
+\#define \hyperlink{mod__substitute_8c_a84cb64b99e9c62ac8d60ae91a8bc663f}{K\+B\+Y\+TE}~1024
+\item 
+\#define \hyperlink{mod__substitute_8c_a1401d91ed4cfc1f56efccf6eda6a5e40}{M\+B\+Y\+TE}~1048576
+\item 
+\#define \hyperlink{mod__substitute_8c_adf40634261dbea3b723e757475e12818}{G\+B\+Y\+TE}~1073741824
+\item 
+\#define \hyperlink{mod__substitute_8c_a48c6ff40fc2133d529852885ab12c26b}{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}~\hyperlink{group__APACHE__CORE__FILTER_ga1e0ebc72e7e221c1fa62e81e3a8b3e25}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}$\vert$\hyperlink{group__APACHE__CORE__FILTER_ga45a85db5961f6aa2975acb30a7ba020e}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structsubst__pattern__t}{subst\+\_\+pattern\+\_\+t} \hyperlink{mod__substitute_8c_a6202c7168a32f06a4ff07bb8faa6610b}{subst\+\_\+pattern\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__substitute_8c_a7b00918372caa8725c7b31d39c7551e1}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (substitute)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__substitute_8c_aa04160e102837442ecbf13b58ed1a7e7}{substitute\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!A\+P\+\_\+\+M\+A\+X\+\_\+\+B\+U\+C\+K\+E\+TS@{A\+P\+\_\+\+M\+A\+X\+\_\+\+B\+U\+C\+K\+E\+TS}}
+\index{A\+P\+\_\+\+M\+A\+X\+\_\+\+B\+U\+C\+K\+E\+TS@{A\+P\+\_\+\+M\+A\+X\+\_\+\+B\+U\+C\+K\+E\+TS}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+M\+A\+X\+\_\+\+B\+U\+C\+K\+E\+TS}{AP_MAX_BUCKETS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+M\+A\+X\+\_\+\+B\+U\+C\+K\+E\+TS~1000}\hypertarget{mod__substitute_8c_aa5a825d8b7b33d70f7e38297db46ff79}{}\label{mod__substitute_8c_aa5a825d8b7b33d70f7e38297db46ff79}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!A\+P\+\_\+\+S\+U\+B\+S\+T\+\_\+\+M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+E\+N\+G\+TH@{A\+P\+\_\+\+S\+U\+B\+S\+T\+\_\+\+M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+E\+N\+G\+TH}}
+\index{A\+P\+\_\+\+S\+U\+B\+S\+T\+\_\+\+M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+E\+N\+G\+TH@{A\+P\+\_\+\+S\+U\+B\+S\+T\+\_\+\+M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+E\+N\+G\+TH}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+S\+U\+B\+S\+T\+\_\+\+M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+E\+N\+G\+TH}{AP_SUBST_MAX_LINE_LENGTH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+S\+U\+B\+S\+T\+\_\+\+M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+E\+N\+G\+TH~(1024$\ast$1024)}\hypertarget{mod__substitute_8c_a9e3ab642ad22f8f9923b38df9c6db72d}{}\label{mod__substitute_8c_a9e3ab642ad22f8f9923b38df9c6db72d}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__substitute_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__substitute_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!G\+B\+Y\+TE@{G\+B\+Y\+TE}}
+\index{G\+B\+Y\+TE@{G\+B\+Y\+TE}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{G\+B\+Y\+TE}{GBYTE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\+B\+Y\+TE~1073741824}\hypertarget{mod__substitute_8c_adf40634261dbea3b723e757475e12818}{}\label{mod__substitute_8c_adf40634261dbea3b723e757475e12818}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!K\+B\+Y\+TE@{K\+B\+Y\+TE}}
+\index{K\+B\+Y\+TE@{K\+B\+Y\+TE}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{K\+B\+Y\+TE}{KBYTE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define K\+B\+Y\+TE~1024}\hypertarget{mod__substitute_8c_a84cb64b99e9c62ac8d60ae91a8bc663f}{}\label{mod__substitute_8c_a84cb64b99e9c62ac8d60ae91a8bc663f}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!M\+B\+Y\+TE@{M\+B\+Y\+TE}}
+\index{M\+B\+Y\+TE@{M\+B\+Y\+TE}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{M\+B\+Y\+TE}{MBYTE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+B\+Y\+TE~1048576}\hypertarget{mod__substitute_8c_a1401d91ed4cfc1f56efccf6eda6a5e40}{}\label{mod__substitute_8c_a1401d91ed4cfc1f56efccf6eda6a5e40}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS@{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}}
+\index{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS@{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}{PROTO_FLAGS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS~{\bf A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}$\vert${\bf A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}}\hypertarget{mod__substitute_8c_a48c6ff40fc2133d529852885ab12c26b}{}\label{mod__substitute_8c_a48c6ff40fc2133d529852885ab12c26b}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!S\+E\+D\+R\+M\+P\+A\+T\+B\+C\+KT@{S\+E\+D\+R\+M\+P\+A\+T\+B\+C\+KT}}
+\index{S\+E\+D\+R\+M\+P\+A\+T\+B\+C\+KT@{S\+E\+D\+R\+M\+P\+A\+T\+B\+C\+KT}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{S\+E\+D\+R\+M\+P\+A\+T\+B\+C\+KT}{SEDRMPATBCKT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+E\+D\+R\+M\+P\+A\+T\+B\+C\+KT(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf offset}, }
+\item[{}]{tmp\+\_\+b, }
+\item[{}]{patlen}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__substitute_8c_aa0668bfb64939980af2ceb5156d7af39}{}\label{mod__substitute_8c_aa0668bfb64939980af2ceb5156d7af39}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{  \hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{\(\backslash\)}
+\hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{    apr\_bucket\_split}(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}, \hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset});                     \(\backslash\)
+    tmp\_b = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b});                      \hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{\(\backslash\)}
+\hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{    apr\_bucket\_split}(tmp\_b, patlen);                 \hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{    b} = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(tmp\_b);                      \hyperlink{group__APR__Util__Bucket__Brigades_ga8925c02a7f95e8c1c3986294d4678797}{\(\backslash\)}
+\hyperlink{group__APR__Util__Bucket__Brigades_ga8925c02a7f95e8c1c3986294d4678797}{    apr\_bucket\_delete}(tmp\_b);                        \(\backslash\)
+\} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!subst\+\_\+pattern\+\_\+t@{subst\+\_\+pattern\+\_\+t}}
+\index{subst\+\_\+pattern\+\_\+t@{subst\+\_\+pattern\+\_\+t}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{subst\+\_\+pattern\+\_\+t}{subst_pattern_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf subst\+\_\+pattern\+\_\+t}  {\bf subst\+\_\+pattern\+\_\+t}}\hypertarget{mod__substitute_8c_a6202c7168a32f06a4ff07bb8faa6610b}{}\label{mod__substitute_8c_a6202c7168a32f06a4ff07bb8faa6610b}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(substitute)}{AP_DECLARE_MODULE(substitute)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{substitute}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__substitute_8c_a7b00918372caa8725c7b31d39c7551e1}{}\label{mod__substitute_8c_a7b00918372caa8725c7b31d39c7551e1}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}!substitute\+\_\+module@{substitute\+\_\+module}}
+\index{substitute\+\_\+module@{substitute\+\_\+module}!mod\+\_\+substitute.\+c@{mod\+\_\+substitute.\+c}}
+\subsubsection[{\texorpdfstring{substitute\+\_\+module}{substitute_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} substitute\+\_\+module}\hypertarget{mod__substitute_8c_aa04160e102837442ecbf13b58ed1a7e7}{}\label{mod__substitute_8c_aa04160e102837442ecbf13b58ed1a7e7}

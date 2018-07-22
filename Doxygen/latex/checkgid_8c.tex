@@ -1,0 +1,87 @@
+\hypertarget{checkgid_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/checkgid.c File Reference}
+\label{checkgid_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/checkgid.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/checkgid.\+c}}
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+Include dependency graph for checkgid.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{checkgid_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{checkgid_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{checkgid.\+c@{checkgid.\+c}!main@{main}}
+\index{main@{main}!checkgid.\+c@{checkgid.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{checkgid_8c_a0ddf1224851353fc92bfbff6f499fa97}{}\label{checkgid_8c_a0ddf1224851353fc92bfbff6f499fa97}
+
+\begin{DoxyCode}
+48 \{
+49     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+50     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+51     gid\_t gid;
+52     \textcolor{keyword}{struct }\hyperlink{group__MOD__DAV_gadc3add9d56a1a732c371606682db4c4e}{group} *grent;
+53     \textcolor{keyword}{struct }\hyperlink{group__MOD__DAV_gadc3add9d56a1a732c371606682db4c4e}{group} fake\_grent;
+54 
+55     \textcolor{comment}{/*}
+56 \textcolor{comment}{     * Assume success. :-)}
+57 \textcolor{comment}{     */}
+58     result = 0;
+59     \textcolor{keywordflow}{for} (i = 1; i < \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+60         \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+61         arg = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+62 
+63         \textcolor{comment}{/*}
+64 \textcolor{comment}{         * If it's from a 'Group #-1' statement, get the numeric value}
+65 \textcolor{comment}{         * and skip the group lookup stuff.}
+66 \textcolor{comment}{         */}
+67         \textcolor{keywordflow}{if} (*arg == \textcolor{charliteral}{'#'}) \{
+68             gid = atoi(&arg[1]);
+69             fake\_grent.gr\_gid = gid;
+70             grent = &fake\_grent;
+71         \}
+72         \textcolor{keywordflow}{else} \{
+73             grent = getgrnam(arg);
+74         \}
+75 
+76         \textcolor{comment}{/*}
+77 \textcolor{comment}{         * A NULL return means no such group was found, so we're done}
+78 \textcolor{comment}{         * with this one.}
+79 \textcolor{comment}{         */}
+80         \textcolor{keywordflow}{if} (grent == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+81             fprintf(stderr, \textcolor{stringliteral}{"%s: group '%s' not found\(\backslash\)n"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], arg);
+82             result = -1;
+83         \}
+84         \textcolor{keywordflow}{else} \{
+85             \textcolor{keywordtype}{int} check;
+86 
+87             \textcolor{comment}{/*}
+88 \textcolor{comment}{             * See if we can switch to the numeric GID we have. If so,}
+89 \textcolor{comment}{             * all well and good; if not, well..}
+90 \textcolor{comment}{             */}
+91             gid = grent->gr\_gid;
+92             check = setgid(gid);
+93             \textcolor{keywordflow}{if} (check != 0) \{
+94                 fprintf(stderr, \textcolor{stringliteral}{"%s: invalid group '%s'\(\backslash\)n"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], arg);
+95                 perror(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+96                 result = -1;
+97             \}
+98         \}
+99     \}
+100     \textcolor{comment}{/*}
+101 \textcolor{comment}{     * Worst-case return value.}
+102 \textcolor{comment}{     */}
+103     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+104 \}
+\end{DoxyCode}

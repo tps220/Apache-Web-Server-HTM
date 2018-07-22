@@ -1,0 +1,482 @@
+\hypertarget{h2__request_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http2/h2\+\_\+request.c File Reference}
+\label{h2__request_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+request.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+request.\+c}}
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+strings.\+h$>$}\\*
+{\ttfamily \#include $<$httpd.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+core.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+connection.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+protocol.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+request.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+log.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+vhost.\+h$>$}\\*
+{\ttfamily \#include $<$util\+\_\+filter.\+h$>$}\\*
+{\ttfamily \#include $<$ap\+\_\+mpm.\+h$>$}\\*
+{\ttfamily \#include $<$mod\+\_\+core.\+h$>$}\\*
+{\ttfamily \#include $<$scoreboard.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+push.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+util.\+h\char`\"{}}\\*
+Include dependency graph for h2\+\_\+request.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__request_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structh1__ctx}{h1\+\_\+ctx}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__request_8c_a1d35290fb0e699147310e780183e2626}{h2\+\_\+request\+\_\+rcreate} (\hyperlink{structh2__request}{h2\+\_\+request} $\ast$$\ast$preq, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__request_8c_a4e6c539529b00fe81973a1a79d300a90}{h2\+\_\+request\+\_\+add\+\_\+header} (\hyperlink{structh2__request}{h2\+\_\+request} $\ast$req, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, size\+\_\+t nlen, const char $\ast$\hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value}, size\+\_\+t vlen)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__request_8c_a293f05d6f5a2c7aa4221468c7723a237}{h2\+\_\+request\+\_\+end\+\_\+headers} (\hyperlink{structh2__request}{h2\+\_\+request} $\ast$req, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} eos)
+\item 
+\hyperlink{structh2__request}{h2\+\_\+request} $\ast$ \hyperlink{h2__request_8c_abd1a394d05040898a973507a59831aa8}{h2\+\_\+request\+\_\+clone} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, const \hyperlink{structh2__request}{h2\+\_\+request} $\ast$\hyperlink{apr__siphash_8h_ab3b4066b211a3d1de8f72e90b2bca8ab}{src})
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$ \hyperlink{h2__request_8c_aa2f8b8a742d642de4463ea63129a985a}{h2\+\_\+request\+\_\+create\+\_\+rec} (const \hyperlink{structh2__request}{h2\+\_\+request} $\ast$req, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{h2\+\_\+request.\+c@{h2\+\_\+request.\+c}!h2\+\_\+request\+\_\+add\+\_\+header@{h2\+\_\+request\+\_\+add\+\_\+header}}
+\index{h2\+\_\+request\+\_\+add\+\_\+header@{h2\+\_\+request\+\_\+add\+\_\+header}!h2\+\_\+request.\+c@{h2\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+request\+\_\+add\+\_\+header(h2\+\_\+request $\ast$req, apr\+\_\+pool\+\_\+t $\ast$pool, const char $\ast$name, size\+\_\+t nlen, const char $\ast$value, size\+\_\+t vlen)}{h2_request_add_header(h2_request *req, apr_pool_t *pool, const char *name, size_t nlen, const char *value, size_t vlen)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+request\+\_\+add\+\_\+header (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+request} $\ast$}]{req, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{const char $\ast$}]{name, }
+\item[{size\+\_\+t}]{nlen, }
+\item[{const char $\ast$}]{value, }
+\item[{size\+\_\+t}]{vlen}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__request_8c_a4e6c539529b00fe81973a1a79d300a90}{}\label{h2__request_8c_a4e6c539529b00fe81973a1a79d300a90}
+
+\begin{DoxyCode}
+102 \{
+103     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+104     
+105     \textcolor{keywordflow}{if} (nlen <= 0) \{
+106         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+107     \}
+108     
+109     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}[0] == \textcolor{charliteral}{':'}) \{
+110         \textcolor{comment}{/* pseudo header, see ch. 8.1.2.3, always should come first */}
+111         \textcolor{keywordflow}{if} (!apr\_is\_empty\_table(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers})) \{
+112             \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 0, pool,
+113                           \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02917) 
+114                           \textcolor{stringliteral}{"h2\_request: pseudo header after request start"});
+115             \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL};
+116         \}
+117         
+118         \textcolor{keywordflow}{if} (\hyperlink{h2_8h_a4b2c38966a5b5898736949e897d20d1a}{H2\_HEADER\_METHOD\_LEN} == nlen
+119             && !strncmp(\hyperlink{h2_8h_a6f53f412aeb85ade5ec93572d3087d57}{H2\_HEADER\_METHOD}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen)) \{
+120             req->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method} = apr\_pstrndup(pool, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+121         \}
+122         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{h2_8h_a411769864367594096c6bcacba967618}{H2\_HEADER\_SCHEME\_LEN} == nlen
+123                  && !strncmp(\hyperlink{h2_8h_a8dd901dc61d7df12984d8807a0751a37}{H2\_HEADER\_SCHEME}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen)) \{
+124             req->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme} = apr\_pstrndup(pool, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+125         \}
+126         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{h2_8h_a80e95fcaa3256b4d54a0628394444a05}{H2\_HEADER\_PATH\_LEN} == nlen
+127                  && !strncmp(\hyperlink{h2_8h_a197b1069c5b8ea801e06a1bc7a53d90c}{H2\_HEADER\_PATH}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen)) \{
+128             req->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path} = apr\_pstrndup(pool, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+129         \}
+130         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{h2_8h_a487700074b634b02aa00a0a30a002027}{H2\_HEADER\_AUTH\_LEN} == nlen
+131                  && !strncmp(\hyperlink{h2_8h_a21a5adf69cde7a99b755d0781210983a}{H2\_HEADER\_AUTH}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen)) \{
+132             req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority} = apr\_pstrndup(pool, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+133         \}
+134         \textcolor{keywordflow}{else} \{
+135             \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}[32];
+136             memset(buffer, 0, 32);
+137             strncpy(buffer, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, (nlen > 31)? 31 : nlen);
+138             \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga73e14aeff380a8a01c66d528162026fe}{APLOG\_WARNING}, 0, pool,
+139                           \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02954) 
+140                           \textcolor{stringliteral}{"h2\_request: ignoring unknown pseudo header %s"},
+141                           buffer);
+142         \}
+143     \}
+144     \textcolor{keywordflow}{else} \{
+145         \textcolor{comment}{/* non-pseudo header, append to work bucket of stream */}
+146         status = \hyperlink{h2__util_8c_a411d190ee50bf03285ec1643482d5e53}{h2\_req\_add\_header}(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}, pool, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+147     \}
+148     
+149     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+150 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__request_8c_a4e6c539529b00fe81973a1a79d300a90_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__request_8c_a4e6c539529b00fe81973a1a79d300a90_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+request.\+c@{h2\+\_\+request.\+c}!h2\+\_\+request\+\_\+clone@{h2\+\_\+request\+\_\+clone}}
+\index{h2\+\_\+request\+\_\+clone@{h2\+\_\+request\+\_\+clone}!h2\+\_\+request.\+c@{h2\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+request\+\_\+clone(apr\+\_\+pool\+\_\+t $\ast$p, const h2\+\_\+request $\ast$src)}{h2_request_clone(apr_pool_t *p, const h2_request *src)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+request}$\ast$ h2\+\_\+request\+\_\+clone (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{const {\bf h2\+\_\+request} $\ast$}]{src}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__request_8c_abd1a394d05040898a973507a59831aa8}{}\label{h2__request_8c_abd1a394d05040898a973507a59831aa8}
+
+\begin{DoxyCode}
+197 \{
+198     \hyperlink{structh2__request}{h2\_request} *dst = apr\_pmemdup(p, src, \textcolor{keyword}{sizeof}(*dst));
+199     dst->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method}       = apr\_pstrdup(p, src->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method});
+200     dst->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme}       = apr\_pstrdup(p, src->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme});
+201     dst->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority}    = apr\_pstrdup(p, src->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority});
+202     dst->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path}         = apr\_pstrdup(p, src->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path});
+203     dst->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}      = apr\_table\_clone(p, src->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers});
+204     \textcolor{keywordflow}{return} dst;
+205 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__request_8c_abd1a394d05040898a973507a59831aa8_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+request.\+c@{h2\+\_\+request.\+c}!h2\+\_\+request\+\_\+create\+\_\+rec@{h2\+\_\+request\+\_\+create\+\_\+rec}}
+\index{h2\+\_\+request\+\_\+create\+\_\+rec@{h2\+\_\+request\+\_\+create\+\_\+rec}!h2\+\_\+request.\+c@{h2\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+request\+\_\+create\+\_\+rec(const h2\+\_\+request $\ast$req, conn\+\_\+rec $\ast$c)}{h2_request_create_rec(const h2_request *req, conn_rec *c)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf request\+\_\+rec}$\ast$ h2\+\_\+request\+\_\+create\+\_\+rec (
+\begin{DoxyParamCaption}
+\item[{const {\bf h2\+\_\+request} $\ast$}]{req, }
+\item[{{\bf conn\+\_\+rec} $\ast$}]{conn}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__request_8c_aa2f8b8a742d642de4463ea63129a985a}{}\label{h2__request_8c_aa2f8b8a742d642de4463ea63129a985a}
+Create a \hyperlink{structrequest__rec}{request\+\_\+rec} representing the \hyperlink{structh2__request}{h2\+\_\+request} to be processed on the given connection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em req} & the h2 request to process \\
+\hline
+{\em conn} & the connection to process the request on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the \hyperlink{structrequest__rec}{request\+\_\+rec} representing the request 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+208 \{
+209     \textcolor{keywordtype}{int} access\_status = \hyperlink{group__HTTP__Status_ga02e6d59009dee759528ec81fc9a8eeff}{HTTP\_OK};    
+210     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *rpath;
+211     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+212     \hyperlink{structrequest__rec}{request\_rec} *\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+213     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+214 
+215     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&p, c->\hyperlink{structconn__rec_a1dc5f31c7afc4a6f9c4ede0daea8cd1d}{pool});
+216     apr\_pool\_tag(p, \textcolor{stringliteral}{"request"});
+217     r = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(p, \textcolor{keyword}{sizeof}(\hyperlink{structrequest__rec}{request\_rec}));
+218     \hyperlink{apache__noprobes_8h_ae565508225e30eb021fb3b4abd9a94df}{AP\_READ\_REQUEST\_ENTRY}((intptr\_t)r, (uintptr\_t)c);
+219     r->pool            = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+220     r->connection      = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+221     r->server          = c->\hyperlink{structconn__rec_a1e199eb6e4e1617e94dd03b9cfaa83c8}{base\_server};
+222     
+223     r->user            = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+224     r->ap\_auth\_type    = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+225     
+226     r->allowed\_methods = ap\_make\_method\_list(p, 2);
+227     
+228     r->headers\_in      = apr\_table\_clone(r->pool, req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers});
+229     r->trailers\_in     = apr\_table\_make(r->pool, 5);
+230     r->subprocess\_env  = apr\_table\_make(r->pool, 25);
+231     r->headers\_out     = apr\_table\_make(r->pool, 12);
+232     r->err\_headers\_out = apr\_table\_make(r->pool, 5);
+233     r->trailers\_out    = apr\_table\_make(r->pool, 5);
+234     r->notes           = apr\_table\_make(r->pool, 5);
+235     
+236     r->request\_config  = ap\_create\_request\_config(r->pool);
+237     \textcolor{comment}{/* Must be set before we run create request hook */}
+238     
+239     r->proto\_output\_filters = c->\hyperlink{structconn__rec_a41ce808290656ac63a859b7145b0602c}{output\_filters};
+240     r->output\_filters  = r->proto\_output\_filters;
+241     r->proto\_input\_filters = c->\hyperlink{structconn__rec_a27bcfa99aac415734fedbb540ab7a3e7}{input\_filters};
+242     r->input\_filters   = r->proto\_input\_filters;
+243     ap\_run\_create\_request(r);
+244     r->per\_dir\_config  = r->server->lookup\_defaults;
+245     
+246     r->sent\_bodyct     = 0;                      \textcolor{comment}{/* bytect isn't for body */}
+247     
+248     r->read\_length     = 0;
+249     r->read\_body       = \hyperlink{group__values__request__rec__body_gaf74625e7d4f8f352ed14a4bdf3f7262b}{REQUEST\_NO\_BODY};
+250     
+251     r->status          = \hyperlink{group__HTTP__Status_ga02e6d59009dee759528ec81fc9a8eeff}{HTTP\_OK};  \textcolor{comment}{/* Until further notice */}
+252     r->header\_only     = 0;
+253     r->the\_request     = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+254     
+255     \textcolor{comment}{/* Begin by presuming any module can make its own path\_info assumptions,}
+256 \textcolor{comment}{     * until some module interjects and changes the value.}
+257 \textcolor{comment}{     */}
+258     r->used\_path\_info = \hyperlink{group__values__request__rec__used__path__info_ga0a636f7227021011d3fa0c2418b918fa}{AP\_REQ\_DEFAULT\_PATH\_INFO};
+259     
+260     r->useragent\_addr = c->\hyperlink{structconn__rec_a182fbb82669057b3ddafaf9e3075a745}{client\_addr};
+261     r->useragent\_ip = c->\hyperlink{structconn__rec_a792faf741c8f0f87587089e194360fba}{client\_ip};
+262     
+263     ap\_run\_pre\_read\_request(r, c);
+264     
+265     \textcolor{comment}{/* Time to populate r with the data we have. */}
+266     r->request\_time = req->\hyperlink{structh2__request_adaa05fcdc45ee82f557ae390d1e14f1a}{request\_time};
+267     r->method = req->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method};
+268     \textcolor{comment}{/* Provide quick information about the request method as soon as known */}
+269     r->method\_number = ap\_method\_number\_of(r->method);
+270     \textcolor{keywordflow}{if} (r->method\_number == \hyperlink{group__Methods_ga8793a8633545688a32ef097e9b0ac591}{M\_GET} && r->method[0] == \textcolor{charliteral}{'H'}) \{
+271         r->header\_only = 1;
+272     \}
+273 
+274     rpath = (req->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path} ? req->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path} : \textcolor{stringliteral}{""});
+275     ap\_parse\_uri(r, rpath);
+276     r->protocol = (\textcolor{keywordtype}{char}*)\textcolor{stringliteral}{"HTTP/2.0"};
+277     r->proto\_num = \hyperlink{group__APACHE__CORE__DAEMON_gab48aba3b8935a26d38b88710041a1b6a}{HTTP\_VERSION}(2, 0);
+278 
+279     r->the\_request = apr\_psprintf(r->pool, \textcolor{stringliteral}{"%s %s %s"}, 
+280                                   r->method, rpath, r->protocol);
+281     
+282     \textcolor{comment}{/* update what we think the virtual host is based on the headers we've}
+283 \textcolor{comment}{     * now read. may update status.}
+284 \textcolor{comment}{     * Leave r->hostname empty, vhost will parse if form our Host: header,}
+285 \textcolor{comment}{     * otherwise we get complains about port numbers.}
+286 \textcolor{comment}{     */}
+287     r->hostname = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+288     ap\_update\_vhost\_from\_headers(r);
+289     
+290     \textcolor{comment}{/* we may have switched to another server */}
+291     r->per\_dir\_config = r->server->lookup\_defaults;
+292     
+293     s = apr\_table\_get(r->headers\_in, \textcolor{stringliteral}{"Expect"});
+294     \textcolor{keywordflow}{if} (s && s[0]) \{
+295         \textcolor{keywordflow}{if} (ap\_cstr\_casecmp(s, \textcolor{stringliteral}{"100-continue"}) == 0) \{
+296             r->expecting\_100 = 1;
+297         \}
+298         \textcolor{keywordflow}{else} \{
+299             r->status = \hyperlink{group__HTTP__Status_ga9419cf3e03b1b3e36c67335cb59edf57}{HTTP\_EXPECTATION\_FAILED};
+300             ap\_send\_error\_response(r, 0);
+301         \}
+302     \}
+303 
+304     \textcolor{comment}{/*}
+305 \textcolor{comment}{     * Add the HTTP\_IN filter here to ensure that ap\_discard\_request\_body}
+306 \textcolor{comment}{     * called by ap\_die and by ap\_send\_error\_response works correctly on}
+307 \textcolor{comment}{     * status codes that do not cause the connection to be dropped and}
+308 \textcolor{comment}{     * in situations where the connection should be kept alive.}
+309 \textcolor{comment}{     */}
+310     ap\_add\_input\_filter\_handle(\hyperlink{group__MOD__CORE_gaeb746d5b6cdbaa812be4a7f25430cc02}{ap\_http\_input\_filter\_handle},
+311                                \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, r, r->connection);
+312     
+313     \textcolor{keywordflow}{if} (access\_status != \hyperlink{group__HTTP__Status_ga02e6d59009dee759528ec81fc9a8eeff}{HTTP\_OK}
+314         || (access\_status = ap\_run\_post\_read\_request(r))) \{
+315         \textcolor{comment}{/* Request check post hooks failed. An example of this would be a}
+316 \textcolor{comment}{         * request for a vhost where h2 is disabled --> 421.}
+317 \textcolor{comment}{         */}
+318         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, c, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03367)
+319                       \textcolor{stringliteral}{"h2\_request: access\_status=%d, request\_create failed"},
+320                       access\_status);
+321         ap\_die(access\_status, r);
+322         ap\_update\_child\_status(c->\hyperlink{structconn__rec_af0e434bcb2a0a47c13e94069431fb281}{sbh}, \hyperlink{scoreboard_8h_a27a5c403b65794dc90e380a76a500924}{SERVER\_BUSY\_LOG}, r);
+323         ap\_run\_log\_transaction(r);
+324         r = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+325         \textcolor{keywordflow}{goto} traceout;
+326     \}
+327 
+328     \hyperlink{apache__noprobes_8h_a4dc77c1a444f774f8900f290dc8e476a}{AP\_READ\_REQUEST\_SUCCESS}((uintptr\_t)r, (\textcolor{keywordtype}{char} *)r->method, 
+329                             (\textcolor{keywordtype}{char} *)r->uri, (\textcolor{keywordtype}{char} *)r->server->defn\_name, 
+330                             r->status);
+331     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+332 traceout:
+333     \hyperlink{apache__noprobes_8h_ae00487df19337e9792c7ed6dd5a0bd88}{AP\_READ\_REQUEST\_FAILURE}((uintptr\_t)r);
+334     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+335 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=299pt]{h2__request_8c_aa2f8b8a742d642de4463ea63129a985a_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+request.\+c@{h2\+\_\+request.\+c}!h2\+\_\+request\+\_\+end\+\_\+headers@{h2\+\_\+request\+\_\+end\+\_\+headers}}
+\index{h2\+\_\+request\+\_\+end\+\_\+headers@{h2\+\_\+request\+\_\+end\+\_\+headers}!h2\+\_\+request.\+c@{h2\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+request\+\_\+end\+\_\+headers(h2\+\_\+request $\ast$req, apr\+\_\+pool\+\_\+t $\ast$pool, int eos)}{h2_request_end_headers(h2_request *req, apr_pool_t *pool, int eos)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+request\+\_\+end\+\_\+headers (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+request} $\ast$}]{req, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{eos}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__request_8c_a293f05d6f5a2c7aa4221468c7723a237}{}\label{h2__request_8c_a293f05d6f5a2c7aa4221468c7723a237}
+
+\begin{DoxyCode}
+153 \{
+154     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+155     
+156     \textcolor{comment}{/* rfc7540, ch. 8.1.2.3:}
+157 \textcolor{comment}{     * - if we have :authority, it overrides any Host header }
+158 \textcolor{comment}{     * - :authority MUST be ommited when converting h1->h2, so we}
+159 \textcolor{comment}{     *   might get a stream without, but then Host needs to be there */}
+160     \textcolor{keywordflow}{if} (!req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority}) \{
+161         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__VHOST_ga8c8ad0616f1a1fed66e67a90a116a76c}{host} = apr\_table\_get(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}, \textcolor{stringliteral}{"Host"});
+162         \textcolor{keywordflow}{if} (!host) \{
+163             \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga771bf48ab38d93355be8530f6efe4ae9}{APR\_BADARG};
+164         \}
+165         req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority} = \hyperlink{group__APACHE__CORE__VHOST_ga8c8ad0616f1a1fed66e67a90a116a76c}{host};
+166     \}
+167     \textcolor{keywordflow}{else} \{
+168         apr\_table\_setn(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}, \textcolor{stringliteral}{"Host"}, req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority});
+169     \}
+170 
+171     s = apr\_table\_get(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}, \textcolor{stringliteral}{"Content-Length"});
+172     \textcolor{keywordflow}{if} (!s) \{
+173         \textcolor{comment}{/* HTTP/2 does not need a Content-Length for framing, but our}
+174 \textcolor{comment}{         * internal request processing is used to HTTP/1.1, so we}
+175 \textcolor{comment}{         * need to either add a Content-Length or a Transfer-Encoding}
+176 \textcolor{comment}{         * if any content can be expected. */}
+177         \textcolor{keywordflow}{if} (!eos) \{
+178             \textcolor{comment}{/* We have not seen a content-length and have no eos,}
+179 \textcolor{comment}{             * simulate a chunked encoding for our HTTP/1.1 infrastructure,}
+180 \textcolor{comment}{             * in case we have "H2SerializeHeaders on" here}
+181 \textcolor{comment}{             */}
+182             req->\hyperlink{structh2__request_a3dde46ef74e22353622855f1fda1f6ef}{chunked} = 1;
+183             apr\_table\_mergen(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}, \textcolor{stringliteral}{"Transfer-Encoding"}, \textcolor{stringliteral}{"chunked"});
+184         \}
+185         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (apr\_table\_get(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}, \textcolor{stringliteral}{"Content-Type"})) \{
+186             \textcolor{comment}{/* If we have a content-type, but already seen eos, no more}
+187 \textcolor{comment}{             * data will come. Signal a zero content length explicitly.}
+188 \textcolor{comment}{             */}
+189             apr\_table\_setn(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}, \textcolor{stringliteral}{"Content-Length"}, \textcolor{stringliteral}{"0"});
+190         \}
+191     \}
+192 
+193     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+194 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__request_8c_a293f05d6f5a2c7aa4221468c7723a237_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+request.\+c@{h2\+\_\+request.\+c}!h2\+\_\+request\+\_\+rcreate@{h2\+\_\+request\+\_\+rcreate}}
+\index{h2\+\_\+request\+\_\+rcreate@{h2\+\_\+request\+\_\+rcreate}!h2\+\_\+request.\+c@{h2\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+request\+\_\+rcreate(h2\+\_\+request $\ast$$\ast$preq, apr\+\_\+pool\+\_\+t $\ast$pool, request\+\_\+rec $\ast$r)}{h2_request_rcreate(h2_request **preq, apr_pool_t *pool, request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+request\+\_\+rcreate (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+request} $\ast$$\ast$}]{preq, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__request_8c_a1d35290fb0e699147310e780183e2626}{}\label{h2__request_8c_a1d35290fb0e699147310e780183e2626}
+
+\begin{DoxyCode}
+55 \{
+56     \hyperlink{structh2__request}{h2\_request} *req;
+57     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *scheme, *authority, *\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path};
+58     \hyperlink{structh1__ctx}{h1\_ctx} \hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x};
+59     
+60     *preq = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+61     scheme = apr\_pstrdup(pool, r->\hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme}? r->
+      \hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme}
+62               : \hyperlink{group__APACHE__CORE__DAEMON_ga486f75485b725c5c3baaa577409d36f3}{ap\_http\_scheme}(r));
+63     authority = apr\_pstrdup(pool, r->\hyperlink{structrequest__rec_a93baa938b6e2f6c4648cb2429495cd1b}{hostname});
+64     path = apr\_uri\_unparse(pool, &r->\hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}, 
+      \hyperlink{group__APR__Util__URI_gaef80da6212c6838ac15bbcafa1e9745b}{APR\_URI\_UNP\_OMITSITEPART});
+65     
+66     \textcolor{keywordflow}{if} (!r->\hyperlink{structrequest__rec_a54de55544c4c4c25d67a08980184c653}{method} || !scheme || !r->\hyperlink{structrequest__rec_a93baa938b6e2f6c4648cb2429495cd1b}{hostname} || !path) \{
+67         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL};
+68     \}
+69 
+70     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\_strchr\_c}(authority, \textcolor{charliteral}{':'}) && r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server} && r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port) \{
+71         \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\_port\_t} defport = apr\_uri\_port\_of\_scheme(scheme);
+72         \textcolor{keywordflow}{if} (defport != r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port) \{
+73             \textcolor{comment}{/* port info missing and port is not default for scheme: append */}
+74             authority = apr\_psprintf(pool, \textcolor{stringliteral}{"%s:%d"}, authority,
+75                                      (\textcolor{keywordtype}{int})r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port);
+76         \}
+77     \}
+78     
+79     req = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(*req));
+80     req->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method}    = apr\_pstrdup(pool, r->\hyperlink{structrequest__rec_a54de55544c4c4c25d67a08980184c653}{method});
+81     req->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme}    = scheme;
+82     req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority} = authority;
+83     req->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path}      = \hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path};
+84     req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}   = apr\_table\_make(pool, 10);
+85     \textcolor{keywordflow}{if} (r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}) \{
+86         req->\hyperlink{structh2__request_acb093d2b49d76dc171a6796b59ba7fdb}{serialize} = \hyperlink{h2__config_8c_a22d672856fe674becba5e4e07ba0ae04}{h2\_config\_geti}(\hyperlink{h2__config_8c_a0c0f1e9706b7426cb14a63a08420e03d}{h2\_config\_sget}(r->
+      \hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}), 
+87                                         \hyperlink{h2__config_8h_a9ba9f682e77cb3b39514432a14fce8d4a477eb45b9b0feb392b7f39f31751bf04}{H2\_CONF\_SER\_HEADERS});
+88     \}
+89 
+90     x.\hyperlink{structh1__ctx_a0d6999735f5c6fe98f9f4222566f9ad6}{pool} = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+91     x.\hyperlink{structh1__ctx_a7459d23a81c2e571171767f2ead334eb}{headers} = req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers};
+92     x.\hyperlink{structh1__ctx_a031d6eaa3944eee95c6a01614dfc0b4b}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+93     apr\_table\_do(set\_h1\_header, &x, r->\hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+94     
+95     *preq = req;
+96     \textcolor{keywordflow}{return} x.\hyperlink{structh1__ctx_a031d6eaa3944eee95c6a01614dfc0b4b}{status};
+97 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__request_8c_a1d35290fb0e699147310e780183e2626_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__request_8c_a1d35290fb0e699147310e780183e2626_icgraph}
+\end{center}
+\end{figure}
+
+

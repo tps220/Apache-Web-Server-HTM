@@ -1,0 +1,224 @@
+\hypertarget{util__fcgi_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/util\+\_\+fcgi.c File Reference}
+\label{util__fcgi_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/util\+\_\+fcgi.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/util\+\_\+fcgi.\+c}}
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+fcgi.\+h\char`\"{}}\\*
+Include dependency graph for util\+\_\+fcgi.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{util__fcgi_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{util__fcgi_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~\hyperlink{group__APACHE__CORE__HTTPD_gaf1cdaac5f4562d9d20bae417471ad422}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{util__fcgi_8c_add88d80dec77346ec9ac22640de4d95f}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t})
+\item 
+\hyperlink{util__fcgi_8c_ad4e49a371518f348d13b2d4e83b79b9e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{util\+\_\+fcgi.\+c@{util\+\_\+fcgi.\+c}!A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}
+\index{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}!util\+\_\+fcgi.\+c@{util\+\_\+fcgi.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}{APLOG_MODULE_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX~{\bf A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}\hypertarget{util__fcgi_8c_ae75325996d1b2cf6120dded4cb153a22}{}\label{util__fcgi_8c_ae75325996d1b2cf6120dded4cb153a22}
+
+
+\subsection{Function Documentation}
+\index{util\+\_\+fcgi.\+c@{util\+\_\+fcgi.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+fcgi.\+c@{util\+\_\+fcgi.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+size\+\_\+t)}{AP_DECLARE(apr_size_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__fcgi_8c_add88d80dec77346ec9ac22640de4d95f}{}\label{util__fcgi_8c_add88d80dec77346ec9ac22640de4d95f}
+
+\begin{DoxyCode}
+119 \{
+120     \textcolor{keyword}{const} \hyperlink{structapr__array__header__t}{apr\_array\_header\_t} *envarr;
+121     \textcolor{keyword}{const} \hyperlink{structapr__table__entry__t}{apr\_table\_entry\_t} *elts;
+122     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} envlen, actualenvlen;
+123     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+124 
+125     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen} > \hyperlink{group__APACHE__CORE__FASTCGI_ga20e89b1b38836a3b9de8a21e7d147e1f}{AP\_FCGI\_MAX\_CONTENT\_LEN}) \{
+126         \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen} = \hyperlink{group__APACHE__CORE__FASTCGI_ga20e89b1b38836a3b9de8a21e7d147e1f}{AP\_FCGI\_MAX\_CONTENT\_LEN};
+127     \}
+128 
+129     envarr = apr\_table\_elts(\hyperlink{group__APACHE__CORE__MPM_ga050c00b1a538603bac07d58e6e1c4ec7}{env});
+130     elts = (\textcolor{keyword}{const} \hyperlink{structapr__table__entry__t}{apr\_table\_entry\_t} *) envarr->\hyperlink{structapr__array__header__t_af8462fa2a1ddf6406c66cd3dd441a269}{elts};
+131 
+132     \textcolor{comment}{/* envlen - speculative, may overflow the limit}
+133 \textcolor{comment}{     * actualenvlen - len required without overflowing}
+134 \textcolor{comment}{     */}
+135     envlen = actualenvlen = 0;
+136     for (i = *\hyperlink{group__APACHE__CORE__FASTCGI_gadc14a4857824ff246ce1816439a3f57e}{starting\_elem}; i < envarr->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}; ) \{
+137         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} keylen, vallen;
+138 
+139         \textcolor{keywordflow}{if} (!elts[i].\hyperlink{group__MOD__CACHE_ga11d8023381192746eb96be162398fe1c}{key}) \{
+140             (*starting\_elem)++;
+141             i++;
+142             \textcolor{keywordflow}{continue};
+143         \}
+144 
+145         keylen = strlen(elts[i].key);
+146 
+147         \textcolor{keywordflow}{if} (keylen >> 7 == 0) \{
+148             envlen += 1;
+149         \}
+150         \textcolor{keywordflow}{else} \{
+151             envlen += 4;
+152         \}
+153 
+154         envlen += keylen;
+155 
+156         vallen = elts[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}].\hyperlink{structapr__table__entry__t_a755371d0aa6a9487b502c34807271e6f}{val} ? strlen(elts[i].\hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val}) : 0;
+157 
+158         \textcolor{keywordflow}{if} (vallen >> 7 == 0) \{
+159             envlen += 1;
+160         \}
+161         \textcolor{keywordflow}{else} \{
+162             envlen += 4;
+163         \}
+164 
+165         envlen += vallen;
+166 
+167         \textcolor{keywordflow}{if} (envlen > \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen}) \{
+168             \textcolor{keywordflow}{break};
+169         \}
+170 
+171         actualenvlen = envlen;
+172         (*starting\_elem)++;
+173         i++;
+174     \}
+175 
+176     \textcolor{keywordflow}{return} actualenvlen;
+177 \}
+\end{DoxyCode}
+\index{util\+\_\+fcgi.\+c@{util\+\_\+fcgi.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+fcgi.\+c@{util\+\_\+fcgi.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t)}{AP_DECLARE(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__fcgi_8c_ad4e49a371518f348d13b2d4e83b79b9e}{}\label{util__fcgi_8c_ad4e49a371518f348d13b2d4e83b79b9e}
+
+\begin{DoxyCode}
+184 \{
+185     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+186     \textcolor{keyword}{const} \hyperlink{structapr__array__header__t}{apr\_array\_header\_t} *envarr;
+187     \textcolor{keyword}{const} \hyperlink{structapr__table__entry__t}{apr\_table\_entry\_t} *elts;
+188     \textcolor{keywordtype}{char} *itr;
+189     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+190 
+191     envarr = apr\_table\_elts(\hyperlink{group__APACHE__CORE__MPM_ga050c00b1a538603bac07d58e6e1c4ec7}{env});
+192     elts = (\textcolor{keyword}{const} \hyperlink{structapr__table__entry__t}{apr\_table\_entry\_t} *) envarr->\hyperlink{structapr__array__header__t_af8462fa2a1ddf6406c66cd3dd441a269}{elts};
+193 
+194     itr = \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer};
+195 
+196     for (i = *\hyperlink{group__APACHE__CORE__FASTCGI_gadc14a4857824ff246ce1816439a3f57e}{starting\_elem}; i < envarr->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}; ) \{
+197         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} keylen, vallen;
+198 
+199         \textcolor{keywordflow}{if} (!elts[i].\hyperlink{group__MOD__CACHE_ga11d8023381192746eb96be162398fe1c}{key}) \{
+200             (*starting\_elem)++;
+201             i++;
+202             \textcolor{keywordflow}{continue};
+203         \}
+204 
+205         keylen = strlen(elts[i].key);
+206 
+207         \textcolor{keywordflow}{if} (keylen >> 7 == 0) \{
+208             \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} < 1) \{
+209                 rv = \hyperlink{group__APR__Error_ga1dfc0bbf080f17b0b9010ef967542193}{APR\_ENOSPC}; \textcolor{comment}{/* overflow */}
+210                 \textcolor{keywordflow}{break};
+211             \}
+212             itr[0] = keylen & 0xff;
+213             itr += 1;
+214             \hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} -= 1;
+215         \}
+216         \textcolor{keywordflow}{else} \{
+217             \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} < 4) \{
+218                 rv = \hyperlink{group__APR__Error_ga1dfc0bbf080f17b0b9010ef967542193}{APR\_ENOSPC}; \textcolor{comment}{/* overflow */}
+219                 \textcolor{keywordflow}{break};
+220             \}
+221             itr[0] = ((keylen >> 24) & 0xff) | 0x80;
+222             itr[1] = ((keylen >> 16) & 0xff);
+223             itr[2] = ((keylen >> 8) & 0xff);
+224             itr[3] = ((keylen) & 0xff);
+225             itr += 4;
+226             \hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} -= 4;
+227         \}
+228 
+229         vallen = elts[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}].\hyperlink{structapr__table__entry__t_a755371d0aa6a9487b502c34807271e6f}{val} ? strlen(elts[i].\hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val}) : 0;
+230 
+231         \textcolor{keywordflow}{if} (vallen >> 7 == 0) \{
+232             \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} < 1) \{
+233                 rv = \hyperlink{group__APR__Error_ga1dfc0bbf080f17b0b9010ef967542193}{APR\_ENOSPC}; \textcolor{comment}{/* overflow */}
+234                 \textcolor{keywordflow}{break};
+235             \}
+236             itr[0] = vallen & 0xff;
+237             itr += 1;
+238             \hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} -= 1;
+239         \}
+240         \textcolor{keywordflow}{else} \{
+241             \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} < 4) \{
+242                 rv = \hyperlink{group__APR__Error_ga1dfc0bbf080f17b0b9010ef967542193}{APR\_ENOSPC}; \textcolor{comment}{/* overflow */}
+243                 \textcolor{keywordflow}{break};
+244             \}
+245             itr[0] = ((vallen >> 24) & 0xff) | 0x80;
+246             itr[1] = ((vallen >> 16) & 0xff);
+247             itr[2] = ((vallen >> 8) & 0xff);
+248             itr[3] = ((vallen) & 0xff);
+249             itr += 4;
+250             \hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} -= 4;
+251         \}
+252 
+253         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} < keylen) \{
+254             rv = \hyperlink{group__APR__Error_ga1dfc0bbf080f17b0b9010ef967542193}{APR\_ENOSPC}; \textcolor{comment}{/* overflow */}
+255             \textcolor{keywordflow}{break};
+256         \}
+257         memcpy(itr, elts[i].key, keylen);
+258         itr += keylen;
+259         \hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} -= keylen;
+260 
+261         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} < vallen) \{
+262             rv = \hyperlink{group__APR__Error_ga1dfc0bbf080f17b0b9010ef967542193}{APR\_ENOSPC}; \textcolor{comment}{/* overflow */}
+263             \textcolor{keywordflow}{break};
+264         \}
+265 
+266         \textcolor{keywordflow}{if} (elts[i].val) \{
+267             memcpy(itr, elts[i].val, vallen);
+268             itr += vallen;
+269         \}
+270 
+271         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} == vallen) \{
+272             (*starting\_elem)++;
+273             i++;
+274             \textcolor{keywordflow}{break}; \textcolor{comment}{/* filled up predicted space, as expected */}
+275         \}
+276 
+277         \hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen} -= vallen;
+278 
+279         (*starting\_elem)++;
+280         i++;
+281     \}
+282 
+283     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+284         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02492)
+285                       \textcolor{stringliteral}{"ap\_fcgi\_encode\_env: out of space "}
+286                       \textcolor{stringliteral}{"encoding environment"});
+287     \}
+288 
+289     \textcolor{keywordflow}{return} rv;
+290 \}
+\end{DoxyCode}

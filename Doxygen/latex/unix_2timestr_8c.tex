@@ -1,0 +1,211 @@
+\hypertarget{unix_2timestr_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/time/unix/timestr.c File Reference}
+\label{unix_2timestr_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/time/unix/timestr.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/time/unix/timestr.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+private.\+h\char`\"{}}\\*
+Include dependency graph for timestr.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{unix_2timestr_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{unix_2timestr_8c_ad77b323dd4402ac89c51240f19015df5}{apr\+\_\+rfc822\+\_\+date} (char $\ast$date\+\_\+str, \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} \hyperlink{pcretest_8txt_a9ffb27fb8e1f90c17b13303fee2fb883}{t})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{unix_2timestr_8c_ad1fcb8f26d508fbb34ea2beca7bc851e}{apr\+\_\+ctime} (char $\ast$date\+\_\+str, \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} \hyperlink{pcretest_8txt_a9ffb27fb8e1f90c17b13303fee2fb883}{t})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{unix_2timestr_8c_a86aaf85d5647e14f6bef210c3adaef63}{apr\+\_\+strftime} (char $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} $\ast$\hyperlink{group__apr__time_gad002c9861f62c612b3224a3b98253b31}{retsize}, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APR__Util__RC_ga38e7d1fc94ad8c6709d5b2243d2fd94b}{max}, const char $\ast$\hyperlink{group__apr__time_ga6427c3237144d9709aa13825289f0b78}{format}, \hyperlink{structapr__time__exp__t}{apr\+\_\+time\+\_\+exp\+\_\+t} $\ast$xt)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__platform_ga16a1a3d65c57ce052fffb63190b1cadc}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} const char \hyperlink{group__apr__time_ga4307e6d6e3a6e60af902edc4743723ee}{apr\+\_\+month\+\_\+snames} \mbox{[}12\mbox{]}\mbox{[}4\mbox{]}
+\item 
+\hyperlink{group__apr__platform_ga16a1a3d65c57ce052fffb63190b1cadc}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} const char \hyperlink{group__apr__time_ga7deb42a36f677bf27da84151f7df74dc}{apr\+\_\+day\+\_\+snames} \mbox{[}7\mbox{]}\mbox{[}4\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{unix/timestr.\+c@{unix/timestr.\+c}!apr\+\_\+ctime@{apr\+\_\+ctime}}
+\index{apr\+\_\+ctime@{apr\+\_\+ctime}!unix/timestr.\+c@{unix/timestr.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+ctime(char $\ast$date\+\_\+str, apr\+\_\+time\+\_\+t t)}{apr_ctime(char *date_str, apr_time_t t)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} apr\+\_\+ctime (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{date\+\_\+str, }
+\item[{{\bf apr\+\_\+time\+\_\+t}}]{t}
+\end{DoxyParamCaption}
+)}\hypertarget{unix_2timestr_8c_ad1fcb8f26d508fbb34ea2beca7bc851e}{}\label{unix_2timestr_8c_ad1fcb8f26d508fbb34ea2beca7bc851e}
+
+\begin{DoxyCode}
+91 \{
+92     \hyperlink{structapr__time__exp__t}{apr\_time\_exp\_t} xt;
+93     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+94     \textcolor{keywordtype}{int} real\_year;
+95 
+96     \textcolor{comment}{/* example: "Wed Jun 30 21:49:08 1993" */}
+97     \textcolor{comment}{/*           123456789012345678901234  */}
+98 
+99     apr\_time\_exp\_lt(&xt, \hyperlink{group__APACHE__CORE__DAEMON_gabfa74bb4f05f3b2de1a89160025e5400}{t});
+100     s = &\hyperlink{group__apr__time_ga7deb42a36f677bf27da84151f7df74dc}{apr\_day\_snames}[xt.\hyperlink{structapr__time__exp__t_a57e892bbf3c52df34dcff2c6a9f1adbf}{tm\_wday}][0];
+101     *date\_str++ = *s++;
+102     *date\_str++ = *s++;
+103     *date\_str++ = *s++;
+104     *date\_str++ = \textcolor{charliteral}{' '};
+105     s = &\hyperlink{group__apr__time_ga4307e6d6e3a6e60af902edc4743723ee}{apr\_month\_snames}[xt.\hyperlink{structapr__time__exp__t_a746f38956dfeb6be3bd17282791e3577}{tm\_mon}][0];
+106     *date\_str++ = *s++;
+107     *date\_str++ = *s++;
+108     *date\_str++ = *s++;
+109     *date\_str++ = \textcolor{charliteral}{' '};
+110     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a6c09a274f011841e9e988c3c9504848a}{tm\_mday} / 10 + \textcolor{charliteral}{'0'};
+111     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a6c09a274f011841e9e988c3c9504848a}{tm\_mday} % 10 + \textcolor{charliteral}{'0'};
+112     *date\_str++ = \textcolor{charliteral}{' '};
+113     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a2dbab1d10ed6234c8e9e714e13b7911c}{tm\_hour} / 10 + \textcolor{charliteral}{'0'};
+114     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a2dbab1d10ed6234c8e9e714e13b7911c}{tm\_hour} % 10 + \textcolor{charliteral}{'0'};
+115     *date\_str++ = \textcolor{charliteral}{':'};
+116     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a56a380db482ba5b2bef43351faad27fb}{tm\_min} / 10 + \textcolor{charliteral}{'0'};
+117     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a56a380db482ba5b2bef43351faad27fb}{tm\_min} % 10 + \textcolor{charliteral}{'0'};
+118     *date\_str++ = \textcolor{charliteral}{':'};
+119     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a2c29c99a75b55237917cb05ebae6706c}{tm\_sec} / 10 + \textcolor{charliteral}{'0'};
+120     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a2c29c99a75b55237917cb05ebae6706c}{tm\_sec} % 10 + \textcolor{charliteral}{'0'};
+121     *date\_str++ = \textcolor{charliteral}{' '};
+122     real\_year = 1900 + xt.\hyperlink{structapr__time__exp__t_a35c32245be49279a6689e34bcd6e534a}{tm\_year};
+123     *date\_str++ = real\_year / 1000 + \textcolor{charliteral}{'0'};
+124     *date\_str++ = real\_year % 1000 / 100 + \textcolor{charliteral}{'0'};
+125     *date\_str++ = real\_year % 100 / 10 + \textcolor{charliteral}{'0'};
+126     *date\_str++ = real\_year % 10 + \textcolor{charliteral}{'0'};
+127     *date\_str++ = 0;
+128 
+129     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+130 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=266pt]{unix_2timestr_8c_ad1fcb8f26d508fbb34ea2beca7bc851e_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{unix/timestr.\+c@{unix/timestr.\+c}!apr\+\_\+rfc822\+\_\+date@{apr\+\_\+rfc822\+\_\+date}}
+\index{apr\+\_\+rfc822\+\_\+date@{apr\+\_\+rfc822\+\_\+date}!unix/timestr.\+c@{unix/timestr.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+rfc822\+\_\+date(char $\ast$date\+\_\+str, apr\+\_\+time\+\_\+t t)}{apr_rfc822_date(char *date_str, apr_time_t t)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} apr\+\_\+rfc822\+\_\+date (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{date\+\_\+str, }
+\item[{{\bf apr\+\_\+time\+\_\+t}}]{t}
+\end{DoxyParamCaption}
+)}\hypertarget{unix_2timestr_8c_ad77b323dd4402ac89c51240f19015df5}{}\label{unix_2timestr_8c_ad77b323dd4402ac89c51240f19015df5}
+
+\begin{DoxyCode}
+43 \{
+44     \hyperlink{structapr__time__exp__t}{apr\_time\_exp\_t} xt;
+45     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+46     \textcolor{keywordtype}{int} real\_year;
+47 
+48     apr\_time\_exp\_gmt(&xt, \hyperlink{group__APACHE__CORE__DAEMON_gabfa74bb4f05f3b2de1a89160025e5400}{t});
+49 
+50     \textcolor{comment}{/* example: "Sat, 08 Jan 2000 18:31:41 GMT" */}
+51     \textcolor{comment}{/*           12345678901234567890123456789  */}
+52 
+53     s = &\hyperlink{group__apr__time_ga7deb42a36f677bf27da84151f7df74dc}{apr\_day\_snames}[xt.\hyperlink{structapr__time__exp__t_a57e892bbf3c52df34dcff2c6a9f1adbf}{tm\_wday}][0];
+54     *date\_str++ = *s++;
+55     *date\_str++ = *s++;
+56     *date\_str++ = *s++;
+57     *date\_str++ = \textcolor{charliteral}{','};
+58     *date\_str++ = \textcolor{charliteral}{' '};
+59     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a6c09a274f011841e9e988c3c9504848a}{tm\_mday} / 10 + \textcolor{charliteral}{'0'};
+60     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a6c09a274f011841e9e988c3c9504848a}{tm\_mday} % 10 + \textcolor{charliteral}{'0'};
+61     *date\_str++ = \textcolor{charliteral}{' '};
+62     s = &\hyperlink{group__apr__time_ga4307e6d6e3a6e60af902edc4743723ee}{apr\_month\_snames}[xt.\hyperlink{structapr__time__exp__t_a746f38956dfeb6be3bd17282791e3577}{tm\_mon}][0];
+63     *date\_str++ = *s++;
+64     *date\_str++ = *s++;
+65     *date\_str++ = *s++;
+66     *date\_str++ = \textcolor{charliteral}{' '};
+67     real\_year = 1900 + xt.\hyperlink{structapr__time__exp__t_a35c32245be49279a6689e34bcd6e534a}{tm\_year};
+68     \textcolor{comment}{/* This routine isn't y10k ready. */}
+69     *date\_str++ = real\_year / 1000 + \textcolor{charliteral}{'0'};
+70     *date\_str++ = real\_year % 1000 / 100 + \textcolor{charliteral}{'0'};
+71     *date\_str++ = real\_year % 100 / 10 + \textcolor{charliteral}{'0'};
+72     *date\_str++ = real\_year % 10 + \textcolor{charliteral}{'0'};
+73     *date\_str++ = \textcolor{charliteral}{' '};
+74     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a2dbab1d10ed6234c8e9e714e13b7911c}{tm\_hour} / 10 + \textcolor{charliteral}{'0'};
+75     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a2dbab1d10ed6234c8e9e714e13b7911c}{tm\_hour} % 10 + \textcolor{charliteral}{'0'};
+76     *date\_str++ = \textcolor{charliteral}{':'};
+77     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a56a380db482ba5b2bef43351faad27fb}{tm\_min} / 10 + \textcolor{charliteral}{'0'};
+78     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a56a380db482ba5b2bef43351faad27fb}{tm\_min} % 10 + \textcolor{charliteral}{'0'};
+79     *date\_str++ = \textcolor{charliteral}{':'};
+80     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a2c29c99a75b55237917cb05ebae6706c}{tm\_sec} / 10 + \textcolor{charliteral}{'0'};
+81     *date\_str++ = xt.\hyperlink{structapr__time__exp__t_a2c29c99a75b55237917cb05ebae6706c}{tm\_sec} % 10 + \textcolor{charliteral}{'0'};
+82     *date\_str++ = \textcolor{charliteral}{' '};
+83     *date\_str++ = \textcolor{charliteral}{'G'};
+84     *date\_str++ = \textcolor{charliteral}{'M'};
+85     *date\_str++ = \textcolor{charliteral}{'T'};
+86     *date\_str++ = 0;
+87     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+88 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=333pt]{unix_2timestr_8c_ad77b323dd4402ac89c51240f19015df5_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{unix/timestr.\+c@{unix/timestr.\+c}!apr\+\_\+strftime@{apr\+\_\+strftime}}
+\index{apr\+\_\+strftime@{apr\+\_\+strftime}!unix/timestr.\+c@{unix/timestr.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+strftime(char $\ast$s, apr\+\_\+size\+\_\+t $\ast$retsize, apr\+\_\+size\+\_\+t max, const char $\ast$format, apr\+\_\+time\+\_\+exp\+\_\+t $\ast$xt)}{apr_strftime(char *s, apr_size_t *retsize, apr_size_t max, const char *format, apr_time_exp_t *xt)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} apr\+\_\+strftime (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s, }
+\item[{{\bf apr\+\_\+size\+\_\+t} $\ast$}]{retsize, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{max, }
+\item[{const char $\ast$}]{format, }
+\item[{{\bf apr\+\_\+time\+\_\+exp\+\_\+t} $\ast$}]{xt}
+\end{DoxyParamCaption}
+)}\hypertarget{unix_2timestr_8c_a86aaf85d5647e14f6bef210c3adaef63}{}\label{unix_2timestr_8c_a86aaf85d5647e14f6bef210c3adaef63}
+
+\begin{DoxyCode}
+134 \{
+135     \textcolor{keyword}{struct }\hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm} \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm};
+136     memset(&\hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}, 0, \textcolor{keyword}{sizeof} \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm});
+137     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a2c29c99a75b55237917cb05ebae6706c}{tm\_sec}  = xt->\hyperlink{structapr__time__exp__t_a2c29c99a75b55237917cb05ebae6706c}{tm\_sec};
+138     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a56a380db482ba5b2bef43351faad27fb}{tm\_min}  = xt->\hyperlink{structapr__time__exp__t_a56a380db482ba5b2bef43351faad27fb}{tm\_min};
+139     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a2dbab1d10ed6234c8e9e714e13b7911c}{tm\_hour} = xt->\hyperlink{structapr__time__exp__t_a2dbab1d10ed6234c8e9e714e13b7911c}{tm\_hour};
+140     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a6c09a274f011841e9e988c3c9504848a}{tm\_mday} = xt->\hyperlink{structapr__time__exp__t_a6c09a274f011841e9e988c3c9504848a}{tm\_mday};
+141     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a746f38956dfeb6be3bd17282791e3577}{tm\_mon}  = xt->\hyperlink{structapr__time__exp__t_a746f38956dfeb6be3bd17282791e3577}{tm\_mon};
+142     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a35c32245be49279a6689e34bcd6e534a}{tm\_year} = xt->\hyperlink{structapr__time__exp__t_a35c32245be49279a6689e34bcd6e534a}{tm\_year};
+143     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a57e892bbf3c52df34dcff2c6a9f1adbf}{tm\_wday} = xt->\hyperlink{structapr__time__exp__t_a57e892bbf3c52df34dcff2c6a9f1adbf}{tm\_wday};
+144     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_aa15c7ab0d7e2a974e89cc1470f1583ab}{tm\_yday} = xt->\hyperlink{structapr__time__exp__t_aa15c7ab0d7e2a974e89cc1470f1583ab}{tm\_yday};
+145     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a4d899f1fb9fde3c6b6893941fa81b1c8}{tm\_isdst} = xt->\hyperlink{structapr__time__exp__t_a4d899f1fb9fde3c6b6893941fa81b1c8}{tm\_isdst};
+146 \textcolor{preprocessor}{#if defined(HAVE\_STRUCT\_TM\_TM\_GMTOFF)}
+147     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\hyperlink{structapr__time__exp__t_a1102ca16ed70b1c707473431eed58d7b}{tm\_gmtoff} = xt->\hyperlink{structapr__time__exp__t_a1102ca16ed70b1c707473431eed58d7b}{tm\_gmtoff};
+148 \textcolor{preprocessor}{#elif defined(HAVE\_STRUCT\_TM\_\_\_TM\_GMTOFF)}
+149     \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.\_\_tm\_gmtoff = xt->\hyperlink{structapr__time__exp__t_a1102ca16ed70b1c707473431eed58d7b}{tm\_gmtoff};
+150 \textcolor{preprocessor}{#endif}
+151     (*retsize) = strftime(\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}, \hyperlink{group__APACHE__CORE__DAEMON_gac1b9c6a7bfbd9ec2444735d634d4a557}{max}, \hyperlink{group__apr__file__io_ga34332e75afdd7ed8d280f2a09b4329ea}{format}, &\hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm});
+152     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+153 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{unix_2timestr_8c_a86aaf85d5647e14f6bef210c3adaef63_icgraph}
+\end{center}
+\end{figure}
+
+

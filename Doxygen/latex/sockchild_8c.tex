@@ -1,0 +1,113 @@
+\hypertarget{sockchild_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/test/sockchild.c File Reference}
+\label{sockchild_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/sockchild.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/sockchild.\+c}}
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}testsock.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+network\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+Include dependency graph for sockchild.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sockchild_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{sockchild_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{sockchild.\+c@{sockchild.\+c}!main@{main}}
+\index{main@{main}!sockchild.\+c@{sockchild.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{sockchild_8c_a0ddf1224851353fc92bfbff6f499fa97}{}\label{sockchild_8c_a0ddf1224851353fc92bfbff6f499fa97}
+
+\begin{DoxyCode}
+23 \{
+24     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+25     \hyperlink{structapr__socket__t}{apr\_socket\_t} *\hyperlink{group__apr__network__io_ga27d162243808e1e5fb7627d9dba89f9e}{sock};
+26     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+27     \hyperlink{structapr__sockaddr__t}{apr\_sockaddr\_t} *remote\_sa;
+28 
+29     apr\_initialize();
+30     atexit(apr\_terminate);
+31     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&p, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+32 
+33     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} < 3) \{
+34         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(-1);
+35     \}
+36 
+37     rv = apr\_sockaddr\_info\_get(&remote\_sa, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2], \hyperlink{group__apr__network__io_gaa7a33b17a7d0820b09ef489bd3328f85}{APR\_UNSPEC}, 8021, 0, p);
+38     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+39         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(-1);
+40     \}
+41 
+42     \textcolor{keywordflow}{if} (\hyperlink{unix_2sockets_8c_ad975e4f99f233d8156a9e8e1a153199d}{apr\_socket\_create}(&sock, remote\_sa->\hyperlink{structapr__sockaddr__t_ac17f6e803928cfc29069a6e62dcb3a52}{family}, SOCK\_STREAM, 0,
+43                 p) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+44         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(-1);
+45     \}
+46 
+47     rv = \hyperlink{unix_2sockopt_8c_a945bdbe807ec5635d65a6fd9ddb78c29}{apr\_socket\_timeout\_set}(sock, \hyperlink{group__apr__time_gaec56c2c03299a750006bfcc08d64ec32}{apr\_time\_from\_sec}(3));
+48     \textcolor{keywordflow}{if} (rv) \{
+49         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(-1);
+50     \}
+51 
+52     \hyperlink{unix_2sockets_8c_a8e58bd8112ed2ce5004487918cd9275e}{apr\_socket\_connect}(sock, remote\_sa);
+53         
+54     \textcolor{keywordflow}{if} (!strcmp(\textcolor{stringliteral}{"read"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1])) \{
+55         \textcolor{keywordtype}{char} datarecv[\hyperlink{testsock_8h_a278cf415676752815cfb411cb0b32802}{STRLEN}];
+56         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length} = \hyperlink{testsock_8h_a278cf415676752815cfb411cb0b32802}{STRLEN};
+57         \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+58 
+59         memset(datarecv, 0, \hyperlink{testsock_8h_a278cf415676752815cfb411cb0b32802}{STRLEN});
+60         rv = \hyperlink{unix_2sendrecv_8c_aa6ee00191f197f64b5a5409f4aff53d1}{apr\_socket\_recv}(sock, datarecv, &length);
+61         \hyperlink{unix_2sockets_8c_a88779f243ce19a2563544aee81894e6d}{apr\_socket\_close}(sock);
+62         \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga864b207719c86ac4deeba696943262d0}{APR\_STATUS\_IS\_TIMEUP}(rv)) \{
+63             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{testsock_8h_aca6153015dc94fe7679954a1ff9d9b15}{SOCKET\_TIMEOUT}); 
+64         \}
+65 
+66         \textcolor{keywordflow}{if} (strcmp(datarecv, \hyperlink{testsock_8h_ac131feca4faff1a1c823fd0cbd770952}{DATASTR})) \{
+67             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(-1);
+68         \}
+69         
+70         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}((\textcolor{keywordtype}{int})length);
+71     \}
+72     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!strcmp(\textcolor{stringliteral}{"write"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1])
+73              || !strcmp(\textcolor{stringliteral}{"write\_after\_delay"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1])) \{
+74         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} length = strlen(\hyperlink{testsock_8h_ac131feca4faff1a1c823fd0cbd770952}{DATASTR});
+75 
+76         \textcolor{keywordflow}{if} (!strcmp(\textcolor{stringliteral}{"write\_after\_delay"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1])) \{
+77             apr\_sleep(\hyperlink{group__apr__time_gaec56c2c03299a750006bfcc08d64ec32}{apr\_time\_from\_sec}(2));
+78         \}
+79 
+80         \hyperlink{unix_2sendrecv_8c_a943268245cf59f6ff8cf1458c9a9ba8d}{apr\_socket\_send}(sock, \hyperlink{testsock_8h_ac131feca4faff1a1c823fd0cbd770952}{DATASTR}, &length);
+81 
+82         \hyperlink{unix_2sockets_8c_a88779f243ce19a2563544aee81894e6d}{apr\_socket\_close}(sock);
+83         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}((\textcolor{keywordtype}{int})length);
+84     \}
+85     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!strcmp(\textcolor{stringliteral}{"close"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1])) \{
+86         \hyperlink{unix_2sockets_8c_a88779f243ce19a2563544aee81894e6d}{apr\_socket\_close}(sock);
+87         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(0);
+88     \}
+89     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(-1);
+90 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sockchild_8c_a0ddf1224851353fc92bfbff6f499fa97_cgraph}
+\end{center}
+\end{figure}
+
+

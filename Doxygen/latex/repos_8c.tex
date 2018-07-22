@@ -1,0 +1,162 @@
+\hypertarget{repos_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/dav/fs/repos.c File Reference}
+\label{repos_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/fs/repos.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/fs/repos.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+dav.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}repos.\+h\char`\"{}}\\*
+Include dependency graph for repos.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{repos_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdav__resource__private}{dav\+\_\+resource\+\_\+private}
+\item 
+struct \hyperlink{structdav__fs__walker__context}{dav\+\_\+fs\+\_\+walker\+\_\+context}
+\item 
+struct \hyperlink{structdav__fs__copymove__walk__ctx}{dav\+\_\+fs\+\_\+copymove\+\_\+walk\+\_\+ctx}
+\item 
+struct \hyperlink{structdav__stream}{dav\+\_\+stream}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{repos_8c_ae0249087a986d02ed28f5d7e623d1aa7}{D\+E\+B\+U\+G\+\_\+\+G\+E\+T\+\_\+\+H\+A\+N\+D\+L\+ER}~0
+\item 
+\#define \hyperlink{repos_8c_afb4475336457c49d61f72ab2cda04be7}{D\+A\+V\+\_\+\+F\+S\+\_\+\+C\+O\+P\+Y\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}~16384   /$\ast$ copy 16k at a time $\ast$/
+\item 
+\#define \hyperlink{repos_8c_a337afb6718796623fc937e0512dab446}{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+H\+I\+D\+D\+EN}~0x4000
+\item 
+\#define \hyperlink{repos_8c_a63401862aa30806dadd45a575bf0bc83}{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX}~0x8000
+\item 
+\#define \hyperlink{repos_8c_ac3df03a9a5fb74f255889be459fbbf58}{D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX}~1000    /$\ast$ \hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a} private call \hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type} $\ast$/
+\item 
+\#define \hyperlink{repos_8c_a9adc11c77dc7285941d1ecbb25dfc127}{D\+A\+V\+\_\+\+F\+S\+\_\+\+H\+A\+S\+\_\+\+E\+X\+E\+C\+U\+T\+A\+B\+LE}
+\item 
+\#define \hyperlink{repos_8c_a90a2445447d2602564cef34d4ca2591d}{D\+A\+V\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+A\+SK}
+\item 
+\#define \hyperlink{repos_8c_acd0b48a95b92c0e92158c915eae82275}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+F\+S\+\_\+executable}~1
+\item 
+\#define \hyperlink{repos_8c_a1623eceec4e534d537a50e30198a3dcd}{D\+A\+V\+\_\+\+F\+S\+\_\+\+T\+M\+P\+\_\+\+P\+R\+E\+F\+IX}~\char`\"{}.davfs.\+tmp\char`\"{}
+\item 
+\#define \hyperlink{repos_8c_afc6d730a5948b8ed7b19e556423f3ef4}{M\+A\+P\+\_\+\+I\+O2\+H\+T\+TP}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \hyperlink{repos_8c_abc6126af1d45847bc59afa0aa3216b04a68723b7acf7ac793ea46d121732244a9}{D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+D\+AV}, 
+\hyperlink{repos_8c_abc6126af1d45847bc59afa0aa3216b04ae54847ae31f90f602cc901aaed794bd6}{D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+M\+Y\+P\+R\+O\+PS}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__MOD__DAV_gabd6b3494f4de797c23cadea279f8a2b2}{dav\+\_\+fs\+\_\+pool} (const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$\hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource})
+\item 
+const char $\ast$ \hyperlink{group__MOD__DAV_gac5e1f3c1ce81f4e7e173219f27a2708d}{dav\+\_\+fs\+\_\+pathname} (const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$\hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource})
+\item 
+\hyperlink{structdav__error}{dav\+\_\+error} $\ast$ \hyperlink{group__MOD__DAV_gae96904b2aaf9fa143f7458db22e61e77}{dav\+\_\+fs\+\_\+dir\+\_\+file\+\_\+name} (const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$\hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource}, const char $\ast$$\ast$dirpath\+\_\+p, const char $\ast$$\ast$fname\+\_\+p)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__DAV_gaf4d373a8594bcdb68c7bb8a4d325f405}{dav\+\_\+fs\+\_\+gather\+\_\+propsets} (\hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$uris)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga4919e8f4d6c425c3dedf0c6c7a78cd6f}{dav\+\_\+fs\+\_\+find\+\_\+liveprop} (const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$\hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource}, const char $\ast$\hyperlink{group__MOD__DAV_ga08d1a5845fd4b9e4370e9423ecb88d75}{ns\+\_\+uri}, const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, const \hyperlink{structdav__hooks__liveprop}{dav\+\_\+hooks\+\_\+liveprop} $\ast$$\ast$\hyperlink{group__MOD__DAV_ga2f89c7cfd67d24769756d6d2df79bf5c}{hooks})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__DAV_gacbe6ef0502a59cea08b03d21af280cd1}{dav\+\_\+fs\+\_\+insert\+\_\+all\+\_\+liveprops} (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$\hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource}, \hyperlink{group__MOD__DAV_ga4c0cd73bce52d0eda981ce54973f27af}{dav\+\_\+prop\+\_\+insert} \hyperlink{group__apr__thread__proc_gaf132f350c1657f61f533df7066e903c4}{what}, \hyperlink{structapr__text__header}{apr\+\_\+text\+\_\+header} $\ast$\hyperlink{group__MOD__DAV_ga08f35dafe4ef680fc79b6e69d71c8f90}{phdr})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__DAV_ga0c7480ef403d9dc9dfa57e7ef1fa5998}{dav\+\_\+fs\+\_\+register} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{structdav__hooks__locks}{dav\+\_\+hooks\+\_\+locks} \hyperlink{repos_8c_aa43a8d2eea4c389e1404bccbf264dc69}{dav\+\_\+hooks\+\_\+locks\+\_\+fs}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX@{D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX}}
+\index{D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX@{D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX}{DAV_CALLTYPE_POSTFIX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX~1000    /$\ast$ {\bf a} private call {\bf type} $\ast$/}\hypertarget{repos_8c_ac3df03a9a5fb74f255889be459fbbf58}{}\label{repos_8c_ac3df03a9a5fb74f255889be459fbbf58}
+\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+A\+SK@{D\+A\+V\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+A\+SK}}
+\index{D\+A\+V\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+A\+SK@{D\+A\+V\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+A\+SK}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+A\+SK}{DAV_FINFO_MASK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+A\+SK}\hypertarget{repos_8c_a90a2445447d2602564cef34d4ca2591d}{}\label{repos_8c_a90a2445447d2602564cef34d4ca2591d}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+(\hyperlink{group__apr__file__stat_ga9b0c1d02401b845f928f836fdd3c6712}{APR\_FINFO\_LINK} | \hyperlink{group__apr__file__stat_gad5d25f25527ee77c08bb20aae141306c}{APR\_FINFO\_TYPE} | \hyperlink{group__apr__file__stat_ga4fee7341395912db501b40de81dbba26}{APR\_FINFO\_INODE} | 
+      \hyperlink{group__apr__file__stat_gadf72493da450c0b1e3d279e98a973120}{\(\backslash\)}
+\hyperlink{group__apr__file__stat_gadf72493da450c0b1e3d279e98a973120}{                        APR\_FINFO\_SIZE} | 
+      \hyperlink{group__apr__file__stat_ga98bef78baf71fa63b06352704f128bca}{APR\_FINFO\_CTIME} | \hyperlink{group__apr__file__stat_ga992ce1f4f75d519fd2a9d241c5a12515}{APR\_FINFO\_MTIME} | \hyperlink{group__apr__file__stat_gad902be0636860cb3f8ad76a59abbcd7c}{\(\backslash\)}
+\hyperlink{group__apr__file__stat_gad902be0636860cb3f8ad76a59abbcd7c}{                        APR\_FINFO\_PROT})
+\end{DoxyCode}
+\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+F\+S\+\_\+\+C\+O\+P\+Y\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE@{D\+A\+V\+\_\+\+F\+S\+\_\+\+C\+O\+P\+Y\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}}
+\index{D\+A\+V\+\_\+\+F\+S\+\_\+\+C\+O\+P\+Y\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE@{D\+A\+V\+\_\+\+F\+S\+\_\+\+C\+O\+P\+Y\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+F\+S\+\_\+\+C\+O\+P\+Y\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}{DAV_FS_COPY_BLOCKSIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+F\+S\+\_\+\+C\+O\+P\+Y\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE~16384   /$\ast$ copy 16k at a time $\ast$/}\hypertarget{repos_8c_afb4475336457c49d61f72ab2cda04be7}{}\label{repos_8c_afb4475336457c49d61f72ab2cda04be7}
+\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+F\+S\+\_\+\+H\+A\+S\+\_\+\+E\+X\+E\+C\+U\+T\+A\+B\+LE@{D\+A\+V\+\_\+\+F\+S\+\_\+\+H\+A\+S\+\_\+\+E\+X\+E\+C\+U\+T\+A\+B\+LE}}
+\index{D\+A\+V\+\_\+\+F\+S\+\_\+\+H\+A\+S\+\_\+\+E\+X\+E\+C\+U\+T\+A\+B\+LE@{D\+A\+V\+\_\+\+F\+S\+\_\+\+H\+A\+S\+\_\+\+E\+X\+E\+C\+U\+T\+A\+B\+LE}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+F\+S\+\_\+\+H\+A\+S\+\_\+\+E\+X\+E\+C\+U\+T\+A\+B\+LE}{DAV_FS_HAS_EXECUTABLE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+F\+S\+\_\+\+H\+A\+S\+\_\+\+E\+X\+E\+C\+U\+T\+A\+B\+LE}\hypertarget{repos_8c_a9adc11c77dc7285941d1ecbb25dfc127}{}\label{repos_8c_a9adc11c77dc7285941d1ecbb25dfc127}
+\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+F\+S\+\_\+\+T\+M\+P\+\_\+\+P\+R\+E\+F\+IX@{D\+A\+V\+\_\+\+F\+S\+\_\+\+T\+M\+P\+\_\+\+P\+R\+E\+F\+IX}}
+\index{D\+A\+V\+\_\+\+F\+S\+\_\+\+T\+M\+P\+\_\+\+P\+R\+E\+F\+IX@{D\+A\+V\+\_\+\+F\+S\+\_\+\+T\+M\+P\+\_\+\+P\+R\+E\+F\+IX}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+F\+S\+\_\+\+T\+M\+P\+\_\+\+P\+R\+E\+F\+IX}{DAV_FS_TMP_PREFIX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+F\+S\+\_\+\+T\+M\+P\+\_\+\+P\+R\+E\+F\+IX~\char`\"{}.davfs.\+tmp\char`\"{}}\hypertarget{repos_8c_a1623eceec4e534d537a50e30198a3dcd}{}\label{repos_8c_a1623eceec4e534d537a50e30198a3dcd}
+\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+F\+S\+\_\+executable@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+F\+S\+\_\+executable}}
+\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+F\+S\+\_\+executable@{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+F\+S\+\_\+executable}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+F\+S\+\_\+executable}{DAV_PROPID_FS_executable}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+F\+S\+\_\+executable~1}\hypertarget{repos_8c_acd0b48a95b92c0e92158c915eae82275}{}\label{repos_8c_acd0b48a95b92c0e92158c915eae82275}
+\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+H\+I\+D\+D\+EN@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+H\+I\+D\+D\+EN}}
+\index{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+H\+I\+D\+D\+EN@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+H\+I\+D\+D\+EN}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+H\+I\+D\+D\+EN}{DAV_WALKTYPE_HIDDEN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+H\+I\+D\+D\+EN~0x4000}\hypertarget{repos_8c_a337afb6718796623fc937e0512dab446}{}\label{repos_8c_a337afb6718796623fc937e0512dab446}
+\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX}}
+\index{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX}{DAV_WALKTYPE_POSTFIX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+P\+O\+S\+T\+F\+IX~0x8000}\hypertarget{repos_8c_a63401862aa30806dadd45a575bf0bc83}{}\label{repos_8c_a63401862aa30806dadd45a575bf0bc83}
+\index{repos.\+c@{repos.\+c}!D\+E\+B\+U\+G\+\_\+\+G\+E\+T\+\_\+\+H\+A\+N\+D\+L\+ER@{D\+E\+B\+U\+G\+\_\+\+G\+E\+T\+\_\+\+H\+A\+N\+D\+L\+ER}}
+\index{D\+E\+B\+U\+G\+\_\+\+G\+E\+T\+\_\+\+H\+A\+N\+D\+L\+ER@{D\+E\+B\+U\+G\+\_\+\+G\+E\+T\+\_\+\+H\+A\+N\+D\+L\+ER}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+B\+U\+G\+\_\+\+G\+E\+T\+\_\+\+H\+A\+N\+D\+L\+ER}{DEBUG_GET_HANDLER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+B\+U\+G\+\_\+\+G\+E\+T\+\_\+\+H\+A\+N\+D\+L\+ER~0}\hypertarget{repos_8c_ae0249087a986d02ed28f5d7e623d1aa7}{}\label{repos_8c_ae0249087a986d02ed28f5d7e623d1aa7}
+\index{repos.\+c@{repos.\+c}!M\+A\+P\+\_\+\+I\+O2\+H\+T\+TP@{M\+A\+P\+\_\+\+I\+O2\+H\+T\+TP}}
+\index{M\+A\+P\+\_\+\+I\+O2\+H\+T\+TP@{M\+A\+P\+\_\+\+I\+O2\+H\+T\+TP}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+P\+\_\+\+I\+O2\+H\+T\+TP}{MAP_IO2HTTP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+P\+\_\+\+I\+O2\+H\+T\+TP(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)}\hypertarget{repos_8c_afc6d730a5948b8ed7b19e556423f3ef4}{}\label{repos_8c_afc6d730a5948b8ed7b19e556423f3ef4}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+(\hyperlink{group__APR__STATUS__IS_ga5c77e7bb1de1b6ec319f2a42eb80be1e}{APR\_STATUS\_IS\_ENOSPC}(\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e}) ? \hyperlink{group__HTTP__Status_ga22f7047c07db7c74dc1b8574538ed7c8}{HTTP\_INSUFFICIENT\_STORAGE} : 
+      \hyperlink{group__APR__STATUS__IS_gad15c3b9bda78a88c02466a0d405c6047}{\(\backslash\)}
+\hyperlink{group__APR__STATUS__IS_gad15c3b9bda78a88c02466a0d405c6047}{                        APR\_STATUS\_IS\_ENOENT}(
+      \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e}) ? \hyperlink{group__HTTP__Status_gaec883057ad9f0c80b611818dc33bc990}{HTTP\_CONFLICT} : \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{\(\backslash\)}
+\hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{                        HTTP\_INTERNAL\_SERVER\_ERROR})
+\end{DoxyCode}
+
+
+\subsection{Enumeration Type Documentation}
+\subsubsection[{\texorpdfstring{anonymous enum}{anonymous enum}}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\hypertarget{repos_8c_abc6126af1d45847bc59afa0aa3216b04}{}\label{repos_8c_abc6126af1d45847bc59afa0aa3216b04}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+D\+AV@{D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+D\+AV}!repos.\+c@{repos.\+c}}\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+D\+AV@{D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+D\+AV}}\item[{\em 
+D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+D\+AV\hypertarget{repos_8c_abc6126af1d45847bc59afa0aa3216b04a68723b7acf7ac793ea46d121732244a9}{}\label{repos_8c_abc6126af1d45847bc59afa0aa3216b04a68723b7acf7ac793ea46d121732244a9}
+}]\index{D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+M\+Y\+P\+R\+O\+PS@{D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+M\+Y\+P\+R\+O\+PS}!repos.\+c@{repos.\+c}}\index{repos.\+c@{repos.\+c}!D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+M\+Y\+P\+R\+O\+PS@{D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+M\+Y\+P\+R\+O\+PS}}\item[{\em 
+D\+A\+V\+\_\+\+F\+S\+\_\+\+U\+R\+I\+\_\+\+M\+Y\+P\+R\+O\+PS\hypertarget{repos_8c_abc6126af1d45847bc59afa0aa3216b04ae54847ae31f90f602cc901aaed794bd6}{}\label{repos_8c_abc6126af1d45847bc59afa0aa3216b04ae54847ae31f90f602cc901aaed794bd6}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+114      \{
+115     \hyperlink{repos_8c_abc6126af1d45847bc59afa0aa3216b04a68723b7acf7ac793ea46d121732244a9}{DAV\_FS\_URI\_DAV},            \textcolor{comment}{/* the DAV: namespace URI */}
+116     \hyperlink{repos_8c_abc6126af1d45847bc59afa0aa3216b04ae54847ae31f90f602cc901aaed794bd6}{DAV\_FS\_URI\_MYPROPS}         \textcolor{comment}{/* the namespace URI for our custom props */}
+117 \};
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{repos.\+c@{repos.\+c}!dav\+\_\+hooks\+\_\+locks\+\_\+fs@{dav\+\_\+hooks\+\_\+locks\+\_\+fs}}
+\index{dav\+\_\+hooks\+\_\+locks\+\_\+fs@{dav\+\_\+hooks\+\_\+locks\+\_\+fs}!repos.\+c@{repos.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+hooks\+\_\+locks\+\_\+fs}{dav_hooks_locks_fs}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf dav\+\_\+hooks\+\_\+locks} dav\+\_\+hooks\+\_\+locks\+\_\+fs}\hypertarget{repos_8c_aa43a8d2eea4c389e1404bccbf264dc69}{}\label{repos_8c_aa43a8d2eea4c389e1404bccbf264dc69}

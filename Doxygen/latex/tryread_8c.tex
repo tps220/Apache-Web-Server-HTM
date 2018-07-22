@@ -1,0 +1,70 @@
+\hypertarget{tryread_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/test/tryread.c File Reference}
+\label{tryread_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/tryread.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/tryread.\+c}}
+{\ttfamily \#include \char`\"{}testflock.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+Include dependency graph for tryread.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{tryread_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{tryread_8c_a110745d0e996bc19a8c8e8cacbadd525}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const $\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{tryread.\+c@{tryread.\+c}!main@{main}}
+\index{main@{main}!tryread.\+c@{tryread.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const $\ast$argv)}{main(int argc, const char *const *argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const $\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{tryread_8c_a110745d0e996bc19a8c8e8cacbadd525}{}\label{tryread_8c_a110745d0e996bc19a8c8e8cacbadd525}
+
+\begin{DoxyCode}
+28 \{
+29     \hyperlink{structapr__file__t}{apr\_file\_t} *\hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file};
+30     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+31     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+32 
+33     apr\_initialize();
+34     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&p, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+35 
+36     \textcolor{keywordflow}{if} (apr\_file\_open(&file, \hyperlink{testflock_8h_a4258e41b25299240dbf3e33b0b61913d}{TESTFILE}, \hyperlink{group__apr__file__open__flags_gac598bb95fc9476b0bf2ed0b1c308842c}{APR\_FOPEN\_WRITE}, 
+      \hyperlink{group__apr__file__permissions_ga8552adb50d545d5fc7faeabb4f4a388f}{APR\_OS\_DEFAULT}, p)
+37         != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+38         
+39         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{testflock_8h_acb108af690745dd79919604510ce1952}{UNEXPECTED\_ERROR});
+40     \}
+41     status = \hyperlink{netware_2flock_8c_a2d337e66c1fa0cd433164079bf542484}{apr\_file\_lock}(file, \hyperlink{group__apr__file__lock__types_gafbf0caa093b99bdf11e25360b9099852}{APR\_FLOCK\_EXCLUSIVE} | 
+      \hyperlink{group__apr__file__lock__types_gab327fa0250e19006f20d5ec65fe7f22a}{APR\_FLOCK\_NONBLOCK});
+42     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+43         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{testflock_8h_ad983fe820b00f0ab273c3b58edffba7b}{SUCCESSFUL\_READ});
+44     \}
+45     \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga9dd578bfcd76a2d997395608ae5b3a4e}{APR\_STATUS\_IS\_EAGAIN}(status)) \{
+46         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{testflock_8h_aebba2b28070a945f2a90390d3701619f}{FAILED\_READ});
+47     \}
+48     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{testflock_8h_acb108af690745dd79919604510ce1952}{UNEXPECTED\_ERROR});
+49 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=225pt]{tryread_8c_a110745d0e996bc19a8c8e8cacbadd525_cgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,706 @@
+\hypertarget{sha2_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/random/unix/sha2.c File Reference}
+\label{sha2_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/random/unix/sha2.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/random/unix/sha2.\+c}}
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}sha2.\+h\char`\"{}}\\*
+Include dependency graph for sha2.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sha2_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{sha2_8c_adfc8fa95344782913efd4ee7d9a9ea74}{S\+H\+A256\+\_\+\+S\+H\+O\+R\+T\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH}~(\hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{S\+H\+A256\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH} -\/ 8)
+\item 
+\#define \hyperlink{sha2_8c_a7164c79bb6bc80abcb61cb96eef4194e}{R\+E\+V\+E\+R\+S\+E32}(\hyperlink{pcregrep_8txt_ab9a0c51666082a4ca5dd995ee972f77e}{w},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})
+\item 
+\#define \hyperlink{sha2_8c_a5399a7e8dab676a6c36fe85c91ae1366}{R\+E\+V\+E\+R\+S\+E64}(\hyperlink{pcregrep_8txt_ab9a0c51666082a4ca5dd995ee972f77e}{w},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})
+\item 
+\#define \hyperlink{sha2_8c_a32ce6a800376f90c7cee70ac2e7255d6}{A\+D\+D\+I\+N\+C128}(\hyperlink{pcregrep_8txt_ab9a0c51666082a4ca5dd995ee972f77e}{w},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})
+\item 
+\#define \hyperlink{sha2_8c_a324569b417209f3e941991d642302d51}{S\+H\+A2\+\_\+\+U\+S\+E\+\_\+\+M\+E\+M\+S\+E\+T\+\_\+\+M\+E\+M\+C\+PY}~1
+\item 
+\#define \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{M\+E\+M\+S\+E\+T\+\_\+\+B\+Z\+E\+RO}(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p},  \hyperlink{pcregrep_8txt_a486d9936a8632c227772a15831f78e11}{l})~memset((\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}), 0, (\hyperlink{pcregrep_8txt_a486d9936a8632c227772a15831f78e11}{l}))
+\item 
+\#define \hyperlink{sha2_8c_aa357cebb0a4ac20de95565894de5f793}{M\+E\+M\+C\+P\+Y\+\_\+\+B\+C\+O\+PY}(\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d},  \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{pcregrep_8txt_a486d9936a8632c227772a15831f78e11}{l})~memcpy((\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d}), (\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}), (\hyperlink{pcregrep_8txt_a486d9936a8632c227772a15831f78e11}{l}))
+\item 
+\#define \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$$>$ (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))
+\item 
+\#define \hyperlink{sha2_8c_afe83c8790798dddd30665496143a853b}{S32}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$$>$ (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})) $\vert$ ((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$$<$ (32 -\/ (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))))
+\item 
+\#define \hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$$>$ (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})) $\vert$ ((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$$<$ (64 -\/ (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))))
+\item 
+\#define \hyperlink{sha2_8c_ab0a0d1ad13c7e4d3cb38c89f7127c85a}{Ch}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) \& (\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y})) $^\wedge$ (($\sim$(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) \& (z)))
+\item 
+\#define \hyperlink{sha2_8c_a447cd1d7fb703b62666400976be24bf3}{Maj}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) \& (\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y})) $^\wedge$ ((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) \& (z)) $^\wedge$ ((\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}) \& (z)))
+\item 
+\#define \hyperlink{sha2_8c_a1d3b933bf48a1c763775d358313f44a6}{Sigma0\+\_\+256}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(\hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(2,  (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(13, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(22, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})))
+\item 
+\#define \hyperlink{sha2_8c_a98f25dda8f234733acf0386d6d5187fd}{Sigma1\+\_\+256}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(\hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(6,  (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(11, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(25, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})))
+\item 
+\#define \hyperlink{sha2_8c_afdc787683d72110451742acd5bf41d16}{sigma0\+\_\+256}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(\hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(7,  (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(18, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}(3 ,   (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})))
+\item 
+\#define \hyperlink{sha2_8c_a6daf5f3524cf68e6a2e19de772070e77}{sigma1\+\_\+256}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(\hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(17, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}(19, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}(10,   (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})))
+\item 
+\#define \hyperlink{sha2_8c_a07b4672fd77b0b5f2bf0041e2faf0b45}{Sigma0\+\_\+512}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(\hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(28, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(34, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(39, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})))
+\item 
+\#define \hyperlink{sha2_8c_a6a0406d09af6eaa6d933070801f74002}{Sigma1\+\_\+512}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(\hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(14, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(18, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(41, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})))
+\item 
+\#define \hyperlink{sha2_8c_a449da15ce26bdf3bf58925e17c7864b3}{sigma0\+\_\+512}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(\hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}( 1, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}( 8, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}( 7,   (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})))
+\item 
+\#define \hyperlink{sha2_8c_adcf0e492a43c6f34a3a5023a0a448e2d}{sigma1\+\_\+512}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(\hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(19, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_a04c57d7554181e15fe6063a477d28236}{S64}(61, (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})) $^\wedge$ \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}( 6,   (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})))
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \hyperlink{group__apr__platform_gadcfa334915b4605a0052cb4ca542eb3a}{apr\+\_\+byte\+\_\+t} \hyperlink{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}{sha2\+\_\+byte}
+\item 
+typedef \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\+\_\+word32}
+\item 
+typedef \hyperlink{group__apr__platform_ga722b277a42230f3fd41cb5be7a76cfb4}{apr\+\_\+uint64\+\_\+t} \hyperlink{sha2_8c_a40fb007a21205e96c214642f0aad386e}{sha2\+\_\+word64}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{sha2_8c_ad0484e2fb623400a8477a22be5bbb7fc}{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Transform} (\hyperlink{sha2_8h_a0e4ea9b43c30824ef17d9d4a108cb249}{S\+H\+A256\+\_\+\+C\+TX} $\ast$, const \hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\+\_\+word32} $\ast$)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{sha2_8c_a2eb5f77871e9563f101c7cf63067521a}{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Init} (\hyperlink{sha2_8h_a0e4ea9b43c30824ef17d9d4a108cb249}{S\+H\+A256\+\_\+\+C\+TX} $\ast$\hyperlink{pcregrep_8txt_a651ed26971b1d49911883c4eb87db1ad}{context})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{sha2_8c_aa31b04b6af85ff0bc3f3f46a0ad1bbd7}{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Update} (\hyperlink{sha2_8h_a0e4ea9b43c30824ef17d9d4a108cb249}{S\+H\+A256\+\_\+\+C\+TX} $\ast$\hyperlink{pcregrep_8txt_a651ed26971b1d49911883c4eb87db1ad}{context}, const \hyperlink{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}{sha2\+\_\+byte} $\ast$\hyperlink{structdata}{data}, size\+\_\+t \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{sha2_8c_a891883b4bed8d69909744f3b9bf43218}{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Final} (\hyperlink{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}{sha2\+\_\+byte} \hyperlink{testmd5_8c_aada48a89cb3d3552ade39585420f5ce6}{digest}\mbox{[}$\,$\mbox{]}, \hyperlink{sha2_8h_a0e4ea9b43c30824ef17d9d4a108cb249}{S\+H\+A256\+\_\+\+C\+TX} $\ast$\hyperlink{pcregrep_8txt_a651ed26971b1d49911883c4eb87db1ad}{context})
+\item 
+char $\ast$ \hyperlink{sha2_8c_a15f4bf31ef0dc1e9d0345d39be06c62e}{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+End} (\hyperlink{sha2_8h_a0e4ea9b43c30824ef17d9d4a108cb249}{S\+H\+A256\+\_\+\+C\+TX} $\ast$\hyperlink{pcregrep_8txt_a651ed26971b1d49911883c4eb87db1ad}{context}, char \hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer}\mbox{[}$\,$\mbox{]})
+\item 
+char $\ast$ \hyperlink{sha2_8c_a858e1d35cc81a28375323f86575895fe}{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Data} (const \hyperlink{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}{sha2\+\_\+byte} $\ast$\hyperlink{structdata}{data}, size\+\_\+t \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len}, char \hyperlink{testmd5_8c_aada48a89cb3d3552ade39585420f5ce6}{digest}\mbox{[}\hyperlink{sha2_8h_a0c71de183b257bb9ef09a865ad1ddc29}{S\+H\+A256\+\_\+\+D\+I\+G\+E\+S\+T\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+E\+N\+G\+TH}\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{sha2.\+c@{sha2.\+c}!A\+D\+D\+I\+N\+C128@{A\+D\+D\+I\+N\+C128}}
+\index{A\+D\+D\+I\+N\+C128@{A\+D\+D\+I\+N\+C128}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{A\+D\+D\+I\+N\+C128}{ADDINC128}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+D\+D\+I\+N\+C128(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf w}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_a32ce6a800376f90c7cee70ac2e7255d6}{}\label{sha2_8c_a32ce6a800376f90c7cee70ac2e7255d6}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \(\backslash\)
+        (\hyperlink{group__MOD__PROXY_gab9a0c51666082a4ca5dd995ee972f77e}{w})[0] += (\hyperlink{sha2_8c_a40fb007a21205e96c214642f0aad386e}{sha2\_word64})(\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}); \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{\(\backslash\)}
+\hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{        if} ((\hyperlink{group__MOD__PROXY_gab9a0c51666082a4ca5dd995ee972f77e}{w})[0] < (\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n})) \{ \(\backslash\)
+                (\hyperlink{group__MOD__PROXY_gab9a0c51666082a4ca5dd995ee972f77e}{w})[1]++; \(\backslash\)
+        \} \(\backslash\)
+\}
+\end{DoxyCode}
+\index{sha2.\+c@{sha2.\+c}!Ch@{Ch}}
+\index{Ch@{Ch}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{Ch}{Ch}}]{\setlength{\rightskip}{0pt plus 5cm}\#define Ch(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~((({\bf x}) \& ({\bf y})) $^\wedge$ (($\sim$({\bf x})) \& (z)))}\hypertarget{sha2_8c_ab0a0d1ad13c7e4d3cb38c89f7127c85a}{}\label{sha2_8c_ab0a0d1ad13c7e4d3cb38c89f7127c85a}
+\index{sha2.\+c@{sha2.\+c}!Maj@{Maj}}
+\index{Maj@{Maj}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{Maj}{Maj}}]{\setlength{\rightskip}{0pt plus 5cm}\#define Maj(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~((({\bf x}) \& ({\bf y})) $^\wedge$ (({\bf x}) \& (z)) $^\wedge$ (({\bf y}) \& (z)))}\hypertarget{sha2_8c_a447cd1d7fb703b62666400976be24bf3}{}\label{sha2_8c_a447cd1d7fb703b62666400976be24bf3}
+\index{sha2.\+c@{sha2.\+c}!M\+E\+M\+C\+P\+Y\+\_\+\+B\+C\+O\+PY@{M\+E\+M\+C\+P\+Y\+\_\+\+B\+C\+O\+PY}}
+\index{M\+E\+M\+C\+P\+Y\+\_\+\+B\+C\+O\+PY@{M\+E\+M\+C\+P\+Y\+\_\+\+B\+C\+O\+PY}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{M\+E\+M\+C\+P\+Y\+\_\+\+B\+C\+O\+PY}{MEMCPY_BCOPY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+E\+M\+C\+P\+Y\+\_\+\+B\+C\+O\+PY(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf d}, }
+\item[{}]{{\bf s}, }
+\item[{}]{{\bf l}}
+\end{DoxyParamCaption}
+)~memcpy(({\bf d}), ({\bf s}), ({\bf l}))}\hypertarget{sha2_8c_aa357cebb0a4ac20de95565894de5f793}{}\label{sha2_8c_aa357cebb0a4ac20de95565894de5f793}
+\index{sha2.\+c@{sha2.\+c}!M\+E\+M\+S\+E\+T\+\_\+\+B\+Z\+E\+RO@{M\+E\+M\+S\+E\+T\+\_\+\+B\+Z\+E\+RO}}
+\index{M\+E\+M\+S\+E\+T\+\_\+\+B\+Z\+E\+RO@{M\+E\+M\+S\+E\+T\+\_\+\+B\+Z\+E\+RO}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{M\+E\+M\+S\+E\+T\+\_\+\+B\+Z\+E\+RO}{MEMSET_BZERO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+E\+M\+S\+E\+T\+\_\+\+B\+Z\+E\+RO(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf p}, }
+\item[{}]{{\bf l}}
+\end{DoxyParamCaption}
+)~memset(({\bf p}), 0, ({\bf l}))}\hypertarget{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{}\label{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}
+\index{sha2.\+c@{sha2.\+c}!R@{R}}
+\index{R@{R}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{R}{R}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~(({\bf x}) $>$$>$ ({\bf b}))}\hypertarget{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{}\label{sha2_8c_af299e0982ce71aad5027c4a7315e536f}
+\index{sha2.\+c@{sha2.\+c}!R\+E\+V\+E\+R\+S\+E32@{R\+E\+V\+E\+R\+S\+E32}}
+\index{R\+E\+V\+E\+R\+S\+E32@{R\+E\+V\+E\+R\+S\+E32}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+V\+E\+R\+S\+E32}{REVERSE32}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+V\+E\+R\+S\+E32(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf w}, }
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_a7164c79bb6bc80abcb61cb96eef4194e}{}\label{sha2_8c_a7164c79bb6bc80abcb61cb96eef4194e}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{\(\backslash\)}
+\hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{        sha2\_word32} tmp = (\hyperlink{group__MOD__PROXY_gab9a0c51666082a4ca5dd995ee972f77e}{w}); \(\backslash\)
+        tmp = (tmp >> 16) | (tmp << 16); \(\backslash\)
+        (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}) = ((tmp & 0xff00ff00UL) >> 8) | ((tmp & 0x00ff00ffUL) << 8); \(\backslash\)
+\}
+\end{DoxyCode}
+\index{sha2.\+c@{sha2.\+c}!R\+E\+V\+E\+R\+S\+E64@{R\+E\+V\+E\+R\+S\+E64}}
+\index{R\+E\+V\+E\+R\+S\+E64@{R\+E\+V\+E\+R\+S\+E64}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+V\+E\+R\+S\+E64}{REVERSE64}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+V\+E\+R\+S\+E64(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf w}, }
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_a5399a7e8dab676a6c36fe85c91ae1366}{}\label{sha2_8c_a5399a7e8dab676a6c36fe85c91ae1366}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \hyperlink{sha2_8c_a40fb007a21205e96c214642f0aad386e}{\(\backslash\)}
+\hyperlink{sha2_8c_a40fb007a21205e96c214642f0aad386e}{        sha2\_word64} tmp = (\hyperlink{group__MOD__PROXY_gab9a0c51666082a4ca5dd995ee972f77e}{w}); \(\backslash\)
+        tmp = (tmp >> 32) | (tmp << 32); \(\backslash\)
+        tmp = ((tmp & \hyperlink{group__apr__platform_gaede133b7384b6a7a08c51cf1fa9c4001}{APR\_UINT64\_C}(0xff00ff00ff00ff00)) >> 8) | \(\backslash\)
+              ((tmp & \hyperlink{group__apr__platform_gaede133b7384b6a7a08c51cf1fa9c4001}{APR\_UINT64\_C}(0x00ff00ff00ff00ff)) << 8); \(\backslash\)
+        (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}) = ((tmp & \hyperlink{group__apr__platform_gaede133b7384b6a7a08c51cf1fa9c4001}{APR\_UINT64\_C}(0xffff0000ffff0000)) >> 16) | \(\backslash\)
+              ((tmp & \hyperlink{group__apr__platform_gaede133b7384b6a7a08c51cf1fa9c4001}{APR\_UINT64\_C}(0x0000ffff0000ffff)) << 16); \(\backslash\)
+\}
+\end{DoxyCode}
+\index{sha2.\+c@{sha2.\+c}!S32@{S32}}
+\index{S32@{S32}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{S32}{S32}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S32(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~((({\bf x}) $>$$>$ ({\bf b})) $\vert$ (({\bf x}) $<$$<$ (32 -\/ ({\bf b}))))}\hypertarget{sha2_8c_afe83c8790798dddd30665496143a853b}{}\label{sha2_8c_afe83c8790798dddd30665496143a853b}
+\index{sha2.\+c@{sha2.\+c}!S64@{S64}}
+\index{S64@{S64}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{S64}{S64}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S64(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~((({\bf x}) $>$$>$ ({\bf b})) $\vert$ (({\bf x}) $<$$<$ (64 -\/ ({\bf b}))))}\hypertarget{sha2_8c_a04c57d7554181e15fe6063a477d28236}{}\label{sha2_8c_a04c57d7554181e15fe6063a477d28236}
+\index{sha2.\+c@{sha2.\+c}!S\+H\+A256\+\_\+\+S\+H\+O\+R\+T\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH@{S\+H\+A256\+\_\+\+S\+H\+O\+R\+T\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH}}
+\index{S\+H\+A256\+\_\+\+S\+H\+O\+R\+T\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH@{S\+H\+A256\+\_\+\+S\+H\+O\+R\+T\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{S\+H\+A256\+\_\+\+S\+H\+O\+R\+T\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH}{SHA256_SHORT_BLOCK_LENGTH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+H\+A256\+\_\+\+S\+H\+O\+R\+T\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH~({\bf S\+H\+A256\+\_\+\+B\+L\+O\+C\+K\+\_\+\+L\+E\+N\+G\+TH} -\/ 8)}\hypertarget{sha2_8c_adfc8fa95344782913efd4ee7d9a9ea74}{}\label{sha2_8c_adfc8fa95344782913efd4ee7d9a9ea74}
+\index{sha2.\+c@{sha2.\+c}!S\+H\+A2\+\_\+\+U\+S\+E\+\_\+\+M\+E\+M\+S\+E\+T\+\_\+\+M\+E\+M\+C\+PY@{S\+H\+A2\+\_\+\+U\+S\+E\+\_\+\+M\+E\+M\+S\+E\+T\+\_\+\+M\+E\+M\+C\+PY}}
+\index{S\+H\+A2\+\_\+\+U\+S\+E\+\_\+\+M\+E\+M\+S\+E\+T\+\_\+\+M\+E\+M\+C\+PY@{S\+H\+A2\+\_\+\+U\+S\+E\+\_\+\+M\+E\+M\+S\+E\+T\+\_\+\+M\+E\+M\+C\+PY}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{S\+H\+A2\+\_\+\+U\+S\+E\+\_\+\+M\+E\+M\+S\+E\+T\+\_\+\+M\+E\+M\+C\+PY}{SHA2_USE_MEMSET_MEMCPY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+H\+A2\+\_\+\+U\+S\+E\+\_\+\+M\+E\+M\+S\+E\+T\+\_\+\+M\+E\+M\+C\+PY~1}\hypertarget{sha2_8c_a324569b417209f3e941991d642302d51}{}\label{sha2_8c_a324569b417209f3e941991d642302d51}
+\index{sha2.\+c@{sha2.\+c}!Sigma0\+\_\+256@{Sigma0\+\_\+256}}
+\index{Sigma0\+\_\+256@{Sigma0\+\_\+256}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{Sigma0\+\_\+256}{Sigma0_256}}]{\setlength{\rightskip}{0pt plus 5cm}\#define Sigma0\+\_\+256(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~({\bf S32}(2,  ({\bf x})) $^\wedge$ {\bf S32}(13, ({\bf x})) $^\wedge$ {\bf S32}(22, ({\bf x})))}\hypertarget{sha2_8c_a1d3b933bf48a1c763775d358313f44a6}{}\label{sha2_8c_a1d3b933bf48a1c763775d358313f44a6}
+\index{sha2.\+c@{sha2.\+c}!sigma0\+\_\+256@{sigma0\+\_\+256}}
+\index{sigma0\+\_\+256@{sigma0\+\_\+256}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{sigma0\+\_\+256}{sigma0_256}}]{\setlength{\rightskip}{0pt plus 5cm}\#define sigma0\+\_\+256(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~({\bf S32}(7,  ({\bf x})) $^\wedge$ {\bf S32}(18, ({\bf x})) $^\wedge$ {\bf R}(3 ,   ({\bf x})))}\hypertarget{sha2_8c_afdc787683d72110451742acd5bf41d16}{}\label{sha2_8c_afdc787683d72110451742acd5bf41d16}
+\index{sha2.\+c@{sha2.\+c}!Sigma0\+\_\+512@{Sigma0\+\_\+512}}
+\index{Sigma0\+\_\+512@{Sigma0\+\_\+512}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{Sigma0\+\_\+512}{Sigma0_512}}]{\setlength{\rightskip}{0pt plus 5cm}\#define Sigma0\+\_\+512(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~({\bf S64}(28, ({\bf x})) $^\wedge$ {\bf S64}(34, ({\bf x})) $^\wedge$ {\bf S64}(39, ({\bf x})))}\hypertarget{sha2_8c_a07b4672fd77b0b5f2bf0041e2faf0b45}{}\label{sha2_8c_a07b4672fd77b0b5f2bf0041e2faf0b45}
+\index{sha2.\+c@{sha2.\+c}!sigma0\+\_\+512@{sigma0\+\_\+512}}
+\index{sigma0\+\_\+512@{sigma0\+\_\+512}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{sigma0\+\_\+512}{sigma0_512}}]{\setlength{\rightskip}{0pt plus 5cm}\#define sigma0\+\_\+512(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~({\bf S64}( 1, ({\bf x})) $^\wedge$ {\bf S64}( 8, ({\bf x})) $^\wedge$ {\bf R}( 7,   ({\bf x})))}\hypertarget{sha2_8c_a449da15ce26bdf3bf58925e17c7864b3}{}\label{sha2_8c_a449da15ce26bdf3bf58925e17c7864b3}
+\index{sha2.\+c@{sha2.\+c}!Sigma1\+\_\+256@{Sigma1\+\_\+256}}
+\index{Sigma1\+\_\+256@{Sigma1\+\_\+256}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{Sigma1\+\_\+256}{Sigma1_256}}]{\setlength{\rightskip}{0pt plus 5cm}\#define Sigma1\+\_\+256(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~({\bf S32}(6,  ({\bf x})) $^\wedge$ {\bf S32}(11, ({\bf x})) $^\wedge$ {\bf S32}(25, ({\bf x})))}\hypertarget{sha2_8c_a98f25dda8f234733acf0386d6d5187fd}{}\label{sha2_8c_a98f25dda8f234733acf0386d6d5187fd}
+\index{sha2.\+c@{sha2.\+c}!sigma1\+\_\+256@{sigma1\+\_\+256}}
+\index{sigma1\+\_\+256@{sigma1\+\_\+256}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{sigma1\+\_\+256}{sigma1_256}}]{\setlength{\rightskip}{0pt plus 5cm}\#define sigma1\+\_\+256(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~({\bf S32}(17, ({\bf x})) $^\wedge$ {\bf S32}(19, ({\bf x})) $^\wedge$ {\bf R}(10,   ({\bf x})))}\hypertarget{sha2_8c_a6daf5f3524cf68e6a2e19de772070e77}{}\label{sha2_8c_a6daf5f3524cf68e6a2e19de772070e77}
+\index{sha2.\+c@{sha2.\+c}!Sigma1\+\_\+512@{Sigma1\+\_\+512}}
+\index{Sigma1\+\_\+512@{Sigma1\+\_\+512}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{Sigma1\+\_\+512}{Sigma1_512}}]{\setlength{\rightskip}{0pt plus 5cm}\#define Sigma1\+\_\+512(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~({\bf S64}(14, ({\bf x})) $^\wedge$ {\bf S64}(18, ({\bf x})) $^\wedge$ {\bf S64}(41, ({\bf x})))}\hypertarget{sha2_8c_a6a0406d09af6eaa6d933070801f74002}{}\label{sha2_8c_a6a0406d09af6eaa6d933070801f74002}
+\index{sha2.\+c@{sha2.\+c}!sigma1\+\_\+512@{sigma1\+\_\+512}}
+\index{sigma1\+\_\+512@{sigma1\+\_\+512}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{sigma1\+\_\+512}{sigma1_512}}]{\setlength{\rightskip}{0pt plus 5cm}\#define sigma1\+\_\+512(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~({\bf S64}(19, ({\bf x})) $^\wedge$ {\bf S64}(61, ({\bf x})) $^\wedge$ {\bf R}( 6,   ({\bf x})))}\hypertarget{sha2_8c_adcf0e492a43c6f34a3a5023a0a448e2d}{}\label{sha2_8c_adcf0e492a43c6f34a3a5023a0a448e2d}
+
+
+\subsection{Typedef Documentation}
+\index{sha2.\+c@{sha2.\+c}!sha2\+\_\+byte@{sha2\+\_\+byte}}
+\index{sha2\+\_\+byte@{sha2\+\_\+byte}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{sha2\+\_\+byte}{sha2_byte}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+byte\+\_\+t} {\bf sha2\+\_\+byte}}\hypertarget{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}{}\label{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}
+\index{sha2.\+c@{sha2.\+c}!sha2\+\_\+word32@{sha2\+\_\+word32}}
+\index{sha2\+\_\+word32@{sha2\+\_\+word32}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{sha2\+\_\+word32}{sha2_word32}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+uint32\+\_\+t} {\bf sha2\+\_\+word32}}\hypertarget{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{}\label{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}
+\index{sha2.\+c@{sha2.\+c}!sha2\+\_\+word64@{sha2\+\_\+word64}}
+\index{sha2\+\_\+word64@{sha2\+\_\+word64}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{sha2\+\_\+word64}{sha2_word64}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+uint64\+\_\+t} {\bf sha2\+\_\+word64}}\hypertarget{sha2_8c_a40fb007a21205e96c214642f0aad386e}{}\label{sha2_8c_a40fb007a21205e96c214642f0aad386e}
+
+
+\subsection{Function Documentation}
+\index{sha2.\+c@{sha2.\+c}!apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Data@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Data}}
+\index{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Data@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Data}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Data(const sha2\+\_\+byte $\ast$data, size\+\_\+t len, char digest[S\+H\+A256\+\_\+\+D\+I\+G\+E\+S\+T\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+E\+N\+G\+TH])}{apr__SHA256_Data(const sha2_byte *data, size_t len, char digest[SHA256_DIGEST_STRING_LENGTH])}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Data (
+\begin{DoxyParamCaption}
+\item[{const {\bf sha2\+\_\+byte} $\ast$}]{data, }
+\item[{size\+\_\+t}]{len, }
+\item[{char}]{digest\mbox{[}\+S\+H\+A256\+\_\+\+D\+I\+G\+E\+S\+T\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+E\+N\+G\+T\+H\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_a858e1d35cc81a28375323f86575895fe}{}\label{sha2_8c_a858e1d35cc81a28375323f86575895fe}
+
+\begin{DoxyCode}
+522                                                                                                     \{
+523         \hyperlink{struct__SHA256__CTX}{SHA256\_CTX}      \hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context};
+524 
+525         \hyperlink{sha2_8c_a2eb5f77871e9563f101c7cf63067521a}{apr\_\_SHA256\_Init}(&context);
+526         \hyperlink{sha2_8c_aa31b04b6af85ff0bc3f3f46a0ad1bbd7}{apr\_\_SHA256\_Update}(&context, \hyperlink{structdata}{data}, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len});
+527         \textcolor{keywordflow}{return} \hyperlink{sha2_8c_a15f4bf31ef0dc1e9d0345d39be06c62e}{apr\_\_SHA256\_End}(&context, \hyperlink{testmd5_8c_aada48a89cb3d3552ade39585420f5ce6}{digest});
+528 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sha2_8c_a858e1d35cc81a28375323f86575895fe_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{sha2.\+c@{sha2.\+c}!apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+End@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+End}}
+\index{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+End@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+End}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+End(\+S\+H\+A256\+\_\+\+C\+T\+X $\ast$context, char buffer[])}{apr__SHA256_End(SHA256_CTX *context, char buffer[])}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+End (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+H\+A256\+\_\+\+C\+TX} $\ast$}]{context, }
+\item[{char}]{buffer\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_a15f4bf31ef0dc1e9d0345d39be06c62e}{}\label{sha2_8c_a15f4bf31ef0dc1e9d0345d39be06c62e}
+
+\begin{DoxyCode}
+499                                                           \{
+500         \hyperlink{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}{sha2\_byte}       \hyperlink{testmd5_8c_aada48a89cb3d3552ade39585420f5ce6}{digest}[\hyperlink{sha2_8h_aa9cf0abf87b30c4c63e9c7e89c590579}{SHA256\_DIGEST\_LENGTH}], *
+      \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d} = \hyperlink{testmd5_8c_aada48a89cb3d3552ade39585420f5ce6}{digest};
+501         \textcolor{keywordtype}{int}             \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+502 
+503         \textcolor{comment}{/* Sanity check: */}
+504         assert(context != (\hyperlink{struct__SHA256__CTX}{SHA256\_CTX}*)0);
+505 
+506         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer} != (\textcolor{keywordtype}{char}*)0) \{
+507                 \hyperlink{sha2_8c_a891883b4bed8d69909744f3b9bf43218}{apr\_\_SHA256\_Final}(digest, context);
+508 
+509                 \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{sha2_8h_aa9cf0abf87b30c4c63e9c7e89c590579}{SHA256\_DIGEST\_LENGTH}; i++) \{
+510                         *\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}++ = sha2\_hex\_digits[(*d & 0xf0) >> 4];
+511                         *\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}++ = sha2\_hex\_digits[*d & 0x0f];
+512                         d++;
+513                 \}
+514                 *\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer} = (char)0;
+515         \} \textcolor{keywordflow}{else} \{
+516                 \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{MEMSET\_BZERO}(context, \textcolor{keyword}{sizeof}(*context));
+517         \}
+518         \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{MEMSET\_BZERO}(digest, \hyperlink{sha2_8h_aa9cf0abf87b30c4c63e9c7e89c590579}{SHA256\_DIGEST\_LENGTH});
+519         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer};
+520 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sha2_8c_a15f4bf31ef0dc1e9d0345d39be06c62e_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=320pt]{sha2_8c_a15f4bf31ef0dc1e9d0345d39be06c62e_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{sha2.\+c@{sha2.\+c}!apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Final@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Final}}
+\index{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Final@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Final}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Final(sha2\+\_\+byte digest[], S\+H\+A256\+\_\+\+C\+T\+X $\ast$context)}{apr__SHA256_Final(sha2_byte digest[], SHA256_CTX *context)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Final (
+\begin{DoxyParamCaption}
+\item[{{\bf sha2\+\_\+byte}}]{digest\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf S\+H\+A256\+\_\+\+C\+TX} $\ast$}]{context}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_a891883b4bed8d69909744f3b9bf43218}{}\label{sha2_8c_a891883b4bed8d69909744f3b9bf43218}
+
+\begin{DoxyCode}
+428                                                                 \{
+429         \hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}     *\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d} = (\hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}*)\hyperlink{testmd5_8c_aada48a89cb3d3552ade39585420f5ce6}{digest};
+430         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}    usedspace;
+431 
+432         \textcolor{comment}{/* Sanity check: */}
+433         assert(context != (\hyperlink{struct__SHA256__CTX}{SHA256\_CTX}*)0);
+434 
+435         \textcolor{comment}{/* If no digest buffer is passed, we don't bother doing this: */}
+436         \textcolor{keywordflow}{if} (\hyperlink{testmd5_8c_aada48a89cb3d3552ade39585420f5ce6}{digest} != (\hyperlink{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}{sha2\_byte}*)0) \{
+437                 usedspace = (\textcolor{keywordtype}{unsigned} \hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})((context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount} >> 3) 
+438                                          % \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH});
+439 \textcolor{preprocessor}{#if !APR\_IS\_BIGENDIAN}
+440                 \textcolor{comment}{/* Convert FROM host byte order */}
+441                 \hyperlink{sha2_8c_a5399a7e8dab676a6c36fe85c91ae1366}{REVERSE64}(context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount},context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount});
+442 \textcolor{preprocessor}{#endif}
+443                 \textcolor{keywordflow}{if} (usedspace > 0) \{
+444                         \textcolor{comment}{/* Begin padding with a 1 bit: */}
+445                         context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}[usedspace++] = 0x80;
+446 
+447                         \textcolor{keywordflow}{if} (usedspace <= \hyperlink{sha2_8c_adfc8fa95344782913efd4ee7d9a9ea74}{SHA256\_SHORT\_BLOCK\_LENGTH}) \{
+448                                 \textcolor{comment}{/* Set-up for the last transform: */}
+449                                 \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{MEMSET\_BZERO}(&context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}[usedspace], 
+      \hyperlink{sha2_8c_adfc8fa95344782913efd4ee7d9a9ea74}{SHA256\_SHORT\_BLOCK\_LENGTH} - usedspace);
+450                         \} \textcolor{keywordflow}{else} \{
+451                                 \textcolor{keywordflow}{if} (usedspace < \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH}) \{
+452                                         \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{MEMSET\_BZERO}(&context->
+      \hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}[usedspace], \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH} - usedspace);
+453                                 \}
+454                                 \textcolor{comment}{/* Do second-to-last transform: */}
+455                                 \hyperlink{sha2_8c_ad0484e2fb623400a8477a22be5bbb7fc}{apr\_\_SHA256\_Transform}(context, (
+      \hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}*)context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer});
+456 
+457                                 \textcolor{comment}{/* And set-up for the last transform: */}
+458                                 \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{MEMSET\_BZERO}(context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}, 
+      \hyperlink{sha2_8c_adfc8fa95344782913efd4ee7d9a9ea74}{SHA256\_SHORT\_BLOCK\_LENGTH});
+459                         \}
+460                 \} \textcolor{keywordflow}{else} \{
+461                         \textcolor{comment}{/* Set-up for the last transform: */}
+462                         \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{MEMSET\_BZERO}(context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}, 
+      \hyperlink{sha2_8c_adfc8fa95344782913efd4ee7d9a9ea74}{SHA256\_SHORT\_BLOCK\_LENGTH});
+463 
+464                         \textcolor{comment}{/* Begin padding with a 1 bit: */}
+465                         *context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer} = 0x80;
+466                 \}
+467                 \textcolor{comment}{/* Set the bit count: */}
+468                 \{
+469                         \textcolor{keyword}{union }\hyperlink{group__APACHE__CORE__LISTEN_gafd856f29d11272d954fe05b9c1ca84dd}{dummy} \{
+470                                 \hyperlink{group__apr__platform_ga722b277a42230f3fd41cb5be7a76cfb4}{apr\_uint64\_t} bitcount;
+471                                 \hyperlink{group__apr__platform_gadcfa334915b4605a0052cb4ca542eb3a}{apr\_byte\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga393b167dab644f408202cbbcad070e6d}{bytes}[8];
+472                         \} bitcount;
+473                         bitcount.bitcount = context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount};
+474                         \hyperlink{sha2_8c_aa357cebb0a4ac20de95565894de5f793}{MEMCPY\_BCOPY}(&context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}[
+      \hyperlink{sha2_8c_adfc8fa95344782913efd4ee7d9a9ea74}{SHA256\_SHORT\_BLOCK\_LENGTH}], bitcount.bytes, 8);
+475                 \}
+476 
+477                 \textcolor{comment}{/* Final transform: */}
+478                 \hyperlink{sha2_8c_ad0484e2fb623400a8477a22be5bbb7fc}{apr\_\_SHA256\_Transform}(context, (\hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}*)context->
+      \hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer});
+479 
+480 \textcolor{preprocessor}{#if !APR\_IS\_BIGENDIAN}
+481                 \{
+482                         \textcolor{comment}{/* Convert TO host byte order */}
+483                         \textcolor{keywordtype}{int}     j;
+484                         \textcolor{keywordflow}{for} (j = 0; j < 8; j++) \{
+485                                 \hyperlink{sha2_8c_a7164c79bb6bc80abcb61cb96eef4194e}{REVERSE32}(context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[j],context->
+      \hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[j]);
+486                                 *d++ = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[j];
+487                         \}
+488                 \}
+489 \textcolor{preprocessor}{#else}
+490                 \hyperlink{sha2_8c_aa357cebb0a4ac20de95565894de5f793}{MEMCPY\_BCOPY}(d, context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}, 
+      \hyperlink{sha2_8h_aa9cf0abf87b30c4c63e9c7e89c590579}{SHA256\_DIGEST\_LENGTH});
+491 \textcolor{preprocessor}{#endif}
+492         \}
+493 
+494         \textcolor{comment}{/* Clean up state data: */}
+495         \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{MEMSET\_BZERO}(context, \textcolor{keyword}{sizeof}(*context));
+496         usedspace = 0;
+497 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=347pt]{sha2_8c_a891883b4bed8d69909744f3b9bf43218_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sha2_8c_a891883b4bed8d69909744f3b9bf43218_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{sha2.\+c@{sha2.\+c}!apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Init@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Init}}
+\index{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Init@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Init}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Init(\+S\+H\+A256\+\_\+\+C\+T\+X $\ast$context)}{apr__SHA256_Init(SHA256_CTX *context)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Init (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+H\+A256\+\_\+\+C\+TX} $\ast$}]{context}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_a2eb5f77871e9563f101c7cf63067521a}{}\label{sha2_8c_a2eb5f77871e9563f101c7cf63067521a}
+
+\begin{DoxyCode}
+195                                            \{
+196         \textcolor{keywordflow}{if} (context == (\hyperlink{struct__SHA256__CTX}{SHA256\_CTX}*)0) \{
+197                 \textcolor{keywordflow}{return};
+198         \}
+199         \hyperlink{sha2_8c_aa357cebb0a4ac20de95565894de5f793}{MEMCPY\_BCOPY}(context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}, sha256\_initial\_hash\_value, 
+      \hyperlink{sha2_8h_aa9cf0abf87b30c4c63e9c7e89c590579}{SHA256\_DIGEST\_LENGTH});
+200         \hyperlink{sha2_8c_a8e212a8c6f84340a49f10895833e2f2d}{MEMSET\_BZERO}(context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}, \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH});
+201         context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount} = 0;
+202 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{sha2_8c_a2eb5f77871e9563f101c7cf63067521a_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=316pt]{sha2_8c_a2eb5f77871e9563f101c7cf63067521a_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{sha2.\+c@{sha2.\+c}!apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Transform@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Transform}}
+\index{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Transform@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Transform}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Transform(\+S\+H\+A256\+\_\+\+C\+T\+X $\ast$, const sha2\+\_\+word32 $\ast$)}{apr__SHA256_Transform(SHA256_CTX *, const sha2_word32 *)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Transform (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+H\+A256\+\_\+\+C\+TX} $\ast$}]{context, }
+\item[{const {\bf sha2\+\_\+word32} $\ast$}]{data}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_ad0484e2fb623400a8477a22be5bbb7fc}{}\label{sha2_8c_ad0484e2fb623400a8477a22be5bbb7fc}
+
+\begin{DoxyCode}
+299                                                                          \{
+300         \hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}     \hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}, \hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}, \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}, \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d}, \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e}, \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}, \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}, s0, s1;
+301         \hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}     T1, T2, *W256;
+302         \textcolor{keywordtype}{int}             j;
+303 
+304         W256 = (\hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}*)context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer};
+305 
+306         \textcolor{comment}{/* Initialize registers with the prev. intermediate value */}
+307         a = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[0];
+308         b = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[1];
+309         c = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[2];
+310         d = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[3];
+311         e = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[4];
+312         f = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[5];
+313         g = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[6];
+314         h = context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[7];
+315 
+316         j = 0;
+317         \textcolor{keywordflow}{do} \{
+318 #\textcolor{keywordflow}{if} !\hyperlink{group__apr__platform_gabf5174c5d522e1a149cbb38a4310743f}{APR\_IS\_BIGENDIAN}
+319                 \textcolor{comment}{/* Copy data while converting to host byte order */}
+320                 \hyperlink{sha2_8c_a7164c79bb6bc80abcb61cb96eef4194e}{REVERSE32}(*\hyperlink{structdata}{data}++,W256[j]);
+321                 \textcolor{comment}{/* Apply the SHA-256 compression function to update a..h */}
+322                 T1 = h + \hyperlink{sha2_8c_a98f25dda8f234733acf0386d6d5187fd}{Sigma1\_256}(e) + \hyperlink{sha2_8c_ab0a0d1ad13c7e4d3cb38c89f7127c85a}{Ch}(e, f, g) + K256[j] + W256[j];
+323 \textcolor{preprocessor}{#else }\textcolor{comment}{/* APR\_IS\_BIGENDIAN */}\textcolor{preprocessor}{}
+324                 \textcolor{comment}{/* Apply the SHA-256 compression function to update a..h with copy */}
+325                 T1 = h + \hyperlink{sha2_8c_a98f25dda8f234733acf0386d6d5187fd}{Sigma1\_256}(e) + \hyperlink{sha2_8c_ab0a0d1ad13c7e4d3cb38c89f7127c85a}{Ch}(e, f, g) + K256[j] + (W256[j] = *
+      \hyperlink{structdata}{data}++);
+326 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* APR\_IS\_BIGENDIAN */}\textcolor{preprocessor}{}
+327                 T2 = \hyperlink{sha2_8c_a1d3b933bf48a1c763775d358313f44a6}{Sigma0\_256}(a) + \hyperlink{sha2_8c_a447cd1d7fb703b62666400976be24bf3}{Maj}(a, b, c);
+328                 h = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g};
+329                 g = \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f};
+330                 f = \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+331                 e = d + T1;
+332                 d = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+333                 c = \hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+334                 b = \hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a};
+335                 a = T1 + T2;
+336 
+337                 j++;
+338         \} \textcolor{keywordflow}{while} (j < 16);
+339 
+340         \textcolor{keywordflow}{do} \{
+341                 \textcolor{comment}{/* Part of the message block expansion: */}
+342                 s0 = W256[(j+1)&0x0f];
+343                 s0 = \hyperlink{sha2_8c_afdc787683d72110451742acd5bf41d16}{sigma0\_256}(s0);
+344                 s1 = W256[(j+14)&0x0f]; 
+345                 s1 = \hyperlink{sha2_8c_a6daf5f3524cf68e6a2e19de772070e77}{sigma1\_256}(s1);
+346 
+347                 \textcolor{comment}{/* Apply the SHA-256 compression function to update a..h */}
+348                 T1 = h + \hyperlink{sha2_8c_a98f25dda8f234733acf0386d6d5187fd}{Sigma1\_256}(e) + \hyperlink{sha2_8c_ab0a0d1ad13c7e4d3cb38c89f7127c85a}{Ch}(e, f, g) + K256[j] + 
+349                      (W256[j&0x0f] += s1 + W256[(j+9)&0x0f] + s0);
+350                 T2 = \hyperlink{sha2_8c_a1d3b933bf48a1c763775d358313f44a6}{Sigma0\_256}(a) + \hyperlink{sha2_8c_a447cd1d7fb703b62666400976be24bf3}{Maj}(a, b, c);
+351                 h = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g};
+352                 g = \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f};
+353                 f = \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+354                 e = d + T1;
+355                 d = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+356                 c = \hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+357                 b = \hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a};
+358                 a = T1 + T2;
+359 
+360                 j++;
+361         \} \textcolor{keywordflow}{while} (j < 64);
+362 
+363         \textcolor{comment}{/* Compute the current intermediate hash value */}
+364         context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[0] += \hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a};
+365         context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[1] += \hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+366         context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[2] += \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+367         context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[3] += \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+368         context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[4] += \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+369         context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[5] += \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f};
+370         context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[6] += \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a50403b1fefb03c2a6080e2d29aa9a2c4}{g};
+371         context->\hyperlink{struct__SHA256__CTX_a651ee21c1ee494e3a6f755f1586acba7}{state}[7] += \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h};
+372 
+373         \textcolor{comment}{/* Clean up */}
+374         a = b = c = d = e = f = g = h = T1 = T2 = 0;
+375 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sha2_8c_ad0484e2fb623400a8477a22be5bbb7fc_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{sha2.\+c@{sha2.\+c}!apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Update@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Update}}
+\index{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Update@{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Update}!sha2.\+c@{sha2.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Update(\+S\+H\+A256\+\_\+\+C\+T\+X $\ast$context, const sha2\+\_\+byte $\ast$data, size\+\_\+t len)}{apr__SHA256_Update(SHA256_CTX *context, const sha2_byte *data, size_t len)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} apr\+\_\+\+\_\+\+S\+H\+A256\+\_\+\+Update (
+\begin{DoxyParamCaption}
+\item[{{\bf S\+H\+A256\+\_\+\+C\+TX} $\ast$}]{context, }
+\item[{const {\bf sha2\+\_\+byte} $\ast$}]{data, }
+\item[{size\+\_\+t}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{sha2_8c_aa31b04b6af85ff0bc3f3f46a0ad1bbd7}{}\label{sha2_8c_aa31b04b6af85ff0bc3f3f46a0ad1bbd7}
+
+\begin{DoxyCode}
+379                                                                                 \{
+380         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}    freespace, usedspace;
+381 
+382         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} == 0) \{
+383                 \textcolor{comment}{/* Calling with no data is valid - we do nothing */}
+384                 \textcolor{keywordflow}{return};
+385         \}
+386 
+387         \textcolor{comment}{/* Sanity check: */}
+388         assert(context != (\hyperlink{struct__SHA256__CTX}{SHA256\_CTX}*)0 && \hyperlink{structdata}{data} != (\hyperlink{sha2_8c_a9f6916916a4f080e786a0b77ad27c80c}{sha2\_byte}*)0);
+389 
+390         usedspace = (\textcolor{keywordtype}{unsigned} \hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})((context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount} >> 3) 
+391                                  % \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH});
+392         \textcolor{keywordflow}{if} (usedspace > 0) \{
+393                 \textcolor{comment}{/* Calculate how much free space is available in the buffer */}
+394                 freespace = \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH} - usedspace;
+395 
+396                 \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} >= freespace) \{
+397                         \textcolor{comment}{/* Fill the buffer completely and process it */}
+398                         \hyperlink{sha2_8c_aa357cebb0a4ac20de95565894de5f793}{MEMCPY\_BCOPY}(&context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}[usedspace], 
+      \hyperlink{structdata}{data}, freespace);
+399                         context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount} += freespace << 3;
+400                         \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} -= freespace;
+401                         \hyperlink{structdata}{data} += freespace;
+402                         \hyperlink{sha2_8c_ad0484e2fb623400a8477a22be5bbb7fc}{apr\_\_SHA256\_Transform}(context, (
+      \hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}*)context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer});
+403                 \} \textcolor{keywordflow}{else} \{
+404                         \textcolor{comment}{/* The buffer is not yet full */}
+405                         \hyperlink{sha2_8c_aa357cebb0a4ac20de95565894de5f793}{MEMCPY\_BCOPY}(&context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}[usedspace], 
+      \hyperlink{structdata}{data}, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len});
+406                         context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount} += \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} << 3;
+407                         \textcolor{comment}{/* Clean up: */}
+408                         usedspace = freespace = 0;
+409                         \textcolor{keywordflow}{return};
+410                 \}
+411         \}
+412         \textcolor{keywordflow}{while} (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} >= \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH}) \{
+413                 \textcolor{comment}{/* Process as many complete blocks as we can */}
+414                 \hyperlink{sha2_8c_ad0484e2fb623400a8477a22be5bbb7fc}{apr\_\_SHA256\_Transform}(context, (\hyperlink{sha2_8c_a10a5f96f5f91a01d2b7ac7e2d492ab17}{sha2\_word32}*)
+      \hyperlink{structdata}{data});
+415                 context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount} += \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH} << 3;
+416                 \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} -= \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH};
+417                 \hyperlink{structdata}{data} += \hyperlink{sha2_8h_af7a1879c2d7cd5cf31c91c0eb91b0015}{SHA256\_BLOCK\_LENGTH};
+418         \}
+419         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} > 0) \{
+420                 \textcolor{comment}{/* There's left-overs, so save 'em */}
+421                 \hyperlink{sha2_8c_aa357cebb0a4ac20de95565894de5f793}{MEMCPY\_BCOPY}(context->\hyperlink{struct__SHA256__CTX_a64c78dd109eb135023e28c3b17ea0c59}{buffer}, \hyperlink{structdata}{data}, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len});
+422                 context->\hyperlink{struct__SHA256__CTX_ad7f82a082163b345b5ac7a0f9478e5a6}{bitcount} += \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} << 3;
+423         \}
+424         \textcolor{comment}{/* Clean up: */}
+425         usedspace = freespace = 0;
+426 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sha2_8c_aa31b04b6af85ff0bc3f3f46a0ad1bbd7_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{sha2_8c_aa31b04b6af85ff0bc3f3f46a0ad1bbd7_icgraph}
+\end{center}
+\end{figure}
+
+

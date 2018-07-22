@@ -1,0 +1,136 @@
+\hypertarget{prefork_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/mpm/prefork/prefork.c File Reference}
+\label{prefork_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/mpm/prefork/prefork.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/mpm/prefork/prefork.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+default.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+connection.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}unixd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+listen.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mmn.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+poll.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$signal.\+h$>$}\\*
+{\ttfamily \#include $<$sys/times.\+h$>$}\\*
+Include dependency graph for prefork.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{prefork_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structprefork__retained__data}{prefork\+\_\+retained\+\_\+data}
+\item 
+struct \hyperlink{structprefork__child__bucket}{prefork\+\_\+child\+\_\+bucket}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{prefork_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}
+\item 
+\#define \hyperlink{prefork_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{prefork_8c_a01b20d8ecea55337127c025247cbdfb4}{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}~256
+\item 
+\#define \hyperlink{prefork_8c_a4d58319ee0d30aa1e218209f354d8d39}{M\+A\+X\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}~200000
+\item 
+\#define \hyperlink{prefork_8c_acd4caf27098c6207ccb7103d0862ccc1}{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT}~1
+\item 
+\#define \hyperlink{prefork_8c_a14a45634d0bbc9454c117ac918a5cd17}{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE}~(32)
+\item 
+\#define \hyperlink{prefork_8c_a7fcd014e74cf03e7f0b1ae62229369e4}{M\+P\+M\+\_\+\+C\+H\+I\+L\+D\+\_\+\+P\+ID}(\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i})~(\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\+\_\+scoreboard\+\_\+image}-\/$>$\hyperlink{group__apr__pools_ga3eb8c52002440da9a3eed11d54d08dd5}{parent}\mbox{[}\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}\mbox{]}.pid)
+\item 
+\#define \hyperlink{prefork_8c_a45f2c53158ed64a07cb9ae027e1c444f}{chdir\+\_\+for\+\_\+gprof}()
+\item 
+\#define \hyperlink{prefork_8c_af2b132fe49adbebf40e20f211e81dd94}{S\+A\+F\+E\+\_\+\+A\+C\+C\+E\+PT}(stmt)~(stmt)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structprefork__retained__data}{prefork\+\_\+retained\+\_\+data} \hyperlink{prefork_8c_ae4a84a7de9296b3af22ca4cf4bd3b0bf}{prefork\+\_\+retained\+\_\+data}
+\item 
+typedef struct \hyperlink{structprefork__child__bucket}{prefork\+\_\+child\+\_\+bucket} \hyperlink{prefork_8c_a23eefb3538efd8e063c3937c0719e07b}{prefork\+\_\+child\+\_\+bucket}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{prefork_8c_a62c4487622c72154617fdb86bb18282f}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (mpm\+\_\+prefork)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{prefork.\+c@{prefork.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}{APR_WANT_STDIO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}\hypertarget{prefork_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{}\label{prefork_8c_a4f3ace9204c571a34c0b2b9bd23b1133}
+\index{prefork.\+c@{prefork.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{prefork_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{prefork_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{prefork.\+c@{prefork.\+c}!chdir\+\_\+for\+\_\+gprof@{chdir\+\_\+for\+\_\+gprof}}
+\index{chdir\+\_\+for\+\_\+gprof@{chdir\+\_\+for\+\_\+gprof}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{chdir\+\_\+for\+\_\+gprof}{chdir_for_gprof}}]{\setlength{\rightskip}{0pt plus 5cm}\#define chdir\+\_\+for\+\_\+gprof(
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{prefork_8c_a45f2c53158ed64a07cb9ae027e1c444f}{}\label{prefork_8c_a45f2c53158ed64a07cb9ae027e1c444f}
+\index{prefork.\+c@{prefork.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT@{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT@{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}{DEFAULT_SERVER_LIMIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT~256}\hypertarget{prefork_8c_a01b20d8ecea55337127c025247cbdfb4}{}\label{prefork_8c_a01b20d8ecea55337127c025247cbdfb4}
+\index{prefork.\+c@{prefork.\+c}!H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT@{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT}}
+\index{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT@{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT}{HARD_THREAD_LIMIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT~1}\hypertarget{prefork_8c_acd4caf27098c6207ccb7103d0862ccc1}{}\label{prefork_8c_acd4caf27098c6207ccb7103d0862ccc1}
+\index{prefork.\+c@{prefork.\+c}!M\+A\+X\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT@{M\+A\+X\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}}
+\index{M\+A\+X\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT@{M\+A\+X\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}{MAX_SERVER_LIMIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT~200000}\hypertarget{prefork_8c_a4d58319ee0d30aa1e218209f354d8d39}{}\label{prefork_8c_a4d58319ee0d30aa1e218209f354d8d39}
+\index{prefork.\+c@{prefork.\+c}!M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE@{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE}}
+\index{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE@{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE}{MAX_SPAWN_RATE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE~(32)}\hypertarget{prefork_8c_a14a45634d0bbc9454c117ac918a5cd17}{}\label{prefork_8c_a14a45634d0bbc9454c117ac918a5cd17}
+\index{prefork.\+c@{prefork.\+c}!M\+P\+M\+\_\+\+C\+H\+I\+L\+D\+\_\+\+P\+ID@{M\+P\+M\+\_\+\+C\+H\+I\+L\+D\+\_\+\+P\+ID}}
+\index{M\+P\+M\+\_\+\+C\+H\+I\+L\+D\+\_\+\+P\+ID@{M\+P\+M\+\_\+\+C\+H\+I\+L\+D\+\_\+\+P\+ID}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{M\+P\+M\+\_\+\+C\+H\+I\+L\+D\+\_\+\+P\+ID}{MPM_CHILD_PID}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+P\+M\+\_\+\+C\+H\+I\+L\+D\+\_\+\+P\+ID(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf i}}
+\end{DoxyParamCaption}
+)~({\bf ap\+\_\+scoreboard\+\_\+image}-\/$>${\bf parent}\mbox{[}{\bf i}\mbox{]}.pid)}\hypertarget{prefork_8c_a7fcd014e74cf03e7f0b1ae62229369e4}{}\label{prefork_8c_a7fcd014e74cf03e7f0b1ae62229369e4}
+\index{prefork.\+c@{prefork.\+c}!S\+A\+F\+E\+\_\+\+A\+C\+C\+E\+PT@{S\+A\+F\+E\+\_\+\+A\+C\+C\+E\+PT}}
+\index{S\+A\+F\+E\+\_\+\+A\+C\+C\+E\+PT@{S\+A\+F\+E\+\_\+\+A\+C\+C\+E\+PT}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{S\+A\+F\+E\+\_\+\+A\+C\+C\+E\+PT}{SAFE_ACCEPT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+A\+F\+E\+\_\+\+A\+C\+C\+E\+PT(
+\begin{DoxyParamCaption}
+\item[{}]{stmt}
+\end{DoxyParamCaption}
+)~(stmt)}\hypertarget{prefork_8c_af2b132fe49adbebf40e20f211e81dd94}{}\label{prefork_8c_af2b132fe49adbebf40e20f211e81dd94}
+
+
+\subsection{Typedef Documentation}
+\index{prefork.\+c@{prefork.\+c}!prefork\+\_\+child\+\_\+bucket@{prefork\+\_\+child\+\_\+bucket}}
+\index{prefork\+\_\+child\+\_\+bucket@{prefork\+\_\+child\+\_\+bucket}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{prefork\+\_\+child\+\_\+bucket}{prefork_child_bucket}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf prefork\+\_\+child\+\_\+bucket}  {\bf prefork\+\_\+child\+\_\+bucket}}\hypertarget{prefork_8c_a23eefb3538efd8e063c3937c0719e07b}{}\label{prefork_8c_a23eefb3538efd8e063c3937c0719e07b}
+\index{prefork.\+c@{prefork.\+c}!prefork\+\_\+retained\+\_\+data@{prefork\+\_\+retained\+\_\+data}}
+\index{prefork\+\_\+retained\+\_\+data@{prefork\+\_\+retained\+\_\+data}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{prefork\+\_\+retained\+\_\+data}{prefork_retained_data}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf prefork\+\_\+retained\+\_\+data}  {\bf prefork\+\_\+retained\+\_\+data}}\hypertarget{prefork_8c_ae4a84a7de9296b3af22ca4cf4bd3b0bf}{}\label{prefork_8c_ae4a84a7de9296b3af22ca4cf4bd3b0bf}
+
+
+\subsection{Function Documentation}
+\index{prefork.\+c@{prefork.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!prefork.\+c@{prefork.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(mpm\+\_\+prefork)}{AP_DECLARE_MODULE(mpm_prefork)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{mpm\+\_\+prefork}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{prefork_8c_a62c4487622c72154617fdb86bb18282f}{}\label{prefork_8c_a62c4487622c72154617fdb86bb18282f}

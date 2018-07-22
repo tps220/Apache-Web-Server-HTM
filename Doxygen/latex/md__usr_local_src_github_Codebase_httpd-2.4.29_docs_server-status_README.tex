@@ -1,0 +1,46 @@
+{\ttfamily mod\+\_\+lua} version of the \hyperlink{namespaceApache}{Apache} httpd\textquotesingle{}s mod\+\_\+status using dynamic charts
+
+\subsection*{What does it do?}
+
+This script is an extended version of the known mod\+\_\+status statistics page for httpd. It uses the simple Quokka Chart A\+PI to visualize many of the elements that are sometimes hard to properly diagnose using plain text information.
+
+Take a look at \href{https://www.apache.org/server-status}{\tt https\+://www.\+apache.\+org/server-\/status} to see how it works.
+
+\subsection*{Requirements}
+
+
+\begin{DoxyItemize}
+\item \hyperlink{namespaceApache}{Apache} httpd 2.\+4.\+6 or higher
+\item mod\+\_\+lua (with either Lua 5.\+1, 5.\+2 or Lua\+J\+IT)
+\item mod\+\_\+status loaded (for enabling traffic statistics)
+\end{DoxyItemize}
+
+\subsection*{Installing}
+
+First, install mod\+\_\+lua (you can enable this during configure time with --enable-\/lua)
+
+\subsubsection*{Installing as a handler\+:}
+
+To install it as a handler, add the following to your httpd.\+conf in the appropriate Virtual\+Host\+: \begin{DoxyVerb}LuaMapHandler ^/server-status$ /path/to/server-status.lua
+\end{DoxyVerb}
+
+
+\subsubsection*{Installing as a web app\+:}
+
+To install as a plain web-\/app, enable .lua scripts to be handled by mod\+\_\+lua, by adding the following to your appropriate Virtual\+Host configuration\+: \begin{DoxyVerb}AddHandler lua-script .lua
+\end{DoxyVerb}
+
+
+Then just put the {\ttfamily .lua} script somewhere in your document root and visit the page.
+
+\subsection*{Configuring}
+
+There are a few options inside the Lua script that can be set to {\ttfamily true} or {\ttfamily false}\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily show\+\_\+warning}\+: Whether or not to show a notice that this page is there on purpose.
+\item {\ttfamily redact\+\_\+ips}\+: Whether or not to replace the last few bits of every IP with \textquotesingle{}x.\+x\textquotesingle{}
+\item {\ttfamily show\+\_\+modules}\+: Whether to show the list of loaded modules or not
+\item {\ttfamily show\+\_\+threads}\+: Whether to show thread details or not. 
+\end{DoxyItemize}

@@ -1,0 +1,135 @@
+\hypertarget{apr__sha1_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr-\/util/crypto/apr\+\_\+sha1.c File Reference}
+\label{apr__sha1_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/crypto/apr\+\_\+sha1.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/crypto/apr\+\_\+sha1.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+sha1.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+base64.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+Include dependency graph for apr\+\_\+sha1.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{apr__sha1_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+union \hyperlink{unionendianTest}{endian\+Test}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{apr__sha1_8c_a2f8afe760c437b681d055d90c553d5c2}{U\+N\+R\+O\+L\+L\+\_\+\+L\+O\+O\+PS}
+\item 
+\#define \hyperlink{apr__sha1_8c_ac6fcad0b30b0c4c7ac9e046da5938897}{U\+S\+E\+\_\+\+M\+O\+D\+I\+F\+I\+E\+D\+\_\+\+S\+HA}
+\item 
+\#define \hyperlink{apr__sha1_8c_a895cf264b1bd506426ebc9e51336241e}{f1}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} \& \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}) $\vert$ ($\sim$\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} \& z))
+\item 
+\#define \hyperlink{apr__sha1_8c_a5a8cd147d49dfc130047aad8b83ddadf}{f2}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} $^\wedge$ \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y} $^\wedge$ z)
+\item 
+\#define \hyperlink{apr__sha1_8c_ae4a6b9a0d304177d9ce0e7488a890bb4}{f3}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} \& \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}) $\vert$ (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} \& z) $\vert$ (\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y} \& z))
+\item 
+\#define \hyperlink{apr__sha1_8c_ad91225588c8fe60771183f5a9d653cea}{f4}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} $^\wedge$ \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y} $^\wedge$ z)
+\item 
+\#define \hyperlink{apr__sha1_8c_aa56bffce7b8d00e5bc35e55b383e7a9e}{C\+O\+N\+S\+T1}~0x5a827999L
+\item 
+\#define \hyperlink{apr__sha1_8c_ac83486b3af5c673d1923926f4de7c06d}{C\+O\+N\+S\+T2}~0x6ed9eba1L
+\item 
+\#define \hyperlink{apr__sha1_8c_a302c2db8ced21080bcd17fc83a9e5d0f}{C\+O\+N\+S\+T3}~0x8f1bbcdcL
+\item 
+\#define \hyperlink{apr__sha1_8c_a0ea99d5736fa70ecc70be1fc04a9dafa}{C\+O\+N\+S\+T4}~0xca62c1d6L
+\item 
+\#define \hyperlink{apr__sha1_8c_a2386d73c1dcb6bccda17b964a2506598}{R\+O\+T32}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} $<$$<$ \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}) $\vert$ (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} $>$$>$ (32 -\/ \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})))
+\item 
+\#define \hyperlink{apr__sha1_8c_a01f1cb675bd501873e8faed06d71d598}{F\+U\+NC}(\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n},  \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i})
+\item 
+\#define \hyperlink{apr__sha1_8c_aea2817b20aed3383184f696e59657398}{S\+H\+A\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}~64
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APR__Util__Hook_gabd2528499ce66c68dc05d60927725a39}{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\begin{DoxyCompactList}\small\item\em Computes Sip\+Hash-\/2-\/4, producing a 64bit (A\+P\+R\+\_\+\+S\+I\+P\+H\+A\+S\+H\+\_\+\+D\+S\+I\+ZE) hash from a message and a 128bit (A\+P\+R\+\_\+\+S\+I\+P\+H\+A\+S\+H\+\_\+\+K\+S\+I\+ZE) secret key, into a possibly unaligned buffer (using the little endian representation as defined by the authors for interoperabilty) usable as a M\+AC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!C\+O\+N\+S\+T1@{C\+O\+N\+S\+T1}}
+\index{C\+O\+N\+S\+T1@{C\+O\+N\+S\+T1}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+S\+T1}{CONST1}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+S\+T1~0x5a827999L}\hypertarget{apr__sha1_8c_aa56bffce7b8d00e5bc35e55b383e7a9e}{}\label{apr__sha1_8c_aa56bffce7b8d00e5bc35e55b383e7a9e}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!C\+O\+N\+S\+T2@{C\+O\+N\+S\+T2}}
+\index{C\+O\+N\+S\+T2@{C\+O\+N\+S\+T2}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+S\+T2}{CONST2}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+S\+T2~0x6ed9eba1L}\hypertarget{apr__sha1_8c_ac83486b3af5c673d1923926f4de7c06d}{}\label{apr__sha1_8c_ac83486b3af5c673d1923926f4de7c06d}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!C\+O\+N\+S\+T3@{C\+O\+N\+S\+T3}}
+\index{C\+O\+N\+S\+T3@{C\+O\+N\+S\+T3}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+S\+T3}{CONST3}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+S\+T3~0x8f1bbcdcL}\hypertarget{apr__sha1_8c_a302c2db8ced21080bcd17fc83a9e5d0f}{}\label{apr__sha1_8c_a302c2db8ced21080bcd17fc83a9e5d0f}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!C\+O\+N\+S\+T4@{C\+O\+N\+S\+T4}}
+\index{C\+O\+N\+S\+T4@{C\+O\+N\+S\+T4}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+S\+T4}{CONST4}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+S\+T4~0xca62c1d6L}\hypertarget{apr__sha1_8c_a0ea99d5736fa70ecc70be1fc04a9dafa}{}\label{apr__sha1_8c_a0ea99d5736fa70ecc70be1fc04a9dafa}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!f1@{f1}}
+\index{f1@{f1}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{f1}{f1}}]{\setlength{\rightskip}{0pt plus 5cm}\#define f1(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~(({\bf x} \& {\bf y}) $\vert$ ($\sim${\bf x} \& z))}\hypertarget{apr__sha1_8c_a895cf264b1bd506426ebc9e51336241e}{}\label{apr__sha1_8c_a895cf264b1bd506426ebc9e51336241e}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!f2@{f2}}
+\index{f2@{f2}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{f2}{f2}}]{\setlength{\rightskip}{0pt plus 5cm}\#define f2(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~({\bf x} $^\wedge$ {\bf y} $^\wedge$ z)}\hypertarget{apr__sha1_8c_a5a8cd147d49dfc130047aad8b83ddadf}{}\label{apr__sha1_8c_a5a8cd147d49dfc130047aad8b83ddadf}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!f3@{f3}}
+\index{f3@{f3}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{f3}{f3}}]{\setlength{\rightskip}{0pt plus 5cm}\#define f3(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~(({\bf x} \& {\bf y}) $\vert$ ({\bf x} \& z) $\vert$ ({\bf y} \& z))}\hypertarget{apr__sha1_8c_ae4a6b9a0d304177d9ce0e7488a890bb4}{}\label{apr__sha1_8c_ae4a6b9a0d304177d9ce0e7488a890bb4}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!f4@{f4}}
+\index{f4@{f4}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{f4}{f4}}]{\setlength{\rightskip}{0pt plus 5cm}\#define f4(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~({\bf x} $^\wedge$ {\bf y} $^\wedge$ z)}\hypertarget{apr__sha1_8c_ad91225588c8fe60771183f5a9d653cea}{}\label{apr__sha1_8c_ad91225588c8fe60771183f5a9d653cea}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!F\+U\+NC@{F\+U\+NC}}
+\index{F\+U\+NC@{F\+U\+NC}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{F\+U\+NC}{FUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\+U\+NC(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf n}, }
+\item[{}]{{\bf i}}
+\end{DoxyParamCaption}
+)}\hypertarget{apr__sha1_8c_a01f1cb675bd501873e8faed06d71d598}{}\label{apr__sha1_8c_a01f1cb675bd501873e8faed06d71d598}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+temp = \hyperlink{apr__sha1_8c_a2386d73c1dcb6bccda17b964a2506598}{ROT32}(\hyperlink{pcregrep_8txt_ae7af65aae7738174b8f4c0662da372d5}{A},5) + \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}##\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}(\hyperlink{sljitNativeARM__32_8c_a764cdad522b80ce7b347e2fd2501d088}{B},\hyperlink{NON-AUTOTOOLS-BUILD_8txt_ac5c2ebe543528426f0c731e1b7056868}{C},\hyperlink{pcretest_8txt_af3fdb9c275fcc532c7a84dc9c7150523}{D}) + E + W[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] + CONST##\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}; \(\backslash\)
+    E = \hyperlink{pcretest_8txt_af3fdb9c275fcc532c7a84dc9c7150523}{D}; \hyperlink{pcretest_8txt_af3fdb9c275fcc532c7a84dc9c7150523}{D} = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_ac5c2ebe543528426f0c731e1b7056868}{C}; \hyperlink{NON-AUTOTOOLS-BUILD_8txt_ac5c2ebe543528426f0c731e1b7056868}{C} = \hyperlink{apr__sha1_8c_a2386d73c1dcb6bccda17b964a2506598}{ROT32}(\hyperlink{sljitNativeARM__32_8c_a764cdad522b80ce7b347e2fd2501d088}{B},30); \hyperlink{sljitNativeARM__32_8c_a764cdad522b80ce7b347e2fd2501d088}{B} = \hyperlink{pcregrep_8txt_ae7af65aae7738174b8f4c0662da372d5}{A}; \hyperlink{pcregrep_8txt_ae7af65aae7738174b8f4c0662da372d5}{A} = temp
+\end{DoxyCode}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!R\+O\+T32@{R\+O\+T32}}
+\index{R\+O\+T32@{R\+O\+T32}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{R\+O\+T32}{ROT32}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+O\+T32(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~(({\bf x} $<$$<$ {\bf n}) $\vert$ ({\bf x} $>$$>$ (32 -\/ {\bf n})))}\hypertarget{apr__sha1_8c_a2386d73c1dcb6bccda17b964a2506598}{}\label{apr__sha1_8c_a2386d73c1dcb6bccda17b964a2506598}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!S\+H\+A\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE@{S\+H\+A\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}}
+\index{S\+H\+A\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE@{S\+H\+A\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{S\+H\+A\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}{SHA_BLOCKSIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+H\+A\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE~64}\hypertarget{apr__sha1_8c_aea2817b20aed3383184f696e59657398}{}\label{apr__sha1_8c_aea2817b20aed3383184f696e59657398}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!U\+N\+R\+O\+L\+L\+\_\+\+L\+O\+O\+PS@{U\+N\+R\+O\+L\+L\+\_\+\+L\+O\+O\+PS}}
+\index{U\+N\+R\+O\+L\+L\+\_\+\+L\+O\+O\+PS@{U\+N\+R\+O\+L\+L\+\_\+\+L\+O\+O\+PS}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{U\+N\+R\+O\+L\+L\+\_\+\+L\+O\+O\+PS}{UNROLL_LOOPS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\+N\+R\+O\+L\+L\+\_\+\+L\+O\+O\+PS}\hypertarget{apr__sha1_8c_a2f8afe760c437b681d055d90c553d5c2}{}\label{apr__sha1_8c_a2f8afe760c437b681d055d90c553d5c2}
+\index{apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}!U\+S\+E\+\_\+\+M\+O\+D\+I\+F\+I\+E\+D\+\_\+\+S\+HA@{U\+S\+E\+\_\+\+M\+O\+D\+I\+F\+I\+E\+D\+\_\+\+S\+HA}}
+\index{U\+S\+E\+\_\+\+M\+O\+D\+I\+F\+I\+E\+D\+\_\+\+S\+HA@{U\+S\+E\+\_\+\+M\+O\+D\+I\+F\+I\+E\+D\+\_\+\+S\+HA}!apr\+\_\+sha1.\+c@{apr\+\_\+sha1.\+c}}
+\subsubsection[{\texorpdfstring{U\+S\+E\+\_\+\+M\+O\+D\+I\+F\+I\+E\+D\+\_\+\+S\+HA}{USE_MODIFIED_SHA}}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\+S\+E\+\_\+\+M\+O\+D\+I\+F\+I\+E\+D\+\_\+\+S\+HA}\hypertarget{apr__sha1_8c_ac6fcad0b30b0c4c7ac9e046da5938897}{}\label{apr__sha1_8c_ac6fcad0b30b0c4c7ac9e046da5938897}

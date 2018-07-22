@@ -1,0 +1,212 @@
+\hypertarget{fcgistarter_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/fcgistarter.c File Reference}
+\label{fcgistarter_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/fcgistarter.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/fcgistarter.\+c}}
+{\ttfamily \#include $<$apr.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+pools.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+network\+\_\+io.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+proc.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+getopt.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+portable.\+h$>$}\\*
+Include dependency graph for fcgistarter.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{fcgistarter_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{fcgistarter_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{fcgistarter.\+c@{fcgistarter.\+c}!main@{main}}
+\index{main@{main}!fcgistarter.\+c@{fcgistarter.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{fcgistarter_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{fcgistarter_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+57 \{
+58     \hyperlink{structapr__file__t}{apr\_file\_t} *infd, *skwrapper;
+59     \hyperlink{structapr__sockaddr__t}{apr\_sockaddr\_t} *skaddr;
+60     \hyperlink{structapr__getopt__t}{apr\_getopt\_t} *gopt;
+61     \hyperlink{structapr__socket__t}{apr\_socket\_t} *skt;
+62     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+63     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+64     \hyperlink{structapr__proc__t}{apr\_proc\_t} \hyperlink{group__apr__thread__proc_ga0872b22b4085e3dafcc7002d15b30010}{proc};
+65 
+66 
+67     \textcolor{comment}{/* Command line arguments */}
+68     \textcolor{keywordtype}{int} num\_to\_start = 1, \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port} = 0;
+69     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\textcolor{keyword}{interface }= \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+70     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{pcre_8txt_af29527e37cc7b19ef4261feb5b8a831d}{command} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+71 
+72     apr\_app\_initialize(&\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+73 
+74     atexit(apr\_terminate);
+75 
+76     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pool, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+77 
+78     rv = apr\_getopt\_init(&gopt, pool, \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+79     \textcolor{keywordflow}{if} (rv) \{
+80         \textcolor{keywordflow}{return} EXIT\_FAILURE;
+81     \}
+82 
+83     \textcolor{keywordflow}{for} (;;) \{
+84         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+85         \textcolor{keywordtype}{char} \hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt};
+86 
+87         rv = apr\_getopt(gopt, \textcolor{stringliteral}{"c:p:i:N:"}, &opt, &arg);
+88         \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_gaf4232cd96b47b76aec9607b1a78e694f}{APR\_STATUS\_IS\_EOF}(rv)) \{
+89             \textcolor{keywordflow}{break};
+90         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (rv) \{
+91             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+92         \} \textcolor{keywordflow}{else} \{
+93             \textcolor{keywordflow}{switch} (opt) \{
+94             \textcolor{keywordflow}{case} \textcolor{charliteral}{'c'}:
+95                 command = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+96                 \textcolor{keywordflow}{break};
+97 
+98             \textcolor{keywordflow}{case} \textcolor{charliteral}{'p'}:
+99                 \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port} = atoi(arg);
+100                 \textcolor{keywordflow}{if} (! \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port}) \{
+101                     \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+102                 \}
+103                 \textcolor{keywordflow}{break};
+104 
+105             \textcolor{keywordflow}{case} \textcolor{charliteral}{'i'}:
+106                 \textcolor{keyword}{interface }= arg;
+107                 \textcolor{keywordflow}{break};
+108 
+109             \textcolor{keywordflow}{case} \textcolor{charliteral}{'N'}:
+110                 num\_to\_start = atoi(arg);
+111                 \textcolor{keywordflow}{if} (! num\_to\_start) \{
+112                     \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+113                 \}
+114                 \textcolor{keywordflow}{break};
+115 
+116             \textcolor{keywordflow}{default}:
+117                 \textcolor{keywordflow}{break};
+118             \}
+119         \}
+120     \}
+121 
+122     \textcolor{keywordflow}{if} (! command || ! \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port}) \{
+123         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+124     \}
+125 
+126     rv = apr\_sockaddr\_info\_get(&skaddr, interface, \hyperlink{group__apr__network__io_gaa7a33b17a7d0820b09ef489bd3328f85}{APR\_UNSPEC}, \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port}, 0, pool);
+127     \textcolor{keywordflow}{if} (rv) \{
+128         exit\_error(rv, \textcolor{stringliteral}{"apr\_sockaddr\_info\_get"});
+129     \}
+130 
+131     rv = \hyperlink{unix_2sockets_8c_ad975e4f99f233d8156a9e8e1a153199d}{apr\_socket\_create}(&skt, skaddr->\hyperlink{structapr__sockaddr__t_ac17f6e803928cfc29069a6e62dcb3a52}{family}, SOCK\_STREAM, 
+      \hyperlink{group__IP__Proto_gad231c935f9f9746ca43b46cdcf80338e}{APR\_PROTO\_TCP}, pool);
+132     \textcolor{keywordflow}{if} (rv) \{
+133         exit\_error(rv, \textcolor{stringliteral}{"apr\_socket\_create"});
+134     \}
+135 
+136     rv = \hyperlink{unix_2sockopt_8c_a08f5e505fa611005f56c12783269ffa9}{apr\_socket\_opt\_set}(skt, \hyperlink{group__apr__sockopt_ga90434074950efa1383d7c5649026a159}{APR\_SO\_REUSEADDR}, 1);
+137     \textcolor{keywordflow}{if} (rv) \{
+138         exit\_error(rv, \textcolor{stringliteral}{"apr\_socket\_opt\_set(APR\_SO\_REUSEADDR)"});
+139     \}
+140 
+141     rv = \hyperlink{unix_2sockets_8c_a512882c9979c2b9cad7cbc2508516d65}{apr\_socket\_bind}(skt, skaddr);
+142     \textcolor{keywordflow}{if} (rv) \{
+143         exit\_error(rv, \textcolor{stringliteral}{"apr\_socket\_bind"});
+144     \}
+145 
+146     rv = \hyperlink{unix_2sockets_8c_a154bcee918f6f01fe0373359dd74b0c4}{apr\_socket\_listen}(skt, 1024);
+147     \textcolor{keywordflow}{if} (rv) \{
+148         exit\_error(rv, \textcolor{stringliteral}{"apr\_socket\_listen"});
+149     \}
+150 
+151     rv = \hyperlink{netware_2procsup_8c_a56c2b005792752b63d804f2021596406}{apr\_proc\_detach}(\hyperlink{group__apr__thread__proc_gab4de7134fcc66c4127ae65b68631f846}{APR\_PROC\_DETACH\_DAEMONIZE});
+152     \textcolor{keywordflow}{if} (rv) \{
+153         exit\_error(rv, \textcolor{stringliteral}{"apr\_proc\_detach"});
+154     \}
+155 
+156 \textcolor{preprocessor}{#if defined(WIN32) || defined(OS2) || defined(NETWARE)}
+157 
+158 \textcolor{preprocessor}{#error "Please implement me."}
+159 
+160 \textcolor{preprocessor}{#else}
+161 
+162     \textcolor{keywordflow}{while} (--num\_to\_start >= 0) \{
+163         rv = apr\_proc\_fork(&proc, pool);
+164         \textcolor{keywordflow}{if} (rv == \hyperlink{group__APR__Error_ga5a2bb63099778699feeae9627474c179}{APR\_INCHILD}) \{
+165             \hyperlink{group__apr__portabile_ga885491b889a4a719549650d3a370fd34}{apr\_os\_file\_t} oft = 0;
+166             \hyperlink{group__apr__portabile_ga2965cd2e48cb6513bc0ba05aa6083ed7}{apr\_os\_sock\_t} oskt;
+167 
+168             \textcolor{comment}{/* Ok, so we need a file that has file descriptor 0 (which}
+169 \textcolor{comment}{             * FastCGI wants), but points to our socket.  This isn't really}
+170 \textcolor{comment}{             * possible in APR, so we cheat a bit.  I have no idea how to}
+171 \textcolor{comment}{             * do this on a non-unix platform, so for now this is platform}
+172 \textcolor{comment}{             * specific.  Ick.}
+173 \textcolor{comment}{             *}
+174 \textcolor{comment}{             * Note that this has to happen post-detach, otherwise fd 0}
+175 \textcolor{comment}{             * gets closed during apr\_proc\_detach and it's all for nothing.}
+176 \textcolor{comment}{             *}
+177 \textcolor{comment}{             * Unfortunately, doing this post detach means we have no way}
+178 \textcolor{comment}{             * to let anyone know if there's a problem at this point :( */}
+179 
+180             rv = apr\_os\_file\_put(&infd, &oft, \hyperlink{group__apr__file__open__flags_ga0021db78d799d1c8825b701c7efee483}{APR\_READ} | \hyperlink{group__apr__file__open__flags_ga3e427e53aceb1ccdb078d9a03cd63d01}{APR\_WRITE}, pool);
+181             \textcolor{keywordflow}{if} (rv) \{
+182                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(EXIT\_FAILURE);
+183             \}
+184 
+185             rv = \hyperlink{unix_2sockets_8c_a07ec79bbb5243596933cd2caf2d428df}{apr\_os\_sock\_get}(&oskt, skt);
+186             \textcolor{keywordflow}{if} (rv) \{
+187                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(EXIT\_FAILURE);
+188             \}
+189 
+190             rv = apr\_os\_file\_put(&skwrapper, &oskt, \hyperlink{group__apr__file__open__flags_ga0021db78d799d1c8825b701c7efee483}{APR\_READ} | \hyperlink{group__apr__file__open__flags_ga3e427e53aceb1ccdb078d9a03cd63d01}{APR\_WRITE},
+191                                  pool);
+192             \textcolor{keywordflow}{if} (rv) \{
+193                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(EXIT\_FAILURE);
+194             \}
+195 
+196             rv = apr\_file\_dup2(infd, skwrapper, pool);
+197             \textcolor{keywordflow}{if} (rv) \{
+198                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(EXIT\_FAILURE);
+199             \}
+200 
+201             \textcolor{comment}{/* XXX Can't use apr\_proc\_create because there's no way to get}
+202 \textcolor{comment}{             *     infd into the procattr without going through another dup2,}
+203 \textcolor{comment}{             *     which means by the time it gets to the fastcgi process it}
+204 \textcolor{comment}{             *     is no longer fd 0, so it doesn't work.  Sigh. */}
+205 
+206             execl(command, command, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+207 
+208         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (rv == \hyperlink{group__APR__Error_ga79abc0fb43e51e0db87f90fa49745d89}{APR\_INPARENT}) \{
+209             \textcolor{keywordflow}{if} (num\_to\_start == 0) \{
+210                 \hyperlink{unix_2sockets_8c_a88779f243ce19a2563544aee81894e6d}{apr\_socket\_close}(skt);
+211             \}
+212         \} \textcolor{keywordflow}{else} \{
+213             exit\_error(rv, \textcolor{stringliteral}{"apr\_proc\_fork"});
+214         \}
+215     \}
+216 
+217 \textcolor{preprocessor}{#endif}
+218 
+219     \textcolor{keywordflow}{return} EXIT\_SUCCESS;
+220 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{fcgistarter_8c_a814244b02f6701fd8ead246678bb3dae_cgraph}
+\end{center}
+\end{figure}
+
+

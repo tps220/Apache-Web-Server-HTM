@@ -1,0 +1,114 @@
+\hypertarget{testregex_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/test/internal/testregex.c File Reference}
+\label{testregex_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/internal/testregex.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/internal/testregex.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$regex.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+Include dependency graph for testregex.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{testregex_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{testregex_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$$\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{testregex.\+c@{testregex.\+c}!main@{main}}
+\index{main@{main}!testregex.\+c@{testregex.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{testregex_8c_a3c04138a5bfe5d72780bb7e82a18e627}{}\label{testregex_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+
+\begin{DoxyCode}
+28                                  \{
+29     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context};
+30     \hyperlink{structregex__t}{regex\_t} \hyperlink{util__expr__scan_8c_abb3bca457cffb99c79523aea2bd8b8ed}{regex};
+31     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+32     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+33     \textcolor{keywordtype}{int} iters;
+34     \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\_time\_t} \hyperlink{group__MOD__CACHE_ga33504014e188d5d7506173cc14fb5801}{now};
+35     \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\_time\_t} \hyperlink{group__apr__strings_ga87c7e3f3f70b6e7de10e3f56e3f4d7a4}{end};
+36     \hyperlink{structapr__hash__t}{apr\_hash\_t} *\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h};
+37     
+38 
+39     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} !=4 ) \{
+40             fprintf(stderr, \textcolor{stringliteral}{"Usage %s match string #iterations\(\backslash\)n"},\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+41             \textcolor{keywordflow}{return} -1;
+42     \}
+43     iters = atoi( \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[3]);
+44     
+45     apr\_initialize() ;
+46     atexit(apr\_terminate);
+47     \textcolor{keywordflow}{if} (\hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&context, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+48         fprintf(stderr, \textcolor{stringliteral}{"Something went wrong\(\backslash\)n"});
+49         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(-1);
+50     \}
+51     rc = \hyperlink{pcreposix_8c_a3ba85b868e843e308c46ae0627793b14}{regcomp}( &regex, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1], \hyperlink{pcreposix_8h_a5fc31e6da9b77e09ea62b4544ac4767f}{REG\_EXTENDED}|\hyperlink{pcreposix_8h_abb835c7fe6f1673fc0efeff0064510ab}{REG\_NOSUB});
+52 
+53 
+54     \textcolor{keywordflow}{if} (rc) \{
+55         \textcolor{keywordtype}{char} \hyperlink{ap__regex_8h_af77b5f4c5b211e29e7b9e265b1420aa7}{errbuf}[2000];
+56         \hyperlink{pcreposix_8c_a70dcfd4affaf92e8fc8ec9b89e054e49}{regerror}(rc, &regex,errbuf,2000);
+57         fprintf(stderr,\textcolor{stringliteral}{"Couldn't compile regex ;(\(\backslash\)n%s\(\backslash\)n "},errbuf);
+58         \textcolor{keywordflow}{return} -1;
+59     \}
+60     \textcolor{keywordflow}{if} ( \hyperlink{pcreposix_8c_a7bae01b6d58da41c644b5e07db9b9511}{regexec}( &regex, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2], 0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},0) == 0 ) \{
+61         fprintf(stderr,\textcolor{stringliteral}{"Match\(\backslash\)n"});
+62     \}
+63     \textcolor{keywordflow}{else} \{
+64         fprintf(stderr,\textcolor{stringliteral}{"No Match\(\backslash\)n"});
+65     \}
+66     now = apr\_time\_now();
+67     \textcolor{keywordflow}{for} (i=0;i<iters;i++) \{
+68         \hyperlink{pcreposix_8c_a7bae01b6d58da41c644b5e07db9b9511}{regexec}( &regex, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2], 0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},0) ;
+69     \}
+70     end=apr\_time\_now();
+71     puts(apr\_psprintf( context, \textcolor{stringliteral}{"Time to run %d regex's          %8lld\(\backslash\)n"},iters,end-now));
+72     h = apr\_hash\_make( context);
+73     \textcolor{keywordflow}{for} (i=0;i<70;i++) \{
+74             apr\_hash\_set(h,apr\_psprintf(context, \textcolor{stringliteral}{"%dkey"},i),\hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},\textcolor{stringliteral}{"1"});
+75     \}
+76     now = apr\_time\_now();
+77     \textcolor{keywordflow}{for} (i=0;i<iters;i++) \{
+78         apr\_hash\_get( h, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2], \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+79     \}
+80     end=apr\_time\_now();
+81     puts(apr\_psprintf( context, \textcolor{stringliteral}{"Time to run %d hash (no find)'s %8lld\(\backslash\)n"},iters,end-now));
+82     apr\_hash\_set(h, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2],\hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},\textcolor{stringliteral}{"1"});
+83     now = apr\_time\_now();
+84     \textcolor{keywordflow}{for} (i=0;i<iters;i++) \{
+85         apr\_hash\_get( h, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2], \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+86     \}
+87     end=apr\_time\_now();
+88     puts(apr\_psprintf( context, \textcolor{stringliteral}{"Time to run %d hash (find)'s    %8lld\(\backslash\)n"},iters,end-now));
+89  
+90     \textcolor{keywordflow}{return} 0;
+91 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{testregex_8c_a3c04138a5bfe5d72780bb7e82a18e627_cgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,84 @@
+\hypertarget{mod__lbmethod__heartbeat_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/proxy/balancers/mod\+\_\+lbmethod\+\_\+heartbeat.c File Reference}
+\label{mod__lbmethod__heartbeat_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/proxy/balancers/mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/proxy/balancers/mod\+\_\+lbmethod\+\_\+heartbeat.\+c}}
+{\ttfamily \#include \char`\"{}mod\+\_\+proxy.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+version.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+hooks.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+slotmem.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}heartbeat.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+lbmethod\+\_\+heartbeat.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__lbmethod__heartbeat_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structlb__hb__ctx__t}{lb\+\_\+hb\+\_\+ctx\+\_\+t}
+\item 
+struct \hyperlink{structhb__server__t}{hb\+\_\+server\+\_\+t}
+\item 
+struct \hyperlink{structctx__servers}{ctx\+\_\+servers}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__lbmethod__heartbeat_8c_abc73bf7c927225e6e000720c7462a5ca}{L\+B\+M\+\_\+\+H\+E\+A\+R\+T\+B\+E\+A\+T\+\_\+\+M\+A\+X\+\_\+\+L\+A\+S\+T\+S\+E\+EN}~(10)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structlb__hb__ctx__t}{lb\+\_\+hb\+\_\+ctx\+\_\+t} \hyperlink{mod__lbmethod__heartbeat_8c_a7a2d3c2eb193689609b29e6110836e91}{lb\+\_\+hb\+\_\+ctx\+\_\+t}
+\item 
+typedef struct \hyperlink{structhb__server__t}{hb\+\_\+server\+\_\+t} \hyperlink{mod__lbmethod__heartbeat_8c_ac3eb56d376d09fc8d1f21efb2312c0f3}{hb\+\_\+server\+\_\+t}
+\item 
+typedef struct \hyperlink{structctx__servers}{ctx\+\_\+servers} \hyperlink{mod__lbmethod__heartbeat_8c_a3d4f82bd2dbcd1888b5e2875af07e60a}{ctx\+\_\+servers\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__lbmethod__heartbeat_8c_ab81d3af3c5676b7b0f471d564fb38315}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (lbmethod\+\_\+heartbeat)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__lbmethod__heartbeat_8c_a4eed61625f0a5db34be75a805cd3b1d1}{lbmethod\+\_\+heartbeat\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}!L\+B\+M\+\_\+\+H\+E\+A\+R\+T\+B\+E\+A\+T\+\_\+\+M\+A\+X\+\_\+\+L\+A\+S\+T\+S\+E\+EN@{L\+B\+M\+\_\+\+H\+E\+A\+R\+T\+B\+E\+A\+T\+\_\+\+M\+A\+X\+\_\+\+L\+A\+S\+T\+S\+E\+EN}}
+\index{L\+B\+M\+\_\+\+H\+E\+A\+R\+T\+B\+E\+A\+T\+\_\+\+M\+A\+X\+\_\+\+L\+A\+S\+T\+S\+E\+EN@{L\+B\+M\+\_\+\+H\+E\+A\+R\+T\+B\+E\+A\+T\+\_\+\+M\+A\+X\+\_\+\+L\+A\+S\+T\+S\+E\+EN}!mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}}
+\subsubsection[{\texorpdfstring{L\+B\+M\+\_\+\+H\+E\+A\+R\+T\+B\+E\+A\+T\+\_\+\+M\+A\+X\+\_\+\+L\+A\+S\+T\+S\+E\+EN}{LBM_HEARTBEAT_MAX_LASTSEEN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define L\+B\+M\+\_\+\+H\+E\+A\+R\+T\+B\+E\+A\+T\+\_\+\+M\+A\+X\+\_\+\+L\+A\+S\+T\+S\+E\+EN~(10)}\hypertarget{mod__lbmethod__heartbeat_8c_abc73bf7c927225e6e000720c7462a5ca}{}\label{mod__lbmethod__heartbeat_8c_abc73bf7c927225e6e000720c7462a5ca}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}!ctx\+\_\+servers\+\_\+t@{ctx\+\_\+servers\+\_\+t}}
+\index{ctx\+\_\+servers\+\_\+t@{ctx\+\_\+servers\+\_\+t}!mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}}
+\subsubsection[{\texorpdfstring{ctx\+\_\+servers\+\_\+t}{ctx_servers_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf ctx\+\_\+servers}  {\bf ctx\+\_\+servers\+\_\+t}}\hypertarget{mod__lbmethod__heartbeat_8c_a3d4f82bd2dbcd1888b5e2875af07e60a}{}\label{mod__lbmethod__heartbeat_8c_a3d4f82bd2dbcd1888b5e2875af07e60a}
+\index{mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}!hb\+\_\+server\+\_\+t@{hb\+\_\+server\+\_\+t}}
+\index{hb\+\_\+server\+\_\+t@{hb\+\_\+server\+\_\+t}!mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}}
+\subsubsection[{\texorpdfstring{hb\+\_\+server\+\_\+t}{hb_server_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf hb\+\_\+server\+\_\+t}  {\bf hb\+\_\+server\+\_\+t}}\hypertarget{mod__lbmethod__heartbeat_8c_ac3eb56d376d09fc8d1f21efb2312c0f3}{}\label{mod__lbmethod__heartbeat_8c_ac3eb56d376d09fc8d1f21efb2312c0f3}
+\index{mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}!lb\+\_\+hb\+\_\+ctx\+\_\+t@{lb\+\_\+hb\+\_\+ctx\+\_\+t}}
+\index{lb\+\_\+hb\+\_\+ctx\+\_\+t@{lb\+\_\+hb\+\_\+ctx\+\_\+t}!mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}}
+\subsubsection[{\texorpdfstring{lb\+\_\+hb\+\_\+ctx\+\_\+t}{lb_hb_ctx_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf lb\+\_\+hb\+\_\+ctx\+\_\+t}  {\bf lb\+\_\+hb\+\_\+ctx\+\_\+t}}\hypertarget{mod__lbmethod__heartbeat_8c_a7a2d3c2eb193689609b29e6110836e91}{}\label{mod__lbmethod__heartbeat_8c_a7a2d3c2eb193689609b29e6110836e91}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(lbmethod\+\_\+heartbeat)}{AP_DECLARE_MODULE(lbmethod_heartbeat)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{lbmethod\+\_\+heartbeat}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__lbmethod__heartbeat_8c_ab81d3af3c5676b7b0f471d564fb38315}{}\label{mod__lbmethod__heartbeat_8c_ab81d3af3c5676b7b0f471d564fb38315}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}!lbmethod\+\_\+heartbeat\+\_\+module@{lbmethod\+\_\+heartbeat\+\_\+module}}
+\index{lbmethod\+\_\+heartbeat\+\_\+module@{lbmethod\+\_\+heartbeat\+\_\+module}!mod\+\_\+lbmethod\+\_\+heartbeat.\+c@{mod\+\_\+lbmethod\+\_\+heartbeat.\+c}}
+\subsubsection[{\texorpdfstring{lbmethod\+\_\+heartbeat\+\_\+module}{lbmethod_heartbeat_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} lbmethod\+\_\+heartbeat\+\_\+module}\hypertarget{mod__lbmethod__heartbeat_8c_a4eed61625f0a5db34be75a805cd3b1d1}{}\label{mod__lbmethod__heartbeat_8c_a4eed61625f0a5db34be75a805cd3b1d1}

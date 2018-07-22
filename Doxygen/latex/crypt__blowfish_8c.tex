@@ -1,0 +1,382 @@
+\hypertarget{crypt__blowfish_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr-\/util/crypto/crypt\+\_\+blowfish.c File Reference}
+\label{crypt__blowfish_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/crypto/crypt\+\_\+blowfish.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/crypto/crypt\+\_\+blowfish.\+c}}
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$errno.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}crypt\+\_\+blowfish.\+h\char`\"{}}\\*
+Include dependency graph for crypt\+\_\+blowfish.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=301pt]{crypt__blowfish_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBF__ctx}{B\+F\+\_\+ctx}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{crypt__blowfish_8c_afedd4c7f8e193b28d8fc61ef3c76286a}{\+\_\+\+\_\+set\+\_\+errno}(\hyperlink{group__apr__tables_ga4d708cd93abeca73400ed82977502830}{val})~errno = (\hyperlink{group__apr__tables_ga4d708cd93abeca73400ed82977502830}{val})
+\item 
+\#define \hyperlink{crypt__blowfish_8c_ac72fa7cdee96e8aa46b975cb40c25cc1}{B\+F\+\_\+\+A\+SM}~0
+\item 
+\#define \hyperlink{crypt__blowfish_8c_af8831870e73774688ca92e2e21aa5568}{B\+F\+\_\+\+S\+C\+A\+LE}~0
+\item 
+\#define \hyperlink{crypt__blowfish_8c_aac3e2cd49b2013f64dc6a6baf8b76e25}{B\+F\+\_\+N}~16
+\item 
+\#define \hyperlink{crypt__blowfish_8c_a638f47647c416c7786191db89ea3a04a}{B\+F\+\_\+safe\+\_\+atoi64}(dst,  \hyperlink{apr__siphash_8h_ab3b4066b211a3d1de8f72e90b2bca8ab}{src})
+\item 
+\#define \hyperlink{crypt__blowfish_8c_acc39ab7cd125cdaf95ccf046af6b8c11}{B\+F\+\_\+\+I\+N\+D\+EX}(\hyperlink{sljitNativePPC__common_8c_a8fa17c8cf4c36df48f4108c36da8573e}{S},  \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i})~($\ast$((\hyperlink{crypt__blowfish_8c_adfbe8e073e752df4092eb8de731ea913}{B\+F\+\_\+word} $\ast$)(((unsigned char $\ast$)\hyperlink{sljitNativePPC__common_8c_a8fa17c8cf4c36df48f4108c36da8573e}{S}) + (\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}))))
+\item 
+\#define \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{B\+F\+\_\+\+R\+O\+U\+ND}(\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L},  \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R},  \hyperlink{pcregrep_8txt_a0513277caa5c1730b9f0e841fd4c30fc}{N})
+\item 
+\#define \hyperlink{crypt__blowfish_8c_a986684e72821b64345d0ddeedfd79cf6}{B\+F\+\_\+\+E\+N\+C\+R\+Y\+PT}
+\item 
+\#define \hyperlink{crypt__blowfish_8c_ad4fc8a11248b6f9960493b73bc20822d}{B\+F\+\_\+body}()
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef unsigned \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{crypt__blowfish_8c_adfbe8e073e752df4092eb8de731ea913}{B\+F\+\_\+word}
+\item 
+typedef signed \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{crypt__blowfish_8c_a1d84c1b4e7ffd471bd66c1b66b90ac96}{B\+F\+\_\+word\+\_\+signed}
+\item 
+typedef \hyperlink{crypt__blowfish_8c_adfbe8e073e752df4092eb8de731ea913}{B\+F\+\_\+word} \hyperlink{crypt__blowfish_8c_ae2b43e84854b238122d89477fa1a88d3}{B\+F\+\_\+key}\mbox{[}\hyperlink{crypt__blowfish_8c_aac3e2cd49b2013f64dc6a6baf8b76e25}{B\+F\+\_\+N}+2\mbox{]}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{crypt__blowfish_8c_a9ed7f4cd146f8885d7c93be4e72ff6b3}{\+\_\+crypt\+\_\+output\+\_\+magic} (const char $\ast$\hyperlink{pcretest_8txt_a935b0b98e07f1e5b6c06e9821ff32fec}{setting}, char $\ast$\hyperlink{pcretest_8txt_acf47d950a4853a501d6b975b394de5e5}{output}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size})
+\item 
+char $\ast$ \hyperlink{crypt__blowfish_8c_a81b9d5e3f2bc127b2d48e96f49dd73e1}{\+\_\+crypt\+\_\+blowfish\+\_\+rn} (const char $\ast$\hyperlink{apr__siphash_8h_adac0b6a30345ea1d0daa8a692b0b7ad9}{key}, const char $\ast$\hyperlink{pcretest_8txt_a935b0b98e07f1e5b6c06e9821ff32fec}{setting}, char $\ast$\hyperlink{pcretest_8txt_acf47d950a4853a501d6b975b394de5e5}{output}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size})
+\item 
+char $\ast$ \hyperlink{crypt__blowfish_8c_a610c49e1e43d9ddc8ae201cbc6088b9c}{\+\_\+crypt\+\_\+gensalt\+\_\+blowfish\+\_\+rn} (const char $\ast$\hyperlink{testmemcache_8c_a93ad9b26ead3bd83914b4942f572f283}{prefix}, unsigned long \hyperlink{pcregrep_8txt_aaaacc9f7ebd12563cc89b85ec6e261fb}{count}, const char $\ast$\hyperlink{perltest_8txt_a1d3f4df61ab6d72e9cfd2de361e2a85b}{input}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size}, char $\ast$\hyperlink{pcretest_8txt_acf47d950a4853a501d6b975b394de5e5}{output}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} output\+\_\+size)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!\+\_\+\+\_\+set\+\_\+errno@{\+\_\+\+\_\+set\+\_\+errno}}
+\index{\+\_\+\+\_\+set\+\_\+errno@{\+\_\+\+\_\+set\+\_\+errno}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+set\+\_\+errno}{__set_errno}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+\_\+set\+\_\+errno(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf val}}
+\end{DoxyParamCaption}
+)~errno = ({\bf val})}\hypertarget{crypt__blowfish_8c_afedd4c7f8e193b28d8fc61ef3c76286a}{}\label{crypt__blowfish_8c_afedd4c7f8e193b28d8fc61ef3c76286a}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+\+A\+SM@{B\+F\+\_\+\+A\+SM}}
+\index{B\+F\+\_\+\+A\+SM@{B\+F\+\_\+\+A\+SM}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+\+A\+SM}{BF_ASM}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+F\+\_\+\+A\+SM~0}\hypertarget{crypt__blowfish_8c_ac72fa7cdee96e8aa46b975cb40c25cc1}{}\label{crypt__blowfish_8c_ac72fa7cdee96e8aa46b975cb40c25cc1}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+body@{B\+F\+\_\+body}}
+\index{B\+F\+\_\+body@{B\+F\+\_\+body}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+body}{BF_body}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+F\+\_\+body(
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{crypt__blowfish_8c_ad4fc8a11248b6f9960493b73bc20822d}{}\label{crypt__blowfish_8c_ad4fc8a11248b6f9960493b73bc20822d}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L} = \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R} = 0; \hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{    ptr} = \hyperlink{structdata}{data}.ctx.P; \hyperlink{pcregrep_8txt_a29df1716374a8e3439d34a27760970bd}{\(\backslash\)}
+\hyperlink{pcregrep_8txt_a29df1716374a8e3439d34a27760970bd}{    do} \{ \hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{        ptr} += 2; \hyperlink{crypt__blowfish_8c_a986684e72821b64345d0ddeedfd79cf6}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a986684e72821b64345d0ddeedfd79cf6}{        BF\_ENCRYPT}; \(\backslash\)
+        *(\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr} - 2) = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}; \(\backslash\)
+        *(\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr} - 1) = \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}; \(\backslash\)
+    \} \textcolor{keywordflow}{while} (\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr} < &\hyperlink{structdata}{data}.ctx.P[\hyperlink{crypt__blowfish_8c_aac3e2cd49b2013f64dc6a6baf8b76e25}{BF\_N} + 2]); \(\backslash\)
+\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{    ptr} = \hyperlink{structdata}{data}.ctx.S[0]; \hyperlink{pcregrep_8txt_a29df1716374a8e3439d34a27760970bd}{\(\backslash\)}
+\hyperlink{pcregrep_8txt_a29df1716374a8e3439d34a27760970bd}{    do} \{ \hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{        ptr} += 2; \hyperlink{crypt__blowfish_8c_a986684e72821b64345d0ddeedfd79cf6}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a986684e72821b64345d0ddeedfd79cf6}{        BF\_ENCRYPT}; \(\backslash\)
+        *(\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr} - 2) = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}; \(\backslash\)
+        *(\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr} - 1) = \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}; \(\backslash\)
+    \} \textcolor{keywordflow}{while} (\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr} < &\hyperlink{structdata}{data}.ctx.S[3][0xFF]);
+\end{DoxyCode}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+\+E\+N\+C\+R\+Y\+PT@{B\+F\+\_\+\+E\+N\+C\+R\+Y\+PT}}
+\index{B\+F\+\_\+\+E\+N\+C\+R\+Y\+PT@{B\+F\+\_\+\+E\+N\+C\+R\+Y\+PT}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+\+E\+N\+C\+R\+Y\+PT}{BF_ENCRYPT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+F\+\_\+\+E\+N\+C\+R\+Y\+PT}\hypertarget{crypt__blowfish_8c_a986684e72821b64345d0ddeedfd79cf6}{}\label{crypt__blowfish_8c_a986684e72821b64345d0ddeedfd79cf6}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L} ^= \hyperlink{structdata}{data}.ctx.P[0]; \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, 0); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 1); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, 2); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 3); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, 4); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 5); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, 6); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 7); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, 8); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 9); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, 10); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 11); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, 12); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 13); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, 14); \hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{\(\backslash\)}
+\hyperlink{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{    BF\_ROUND}(\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 15); \(\backslash\)
+    tmp4 = \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{R}; \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{\(\backslash\)}
+\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{    R} = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}; \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{\(\backslash\)}
+\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{    L} = tmp4 ^ \hyperlink{structdata}{data}.ctx.P[\hyperlink{crypt__blowfish_8c_aac3e2cd49b2013f64dc6a6baf8b76e25}{BF\_N} + 1];
+\end{DoxyCode}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+\+I\+N\+D\+EX@{B\+F\+\_\+\+I\+N\+D\+EX}}
+\index{B\+F\+\_\+\+I\+N\+D\+EX@{B\+F\+\_\+\+I\+N\+D\+EX}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+\+I\+N\+D\+EX}{BF_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+F\+\_\+\+I\+N\+D\+EX(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf S}, }
+\item[{}]{{\bf i}}
+\end{DoxyParamCaption}
+)~($\ast$(({\bf B\+F\+\_\+word} $\ast$)(((unsigned char $\ast$){\bf S}) + ({\bf i}))))}\hypertarget{crypt__blowfish_8c_acc39ab7cd125cdaf95ccf046af6b8c11}{}\label{crypt__blowfish_8c_acc39ab7cd125cdaf95ccf046af6b8c11}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+N@{B\+F\+\_\+N}}
+\index{B\+F\+\_\+N@{B\+F\+\_\+N}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+N}{BF_N}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+F\+\_\+N~16}\hypertarget{crypt__blowfish_8c_aac3e2cd49b2013f64dc6a6baf8b76e25}{}\label{crypt__blowfish_8c_aac3e2cd49b2013f64dc6a6baf8b76e25}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+\+R\+O\+U\+ND@{B\+F\+\_\+\+R\+O\+U\+ND}}
+\index{B\+F\+\_\+\+R\+O\+U\+ND@{B\+F\+\_\+\+R\+O\+U\+ND}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+\+R\+O\+U\+ND}{BF_ROUND}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+F\+\_\+\+R\+O\+U\+ND(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf L}, }
+\item[{}]{{\bf R}, }
+\item[{}]{{\bf N}}
+\end{DoxyParamCaption}
+)}\hypertarget{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}{}\label{crypt__blowfish_8c_a16dea49a1bfa6f332bcce9feaba5b4af}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+tmp1 = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L} & 0xFF; \(\backslash\)
+    tmp1 <<= 2; \(\backslash\)
+    tmp2 = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L} >> 6; \(\backslash\)
+    tmp2 &= 0x3FC; \(\backslash\)
+    tmp3 = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L} >> 14; \(\backslash\)
+    tmp3 &= 0x3FC; \(\backslash\)
+    tmp4 = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L} >> 22; \(\backslash\)
+    tmp4 &= 0x3FC; \(\backslash\)
+    tmp1 = \hyperlink{crypt__blowfish_8c_acc39ab7cd125cdaf95ccf046af6b8c11}{BF\_INDEX}(\hyperlink{structdata}{data}.ctx.S[3], tmp1); \(\backslash\)
+    tmp2 = \hyperlink{crypt__blowfish_8c_acc39ab7cd125cdaf95ccf046af6b8c11}{BF\_INDEX}(\hyperlink{structdata}{data}.ctx.S[2], tmp2); \(\backslash\)
+    tmp3 = \hyperlink{crypt__blowfish_8c_acc39ab7cd125cdaf95ccf046af6b8c11}{BF\_INDEX}(\hyperlink{structdata}{data}.ctx.S[1], tmp3); \(\backslash\)
+    tmp3 += \hyperlink{crypt__blowfish_8c_acc39ab7cd125cdaf95ccf046af6b8c11}{BF\_INDEX}(\hyperlink{structdata}{data}.ctx.S[0], tmp4); \(\backslash\)
+    tmp3 ^= tmp2; \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{\(\backslash\)}
+\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{    R} ^= \hyperlink{structdata}{data}.ctx.P[\hyperlink{pcregrep_8txt_ac57ff056e0ddc70c1a49ba17b6c9a69e}{N} + 1]; \(\backslash\)
+    tmp3 += tmp1; \hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{\(\backslash\)}
+\hyperlink{sha2_8c_af299e0982ce71aad5027c4a7315e536f}{    R} ^= tmp3;
+\end{DoxyCode}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+safe\+\_\+atoi64@{B\+F\+\_\+safe\+\_\+atoi64}}
+\index{B\+F\+\_\+safe\+\_\+atoi64@{B\+F\+\_\+safe\+\_\+atoi64}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+safe\+\_\+atoi64}{BF_safe_atoi64}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+F\+\_\+safe\+\_\+atoi64(
+\begin{DoxyParamCaption}
+\item[{}]{dst, }
+\item[{}]{{\bf src}}
+\end{DoxyParamCaption}
+)}\hypertarget{crypt__blowfish_8c_a638f47647c416c7786191db89ea3a04a}{}\label{crypt__blowfish_8c_a638f47647c416c7786191db89ea3a04a}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \(\backslash\)
+    tmp = (\textcolor{keywordtype}{unsigned} char)(\hyperlink{group__APACHE__CORE__PROTO_ga3250c7d76063d957a24f2ecbb3d93c2c}{src}); \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{\(\backslash\)}
+\hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{    if} ((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})(tmp -= 0x20) >= 0x60) return -1; \(\backslash\)
+    tmp = BF\_atoi64[tmp]; \(\backslash\)
+    \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{if} (tmp > 63) return -1; \(\backslash\)
+    (dst) = tmp; \(\backslash\)
+\}
+\end{DoxyCode}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+\+S\+C\+A\+LE@{B\+F\+\_\+\+S\+C\+A\+LE}}
+\index{B\+F\+\_\+\+S\+C\+A\+LE@{B\+F\+\_\+\+S\+C\+A\+LE}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+\+S\+C\+A\+LE}{BF_SCALE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+F\+\_\+\+S\+C\+A\+LE~0}\hypertarget{crypt__blowfish_8c_af8831870e73774688ca92e2e21aa5568}{}\label{crypt__blowfish_8c_af8831870e73774688ca92e2e21aa5568}
+
+
+\subsection{Typedef Documentation}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+key@{B\+F\+\_\+key}}
+\index{B\+F\+\_\+key@{B\+F\+\_\+key}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+key}{BF_key}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf B\+F\+\_\+word} B\+F\+\_\+key\mbox{[}{\bf B\+F\+\_\+N}+2\mbox{]}}\hypertarget{crypt__blowfish_8c_ae2b43e84854b238122d89477fa1a88d3}{}\label{crypt__blowfish_8c_ae2b43e84854b238122d89477fa1a88d3}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+word@{B\+F\+\_\+word}}
+\index{B\+F\+\_\+word@{B\+F\+\_\+word}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+word}{BF_word}}]{\setlength{\rightskip}{0pt plus 5cm}typedef unsigned {\bf int} {\bf B\+F\+\_\+word}}\hypertarget{crypt__blowfish_8c_adfbe8e073e752df4092eb8de731ea913}{}\label{crypt__blowfish_8c_adfbe8e073e752df4092eb8de731ea913}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!B\+F\+\_\+word\+\_\+signed@{B\+F\+\_\+word\+\_\+signed}}
+\index{B\+F\+\_\+word\+\_\+signed@{B\+F\+\_\+word\+\_\+signed}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{B\+F\+\_\+word\+\_\+signed}{BF_word_signed}}]{\setlength{\rightskip}{0pt plus 5cm}typedef signed {\bf int} {\bf B\+F\+\_\+word\+\_\+signed}}\hypertarget{crypt__blowfish_8c_a1d84c1b4e7ffd471bd66c1b66b90ac96}{}\label{crypt__blowfish_8c_a1d84c1b4e7ffd471bd66c1b66b90ac96}
+
+
+\subsection{Function Documentation}
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!\+\_\+crypt\+\_\+blowfish\+\_\+rn@{\+\_\+crypt\+\_\+blowfish\+\_\+rn}}
+\index{\+\_\+crypt\+\_\+blowfish\+\_\+rn@{\+\_\+crypt\+\_\+blowfish\+\_\+rn}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{\+\_\+crypt\+\_\+blowfish\+\_\+rn(const char $\ast$key, const char $\ast$setting, char $\ast$output, int size)}{_crypt_blowfish_rn(const char *key, const char *setting, char *output, int size)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ \+\_\+crypt\+\_\+blowfish\+\_\+rn (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{key, }
+\item[{const char $\ast$}]{setting, }
+\item[{char $\ast$}]{output, }
+\item[{{\bf int}}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{crypt__blowfish_8c_a81b9d5e3f2bc127b2d48e96f49dd73e1}{}\label{crypt__blowfish_8c_a81b9d5e3f2bc127b2d48e96f49dd73e1}
+
+\begin{DoxyCode}
+816 \{
+817     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *test\_key = \textcolor{stringliteral}{"8b \(\backslash\)xd0\(\backslash\)xc1\(\backslash\)xd2\(\backslash\)xcf\(\backslash\)xcc\(\backslash\)xd8"};
+818     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *test\_setting = \textcolor{stringliteral}{"$2a$00$abcdefghijklmnopqrstuu"};
+819     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} * \textcolor{keyword}{const} test\_hash[2] =
+820         \{\textcolor{stringliteral}{"VUrPmXD6q/nVSSp7pNDhCR9071IfIRe\(\backslash\)0\(\backslash\)x55"}, \textcolor{comment}{/* $2x$ */}
+821         \textcolor{stringliteral}{"i1D709vfamulimlGcq0qq3UvuUasvEa\(\backslash\)0\(\backslash\)x55"}\}; \textcolor{comment}{/* $2a$, $2y$ */}
+822     \textcolor{keywordtype}{char} *\hyperlink{group__apr__thread__proc_gabf8925f55d77c20b76e036eaf58f0c26}{retval};
+823     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+824     \textcolor{keywordtype}{int} save\_errno, ok;
+825     \textcolor{keyword}{struct }\{
+826         \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}[7 + 22 + 1];
+827         \textcolor{keywordtype}{char} \hyperlink{pcregrep_8txt_a0f1f758594514cf4d93c83f0a3f92ec9}{o}[7 + 22 + 31 + 1 + 1 + 1];
+828     \} \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf};
+829 
+830 \textcolor{comment}{/* Hash the supplied password */}
+831     \hyperlink{crypt__blowfish_8c_a9ed7f4cd146f8885d7c93be4e72ff6b3}{\_crypt\_output\_magic}(\hyperlink{README_8txt_adbbbedb625469ba85798fd2e72c24316}{setting}, \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}, \hyperlink{group__APACHE__CORE__CONFIG_ga2bd3edb50f631a96f1b729fde236ff43}{size});
+832     retval = BF\_crypt(\hyperlink{group__MOD__CACHE_ga11d8023381192746eb96be162398fe1c}{key}, \hyperlink{README_8txt_adbbbedb625469ba85798fd2e72c24316}{setting}, \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}, \hyperlink{group__APACHE__CORE__CONFIG_ga2bd3edb50f631a96f1b729fde236ff43}{size}, 16);
+833     save\_errno = errno;
+834 
+835 \textcolor{comment}{/*}
+836 \textcolor{comment}{ * Do a quick self-test.  It is important that we make both calls to BF\_crypt()}
+837 \textcolor{comment}{ * from the same scope such that they likely use the same stack locations,}
+838 \textcolor{comment}{ * which makes the second call overwrite the first call's sensitive data on the}
+839 \textcolor{comment}{ * stack and makes it more likely that any alignment related issues would be}
+840 \textcolor{comment}{ * detected by the self-test.}
+841 \textcolor{comment}{ */}
+842     memcpy(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.s, test\_setting, \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.s));
+843     \textcolor{keywordflow}{if} (retval)
+844         \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.s[2] = \hyperlink{README_8txt_adbbbedb625469ba85798fd2e72c24316}{setting}[2];
+845     memset(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.o, 0x55, \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.o));
+846     \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.o[\textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.o) - 1] = 0;
+847     p = BF\_crypt(test\_key, \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.s, \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.o, \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.o) - (1 + 1), 1);
+848 
+849     ok = (p == \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.o &&
+850         !memcmp(p, \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.s, 7 + 22) &&
+851         !memcmp(p + (7 + 22),
+852         test\_hash[(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char})\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}.s[2] & 1],
+853         31 + 1 + 1 + 1));
+854 
+855     \{
+856         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *k = \textcolor{stringliteral}{"\(\backslash\)xff\(\backslash\)xa3"} \textcolor{stringliteral}{"34"} \textcolor{stringliteral}{"\(\backslash\)xff\(\backslash\)xff\(\backslash\)xff\(\backslash\)xa3"} \textcolor{stringliteral}{"345"};
+857         \hyperlink{crypt__blowfish_8c_ae2b43e84854b238122d89477fa1a88d3}{BF\_key} ae, ai, ye, yi;
+858         BF\_set\_key(k, ae, ai, 2); \textcolor{comment}{/* $2a$ */}
+859         BF\_set\_key(k, ye, yi, 4); \textcolor{comment}{/* $2y$ */}
+860         ai[0] ^= 0x10000; \textcolor{comment}{/* undo the safety (for comparison) */}
+861         ok = ok && ai[0] == 0xdb9c59bc && ye[17] == 0x33343500 &&
+862             !memcmp(ae, ye, \textcolor{keyword}{sizeof}(ae)) &&
+863             !memcmp(ai, yi, \textcolor{keyword}{sizeof}(ai));
+864     \}
+865 
+866     \hyperlink{crypt__blowfish_8c_afedd4c7f8e193b28d8fc61ef3c76286a}{\_\_set\_errno}(save\_errno);
+867     \textcolor{keywordflow}{if} (ok)
+868         \textcolor{keywordflow}{return} \hyperlink{group__apr__thread__proc_gabf8925f55d77c20b76e036eaf58f0c26}{retval};
+869 
+870 \textcolor{comment}{/* Should not happen */}
+871     \hyperlink{crypt__blowfish_8c_a9ed7f4cd146f8885d7c93be4e72ff6b3}{\_crypt\_output\_magic}(\hyperlink{README_8txt_adbbbedb625469ba85798fd2e72c24316}{setting}, \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}, \hyperlink{group__APACHE__CORE__CONFIG_ga2bd3edb50f631a96f1b729fde236ff43}{size});
+872     \hyperlink{crypt__blowfish_8c_afedd4c7f8e193b28d8fc61ef3c76286a}{\_\_set\_errno}(EINVAL); \textcolor{comment}{/* pretend we don't support this hash type */}
+873     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+874 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=321pt]{crypt__blowfish_8c_a81b9d5e3f2bc127b2d48e96f49dd73e1_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=305pt]{crypt__blowfish_8c_a81b9d5e3f2bc127b2d48e96f49dd73e1_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!\+\_\+crypt\+\_\+gensalt\+\_\+blowfish\+\_\+rn@{\+\_\+crypt\+\_\+gensalt\+\_\+blowfish\+\_\+rn}}
+\index{\+\_\+crypt\+\_\+gensalt\+\_\+blowfish\+\_\+rn@{\+\_\+crypt\+\_\+gensalt\+\_\+blowfish\+\_\+rn}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{\+\_\+crypt\+\_\+gensalt\+\_\+blowfish\+\_\+rn(const char $\ast$prefix, unsigned long count, const char $\ast$input, int size, char $\ast$output, int output\+\_\+size)}{_crypt_gensalt_blowfish_rn(const char *prefix, unsigned long count, const char *input, int size, char *output, int output_size)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ \+\_\+crypt\+\_\+gensalt\+\_\+blowfish\+\_\+rn (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{prefix, }
+\item[{unsigned long}]{count, }
+\item[{const char $\ast$}]{input, }
+\item[{{\bf int}}]{size, }
+\item[{char $\ast$}]{output, }
+\item[{{\bf int}}]{output\+\_\+size}
+\end{DoxyParamCaption}
+)}\hypertarget{crypt__blowfish_8c_a610c49e1e43d9ddc8ae201cbc6088b9c}{}\label{crypt__blowfish_8c_a610c49e1e43d9ddc8ae201cbc6088b9c}
+
+\begin{DoxyCode}
+878 \{
+879     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga2bd3edb50f631a96f1b729fde236ff43}{size} < 16 || output\_size < 7 + 22 + 1 ||
+880         (\hyperlink{group__APR__MD5_ga16ff2d8e15ade4948398b0aeb80124a8}{count} && (count < 4 || count > 17)) ||
+881         \hyperlink{group__APACHE__CORE__DAEMON_gab3ec82a7f3a54026d495e065c942b3b3}{prefix}[0] != \textcolor{charliteral}{'$'} || \hyperlink{group__APACHE__CORE__DAEMON_gab3ec82a7f3a54026d495e065c942b3b3}{prefix}[1] != \textcolor{charliteral}{'2'} ||
+882         (\hyperlink{group__APACHE__CORE__DAEMON_gab3ec82a7f3a54026d495e065c942b3b3}{prefix}[2] != \textcolor{charliteral}{'a'} && \hyperlink{group__APACHE__CORE__DAEMON_gab3ec82a7f3a54026d495e065c942b3b3}{prefix}[2] != \textcolor{charliteral}{'y'})) \{
+883         \textcolor{keywordflow}{if} (output\_size > 0) \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[0] = \textcolor{charliteral}{'\(\backslash\)0'};
+884         \hyperlink{crypt__blowfish_8c_afedd4c7f8e193b28d8fc61ef3c76286a}{\_\_set\_errno}((output\_size < 7 + 22 + 1) ? ERANGE : EINVAL);
+885         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+886     \}
+887 
+888     \textcolor{keywordflow}{if} (!\hyperlink{group__APR__MD5_ga16ff2d8e15ade4948398b0aeb80124a8}{count}) \hyperlink{group__APR__MD5_ga16ff2d8e15ade4948398b0aeb80124a8}{count} = 5;
+889 
+890     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[0] = \textcolor{charliteral}{'$'};
+891     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[1] = \textcolor{charliteral}{'2'};
+892     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[2] = \hyperlink{group__APACHE__CORE__DAEMON_gab3ec82a7f3a54026d495e065c942b3b3}{prefix}[2];
+893     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[3] = \textcolor{charliteral}{'$'};
+894     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[4] = \textcolor{charliteral}{'0'} + \hyperlink{group__APR__MD5_ga16ff2d8e15ade4948398b0aeb80124a8}{count} / 10;
+895     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[5] = \textcolor{charliteral}{'0'} + \hyperlink{group__APR__MD5_ga16ff2d8e15ade4948398b0aeb80124a8}{count} % 10;
+896     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[6] = \textcolor{charliteral}{'$'};
+897 
+898     BF\_encode(&\hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[7], (\textcolor{keyword}{const} \hyperlink{crypt__blowfish_8c_adfbe8e073e752df4092eb8de731ea913}{BF\_word} *)\hyperlink{group__APACHE__CORE__DAEMON_gaf801cc3fb2a90cf95d512d76fb498c3f}{input}, 16);
+899     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[7 + 22] = \textcolor{charliteral}{'\(\backslash\)0'};
+900 
+901     \textcolor{keywordflow}{return} \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output};
+902 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=342pt]{crypt__blowfish_8c_a610c49e1e43d9ddc8ae201cbc6088b9c_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}!\+\_\+crypt\+\_\+output\+\_\+magic@{\+\_\+crypt\+\_\+output\+\_\+magic}}
+\index{\+\_\+crypt\+\_\+output\+\_\+magic@{\+\_\+crypt\+\_\+output\+\_\+magic}!crypt\+\_\+blowfish.\+c@{crypt\+\_\+blowfish.\+c}}
+\subsubsection[{\texorpdfstring{\+\_\+crypt\+\_\+output\+\_\+magic(const char $\ast$setting, char $\ast$output, int size)}{_crypt_output_magic(const char *setting, char *output, int size)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} \+\_\+crypt\+\_\+output\+\_\+magic (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{setting, }
+\item[{char $\ast$}]{output, }
+\item[{{\bf int}}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{crypt__blowfish_8c_a9ed7f4cd146f8885d7c93be4e72ff6b3}{}\label{crypt__blowfish_8c_a9ed7f4cd146f8885d7c93be4e72ff6b3}
+
+\begin{DoxyCode}
+780 \{
+781     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga2bd3edb50f631a96f1b729fde236ff43}{size} < 3)
+782         \textcolor{keywordflow}{return} -1;
+783 
+784     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[0] = \textcolor{charliteral}{'*'};
+785     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[1] = \textcolor{charliteral}{'0'};
+786     \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[2] = \textcolor{charliteral}{'\(\backslash\)0'};
+787 
+788     \textcolor{keywordflow}{if} (\hyperlink{README_8txt_adbbbedb625469ba85798fd2e72c24316}{setting}[0] == \textcolor{charliteral}{'*'} && \hyperlink{README_8txt_adbbbedb625469ba85798fd2e72c24316}{setting}[1] == \textcolor{charliteral}{'0'})
+789         \hyperlink{pcregrep_8txt_acf47d950a4853a501d6b975b394de5e5}{output}[1] = \textcolor{charliteral}{'1'};
+790 
+791     \textcolor{keywordflow}{return} 0;
+792 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{crypt__blowfish_8c_a9ed7f4cd146f8885d7c93be4e72ff6b3_icgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,127 @@
+\hypertarget{group__apr__thread__cond}{}\section{Condition Variable Routines}
+\label{group__apr__thread__cond}\index{Condition Variable Routines@{Condition Variable Routines}}
+Collaboration diagram for Condition Variable Routines\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=308pt]{group__apr__thread__cond}
+\end{center}
+\end{figure}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structapr__thread__cond__t}{apr\+\_\+thread\+\_\+cond\+\_\+t} \hyperlink{group__apr__thread__cond_gae8f918d38bf1c58bc09670eee456ae5e}{apr\+\_\+thread\+\_\+cond\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__thread__cond_ga2521e0e7d60358ca954359ed417e39c5}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) apr\+\_\+thread\+\_\+cond\+\_\+create(\hyperlink{structapr__thread__cond__t}{apr\+\_\+thread\+\_\+cond\+\_\+t} $\ast$$\ast$cond
+\item 
+\hyperlink{group__apr__thread__cond_ga9ec6c5e414163a0f987e56160b1991cf}{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR} (thread\+\_\+cond)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__apr__thread__cond_ga35230907c170df5d4d7f0ca99274c574}{pool}
+\item 
+\hyperlink{structapr__thread__mutex__t}{apr\+\_\+thread\+\_\+mutex\+\_\+t} $\ast$ \hyperlink{group__apr__thread__cond_ga9b5d997217b2ae4c884c535811cb6e35}{mutex}
+\item 
+\hyperlink{structapr__thread__mutex__t}{apr\+\_\+thread\+\_\+mutex\+\_\+t} \hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{group__apr__thread__cond_ga58459b17720e15365dbe11e8395563fc}{timeout}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Typedef Documentation}
+\index{Condition Variable Routines@{Condition Variable Routines}!apr\+\_\+thread\+\_\+cond\+\_\+t@{apr\+\_\+thread\+\_\+cond\+\_\+t}}
+\index{apr\+\_\+thread\+\_\+cond\+\_\+t@{apr\+\_\+thread\+\_\+cond\+\_\+t}!Condition Variable Routines@{Condition Variable Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+thread\+\_\+cond\+\_\+t}{apr_thread_cond_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+thread\+\_\+cond\+\_\+t} {\bf apr\+\_\+thread\+\_\+cond\+\_\+t}}\hypertarget{group__apr__thread__cond_gae8f918d38bf1c58bc09670eee456ae5e}{}\label{group__apr__thread__cond_gae8f918d38bf1c58bc09670eee456ae5e}
+Opaque structure for thread condition variables 
+
+\subsection{Function Documentation}
+\index{Condition Variable Routines@{Condition Variable Routines}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}!Condition Variable Routines@{Condition Variable Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t) apr\+\_\+thread\+\_\+cond\+\_\+create(apr\+\_\+thread\+\_\+cond\+\_\+t $\ast$$\ast$cond}{APR_DECLARE(apr_status_t) apr_thread_cond_create(apr_thread_cond_t **cond}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__thread__cond_ga2521e0e7d60358ca954359ed417e39c5}{}\label{group__apr__thread__cond_ga2521e0e7d60358ca954359ed417e39c5}
+Note\+: destroying a condition variable (or likewise, destroying or clearing the pool from which a condition variable was allocated) if any threads are blocked waiting on it gives undefined results. Create and initialize a condition variable that can be used to signal and schedule threads in a single process. 
+\begin{DoxyParams}{Parameters}
+{\em cond} & the memory address where the newly created condition variable will be stored. \\
+\hline
+{\em pool} & the pool from which to allocate the condition.\\
+\hline
+\end{DoxyParams}
+Put the active calling thread to sleep until signaled to wake up. Each condition variable must be associated with a mutex, and that mutex must be locked before calling this function, or the behavior will be undefined. As the calling thread is put to sleep, the given mutex will be simultaneously released; and as this thread wakes up the lock is again simultaneously acquired. 
+\begin{DoxyParams}{Parameters}
+{\em cond} & the condition variable on which to block. \\
+\hline
+{\em mutex} & the mutex that must be locked upon entering this function, is released while the thread is asleep, and is again acquired before returning from this function. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Spurious wakeups may occur. Before and after every call to wait on a condition variable, the caller should test whether the condition is already met.
+\end{DoxyRemark}
+Put the active calling thread to sleep until signaled to wake up or the timeout is reached. Each condition variable must be associated with a mutex, and that mutex must be locked before calling this function, or the behavior will be undefined. As the calling thread is put to sleep, the given mutex will be simultaneously released; and as this thread wakes up the lock is again simultaneously acquired. 
+\begin{DoxyParams}{Parameters}
+{\em cond} & the condition variable on which to block. \\
+\hline
+{\em mutex} & the mutex that must be locked upon entering this function, is released while the thread is asleep, and is again acquired before returning from this function. \\
+\hline
+{\em timeout} & The amount of time in microseconds to wait. This is a maximum, not a minimum. If the condition is signaled, we will wake up before this time, otherwise the error A\+P\+R\+\_\+\+T\+I\+M\+E\+UP is returned.\\
+\hline
+\end{DoxyParams}
+Signals a single thread, if one exists, that is blocking on the given condition variable. That thread is then scheduled to wake up and acquire the associated mutex. Although it is not required, if predictable scheduling is desired, that mutex must be locked while calling this function. 
+\begin{DoxyParams}{Parameters}
+{\em cond} & the condition variable on which to produce the signal. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If no threads are waiting on the condition variable, nothing happens.
+\end{DoxyRemark}
+Signals all threads blocking on the given condition variable. Each thread that was signaled is then scheduled to wake up and acquire the associated mutex. This will happen in a serialized manner. 
+\begin{DoxyParams}{Parameters}
+{\em cond} & the condition variable on which to produce the broadcast. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If no threads are waiting on the condition variable, nothing happens.
+\end{DoxyRemark}
+Destroy the condition variable and free the associated memory. 
+\begin{DoxyParams}{Parameters}
+{\em cond} & the condition variable to destroy. \\
+\hline
+\end{DoxyParams}
+The problem with trying to output the entire iovec is that we cannot maintain the behaviour that a real writev would have. If we iterate over the iovec one at a time, we lose the atomic properties of \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}. The other option is to combine the entire iovec into one buffer that we could then send in one call to write(). This is not reasonable since we do not know how much data an iovec could contain.
+
+The only reasonable option, that maintains the semantics of a real \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}, is to only write the first iovec. Callers of file\+\_\+writev() must deal with partial writes as they normally would. If you want to ensure an entire iovec is written, use apr\+\_\+file\+\_\+writev\+\_\+full().
+\begin{DoxyCode}
+23 \{
+24     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+25 \}
+\end{DoxyCode}
+\index{Condition Variable Routines@{Condition Variable Routines}!A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR@{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR}}
+\index{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR@{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR}!Condition Variable Routines@{Condition Variable Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+O\+R(thread\+\_\+cond)}{APR_POOL_DECLARE_ACCESSOR(thread_cond)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR (
+\begin{DoxyParamCaption}
+\item[{thread\+\_\+cond}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__thread__cond_ga9ec6c5e414163a0f987e56160b1991cf}{}\label{group__apr__thread__cond_ga9ec6c5e414163a0f987e56160b1991cf}
+Get the pool used by this thread\+\_\+cond. \begin{DoxyReturn}{Returns}
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} the pool 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\index{Condition Variable Routines@{Condition Variable Routines}!mutex@{mutex}}
+\index{mutex@{mutex}!Condition Variable Routines@{Condition Variable Routines}}
+\subsubsection[{\texorpdfstring{mutex}{mutex}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+thread\+\_\+mutex\+\_\+t} $\ast$ mutex}\hypertarget{group__apr__thread__cond_ga9b5d997217b2ae4c884c535811cb6e35}{}\label{group__apr__thread__cond_ga9b5d997217b2ae4c884c535811cb6e35}
+\index{Condition Variable Routines@{Condition Variable Routines}!pool@{pool}}
+\index{pool@{pool}!Condition Variable Routines@{Condition Variable Routines}}
+\subsubsection[{\texorpdfstring{pool}{pool}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ pool}\hypertarget{group__apr__thread__cond_ga35230907c170df5d4d7f0ca99274c574}{}\label{group__apr__thread__cond_ga35230907c170df5d4d7f0ca99274c574}
+\index{Condition Variable Routines@{Condition Variable Routines}!timeout@{timeout}}
+\index{timeout@{timeout}!Condition Variable Routines@{Condition Variable Routines}}
+\subsubsection[{\texorpdfstring{timeout}{timeout}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+thread\+\_\+mutex\+\_\+t} {\bf apr\+\_\+interval\+\_\+time\+\_\+t} timeout}\hypertarget{group__apr__thread__cond_ga58459b17720e15365dbe11e8395563fc}{}\label{group__apr__thread__cond_ga58459b17720e15365dbe11e8395563fc}

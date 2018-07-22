@@ -1,0 +1,277 @@
+\hypertarget{request_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/request.c File Reference}
+\label{request_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/request.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/request.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+fnmatch.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+charset.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+script.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+expr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+auth.\+h\char`\"{}}\\*
+Include dependency graph for request.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{request_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structwalk__walked__t}{walk\+\_\+walked\+\_\+t}
+\item 
+struct \hyperlink{structwalk__cache__t}{walk\+\_\+cache\+\_\+t}
+\item 
+struct \hyperlink{structcore__opts__t}{core\+\_\+opts\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{request_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{request_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~\hyperlink{group__APACHE__CORE__HTTPD_gaf1cdaac5f4562d9d20bae417471ad422}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structwalk__walked__t}{walk\+\_\+walked\+\_\+t} \hyperlink{request_8c_aa4897a31a56851a9bf4df140fe86ce89}{walk\+\_\+walked\+\_\+t}
+\item 
+typedef struct \hyperlink{structwalk__cache__t}{walk\+\_\+cache\+\_\+t} \hyperlink{request_8c_aa9abc4cc58d4dfce1fe23fef605ce5bb}{walk\+\_\+cache\+\_\+t}
+\item 
+typedef struct \hyperlink{structcore__opts__t}{core\+\_\+opts\+\_\+t} \hyperlink{request_8c_aa2e36795611a89f0dd251b92487a958a}{core\+\_\+opts\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{request_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT} ()
+\item 
+\hyperlink{request_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{request_8c_a1e18f4ca36424427873818ee2339f982}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{request_8c_ad6e41f8ba25f44ef3fe2792af1127dbc}{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE} (authz\+\_\+some\+\_\+auth\+\_\+required)
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{request_8c_ac9eecf5a86e0f8159871ade42e0ac265}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{request.\+c@{request.\+c}!A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}
+\index{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}{APLOG_MODULE_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX~{\bf A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}\hypertarget{request_8c_ae75325996d1b2cf6120dded4cb153a22}{}\label{request_8c_ae75325996d1b2cf6120dded4cb153a22}
+\index{request.\+c@{request.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{request_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{request_8c_a88a4bf7f483aad3f3945773f3383e713}
+
+
+\subsection{Typedef Documentation}
+\index{request.\+c@{request.\+c}!core\+\_\+opts\+\_\+t@{core\+\_\+opts\+\_\+t}}
+\index{core\+\_\+opts\+\_\+t@{core\+\_\+opts\+\_\+t}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{core\+\_\+opts\+\_\+t}{core_opts_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf core\+\_\+opts\+\_\+t}  {\bf core\+\_\+opts\+\_\+t}}\hypertarget{request_8c_aa2e36795611a89f0dd251b92487a958a}{}\label{request_8c_aa2e36795611a89f0dd251b92487a958a}
+\index{request.\+c@{request.\+c}!walk\+\_\+cache\+\_\+t@{walk\+\_\+cache\+\_\+t}}
+\index{walk\+\_\+cache\+\_\+t@{walk\+\_\+cache\+\_\+t}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{walk\+\_\+cache\+\_\+t}{walk_cache_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf walk\+\_\+cache\+\_\+t}  {\bf walk\+\_\+cache\+\_\+t}}\hypertarget{request_8c_aa9abc4cc58d4dfce1fe23fef605ce5bb}{}\label{request_8c_aa9abc4cc58d4dfce1fe23fef605ce5bb}
+\index{request.\+c@{request.\+c}!walk\+\_\+walked\+\_\+t@{walk\+\_\+walked\+\_\+t}}
+\index{walk\+\_\+walked\+\_\+t@{walk\+\_\+walked\+\_\+t}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{walk\+\_\+walked\+\_\+t}{walk_walked_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf walk\+\_\+walked\+\_\+t}  {\bf walk\+\_\+walked\+\_\+t}}\hypertarget{request_8c_aa4897a31a56851a9bf4df140fe86ce89}{}\label{request_8c_aa4897a31a56851a9bf4df140fe86ce89}
+
+
+\subsection{Function Documentation}
+\index{request.\+c@{request.\+c}!A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(apr\+\_\+status\+\_\+t)}{AP_CORE_DECLARE_NONSTD(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{request_8c_a1e18f4ca36424427873818ee2339f982}{}\label{request_8c_a1e18f4ca36424427873818ee2339f982}
+
+\begin{DoxyCode}
+2048 \{
+2049     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e} = \hyperlink{group__APR__Util__Bucket__Brigades_ga40e0ef2a904aa519ca9d63288dee0b4d}{APR\_BRIGADE\_LAST}(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb});
+2050 
+2051     \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(e)) \{
+2052         \hyperlink{group__APR__Util__Bucket__Brigades_ga8925c02a7f95e8c1c3986294d4678797}{apr\_bucket\_delete}(e);
+2053     \}
+2054 
+2055     \textcolor{keywordflow}{if} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb})) \{
+2056         \textcolor{keywordflow}{return} ap\_pass\_brigade(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}->next, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb});
+2057     \}
+2058 
+2059     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+2060 \}
+\end{DoxyCode}
+\index{request.\+c@{request.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{AP_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{request_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{}\label{request_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}
+
+\begin{DoxyCode}
+125 \{
+126     \textcolor{keywordtype}{int} access\_status;
+127     \textcolor{keywordtype}{char} *olduser = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a63f3abd83f53633f9d0069bc39aeb424}{user};
+128     \textcolor{keywordtype}{int} rv = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+129 
+130     \textcolor{keywordflow}{switch} (ap\_satisfies(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r})) \{
+131     \textcolor{keywordflow}{case} \hyperlink{group__APACHE__CORE__HTTPD_gacc2b7ed25e2401cac2190b7d65ae3a41}{SATISFY\_ALL}:
+132     \textcolor{keywordflow}{case} \hyperlink{group__APACHE__CORE__HTTPD_gab684a5ab63ca78970814c6f9ad2fc239}{SATISFY\_NOSPEC}:
+133         \textcolor{keywordflow}{if} ((access\_status = ap\_run\_access\_checker(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r})) != \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+134             \textcolor{keywordflow}{break};
+135         \}
+136 
+137         access\_status = ap\_run\_access\_checker\_ex(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+138         \textcolor{keywordflow}{if} (access\_status == \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{DECLINED}) \{
+139             rv = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+140         \}
+141 
+142         \textcolor{keywordflow}{break};
+143     \textcolor{keywordflow}{case} \hyperlink{group__APACHE__CORE__HTTPD_ga1b48167fdd55bd64a0fa79800847ce84}{SATISFY\_ANY}:
+144         \textcolor{keywordflow}{if} ((access\_status = ap\_run\_access\_checker(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r})) == \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+145             \textcolor{keywordflow}{break};
+146         \}
+147 
+148         access\_status = ap\_run\_access\_checker\_ex(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+149         \textcolor{keywordflow}{if} (access\_status == \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{DECLINED}) \{
+150             rv = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+151         \}
+152 
+153         \textcolor{keywordflow}{break};
+154     \}
+155 
+156     \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a63f3abd83f53633f9d0069bc39aeb424}{user} = olduser;
+157     \textcolor{keywordflow}{return} rv;
+158 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{request_8c_ace56382e8c8bdfffe9ffc8dbab06d36c_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{request.\+c@{request.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(request\+\_\+rec $\ast$)}{AP_DECLARE(request_rec *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf request\+\_\+rec} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{request_8c_ac9eecf5a86e0f8159871ade42e0ac265}{}\label{request_8c_ac9eecf5a86e0f8159871ade42e0ac265}
+
+\begin{DoxyCode}
+2185 \{
+2186     \hyperlink{structrequest__rec}{request\_rec} *rnew;
+2187     \textcolor{comment}{/* Initialise res, to avoid a gcc warning */}
+2188     \textcolor{keywordtype}{int} \hyperlink{group__APR__Util__DBD_ga3bb17d78322a086f98b82abd8bb9a8cd}{res} = \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{HTTP\_INTERNAL\_SERVER\_ERROR};
+2189     \textcolor{keywordtype}{char} *udir;
+2190 
+2191     rnew = make\_sub\_request(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__REQ_ga9152b2a73566c0e87928a82d0e659c6c}{next\_filter});
+2192 
+2193     \textcolor{comment}{/* would be nicer to pass "method" to ap\_set\_sub\_req\_protocol */}
+2194     rnew->\hyperlink{structrequest__rec_a54de55544c4c4c25d67a08980184c653}{method} = \hyperlink{group__APACHE__CORE__CONFIG_ga6c1b16298acdfc2ca3cba871da0daa17}{method};
+2195     rnew->\hyperlink{structrequest__rec_a5d11eb89be0765988fde175e0d5ccfb7}{method\_number} = ap\_method\_number\_of(\hyperlink{group__APACHE__CORE__CONFIG_ga6c1b16298acdfc2ca3cba871da0daa17}{method});
+2196 
+2197     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__REQ_ga65e3869c33c434213e1bc568332c0df9}{new\_uri}[0] == \textcolor{charliteral}{'/'}) \{
+2198         ap\_parse\_uri(rnew, \hyperlink{group__APACHE__CORE__REQ_ga65e3869c33c434213e1bc568332c0df9}{new\_uri});
+2199     \}
+2200     \textcolor{keywordflow}{else} \{
+2201         udir = ap\_make\_dirstr\_parent(rnew->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri});
+2202         udir = \hyperlink{group__APACHE__CORE__DAEMON_ga3df7a06ed11838b84264a6759b2c3674}{ap\_escape\_uri}(rnew->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, udir);    \textcolor{comment}{/* re-escape it */}
+2203         ap\_parse\_uri(rnew, ap\_make\_full\_path(rnew->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, udir, \hyperlink{group__APACHE__CORE__REQ_ga65e3869c33c434213e1bc568332c0df9}{new\_uri}));
+2204     \}
+2205 
+2206     \textcolor{comment}{/* We cannot return NULL without violating the API. So just turn this}
+2207 \textcolor{comment}{     * subrequest into a 500 to indicate the failure. */}
+2208     \textcolor{keywordflow}{if} (ap\_is\_recursion\_limit\_exceeded(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r})) \{
+2209         rnew->\hyperlink{structrequest__rec_a09b59ad2fa51be73efea7369b5484eb0}{status} = \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{HTTP\_INTERNAL\_SERVER\_ERROR};
+2210         \textcolor{keywordflow}{return} rnew;
+2211     \}
+2212 
+2213     \textcolor{comment}{/* lookup\_uri}
+2214 \textcolor{comment}{     * If the content can be served by the quick\_handler, we can}
+2215 \textcolor{comment}{     * safely bypass request\_internal processing.}
+2216 \textcolor{comment}{     *}
+2217 \textcolor{comment}{     * If next\_filter is NULL we are expecting to be}
+2218 \textcolor{comment}{     * internal\_fast\_redirect'ed to the subrequest, or the subrequest will}
+2219 \textcolor{comment}{     * never be invoked. We need to make sure that the quickhandler is not}
+2220 \textcolor{comment}{     * invoked by any lookups. Since an internal\_fast\_redirect will always}
+2221 \textcolor{comment}{     * occur too late for the quickhandler to handle the request.}
+2222 \textcolor{comment}{     */}
+2223     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__REQ_ga9152b2a73566c0e87928a82d0e659c6c}{next\_filter}) \{
+2224         res = ap\_run\_quick\_handler(rnew, 1);
+2225     \}
+2226 
+2227     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__REQ_ga9152b2a73566c0e87928a82d0e659c6c}{next\_filter} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} || res != \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+2228         \textcolor{keywordflow}{if} ((res = ap\_process\_request\_internal(rnew))) \{
+2229             rnew->\hyperlink{structrequest__rec_a09b59ad2fa51be73efea7369b5484eb0}{status} = \hyperlink{group__APR__Util__DBD_ga3bb17d78322a086f98b82abd8bb9a8cd}{res};
+2230         \}
+2231     \}
+2232 
+2233     \textcolor{keywordflow}{return} rnew;
+2234 \}
+\end{DoxyCode}
+\index{request.\+c@{request.\+c}!A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}}
+\index{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+C\+T()}{APR_HOOK_STRUCT()}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{request_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{}\label{request_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}
+
+\begin{DoxyCode}
+110 \{
+111     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} == \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{DECLINED}) \{
+112         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{APLOG\_CRIT}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00025)
+113                       \textcolor{stringliteral}{"configuration error:  couldn't %s: %s"}, \hyperlink{pcretest_8txt_accef33224b2aee7c2350c396e2973890}{phase}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->
+      \hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri});
+114         \textcolor{keywordflow}{return} \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{HTTP\_INTERNAL\_SERVER\_ERROR};
+115     \}
+116     \textcolor{keywordflow}{else} \{
+117         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r},
+118                       \textcolor{stringliteral}{"auth phase '%s' gave status %d: %s"}, \hyperlink{pcretest_8txt_accef33224b2aee7c2350c396e2973890}{phase},
+119                       \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri});
+120         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+121     \}
+122 \}
+\end{DoxyCode}
+\index{request.\+c@{request.\+c}!A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE@{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE}}
+\index{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE@{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE}!request.\+c@{request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+P\+E(authz\+\_\+some\+\_\+auth\+\_\+required)}{APR_OPTIONAL_FN_TYPE(authz_some_auth_required)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE (
+\begin{DoxyParamCaption}
+\item[{authz\+\_\+some\+\_\+auth\+\_\+required}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{request_8c_ad6e41f8ba25f44ef3fe2792af1127dbc}{}\label{request_8c_ad6e41f8ba25f44ef3fe2792af1127dbc}
+
+\begin{DoxyCode}
+2065 \{
+2066     \textcolor{comment}{/* Is there a require line configured for the type of *this* req? */}
+2067     \textcolor{keywordflow}{if} (ap\_\_authz\_ap\_some\_auth\_required) \{
+2068         \textcolor{keywordflow}{return} ap\_\_authz\_ap\_some\_auth\_required(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+2069     \}
+2070     \textcolor{keywordflow}{else}
+2071         \textcolor{keywordflow}{return} 0;
+2072 \}
+\end{DoxyCode}

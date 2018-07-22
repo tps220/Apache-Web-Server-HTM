@@ -1,0 +1,1026 @@
+\hypertarget{ab_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/ab.c File Reference}
+\label{ab_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/ab.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/ab.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+network\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+getopt.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+release.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+poll.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+base64.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+xlate.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config\+\_\+auto.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$math.\+h$>$}\\*
+Include dependency graph for ab.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ab_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structconnection}{connection}
+\item 
+struct \hyperlink{structdata}{data}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{ab_8c_aff8852d17420cbfd647e4b982cbc1b07}{A\+P\+\_\+\+A\+B\+\_\+\+B\+A\+S\+E\+R\+E\+V\+I\+S\+I\+ON}~\char`\"{}2.\+3\char`\"{}
+\item 
+\#define \hyperlink{ab_8c_adb6515be8f47176aa53f6705dbf012f3}{N\+O\+T\+\_\+\+A\+S\+C\+II}
+\item 
+\#define \hyperlink{ab_8c_a953676b4d0555aeafd9e3efdc7f3f387}{B\+S\+D\+\_\+\+C\+O\+MP}
+\item 
+\#define \hyperlink{ab_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{ab_8c_a3cdc9203f988a6bce41ce68dd45a4dd3}{A\+B\+\_\+\+M\+AX}~\hyperlink{group__apr__platform_gaae749817bb595cd5dcb9c17c119ddb13}{A\+P\+R\+\_\+\+I\+N\+T64\+\_\+C}(0x7fffffffffffffff)
+\item 
+\#define \hyperlink{ab_8c_a8fc96cee4177a369a99de7026ebeba81}{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+TS}~(I\+N\+T\+\_\+\+M\+AX $>$ 50000 ? 50000 \+: I\+N\+T\+\_\+\+M\+AX)
+\item 
+\#define \hyperlink{ab_8c_a4c9cdce85e8b74131ee39c4d40eb7712}{C\+B\+U\+F\+F\+S\+I\+ZE}~(8192)
+\item 
+\#define \hyperlink{ab_8c_ac630e7a49acf31c99538caa29ebf9ac6}{ap\+\_\+min}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~(((\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})$<$(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))?(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})\+:(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))
+\item 
+\#define \hyperlink{ab_8c_ac771d4159fb5c152a99bfb35cd0db349}{ap\+\_\+max}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~(((\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})$>$(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))?(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})\+:(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))
+\item 
+\#define \hyperlink{ab_8c_ac27b12feaf8516799b133b1bc8ce686f}{ap\+\_\+round\+\_\+ms}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})~((\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t})((\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}) + 500)/1000)
+\item 
+\#define \hyperlink{ab_8c_a6e19ca92dc1e61709c5a2dfc19132630}{ap\+\_\+double\+\_\+ms}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})~((double)(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})/1000.\+0)
+\item 
+\#define \hyperlink{ab_8c_a67d0d61ccfb7107834405031c3cfd4f3}{M\+A\+X\+\_\+\+C\+O\+N\+C\+U\+R\+R\+E\+N\+CY}~20000
+\item 
+\#define \hyperlink{ab_8c_a69accdc00e904d1c43df1b3bb7456502}{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG}~\char`\"{}\%5\char`\"{} \hyperlink{group__apr__time_gaad2d372b64a68d96b1e4c5f1173eb2c7}{A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{} \%4\char`\"{} \hyperlink{group__apr__time_gaad2d372b64a68d96b1e4c5f1173eb2c7}{A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{} \%5.\+1f \%6\char`\"{} A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+M\+T \char`\"{} \%7\char`\"{} A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+M\+T \char`\"{}\textbackslash{}n\char`\"{}
+\item 
+\#define \hyperlink{ab_8c_ab4304cb59fce7b2c15c33ee90553e242}{S\+A\+NE}(\hyperlink{group__apr__thread__proc_gaf132f350c1657f61f533df7066e903c4}{what},  mean,  median,  sd)
+\item 
+\#define \hyperlink{ab_8c_a69accdc00e904d1c43df1b3bb7456502}{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG}~\char`\"{}\%5\char`\"{} \hyperlink{group__apr__time_gaad2d372b64a68d96b1e4c5f1173eb2c7}{A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{} \%5\char`\"{} \hyperlink{group__apr__time_gaad2d372b64a68d96b1e4c5f1173eb2c7}{A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{}\%5\char`\"{} \hyperlink{group__apr__time_gaad2d372b64a68d96b1e4c5f1173eb2c7}{A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{}\textbackslash{}n\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1}{connect\+\_\+state\+\_\+e} \{ \hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a249e9350ec17e0337424376c1270aa33}{S\+T\+A\+T\+E\+\_\+\+U\+N\+C\+O\+N\+N\+E\+C\+T\+ED} = 0, 
+\hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a28b97e301232f1b841d146187844c7a5}{S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+NG}, 
+\hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a5b0f1cbce9b9f72772747cdedfc7b8e1}{S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+ED}, 
+\hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a0bd62d2c19c771fedb1c6459ff576756}{S\+T\+A\+T\+E\+\_\+\+R\+E\+AD}
+ \}
+\item 
+enum \{ \\*
+\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{N\+O\+\_\+\+M\+E\+TH} = 0, 
+\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a12a8dcf59c16b5aadfda3a08ba67d529}{G\+ET}, 
+\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a0b0955668575b21eb0ab2272aef49f76}{H\+E\+AD}, 
+\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260afec39d40e8bc9e12afa614df5ddb9fa9}{P\+UT}, 
+\\*
+\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a368c5bc07109370b819193871352b926}{P\+O\+ST}, 
+\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260aa5a2db782956b762efa4e4066aa948a5}{C\+U\+S\+T\+O\+M\+\_\+\+M\+E\+T\+H\+OD}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a1bdcfae3209cbd96db35a2ae356fa15e}{verbosity} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a2df397b00d459435195ae8d8373f5ee5}{recverrok} = 0
+\item 
+enum  \{ ... \}  \hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} = \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{N\+O\+\_\+\+M\+E\+TH}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a88c3bbc2a73981d8835afa1fdee1b554}{method\+\_\+str} \mbox{[}$\,$\mbox{]} = \{\char`\"{}bug\char`\"{}, \char`\"{}\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a12a8dcf59c16b5aadfda3a08ba67d529}{G\+ET}\char`\"{}, \char`\"{}\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a0b0955668575b21eb0ab2272aef49f76}{H\+E\+AD}\char`\"{}, \char`\"{}\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260afec39d40e8bc9e12afa614df5ddb9fa9}{P\+UT}\char`\"{}, \char`\"{}\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a368c5bc07109370b819193871352b926}{P\+O\+ST}\char`\"{}, \char`\"{}\char`\"{}\}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a11b0ef5043d8f95d484421dbb7bd7bc4}{send\+\_\+body} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}{requests} = 1
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_afdddb4504a49b896588d906b13560d8e}{heartbeatres} = 100
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a8fd864cde9462413e3e7f24701630dca}{concurrency} = 1
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_aa7195498a377b8500bb309d49e3fe9cb}{percentile} = 1
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a3e4c5260dc44cc07c2638b0f02b277c1}{nolength} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a1a5d876387ec0f17dc6df2e0dbe707b2}{confidence} = 1
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_ac7c18d7cc6d16b089c3aba4960985b34}{tlimit} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_ae314c4b48027be9feab52906b6313b73}{keepalive} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a62d68269b9adfd52e062cf0a26b964b5}{windowsize} = 0
+\item 
+char \hyperlink{ab_8c_aa565cc2c00e3eee2c93c18e1aaf6cb6a}{servername} \mbox{[}1024\mbox{]}
+\item 
+char $\ast$ \hyperlink{ab_8c_af203df082d5c6dcaa0c88b07cf86466d}{hostname}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a70b42a2444fcd31c70771b97d4c7132a}{host\+\_\+field}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{path}
+\item 
+char $\ast$ \hyperlink{ab_8c_aecb5539a9bd6c87c4d0cbe7562f6a31d}{postdata}
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{ab_8c_a4a87a4452ed5b031a89fc71779306442}{postlen} = 0
+\item 
+char $\ast$ \hyperlink{ab_8c_a7b9c7814d28acb614167ccd41c80f504}{content\+\_\+type} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a092a206107a32f8a9a580bd65f9ae151}{cookie}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a5a2786b5a5c1c1aea3285c3bbc3d832c}{auth}
+\item 
+const char $\ast$ \hyperlink{ab_8c_ac5c16b0f06a40d5032a1c3fb75653354}{hdrs}
+\item 
+\hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{ab_8c_ab3bdaca3e004f9926a8c2530f1d9e9dc}{port}
+\item 
+char $\ast$ \hyperlink{ab_8c_aae574ff365697003c4add905b7c379e2}{proxyhost} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_aafd282ad1fd2b2937f45c1cd22f143da}{proxyport} = 0
+\item 
+const char $\ast$ \hyperlink{ab_8c_a73bddf0adbcdaa0603980765354ba116}{connecthost}
+\item 
+const char $\ast$ \hyperlink{ab_8c_adc71a281698861cab451e4f756258b9a}{myhost}
+\item 
+\hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{ab_8c_a9e5c8875170bd4cfc099cc447cc0a8e8}{connectport}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a29eac3fd55121829337ca23795eb8a22}{gnuplot}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a9a5ca87a63d0a64469a716b3b2743426}{csvperc}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a0e7598cbfa82150b03acb2fa0f42111d}{fullurl}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a104d7c0f3a75c0d2225aded2e396ae82}{colonhost}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_aedd296702c492aedb8d505ff700b5106}{isproxy} = 0
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{ab_8c_a75b65aa616ca6aeda88128d5ab23ec6d}{aprtimeout} = \hyperlink{group__apr__time_gaec56c2c03299a750006bfcc08d64ec32}{apr\+\_\+time\+\_\+from\+\_\+sec}(30)
+\item 
+const char $\ast$ \hyperlink{ab_8c_afad8bad7bef92fe38d6a74414a96cf46}{opt\+\_\+host}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a7544207fdf4a269ed986c67077d299db}{opt\+\_\+useragent} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_aa7632a14f6d36b8e3c857c0c57e497a2}{opt\+\_\+accept} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_abcf3fc865ace5453e6011327b86a15d2}{use\+\_\+html} = 0
+\item 
+const char $\ast$ \hyperlink{ab_8c_a59a42cc995d839279d1eb11a2fd75b9e}{tablestring}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a2a6d5723abda8c391007e374682b0f41}{trstring}
+\item 
+const char $\ast$ \hyperlink{ab_8c_a2b787b2440c0e23c6269231b0eab8f10}{tdstring}
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{ab_8c_add7e16d9f9011d7a0947a9752ff09203}{doclen} = 0
+\item 
+\hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\+\_\+int64\+\_\+t} \hyperlink{ab_8c_a820ac3597d0f57ceb3428345978194e9}{totalread} = 0
+\item 
+\hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\+\_\+int64\+\_\+t} \hyperlink{ab_8c_a89b6433306e13300f9a2ca8608843b76}{totalbread} = 0
+\item 
+\hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\+\_\+int64\+\_\+t} \hyperlink{ab_8c_ad3b6ab2364885340376d193774ce01f7}{totalposted} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_abfafc640452d742a5a404a158ce4737a}{started} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a5992b274cfdcacdbc1fa8347fd01ebde}{done} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_aeab0bc9d1ef972b25612fa3088ca3f09}{doneka} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a0d1aabbbc1c4b6b7fefe5698fbaaa95f}{good} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a27a1c72438b4005fdc9b5b0d16705279}{bad} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a32049f52d9ebc545a262535010eca909}{epipe} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a30656e69ded0c5b56a3832d0ae2368d5}{err\+\_\+length} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a946f963921e827a63b09df1a2fb9e0cc}{err\+\_\+conn} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a97049e8279d99cca3499f35748daf5f8}{err\+\_\+recv} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_aff903fac04441aa7c8648b6ee0b127be}{err\+\_\+except} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a496fe269655f3737bd3dbfe3118a2a1f}{err\+\_\+response} = 0
+\item 
+\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} \hyperlink{ab_8c_af9b96980fc724ad325115184a485da5f}{start}
+\item 
+\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} \hyperlink{ab_8c_abb1950138091b892c738a15c18092cda}{lasttime}
+\item 
+\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} \hyperlink{ab_8c_a30e95fe733967eee4cefb92c9e740032}{stoptime}
+\item 
+char \hyperlink{ab_8c_a1cf404d19e9eccb15afa1b8206442cbd}{\+\_\+request} \mbox{[}8192\mbox{]}
+\item 
+char $\ast$ \hyperlink{ab_8c_ae55c2591fd7f232c48d3f252f18a869a}{request} = \hyperlink{ab_8c_a1cf404d19e9eccb15afa1b8206442cbd}{\+\_\+request}
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{ab_8c_afd3775bc29afddb47261132bc8939fd8}{reqlen}
+\item 
+char \hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer} \mbox{[}8192\mbox{]}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ab_8c_a22831383c2ddecd01286e109c1841439}{percs} \mbox{[}$\,$\mbox{]} = \{50, 66, 75, 80, 90, 95, 98, 99, 100\}
+\item 
+struct \hyperlink{structconnection}{connection} $\ast$ \hyperlink{ab_8c_a293f1d9e5b7baafe1725e97561961b7b}{con}
+\item 
+struct \hyperlink{structdata}{data} $\ast$ \hyperlink{ab_8c_ad239e689d351fe125aff51dd3662bf6c}{stats}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}
+\item 
+\hyperlink{structapr__pollset__t}{apr\+\_\+pollset\+\_\+t} $\ast$ \hyperlink{ab_8c_aa5cc42852439978ad981d8449ebd9204}{readbits}
+\item 
+\hyperlink{structapr__sockaddr__t}{apr\+\_\+sockaddr\+\_\+t} $\ast$ \hyperlink{ab_8c_a790ecbe47cf9f5ba28dae5ffff6c518c}{mysa}
+\item 
+\hyperlink{structapr__sockaddr__t}{apr\+\_\+sockaddr\+\_\+t} $\ast$ \hyperlink{ab_8c_a382291fe9880c261c9d0b1dd116bf15c}{destsa}
+\item 
+\hyperlink{group__APR__XLATE_ga069dabbadc30e3a4157c38104a250e77}{apr\+\_\+xlate\+\_\+t} $\ast$ \hyperlink{ab_8c_a87712571fbe7039cc9a9606f23ea8123}{from\+\_\+ascii}
+\item 
+\hyperlink{group__APR__XLATE_ga069dabbadc30e3a4157c38104a250e77}{apr\+\_\+xlate\+\_\+t} $\ast$ \hyperlink{ab_8c_ac2b1e84470918e4c7d16449f4b4d5ddb}{to\+\_\+ascii}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{ab.\+c@{ab.\+c}!A\+B\+\_\+\+M\+AX@{A\+B\+\_\+\+M\+AX}}
+\index{A\+B\+\_\+\+M\+AX@{A\+B\+\_\+\+M\+AX}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{A\+B\+\_\+\+M\+AX}{AB_MAX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+B\+\_\+\+M\+AX~{\bf A\+P\+R\+\_\+\+I\+N\+T64\+\_\+C}(0x7fffffffffffffff)}\hypertarget{ab_8c_a3cdc9203f988a6bce41ce68dd45a4dd3}{}\label{ab_8c_a3cdc9203f988a6bce41ce68dd45a4dd3}
+\index{ab.\+c@{ab.\+c}!A\+P\+\_\+\+A\+B\+\_\+\+B\+A\+S\+E\+R\+E\+V\+I\+S\+I\+ON@{A\+P\+\_\+\+A\+B\+\_\+\+B\+A\+S\+E\+R\+E\+V\+I\+S\+I\+ON}}
+\index{A\+P\+\_\+\+A\+B\+\_\+\+B\+A\+S\+E\+R\+E\+V\+I\+S\+I\+ON@{A\+P\+\_\+\+A\+B\+\_\+\+B\+A\+S\+E\+R\+E\+V\+I\+S\+I\+ON}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+A\+B\+\_\+\+B\+A\+S\+E\+R\+E\+V\+I\+S\+I\+ON}{AP_AB_BASEREVISION}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+A\+B\+\_\+\+B\+A\+S\+E\+R\+E\+V\+I\+S\+I\+ON~\char`\"{}2.\+3\char`\"{}}\hypertarget{ab_8c_aff8852d17420cbfd647e4b982cbc1b07}{}\label{ab_8c_aff8852d17420cbfd647e4b982cbc1b07}
+\index{ab.\+c@{ab.\+c}!ap\+\_\+double\+\_\+ms@{ap\+\_\+double\+\_\+ms}}
+\index{ap\+\_\+double\+\_\+ms@{ap\+\_\+double\+\_\+ms}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+double\+\_\+ms}{ap_double_ms}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+double\+\_\+ms(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}}
+\end{DoxyParamCaption}
+)~((double)({\bf a})/1000.\+0)}\hypertarget{ab_8c_a6e19ca92dc1e61709c5a2dfc19132630}{}\label{ab_8c_a6e19ca92dc1e61709c5a2dfc19132630}
+\index{ab.\+c@{ab.\+c}!ap\+\_\+max@{ap\+\_\+max}}
+\index{ap\+\_\+max@{ap\+\_\+max}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+max}{ap_max}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+max(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~((({\bf a})$>$({\bf b}))?({\bf a})\+:({\bf b}))}\hypertarget{ab_8c_ac771d4159fb5c152a99bfb35cd0db349}{}\label{ab_8c_ac771d4159fb5c152a99bfb35cd0db349}
+\index{ab.\+c@{ab.\+c}!ap\+\_\+min@{ap\+\_\+min}}
+\index{ap\+\_\+min@{ap\+\_\+min}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+min}{ap_min}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+min(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~((({\bf a})$<$({\bf b}))?({\bf a})\+:({\bf b}))}\hypertarget{ab_8c_ac630e7a49acf31c99538caa29ebf9ac6}{}\label{ab_8c_ac630e7a49acf31c99538caa29ebf9ac6}
+\index{ab.\+c@{ab.\+c}!ap\+\_\+round\+\_\+ms@{ap\+\_\+round\+\_\+ms}}
+\index{ap\+\_\+round\+\_\+ms@{ap\+\_\+round\+\_\+ms}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+round\+\_\+ms}{ap_round_ms}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+round\+\_\+ms(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}}
+\end{DoxyParamCaption}
+)~(({\bf apr\+\_\+time\+\_\+t})(({\bf a}) + 500)/1000)}\hypertarget{ab_8c_ac27b12feaf8516799b133b1bc8ce686f}{}\label{ab_8c_ac27b12feaf8516799b133b1bc8ce686f}
+\index{ab.\+c@{ab.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{ab_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{ab_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{ab.\+c@{ab.\+c}!B\+S\+D\+\_\+\+C\+O\+MP@{B\+S\+D\+\_\+\+C\+O\+MP}}
+\index{B\+S\+D\+\_\+\+C\+O\+MP@{B\+S\+D\+\_\+\+C\+O\+MP}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{B\+S\+D\+\_\+\+C\+O\+MP}{BSD_COMP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+S\+D\+\_\+\+C\+O\+MP}\hypertarget{ab_8c_a953676b4d0555aeafd9e3efdc7f3f387}{}\label{ab_8c_a953676b4d0555aeafd9e3efdc7f3f387}
+\index{ab.\+c@{ab.\+c}!C\+B\+U\+F\+F\+S\+I\+ZE@{C\+B\+U\+F\+F\+S\+I\+ZE}}
+\index{C\+B\+U\+F\+F\+S\+I\+ZE@{C\+B\+U\+F\+F\+S\+I\+ZE}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{C\+B\+U\+F\+F\+S\+I\+ZE}{CBUFFSIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+B\+U\+F\+F\+S\+I\+ZE~(8192)}\hypertarget{ab_8c_a4c9cdce85e8b74131ee39c4d40eb7712}{}\label{ab_8c_a4c9cdce85e8b74131ee39c4d40eb7712}
+\index{ab.\+c@{ab.\+c}!C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG@{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG}}
+\index{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG@{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG}{CONF_FMT_STRING}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG~\char`\"{}\%5\char`\"{} {\bf A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{} \%4\char`\"{} {\bf A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{} \%5.\+1f \%6\char`\"{} A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+M\+T \char`\"{} \%7\char`\"{} A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+M\+T \char`\"{}\textbackslash{}n\char`\"{}}\hypertarget{ab_8c_a69accdc00e904d1c43df1b3bb7456502}{}\label{ab_8c_a69accdc00e904d1c43df1b3bb7456502}
+\index{ab.\+c@{ab.\+c}!C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG@{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG}}
+\index{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG@{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG}{CONF_FMT_STRING}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+F\+\_\+\+F\+M\+T\+\_\+\+S\+T\+R\+I\+NG~\char`\"{}\%5\char`\"{} {\bf A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{} \%5\char`\"{} {\bf A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{}\%5\char`\"{} {\bf A\+P\+R\+\_\+\+T\+I\+M\+E\+\_\+\+T\+\_\+\+F\+MT} \char`\"{}\textbackslash{}n\char`\"{}}\hypertarget{ab_8c_a69accdc00e904d1c43df1b3bb7456502}{}\label{ab_8c_a69accdc00e904d1c43df1b3bb7456502}
+\index{ab.\+c@{ab.\+c}!M\+A\+X\+\_\+\+C\+O\+N\+C\+U\+R\+R\+E\+N\+CY@{M\+A\+X\+\_\+\+C\+O\+N\+C\+U\+R\+R\+E\+N\+CY}}
+\index{M\+A\+X\+\_\+\+C\+O\+N\+C\+U\+R\+R\+E\+N\+CY@{M\+A\+X\+\_\+\+C\+O\+N\+C\+U\+R\+R\+E\+N\+CY}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+C\+O\+N\+C\+U\+R\+R\+E\+N\+CY}{MAX_CONCURRENCY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+C\+O\+N\+C\+U\+R\+R\+E\+N\+CY~20000}\hypertarget{ab_8c_a67d0d61ccfb7107834405031c3cfd4f3}{}\label{ab_8c_a67d0d61ccfb7107834405031c3cfd4f3}
+\index{ab.\+c@{ab.\+c}!M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+TS@{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+TS}}
+\index{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+TS@{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+TS}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+TS}{MAX_REQUESTS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+TS~(I\+N\+T\+\_\+\+M\+AX $>$ 50000 ? 50000 \+: I\+N\+T\+\_\+\+M\+AX)}\hypertarget{ab_8c_a8fc96cee4177a369a99de7026ebeba81}{}\label{ab_8c_a8fc96cee4177a369a99de7026ebeba81}
+\index{ab.\+c@{ab.\+c}!N\+O\+T\+\_\+\+A\+S\+C\+II@{N\+O\+T\+\_\+\+A\+S\+C\+II}}
+\index{N\+O\+T\+\_\+\+A\+S\+C\+II@{N\+O\+T\+\_\+\+A\+S\+C\+II}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{N\+O\+T\+\_\+\+A\+S\+C\+II}{NOT_ASCII}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+O\+T\+\_\+\+A\+S\+C\+II}\hypertarget{ab_8c_adb6515be8f47176aa53f6705dbf012f3}{}\label{ab_8c_adb6515be8f47176aa53f6705dbf012f3}
+\index{ab.\+c@{ab.\+c}!S\+A\+NE@{S\+A\+NE}}
+\index{S\+A\+NE@{S\+A\+NE}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{S\+A\+NE}{SANE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+A\+NE(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf what}, }
+\item[{}]{mean, }
+\item[{}]{median, }
+\item[{}]{sd}
+\end{DoxyParamCaption}
+)}\hypertarget{ab_8c_ab4304cb59fce7b2c15c33ee90553e242}{}\label{ab_8c_ab4304cb59fce7b2c15c33ee90553e242}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \(\backslash\)
+                double \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d} = (double)mean - median; \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{\(\backslash\)}
+\hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{                if} (d < 0) d = -d; \(\backslash\)
+                \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{if} (d > 2 * sd ) \(\backslash\)
+                    printf("ERROR: The median and mean for " \hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what} " \hyperlink{pcre_8txt_a98da773651c0ef9992aa9a7bab588058}{are} more 
+      \hyperlink{pcre_8txt_af2fdb07d3097b68fca970a5c282c7680}{than} \hyperlink{pcregrep_8txt_ac3a8626ed34af4d219e6b3435b86463b}{twice} the standard\(\backslash\)\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}" \(\backslash\)
+                           "       deviation apart. These \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a9237582cb59392bdaeda6c248df4441c}{results} \hyperlink{pcre_8txt_a98da773651c0ef9992aa9a7bab588058}{are} NOT reliable.\(\backslash\)
+      \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}"); \(\backslash\)
+                else \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{if} (d > sd ) \(\backslash\)
+                    printf("\hyperlink{pcre_8txt_a91ca6d19aad26c99cb39d5aa003d771d}{WARNING}: The median and mean for " \hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what} " 
+      \hyperlink{pcre_8txt_a98da773651c0ef9992aa9a7bab588058}{are} \hyperlink{pcre_8txt_aab236af6334f68eebb41dff13921475a}{not} within \hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a} normal deviation\(\backslash\)n" \(\backslash\)
+                           "        These \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a9237582cb59392bdaeda6c248df4441c}{results} \hyperlink{pcre_8txt_a98da773651c0ef9992aa9a7bab588058}{are} probably \hyperlink{pcre_8txt_aab236af6334f68eebb41dff13921475a}{not} that reliable.\(\backslash\)n"); \(\backslash\)
+            \}
+\end{DoxyCode}
+
+
+\subsection{Enumeration Type Documentation}
+\subsubsection[{\texorpdfstring{anonymous enum}{anonymous enum}}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\hypertarget{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260}{}\label{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{N\+O\+\_\+\+M\+E\+TH@{N\+O\+\_\+\+M\+E\+TH}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!N\+O\+\_\+\+M\+E\+TH@{N\+O\+\_\+\+M\+E\+TH}}\item[{\em 
+N\+O\+\_\+\+M\+E\+TH\hypertarget{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{}\label{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}
+}]\index{G\+ET@{G\+ET}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!G\+ET@{G\+ET}}\item[{\em 
+G\+ET\hypertarget{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a12a8dcf59c16b5aadfda3a08ba67d529}{}\label{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a12a8dcf59c16b5aadfda3a08ba67d529}
+}]\index{H\+E\+AD@{H\+E\+AD}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!H\+E\+AD@{H\+E\+AD}}\item[{\em 
+H\+E\+AD\hypertarget{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a0b0955668575b21eb0ab2272aef49f76}{}\label{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a0b0955668575b21eb0ab2272aef49f76}
+}]\index{P\+UT@{P\+UT}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!P\+UT@{P\+UT}}\item[{\em 
+P\+UT\hypertarget{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260afec39d40e8bc9e12afa614df5ddb9fa9}{}\label{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260afec39d40e8bc9e12afa614df5ddb9fa9}
+}]\index{P\+O\+ST@{P\+O\+ST}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!P\+O\+ST@{P\+O\+ST}}\item[{\em 
+P\+O\+ST\hypertarget{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a368c5bc07109370b819193871352b926}{}\label{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a368c5bc07109370b819193871352b926}
+}]\index{C\+U\+S\+T\+O\+M\+\_\+\+M\+E\+T\+H\+OD@{C\+U\+S\+T\+O\+M\+\_\+\+M\+E\+T\+H\+OD}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!C\+U\+S\+T\+O\+M\+\_\+\+M\+E\+T\+H\+OD@{C\+U\+S\+T\+O\+M\+\_\+\+M\+E\+T\+H\+OD}}\item[{\em 
+C\+U\+S\+T\+O\+M\+\_\+\+M\+E\+T\+H\+OD\hypertarget{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260aa5a2db782956b762efa4e4066aa948a5}{}\label{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260aa5a2db782956b762efa4e4066aa948a5}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+288 \{\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{NO\_METH} = 0, \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a12a8dcf59c16b5aadfda3a08ba67d529}{GET}, \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a0b0955668575b21eb0ab2272aef49f76}{HEAD}, \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260afec39d40e8bc9e12afa614df5ddb9fa9}{PUT}, \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a368c5bc07109370b819193871352b926}{POST}, \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260aa5a2db782956b762efa4e4066aa948a5}{CUSTOM\_METHOD}\} 
+      \hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} = \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{NO\_METH};
+\end{DoxyCode}
+\index{ab.\+c@{ab.\+c}!connect\+\_\+state\+\_\+e@{connect\+\_\+state\+\_\+e}}
+\index{connect\+\_\+state\+\_\+e@{connect\+\_\+state\+\_\+e}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{connect\+\_\+state\+\_\+e}{connect_state_e}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf connect\+\_\+state\+\_\+e}}\hypertarget{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1}{}\label{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{S\+T\+A\+T\+E\+\_\+\+U\+N\+C\+O\+N\+N\+E\+C\+T\+ED@{S\+T\+A\+T\+E\+\_\+\+U\+N\+C\+O\+N\+N\+E\+C\+T\+ED}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!S\+T\+A\+T\+E\+\_\+\+U\+N\+C\+O\+N\+N\+E\+C\+T\+ED@{S\+T\+A\+T\+E\+\_\+\+U\+N\+C\+O\+N\+N\+E\+C\+T\+ED}}\item[{\em 
+S\+T\+A\+T\+E\+\_\+\+U\+N\+C\+O\+N\+N\+E\+C\+T\+ED\hypertarget{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a249e9350ec17e0337424376c1270aa33}{}\label{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a249e9350ec17e0337424376c1270aa33}
+}]\index{S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+NG@{S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+NG}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+NG@{S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+NG}}\item[{\em 
+S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+NG\hypertarget{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a28b97e301232f1b841d146187844c7a5}{}\label{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a28b97e301232f1b841d146187844c7a5}
+}]\index{S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+ED@{S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+ED}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+ED@{S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+ED}}\item[{\em 
+S\+T\+A\+T\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+ED\hypertarget{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a5b0f1cbce9b9f72772747cdedfc7b8e1}{}\label{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a5b0f1cbce9b9f72772747cdedfc7b8e1}
+}]\index{S\+T\+A\+T\+E\+\_\+\+R\+E\+AD@{S\+T\+A\+T\+E\+\_\+\+R\+E\+AD}!ab.\+c@{ab.\+c}}\index{ab.\+c@{ab.\+c}!S\+T\+A\+T\+E\+\_\+\+R\+E\+AD@{S\+T\+A\+T\+E\+\_\+\+R\+E\+AD}}\item[{\em 
+S\+T\+A\+T\+E\+\_\+\+R\+E\+AD\hypertarget{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a0bd62d2c19c771fedb1c6459ff576756}{}\label{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a0bd62d2c19c771fedb1c6459ff576756}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+233              \{
+234     \hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a249e9350ec17e0337424376c1270aa33}{STATE\_UNCONNECTED} = 0,
+235     \hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a28b97e301232f1b841d146187844c7a5}{STATE\_CONNECTING},           \textcolor{comment}{/* TCP connect initiated, but we don't}
+236 \textcolor{comment}{                                 * know if it worked yet}
+237 \textcolor{comment}{                                 */}
+238     \hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a5b0f1cbce9b9f72772747cdedfc7b8e1}{STATE\_CONNECTED},            \textcolor{comment}{/* we know TCP connect completed */}
+239     \hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1a0bd62d2c19c771fedb1c6459ff576756}{STATE\_READ}
+240 \} \hyperlink{ab_8c_adafa1a8fca5ae8cde6864e6fa4a96ed1}{connect\_state\_e};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{ab.\+c@{ab.\+c}!main@{main}}
+\index{main@{main}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{ab_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{ab_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+2169 \{
+2170     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l};
+2171     \textcolor{keywordtype}{char} tmp[1024];
+2172     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+2173     \hyperlink{structapr__getopt__t}{apr\_getopt\_t} *\hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt};
+2174     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *opt\_arg;
+2175     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+2176 \textcolor{preprocessor}{#if OPENSSL\_VERSION\_NUMBER >= 0x10100000L}
+2177     \textcolor{keywordtype}{int} max\_prot = TLS1\_2\_VERSION;
+2178 \textcolor{preprocessor}{#ifndef OPENSSL\_NO\_SSL3}
+2179     \textcolor{keywordtype}{int} min\_prot = SSL3\_VERSION;
+2180 \textcolor{preprocessor}{#else}
+2181     \textcolor{keywordtype}{int} min\_prot = TLS1\_VERSION;
+2182 \textcolor{preprocessor}{#endif}
+2183 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* #if OPENSSL\_VERSION\_NUMBER >= 0x10100000L */}\textcolor{preprocessor}{}
+2184 \textcolor{preprocessor}{#ifdef USE\_SSL}
+2185     AB\_SSL\_METHOD\_CONST SSL\_METHOD *meth = SSLv23\_client\_method();
+2186 \textcolor{preprocessor}{#endif}
+2187 
+2188     \textcolor{comment}{/* table defaults  */}
+2189     \hyperlink{ab_8c_a59a42cc995d839279d1eb11a2fd75b9e}{tablestring} = \textcolor{stringliteral}{""};
+2190     \hyperlink{ab_8c_a2a6d5723abda8c391007e374682b0f41}{trstring} = \textcolor{stringliteral}{""};
+2191     \hyperlink{ab_8c_a2b787b2440c0e23c6269231b0eab8f10}{tdstring} = \textcolor{stringliteral}{"bgcolor=white"};
+2192     \hyperlink{ab_8c_a092a206107a32f8a9a580bd65f9ae151}{cookie} = \textcolor{stringliteral}{""};
+2193     \hyperlink{ab_8c_a5a2786b5a5c1c1aea3285c3bbc3d832c}{auth} = \textcolor{stringliteral}{""};
+2194     \hyperlink{ab_8c_aae574ff365697003c4add905b7c379e2}{proxyhost} = \textcolor{stringliteral}{""};
+2195     \hyperlink{ab_8c_ac5c16b0f06a40d5032a1c3fb75653354}{hdrs} = \textcolor{stringliteral}{""};
+2196 
+2197     apr\_app\_initialize(&\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2198     atexit(apr\_terminate);
+2199     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2200     apr\_pool\_abort\_set(abort\_on\_oom, \hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt});
+2201 
+2202 \textcolor{preprocessor}{#ifdef NOT\_ASCII}
+2203     status = apr\_xlate\_open(&\hyperlink{ab_8c_ac2b1e84470918e4c7d16449f4b4d5ddb}{to\_ascii}, \textcolor{stringliteral}{"ISO-8859-1"}, \hyperlink{group__APR__XLATE_ga3276c680eb0917ff51ff22c9b9959fa9}{APR\_DEFAULT\_CHARSET}, 
+      \hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt});
+2204     \textcolor{keywordflow}{if} (status) \{
+2205         fprintf(stderr, \textcolor{stringliteral}{"apr\_xlate\_open(to ASCII)->%d\(\backslash\)n"}, status);
+2206         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+2207     \}
+2208     status = apr\_xlate\_open(&\hyperlink{ab_8c_a87712571fbe7039cc9a9606f23ea8123}{from\_ascii}, \hyperlink{group__APR__XLATE_ga3276c680eb0917ff51ff22c9b9959fa9}{APR\_DEFAULT\_CHARSET}, \textcolor{stringliteral}{"ISO-8859-1"}, 
+      \hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt});
+2209     \textcolor{keywordflow}{if} (status) \{
+2210         fprintf(stderr, \textcolor{stringliteral}{"apr\_xlate\_open(from ASCII)->%d\(\backslash\)n"}, status);
+2211         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+2212     \}
+2213     status = apr\_base64init\_ebcdic(\hyperlink{ab_8c_ac2b1e84470918e4c7d16449f4b4d5ddb}{to\_ascii}, \hyperlink{ab_8c_a87712571fbe7039cc9a9606f23ea8123}{from\_ascii});
+2214     \textcolor{keywordflow}{if} (status) \{
+2215         fprintf(stderr, \textcolor{stringliteral}{"apr\_base64init\_ebcdic()->%d\(\backslash\)n"}, status);
+2216         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+2217     \}
+2218 \textcolor{preprocessor}{#endif}
+2219 
+2220     \hyperlink{ab_8c_adc71a281698861cab451e4f756258b9a}{myhost} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; \textcolor{comment}{/* 0.0.0.0 or :: */}
+2221 
+2222     apr\_getopt\_init(&opt, \hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+2223     \textcolor{keywordflow}{while} ((status = apr\_getopt(opt, \textcolor{stringliteral}{"n:c:t:s:b:T:p:u:v:lrkVhwiIx:y:z:C:H:P:A:g:X:de:SqB:m:"}
+2224 #ifdef USE\_SSL
+2225             \textcolor{stringliteral}{"Z:f:"}
+2226 #endif
+2227             ,&c, &opt\_arg)) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2228         \textcolor{keywordflow}{switch} (c) \{
+2229             \textcolor{keywordflow}{case} \textcolor{charliteral}{'n'}:
+2230                 \hyperlink{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}{requests} = atoi(opt\_arg);
+2231                 \textcolor{keywordflow}{if} (\hyperlink{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}{requests} <= 0) \{
+2232                     \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err}(\textcolor{stringliteral}{"Invalid number of requests\(\backslash\)n"});
+2233                 \}
+2234                 \textcolor{keywordflow}{break};
+2235             \textcolor{keywordflow}{case} \textcolor{charliteral}{'k'}:
+2236                 \hyperlink{ab_8c_ae314c4b48027be9feab52906b6313b73}{keepalive} = 1;
+2237                 \textcolor{keywordflow}{break};
+2238             \textcolor{keywordflow}{case} \textcolor{charliteral}{'q'}:
+2239                 \hyperlink{ab_8c_afdddb4504a49b896588d906b13560d8e}{heartbeatres} = 0;
+2240                 \textcolor{keywordflow}{break};
+2241             \textcolor{keywordflow}{case} \textcolor{charliteral}{'c'}:
+2242                 \hyperlink{ab_8c_a8fd864cde9462413e3e7f24701630dca}{concurrency} = atoi(opt\_arg);
+2243                 \textcolor{keywordflow}{break};
+2244             \textcolor{keywordflow}{case} \textcolor{charliteral}{'b'}:
+2245                 \hyperlink{ab_8c_a62d68269b9adfd52e062cf0a26b964b5}{windowsize} = atoi(opt\_arg);
+2246                 \textcolor{keywordflow}{break};
+2247             \textcolor{keywordflow}{case} \textcolor{charliteral}{'i'}:
+2248                 \textcolor{keywordflow}{if} (\hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} != \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{NO\_METH})
+2249                     \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err}(\textcolor{stringliteral}{"Cannot mix HEAD with other methods\(\backslash\)n"});
+2250                 \hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} = \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a0b0955668575b21eb0ab2272aef49f76}{HEAD};
+2251                 \textcolor{keywordflow}{break};
+2252             \textcolor{keywordflow}{case} \textcolor{charliteral}{'g'}:
+2253                 \hyperlink{ab_8c_a29eac3fd55121829337ca23795eb8a22}{gnuplot} = xstrdup(opt\_arg);
+2254                 \textcolor{keywordflow}{break};
+2255             \textcolor{keywordflow}{case} \textcolor{charliteral}{'d'}:
+2256                 \hyperlink{ab_8c_aa7195498a377b8500bb309d49e3fe9cb}{percentile} = 0;
+2257                 \textcolor{keywordflow}{break};
+2258             \textcolor{keywordflow}{case} \textcolor{charliteral}{'e'}:
+2259                 \hyperlink{ab_8c_a9a5ca87a63d0a64469a716b3b2743426}{csvperc} = xstrdup(opt\_arg);
+2260                 \textcolor{keywordflow}{break};
+2261             \textcolor{keywordflow}{case} \textcolor{charliteral}{'S'}:
+2262                 \hyperlink{ab_8c_a1a5d876387ec0f17dc6df2e0dbe707b2}{confidence} = 0;
+2263                 \textcolor{keywordflow}{break};
+2264             \textcolor{keywordflow}{case} \textcolor{charliteral}{'s'}:
+2265                 \hyperlink{ab_8c_a75b65aa616ca6aeda88128d5ab23ec6d}{aprtimeout} = \hyperlink{group__apr__time_gaec56c2c03299a750006bfcc08d64ec32}{apr\_time\_from\_sec}(atoi(opt\_arg)); \textcolor{comment}{/* timeout value 
+      */}
+2266                 \textcolor{keywordflow}{break};
+2267             \textcolor{keywordflow}{case} \textcolor{charliteral}{'p'}:
+2268                 \textcolor{keywordflow}{if} (\hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} != \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{NO\_METH})
+2269                     \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err}(\textcolor{stringliteral}{"Cannot mix POST with other methods\(\backslash\)n"});
+2270                 \textcolor{keywordflow}{if} (open\_postfile(opt\_arg) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2271                     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+2272                 \}
+2273                 \hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} = \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a368c5bc07109370b819193871352b926}{POST};
+2274                 \hyperlink{ab_8c_a11b0ef5043d8f95d484421dbb7bd7bc4}{send\_body} = 1;
+2275                 \textcolor{keywordflow}{break};
+2276             \textcolor{keywordflow}{case} \textcolor{charliteral}{'u'}:
+2277                 \textcolor{keywordflow}{if} (\hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} != \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{NO\_METH})
+2278                     \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err}(\textcolor{stringliteral}{"Cannot mix PUT with other methods\(\backslash\)n"});
+2279                 \textcolor{keywordflow}{if} (open\_postfile(opt\_arg) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2280                     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+2281                 \}
+2282                 \hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} = \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260afec39d40e8bc9e12afa614df5ddb9fa9}{PUT};
+2283                 \hyperlink{ab_8c_a11b0ef5043d8f95d484421dbb7bd7bc4}{send\_body} = 1;
+2284                 \textcolor{keywordflow}{break};
+2285             \textcolor{keywordflow}{case} \textcolor{charliteral}{'l'}:
+2286                 \hyperlink{ab_8c_a3e4c5260dc44cc07c2638b0f02b277c1}{nolength} = 1;
+2287                 \textcolor{keywordflow}{break};
+2288             \textcolor{keywordflow}{case} \textcolor{charliteral}{'r'}:
+2289                 \hyperlink{ab_8c_a2df397b00d459435195ae8d8373f5ee5}{recverrok} = 1;
+2290                 \textcolor{keywordflow}{break};
+2291             \textcolor{keywordflow}{case} \textcolor{charliteral}{'v'}:
+2292                 \hyperlink{ab_8c_a1bdcfae3209cbd96db35a2ae356fa15e}{verbosity} = atoi(opt\_arg);
+2293                 \textcolor{keywordflow}{break};
+2294             \textcolor{keywordflow}{case} \textcolor{charliteral}{'t'}:
+2295                 \hyperlink{ab_8c_ac7c18d7cc6d16b089c3aba4960985b34}{tlimit} = atoi(opt\_arg);
+2296                 \hyperlink{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}{requests} = \hyperlink{ab_8c_a8fc96cee4177a369a99de7026ebeba81}{MAX\_REQUESTS};    \textcolor{comment}{/* need to size data array on}
+2297 \textcolor{comment}{                                             * something */}
+2298                 \textcolor{keywordflow}{break};
+2299             \textcolor{keywordflow}{case} \textcolor{charliteral}{'T'}:
+2300                 \hyperlink{structcontent__type}{content\_type} = apr\_pstrdup(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, opt\_arg);
+2301                 \textcolor{keywordflow}{break};
+2302             \textcolor{keywordflow}{case} \textcolor{charliteral}{'C'}:
+2303                 \hyperlink{ab_8c_a092a206107a32f8a9a580bd65f9ae151}{cookie} = apr\_pstrcat(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, \textcolor{stringliteral}{"Cookie: "}, opt\_arg, \textcolor{stringliteral}{"\(\backslash\)r\(\backslash\)n"}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2304                 \textcolor{keywordflow}{break};
+2305             \textcolor{keywordflow}{case} \textcolor{charliteral}{'A'}:
+2306                 \textcolor{comment}{/*}
+2307 \textcolor{comment}{                 * assume username passwd already to be in colon separated form.}
+2308 \textcolor{comment}{                 * Ready to be uu-encoded.}
+2309 \textcolor{comment}{                 */}
+2310                 \textcolor{keywordflow}{while} (\hyperlink{group__apr__ctype_ga23f4c7721923a0f0f444fd7fb196047a}{apr\_isspace}(*opt\_arg))
+2311                     opt\_arg++;
+2312                 \textcolor{keywordflow}{if} (apr\_base64\_encode\_len(strlen(opt\_arg)) > \textcolor{keyword}{sizeof}(tmp)) \{
+2313                     \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err}(\textcolor{stringliteral}{"Authentication credentials too long\(\backslash\)n"});
+2314                 \}
+2315                 l = apr\_base64\_encode(tmp, opt\_arg, strlen(opt\_arg));
+2316                 tmp[\hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l}] = \textcolor{charliteral}{'\(\backslash\)0'};
+2317 
+2318                 \hyperlink{ab_8c_a5a2786b5a5c1c1aea3285c3bbc3d832c}{auth} = apr\_pstrcat(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, \hyperlink{ab_8c_a5a2786b5a5c1c1aea3285c3bbc3d832c}{auth}, \textcolor{stringliteral}{"Authorization: Basic "}, tmp,
+2319                                        \textcolor{stringliteral}{"\(\backslash\)r\(\backslash\)n"}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2320                 \textcolor{keywordflow}{break};
+2321             \textcolor{keywordflow}{case} \textcolor{charliteral}{'P'}:
+2322                 \textcolor{comment}{/*}
+2323 \textcolor{comment}{                 * assume username passwd already to be in colon separated form.}
+2324 \textcolor{comment}{                 */}
+2325                 \textcolor{keywordflow}{while} (\hyperlink{group__apr__ctype_ga23f4c7721923a0f0f444fd7fb196047a}{apr\_isspace}(*opt\_arg))
+2326                 opt\_arg++;
+2327                 \textcolor{keywordflow}{if} (apr\_base64\_encode\_len(strlen(opt\_arg)) > \textcolor{keyword}{sizeof}(tmp)) \{
+2328                     \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err}(\textcolor{stringliteral}{"Proxy credentials too long\(\backslash\)n"});
+2329                 \}
+2330                 l = apr\_base64\_encode(tmp, opt\_arg, strlen(opt\_arg));
+2331                 tmp[\hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l}] = \textcolor{charliteral}{'\(\backslash\)0'};
+2332 
+2333                 \hyperlink{ab_8c_a5a2786b5a5c1c1aea3285c3bbc3d832c}{auth} = apr\_pstrcat(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, \hyperlink{ab_8c_a5a2786b5a5c1c1aea3285c3bbc3d832c}{auth}, \textcolor{stringliteral}{"Proxy-Authorization: Basic "},
+2334                                        tmp, \textcolor{stringliteral}{"\(\backslash\)r\(\backslash\)n"}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2335                 \textcolor{keywordflow}{break};
+2336             \textcolor{keywordflow}{case} \textcolor{charliteral}{'H'}:
+2337                 \hyperlink{ab_8c_ac5c16b0f06a40d5032a1c3fb75653354}{hdrs} = apr\_pstrcat(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, \hyperlink{ab_8c_ac5c16b0f06a40d5032a1c3fb75653354}{hdrs}, opt\_arg, \textcolor{stringliteral}{"\(\backslash\)r\(\backslash\)n"}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2338                 \textcolor{comment}{/*}
+2339 \textcolor{comment}{                 * allow override of some of the common headers that ab adds}
+2340 \textcolor{comment}{                 */}
+2341                 \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"Host:"}, 5) == 0) \{
+2342                     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__VHOST_ga8c8ad0616f1a1fed66e67a90a116a76c}{host};
+2343                     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+2344                     opt\_arg += 5;
+2345                     \textcolor{keywordflow}{while} (\hyperlink{group__apr__ctype_ga23f4c7721923a0f0f444fd7fb196047a}{apr\_isspace}(*opt\_arg))
+2346                         opt\_arg++;
+2347                     len = strlen(opt\_arg);
+2348                     host = \hyperlink{apr__cpystrn_8c_a2c4f14c424a31db9c57fd046c3b9f0df}{strdup}(opt\_arg);
+2349                     \textcolor{keywordflow}{while} (len && \hyperlink{group__apr__ctype_ga23f4c7721923a0f0f444fd7fb196047a}{apr\_isspace}(host[len-1]))
+2350                         host[--\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}] = \textcolor{charliteral}{'\(\backslash\)0'};
+2351                     \hyperlink{ab_8c_afad8bad7bef92fe38d6a74414a96cf46}{opt\_host} = \hyperlink{group__APACHE__CORE__VHOST_ga8c8ad0616f1a1fed66e67a90a116a76c}{host};
+2352                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"Accept:"}, 7) == 0) \{
+2353                     \hyperlink{ab_8c_aa7632a14f6d36b8e3c857c0c57e497a2}{opt\_accept} = 1;
+2354                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"User-Agent:"}, 11) == 0) \{
+2355                     \hyperlink{ab_8c_a7544207fdf4a269ed986c67077d299db}{opt\_useragent} = 1;
+2356                 \}
+2357                 \textcolor{keywordflow}{break};
+2358             \textcolor{keywordflow}{case} \textcolor{charliteral}{'w'}:
+2359                 \hyperlink{ab_8c_abcf3fc865ace5453e6011327b86a15d2}{use\_html} = 1;
+2360                 \textcolor{keywordflow}{break};
+2361                 \textcolor{comment}{/*}
+2362 \textcolor{comment}{                 * if any of the following three are used, turn on html output}
+2363 \textcolor{comment}{                 * automatically}
+2364 \textcolor{comment}{                 */}
+2365             \textcolor{keywordflow}{case} \textcolor{charliteral}{'x'}:
+2366                 \hyperlink{ab_8c_abcf3fc865ace5453e6011327b86a15d2}{use\_html} = 1;
+2367                 \hyperlink{ab_8c_a59a42cc995d839279d1eb11a2fd75b9e}{tablestring} = opt\_arg;
+2368                 \textcolor{keywordflow}{break};
+2369             \textcolor{keywordflow}{case} \textcolor{charliteral}{'X'}:
+2370                 \{
+2371                     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+2372                     \textcolor{comment}{/*}
+2373 \textcolor{comment}{                     * assume proxy-name[:port]}
+2374 \textcolor{comment}{                     */}
+2375                     \textcolor{keywordflow}{if} ((p = strchr(opt\_arg, \textcolor{charliteral}{':'}))) \{
+2376                         *p = \textcolor{charliteral}{'\(\backslash\)0'};
+2377                         p++;
+2378                         \hyperlink{ab_8c_aafd282ad1fd2b2937f45c1cd22f143da}{proxyport} = atoi(p);
+2379                     \}
+2380                     \hyperlink{ab_8c_aae574ff365697003c4add905b7c379e2}{proxyhost} = apr\_pstrdup(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, opt\_arg);
+2381                     \hyperlink{ab_8c_aedd296702c492aedb8d505ff700b5106}{isproxy} = 1;
+2382                 \}
+2383                 \textcolor{keywordflow}{break};
+2384             \textcolor{keywordflow}{case} \textcolor{charliteral}{'y'}:
+2385                 \hyperlink{ab_8c_abcf3fc865ace5453e6011327b86a15d2}{use\_html} = 1;
+2386                 \hyperlink{ab_8c_a2a6d5723abda8c391007e374682b0f41}{trstring} = opt\_arg;
+2387                 \textcolor{keywordflow}{break};
+2388             \textcolor{keywordflow}{case} \textcolor{charliteral}{'z'}:
+2389                 \hyperlink{ab_8c_abcf3fc865ace5453e6011327b86a15d2}{use\_html} = 1;
+2390                 \hyperlink{ab_8c_a2b787b2440c0e23c6269231b0eab8f10}{tdstring} = opt\_arg;
+2391                 \textcolor{keywordflow}{break};
+2392             \textcolor{keywordflow}{case} \textcolor{charliteral}{'h'}:
+2393                 \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+2394                 \textcolor{keywordflow}{break};
+2395             \textcolor{keywordflow}{case} \textcolor{charliteral}{'V'}:
+2396                 copyright();
+2397                 \textcolor{keywordflow}{return} 0;
+2398             \textcolor{keywordflow}{case} \textcolor{charliteral}{'B'}:
+2399                 \hyperlink{ab_8c_adc71a281698861cab451e4f756258b9a}{myhost} = apr\_pstrdup(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, opt\_arg);
+2400                 \textcolor{keywordflow}{break};
+2401             \textcolor{keywordflow}{case} \textcolor{charliteral}{'m'}:
+2402                 \hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} = \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260aa5a2db782956b762efa4e4066aa948a5}{CUSTOM\_METHOD};
+2403                 \hyperlink{ab_8c_a88c3bbc2a73981d8835afa1fdee1b554}{method\_str}[\hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260aa5a2db782956b762efa4e4066aa948a5}{CUSTOM\_METHOD}] = \hyperlink{apr__cpystrn_8c_a2c4f14c424a31db9c57fd046c3b9f0df}{strdup}(opt\_arg);
+2404                 \textcolor{keywordflow}{break};
+2405 \textcolor{preprocessor}{#ifdef USE\_SSL}
+2406             \textcolor{keywordflow}{case} \textcolor{charliteral}{'Z'}:
+2407                 ssl\_cipher = \hyperlink{apr__cpystrn_8c_a2c4f14c424a31db9c57fd046c3b9f0df}{strdup}(opt\_arg);
+2408                 \textcolor{keywordflow}{break};
+2409             \textcolor{keywordflow}{case} \textcolor{charliteral}{'f'}:
+2410 \textcolor{preprocessor}{#if OPENSSL\_VERSION\_NUMBER < 0x10100000L}
+2411                 \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"ALL"}, 3) == 0) \{
+2412                     meth = SSLv23\_client\_method();
+2413 \textcolor{preprocessor}{#ifndef OPENSSL\_NO\_SSL2}
+2414                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"SSL2"}, 4) == 0) \{
+2415                     meth = SSLv2\_client\_method();
+2416 \textcolor{preprocessor}{#ifdef HAVE\_TLSEXT}
+2417                     tls\_use\_sni = 0;
+2418 \textcolor{preprocessor}{#endif}
+2419 \textcolor{preprocessor}{#endif}
+2420 \textcolor{preprocessor}{#ifndef OPENSSL\_NO\_SSL3}
+2421                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"SSL3"}, 4) == 0) \{
+2422                     meth = SSLv3\_client\_method();
+2423 \textcolor{preprocessor}{#ifdef HAVE\_TLSEXT}
+2424                     tls\_use\_sni = 0;
+2425 \textcolor{preprocessor}{#endif}
+2426 \textcolor{preprocessor}{#endif}
+2427 \textcolor{preprocessor}{#ifdef HAVE\_TLSV1\_X}
+2428                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"TLS1.1"}, 6) == 0) \{
+2429                     meth = TLSv1\_1\_client\_method();
+2430                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"TLS1.2"}, 6) == 0) \{
+2431                     meth = TLSv1\_2\_client\_method();
+2432 \textcolor{preprocessor}{#endif}
+2433                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"TLS1"}, 4) == 0) \{
+2434                     meth = TLSv1\_client\_method();
+2435                 \}
+2436 \textcolor{preprocessor}{#else }\textcolor{comment}{/* #if OPENSSL\_VERSION\_NUMBER < 0x10100000L */}\textcolor{preprocessor}{}
+2437                 meth = TLS\_client\_method();
+2438                 \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"ALL"}, 3) == 0) \{
+2439                     max\_prot = TLS1\_2\_VERSION;
+2440 \textcolor{preprocessor}{#ifndef OPENSSL\_NO\_SSL3}
+2441                     min\_prot = SSL3\_VERSION;
+2442 \textcolor{preprocessor}{#else}
+2443                     min\_prot = TLS1\_VERSION;
+2444 \textcolor{preprocessor}{#endif}
+2445 \textcolor{preprocessor}{#ifndef OPENSSL\_NO\_SSL3}
+2446                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"SSL3"}, 4) == 0) \{
+2447                     max\_prot = SSL3\_VERSION;
+2448                     min\_prot = SSL3\_VERSION;
+2449 \textcolor{preprocessor}{#endif}
+2450                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"TLS1.1"}, 6) == 0) \{
+2451                     max\_prot = TLS1\_1\_VERSION;
+2452                     min\_prot = TLS1\_1\_VERSION;
+2453                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"TLS1.2"}, 6) == 0) \{
+2454                     max\_prot = TLS1\_2\_VERSION;
+2455                     min\_prot = TLS1\_2\_VERSION;
+2456                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(opt\_arg, \textcolor{stringliteral}{"TLS1"}, 4) == 0) \{
+2457                     max\_prot = TLS1\_VERSION;
+2458                     min\_prot = TLS1\_VERSION;
+2459                 \}
+2460 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* #if OPENSSL\_VERSION\_NUMBER < 0x10100000L */}\textcolor{preprocessor}{}
+2461                 \textcolor{keywordflow}{break};
+2462 \textcolor{preprocessor}{#ifdef HAVE\_TLSEXT}
+2463             \textcolor{keywordflow}{case} \textcolor{charliteral}{'I'}:
+2464                 tls\_use\_sni = 0;
+2465                 \textcolor{keywordflow}{break};
+2466 \textcolor{preprocessor}{#endif}
+2467 \textcolor{preprocessor}{#endif}
+2468         \}
+2469     \}
+2470 
+2471     \textcolor{keywordflow}{if} (opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind} != \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} - 1) \{
+2472         fprintf(stderr, \textcolor{stringliteral}{"%s: wrong number of arguments\(\backslash\)n"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+2473         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+2474     \}
+2475 
+2476     \textcolor{keywordflow}{if} (\hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} == \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a8a0af4a03bc1d3cb2656dc8788a3a438}{NO\_METH}) \{
+2477         \hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} = \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260a12a8dcf59c16b5aadfda3a08ba67d529}{GET};
+2478     \}
+2479 
+2480     \textcolor{keywordflow}{if} (parse\_url(apr\_pstrdup(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, opt->\hyperlink{structapr__getopt__t_a296c27d8db2fe6d4b88c5c7a85c40c02}{argv}[opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}++]))) \{
+2481         fprintf(stderr, \textcolor{stringliteral}{"%s: invalid URL\(\backslash\)n"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+2482         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+2483     \}
+2484 
+2485     \textcolor{keywordflow}{if} ((\hyperlink{ab_8c_a8fd864cde9462413e3e7f24701630dca}{concurrency} < 0) || (\hyperlink{ab_8c_a8fd864cde9462413e3e7f24701630dca}{concurrency} > 
+      \hyperlink{ab_8c_a67d0d61ccfb7107834405031c3cfd4f3}{MAX\_CONCURRENCY})) \{
+2486         fprintf(stderr, \textcolor{stringliteral}{"%s: Invalid Concurrency [Range 0..%d]\(\backslash\)n"},
+2487                 \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], \hyperlink{ab_8c_a67d0d61ccfb7107834405031c3cfd4f3}{MAX\_CONCURRENCY});
+2488         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+2489     \}
+2490 
+2491     \textcolor{keywordflow}{if} (\hyperlink{ab_8c_a8fd864cde9462413e3e7f24701630dca}{concurrency} > \hyperlink{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}{requests}) \{
+2492         fprintf(stderr, \textcolor{stringliteral}{"%s: Cannot use concurrency level greater than "}
+2493                 \textcolor{stringliteral}{"total number of requests\(\backslash\)n"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+2494         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+2495     \}
+2496 
+2497     \textcolor{keywordflow}{if} ((\hyperlink{ab_8c_afdddb4504a49b896588d906b13560d8e}{heartbeatres}) && (\hyperlink{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}{requests} > 150)) \{
+2498         \hyperlink{ab_8c_afdddb4504a49b896588d906b13560d8e}{heartbeatres} = \hyperlink{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}{requests} / 10;   \textcolor{comment}{/* Print line every 10% of requests */}
+2499         \textcolor{keywordflow}{if} (\hyperlink{ab_8c_afdddb4504a49b896588d906b13560d8e}{heartbeatres} < 100)
+2500             \hyperlink{ab_8c_afdddb4504a49b896588d906b13560d8e}{heartbeatres} = 100; \textcolor{comment}{/* but never more often than once every 100}
+2501 \textcolor{comment}{                                 * connections. */}
+2502     \}
+2503     \textcolor{keywordflow}{else}
+2504         \hyperlink{ab_8c_afdddb4504a49b896588d906b13560d8e}{heartbeatres} = 0;
+2505 
+2506 \textcolor{preprocessor}{#ifdef USE\_SSL}
+2507 \textcolor{preprocessor}{#ifdef RSAREF}
+2508     R\_malloc\_init();
+2509 \textcolor{preprocessor}{#else}
+2510 \textcolor{preprocessor}{#if OPENSSL\_VERSION\_NUMBER < 0x10100000L}
+2511     CRYPTO\_malloc\_init();
+2512 \textcolor{preprocessor}{#endif}
+2513 \textcolor{preprocessor}{#endif}
+2514     SSL\_load\_error\_strings();
+2515     SSL\_library\_init();
+2516     bio\_out=BIO\_new\_fp(\hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout},BIO\_NOCLOSE);
+2517     bio\_err=BIO\_new\_fp(stderr,BIO\_NOCLOSE);
+2518 
+2519     \textcolor{keywordflow}{if} (!(ssl\_ctx = SSL\_CTX\_new(meth))) \{
+2520         BIO\_printf(bio\_err, \textcolor{stringliteral}{"Could not initialize SSL Context.\(\backslash\)n"});
+2521         ERR\_print\_errors(bio\_err);
+2522         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+2523     \}
+2524     SSL\_CTX\_set\_options(ssl\_ctx, SSL\_OP\_ALL);
+2525 \textcolor{preprocessor}{#if OPENSSL\_VERSION\_NUMBER >= 0x10100000L}
+2526     SSL\_CTX\_set\_max\_proto\_version(ssl\_ctx, max\_prot);
+2527     SSL\_CTX\_set\_min\_proto\_version(ssl\_ctx, min\_prot);
+2528 \textcolor{preprocessor}{#endif}
+2529 \textcolor{preprocessor}{#ifdef SSL\_MODE\_RELEASE\_BUFFERS}
+2530     \textcolor{comment}{/* Keep memory usage as low as possible */}
+2531     SSL\_CTX\_set\_mode (ssl\_ctx, SSL\_MODE\_RELEASE\_BUFFERS);
+2532 \textcolor{preprocessor}{#endif}
+2533     \textcolor{keywordflow}{if} (ssl\_cipher != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+2534         \textcolor{keywordflow}{if} (!SSL\_CTX\_set\_cipher\_list(ssl\_ctx, ssl\_cipher)) \{
+2535             fprintf(stderr, \textcolor{stringliteral}{"error setting cipher list [%s]\(\backslash\)n"}, ssl\_cipher);
+2536         ERR\_print\_errors\_fp(stderr);
+2537         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+2538     \}
+2539     \}
+2540     \textcolor{keywordflow}{if} (\hyperlink{ab_8c_a1bdcfae3209cbd96db35a2ae356fa15e}{verbosity} >= 3) \{
+2541         SSL\_CTX\_set\_info\_callback(ssl\_ctx, ssl\_state\_cb);
+2542     \}
+2543 \textcolor{preprocessor}{#endif}
+2544 \textcolor{preprocessor}{#ifdef SIGPIPE}
+2545     apr\_signal(SIGPIPE, SIG\_IGN);       \textcolor{comment}{/* Ignore writes to connections that}
+2546 \textcolor{comment}{                                         * have been closed at the other end. */}
+2547 \textcolor{preprocessor}{#endif}
+2548     copyright();
+2549     test();
+2550     apr\_pool\_destroy(\hyperlink{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt});
+2551 
+2552     \textcolor{keywordflow}{return} 0;
+2553 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=308pt]{ab_8c_a814244b02f6701fd8ead246678bb3dae_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{ab.\+c@{ab.\+c}!\+\_\+request@{\+\_\+request}}
+\index{\+\_\+request@{\+\_\+request}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{\+\_\+request}{_request}}]{\setlength{\rightskip}{0pt plus 5cm}char \+\_\+request\mbox{[}8192\mbox{]}}\hypertarget{ab_8c_a1cf404d19e9eccb15afa1b8206442cbd}{}\label{ab_8c_a1cf404d19e9eccb15afa1b8206442cbd}
+\index{ab.\+c@{ab.\+c}!aprtimeout@{aprtimeout}}
+\index{aprtimeout@{aprtimeout}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{aprtimeout}{aprtimeout}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+interval\+\_\+time\+\_\+t} aprtimeout = {\bf apr\+\_\+time\+\_\+from\+\_\+sec}(30)}\hypertarget{ab_8c_a75b65aa616ca6aeda88128d5ab23ec6d}{}\label{ab_8c_a75b65aa616ca6aeda88128d5ab23ec6d}
+\index{ab.\+c@{ab.\+c}!auth@{auth}}
+\index{auth@{auth}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{auth}{auth}}]{\setlength{\rightskip}{0pt plus 5cm}const char $\ast$ auth}\hypertarget{ab_8c_a5a2786b5a5c1c1aea3285c3bbc3d832c}{}\label{ab_8c_a5a2786b5a5c1c1aea3285c3bbc3d832c}
+\index{ab.\+c@{ab.\+c}!bad@{bad}}
+\index{bad@{bad}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{bad}{bad}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} bad = 0}\hypertarget{ab_8c_a27a1c72438b4005fdc9b5b0d16705279}{}\label{ab_8c_a27a1c72438b4005fdc9b5b0d16705279}
+\index{ab.\+c@{ab.\+c}!buffer@{buffer}}
+\index{buffer@{buffer}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{buffer}{buffer}}]{\setlength{\rightskip}{0pt plus 5cm}char buffer\mbox{[}8192\mbox{]}}\hypertarget{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{}\label{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}
+\index{ab.\+c@{ab.\+c}!cntxt@{cntxt}}
+\index{cntxt@{cntxt}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{cntxt}{cntxt}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ cntxt}\hypertarget{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{}\label{ab_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}
+\index{ab.\+c@{ab.\+c}!colonhost@{colonhost}}
+\index{colonhost@{colonhost}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{colonhost}{colonhost}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ colonhost}\hypertarget{ab_8c_a104d7c0f3a75c0d2225aded2e396ae82}{}\label{ab_8c_a104d7c0f3a75c0d2225aded2e396ae82}
+\index{ab.\+c@{ab.\+c}!con@{con}}
+\index{con@{con}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{con}{con}}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf connection}$\ast$ con}\hypertarget{ab_8c_a293f1d9e5b7baafe1725e97561961b7b}{}\label{ab_8c_a293f1d9e5b7baafe1725e97561961b7b}
+\index{ab.\+c@{ab.\+c}!concurrency@{concurrency}}
+\index{concurrency@{concurrency}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{concurrency}{concurrency}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} concurrency = 1}\hypertarget{ab_8c_a8fd864cde9462413e3e7f24701630dca}{}\label{ab_8c_a8fd864cde9462413e3e7f24701630dca}
+\index{ab.\+c@{ab.\+c}!confidence@{confidence}}
+\index{confidence@{confidence}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{confidence}{confidence}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} confidence = 1}\hypertarget{ab_8c_a1a5d876387ec0f17dc6df2e0dbe707b2}{}\label{ab_8c_a1a5d876387ec0f17dc6df2e0dbe707b2}
+\index{ab.\+c@{ab.\+c}!connecthost@{connecthost}}
+\index{connecthost@{connecthost}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{connecthost}{connecthost}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ connecthost}\hypertarget{ab_8c_a73bddf0adbcdaa0603980765354ba116}{}\label{ab_8c_a73bddf0adbcdaa0603980765354ba116}
+\index{ab.\+c@{ab.\+c}!connectport@{connectport}}
+\index{connectport@{connectport}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{connectport}{connectport}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+port\+\_\+t} connectport}\hypertarget{ab_8c_a9e5c8875170bd4cfc099cc447cc0a8e8}{}\label{ab_8c_a9e5c8875170bd4cfc099cc447cc0a8e8}
+\index{ab.\+c@{ab.\+c}!content\+\_\+type@{content\+\_\+type}}
+\index{content\+\_\+type@{content\+\_\+type}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{content\+\_\+type}{content_type}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ {\bf content\+\_\+type} = {\bf N\+U\+LL}}\hypertarget{ab_8c_a7b9c7814d28acb614167ccd41c80f504}{}\label{ab_8c_a7b9c7814d28acb614167ccd41c80f504}
+\index{ab.\+c@{ab.\+c}!cookie@{cookie}}
+\index{cookie@{cookie}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{cookie}{cookie}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ cookie}\hypertarget{ab_8c_a092a206107a32f8a9a580bd65f9ae151}{}\label{ab_8c_a092a206107a32f8a9a580bd65f9ae151}
+\index{ab.\+c@{ab.\+c}!csvperc@{csvperc}}
+\index{csvperc@{csvperc}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{csvperc}{csvperc}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ csvperc}\hypertarget{ab_8c_a9a5ca87a63d0a64469a716b3b2743426}{}\label{ab_8c_a9a5ca87a63d0a64469a716b3b2743426}
+\index{ab.\+c@{ab.\+c}!destsa@{destsa}}
+\index{destsa@{destsa}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{destsa}{destsa}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+sockaddr\+\_\+t}$\ast$ destsa}\hypertarget{ab_8c_a382291fe9880c261c9d0b1dd116bf15c}{}\label{ab_8c_a382291fe9880c261c9d0b1dd116bf15c}
+\index{ab.\+c@{ab.\+c}!doclen@{doclen}}
+\index{doclen@{doclen}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{doclen}{doclen}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} doclen = 0}\hypertarget{ab_8c_add7e16d9f9011d7a0947a9752ff09203}{}\label{ab_8c_add7e16d9f9011d7a0947a9752ff09203}
+\index{ab.\+c@{ab.\+c}!done@{done}}
+\index{done@{done}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{done}{done}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} done = 0}\hypertarget{ab_8c_a5992b274cfdcacdbc1fa8347fd01ebde}{}\label{ab_8c_a5992b274cfdcacdbc1fa8347fd01ebde}
+\index{ab.\+c@{ab.\+c}!doneka@{doneka}}
+\index{doneka@{doneka}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{doneka}{doneka}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} doneka = 0}\hypertarget{ab_8c_aeab0bc9d1ef972b25612fa3088ca3f09}{}\label{ab_8c_aeab0bc9d1ef972b25612fa3088ca3f09}
+\index{ab.\+c@{ab.\+c}!epipe@{epipe}}
+\index{epipe@{epipe}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{epipe}{epipe}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} epipe = 0}\hypertarget{ab_8c_a32049f52d9ebc545a262535010eca909}{}\label{ab_8c_a32049f52d9ebc545a262535010eca909}
+\index{ab.\+c@{ab.\+c}!err\+\_\+conn@{err\+\_\+conn}}
+\index{err\+\_\+conn@{err\+\_\+conn}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{err\+\_\+conn}{err_conn}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} err\+\_\+conn = 0}\hypertarget{ab_8c_a946f963921e827a63b09df1a2fb9e0cc}{}\label{ab_8c_a946f963921e827a63b09df1a2fb9e0cc}
+\index{ab.\+c@{ab.\+c}!err\+\_\+except@{err\+\_\+except}}
+\index{err\+\_\+except@{err\+\_\+except}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{err\+\_\+except}{err_except}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} err\+\_\+except = 0}\hypertarget{ab_8c_aff903fac04441aa7c8648b6ee0b127be}{}\label{ab_8c_aff903fac04441aa7c8648b6ee0b127be}
+\index{ab.\+c@{ab.\+c}!err\+\_\+length@{err\+\_\+length}}
+\index{err\+\_\+length@{err\+\_\+length}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{err\+\_\+length}{err_length}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} err\+\_\+length = 0}\hypertarget{ab_8c_a30656e69ded0c5b56a3832d0ae2368d5}{}\label{ab_8c_a30656e69ded0c5b56a3832d0ae2368d5}
+\index{ab.\+c@{ab.\+c}!err\+\_\+recv@{err\+\_\+recv}}
+\index{err\+\_\+recv@{err\+\_\+recv}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{err\+\_\+recv}{err_recv}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} err\+\_\+recv = 0}\hypertarget{ab_8c_a97049e8279d99cca3499f35748daf5f8}{}\label{ab_8c_a97049e8279d99cca3499f35748daf5f8}
+\index{ab.\+c@{ab.\+c}!err\+\_\+response@{err\+\_\+response}}
+\index{err\+\_\+response@{err\+\_\+response}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{err\+\_\+response}{err_response}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} err\+\_\+response = 0}\hypertarget{ab_8c_a496fe269655f3737bd3dbfe3118a2a1f}{}\label{ab_8c_a496fe269655f3737bd3dbfe3118a2a1f}
+\index{ab.\+c@{ab.\+c}!from\+\_\+ascii@{from\+\_\+ascii}}
+\index{from\+\_\+ascii@{from\+\_\+ascii}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{from\+\_\+ascii}{from_ascii}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+xlate\+\_\+t}$\ast$ from\+\_\+ascii}\hypertarget{ab_8c_a87712571fbe7039cc9a9606f23ea8123}{}\label{ab_8c_a87712571fbe7039cc9a9606f23ea8123}
+\index{ab.\+c@{ab.\+c}!fullurl@{fullurl}}
+\index{fullurl@{fullurl}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{fullurl}{fullurl}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ fullurl}\hypertarget{ab_8c_a0e7598cbfa82150b03acb2fa0f42111d}{}\label{ab_8c_a0e7598cbfa82150b03acb2fa0f42111d}
+\index{ab.\+c@{ab.\+c}!gnuplot@{gnuplot}}
+\index{gnuplot@{gnuplot}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{gnuplot}{gnuplot}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ gnuplot}\hypertarget{ab_8c_a29eac3fd55121829337ca23795eb8a22}{}\label{ab_8c_a29eac3fd55121829337ca23795eb8a22}
+\index{ab.\+c@{ab.\+c}!good@{good}}
+\index{good@{good}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{good}{good}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} good = 0}\hypertarget{ab_8c_a0d1aabbbc1c4b6b7fefe5698fbaaa95f}{}\label{ab_8c_a0d1aabbbc1c4b6b7fefe5698fbaaa95f}
+\index{ab.\+c@{ab.\+c}!hdrs@{hdrs}}
+\index{hdrs@{hdrs}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{hdrs}{hdrs}}]{\setlength{\rightskip}{0pt plus 5cm}const char $\ast$ hdrs}\hypertarget{ab_8c_ac5c16b0f06a40d5032a1c3fb75653354}{}\label{ab_8c_ac5c16b0f06a40d5032a1c3fb75653354}
+\index{ab.\+c@{ab.\+c}!heartbeatres@{heartbeatres}}
+\index{heartbeatres@{heartbeatres}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{heartbeatres}{heartbeatres}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} heartbeatres = 100}\hypertarget{ab_8c_afdddb4504a49b896588d906b13560d8e}{}\label{ab_8c_afdddb4504a49b896588d906b13560d8e}
+\index{ab.\+c@{ab.\+c}!host\+\_\+field@{host\+\_\+field}}
+\index{host\+\_\+field@{host\+\_\+field}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{host\+\_\+field}{host_field}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ host\+\_\+field}\hypertarget{ab_8c_a70b42a2444fcd31c70771b97d4c7132a}{}\label{ab_8c_a70b42a2444fcd31c70771b97d4c7132a}
+\index{ab.\+c@{ab.\+c}!hostname@{hostname}}
+\index{hostname@{hostname}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{hostname}{hostname}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ hostname}\hypertarget{ab_8c_af203df082d5c6dcaa0c88b07cf86466d}{}\label{ab_8c_af203df082d5c6dcaa0c88b07cf86466d}
+\index{ab.\+c@{ab.\+c}!isproxy@{isproxy}}
+\index{isproxy@{isproxy}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{isproxy}{isproxy}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} isproxy = 0}\hypertarget{ab_8c_aedd296702c492aedb8d505ff700b5106}{}\label{ab_8c_aedd296702c492aedb8d505ff700b5106}
+\index{ab.\+c@{ab.\+c}!keepalive@{keepalive}}
+\index{keepalive@{keepalive}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{keepalive}{keepalive}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} keepalive = 0}\hypertarget{ab_8c_ae314c4b48027be9feab52906b6313b73}{}\label{ab_8c_ae314c4b48027be9feab52906b6313b73}
+\index{ab.\+c@{ab.\+c}!lasttime@{lasttime}}
+\index{lasttime@{lasttime}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{lasttime}{lasttime}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+time\+\_\+t} lasttime}\hypertarget{ab_8c_abb1950138091b892c738a15c18092cda}{}\label{ab_8c_abb1950138091b892c738a15c18092cda}
+\index{ab.\+c@{ab.\+c}!method@{method}}
+\index{method@{method}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{method}{method}}]{\setlength{\rightskip}{0pt plus 5cm}enum \{ ... \}   method}\hypertarget{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{}\label{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}
+\index{ab.\+c@{ab.\+c}!method\+\_\+str@{method\+\_\+str}}
+\index{method\+\_\+str@{method\+\_\+str}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{method\+\_\+str}{method_str}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ method\+\_\+str\mbox{[}$\,$\mbox{]} = \{\char`\"{}bug\char`\"{}, \char`\"{}{\bf G\+ET}\char`\"{}, \char`\"{}{\bf H\+E\+AD}\char`\"{}, \char`\"{}{\bf P\+UT}\char`\"{}, \char`\"{}{\bf P\+O\+ST}\char`\"{}, \char`\"{}\char`\"{}\}}\hypertarget{ab_8c_a88c3bbc2a73981d8835afa1fdee1b554}{}\label{ab_8c_a88c3bbc2a73981d8835afa1fdee1b554}
+\index{ab.\+c@{ab.\+c}!myhost@{myhost}}
+\index{myhost@{myhost}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{myhost}{myhost}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ myhost}\hypertarget{ab_8c_adc71a281698861cab451e4f756258b9a}{}\label{ab_8c_adc71a281698861cab451e4f756258b9a}
+\index{ab.\+c@{ab.\+c}!mysa@{mysa}}
+\index{mysa@{mysa}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{mysa}{mysa}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+sockaddr\+\_\+t}$\ast$ mysa}\hypertarget{ab_8c_a790ecbe47cf9f5ba28dae5ffff6c518c}{}\label{ab_8c_a790ecbe47cf9f5ba28dae5ffff6c518c}
+\index{ab.\+c@{ab.\+c}!nolength@{nolength}}
+\index{nolength@{nolength}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{nolength}{nolength}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} nolength = 0}\hypertarget{ab_8c_a3e4c5260dc44cc07c2638b0f02b277c1}{}\label{ab_8c_a3e4c5260dc44cc07c2638b0f02b277c1}
+\index{ab.\+c@{ab.\+c}!opt\+\_\+accept@{opt\+\_\+accept}}
+\index{opt\+\_\+accept@{opt\+\_\+accept}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{opt\+\_\+accept}{opt_accept}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} opt\+\_\+accept = 0}\hypertarget{ab_8c_aa7632a14f6d36b8e3c857c0c57e497a2}{}\label{ab_8c_aa7632a14f6d36b8e3c857c0c57e497a2}
+\index{ab.\+c@{ab.\+c}!opt\+\_\+host@{opt\+\_\+host}}
+\index{opt\+\_\+host@{opt\+\_\+host}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{opt\+\_\+host}{opt_host}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ opt\+\_\+host}\hypertarget{ab_8c_afad8bad7bef92fe38d6a74414a96cf46}{}\label{ab_8c_afad8bad7bef92fe38d6a74414a96cf46}
+\index{ab.\+c@{ab.\+c}!opt\+\_\+useragent@{opt\+\_\+useragent}}
+\index{opt\+\_\+useragent@{opt\+\_\+useragent}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{opt\+\_\+useragent}{opt_useragent}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} opt\+\_\+useragent = 0}\hypertarget{ab_8c_a7544207fdf4a269ed986c67077d299db}{}\label{ab_8c_a7544207fdf4a269ed986c67077d299db}
+\index{ab.\+c@{ab.\+c}!path@{path}}
+\index{path@{path}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{path}{path}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ path}\hypertarget{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{}\label{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}
+\index{ab.\+c@{ab.\+c}!percentile@{percentile}}
+\index{percentile@{percentile}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{percentile}{percentile}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} percentile = 1}\hypertarget{ab_8c_aa7195498a377b8500bb309d49e3fe9cb}{}\label{ab_8c_aa7195498a377b8500bb309d49e3fe9cb}
+\index{ab.\+c@{ab.\+c}!percs@{percs}}
+\index{percs@{percs}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{percs}{percs}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} percs\mbox{[}$\,$\mbox{]} = \{50, 66, 75, 80, 90, 95, 98, 99, 100\}}\hypertarget{ab_8c_a22831383c2ddecd01286e109c1841439}{}\label{ab_8c_a22831383c2ddecd01286e109c1841439}
+\index{ab.\+c@{ab.\+c}!port@{port}}
+\index{port@{port}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{port}{port}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+port\+\_\+t} port}\hypertarget{ab_8c_ab3bdaca3e004f9926a8c2530f1d9e9dc}{}\label{ab_8c_ab3bdaca3e004f9926a8c2530f1d9e9dc}
+\index{ab.\+c@{ab.\+c}!postdata@{postdata}}
+\index{postdata@{postdata}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{postdata}{postdata}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ postdata}\hypertarget{ab_8c_aecb5539a9bd6c87c4d0cbe7562f6a31d}{}\label{ab_8c_aecb5539a9bd6c87c4d0cbe7562f6a31d}
+\index{ab.\+c@{ab.\+c}!postlen@{postlen}}
+\index{postlen@{postlen}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{postlen}{postlen}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} postlen = 0}\hypertarget{ab_8c_a4a87a4452ed5b031a89fc71779306442}{}\label{ab_8c_a4a87a4452ed5b031a89fc71779306442}
+\index{ab.\+c@{ab.\+c}!proxyhost@{proxyhost}}
+\index{proxyhost@{proxyhost}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{proxyhost}{proxyhost}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ proxyhost = {\bf N\+U\+LL}}\hypertarget{ab_8c_aae574ff365697003c4add905b7c379e2}{}\label{ab_8c_aae574ff365697003c4add905b7c379e2}
+\index{ab.\+c@{ab.\+c}!proxyport@{proxyport}}
+\index{proxyport@{proxyport}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{proxyport}{proxyport}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} proxyport = 0}\hypertarget{ab_8c_aafd282ad1fd2b2937f45c1cd22f143da}{}\label{ab_8c_aafd282ad1fd2b2937f45c1cd22f143da}
+\index{ab.\+c@{ab.\+c}!readbits@{readbits}}
+\index{readbits@{readbits}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{readbits}{readbits}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pollset\+\_\+t}$\ast$ readbits}\hypertarget{ab_8c_aa5cc42852439978ad981d8449ebd9204}{}\label{ab_8c_aa5cc42852439978ad981d8449ebd9204}
+\index{ab.\+c@{ab.\+c}!recverrok@{recverrok}}
+\index{recverrok@{recverrok}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{recverrok}{recverrok}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} recverrok = 0}\hypertarget{ab_8c_a2df397b00d459435195ae8d8373f5ee5}{}\label{ab_8c_a2df397b00d459435195ae8d8373f5ee5}
+\index{ab.\+c@{ab.\+c}!reqlen@{reqlen}}
+\index{reqlen@{reqlen}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{reqlen}{reqlen}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} reqlen}\hypertarget{ab_8c_afd3775bc29afddb47261132bc8939fd8}{}\label{ab_8c_afd3775bc29afddb47261132bc8939fd8}
+\index{ab.\+c@{ab.\+c}!request@{request}}
+\index{request@{request}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{request}{request}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ request = {\bf \+\_\+request}}\hypertarget{ab_8c_ae55c2591fd7f232c48d3f252f18a869a}{}\label{ab_8c_ae55c2591fd7f232c48d3f252f18a869a}
+\index{ab.\+c@{ab.\+c}!requests@{requests}}
+\index{requests@{requests}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{requests}{requests}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} requests = 1}\hypertarget{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}{}\label{ab_8c_ab299dd99b9a78c1e18b50f98ce37054b}
+\index{ab.\+c@{ab.\+c}!send\+\_\+body@{send\+\_\+body}}
+\index{send\+\_\+body@{send\+\_\+body}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{send\+\_\+body}{send_body}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} send\+\_\+body = 0}\hypertarget{ab_8c_a11b0ef5043d8f95d484421dbb7bd7bc4}{}\label{ab_8c_a11b0ef5043d8f95d484421dbb7bd7bc4}
+\index{ab.\+c@{ab.\+c}!servername@{servername}}
+\index{servername@{servername}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{servername}{servername}}]{\setlength{\rightskip}{0pt plus 5cm}char servername\mbox{[}1024\mbox{]}}\hypertarget{ab_8c_aa565cc2c00e3eee2c93c18e1aaf6cb6a}{}\label{ab_8c_aa565cc2c00e3eee2c93c18e1aaf6cb6a}
+\index{ab.\+c@{ab.\+c}!start@{start}}
+\index{start@{start}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{start}{start}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+time\+\_\+t} start}\hypertarget{ab_8c_af9b96980fc724ad325115184a485da5f}{}\label{ab_8c_af9b96980fc724ad325115184a485da5f}
+\index{ab.\+c@{ab.\+c}!started@{started}}
+\index{started@{started}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{started}{started}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} started = 0}\hypertarget{ab_8c_abfafc640452d742a5a404a158ce4737a}{}\label{ab_8c_abfafc640452d742a5a404a158ce4737a}
+\index{ab.\+c@{ab.\+c}!stats@{stats}}
+\index{stats@{stats}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{stats}{stats}}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf data}$\ast$ stats}\hypertarget{ab_8c_ad239e689d351fe125aff51dd3662bf6c}{}\label{ab_8c_ad239e689d351fe125aff51dd3662bf6c}
+\index{ab.\+c@{ab.\+c}!stoptime@{stoptime}}
+\index{stoptime@{stoptime}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{stoptime}{stoptime}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+time\+\_\+t} stoptime}\hypertarget{ab_8c_a30e95fe733967eee4cefb92c9e740032}{}\label{ab_8c_a30e95fe733967eee4cefb92c9e740032}
+\index{ab.\+c@{ab.\+c}!tablestring@{tablestring}}
+\index{tablestring@{tablestring}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{tablestring}{tablestring}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ tablestring}\hypertarget{ab_8c_a59a42cc995d839279d1eb11a2fd75b9e}{}\label{ab_8c_a59a42cc995d839279d1eb11a2fd75b9e}
+\index{ab.\+c@{ab.\+c}!tdstring@{tdstring}}
+\index{tdstring@{tdstring}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{tdstring}{tdstring}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ tdstring}\hypertarget{ab_8c_a2b787b2440c0e23c6269231b0eab8f10}{}\label{ab_8c_a2b787b2440c0e23c6269231b0eab8f10}
+\index{ab.\+c@{ab.\+c}!tlimit@{tlimit}}
+\index{tlimit@{tlimit}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{tlimit}{tlimit}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} tlimit = 0}\hypertarget{ab_8c_ac7c18d7cc6d16b089c3aba4960985b34}{}\label{ab_8c_ac7c18d7cc6d16b089c3aba4960985b34}
+\index{ab.\+c@{ab.\+c}!to\+\_\+ascii@{to\+\_\+ascii}}
+\index{to\+\_\+ascii@{to\+\_\+ascii}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{to\+\_\+ascii}{to_ascii}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+xlate\+\_\+t} $\ast$ to\+\_\+ascii}\hypertarget{ab_8c_ac2b1e84470918e4c7d16449f4b4d5ddb}{}\label{ab_8c_ac2b1e84470918e4c7d16449f4b4d5ddb}
+\index{ab.\+c@{ab.\+c}!totalbread@{totalbread}}
+\index{totalbread@{totalbread}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{totalbread}{totalbread}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+int64\+\_\+t} totalbread = 0}\hypertarget{ab_8c_a89b6433306e13300f9a2ca8608843b76}{}\label{ab_8c_a89b6433306e13300f9a2ca8608843b76}
+\index{ab.\+c@{ab.\+c}!totalposted@{totalposted}}
+\index{totalposted@{totalposted}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{totalposted}{totalposted}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+int64\+\_\+t} totalposted = 0}\hypertarget{ab_8c_ad3b6ab2364885340376d193774ce01f7}{}\label{ab_8c_ad3b6ab2364885340376d193774ce01f7}
+\index{ab.\+c@{ab.\+c}!totalread@{totalread}}
+\index{totalread@{totalread}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{totalread}{totalread}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+int64\+\_\+t} totalread = 0}\hypertarget{ab_8c_a820ac3597d0f57ceb3428345978194e9}{}\label{ab_8c_a820ac3597d0f57ceb3428345978194e9}
+\index{ab.\+c@{ab.\+c}!trstring@{trstring}}
+\index{trstring@{trstring}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{trstring}{trstring}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ trstring}\hypertarget{ab_8c_a2a6d5723abda8c391007e374682b0f41}{}\label{ab_8c_a2a6d5723abda8c391007e374682b0f41}
+\index{ab.\+c@{ab.\+c}!use\+\_\+html@{use\+\_\+html}}
+\index{use\+\_\+html@{use\+\_\+html}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{use\+\_\+html}{use_html}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} use\+\_\+html = 0}\hypertarget{ab_8c_abcf3fc865ace5453e6011327b86a15d2}{}\label{ab_8c_abcf3fc865ace5453e6011327b86a15d2}
+\index{ab.\+c@{ab.\+c}!verbosity@{verbosity}}
+\index{verbosity@{verbosity}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{verbosity}{verbosity}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} verbosity = 0}\hypertarget{ab_8c_a1bdcfae3209cbd96db35a2ae356fa15e}{}\label{ab_8c_a1bdcfae3209cbd96db35a2ae356fa15e}
+\index{ab.\+c@{ab.\+c}!windowsize@{windowsize}}
+\index{windowsize@{windowsize}!ab.\+c@{ab.\+c}}
+\subsubsection[{\texorpdfstring{windowsize}{windowsize}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} windowsize = 0}\hypertarget{ab_8c_a62d68269b9adfd52e062cf0a26b964b5}{}\label{ab_8c_a62d68269b9adfd52e062cf0a26b964b5}

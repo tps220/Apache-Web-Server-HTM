@@ -1,0 +1,809 @@
+\hypertarget{group__APACHE__MPM__EVENT}{}\section{Event M\+PM}
+\label{group__APACHE__MPM__EVENT}\index{Event M\+PM@{Event M\+PM}}
+Collaboration diagram for Event M\+PM\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structfd__queue__elem__t}{fd\+\_\+queue\+\_\+elem\+\_\+t}
+\item 
+struct \hyperlink{structtimer__event__t}{timer\+\_\+event\+\_\+t}
+\item 
+struct \hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__APACHE__MPM__EVENT_gac3950e57f9e8a7cfe6ff3fa67237e604}{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+T\+A\+R\+T\+\_\+\+D\+A\+E\+M\+ON}~3
+\item 
+\#define \hyperlink{group__APACHE__MPM__EVENT_ga77abf0320697e196e2d1d282cca9ad44}{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON}~10
+\item 
+\#define \hyperlink{group__APACHE__MPM__EVENT_gabfe5932653591d3339a6620cbd0d40be}{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON}~3
+\item 
+\#define \hyperlink{group__APACHE__MPM__EVENT_gaf3e2d0fe4c45aac538a61bf99d69a378}{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+\_\+\+P\+E\+R\+\_\+\+C\+H\+I\+LD}~25
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_gae60bd20f632fdf018c59af8943651458}{fd\+\_\+queue\+\_\+info\+\_\+t}
+\item 
+typedef struct \hyperlink{structevent__conn__state__t}{event\+\_\+conn\+\_\+state\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga58fdee464d43137837b98e9009534343}{event\+\_\+conn\+\_\+state\+\_\+t}
+\item 
+typedef struct \hyperlink{structfd__queue__elem__t}{fd\+\_\+queue\+\_\+elem\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga05898396eb6f09bf84cdf03f6c4bea00}{fd\+\_\+queue\+\_\+elem\+\_\+t}
+\item 
+typedef struct \hyperlink{structtimer__event__t}{timer\+\_\+event\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga6f734427176866b66f098c2627784243}{timer\+\_\+event\+\_\+t}
+\item 
+typedef struct \hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_gaecd41846d40f5570725f5cd670a3181b}{fd\+\_\+queue\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga4d0d706674f511d288505e01485464aa}{ap\+\_\+queue\+\_\+info\+\_\+create} (\hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$$\ast$queue\+\_\+info, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} max\+\_\+idlers, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} max\+\_\+recycled\+\_\+pools)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga7673a5c9eda89916d6df264fdfdba2b5}{ap\+\_\+queue\+\_\+info\+\_\+set\+\_\+idle} (\hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$queue\+\_\+info, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$pool\+\_\+to\+\_\+recycle)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga41f3d03ed7c7a2b8a6bbfa78c17d3475}{ap\+\_\+queue\+\_\+info\+\_\+try\+\_\+get\+\_\+idler} (\hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$queue\+\_\+info)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga61e0f50817329b124d2ea67d9cfe0cbf}{ap\+\_\+queue\+\_\+info\+\_\+wait\+\_\+for\+\_\+idler} (\hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$queue\+\_\+info, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$had\+\_\+to\+\_\+block)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_gaae8ca4deac4b25a12d826ba68569f608}{ap\+\_\+queue\+\_\+info\+\_\+term} (\hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$queue\+\_\+info)
+\item 
+\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_gabbd4dfde021d8cf397976af8b8039a53}{ap\+\_\+queue\+\_\+info\+\_\+get\+\_\+idlers} (\hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$queue\+\_\+info)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__APACHE__MPM__EVENT_ga85dcc8a63dfbd9a0abf4c88b668fd7ae}{ap\+\_\+free\+\_\+idle\+\_\+pools} (\hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$queue\+\_\+info)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__APACHE__MPM__EVENT_ga2981ac69bfcc972dab0211a57cf15730}{ap\+\_\+pop\+\_\+pool} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$$\ast$\hyperlink{structrecycled__pool}{recycled\+\_\+pool}, \hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$queue\+\_\+info)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__APACHE__MPM__EVENT_ga725f2a86b43ff2ade34db77aec45e471}{ap\+\_\+push\+\_\+pool} (\hyperlink{structfd__queue__info__t}{fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$queue\+\_\+info, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$pool\+\_\+to\+\_\+recycle)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga3c7e0f17e79985d68cf97adbe01966a4}{ap\+\_\+queue\+\_\+init} (\hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t} $\ast$queue, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} queue\+\_\+capacity, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga810547b86427d84bc25aa4711ca2f2f7}{ap\+\_\+queue\+\_\+push} (\hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t} $\ast$queue, \hyperlink{structapr__socket__t}{apr\+\_\+socket\+\_\+t} $\ast$sd, \hyperlink{structevent__conn__state__t}{event\+\_\+conn\+\_\+state\+\_\+t} $\ast$ecs, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga74a1be793d9307efa2e41b2248039da0}{ap\+\_\+queue\+\_\+push\+\_\+timer} (\hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t} $\ast$queue, \hyperlink{structtimer__event__t}{timer\+\_\+event\+\_\+t} $\ast$te)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_gaea3aa3dc980104c89fc3fa768bc5aaea}{ap\+\_\+queue\+\_\+pop\+\_\+something} (\hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t} $\ast$queue, \hyperlink{structapr__socket__t}{apr\+\_\+socket\+\_\+t} $\ast$$\ast$sd, \hyperlink{structevent__conn__state__t}{event\+\_\+conn\+\_\+state\+\_\+t} $\ast$$\ast$ecs, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$$\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structtimer__event__t}{timer\+\_\+event\+\_\+t} $\ast$$\ast$te)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_ga6a9df0d76a287d52f8ea78b6ebce9c27}{ap\+\_\+queue\+\_\+interrupt\+\_\+all} (\hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t} $\ast$queue)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_gae8c79d988912470cbc9313930133afb3}{ap\+\_\+queue\+\_\+interrupt\+\_\+one} (\hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t} $\ast$queue)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__MPM__EVENT_gabd40aa9d9c5f2cd9a23d912200158c5f}{ap\+\_\+queue\+\_\+term} (\hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t} $\ast$queue)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Macro Definition Documentation}
+\index{Event M\+PM@{Event M\+PM}!D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON}{DEFAULT_MAX_FREE_DAEMON}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON~10}\hypertarget{group__APACHE__MPM__EVENT_ga77abf0320697e196e2d1d282cca9ad44}{}\label{group__APACHE__MPM__EVENT_ga77abf0320697e196e2d1d282cca9ad44}
+\index{Event M\+PM@{Event M\+PM}!D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON}{DEFAULT_MIN_FREE_DAEMON}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+\_\+\+F\+R\+E\+E\+\_\+\+D\+A\+E\+M\+ON~3}\hypertarget{group__APACHE__MPM__EVENT_gabfe5932653591d3339a6620cbd0d40be}{}\label{group__APACHE__MPM__EVENT_gabfe5932653591d3339a6620cbd0d40be}
+\index{Event M\+PM@{Event M\+PM}!D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+T\+A\+R\+T\+\_\+\+D\+A\+E\+M\+ON@{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+T\+A\+R\+T\+\_\+\+D\+A\+E\+M\+ON}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+T\+A\+R\+T\+\_\+\+D\+A\+E\+M\+ON@{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+T\+A\+R\+T\+\_\+\+D\+A\+E\+M\+ON}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+T\+A\+R\+T\+\_\+\+D\+A\+E\+M\+ON}{DEFAULT_START_DAEMON}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+T\+A\+R\+T\+\_\+\+D\+A\+E\+M\+ON~3}\hypertarget{group__APACHE__MPM__EVENT_gac3950e57f9e8a7cfe6ff3fa67237e604}{}\label{group__APACHE__MPM__EVENT_gac3950e57f9e8a7cfe6ff3fa67237e604}
+\index{Event M\+PM@{Event M\+PM}!D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+\_\+\+P\+E\+R\+\_\+\+C\+H\+I\+LD@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+\_\+\+P\+E\+R\+\_\+\+C\+H\+I\+LD}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+\_\+\+P\+E\+R\+\_\+\+C\+H\+I\+LD@{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+\_\+\+P\+E\+R\+\_\+\+C\+H\+I\+LD}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+\_\+\+P\+E\+R\+\_\+\+C\+H\+I\+LD}{DEFAULT_THREADS_PER_CHILD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+\_\+\+P\+E\+R\+\_\+\+C\+H\+I\+LD~25}\hypertarget{group__APACHE__MPM__EVENT_gaf3e2d0fe4c45aac538a61bf99d69a378}{}\label{group__APACHE__MPM__EVENT_gaf3e2d0fe4c45aac538a61bf99d69a378}
+
+
+\subsection{Typedef Documentation}
+\index{Event M\+PM@{Event M\+PM}!event\+\_\+conn\+\_\+state\+\_\+t@{event\+\_\+conn\+\_\+state\+\_\+t}}
+\index{event\+\_\+conn\+\_\+state\+\_\+t@{event\+\_\+conn\+\_\+state\+\_\+t}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{event\+\_\+conn\+\_\+state\+\_\+t}{event_conn_state_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf event\+\_\+conn\+\_\+state\+\_\+t} {\bf event\+\_\+conn\+\_\+state\+\_\+t}}\hypertarget{group__APACHE__MPM__EVENT_ga58fdee464d43137837b98e9009534343}{}\label{group__APACHE__MPM__EVENT_ga58fdee464d43137837b98e9009534343}
+\index{Event M\+PM@{Event M\+PM}!fd\+\_\+queue\+\_\+elem\+\_\+t@{fd\+\_\+queue\+\_\+elem\+\_\+t}}
+\index{fd\+\_\+queue\+\_\+elem\+\_\+t@{fd\+\_\+queue\+\_\+elem\+\_\+t}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{fd\+\_\+queue\+\_\+elem\+\_\+t}{fd_queue_elem_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf fd\+\_\+queue\+\_\+elem\+\_\+t} {\bf fd\+\_\+queue\+\_\+elem\+\_\+t}}\hypertarget{group__APACHE__MPM__EVENT_ga05898396eb6f09bf84cdf03f6c4bea00}{}\label{group__APACHE__MPM__EVENT_ga05898396eb6f09bf84cdf03f6c4bea00}
+\index{Event M\+PM@{Event M\+PM}!fd\+\_\+queue\+\_\+info\+\_\+t@{fd\+\_\+queue\+\_\+info\+\_\+t}}
+\index{fd\+\_\+queue\+\_\+info\+\_\+t@{fd\+\_\+queue\+\_\+info\+\_\+t}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{fd\+\_\+queue\+\_\+info\+\_\+t}{fd_queue_info_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf fd\+\_\+queue\+\_\+info\+\_\+t} {\bf fd\+\_\+queue\+\_\+info\+\_\+t}}\hypertarget{group__APACHE__MPM__EVENT_gae60bd20f632fdf018c59af8943651458}{}\label{group__APACHE__MPM__EVENT_gae60bd20f632fdf018c59af8943651458}
+\index{Event M\+PM@{Event M\+PM}!fd\+\_\+queue\+\_\+t@{fd\+\_\+queue\+\_\+t}}
+\index{fd\+\_\+queue\+\_\+t@{fd\+\_\+queue\+\_\+t}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{fd\+\_\+queue\+\_\+t}{fd_queue_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf fd\+\_\+queue\+\_\+t} {\bf fd\+\_\+queue\+\_\+t}}\hypertarget{group__APACHE__MPM__EVENT_gaecd41846d40f5570725f5cd670a3181b}{}\label{group__APACHE__MPM__EVENT_gaecd41846d40f5570725f5cd670a3181b}
+\index{Event M\+PM@{Event M\+PM}!timer\+\_\+event\+\_\+t@{timer\+\_\+event\+\_\+t}}
+\index{timer\+\_\+event\+\_\+t@{timer\+\_\+event\+\_\+t}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{timer\+\_\+event\+\_\+t}{timer_event_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf timer\+\_\+event\+\_\+t} {\bf timer\+\_\+event\+\_\+t}}\hypertarget{group__APACHE__MPM__EVENT_ga6f734427176866b66f098c2627784243}{}\label{group__APACHE__MPM__EVENT_ga6f734427176866b66f098c2627784243}
+
+
+\subsection{Function Documentation}
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+free\+\_\+idle\+\_\+pools@{ap\+\_\+free\+\_\+idle\+\_\+pools}}
+\index{ap\+\_\+free\+\_\+idle\+\_\+pools@{ap\+\_\+free\+\_\+idle\+\_\+pools}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+free\+\_\+idle\+\_\+pools(fd\+\_\+queue\+\_\+info\+\_\+t $\ast$queue\+\_\+info)}{ap_free_idle_pools(fd_queue_info_t *queue_info)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+free\+\_\+idle\+\_\+pools (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$}]{queue\+\_\+info}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga85dcc8a63dfbd9a0abf4c88b668fd7ae}{}\label{group__APACHE__MPM__EVENT_ga85dcc8a63dfbd9a0abf4c88b668fd7ae}
+
+\begin{DoxyCode}
+284 \{
+285     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+286 
+287     queue\_info->\hyperlink{structfd__queue__info__t_ac83918a33f9efbcb3c79ca208358d5f3}{max\_recycled\_pools} = 0;
+288     \textcolor{keywordflow}{do} \{
+289         \hyperlink{group__APACHE__MPM__EVENT_ga2981ac69bfcc972dab0211a57cf15730}{ap\_pop\_pool}(&p, queue\_info);
+290         \textcolor{keywordflow}{if} (p != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+291             apr\_pool\_destroy(p);
+292     \} \textcolor{keywordflow}{while} (p != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+293 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT_ga85dcc8a63dfbd9a0abf4c88b668fd7ae_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+pop\+\_\+pool@{ap\+\_\+pop\+\_\+pool}}
+\index{ap\+\_\+pop\+\_\+pool@{ap\+\_\+pop\+\_\+pool}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+pop\+\_\+pool(apr\+\_\+pool\+\_\+t $\ast$$\ast$recycled\+\_\+pool, fd\+\_\+queue\+\_\+info\+\_\+t $\ast$queue\+\_\+info)}{ap_pop_pool(apr_pool_t **recycled_pool, fd_queue_info_t *queue_info)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+pop\+\_\+pool (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$$\ast$}]{recycled\+\_\+pool, }
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$}]{queue\+\_\+info}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga2981ac69bfcc972dab0211a57cf15730}{}\label{group__APACHE__MPM__EVENT_ga2981ac69bfcc972dab0211a57cf15730}
+
+\begin{DoxyCode}
+253 \{
+254     \textcolor{comment}{/* Atomically pop a pool from the recycled list */}
+255 
+256     \textcolor{comment}{/* This function is safe only as long as it is single threaded because}
+257 \textcolor{comment}{     * it reaches into the queue and accesses "next" which can change.}
+258 \textcolor{comment}{     * We are OK today because it is only called from the listener thread.}
+259 \textcolor{comment}{     * cas-based pushes do not have the same limitation - any number can}
+260 \textcolor{comment}{     * happen concurrently with a single cas-based pop.}
+261 \textcolor{comment}{     */}
+262 
+263     *recycled\_pool = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+264 
+265 
+266     \textcolor{comment}{/* Atomically pop a pool from the recycled list */}
+267     \textcolor{keywordflow}{for} (;;) \{
+268         \textcolor{keyword}{struct }recycled\_pool *first\_pool = queue\_info->\hyperlink{structfd__queue__info__t_ac4e7511417ba04c774bf0576cba54dc2}{recycled\_pools};
+269         \textcolor{keywordflow}{if} (first\_pool == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+270             \textcolor{keywordflow}{break};
+271         \}
+272         \textcolor{keywordflow}{if} (apr\_atomic\_casptr
+273             ((\textcolor{keywordtype}{void}*) &(queue\_info->\hyperlink{structfd__queue__info__t_ac4e7511417ba04c774bf0576cba54dc2}{recycled\_pools}),
+274              first\_pool->\hyperlink{structrecycled__pool_a6c607a84f541b580419d94ec5313c25a}{next}, first\_pool) == first\_pool) \{
+275             *recycled\_pool = first\_pool->\hyperlink{structrecycled__pool_a7a9db88b8ae2ec367708d457b29e7d22}{pool};
+276             \textcolor{keywordflow}{if} (queue\_info->\hyperlink{structfd__queue__info__t_ac83918a33f9efbcb3c79ca208358d5f3}{max\_recycled\_pools} >= 0)
+277                 \hyperlink{atomic_8c_a7a8d16335fdcd27f2baca90df35ad300}{apr\_atomic\_dec32}(&queue\_info->
+      \hyperlink{structfd__queue__info__t_af10c530322499a45a7ceff4dee6047e0}{recycled\_pools\_count});
+278             \textcolor{keywordflow}{break};
+279         \}
+280     \}
+281 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=283pt]{group__APACHE__MPM__EVENT_ga2981ac69bfcc972dab0211a57cf15730_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=285pt]{group__APACHE__MPM__EVENT_ga2981ac69bfcc972dab0211a57cf15730_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+push\+\_\+pool@{ap\+\_\+push\+\_\+pool}}
+\index{ap\+\_\+push\+\_\+pool@{ap\+\_\+push\+\_\+pool}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+push\+\_\+pool(fd\+\_\+queue\+\_\+info\+\_\+t $\ast$queue\+\_\+info, apr\+\_\+pool\+\_\+t $\ast$pool\+\_\+to\+\_\+recycle)}{ap_push_pool(fd_queue_info_t *queue_info, apr_pool_t *pool_to_recycle)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+push\+\_\+pool (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$}]{queue\+\_\+info, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool\+\_\+to\+\_\+recycle}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga725f2a86b43ff2ade34db77aec45e471}{}\label{group__APACHE__MPM__EVENT_ga725f2a86b43ff2ade34db77aec45e471}
+
+\begin{DoxyCode}
+217 \{
+218     \textcolor{keyword}{struct }\hyperlink{structrecycled__pool}{recycled\_pool} *new\_recycle;
+219     \textcolor{comment}{/* If we have been given a pool to recycle, atomically link}
+220 \textcolor{comment}{     * it into the queue\_info's list of recycled pools}
+221 \textcolor{comment}{     */}
+222     \textcolor{keywordflow}{if} (!pool\_to\_recycle)
+223         \textcolor{keywordflow}{return};
+224 
+225     \textcolor{keywordflow}{if} (queue\_info->\hyperlink{structfd__queue__info__t_ac83918a33f9efbcb3c79ca208358d5f3}{max\_recycled\_pools} >= 0) \{
+226         \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\_uint32\_t} cnt = \hyperlink{atomic_8c_afba4de90e113d26536cff48418689771}{apr\_atomic\_read32}(&queue\_info->
+      \hyperlink{structfd__queue__info__t_af10c530322499a45a7ceff4dee6047e0}{recycled\_pools\_count});
+227         \textcolor{keywordflow}{if} (cnt >= queue\_info->\hyperlink{structfd__queue__info__t_ac83918a33f9efbcb3c79ca208358d5f3}{max\_recycled\_pools}) \{
+228             apr\_pool\_destroy(pool\_to\_recycle);
+229             \textcolor{keywordflow}{return};
+230         \}
+231         \hyperlink{atomic_8c_a4af33da5aa6493ec321af14bedfc47a9}{apr\_atomic\_inc32}(&queue\_info->\hyperlink{structfd__queue__info__t_af10c530322499a45a7ceff4dee6047e0}{recycled\_pools\_count});
+232     \}
+233 
+234     apr\_pool\_clear(pool\_to\_recycle);
+235     new\_recycle = (\textcolor{keyword}{struct }\hyperlink{structrecycled__pool}{recycled\_pool} *) apr\_palloc(pool\_to\_recycle,
+236                                                       \textcolor{keyword}{sizeof} (*new\_recycle));
+237     new\_recycle->\hyperlink{structrecycled__pool_a7a9db88b8ae2ec367708d457b29e7d22}{pool} = pool\_to\_recycle;
+238     \textcolor{keywordflow}{for} (;;) \{
+239         \textcolor{comment}{/*}
+240 \textcolor{comment}{         * Save queue\_info->recycled\_pool in local variable next because}
+241 \textcolor{comment}{         * new\_recycle->next can be changed after apr\_atomic\_casptr}
+242 \textcolor{comment}{         * function call. For gory details see PR 44402.}
+243 \textcolor{comment}{         */}
+244         \textcolor{keyword}{struct }\hyperlink{structrecycled__pool}{recycled\_pool} *\hyperlink{structrecycled__pool_a6c607a84f541b580419d94ec5313c25a}{next} = queue\_info->\hyperlink{structfd__queue__info__t_ac4e7511417ba04c774bf0576cba54dc2}{recycled\_pools};
+245         new\_recycle->\hyperlink{structrecycled__pool_a6c607a84f541b580419d94ec5313c25a}{next} = \hyperlink{structrecycled__pool_a6c607a84f541b580419d94ec5313c25a}{next};
+246         \textcolor{keywordflow}{if} (apr\_atomic\_casptr((\textcolor{keywordtype}{void}*) &(queue\_info->\hyperlink{structfd__queue__info__t_ac4e7511417ba04c774bf0576cba54dc2}{recycled\_pools}),
+247                               new\_recycle, next) == \hyperlink{structrecycled__pool_a6c607a84f541b580419d94ec5313c25a}{next})
+248             \textcolor{keywordflow}{break};
+249     \}
+250 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT_ga725f2a86b43ff2ade34db77aec45e471_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT_ga725f2a86b43ff2ade34db77aec45e471_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+info\+\_\+create@{ap\+\_\+queue\+\_\+info\+\_\+create}}
+\index{ap\+\_\+queue\+\_\+info\+\_\+create@{ap\+\_\+queue\+\_\+info\+\_\+create}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+info\+\_\+create(fd\+\_\+queue\+\_\+info\+\_\+t $\ast$$\ast$queue\+\_\+info, apr\+\_\+pool\+\_\+t $\ast$pool, int max\+\_\+idlers, int max\+\_\+recycled\+\_\+pools)}{ap_queue_info_create(fd_queue_info_t **queue_info, apr_pool_t *pool, int max_idlers, int max_recycled_pools)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+info\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$$\ast$}]{queue\+\_\+info, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{max\+\_\+idlers, }
+\item[{{\bf int}}]{max\+\_\+recycled\+\_\+pools}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga4d0d706674f511d288505e01485464aa}{}\label{group__APACHE__MPM__EVENT_ga4d0d706674f511d288505e01485464aa}
+
+\begin{DoxyCode}
+69 \{
+70     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+71     \hyperlink{structfd__queue__info__t}{fd\_queue\_info\_t} *qi;
+72 
+73     qi = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(*qi));
+74 
+75     rv = apr\_thread\_mutex\_create(&qi->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex}, 
+      \hyperlink{group__apr__thread__mutex_ga579050872f9aff06e773b084264f7d06}{APR\_THREAD\_MUTEX\_DEFAULT},
+76                                  pool);
+77     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+78         \textcolor{keywordflow}{return} rv;
+79     \}
+80     rv = apr\_thread\_cond\_create(&qi->\hyperlink{structfd__queue__info__t_ab55cf55999e66ef49df240ec7ac1b750}{wait\_for\_idler}, pool);
+81     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+82         \textcolor{keywordflow}{return} rv;
+83     \}
+84     qi->\hyperlink{structfd__queue__info__t_ac4e7511417ba04c774bf0576cba54dc2}{recycled\_pools} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+85     qi->\hyperlink{structfd__queue__info__t_ac83918a33f9efbcb3c79ca208358d5f3}{max\_recycled\_pools} = max\_recycled\_pools;
+86     qi->\hyperlink{structfd__queue__info__t_a288e8b082895e4560c6414d9b77b773d}{max\_idlers} = max\_idlers;
+87     qi->\hyperlink{structfd__queue__info__t_a34f88b2125fb629dd4200cf75568bb1d}{idlers} = zero\_pt;
+88     apr\_pool\_cleanup\_register(pool, qi, queue\_info\_cleanup,
+89                               apr\_pool\_cleanup\_null);
+90 
+91     *queue\_info = qi;
+92 
+93     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+94 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT_ga4d0d706674f511d288505e01485464aa_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+info\+\_\+get\+\_\+idlers@{ap\+\_\+queue\+\_\+info\+\_\+get\+\_\+idlers}}
+\index{ap\+\_\+queue\+\_\+info\+\_\+get\+\_\+idlers@{ap\+\_\+queue\+\_\+info\+\_\+get\+\_\+idlers}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+info\+\_\+get\+\_\+idlers(fd\+\_\+queue\+\_\+info\+\_\+t $\ast$queue\+\_\+info)}{ap_queue_info_get_idlers(fd_queue_info_t *queue_info)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+uint32\+\_\+t} ap\+\_\+queue\+\_\+info\+\_\+get\+\_\+idlers (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$}]{queue\+\_\+info}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_gabbd4dfde021d8cf397976af8b8039a53}{}\label{group__APACHE__MPM__EVENT_gabbd4dfde021d8cf397976af8b8039a53}
+
+\begin{DoxyCode}
+207 \{
+208     \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\_int32\_t} \hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val};
+209     val = (\hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\_int32\_t})\hyperlink{atomic_8c_afba4de90e113d26536cff48418689771}{apr\_atomic\_read32}(&queue\_info->
+      \hyperlink{structfd__queue__info__t_a34f88b2125fb629dd4200cf75568bb1d}{idlers}) - zero\_pt;
+210     \textcolor{keywordflow}{if} (val < 0)
+211         \textcolor{keywordflow}{return} 0;
+212     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val};
+213 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=342pt]{group__APACHE__MPM__EVENT_gabbd4dfde021d8cf397976af8b8039a53_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+info\+\_\+set\+\_\+idle@{ap\+\_\+queue\+\_\+info\+\_\+set\+\_\+idle}}
+\index{ap\+\_\+queue\+\_\+info\+\_\+set\+\_\+idle@{ap\+\_\+queue\+\_\+info\+\_\+set\+\_\+idle}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+info\+\_\+set\+\_\+idle(fd\+\_\+queue\+\_\+info\+\_\+t $\ast$queue\+\_\+info, apr\+\_\+pool\+\_\+t $\ast$pool\+\_\+to\+\_\+recycle)}{ap_queue_info_set_idle(fd_queue_info_t *queue_info, apr_pool_t *pool_to_recycle)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+info\+\_\+set\+\_\+idle (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$}]{queue\+\_\+info, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool\+\_\+to\+\_\+recycle}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga7673a5c9eda89916d6df264fdfdba2b5}{}\label{group__APACHE__MPM__EVENT_ga7673a5c9eda89916d6df264fdfdba2b5}
+
+\begin{DoxyCode}
+98 \{
+99     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+100     \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\_int32\_t} prev\_idlers;
+101 
+102     \hyperlink{group__APACHE__MPM__EVENT_ga725f2a86b43ff2ade34db77aec45e471}{ap\_push\_pool}(queue\_info, pool\_to\_recycle);
+103 
+104     \textcolor{comment}{/* Atomically increment the count of idle workers */}
+105     prev\_idlers = \hyperlink{atomic_8c_a4af33da5aa6493ec321af14bedfc47a9}{apr\_atomic\_inc32}(&(queue\_info->\hyperlink{structfd__queue__info__t_a34f88b2125fb629dd4200cf75568bb1d}{idlers})) - zero\_pt;
+106 
+107     \textcolor{comment}{/* If other threads are waiting on a worker, wake one up */}
+108     \textcolor{keywordflow}{if} (prev\_idlers < 0) \{
+109         rv = apr\_thread\_mutex\_lock(queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+110         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+111             \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(0);
+112             \textcolor{keywordflow}{return} rv;
+113         \}
+114         rv = apr\_thread\_cond\_signal(queue\_info->\hyperlink{structfd__queue__info__t_ab55cf55999e66ef49df240ec7ac1b750}{wait\_for\_idler});
+115         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+116             apr\_thread\_mutex\_unlock(queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+117             \textcolor{keywordflow}{return} rv;
+118         \}
+119         rv = apr\_thread\_mutex\_unlock(queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+120         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+121             \textcolor{keywordflow}{return} rv;
+122         \}
+123     \}
+124 
+125     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+126 \}
+\end{DoxyCode}
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+info\+\_\+term@{ap\+\_\+queue\+\_\+info\+\_\+term}}
+\index{ap\+\_\+queue\+\_\+info\+\_\+term@{ap\+\_\+queue\+\_\+info\+\_\+term}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+info\+\_\+term(fd\+\_\+queue\+\_\+info\+\_\+t $\ast$queue\+\_\+info)}{ap_queue_info_term(fd_queue_info_t *queue_info)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+info\+\_\+term (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$}]{queue\+\_\+info}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_gaae8ca4deac4b25a12d826ba68569f608}{}\label{group__APACHE__MPM__EVENT_gaae8ca4deac4b25a12d826ba68569f608}
+
+\begin{DoxyCode}
+297 \{
+298     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+299     rv = apr\_thread\_mutex\_lock(queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+300     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+301         \textcolor{keywordflow}{return} rv;
+302     \}
+303     queue\_info->\hyperlink{structfd__queue__info__t_ab3c2c38658e83a417f7d6d98ed021d87}{terminated} = 1;
+304     apr\_thread\_cond\_broadcast(queue\_info->\hyperlink{structfd__queue__info__t_ab55cf55999e66ef49df240ec7ac1b750}{wait\_for\_idler});
+305     \textcolor{keywordflow}{return} apr\_thread\_mutex\_unlock(queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+306 \}
+\end{DoxyCode}
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+info\+\_\+try\+\_\+get\+\_\+idler@{ap\+\_\+queue\+\_\+info\+\_\+try\+\_\+get\+\_\+idler}}
+\index{ap\+\_\+queue\+\_\+info\+\_\+try\+\_\+get\+\_\+idler@{ap\+\_\+queue\+\_\+info\+\_\+try\+\_\+get\+\_\+idler}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+info\+\_\+try\+\_\+get\+\_\+idler(fd\+\_\+queue\+\_\+info\+\_\+t $\ast$queue\+\_\+info)}{ap_queue_info_try_get_idler(fd_queue_info_t *queue_info)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+info\+\_\+try\+\_\+get\+\_\+idler (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$}]{queue\+\_\+info}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga41f3d03ed7c7a2b8a6bbfa78c17d3475}{}\label{group__APACHE__MPM__EVENT_ga41f3d03ed7c7a2b8a6bbfa78c17d3475}
+
+\begin{DoxyCode}
+129 \{
+130     \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\_int32\_t} new\_idlers;
+131     new\_idlers = \hyperlink{atomic_8c_a3ef16e13b679710fafd5196713e17433}{apr\_atomic\_add32}(&(queue\_info->\hyperlink{structfd__queue__info__t_a34f88b2125fb629dd4200cf75568bb1d}{idlers}), -1) - zero\_pt;
+132     \textcolor{keywordflow}{if} (--new\_idlers <= 0) \{
+133         \hyperlink{atomic_8c_a4af33da5aa6493ec321af14bedfc47a9}{apr\_atomic\_inc32}(&(queue\_info->\hyperlink{structfd__queue__info__t_a34f88b2125fb629dd4200cf75568bb1d}{idlers}));    \textcolor{comment}{/* back out dec */}
+134         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+135     \}
+136     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+137 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT_ga41f3d03ed7c7a2b8a6bbfa78c17d3475_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+info\+\_\+wait\+\_\+for\+\_\+idler@{ap\+\_\+queue\+\_\+info\+\_\+wait\+\_\+for\+\_\+idler}}
+\index{ap\+\_\+queue\+\_\+info\+\_\+wait\+\_\+for\+\_\+idler@{ap\+\_\+queue\+\_\+info\+\_\+wait\+\_\+for\+\_\+idler}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+info\+\_\+wait\+\_\+for\+\_\+idler(fd\+\_\+queue\+\_\+info\+\_\+t $\ast$queue\+\_\+info, int $\ast$had\+\_\+to\+\_\+block)}{ap_queue_info_wait_for_idler(fd_queue_info_t *queue_info, int *had_to_block)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+info\+\_\+wait\+\_\+for\+\_\+idler (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+info\+\_\+t} $\ast$}]{queue\+\_\+info, }
+\item[{{\bf int} $\ast$}]{had\+\_\+to\+\_\+block}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga61e0f50817329b124d2ea67d9cfe0cbf}{}\label{group__APACHE__MPM__EVENT_ga61e0f50817329b124d2ea67d9cfe0cbf}
+
+\begin{DoxyCode}
+141 \{
+142     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+143     \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\_int32\_t} prev\_idlers;
+144 
+145     \textcolor{comment}{/* Atomically decrement the idle worker count, saving the old value */}
+146     \textcolor{comment}{/* See TODO in ap\_queue\_info\_set\_idle() */}
+147     prev\_idlers = \hyperlink{atomic_8c_a3ef16e13b679710fafd5196713e17433}{apr\_atomic\_add32}(&(queue\_info->\hyperlink{structfd__queue__info__t_a34f88b2125fb629dd4200cf75568bb1d}{idlers}), -1) - zero\_pt;
+148 
+149     \textcolor{comment}{/* Block if there weren't any idle workers */}
+150     \textcolor{keywordflow}{if} (prev\_idlers <= 0) \{
+151         rv = apr\_thread\_mutex\_lock(queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+152         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+153             \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(0);
+154             \textcolor{comment}{/* See TODO in ap\_queue\_info\_set\_idle() */}
+155             \hyperlink{atomic_8c_a4af33da5aa6493ec321af14bedfc47a9}{apr\_atomic\_inc32}(&(queue\_info->\hyperlink{structfd__queue__info__t_a34f88b2125fb629dd4200cf75568bb1d}{idlers}));    \textcolor{comment}{/* back out dec */}
+156             \textcolor{keywordflow}{return} rv;
+157         \}
+158         \textcolor{comment}{/* Re-check the idle worker count to guard against a}
+159 \textcolor{comment}{         * race condition.  Now that we're in the mutex-protected}
+160 \textcolor{comment}{         * region, one of two things may have happened:}
+161 \textcolor{comment}{         *   - If the idle worker count is still negative, the}
+162 \textcolor{comment}{         *     workers are all still busy, so it's safe to}
+163 \textcolor{comment}{         *     block on a condition variable.}
+164 \textcolor{comment}{         *   - If the idle worker count is non-negative, then a}
+165 \textcolor{comment}{         *     worker has become idle since the first check}
+166 \textcolor{comment}{         *     of queue\_info->idlers above.  It's possible}
+167 \textcolor{comment}{         *     that the worker has also signaled the condition}
+168 \textcolor{comment}{         *     variable--and if so, the listener missed it}
+169 \textcolor{comment}{         *     because it wasn't yet blocked on the condition}
+170 \textcolor{comment}{         *     variable.  But if the idle worker count is}
+171 \textcolor{comment}{         *     now non-negative, it's safe for this function to}
+172 \textcolor{comment}{         *     return immediately.}
+173 \textcolor{comment}{         *}
+174 \textcolor{comment}{         *     A "negative value" (relative to zero\_pt) in}
+175 \textcolor{comment}{         *     queue\_info->idlers tells how many}
+176 \textcolor{comment}{         *     threads are waiting on an idle worker.}
+177 \textcolor{comment}{         */}
+178         \textcolor{keywordflow}{if} (queue\_info->\hyperlink{structfd__queue__info__t_a34f88b2125fb629dd4200cf75568bb1d}{idlers} < zero\_pt) \{
+179             *had\_to\_block = 1;
+180             rv = apr\_thread\_cond\_wait(queue\_info->\hyperlink{structfd__queue__info__t_ab55cf55999e66ef49df240ec7ac1b750}{wait\_for\_idler},
+181                                       queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+182             \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+183                 \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv2;
+184                 \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(0);
+185                 rv2 = apr\_thread\_mutex\_unlock(queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+186                 \textcolor{keywordflow}{if} (rv2 != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+187                     \textcolor{keywordflow}{return} rv2;
+188                 \}
+189                 \textcolor{keywordflow}{return} rv;
+190             \}
+191         \}
+192         rv = apr\_thread\_mutex\_unlock(queue\_info->\hyperlink{structfd__queue__info__t_a18d58b9d46ec7629daee1c309161b8d0}{idlers\_mutex});
+193         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+194             \textcolor{keywordflow}{return} rv;
+195         \}
+196     \}
+197 
+198     \textcolor{keywordflow}{if} (queue\_info->\hyperlink{structfd__queue__info__t_ab3c2c38658e83a417f7d6d98ed021d87}{terminated}) \{
+199         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF};
+200     \}
+201     \textcolor{keywordflow}{else} \{
+202         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+203     \}
+204 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT_ga61e0f50817329b124d2ea67d9cfe0cbf_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT_ga61e0f50817329b124d2ea67d9cfe0cbf_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+init@{ap\+\_\+queue\+\_\+init}}
+\index{ap\+\_\+queue\+\_\+init@{ap\+\_\+queue\+\_\+init}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+init(fd\+\_\+queue\+\_\+t $\ast$queue, int queue\+\_\+capacity, apr\+\_\+pool\+\_\+t $\ast$a)}{ap_queue_init(fd_queue_t *queue, int queue_capacity, apr_pool_t *a)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+init (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+t} $\ast$}]{queue, }
+\item[{{\bf int}}]{queue\+\_\+capacity, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{a}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga3c7e0f17e79985d68cf97adbe01966a4}{}\label{group__APACHE__MPM__EVENT_ga3c7e0f17e79985d68cf97adbe01966a4}
+Initialize the \hyperlink{structfd__queue__t}{fd\+\_\+queue\+\_\+t}. 
+\begin{DoxyCode}
+342 \{
+343     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+344     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+345 
+346     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_create(&queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex},
+347                                       \hyperlink{group__apr__thread__mutex_ga579050872f9aff06e773b084264f7d06}{APR\_THREAD\_MUTEX\_DEFAULT},
+348                                       a)) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+349         \textcolor{keywordflow}{return} rv;
+350     \}
+351     \textcolor{keywordflow}{if} ((rv = apr\_thread\_cond\_create(&queue->\hyperlink{structfd__queue__t_a18ddd6a916b50d00310ee4ed096a562a}{not\_empty}, a)) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+352         \textcolor{keywordflow}{return} rv;
+353     \}
+354 
+355     \hyperlink{group__apr__ring_ga245e1a73b162a4a68ebd54c84683729d}{APR\_RING\_INIT}(&queue->timers, \hyperlink{structtimer__event__t}{timer\_event\_t}, link);
+356 
+357     queue->\hyperlink{structfd__queue__t_af838c3af6ffee37b30bbe8c45e05292b}{data} = apr\_palloc(a, queue\_capacity * \textcolor{keyword}{sizeof}(\hyperlink{structfd__queue__elem__t}{fd\_queue\_elem\_t}));
+358     queue->\hyperlink{structfd__queue__t_a4f4edbb981e4bbbc7304ba485b519c09}{bounds} = queue\_capacity;
+359     queue->\hyperlink{structfd__queue__t_a064707a5e5c88ee4715ebc0f4ea4abb1}{nelts} = 0;
+360     queue->\hyperlink{structfd__queue__t_a17cde346fb215a61f7b2df26970c72bd}{in} = 0;
+361     queue->\hyperlink{structfd__queue__t_a85b9339d9c70a03d3ff95ae92061cf70}{out} = 0;
+362 
+363     \textcolor{comment}{/* Set all the sockets in the queue to NULL */}
+364     \textcolor{keywordflow}{for} (i = 0; i < queue\_capacity; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i})
+365         queue->\hyperlink{structfd__queue__t_af838c3af6ffee37b30bbe8c45e05292b}{data}[i].\hyperlink{structfd__queue__elem__t_a04934612aa0f85b323659d652bc061a5}{sd} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+366 
+367     apr\_pool\_cleanup\_register(a, queue, ap\_queue\_destroy,
+368                               apr\_pool\_cleanup\_null);
+369 
+370     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+371 \}
+\end{DoxyCode}
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+interrupt\+\_\+all@{ap\+\_\+queue\+\_\+interrupt\+\_\+all}}
+\index{ap\+\_\+queue\+\_\+interrupt\+\_\+all@{ap\+\_\+queue\+\_\+interrupt\+\_\+all}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+interrupt\+\_\+all(fd\+\_\+queue\+\_\+t $\ast$queue)}{ap_queue_interrupt_all(fd_queue_t *queue)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+interrupt\+\_\+all (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+t} $\ast$}]{queue}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga6a9df0d76a287d52f8ea78b6ebce9c27}{}\label{group__APACHE__MPM__EVENT_ga6a9df0d76a287d52f8ea78b6ebce9c27}
+
+\begin{DoxyCode}
+508 \{
+509     \textcolor{keywordflow}{return} queue\_interrupt(queue, 1);
+510 \}
+\end{DoxyCode}
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+interrupt\+\_\+one@{ap\+\_\+queue\+\_\+interrupt\+\_\+one}}
+\index{ap\+\_\+queue\+\_\+interrupt\+\_\+one@{ap\+\_\+queue\+\_\+interrupt\+\_\+one}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+interrupt\+\_\+one(fd\+\_\+queue\+\_\+t $\ast$queue)}{ap_queue_interrupt_one(fd_queue_t *queue)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+interrupt\+\_\+one (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+t} $\ast$}]{queue}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_gae8c79d988912470cbc9313930133afb3}{}\label{group__APACHE__MPM__EVENT_gae8c79d988912470cbc9313930133afb3}
+
+\begin{DoxyCode}
+513 \{
+514     \textcolor{keywordflow}{return} queue\_interrupt(queue, 0);
+515 \}
+\end{DoxyCode}
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+pop\+\_\+something@{ap\+\_\+queue\+\_\+pop\+\_\+something}}
+\index{ap\+\_\+queue\+\_\+pop\+\_\+something@{ap\+\_\+queue\+\_\+pop\+\_\+something}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+pop\+\_\+something(fd\+\_\+queue\+\_\+t $\ast$queue, apr\+\_\+socket\+\_\+t $\ast$$\ast$sd, event\+\_\+conn\+\_\+state\+\_\+t $\ast$$\ast$ecs, apr\+\_\+pool\+\_\+t $\ast$$\ast$p, timer\+\_\+event\+\_\+t $\ast$$\ast$te)}{ap_queue_pop_something(fd_queue_t *queue, apr_socket_t **sd, event_conn_state_t **ecs, apr_pool_t **p, timer_event_t **te)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+pop\+\_\+something (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+t} $\ast$}]{queue, }
+\item[{{\bf apr\+\_\+socket\+\_\+t} $\ast$$\ast$}]{sd, }
+\item[{{\bf event\+\_\+conn\+\_\+state\+\_\+t} $\ast$$\ast$}]{ecs, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$$\ast$}]{p, }
+\item[{{\bf timer\+\_\+event\+\_\+t} $\ast$$\ast$}]{te\+\_\+out}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_gaea3aa3dc980104c89fc3fa768bc5aaea}{}\label{group__APACHE__MPM__EVENT_gaea3aa3dc980104c89fc3fa768bc5aaea}
+Retrieves the next available socket from the queue. If there are no sockets available, it will block until one becomes available. Once retrieved, the socket is placed into the address specified by \textquotesingle{}sd\textquotesingle{}. 
+\begin{DoxyCode}
+440 \{
+441     \hyperlink{structfd__queue__elem__t}{fd\_queue\_elem\_t} *\hyperlink{group__APR__Util__XML_gaf6c0c31c62555e73fa50b02e1393afc2}{elem};
+442     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+443 
+444     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex})) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+445         \textcolor{keywordflow}{return} rv;
+446     \}
+447 
+448     \textcolor{comment}{/* Keep waiting until we wake up and find that the queue is not empty. */}
+449     \textcolor{keywordflow}{if} (\hyperlink{event_2fdqueue_8c_af337af05355304aefe574a0ec1739675}{ap\_queue\_empty}(queue)) \{
+450         \textcolor{keywordflow}{if} (!queue->\hyperlink{structfd__queue__t_aace4fa4b984ffe25980fed75c97779d2}{terminated}) \{
+451             apr\_thread\_cond\_wait(queue->\hyperlink{structfd__queue__t_a18ddd6a916b50d00310ee4ed096a562a}{not\_empty}, queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex});
+452         \}
+453         \textcolor{comment}{/* If we wake up and it's still empty, then we were interrupted */}
+454         \textcolor{keywordflow}{if} (\hyperlink{event_2fdqueue_8c_af337af05355304aefe574a0ec1739675}{ap\_queue\_empty}(queue)) \{
+455             rv = apr\_thread\_mutex\_unlock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex});
+456             \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+457                 \textcolor{keywordflow}{return} rv;
+458             \}
+459             \textcolor{keywordflow}{if} (queue->\hyperlink{structfd__queue__t_aace4fa4b984ffe25980fed75c97779d2}{terminated}) \{
+460                 \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF}; \textcolor{comment}{/* no more elements ever again */}
+461             \}
+462             \textcolor{keywordflow}{else} \{
+463                 \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gaee1ce306c0ebf1701b34172310aa1bd5}{APR\_EINTR};
+464             \}
+465         \}
+466     \}
+467 
+468     *te\_out = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+469 
+470     \textcolor{keywordflow}{if} (!\hyperlink{group__apr__ring_ga9b64ad6eebea19f896d2aa90172b6b9a}{APR\_RING\_EMPTY}(&queue->timers, \hyperlink{structtimer__event__t}{timer\_event\_t}, link)) \{
+471         *te\_out = \hyperlink{group__apr__ring_gacacd9cfca24feb7ff754d4008422efcb}{APR\_RING\_FIRST}(&queue->timers);
+472         \hyperlink{group__apr__ring_gaab4a57544bdb660ec1e306137387d9d7}{APR\_RING\_REMOVE}(*te\_out, link);
+473     \}
+474     \textcolor{keywordflow}{else} \{
+475         elem = &queue->\hyperlink{structfd__queue__t_af838c3af6ffee37b30bbe8c45e05292b}{data}[queue->\hyperlink{structfd__queue__t_a85b9339d9c70a03d3ff95ae92061cf70}{out}];
+476         queue->\hyperlink{structfd__queue__t_a85b9339d9c70a03d3ff95ae92061cf70}{out}++;
+477         \textcolor{keywordflow}{if} (queue->\hyperlink{structfd__queue__t_a85b9339d9c70a03d3ff95ae92061cf70}{out} >= queue->\hyperlink{structfd__queue__t_a4f4edbb981e4bbbc7304ba485b519c09}{bounds})
+478             queue->\hyperlink{structfd__queue__t_a85b9339d9c70a03d3ff95ae92061cf70}{out} -= queue->\hyperlink{structfd__queue__t_a4f4edbb981e4bbbc7304ba485b519c09}{bounds};
+479         queue->\hyperlink{structfd__queue__t_a064707a5e5c88ee4715ebc0f4ea4abb1}{nelts}--;
+480         *sd = elem->\hyperlink{structfd__queue__elem__t_a04934612aa0f85b323659d652bc061a5}{sd};
+481         *ecs = elem->\hyperlink{structfd__queue__elem__t_a4450cbada67982a9d2202b8330458a99}{ecs};
+482         *p = elem->\hyperlink{structfd__queue__elem__t_a6b6e73a58c344f80a3fab25eb35f9fd3}{p};
+483 \textcolor{preprocessor}{#ifdef AP\_DEBUG}
+484         elem->\hyperlink{structfd__queue__elem__t_a04934612aa0f85b323659d652bc061a5}{sd} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+485         elem->\hyperlink{structfd__queue__elem__t_a6b6e73a58c344f80a3fab25eb35f9fd3}{p} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+486 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* AP\_DEBUG */}\textcolor{preprocessor}{}
+487     \}
+488 
+489     rv = apr\_thread\_mutex\_unlock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex});
+490     \textcolor{keywordflow}{return} rv;
+491 \}
+\end{DoxyCode}
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+push@{ap\+\_\+queue\+\_\+push}}
+\index{ap\+\_\+queue\+\_\+push@{ap\+\_\+queue\+\_\+push}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+push(fd\+\_\+queue\+\_\+t $\ast$queue, apr\+\_\+socket\+\_\+t $\ast$sd, event\+\_\+conn\+\_\+state\+\_\+t $\ast$ecs, apr\+\_\+pool\+\_\+t $\ast$p)}{ap_queue_push(fd_queue_t *queue, apr_socket_t *sd, event_conn_state_t *ecs, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+push (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+t} $\ast$}]{queue, }
+\item[{{\bf apr\+\_\+socket\+\_\+t} $\ast$}]{sd, }
+\item[{{\bf event\+\_\+conn\+\_\+state\+\_\+t} $\ast$}]{ecs, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga810547b86427d84bc25aa4711ca2f2f7}{}\label{group__APACHE__MPM__EVENT_ga810547b86427d84bc25aa4711ca2f2f7}
+Push a new socket onto the queue.
+
+precondition\+: ap\+\_\+queue\+\_\+info\+\_\+wait\+\_\+for\+\_\+idler has already been called to reserve an idle worker thread 
+\begin{DoxyCode}
+381 \{
+382     \hyperlink{structfd__queue__elem__t}{fd\_queue\_elem\_t} *\hyperlink{group__APR__Util__XML_gaf6c0c31c62555e73fa50b02e1393afc2}{elem};
+383     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+384 
+385     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex})) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+386         \textcolor{keywordflow}{return} rv;
+387     \}
+388 
+389     \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(!queue->\hyperlink{structfd__queue__t_aace4fa4b984ffe25980fed75c97779d2}{terminated});
+390     \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(!\hyperlink{event_2fdqueue_8c_aee6adf45a7812d4fdc4211b1b90acbc7}{ap\_queue\_full}(queue));
+391 
+392     elem = &queue->\hyperlink{structfd__queue__t_af838c3af6ffee37b30bbe8c45e05292b}{data}[queue->\hyperlink{structfd__queue__t_a17cde346fb215a61f7b2df26970c72bd}{in}];
+393     queue->\hyperlink{structfd__queue__t_a17cde346fb215a61f7b2df26970c72bd}{in}++;
+394     \textcolor{keywordflow}{if} (queue->\hyperlink{structfd__queue__t_a17cde346fb215a61f7b2df26970c72bd}{in} >= queue->\hyperlink{structfd__queue__t_a4f4edbb981e4bbbc7304ba485b519c09}{bounds})
+395         queue->\hyperlink{structfd__queue__t_a17cde346fb215a61f7b2df26970c72bd}{in} -= queue->\hyperlink{structfd__queue__t_a4f4edbb981e4bbbc7304ba485b519c09}{bounds};
+396     elem->\hyperlink{structfd__queue__elem__t_a04934612aa0f85b323659d652bc061a5}{sd} = sd;
+397     elem->\hyperlink{structfd__queue__elem__t_a4450cbada67982a9d2202b8330458a99}{ecs} = ecs;
+398     elem->\hyperlink{structfd__queue__elem__t_a6b6e73a58c344f80a3fab25eb35f9fd3}{p} = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+399     queue->\hyperlink{structfd__queue__t_a064707a5e5c88ee4715ebc0f4ea4abb1}{nelts}++;
+400 
+401     apr\_thread\_cond\_signal(queue->\hyperlink{structfd__queue__t_a18ddd6a916b50d00310ee4ed096a562a}{not\_empty});
+402 
+403     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_unlock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex})) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+404         \textcolor{keywordflow}{return} rv;
+405     \}
+406 
+407     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+408 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__APACHE__MPM__EVENT_ga810547b86427d84bc25aa4711ca2f2f7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+push\+\_\+timer@{ap\+\_\+queue\+\_\+push\+\_\+timer}}
+\index{ap\+\_\+queue\+\_\+push\+\_\+timer@{ap\+\_\+queue\+\_\+push\+\_\+timer}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+push\+\_\+timer(fd\+\_\+queue\+\_\+t $\ast$queue, timer\+\_\+event\+\_\+t $\ast$te)}{ap_queue_push_timer(fd_queue_t *queue, timer_event_t *te)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+push\+\_\+timer (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+t} $\ast$}]{queue, }
+\item[{{\bf timer\+\_\+event\+\_\+t} $\ast$}]{te}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_ga74a1be793d9307efa2e41b2248039da0}{}\label{group__APACHE__MPM__EVENT_ga74a1be793d9307efa2e41b2248039da0}
+
+\begin{DoxyCode}
+411 \{
+412     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+413 
+414     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex})) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+415         \textcolor{keywordflow}{return} rv;
+416     \}
+417 
+418     \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(!queue->\hyperlink{structfd__queue__t_aace4fa4b984ffe25980fed75c97779d2}{terminated});
+419 
+420     \hyperlink{group__apr__ring_ga235311035184125d72ce0689c9949a3e}{APR\_RING\_INSERT\_TAIL}(&queue->timers, te, \hyperlink{structtimer__event__t}{timer\_event\_t}, link);
+421 
+422     apr\_thread\_cond\_signal(queue->\hyperlink{structfd__queue__t_a18ddd6a916b50d00310ee4ed096a562a}{not\_empty});
+423 
+424     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_unlock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex})) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+425         \textcolor{keywordflow}{return} rv;
+426     \}
+427 
+428     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+429 \}
+\end{DoxyCode}
+\index{Event M\+PM@{Event M\+PM}!ap\+\_\+queue\+\_\+term@{ap\+\_\+queue\+\_\+term}}
+\index{ap\+\_\+queue\+\_\+term@{ap\+\_\+queue\+\_\+term}!Event M\+PM@{Event M\+PM}}
+\subsubsection[{\texorpdfstring{ap\+\_\+queue\+\_\+term(fd\+\_\+queue\+\_\+t $\ast$queue)}{ap_queue_term(fd_queue_t *queue)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+queue\+\_\+term (
+\begin{DoxyParamCaption}
+\item[{{\bf fd\+\_\+queue\+\_\+t} $\ast$}]{queue}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__MPM__EVENT_gabd40aa9d9c5f2cd9a23d912200158c5f}{}\label{group__APACHE__MPM__EVENT_gabd40aa9d9c5f2cd9a23d912200158c5f}
+
+\begin{DoxyCode}
+518 \{
+519     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+520 
+521     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex})) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+522         \textcolor{keywordflow}{return} rv;
+523     \}
+524     \textcolor{comment}{/* we must hold one\_big\_mutex when setting this... otherwise,}
+525 \textcolor{comment}{     * we could end up setting it and waking everybody up just after a}
+526 \textcolor{comment}{     * would-be popper checks it but right before they block}
+527 \textcolor{comment}{     */}
+528     queue->\hyperlink{structfd__queue__t_aace4fa4b984ffe25980fed75c97779d2}{terminated} = 1;
+529     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_unlock(queue->\hyperlink{structfd__queue__t_af029904f6cc5ddc0afec5df2fadeaef6}{one\_big\_mutex})) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+530         \textcolor{keywordflow}{return} rv;
+531     \}
+532     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM__EVENT_ga6a9df0d76a287d52f8ea78b6ebce9c27}{ap\_queue\_interrupt\_all}(queue);
+533 \}
+\end{DoxyCode}

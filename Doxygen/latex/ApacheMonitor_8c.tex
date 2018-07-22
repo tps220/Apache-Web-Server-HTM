@@ -1,0 +1,2415 @@
+\hypertarget{ApacheMonitor_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/win32/\+Apache\+Monitor.c File Reference}
+\label{ApacheMonitor_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/win32/\+Apache\+Monitor.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/win32/\+Apache\+Monitor.\+c}}
+{\ttfamily \#include $<$windows.\+h$>$}\\*
+{\ttfamily \#include $<$windowsx.\+h$>$}\\*
+{\ttfamily \#include $<$commctrl.\+h$>$}\\*
+{\ttfamily \#include $<$objbase.\+h$>$}\\*
+{\ttfamily \#include $<$shlobj.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$Wts\+Api32.\+h$>$}\\*
+{\ttfamily \#include $<$tchar.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}Apache\+Monitor.\+h\char`\"{}}\\*
+Include dependency graph for Apache\+Monitor.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__st__APACHE__SERVICE}{\+\_\+st\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE}
+\item 
+struct \hyperlink{struct__st__MONITORED__COMPUTERS}{\+\_\+st\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{ApacheMonitor_8c_ac50762666aa00bd3a4308158510f1748}{\+\_\+\+W\+I\+N32\+\_\+\+W\+I\+N\+NT}~0x0500
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a8a7c30a576d5706b6c0821834d01cbbc}{S\+T\+R\+I\+CT}
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a3a75770af38d05856eb2e9d1867b471c}{O\+E\+M\+R\+E\+S\+O\+U\+R\+CE}
+\item 
+\#define \hyperlink{ApacheMonitor_8c_ae6bcbe7f05ff73c6cb76c91b11e59722}{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+FY}(\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~\hyperlink{ApacheMonitor_8c_afc9fd626f2b82eb31b2b151249f92ce2}{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER}(\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})
+\item 
+\#define \hyperlink{ApacheMonitor_8c_afc9fd626f2b82eb31b2b151249f92ce2}{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER}(\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~\#\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a7179343f07abe3f1766428d0b2679a69}{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N\+NT}~2
+\item 
+\#define \hyperlink{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N2K}~3
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a888e6bc4ccc9c165aa1522f02474f033}{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES}~128
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a0f13e7b8e97f05a5050f12bf0e78bfa1}{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS}~32
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a9b9ef7c866f961e54d2770584b5f6820}{W\+M\+\_\+\+T\+R\+A\+Y\+M\+E\+S\+S\+A\+GE}~(W\+M\+\_\+\+A\+PP+1)
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a22fdf378ef7aa9e39034b54b36ac5831}{W\+M\+\_\+\+U\+P\+D\+A\+T\+E\+M\+E\+S\+S\+A\+GE}~(W\+M\+\_\+\+U\+S\+ER+1)
+\item 
+\#define \hyperlink{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}{W\+M\+\_\+\+M\+A\+N\+A\+G\+E\+M\+E\+S\+S\+A\+GE}~(W\+M\+\_\+\+U\+S\+ER+2)
+\item 
+\#define \hyperlink{ApacheMonitor_8c_aff79c512ca2d42e987ffe198c7f76347}{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+F\+R\+E\+SH}~10
+\item 
+\#define \hyperlink{ApacheMonitor_8c_aba560eb64e9ec409c153585601512015}{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+S\+C\+AN}~11
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a9728584c8a48e10efacaf29f5899f587}{S\+E\+R\+V\+I\+C\+E\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+R\+E\+S\+T\+A\+RT}~128
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a7fda781eb1e8fb545b2a373e7f1cfe14}{X\+B\+I\+T\+M\+AP}~16
+\item 
+\#define \hyperlink{ApacheMonitor_8c_aba79305932e87f301cf27098dec70b35}{Y\+B\+I\+T\+M\+AP}~16
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a2b68559d692760680c326428841254d1}{M\+A\+X\+\_\+\+L\+O\+A\+D\+S\+T\+R\+I\+NG}~100
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a45a64d025faf2f8499d2192c5b033a4b}{R\+E\+F\+R\+E\+S\+H\+\_\+\+T\+I\+ME}~2000           /$\ast$ service refresh \hyperlink{pcre_8txt_aafdc0b2481cb13eb2e0183db31aa1c5d}{time} (\hyperlink{group__APR__Util__MC_gabcfc3d1de80e72f78d877d87639acdd2}{ms}) $\ast$/
+\item 
+\#define \hyperlink{ApacheMonitor_8c_a454b5643c2ee8d9c939ed0e87dc6d731}{R\+E\+S\+C\+A\+N\+\_\+\+T\+I\+ME}~20000          /$\ast$ registry rescan \hyperlink{pcre_8txt_aafdc0b2481cb13eb2e0183db31aa1c5d}{time} (\hyperlink{group__APR__Util__MC_gabcfc3d1de80e72f78d877d87639acdd2}{ms}) $\ast$/
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__st__APACHE__SERVICE}{\+\_\+st\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE} \hyperlink{ApacheMonitor_8c_aeedaaf0bf67ff3deef34df348b7d6b85}{S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE}
+\item 
+typedef struct \hyperlink{struct__st__MONITORED__COMPUTERS}{\+\_\+st\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS} \hyperlink{ApacheMonitor_8c_a0c27838cb0f1d64521068d9a962b7bc5}{S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{ApacheMonitor_8c_abe05e747e5221061baf38f279cbdef12}{am\+\_\+\+Clear\+Services\+St} ()
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{ApacheMonitor_8c_a32b8532b0104c27d2514e447b265d6b7}{am\+\_\+\+Clear\+Computers\+St} ()
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_ac023f67bdb3203e204201d9421f8e305}{am\+\_\+\+Is\+Computer\+Connected} (L\+P\+T\+S\+TR sz\+Computer\+Name)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{ApacheMonitor_8c_a0dea6c1dcd4bc3e57dc9c26ce2911024}{am\+\_\+\+Disconnect\+Computer} (L\+P\+T\+S\+TR sz\+Computer\+Name)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{Error\+Message} (L\+P\+C\+T\+S\+TR sz\+Error, \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} b\+Fatal)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{ApacheMonitor_8c_a46f8988b1195685150c600404e531328}{am\+\_\+\+Respawn\+As\+User\+Admin} (H\+W\+ND hwnd, D\+W\+O\+RD op, L\+P\+C\+T\+S\+TR sz\+Service, L\+P\+C\+T\+S\+TR sz\+Computer\+Name)
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_a79a0d782af0313fbde002d0342abfc9f}{am\+\_\+\+Connect\+Computer} (L\+P\+T\+S\+TR sz\+Computer\+Name)
+\item 
+L\+P\+T\+S\+TR \hyperlink{ApacheMonitor_8c_ae639fa1a5230350d790860b90b592436}{Get\+String\+Res} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id)
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_a6f6b208a3caeb3a480d020b0a1a587e3}{Get\+System\+O\+S\+Version} (L\+P\+D\+W\+O\+RD dw\+Version)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{append\+Menu\+Item} (H\+M\+E\+NU h\+Menu, U\+I\+NT u\+Menu\+Id, L\+P\+T\+S\+TR sz\+Name, \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} f\+Default, \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} f\+Enabled)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{ApacheMonitor_8c_ac60667b9020c3690fd448ab3185732e0}{append\+Service\+Menu} (H\+M\+E\+NU h\+Menu, U\+I\+NT u\+Menu\+Id, L\+P\+T\+S\+TR sz\+Service\+Name, \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} f\+Running)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{ApacheMonitor_8c_a26ad31b5fe1a936eb78ec98714c67802}{Show\+Try\+Popup\+Menu} (H\+W\+ND h\+Wnd)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{ApacheMonitor_8c_a8d6651ecbaa1c5daac907f3f7d0394e8}{Show\+Try\+Services\+Menu} (H\+W\+ND h\+Wnd)
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_a8ba351a10e94987b8adeaac21543b231}{Center\+Window} (H\+W\+ND hwnd\+Child)
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29}{Apache\+Manage\+Service} (L\+P\+C\+T\+S\+TR sz\+Service\+Name, L\+P\+C\+T\+S\+TR sz\+Image\+Path, L\+P\+T\+S\+TR sz\+Computer\+Name, D\+W\+O\+RD dw\+Command)
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_aa9a8e82e1b247f43aa7b147340446429}{Is\+Service\+Running} (L\+P\+C\+T\+S\+TR sz\+Service\+Name, L\+P\+C\+T\+S\+TR sz\+Computer\+Name, L\+P\+D\+W\+O\+RD lpdw\+Pid)
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_aa1aa97222a0d05397de15ae34cc17229}{Find\+Running\+Services} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86}{Get\+Apache\+Services\+Status} ()
+\item 
+L\+R\+E\+S\+U\+LT C\+A\+L\+L\+B\+A\+CK \hyperlink{ApacheMonitor_8c_aceb3d28feeb5ae0fecdd9d53dc4dd884}{Connect\+Dlg\+Proc} (H\+W\+ND h\+Dlg, U\+I\+NT \hyperlink{pcregrep_8txt_a0a2f14d6be6096315101e08133f8d1bc}{message}, W\+P\+A\+R\+AM w\+Param, L\+P\+A\+R\+AM l\+Param)
+\item 
+L\+R\+E\+S\+U\+LT C\+A\+L\+L\+B\+A\+CK \hyperlink{ApacheMonitor_8c_af5961f2cd92c217189fabb303663f600}{Service\+Dlg\+Proc} (H\+W\+ND h\+Dlg, U\+I\+NT \hyperlink{pcregrep_8txt_a0a2f14d6be6096315101e08133f8d1bc}{message}, W\+P\+A\+R\+AM w\+Param, L\+P\+A\+R\+AM l\+Param)
+\item 
+L\+R\+E\+S\+U\+LT C\+A\+L\+L\+B\+A\+CK \hyperlink{ApacheMonitor_8c_a30a1e3b0304f1b083637664cbda94e72}{Wnd\+Proc} (H\+W\+ND h\+Wnd, U\+I\+NT \hyperlink{pcregrep_8txt_a0a2f14d6be6096315101e08133f8d1bc}{message}, W\+P\+A\+R\+AM w\+Param, L\+P\+A\+R\+AM l\+Param)
+\item 
+H\+W\+ND \hyperlink{ApacheMonitor_8c_a4c157499b414a516446108301e061979}{Create\+Main\+Window} (H\+I\+N\+S\+T\+A\+N\+CE h\+Instance)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \+\_\+\+\_\+cdecl \hyperlink{ApacheMonitor_8c_a26a86baed11120d322b658b775b373d7}{\+\_\+setargv} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} W\+I\+N\+A\+PI \hyperlink{ApacheMonitor_8c_a661c2abc03926acfaeb93b4ae7db4943}{Win\+Main} (H\+I\+N\+S\+T\+A\+N\+CE h\+Instance, H\+I\+N\+S\+T\+A\+N\+CE h\+Prev\+Instance, L\+P\+S\+TR lp\+Cmd\+Line, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} n\+Cmd\+Show)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+H\+I\+N\+S\+T\+A\+N\+CE \hyperlink{ApacheMonitor_8c_ac3ac20e13a0100039a831961a786ca28}{g\+\_\+h\+Instance} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL}
+\item 
+T\+C\+H\+AR $\ast$ \hyperlink{ApacheMonitor_8c_a7224c1ff0ea1d0a5f104da9022081db5}{g\+\_\+sz\+Title}
+\item 
+T\+C\+H\+AR $\ast$ \hyperlink{ApacheMonitor_8c_a09081aff5af6d1aa3d8fea0876abe868}{g\+\_\+sz\+Window\+Class}
+\item 
+H\+I\+C\+ON \hyperlink{ApacheMonitor_8c_afd5c36b003e90ee47d2c73c17de2ac8f}{g\+\_\+ico\+Stop}
+\item 
+H\+I\+C\+ON \hyperlink{ApacheMonitor_8c_a6c06029359cb44c6d96653719d3a86c5}{g\+\_\+ico\+Run}
+\item 
+U\+I\+NT \hyperlink{ApacheMonitor_8c_aedec9ce315c13b2baba1d96aaf0e1e15}{g\+\_\+b\+Ui\+Taskbar\+Created}
+\item 
+D\+W\+O\+RD \hyperlink{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}{g\+\_\+dw\+O\+S\+Version}
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}{g\+\_\+b\+Dlg\+Service\+On} = \hyperlink{pcregrep_8c_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_a463973f56e605c5517d2461e7682070e}{g\+\_\+b\+Console\+Run} = \hyperlink{pcregrep_8c_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}
+\item 
+\hyperlink{ApacheMonitor_8c_aeedaaf0bf67ff3deef34df348b7d6b85}{S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE} \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\+\_\+st\+Services} \mbox{[}\hyperlink{ApacheMonitor_8c_a888e6bc4ccc9c165aa1522f02474f033}{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES}\mbox{]}
+\item 
+\hyperlink{ApacheMonitor_8c_a0c27838cb0f1d64521068d9a962b7bc5}{S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP} \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\+\_\+st\+Computers} \mbox{[}\hyperlink{ApacheMonitor_8c_a0f13e7b8e97f05a5050f12bf0e78bfa1}{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS}\mbox{]}
+\item 
+H\+B\+I\+T\+M\+AP \hyperlink{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}{g\+\_\+h\+Bmp\+Start}
+\item 
+H\+B\+I\+T\+M\+AP \hyperlink{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{g\+\_\+h\+Bmp\+Stop}
+\item 
+H\+B\+I\+T\+M\+AP \hyperlink{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}{g\+\_\+h\+Bmp\+Picture}
+\item 
+H\+B\+I\+T\+M\+AP \hyperlink{ApacheMonitor_8c_afefe7c7cf8e229c511882c3a5186d8e8}{g\+\_\+h\+Bmp\+Old}
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{ApacheMonitor_8c_a367f6a9a04f9ae13e95eefc98ae9b1af}{g\+\_\+b\+Rescan\+Services}
+\item 
+H\+W\+ND \hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\+\_\+hwnd\+Service\+Dlg}
+\item 
+H\+W\+ND \hyperlink{ApacheMonitor_8c_abaeab070683eb0781bf12d92bc68d430}{g\+\_\+hwnd\+Main}
+\item 
+H\+W\+ND \hyperlink{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{g\+\_\+hwnd\+Stdout\+List}
+\item 
+H\+W\+ND \hyperlink{ApacheMonitor_8c_a3ea986ce98d48630f99ea3b3f889f525}{g\+\_\+hwnd\+Connect\+Dlg}
+\item 
+H\+C\+U\+R\+S\+OR \hyperlink{ApacheMonitor_8c_adf2793c1ebbfd8ea69879e88877c6eb8}{g\+\_\+h\+Cursor\+Hourglass}
+\item 
+H\+C\+U\+R\+S\+OR \hyperlink{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}{g\+\_\+h\+Cursor\+Arrow}
+\item 
+L\+A\+N\+G\+ID \hyperlink{ApacheMonitor_8c_a0d98d46a172f82e8904fe3e2ec095e2c}{g\+\_\+\+Lang\+ID}
+\item 
+C\+R\+I\+T\+I\+C\+A\+L\+\_\+\+S\+E\+C\+T\+I\+ON \hyperlink{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}{g\+\_\+stc\+Section}
+\item 
+L\+P\+T\+S\+TR \hyperlink{ApacheMonitor_8c_a236a248f74e54c0ecf421d94646e766f}{g\+\_\+sz\+Local\+Host}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!\+\_\+\+W\+I\+N32\+\_\+\+W\+I\+N\+NT@{\+\_\+\+W\+I\+N32\+\_\+\+W\+I\+N\+NT}}
+\index{\+\_\+\+W\+I\+N32\+\_\+\+W\+I\+N\+NT@{\+\_\+\+W\+I\+N32\+\_\+\+W\+I\+N\+NT}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{\+\_\+\+W\+I\+N32\+\_\+\+W\+I\+N\+NT}{_WIN32_WINNT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+W\+I\+N32\+\_\+\+W\+I\+N\+NT~0x0500}\hypertarget{ApacheMonitor_8c_ac50762666aa00bd3a4308158510f1748}{}\label{ApacheMonitor_8c_ac50762666aa00bd3a4308158510f1748}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+FY@{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+FY}}
+\index{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+FY@{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+FY}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+FY}{AM_STRINGIFY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+FY(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~{\bf A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER}({\bf n})}\hypertarget{ApacheMonitor_8c_ae6bcbe7f05ff73c6cb76c91b11e59722}{}\label{ApacheMonitor_8c_ae6bcbe7f05ff73c6cb76c91b11e59722}
+Properly quote a value as a string in the C preprocessor \index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER@{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER}}
+\index{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER@{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER}{AM_STRINGIFY_HELPER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+F\+Y\+\_\+\+H\+E\+L\+P\+ER(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~\#{\bf n}}\hypertarget{ApacheMonitor_8c_afc9fd626f2b82eb31b2b151249f92ce2}{}\label{ApacheMonitor_8c_afc9fd626f2b82eb31b2b151249f92ce2}
+Helper macro for A\+M\+\_\+\+S\+T\+R\+I\+N\+G\+I\+FY \index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS@{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS}}
+\index{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS@{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS}{MAX_APACHE_COMPUTERS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS~32}\hypertarget{ApacheMonitor_8c_a0f13e7b8e97f05a5050f12bf0e78bfa1}{}\label{ApacheMonitor_8c_a0f13e7b8e97f05a5050f12bf0e78bfa1}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES@{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES}}
+\index{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES@{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES}{MAX_APACHE_SERVICES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES~128}\hypertarget{ApacheMonitor_8c_a888e6bc4ccc9c165aa1522f02474f033}{}\label{ApacheMonitor_8c_a888e6bc4ccc9c165aa1522f02474f033}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!M\+A\+X\+\_\+\+L\+O\+A\+D\+S\+T\+R\+I\+NG@{M\+A\+X\+\_\+\+L\+O\+A\+D\+S\+T\+R\+I\+NG}}
+\index{M\+A\+X\+\_\+\+L\+O\+A\+D\+S\+T\+R\+I\+NG@{M\+A\+X\+\_\+\+L\+O\+A\+D\+S\+T\+R\+I\+NG}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+L\+O\+A\+D\+S\+T\+R\+I\+NG}{MAX_LOADSTRING}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+L\+O\+A\+D\+S\+T\+R\+I\+NG~100}\hypertarget{ApacheMonitor_8c_a2b68559d692760680c326428841254d1}{}\label{ApacheMonitor_8c_a2b68559d692760680c326428841254d1}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!O\+E\+M\+R\+E\+S\+O\+U\+R\+CE@{O\+E\+M\+R\+E\+S\+O\+U\+R\+CE}}
+\index{O\+E\+M\+R\+E\+S\+O\+U\+R\+CE@{O\+E\+M\+R\+E\+S\+O\+U\+R\+CE}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{O\+E\+M\+R\+E\+S\+O\+U\+R\+CE}{OEMRESOURCE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\+E\+M\+R\+E\+S\+O\+U\+R\+CE}\hypertarget{ApacheMonitor_8c_a3a75770af38d05856eb2e9d1867b471c}{}\label{ApacheMonitor_8c_a3a75770af38d05856eb2e9d1867b471c}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N2K@{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N2K}}
+\index{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N2K@{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N2K}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N2K}{OS_VERSION_WIN2K}}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N2K~3}\hypertarget{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}{}\label{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N\+NT@{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N\+NT}}
+\index{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N\+NT@{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N\+NT}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N\+NT}{OS_VERSION_WINNT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\+S\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+W\+I\+N\+NT~2}\hypertarget{ApacheMonitor_8c_a7179343f07abe3f1766428d0b2679a69}{}\label{ApacheMonitor_8c_a7179343f07abe3f1766428d0b2679a69}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!R\+E\+F\+R\+E\+S\+H\+\_\+\+T\+I\+ME@{R\+E\+F\+R\+E\+S\+H\+\_\+\+T\+I\+ME}}
+\index{R\+E\+F\+R\+E\+S\+H\+\_\+\+T\+I\+ME@{R\+E\+F\+R\+E\+S\+H\+\_\+\+T\+I\+ME}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+F\+R\+E\+S\+H\+\_\+\+T\+I\+ME}{REFRESH_TIME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+F\+R\+E\+S\+H\+\_\+\+T\+I\+ME~2000           /$\ast$ service refresh {\bf time} ({\bf ms}) $\ast$/}\hypertarget{ApacheMonitor_8c_a45a64d025faf2f8499d2192c5b033a4b}{}\label{ApacheMonitor_8c_a45a64d025faf2f8499d2192c5b033a4b}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!R\+E\+S\+C\+A\+N\+\_\+\+T\+I\+ME@{R\+E\+S\+C\+A\+N\+\_\+\+T\+I\+ME}}
+\index{R\+E\+S\+C\+A\+N\+\_\+\+T\+I\+ME@{R\+E\+S\+C\+A\+N\+\_\+\+T\+I\+ME}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+S\+C\+A\+N\+\_\+\+T\+I\+ME}{RESCAN_TIME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+S\+C\+A\+N\+\_\+\+T\+I\+ME~20000          /$\ast$ registry rescan {\bf time} ({\bf ms}) $\ast$/}\hypertarget{ApacheMonitor_8c_a454b5643c2ee8d9c939ed0e87dc6d731}{}\label{ApacheMonitor_8c_a454b5643c2ee8d9c939ed0e87dc6d731}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!S\+E\+R\+V\+I\+C\+E\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+R\+E\+S\+T\+A\+RT@{S\+E\+R\+V\+I\+C\+E\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+R\+E\+S\+T\+A\+RT}}
+\index{S\+E\+R\+V\+I\+C\+E\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+R\+E\+S\+T\+A\+RT@{S\+E\+R\+V\+I\+C\+E\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+R\+E\+S\+T\+A\+RT}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{S\+E\+R\+V\+I\+C\+E\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+R\+E\+S\+T\+A\+RT}{SERVICE_APACHE_RESTART}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+E\+R\+V\+I\+C\+E\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+R\+E\+S\+T\+A\+RT~128}\hypertarget{ApacheMonitor_8c_a9728584c8a48e10efacaf29f5899f587}{}\label{ApacheMonitor_8c_a9728584c8a48e10efacaf29f5899f587}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!S\+T\+R\+I\+CT@{S\+T\+R\+I\+CT}}
+\index{S\+T\+R\+I\+CT@{S\+T\+R\+I\+CT}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{S\+T\+R\+I\+CT}{STRICT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+T\+R\+I\+CT}\hypertarget{ApacheMonitor_8c_a8a7c30a576d5706b6c0821834d01cbbc}{}\label{ApacheMonitor_8c_a8a7c30a576d5706b6c0821834d01cbbc}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!W\+M\+\_\+\+M\+A\+N\+A\+G\+E\+M\+E\+S\+S\+A\+GE@{W\+M\+\_\+\+M\+A\+N\+A\+G\+E\+M\+E\+S\+S\+A\+GE}}
+\index{W\+M\+\_\+\+M\+A\+N\+A\+G\+E\+M\+E\+S\+S\+A\+GE@{W\+M\+\_\+\+M\+A\+N\+A\+G\+E\+M\+E\+S\+S\+A\+GE}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{W\+M\+\_\+\+M\+A\+N\+A\+G\+E\+M\+E\+S\+S\+A\+GE}{WM_MANAGEMESSAGE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+M\+\_\+\+M\+A\+N\+A\+G\+E\+M\+E\+S\+S\+A\+GE~(W\+M\+\_\+\+U\+S\+ER+2)}\hypertarget{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}{}\label{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+F\+R\+E\+SH@{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+F\+R\+E\+SH}}
+\index{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+F\+R\+E\+SH@{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+F\+R\+E\+SH}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+F\+R\+E\+SH}{WM_TIMER_REFRESH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+F\+R\+E\+SH~10}\hypertarget{ApacheMonitor_8c_aff79c512ca2d42e987ffe198c7f76347}{}\label{ApacheMonitor_8c_aff79c512ca2d42e987ffe198c7f76347}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+S\+C\+AN@{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+S\+C\+AN}}
+\index{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+S\+C\+AN@{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+S\+C\+AN}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+S\+C\+AN}{WM_TIMER_RESCAN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+M\+\_\+\+T\+I\+M\+E\+R\+\_\+\+R\+E\+S\+C\+AN~11}\hypertarget{ApacheMonitor_8c_aba560eb64e9ec409c153585601512015}{}\label{ApacheMonitor_8c_aba560eb64e9ec409c153585601512015}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!W\+M\+\_\+\+T\+R\+A\+Y\+M\+E\+S\+S\+A\+GE@{W\+M\+\_\+\+T\+R\+A\+Y\+M\+E\+S\+S\+A\+GE}}
+\index{W\+M\+\_\+\+T\+R\+A\+Y\+M\+E\+S\+S\+A\+GE@{W\+M\+\_\+\+T\+R\+A\+Y\+M\+E\+S\+S\+A\+GE}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{W\+M\+\_\+\+T\+R\+A\+Y\+M\+E\+S\+S\+A\+GE}{WM_TRAYMESSAGE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+M\+\_\+\+T\+R\+A\+Y\+M\+E\+S\+S\+A\+GE~(W\+M\+\_\+\+A\+PP+1)}\hypertarget{ApacheMonitor_8c_a9b9ef7c866f961e54d2770584b5f6820}{}\label{ApacheMonitor_8c_a9b9ef7c866f961e54d2770584b5f6820}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!W\+M\+\_\+\+U\+P\+D\+A\+T\+E\+M\+E\+S\+S\+A\+GE@{W\+M\+\_\+\+U\+P\+D\+A\+T\+E\+M\+E\+S\+S\+A\+GE}}
+\index{W\+M\+\_\+\+U\+P\+D\+A\+T\+E\+M\+E\+S\+S\+A\+GE@{W\+M\+\_\+\+U\+P\+D\+A\+T\+E\+M\+E\+S\+S\+A\+GE}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{W\+M\+\_\+\+U\+P\+D\+A\+T\+E\+M\+E\+S\+S\+A\+GE}{WM_UPDATEMESSAGE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+M\+\_\+\+U\+P\+D\+A\+T\+E\+M\+E\+S\+S\+A\+GE~(W\+M\+\_\+\+U\+S\+ER+1)}\hypertarget{ApacheMonitor_8c_a22fdf378ef7aa9e39034b54b36ac5831}{}\label{ApacheMonitor_8c_a22fdf378ef7aa9e39034b54b36ac5831}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!X\+B\+I\+T\+M\+AP@{X\+B\+I\+T\+M\+AP}}
+\index{X\+B\+I\+T\+M\+AP@{X\+B\+I\+T\+M\+AP}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{X\+B\+I\+T\+M\+AP}{XBITMAP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define X\+B\+I\+T\+M\+AP~16}\hypertarget{ApacheMonitor_8c_a7fda781eb1e8fb545b2a373e7f1cfe14}{}\label{ApacheMonitor_8c_a7fda781eb1e8fb545b2a373e7f1cfe14}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Y\+B\+I\+T\+M\+AP@{Y\+B\+I\+T\+M\+AP}}
+\index{Y\+B\+I\+T\+M\+AP@{Y\+B\+I\+T\+M\+AP}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Y\+B\+I\+T\+M\+AP}{YBITMAP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define Y\+B\+I\+T\+M\+AP~16}\hypertarget{ApacheMonitor_8c_aba79305932e87f301cf27098dec70b35}{}\label{ApacheMonitor_8c_aba79305932e87f301cf27098dec70b35}
+
+
+\subsection{Typedef Documentation}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE@{S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE}}
+\index{S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE@{S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE}{ST_APACHE_SERVICE}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+st\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE}  {\bf S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE}}\hypertarget{ApacheMonitor_8c_aeedaaf0bf67ff3deef34df348b7d6b85}{}\label{ApacheMonitor_8c_aeedaaf0bf67ff3deef34df348b7d6b85}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP@{S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP}}
+\index{S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP@{S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP}{ST_MONITORED_COMP}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+st\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS}  {\bf S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP}}\hypertarget{ApacheMonitor_8c_a0c27838cb0f1d64521068d9a962b7bc5}{}\label{ApacheMonitor_8c_a0c27838cb0f1d64521068d9a962b7bc5}
+
+
+\subsection{Function Documentation}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!\+\_\+setargv@{\+\_\+setargv}}
+\index{\+\_\+setargv@{\+\_\+setargv}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{\+\_\+setargv(void)}{_setargv(void)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} \+\_\+\+\_\+cdecl \+\_\+setargv (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a26a86baed11120d322b658b775b373d7}{}\label{ApacheMonitor_8c_a26a86baed11120d322b658b775b373d7}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a26a86baed11120d322b658b775b373d7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!am\+\_\+\+Clear\+Computers\+St@{am\+\_\+\+Clear\+Computers\+St}}
+\index{am\+\_\+\+Clear\+Computers\+St@{am\+\_\+\+Clear\+Computers\+St}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{am\+\_\+\+Clear\+Computers\+St()}{am_ClearComputersSt()}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} am\+\_\+\+Clear\+Computers\+St (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a32b8532b0104c27d2514e447b265d6b7}{}\label{ApacheMonitor_8c_a32b8532b0104c27d2514e447b265d6b7}
+
+\begin{DoxyCode}
+150 \{
+151     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+152     \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{ApacheMonitor_8c_a0f13e7b8e97f05a5050f12bf0e78bfa1}{MAX\_APACHE\_COMPUTERS}; i++) \{
+153         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName) \{
+154             \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName);
+155             RegCloseKey(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].hRegistry);
+156         \}
+157     \}
+158     memset(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}, 0, \textcolor{keyword}{sizeof}(\hyperlink{struct__st__MONITORED__COMPUTERS}{ST\_MONITORED\_COMP}) * MAX\_APACHE\_COMPUTERS
+      );
+159 
+160 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=265pt]{ApacheMonitor_8c_a32b8532b0104c27d2514e447b265d6b7_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=287pt]{ApacheMonitor_8c_a32b8532b0104c27d2514e447b265d6b7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!am\+\_\+\+Clear\+Services\+St@{am\+\_\+\+Clear\+Services\+St}}
+\index{am\+\_\+\+Clear\+Services\+St@{am\+\_\+\+Clear\+Services\+St}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{am\+\_\+\+Clear\+Services\+St()}{am_ClearServicesSt()}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} am\+\_\+\+Clear\+Services\+St (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_abe05e747e5221061baf38f279cbdef12}{}\label{ApacheMonitor_8c_abe05e747e5221061baf38f279cbdef12}
+
+\begin{DoxyCode}
+123 \{
+124     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+125     \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{ApacheMonitor_8c_a888e6bc4ccc9c165aa1522f02474f033}{MAX\_APACHE\_SERVICES}; i++)
+126     \{
+127         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szServiceName) \{
+128             \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szServiceName);
+129         \}
+130         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szDisplayName) \{
+131             \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szDisplayName);
+132         \}
+133         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szDescription) \{
+134             \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szDescription);
+135         \}
+136         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szImagePath) \{
+137             \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szImagePath);
+138         \}
+139         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szComputerName) \{
+140             \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szComputerName);
+141         \}
+142 
+143     \}
+144     memset(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}, 0, \textcolor{keyword}{sizeof}(\hyperlink{struct__st__APACHE__SERVICE}{ST\_APACHE\_SERVICE}) * MAX\_APACHE\_SERVICES);
+145 
+146 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=256pt]{ApacheMonitor_8c_abe05e747e5221061baf38f279cbdef12_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_abe05e747e5221061baf38f279cbdef12_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!am\+\_\+\+Connect\+Computer@{am\+\_\+\+Connect\+Computer}}
+\index{am\+\_\+\+Connect\+Computer@{am\+\_\+\+Connect\+Computer}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{am\+\_\+\+Connect\+Computer(\+L\+P\+T\+S\+T\+R sz\+Computer\+Name)}{am_ConnectComputer(LPTSTR szComputerName)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} am\+\_\+\+Connect\+Computer (
+\begin{DoxyParamCaption}
+\item[{L\+P\+T\+S\+TR}]{sz\+Computer\+Name}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a79a0d782af0313fbde002d0342abfc9f}{}\label{ApacheMonitor_8c_a79a0d782af0313fbde002d0342abfc9f}
+
+\begin{DoxyCode}
+246 \{
+247     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0;
+248     HKEY hKeyRemote;
+249     TCHAR szTmp[MAX\_PATH];
+250 
+251     \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+252         \textcolor{keywordflow}{if} (\_tcscmp(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName, szComputerName) == 0) \{
+253             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+254         \}
+255         ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+256     \}
+257     \textcolor{keywordflow}{if} (i > \hyperlink{ApacheMonitor_8c_a0f13e7b8e97f05a5050f12bf0e78bfa1}{MAX\_APACHE\_COMPUTERS} - 1) \{
+258         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+259     \}
+260     \textcolor{keywordflow}{if} (RegConnectRegistry(szComputerName, HKEY\_LOCAL\_MACHINE, &hKeyRemote)
+261             != \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS}) \{
+262         \_sntprintf(szTmp, \textcolor{keyword}{sizeof}(szTmp) / \textcolor{keyword}{sizeof}(TCHAR),
+263                    g\_lpMsg[\hyperlink{ApacheMonitor_8h_a9a309eae7227c788700f69d421819b7f}{IDS\_MSG\_ECONNECT} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+264                    szComputerName);
+265         \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(szTmp, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+266         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+267     \}
+268     \textcolor{keywordflow}{else} \{
+269         \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}].\hyperlink{struct__st__MONITORED__COMPUTERS_a00f2db8f87493ab31ecd00253868891f}{szComputerName} = \_tcsdup(szComputerName);
+270         \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}].\hyperlink{struct__st__MONITORED__COMPUTERS_a5ff832bcc89cf9d9111d32f2677ca0de}{hRegistry} = hKeyRemote;
+271         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+272     \}
+273 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=308pt]{ApacheMonitor_8c_a79a0d782af0313fbde002d0342abfc9f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a79a0d782af0313fbde002d0342abfc9f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!am\+\_\+\+Disconnect\+Computer@{am\+\_\+\+Disconnect\+Computer}}
+\index{am\+\_\+\+Disconnect\+Computer@{am\+\_\+\+Disconnect\+Computer}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{am\+\_\+\+Disconnect\+Computer(\+L\+P\+T\+S\+T\+R sz\+Computer\+Name)}{am_DisconnectComputer(LPTSTR szComputerName)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} am\+\_\+\+Disconnect\+Computer (
+\begin{DoxyParamCaption}
+\item[{L\+P\+T\+S\+TR}]{sz\+Computer\+Name}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a0dea6c1dcd4bc3e57dc9c26ce2911024}{}\label{ApacheMonitor_8c_a0dea6c1dcd4bc3e57dc9c26ce2911024}
+
+\begin{DoxyCode}
+177 \{
+178     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0, j;
+179     \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+180         \textcolor{keywordflow}{if} (\_tcscmp(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName, szComputerName) == 0) \{
+181             \textcolor{keywordflow}{break};
+182         \}
+183         ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+184     \}
+185     \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+186         \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName);
+187         RegCloseKey(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].hRegistry);
+188         \textcolor{keywordflow}{for} (j = i; j < \hyperlink{ApacheMonitor_8c_a0f13e7b8e97f05a5050f12bf0e78bfa1}{MAX\_APACHE\_COMPUTERS} - 1; j++) \{
+189             \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[j].\hyperlink{struct__st__MONITORED__COMPUTERS_a00f2db8f87493ab31ecd00253868891f}{szComputerName}= 
+      \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[j+1].\hyperlink{struct__st__MONITORED__COMPUTERS_a00f2db8f87493ab31ecd00253868891f}{szComputerName};
+190             \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[j].\hyperlink{struct__st__MONITORED__COMPUTERS_a5ff832bcc89cf9d9111d32f2677ca0de}{hRegistry} = \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[j+1].
+      \hyperlink{struct__st__MONITORED__COMPUTERS_a5ff832bcc89cf9d9111d32f2677ca0de}{hRegistry};
+191         \}
+192         \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[j].\hyperlink{struct__st__MONITORED__COMPUTERS_a00f2db8f87493ab31ecd00253868891f}{szComputerName} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+193         \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[j].\hyperlink{struct__st__MONITORED__COMPUTERS_a5ff832bcc89cf9d9111d32f2677ca0de}{hRegistry} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+194     \}
+195 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=277pt]{ApacheMonitor_8c_a0dea6c1dcd4bc3e57dc9c26ce2911024_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a0dea6c1dcd4bc3e57dc9c26ce2911024_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!am\+\_\+\+Is\+Computer\+Connected@{am\+\_\+\+Is\+Computer\+Connected}}
+\index{am\+\_\+\+Is\+Computer\+Connected@{am\+\_\+\+Is\+Computer\+Connected}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{am\+\_\+\+Is\+Computer\+Connected(\+L\+P\+T\+S\+T\+R sz\+Computer\+Name)}{am_IsComputerConnected(LPTSTR szComputerName)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} am\+\_\+\+Is\+Computer\+Connected (
+\begin{DoxyParamCaption}
+\item[{L\+P\+T\+S\+TR}]{sz\+Computer\+Name}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_ac023f67bdb3203e204201d9421f8e305}{}\label{ApacheMonitor_8c_ac023f67bdb3203e204201d9421f8e305}
+
+\begin{DoxyCode}
+164 \{
+165     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0;
+166     \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+167         \textcolor{keywordflow}{if} (\_tcscmp(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[i].szComputerName, szComputerName) == 0) \{
+168             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+169         \}
+170         ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+171     \}
+172     \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+173 \}
+\end{DoxyCode}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!am\+\_\+\+Respawn\+As\+User\+Admin@{am\+\_\+\+Respawn\+As\+User\+Admin}}
+\index{am\+\_\+\+Respawn\+As\+User\+Admin@{am\+\_\+\+Respawn\+As\+User\+Admin}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{am\+\_\+\+Respawn\+As\+User\+Admin(\+H\+W\+N\+D hwnd, D\+W\+O\+R\+D op, L\+P\+C\+T\+S\+T\+R sz\+Service, L\+P\+C\+T\+S\+T\+R sz\+Computer\+Name)}{am_RespawnAsUserAdmin(HWND hwnd, DWORD op, LPCTSTR szService, LPCTSTR szComputerName)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} am\+\_\+\+Respawn\+As\+User\+Admin (
+\begin{DoxyParamCaption}
+\item[{H\+W\+ND}]{hwnd, }
+\item[{D\+W\+O\+RD}]{op, }
+\item[{L\+P\+C\+T\+S\+TR}]{sz\+Service, }
+\item[{L\+P\+C\+T\+S\+TR}]{sz\+Computer\+Name}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a46f8988b1195685150c600404e531328}{}\label{ApacheMonitor_8c_a46f8988b1195685150c600404e531328}
+
+\begin{DoxyCode}
+224 \{
+225     TCHAR \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}[MAX\_PATH + MAX\_COMPUTERNAME\_LENGTH + 12];
+226 
+227     \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}{g\_dwOSVersion} < \hyperlink{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}{OS\_VERSION\_WIN2K}) \{
+228         \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(g\_lpMsg[\hyperlink{ApacheMonitor_8h_a71edf2b6149ce8bb80be46d26d0067cc}{IDS\_MSG\_SRVFAILED} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}], \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+229         \textcolor{keywordflow}{return} 0;
+230     \}
+231 
+232     \_sntprintf(args, \textcolor{keyword}{sizeof}(args) / \textcolor{keyword}{sizeof}(TCHAR),
+233                \_T(\textcolor{stringliteral}{"%d \(\backslash\)"%s\(\backslash\)" \(\backslash\)"%s\(\backslash\)""}), op, szService,
+234                szComputerName ? szComputerName : \_T(\textcolor{stringliteral}{""}));
+235     \textcolor{keywordflow}{if} (!ShellExecute(hwnd, \_T(\textcolor{stringliteral}{"runas"}), \_\_targv[0], args, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, SW\_NORMAL)) \{
+236         \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(g\_lpMsg[\hyperlink{ApacheMonitor_8h_a71edf2b6149ce8bb80be46d26d0067cc}{IDS\_MSG\_SRVFAILED} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+237                      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+238         \textcolor{keywordflow}{return} 0;
+239     \}
+240 
+241     \textcolor{keywordflow}{return} 1;
+242 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{ApacheMonitor_8c_a46f8988b1195685150c600404e531328_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a46f8988b1195685150c600404e531328_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Apache\+Manage\+Service@{Apache\+Manage\+Service}}
+\index{Apache\+Manage\+Service@{Apache\+Manage\+Service}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Apache\+Manage\+Service(\+L\+P\+C\+T\+S\+T\+R sz\+Service\+Name, L\+P\+C\+T\+S\+T\+R sz\+Image\+Path, L\+P\+T\+S\+T\+R sz\+Computer\+Name, D\+W\+O\+R\+D dw\+Command)}{ApacheManageService(LPCTSTR szServiceName, LPCTSTR szImagePath, LPTSTR szComputerName, DWORD dwCommand)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} Apache\+Manage\+Service (
+\begin{DoxyParamCaption}
+\item[{L\+P\+C\+T\+S\+TR}]{sz\+Service\+Name, }
+\item[{L\+P\+C\+T\+S\+TR}]{sz\+Image\+Path, }
+\item[{L\+P\+T\+S\+TR}]{sz\+Computer\+Name, }
+\item[{D\+W\+O\+RD}]{dw\+Command}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29}{}\label{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29}
+
+\begin{DoxyCode}
+542 \{
+543     TCHAR szMsg[MAX\_PATH];
+544     \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{BOOL} retValue;
+545     SC\_HANDLE schService;
+546     SC\_HANDLE schSCManager;
+547     SERVICE\_STATUS schSStatus;
+548     \textcolor{keywordtype}{int} ticks;
+549 
+550     schSCManager = OpenSCManager(szComputerName, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+551                                  SC\_MANAGER\_CONNECT);
+552     \textcolor{keywordflow}{if} (!schSCManager) \{
+553         \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(g\_lpMsg[\hyperlink{ApacheMonitor_8h_a71edf2b6149ce8bb80be46d26d0067cc}{IDS\_MSG\_SRVFAILED} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+554                      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+555         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+556     \}
+557 
+558     schService = OpenService(schSCManager, szServiceName,
+559                              SERVICE\_QUERY\_STATUS | SERVICE\_START |
+560                              SERVICE\_STOP | SERVICE\_USER\_DEFINED\_CONTROL);
+561     \textcolor{keywordflow}{if} (schService == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+562     \{
+563         \textcolor{comment}{/* Avoid recursion of ImagePath NULL (from this Respawn) */}
+564         \textcolor{keywordflow}{if} (szImagePath) \{
+565             \hyperlink{ApacheMonitor_8c_a46f8988b1195685150c600404e531328}{am\_RespawnAsUserAdmin}(\hyperlink{ApacheMonitor_8c_abaeab070683eb0781bf12d92bc68d430}{g\_hwndMain}, dwCommand,
+566                                   szServiceName, szComputerName);
+567         \}
+568         \textcolor{keywordflow}{else} \{
+569             \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(g\_lpMsg[\hyperlink{ApacheMonitor_8h_a71edf2b6149ce8bb80be46d26d0067cc}{IDS\_MSG\_SRVFAILED} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+570                          \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+571         \}
+572         CloseServiceHandle(schSCManager);
+573         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+574     \}
+575     \textcolor{keywordflow}{else}
+576     \{
+577         retValue = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+578         \hyperlink{ApacheMonitor_8c_a463973f56e605c5517d2461e7682070e}{g\_bConsoleRun} = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+579         SetCursor(\hyperlink{ApacheMonitor_8c_adf2793c1ebbfd8ea69879e88877c6eb8}{g\_hCursorHourglass});
+580         \textcolor{keywordflow}{switch} (dwCommand)
+581         \{
+582           \textcolor{keywordflow}{case} SERVICE\_CONTROL\_STOP:
+583             \_sntprintf(szMsg, \textcolor{keyword}{sizeof}(szMsg) / \textcolor{keyword}{sizeof}(TCHAR),
+584                        g\_lpMsg[\hyperlink{ApacheMonitor_8h_adf251e05e74e1f484c6a85bb8c40ebbf}{IDS\_MSG\_SRVSTOP} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+585                        szServiceName);
+586             addListBoxString(\hyperlink{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{g\_hwndStdoutList}, szMsg);
+587             \textcolor{keywordflow}{if} (ControlService(schService, SERVICE\_CONTROL\_STOP,
+588                                &schSStatus)) \{
+589                 Sleep(1000);
+590                 \textcolor{keywordflow}{while} (QueryServiceStatus(schService, &schSStatus))
+591                 \{
+592                     \textcolor{keywordflow}{if} (schSStatus.dwCurrentState == SERVICE\_STOP\_PENDING)
+593                     \{
+594                         Sleep(1000);
+595                     \}
+596                     \textcolor{keywordflow}{else} \{
+597                         \textcolor{keywordflow}{break};
+598                     \}
+599                 \}
+600             \}
+601             \textcolor{keywordflow}{if} (QueryServiceStatus(schService, &schSStatus))
+602             \{
+603                 \textcolor{keywordflow}{if} (schSStatus.dwCurrentState == SERVICE\_STOPPED)
+604                 \{
+605                     retValue = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+606                     \_sntprintf(szMsg, \textcolor{keyword}{sizeof}(szMsg) / \textcolor{keyword}{sizeof}(TCHAR),
+607                                g\_lpMsg[\hyperlink{ApacheMonitor_8h_af38694b264175cb61bc934039a7d6d9f}{IDS\_MSG\_SRVSTOPPED} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+608                                szServiceName);
+609                     addListBoxString(\hyperlink{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{g\_hwndStdoutList}, szMsg);
+610                 \}
+611             \}
+612             \textcolor{keywordflow}{break};
+613 
+614           \textcolor{keywordflow}{case} SERVICE\_CONTROL\_CONTINUE:
+615             \_sntprintf(szMsg, \textcolor{keyword}{sizeof}(szMsg) / \textcolor{keyword}{sizeof}(TCHAR),
+616                        g\_lpMsg[\hyperlink{ApacheMonitor_8h_aa29ac1625f1030deb1df2ab533322b5b}{IDS\_MSG\_SRVSTART} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+617                        szServiceName);
+618             addListBoxString(\hyperlink{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{g\_hwndStdoutList}, szMsg);
+619 
+620             \textcolor{keywordflow}{if} (StartService(schService, 0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}))
+621             \{
+622                 Sleep(1000);
+623                 \textcolor{keywordflow}{while} (QueryServiceStatus(schService, &schSStatus))
+624                 \{
+625                     \textcolor{keywordflow}{if} (schSStatus.dwCurrentState == SERVICE\_START\_PENDING)
+626                     \{
+627                         Sleep(1000);
+628                     \}
+629                     \textcolor{keywordflow}{else} \{
+630                         \textcolor{keywordflow}{break};
+631                     \}
+632                 \}
+633             \}
+634             \textcolor{keywordflow}{if} (QueryServiceStatus(schService, &schSStatus))
+635             \{
+636                 \textcolor{keywordflow}{if} (schSStatus.dwCurrentState == SERVICE\_RUNNING)
+637                 \{
+638                     retValue = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+639                     \_sntprintf(szMsg, \textcolor{keyword}{sizeof}(szMsg) / \textcolor{keyword}{sizeof}(TCHAR),
+640                                g\_lpMsg[\hyperlink{ApacheMonitor_8h_a51b8258af0f8c5083f9d54ec9e287efc}{IDS\_MSG\_SRVSTARTED} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+641                                szServiceName);
+642                     addListBoxString(\hyperlink{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{g\_hwndStdoutList}, szMsg);
+643                 \}
+644             \}
+645             \textcolor{keywordflow}{break};
+646 
+647           \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8c_a9728584c8a48e10efacaf29f5899f587}{SERVICE\_APACHE\_RESTART}:
+648             \_sntprintf(szMsg, \textcolor{keyword}{sizeof}(szMsg) / \textcolor{keyword}{sizeof}(TCHAR),
+649                        g\_lpMsg[\hyperlink{ApacheMonitor_8h_ad96bb35ea7a39cb74d8d4c9f493edfc7}{IDS\_MSG\_SRVRESTART} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+650                        szServiceName);
+651             addListBoxString(\hyperlink{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{g\_hwndStdoutList}, szMsg);
+652             \textcolor{keywordflow}{if} (ControlService(schService, \hyperlink{ApacheMonitor_8c_a9728584c8a48e10efacaf29f5899f587}{SERVICE\_APACHE\_RESTART},
+653                                &schSStatus))
+654             \{
+655                 ticks = 60;
+656                 \textcolor{keywordflow}{while} (schSStatus.dwCurrentState == SERVICE\_START\_PENDING)
+657                 \{
+658                     Sleep(1000);
+659                     \textcolor{keywordflow}{if} (!QueryServiceStatus(schService, &schSStatus))
+660                     \{
+661                         CloseServiceHandle(schService);
+662                         CloseServiceHandle(schSCManager);
+663                         \hyperlink{ApacheMonitor_8c_a463973f56e605c5517d2461e7682070e}{g\_bConsoleRun} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+664                         SetCursor(\hyperlink{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}{g\_hCursorArrow});
+665                         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+666                     \}
+667                     \textcolor{keywordflow}{if} (!--ticks) \{
+668                         \textcolor{keywordflow}{break};
+669                     \}
+670                 \}
+671             \}
+672             \textcolor{keywordflow}{if} (schSStatus.dwCurrentState == SERVICE\_RUNNING)
+673             \{
+674                 retValue = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+675                 \_sntprintf(szMsg, \textcolor{keyword}{sizeof}(szMsg) / \textcolor{keyword}{sizeof}(TCHAR),
+676                            g\_lpMsg[\hyperlink{ApacheMonitor_8h_afcbf03faf24e496723de6417ca42c8d5}{IDS\_MSG\_SRVRESTARTED} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+677                            szServiceName);
+678                 addListBoxString(\hyperlink{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{g\_hwndStdoutList}, szMsg);
+679             \}
+680             \textcolor{keywordflow}{break};
+681         \}
+682         CloseServiceHandle(schService);
+683         CloseServiceHandle(schSCManager);
+684         \textcolor{keywordflow}{if} (!retValue) \{
+685             \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(g\_lpMsg[\hyperlink{ApacheMonitor_8h_a71edf2b6149ce8bb80be46d26d0067cc}{IDS\_MSG\_SRVFAILED} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+686                          \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+687         \}
+688         \hyperlink{ApacheMonitor_8c_a463973f56e605c5517d2461e7682070e}{g\_bConsoleRun} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+689         SetCursor(\hyperlink{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}{g\_hCursorArrow});
+690         \textcolor{keywordflow}{return} retValue;
+691     \}
+692     \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+693 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!append\+Menu\+Item@{append\+Menu\+Item}}
+\index{append\+Menu\+Item@{append\+Menu\+Item}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{append\+Menu\+Item(\+H\+M\+E\+N\+U h\+Menu, U\+I\+N\+T u\+Menu\+Id, L\+P\+T\+S\+T\+R sz\+Name, B\+O\+O\+L f\+Default, B\+O\+O\+L f\+Enabled)}{appendMenuItem(HMENU hMenu, UINT uMenuId, LPTSTR szName, BOOL fDefault, BOOL fEnabled)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} append\+Menu\+Item (
+\begin{DoxyParamCaption}
+\item[{H\+M\+E\+NU}]{h\+Menu, }
+\item[{U\+I\+NT}]{u\+Menu\+Id, }
+\item[{L\+P\+T\+S\+TR}]{sz\+Name, }
+\item[{{\bf B\+O\+OL}}]{f\+Default, }
+\item[{{\bf B\+O\+OL}}]{f\+Enabled}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{}\label{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}
+
+\begin{DoxyCode}
+370 \{
+371     MENUITEMINFO mii;
+372 
+373     memset(&mii, 0, \textcolor{keyword}{sizeof}(MENUITEMINFO));
+374     mii.cbSize = \textcolor{keyword}{sizeof}(MENUITEMINFO);
+375     mii.fMask = MIIM\_ID | MIIM\_TYPE | MIIM\_STATE;
+376     \textcolor{keywordflow}{if} (\_tcslen(szName))
+377     \{
+378         mii.fType = MFT\_STRING;
+379         mii.wID = uMenuId;
+380         \textcolor{keywordflow}{if} (fDefault) \{
+381             mii.fState = MFS\_DEFAULT;
+382         \}
+383         \textcolor{keywordflow}{if} (!fEnabled) \{
+384             mii.fState |= MFS\_DISABLED;
+385         \}
+386         mii.dwTypeData = szName;
+387     \}
+388     \textcolor{keywordflow}{else} \{
+389         mii.fType = MFT\_SEPARATOR;
+390     \}
+391     InsertMenuItem(hMenu, uMenuId, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, &mii);
+392 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!append\+Service\+Menu@{append\+Service\+Menu}}
+\index{append\+Service\+Menu@{append\+Service\+Menu}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{append\+Service\+Menu(\+H\+M\+E\+N\+U h\+Menu, U\+I\+N\+T u\+Menu\+Id, L\+P\+T\+S\+T\+R sz\+Service\+Name, B\+O\+O\+L f\+Running)}{appendServiceMenu(HMENU hMenu, UINT uMenuId, LPTSTR szServiceName, BOOL fRunning)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} append\+Service\+Menu (
+\begin{DoxyParamCaption}
+\item[{H\+M\+E\+NU}]{h\+Menu, }
+\item[{U\+I\+NT}]{u\+Menu\+Id, }
+\item[{L\+P\+T\+S\+TR}]{sz\+Service\+Name, }
+\item[{{\bf B\+O\+OL}}]{f\+Running}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_ac60667b9020c3690fd448ab3185732e0}{}\label{ApacheMonitor_8c_ac60667b9020c3690fd448ab3185732e0}
+
+\begin{DoxyCode}
+397 \{
+398     MENUITEMINFO mii;
+399     HMENU smh;
+400 
+401     smh = CreatePopupMenu();
+402 
+403     \hyperlink{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{appendMenuItem}(smh, \hyperlink{ApacheMonitor_8h_aab54b8aa0098db1d085585992f9dd6d2}{IDM\_SM\_START} + uMenuId,
+404                    g\_lpMsg[\hyperlink{ApacheMonitor_8h_a2bb1d5d8b701451971ddcdc51d7f018b}{IDS\_MSG\_SSTART} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}], 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, !fRunning);
+405     \hyperlink{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{appendMenuItem}(smh, \hyperlink{ApacheMonitor_8h_a56d3e290d3f93b36aa914adc4e62b834}{IDM\_SM\_STOP} + uMenuId,
+406                    g\_lpMsg[\hyperlink{ApacheMonitor_8h_ae31958e3168834f2be9b8cce8ce6e585}{IDS\_MSG\_SSTOP} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}], 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, fRunning);
+407     \hyperlink{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{appendMenuItem}(smh, \hyperlink{ApacheMonitor_8h_aef275168c7bfeee939125298ecad93af}{IDM\_SM\_RESTART} + uMenuId,
+408                    g\_lpMsg[\hyperlink{ApacheMonitor_8h_aae2dfb42fa216dbe3c82e5a0c8ef09c6}{IDS\_MSG\_SRESTART} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}], 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, fRunning);
+409 
+410     memset(&mii, 0, \textcolor{keyword}{sizeof}(MENUITEMINFO));
+411     mii.cbSize = \textcolor{keyword}{sizeof}(MENUITEMINFO);
+412     mii.fMask = MIIM\_ID | MIIM\_TYPE | MIIM\_STATE | MIIM\_SUBMENU
+413               | MIIM\_CHECKMARKS;
+414     mii.fType = MFT\_STRING;
+415     mii.wID = uMenuId;
+416     mii.hbmpChecked = \hyperlink{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}{g\_hBmpStart};
+417     mii.hbmpUnchecked = \hyperlink{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{g\_hBmpStop};
+418     mii.dwTypeData = szServiceName;
+419     mii.hSubMenu = smh;
+420     mii.fState = fRunning ? MFS\_CHECKED : MFS\_UNCHECKED;
+421     InsertMenuItem(hMenu, \hyperlink{ApacheMonitor_8h_a16ec28a8e3c85539816ff71a690e7194}{IDM\_SM\_SERVICE} + uMenuId, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, &mii);
+422 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=313pt]{ApacheMonitor_8c_ac60667b9020c3690fd448ab3185732e0_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_ac60667b9020c3690fd448ab3185732e0_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Center\+Window@{Center\+Window}}
+\index{Center\+Window@{Center\+Window}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Center\+Window(\+H\+W\+N\+D hwnd\+Child)}{CenterWindow(HWND hwndChild)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} Center\+Window (
+\begin{DoxyParamCaption}
+\item[{H\+W\+ND}]{hwnd\+Child}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a8ba351a10e94987b8adeaac21543b231}{}\label{ApacheMonitor_8c_a8ba351a10e94987b8adeaac21543b231}
+
+\begin{DoxyCode}
+485 \{
+486    RECT rChild, rWorkArea;
+487    \textcolor{keywordtype}{int} wChild, hChild;
+488    \textcolor{keywordtype}{int} xNew, yNew;
+489    \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{BOOL} bResult;
+490 
+491    \textcolor{comment}{/* Get the Height and Width of the child window */}
+492    GetWindowRect(hwndChild, &rChild);
+493    wChild = rChild.right - rChild.left;
+494    hChild = rChild.bottom - rChild.top;
+495 
+496    \textcolor{comment}{/* Get the limits of the 'workarea' */}
+497    bResult = SystemParametersInfo(SPI\_GETWORKAREA, \textcolor{keyword}{sizeof}(RECT),
+498                                   &rWorkArea, 0);
+499    \textcolor{keywordflow}{if} (!bResult) \{
+500       rWorkArea.left = rWorkArea.top = 0;
+501       rWorkArea.right = GetSystemMetrics(SM\_CXSCREEN);
+502       rWorkArea.bottom = GetSystemMetrics(SM\_CYSCREEN);
+503    \}
+504 
+505    \textcolor{comment}{/* Calculate new X and Y position*/}
+506    xNew = (rWorkArea.right - wChild) / 2;
+507    yNew = (rWorkArea.bottom - hChild) / 2;
+508    \textcolor{keywordflow}{return} SetWindowPos(hwndChild, HWND\_TOP, xNew, yNew, 0, 0,
+509                        SWP\_NOSIZE | SWP\_SHOWWINDOW);
+510 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a8ba351a10e94987b8adeaac21543b231_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Connect\+Dlg\+Proc@{Connect\+Dlg\+Proc}}
+\index{Connect\+Dlg\+Proc@{Connect\+Dlg\+Proc}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Connect\+Dlg\+Proc(\+H\+W\+N\+D h\+Dlg, U\+I\+N\+T message, W\+P\+A\+R\+A\+M w\+Param, L\+P\+A\+R\+A\+M l\+Param)}{ConnectDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)}}]{\setlength{\rightskip}{0pt plus 5cm}L\+R\+E\+S\+U\+LT C\+A\+L\+L\+B\+A\+CK Connect\+Dlg\+Proc (
+\begin{DoxyParamCaption}
+\item[{H\+W\+ND}]{h\+Dlg, }
+\item[{U\+I\+NT}]{message, }
+\item[{W\+P\+A\+R\+AM}]{w\+Param, }
+\item[{L\+P\+A\+R\+AM}]{l\+Param}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_aceb3d28feeb5ae0fecdd9d53dc4dd884}{}\label{ApacheMonitor_8c_aceb3d28feeb5ae0fecdd9d53dc4dd884}
+
+\begin{DoxyCode}
+859 \{
+860     TCHAR szCmp[MAX\_COMPUTERNAME\_LENGTH+4];
+861     \textcolor{keywordflow}{switch} (\hyperlink{group__MOD__PROXY_ga0c50798f43a2b6a973e0faf3b4038d54}{message})
+862     \{
+863     \textcolor{keywordflow}{case} WM\_INITDIALOG:
+864         ShowWindow(hDlg, SW\_HIDE);
+865         \hyperlink{ApacheMonitor_8c_a3ea986ce98d48630f99ea3b3f889f525}{g\_hwndConnectDlg} = hDlg;
+866         \hyperlink{ApacheMonitor_8c_a8ba351a10e94987b8adeaac21543b231}{CenterWindow}(hDlg);
+867         ShowWindow(hDlg, SW\_SHOW);
+868         SetFocus(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20aa37216ea21a99ed2c8bd6c864d97b}{IDC\_COMPUTER}));
+869         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+870 
+871     \textcolor{keywordflow}{case} WM\_COMMAND:
+872         \textcolor{keywordflow}{switch} (LOWORD(wParam))
+873         \{
+874         \textcolor{keywordflow}{case} IDOK:
+875             memset(szCmp, 0, \textcolor{keyword}{sizeof}(szCmp));
+876             \_tcscpy(szCmp, \_T(\textcolor{stringliteral}{"\(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)"}));
+877             SendMessage(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20aa37216ea21a99ed2c8bd6c864d97b}{IDC\_COMPUTER}), WM\_GETTEXT,
+878                         (WPARAM) MAX\_COMPUTERNAME\_LENGTH,
+879                         (LPARAM) szCmp+2);
+880 
+881             \_tcsupr(szCmp);
+882             \textcolor{keywordflow}{if} (\_tcslen(szCmp) < 3) \{
+883                 EndDialog(hDlg, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+884                 \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+885             \}
+886             \hyperlink{ApacheMonitor_8c_a79a0d782af0313fbde002d0342abfc9f}{am\_ConnectComputer}(szCmp);
+887             SendMessage(\hyperlink{ApacheMonitor_8c_abaeab070683eb0781bf12d92bc68d430}{g\_hwndMain}, WM\_TIMER, \hyperlink{ApacheMonitor_8c_aba560eb64e9ec409c153585601512015}{WM\_TIMER\_RESCAN}, 0);
+888 
+889         \textcolor{keywordflow}{case} IDCANCEL:
+890             EndDialog(hDlg, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+891             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+892 
+893         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_affed95a8284d8a6bc5e352c257915c09}{IDC\_LBROWSE}:
+894         \{
+895             BROWSEINFO bi;
+896             ITEMIDLIST *il;
+897             LPMALLOC pMalloc;
+898             memset(&bi, 0, \textcolor{keyword}{sizeof}(BROWSEINFO));
+899             SHGetSpecialFolderLocation(hDlg, CSIDL\_NETWORK, &il);
+900 
+901             bi.lpszTitle      = \_T(\textcolor{stringliteral}{"ApacheMonitor :\(\backslash\)nSelect Network Computer!"});
+902             bi.pszDisplayName = szCmp;
+903             bi.hwndOwner =      hDlg;
+904             bi.ulFlags =        BIF\_BROWSEFORCOMPUTER;
+905             bi.lpfn =           \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+906             bi.lParam =         0;
+907             bi.iImage =         0;
+908             bi.pidlRoot =       il;
+909 
+910             \textcolor{keywordflow}{if} (SHBrowseForFolder(&bi) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+911                 SendMessage(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20aa37216ea21a99ed2c8bd6c864d97b}{IDC\_COMPUTER}),
+912                             WM\_SETTEXT,
+913                             (WPARAM) \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, (LPARAM) szCmp);
+914             \}
+915             \textcolor{keywordflow}{if} (SHGetMalloc(&pMalloc)) \{
+916                 pMalloc->lpVtbl->Free(pMalloc, il);
+917                 pMalloc->lpVtbl->Release(pMalloc);
+918             \}
+919             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+920         \}
+921         \}
+922         \textcolor{keywordflow}{break};
+923 
+924     \textcolor{keywordflow}{case} WM\_QUIT:
+925     \textcolor{keywordflow}{case} WM\_CLOSE:
+926         EndDialog(hDlg, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+927         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+928 
+929     \textcolor{keywordflow}{default}:
+930         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+931     \}
+932     \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+933 
+934 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_aceb3d28feeb5ae0fecdd9d53dc4dd884_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_aceb3d28feeb5ae0fecdd9d53dc4dd884_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Create\+Main\+Window@{Create\+Main\+Window}}
+\index{Create\+Main\+Window@{Create\+Main\+Window}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Create\+Main\+Window(\+H\+I\+N\+S\+T\+A\+N\+C\+E h\+Instance)}{CreateMainWindow(HINSTANCE hInstance)}}]{\setlength{\rightskip}{0pt plus 5cm}H\+W\+ND Create\+Main\+Window (
+\begin{DoxyParamCaption}
+\item[{H\+I\+N\+S\+T\+A\+N\+CE}]{h\+Instance}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a4c157499b414a516446108301e061979}{}\label{ApacheMonitor_8c_a4c157499b414a516446108301e061979}
+
+\begin{DoxyCode}
+1510 \{
+1511     HWND hWnd = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1512     WNDCLASSEX wcex;
+1513 
+1514     wcex.cbSize = \textcolor{keyword}{sizeof}(WNDCLASSEX);
+1515 
+1516     wcex.style          = CS\_HREDRAW | CS\_VREDRAW;
+1517     wcex.lpfnWndProc    = (WNDPROC)\hyperlink{ApacheMonitor_8c_a30a1e3b0304f1b083637664cbda94e72}{WndProc};
+1518     wcex.cbClsExtra     = 0;
+1519     wcex.cbWndExtra     = 0;
+1520     wcex.hInstance      = hInstance;
+1521     wcex.hIcon   = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(\hyperlink{ApacheMonitor_8h_a909a5e00cd3258d83c52f30d5ae323a6}{IDI\_APSRVMON}),
+1522                                     IMAGE\_ICON, 32, 32, LR\_DEFAULTCOLOR);
+1523     wcex.hCursor        = \hyperlink{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}{g\_hCursorArrow};
+1524     wcex.hbrBackground  = (HBRUSH)(COLOR\_WINDOW+1);
+1525     wcex.lpszMenuName   = 0;
+1526     wcex.lpszClassName  = \hyperlink{ApacheMonitor_8c_a09081aff5af6d1aa3d8fea0876abe868}{g\_szWindowClass};
+1527     wcex.hIconSm = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(\hyperlink{ApacheMonitor_8h_a909a5e00cd3258d83c52f30d5ae323a6}{IDI\_APSRVMON}),
+1528                                     IMAGE\_ICON, 16, 16, LR\_DEFAULTCOLOR);
+1529 
+1530     \textcolor{keywordflow}{if} (RegisterClassEx(&wcex)) \{
+1531         hWnd = CreateWindow(\hyperlink{ApacheMonitor_8c_a09081aff5af6d1aa3d8fea0876abe868}{g\_szWindowClass}, \hyperlink{ApacheMonitor_8c_a7224c1ff0ea1d0a5f104da9022081db5}{g\_szTitle},
+1532                             0, 0, 0, 0, 0,
+1533                             \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, hInstance, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1534     \}
+1535     \textcolor{keywordflow}{return} hWnd;
+1536 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a4c157499b414a516446108301e061979_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=273pt]{ApacheMonitor_8c_a4c157499b414a516446108301e061979_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Error\+Message@{Error\+Message}}
+\index{Error\+Message@{Error\+Message}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Error\+Message(\+L\+P\+C\+T\+S\+T\+R sz\+Error, B\+O\+O\+L b\+Fatal)}{ErrorMessage(LPCTSTR szError, BOOL bFatal)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} Error\+Message (
+\begin{DoxyParamCaption}
+\item[{L\+P\+C\+T\+S\+TR}]{sz\+Error, }
+\item[{{\bf B\+O\+OL}}]{b\+Fatal}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{}\label{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}
+
+\begin{DoxyCode}
+199 \{
+200     LPVOID lpMsgBuf = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+201     \textcolor{keywordflow}{if} (szError) \{
+202         MessageBox(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, szError, g\_lpMsg[\hyperlink{ApacheMonitor_8h_a827aaaa0794f9d74770d5eac7341e156}{IDS\_MSG\_ERROR} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+203                    MB\_OK | (bFatal ? MB\_ICONERROR : MB\_ICONEXCLAMATION));
+204     \}
+205     \textcolor{keywordflow}{else} \{
+206         FormatMessage(FORMAT\_MESSAGE\_ALLOCATE\_BUFFER |
+207                       FORMAT\_MESSAGE\_FROM\_SYSTEM |
+208                       FORMAT\_MESSAGE\_IGNORE\_INSERTS,
+209                       \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, GetLastError(), \hyperlink{ApacheMonitor_8c_a0d98d46a172f82e8904fe3e2ec095e2c}{g\_LangID},
+210                       (LPTSTR) &lpMsgBuf, 0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+211         MessageBox(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, (LPCTSTR)lpMsgBuf,
+212                    g\_lpMsg[\hyperlink{ApacheMonitor_8h_a827aaaa0794f9d74770d5eac7341e156}{IDS\_MSG\_ERROR} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+213                    MB\_OK | (bFatal ? MB\_ICONERROR : MB\_ICONEXCLAMATION));
+214         LocalFree(lpMsgBuf);
+215     \}
+216     \textcolor{keywordflow}{if} (bFatal) \{
+217         PostQuitMessage(0);
+218     \}
+219 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Find\+Running\+Services@{Find\+Running\+Services}}
+\index{Find\+Running\+Services@{Find\+Running\+Services}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Find\+Running\+Services(void)}{FindRunningServices(void)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} Find\+Running\+Services (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_aa1aa97222a0d05397de15ae34cc17229}{}\label{ApacheMonitor_8c_aa1aa97222a0d05397de15ae34cc17229}
+
+\begin{DoxyCode}
+735 \{
+736     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0;
+737     DWORD dwPid;
+738     \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{BOOL} rv = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+739     \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szServiceName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+740     \{
+741         \textcolor{keywordflow}{if} (!\hyperlink{ApacheMonitor_8c_aa9a8e82e1b247f43aa7b147340446429}{IsServiceRunning}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szServiceName,
+742                               \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szComputerName, &dwPid)) \{
+743             dwPid = 0;
+744         \}
+745         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].dwPid != dwPid) \{
+746             rv = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+747         \}
+748         \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}].\hyperlink{struct__st__APACHE__SERVICE_a858984fae9c8b0508647035c3917029b}{dwPid} = dwPid;
+749         ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+750     \}
+751     \textcolor{keywordflow}{return} rv;
+752 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=320pt]{ApacheMonitor_8c_aa1aa97222a0d05397de15ae34cc17229_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_aa1aa97222a0d05397de15ae34cc17229_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Get\+Apache\+Services\+Status@{Get\+Apache\+Services\+Status}}
+\index{Get\+Apache\+Services\+Status@{Get\+Apache\+Services\+Status}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Get\+Apache\+Services\+Status()}{GetApacheServicesStatus()}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} Get\+Apache\+Services\+Status (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86}{}\label{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86}
+
+\begin{DoxyCode}
+756 \{
+757     TCHAR szKey[MAX\_PATH];
+758     TCHAR achKey[MAX\_PATH];
+759     TCHAR szImagePath[MAX\_PATH];
+760     TCHAR szBuf[MAX\_PATH];
+761     TCHAR szTmp[MAX\_PATH];
+762     HKEY hKey, hSubKey, hKeyRemote;
+763     DWORD retCode, rv, dwKeyType;
+764     DWORD dwBufLen = MAX\_PATH;
+765     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, stPos = 0;
+766     \textcolor{keywordtype}{int} computers = 0;
+767 
+768     \hyperlink{ApacheMonitor_8c_a367f6a9a04f9ae13e95eefc98ae9b1af}{g\_bRescanServices} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+769 
+770     \hyperlink{ApacheMonitor_8c_abe05e747e5221061baf38f279cbdef12}{am\_ClearServicesSt}();
+771     \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[computers].szComputerName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+772         hKeyRemote = \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[computers].\hyperlink{struct__st__MONITORED__COMPUTERS_a5ff832bcc89cf9d9111d32f2677ca0de}{hRegistry};
+773         retCode = RegOpenKeyEx(hKeyRemote,
+774                                \_T(\textcolor{stringliteral}{"System\(\backslash\)\(\backslash\)CurrentControlSet\(\backslash\)\(\backslash\)Services\(\backslash\)\(\backslash\)"}),
+775                                0, KEY\_READ, &hKey);
+776         \textcolor{keywordflow}{if} (retCode != \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS})
+777         \{
+778             \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+779             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+780         \}
+781         \textcolor{keywordflow}{for} (i = 0, retCode = \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS}; retCode == 
+      \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS}; i++)
+782         \{
+783             retCode = RegEnumKey(hKey, i, achKey, MAX\_PATH);
+784             \textcolor{keywordflow}{if} (retCode == \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS})
+785             \{
+786                 \_tcscpy(szKey, \_T(\textcolor{stringliteral}{"System\(\backslash\)\(\backslash\)CurrentControlSet\(\backslash\)\(\backslash\)Services\(\backslash\)\(\backslash\)"}));
+787                 \_tcscat(szKey, achKey);
+788 
+789                 \textcolor{keywordflow}{if} (RegOpenKeyEx(hKeyRemote, szKey, 0,
+790                                  KEY\_QUERY\_VALUE, &hSubKey) == \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS})
+791                 \{
+792                     dwBufLen = MAX\_PATH;
+793                     rv = RegQueryValueEx(hSubKey, \_T(\textcolor{stringliteral}{"ImagePath"}), \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+794                                          &dwKeyType, (LPBYTE)szImagePath, &dwBufLen);
+795 
+796                     \textcolor{keywordflow}{if} (rv == \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS}
+797                             && (dwKeyType == REG\_SZ
+798                              || dwKeyType == REG\_EXPAND\_SZ)
+799                             && dwBufLen)
+800                     \{
+801                         \_tcscpy(szBuf, szImagePath);
+802                         CharLower(szBuf);
+803                         \textcolor{comment}{/* the service name could be httpd*.exe or Apache*.exe */}
+804                         \textcolor{keywordflow}{if} (((\_tcsstr(szBuf, \_T(\textcolor{stringliteral}{"\(\backslash\)\(\backslash\)apache"})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+805                              || (\_tcsstr(szBuf, \_T(\textcolor{stringliteral}{"\(\backslash\)\(\backslash\)httpd"})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}))
+806                                 && \_tcsstr(szBuf, \_T(\textcolor{stringliteral}{".exe"}))
+807                                 && (\_tcsstr(szBuf, \_T(\textcolor{stringliteral}{"--ntservice"})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}
+808                                        || \_tcsstr(szBuf, \_T(\textcolor{stringliteral}{"-k "})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}))
+809                         \{
+810                             \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[stPos].\hyperlink{struct__st__APACHE__SERVICE_a756538030779a2025623fc3c912b3f91}{szServiceName} = \_tcsdup(achKey);
+811                             \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[stPos].\hyperlink{struct__st__APACHE__SERVICE_a9e6fb4545b06aaccfc65e0120eaf6747}{szImagePath} = \_tcsdup(szImagePath);
+812                             \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[stPos].\hyperlink{struct__st__APACHE__SERVICE_a2c63f69de82f6d93af658f954f104a66}{szComputerName} =
+813                                 \_tcsdup(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[computers].szComputerName);
+814                             dwBufLen = MAX\_PATH;
+815                             \textcolor{keywordflow}{if} (RegQueryValueEx(hSubKey, \_T(\textcolor{stringliteral}{"Description"}), \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+816                                                 &dwKeyType, (LPBYTE)szBuf, &dwBufLen)
+817                                     == \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS}) \{
+818                                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[stPos].\hyperlink{struct__st__APACHE__SERVICE_acd91910e4b38f7fe63926261d0a5a99c}{szDescription} = \_tcsdup(szBuf)
+      ;
+819                             \}
+820                             dwBufLen = MAX\_PATH;
+821                             \textcolor{keywordflow}{if} (RegQueryValueEx(hSubKey, \_T(\textcolor{stringliteral}{"DisplayName"}), \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+822                                                 &dwKeyType, (LPBYTE)szBuf, &dwBufLen)
+823                                     == \hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS})
+824                             \{
+825                                 \textcolor{keywordflow}{if} (\_tcscmp(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[computers]
+826                                         .szComputerName, \hyperlink{ApacheMonitor_8c_a236a248f74e54c0ecf421d94646e766f}{g\_szLocalHost}) != 0)
+827                                 \{
+828                                     \_tcscpy(szTmp, \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[computers]
+829                                                       .szComputerName + 2);
+830                                     \_tcscat(szTmp, \_T(\textcolor{stringliteral}{"@"}));
+831                                     \_tcscat(szTmp, szBuf);
+832                                 \}
+833                                 \textcolor{keywordflow}{else} \{
+834                                     \_tcscpy(szTmp, szBuf);
+835                                 \}
+836                                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[stPos].\hyperlink{struct__st__APACHE__SERVICE_ae5f342ed4cfbad958dd7330114597eec}{szDisplayName} = \_tcsdup(szTmp)
+      ;
+837 
+838                             \}
+839                             ++stPos;
+840                             \textcolor{keywordflow}{if} (stPos >= \hyperlink{ApacheMonitor_8c_a888e6bc4ccc9c165aa1522f02474f033}{MAX\_APACHE\_SERVICES}) \{
+841                                 retCode = !\hyperlink{group__MOD__ISAPI_gaea0ae801b7d25c979655a7eb20d034af}{ERROR\_SUCCESS};
+842                             \}
+843                         \}
+844                     \}
+845                     RegCloseKey(hSubKey);
+846                 \}
+847             \}
+848         \}
+849         ++computers;
+850         RegCloseKey(hKey);
+851     \}
+852     \hyperlink{ApacheMonitor_8c_aa1aa97222a0d05397de15ae34cc17229}{FindRunningServices}();
+853     \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+854 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Get\+String\+Res@{Get\+String\+Res}}
+\index{Get\+String\+Res@{Get\+String\+Res}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Get\+String\+Res(int id)}{GetStringRes(int id)}}]{\setlength{\rightskip}{0pt plus 5cm}L\+P\+T\+S\+TR Get\+String\+Res (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{id}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_ae639fa1a5230350d790860b90b592436}{}\label{ApacheMonitor_8c_ae639fa1a5230350d790860b90b592436}
+
+\begin{DoxyCode}
+277 \{
+278     \textcolor{keyword}{static} TCHAR \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}[MAX\_PATH];
+279 
+280     buffer[0] = 0;
+281     LoadString(GetModuleHandle(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}), \textcolor{keywordtype}{id}, buffer, MAX\_PATH);
+282     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer};
+283 \}
+\end{DoxyCode}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Get\+System\+O\+S\+Version@{Get\+System\+O\+S\+Version}}
+\index{Get\+System\+O\+S\+Version@{Get\+System\+O\+S\+Version}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Get\+System\+O\+S\+Version(\+L\+P\+D\+W\+O\+R\+D dw\+Version)}{GetSystemOSVersion(LPDWORD dwVersion)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} Get\+System\+O\+S\+Version (
+\begin{DoxyParamCaption}
+\item[{L\+P\+D\+W\+O\+RD}]{dw\+Version}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a6f6b208a3caeb3a480d020b0a1a587e3}{}\label{ApacheMonitor_8c_a6f6b208a3caeb3a480d020b0a1a587e3}
+
+\begin{DoxyCode}
+287 \{
+288     OSVERSIONINFO osvi;
+289     \textcolor{comment}{/*}
+290 \textcolor{comment}{    Try calling GetVersionEx using the OSVERSIONINFOEX structure.}
+291 \textcolor{comment}{    If that fails, try using the OSVERSIONINFO structure.}
+292 \textcolor{comment}{    */}
+293     memset(&osvi, 0, \textcolor{keyword}{sizeof}(OSVERSIONINFO));
+294     osvi.dwOSVersionInfoSize = \textcolor{keyword}{sizeof}(OSVERSIONINFO);
+295 
+296     \textcolor{keywordflow}{if} (!GetVersionEx(&osvi)) \{
+297         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+298     \}
+299 
+300     \textcolor{keywordflow}{switch} (osvi.dwPlatformId)
+301     \{
+302     \textcolor{keywordflow}{case} VER\_PLATFORM\_WIN32\_NT:
+303         \textcolor{keywordflow}{if} (osvi.dwMajorVersion >= 5)
+304             *dwVersion = \hyperlink{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}{OS\_VERSION\_WIN2K};
+305         \textcolor{keywordflow}{else}
+306             *dwVersion = \hyperlink{ApacheMonitor_8c_a7179343f07abe3f1766428d0b2679a69}{OS\_VERSION\_WINNT};
+307         \textcolor{keywordflow}{break};
+308 
+309     \textcolor{keywordflow}{case} VER\_PLATFORM\_WIN32\_WINDOWS:
+310     \textcolor{keywordflow}{case} VER\_PLATFORM\_WIN32s:
+311     \textcolor{keywordflow}{default}:
+312         *dwVersion = 0;
+313         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+314     \}
+315     \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+316 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=284pt]{ApacheMonitor_8c_a6f6b208a3caeb3a480d020b0a1a587e3_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Is\+Service\+Running@{Is\+Service\+Running}}
+\index{Is\+Service\+Running@{Is\+Service\+Running}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Is\+Service\+Running(\+L\+P\+C\+T\+S\+T\+R sz\+Service\+Name, L\+P\+C\+T\+S\+T\+R sz\+Computer\+Name, L\+P\+D\+W\+O\+R\+D lpdw\+Pid)}{IsServiceRunning(LPCTSTR szServiceName, LPCTSTR szComputerName, LPDWORD lpdwPid)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} Is\+Service\+Running (
+\begin{DoxyParamCaption}
+\item[{L\+P\+C\+T\+S\+TR}]{sz\+Service\+Name, }
+\item[{L\+P\+C\+T\+S\+TR}]{sz\+Computer\+Name, }
+\item[{L\+P\+D\+W\+O\+RD}]{lpdw\+Pid}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_aa9a8e82e1b247f43aa7b147340446429}{}\label{ApacheMonitor_8c_aa9a8e82e1b247f43aa7b147340446429}
+
+\begin{DoxyCode}
+698 \{
+699     DWORD dwPid;
+700     SC\_HANDLE schService;
+701     SC\_HANDLE schSCManager;
+702     SERVICE\_STATUS schSStatus;
+703 
+704     dwPid = 0;
+705     schSCManager = OpenSCManager(szComputerName, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+706                                 SC\_MANAGER\_CONNECT);
+707     \textcolor{keywordflow}{if} (!schSCManager) \{
+708         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+709     \}
+710 
+711     schService = OpenService(schSCManager, szServiceName,
+712                              SERVICE\_QUERY\_STATUS);
+713     \textcolor{keywordflow}{if} (schService != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+714     \{
+715         \textcolor{keywordflow}{if} (QueryServiceStatus(schService, &schSStatus))
+716         \{
+717             dwPid = schSStatus.dwCurrentState;
+718             \textcolor{keywordflow}{if} (lpdwPid) \{
+719                 *lpdwPid = 1;
+720             \}
+721         \}
+722         CloseServiceHandle(schService);
+723         CloseServiceHandle(schSCManager);
+724         \textcolor{keywordflow}{return} dwPid == SERVICE\_RUNNING ? \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE} : \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+725     \}
+726     \textcolor{keywordflow}{else} \{
+727         \hyperlink{ApacheMonitor_8c_a367f6a9a04f9ae13e95eefc98ae9b1af}{g\_bRescanServices} = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+728     \}
+729     CloseServiceHandle(schSCManager);
+730     \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+731 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_aa9a8e82e1b247f43aa7b147340446429_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Service\+Dlg\+Proc@{Service\+Dlg\+Proc}}
+\index{Service\+Dlg\+Proc@{Service\+Dlg\+Proc}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Service\+Dlg\+Proc(\+H\+W\+N\+D h\+Dlg, U\+I\+N\+T message, W\+P\+A\+R\+A\+M w\+Param, L\+P\+A\+R\+A\+M l\+Param)}{ServiceDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)}}]{\setlength{\rightskip}{0pt plus 5cm}L\+R\+E\+S\+U\+LT C\+A\+L\+L\+B\+A\+CK Service\+Dlg\+Proc (
+\begin{DoxyParamCaption}
+\item[{H\+W\+ND}]{h\+Dlg, }
+\item[{U\+I\+NT}]{message, }
+\item[{W\+P\+A\+R\+AM}]{w\+Param, }
+\item[{L\+P\+A\+R\+AM}]{l\+Param}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_af5961f2cd92c217189fabb303663f600}{}\label{ApacheMonitor_8c_af5961f2cd92c217189fabb303663f600}
+
+\begin{DoxyCode}
+939 \{
+940     TCHAR szBuf[MAX\_PATH];
+941     HWND hListBox;
+942     \textcolor{keyword}{static} HWND hStatusBar;
+943     TEXTMETRIC \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm};
+944     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y};
+945     HDC hdcMem;
+946     RECT rcBitmap;
+947     LRESULT nItem;
+948     LPMEASUREITEMSTRUCT lpmis;
+949     LPDRAWITEMSTRUCT lpdis;
+950 
+951     memset(szBuf, 0, \textcolor{keyword}{sizeof}(szBuf));
+952     \textcolor{keywordflow}{switch} (\hyperlink{group__MOD__PROXY_ga0c50798f43a2b6a973e0faf3b4038d54}{message})
+953     \{
+954     \textcolor{keywordflow}{case} WM\_INITDIALOG:
+955         ShowWindow(hDlg, SW\_HIDE);
+956         \hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg} = hDlg;
+957         SetWindowText(hDlg, \hyperlink{ApacheMonitor_8c_a7224c1ff0ea1d0a5f104da9022081db5}{g\_szTitle});
+958         Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+959         Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+960         Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+961         Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a57e6fef32605ed116ac2025e9efd1621}{IDC\_SDISCONN}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+962         SetWindowText(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}),
+963                       g\_lpMsg[\hyperlink{ApacheMonitor_8h_a2bb1d5d8b701451971ddcdc51d7f018b}{IDS\_MSG\_SSTART} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}]);
+964         SetWindowText(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}),
+965                       g\_lpMsg[\hyperlink{ApacheMonitor_8h_ae31958e3168834f2be9b8cce8ce6e585}{IDS\_MSG\_SSTOP} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}]);
+966         SetWindowText(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}),
+967                       g\_lpMsg[\hyperlink{ApacheMonitor_8h_aae2dfb42fa216dbe3c82e5a0c8ef09c6}{IDS\_MSG\_SRESTART} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}]);
+968         SetWindowText(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_ac0449c9fbbc85bd97b2ded294ae56e9f}{IDC\_SMANAGER}),
+969                       g\_lpMsg[\hyperlink{ApacheMonitor_8h_a8fb1a824138fe5f99e3757a66408f9b1}{IDS\_MSG\_SERVICES} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}]);
+970         SetWindowText(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9d18231dae0b7133dc02a52bc714dc85}{IDC\_SCONNECT}),
+971                       g\_lpMsg[\hyperlink{ApacheMonitor_8h_a6c14433e7f3329b634ea47b2c26aa7fd}{IDS\_MSG\_CONNECT} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}]);
+972         SetWindowText(GetDlgItem(hDlg, IDCANCEL),
+973                       g\_lpMsg[\hyperlink{ApacheMonitor_8h_a96332b24cadcda94a1ef5af6a71a104d}{IDS\_MSG\_OK} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}]);
+974         hListBox = GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a8a92b22512cdc678bbec94a1479bf767}{IDL\_SERVICES});
+975         \hyperlink{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{g\_hwndStdoutList} = GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a954dccca0dcab2aa3af76bf4535cc5be}{IDL\_STDOUT});
+976         hStatusBar = CreateStatusWindow(0x0800 \textcolor{comment}{/* SBT\_TOOLTIPS */}
+977                                       | WS\_CHILD | WS\_VISIBLE,
+978                                         \_T(\textcolor{stringliteral}{""}), hDlg, \hyperlink{ApacheMonitor_8h_a742cd04db411c1785752db127e4f7e9d}{IDC\_STATBAR});
+979         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86}{GetApacheServicesStatus}())
+980         \{
+981             i = 0;
+982             \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szServiceName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+983             \{
+984                 addListBoxItem(hListBox, \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szDisplayName,
+985                                \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].dwPid == 0 ? 
+      \hyperlink{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{g\_hBmpStop}
+986                                                           : \hyperlink{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}{g\_hBmpStart});
+987                 ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+988             \}
+989         \}
+990         \hyperlink{ApacheMonitor_8c_a8ba351a10e94987b8adeaac21543b231}{CenterWindow}(hDlg);
+991         ShowWindow(hDlg, SW\_SHOW);
+992         SetFocus(hListBox);
+993         SendMessage(hListBox, LB\_SETCURSEL, 0, 0);
+994         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+995         \textcolor{keywordflow}{break};
+996 
+997     \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}{WM\_MANAGEMESSAGE}:
+998         \hyperlink{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29}{ApacheManageService}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)].szServiceName,
+999                     \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)].szImagePath,
+1000                     \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)].szComputerName,
+1001                     LOWORD(lParam));
+1002 
+1003         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1004         \textcolor{keywordflow}{break};
+1005 
+1006     \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8c_a22fdf378ef7aa9e39034b54b36ac5831}{WM\_UPDATEMESSAGE}:
+1007         hListBox = GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a8a92b22512cdc678bbec94a1479bf767}{IDL\_SERVICES});
+1008         SendMessage(hListBox, LB\_RESETCONTENT, 0, 0);
+1009         SendMessage(hStatusBar, SB\_SETTEXT, 0, (LPARAM)\_T(\textcolor{stringliteral}{""}));
+1010         Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1011         Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1012         Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1013         Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a57e6fef32605ed116ac2025e9efd1621}{IDC\_SDISCONN}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1014         i = 0;
+1015         \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szServiceName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+1016         \{
+1017             addListBoxItem(hListBox, \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szDisplayName,
+1018                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].dwPid == 0 ? \hyperlink{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{g\_hBmpStop} : 
+      \hyperlink{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}{g\_hBmpStart});
+1019             ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+1020         \}
+1021         SendMessage(hListBox, LB\_SETCURSEL, 0, 0);
+1022         \textcolor{comment}{/* Dirty hack to bring the window to the foreground */}
+1023         SetWindowPos(hDlg, HWND\_TOPMOST, 0, 0, 0, 0,
+1024                                 SWP\_NOSIZE | SWP\_NOMOVE | SWP\_SHOWWINDOW);
+1025         SetWindowPos(hDlg, HWND\_NOTOPMOST, 0, 0, 0, 0,
+1026                                 SWP\_NOSIZE | SWP\_NOMOVE | SWP\_SHOWWINDOW);
+1027         SetFocus(hListBox);
+1028         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1029         \textcolor{keywordflow}{break};
+1030 
+1031     \textcolor{keywordflow}{case} WM\_MEASUREITEM:
+1032         lpmis = (LPMEASUREITEMSTRUCT) lParam;
+1033         lpmis->itemHeight = \hyperlink{ApacheMonitor_8c_aba79305932e87f301cf27098dec70b35}{YBITMAP};
+1034         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1035 
+1036     \textcolor{keywordflow}{case} WM\_SETCURSOR:
+1037         \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a463973f56e605c5517d2461e7682070e}{g\_bConsoleRun}) \{
+1038             SetCursor(\hyperlink{ApacheMonitor_8c_adf2793c1ebbfd8ea69879e88877c6eb8}{g\_hCursorHourglass});
+1039         \}
+1040         \textcolor{keywordflow}{else} \{
+1041             SetCursor(\hyperlink{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}{g\_hCursorArrow});
+1042         \}
+1043         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1044 
+1045     \textcolor{keywordflow}{case} WM\_DRAWITEM:
+1046         lpdis = (LPDRAWITEMSTRUCT) lParam;
+1047         \textcolor{keywordflow}{if} (lpdis->itemID == -1) \{
+1048             \textcolor{keywordflow}{break};
+1049         \}
+1050         \textcolor{keywordflow}{switch} (lpdis->itemAction)
+1051         \{
+1052         \textcolor{keywordflow}{case} ODA\_FOCUS:
+1053         \textcolor{keywordflow}{case} ODA\_SELECT:
+1054         \textcolor{keywordflow}{case} ODA\_DRAWENTIRE:
+1055             \hyperlink{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}{g\_hBmpPicture} = (HBITMAP)SendMessage(lpdis->hwndItem,
+1056                                                  LB\_GETITEMDATA,
+1057                                                  lpdis->itemID, (LPARAM) 0);
+1058 
+1059             hdcMem = CreateCompatibleDC(lpdis->hDC);
+1060             \hyperlink{ApacheMonitor_8c_afefe7c7cf8e229c511882c3a5186d8e8}{g\_hBmpOld} = SelectObject(hdcMem, \hyperlink{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}{g\_hBmpPicture});
+1061 
+1062             BitBlt(lpdis->hDC, lpdis->rcItem.left, lpdis->rcItem.top,
+1063                    lpdis->rcItem.right - lpdis->rcItem.left,
+1064                    lpdis->rcItem.bottom - lpdis->rcItem.top,
+1065                    hdcMem, 0, 0, SRCCOPY);
+1066             SendMessage(lpdis->hwndItem, LB\_GETTEXT,
+1067                         lpdis->itemID, (LPARAM) szBuf);
+1068 
+1069             GetTextMetrics(lpdis->hDC, &tm);
+1070             y = (lpdis->rcItem.bottom + lpdis->rcItem.top - tm.tmHeight) / 2;
+1071 
+1072             SelectObject(hdcMem, \hyperlink{ApacheMonitor_8c_afefe7c7cf8e229c511882c3a5186d8e8}{g\_hBmpOld});
+1073             DeleteDC(hdcMem);
+1074 
+1075             rcBitmap.left = lpdis->rcItem.left + \hyperlink{ApacheMonitor_8c_a7fda781eb1e8fb545b2a373e7f1cfe14}{XBITMAP} + 2;
+1076             rcBitmap.top = lpdis->rcItem.top;
+1077             rcBitmap.right = lpdis->rcItem.right;
+1078             rcBitmap.bottom = lpdis->rcItem.top + \hyperlink{ApacheMonitor_8c_aba79305932e87f301cf27098dec70b35}{YBITMAP};
+1079 
+1080             \textcolor{keywordflow}{if} (lpdis->itemState & ODS\_SELECTED)
+1081             \{
+1082                 \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}{g\_hBmpPicture} == \hyperlink{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{g\_hBmpStop})
+1083                 \{
+1084                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1085                     Button\_SetStyle(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}), BS\_DEFPUSHBUTTON, 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1086                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1087                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}), 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1088                 \}
+1089                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}{g\_hBmpPicture} == \hyperlink{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}{g\_hBmpStart})
+1090                 \{
+1091                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1092                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}), \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1093                     Button\_SetStyle(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}), BS\_DEFPUSHBUTTON, 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1094                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}), 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1095                 \}
+1096                 \textcolor{keywordflow}{else} \{
+1097                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1098                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1099                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}), 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1100                 \}
+1101                 \textcolor{keywordflow}{if} (\_tcscmp(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[lpdis->itemID].
+      \hyperlink{struct__st__APACHE__SERVICE_a2c63f69de82f6d93af658f954f104a66}{szComputerName},
+1102                            \hyperlink{ApacheMonitor_8c_a236a248f74e54c0ecf421d94646e766f}{g\_szLocalHost}) == 0) \{
+1103                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a57e6fef32605ed116ac2025e9efd1621}{IDC\_SDISCONN}), 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1104                 \}
+1105                 \textcolor{keywordflow}{else} \{
+1106                     Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a57e6fef32605ed116ac2025e9efd1621}{IDC\_SDISCONN}), 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1107                 \}
+1108 
+1109                 \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[lpdis->itemID].\hyperlink{struct__st__APACHE__SERVICE_acd91910e4b38f7fe63926261d0a5a99c}{szDescription}) \{
+1110                     SendMessage(hStatusBar, SB\_SETTEXT, 0,
+1111                             (LPARAM)\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[lpdis->itemID].
+      \hyperlink{struct__st__APACHE__SERVICE_acd91910e4b38f7fe63926261d0a5a99c}{szDescription});
+1112                 \}
+1113                 \textcolor{keywordflow}{else} \{
+1114                     SendMessage(hStatusBar, SB\_SETTEXT, 0, (LPARAM)\_T(\textcolor{stringliteral}{""}));
+1115                 \}
+1116                 \textcolor{keywordflow}{if} (lpdis->itemState & ODS\_FOCUS) \{
+1117                     SetTextColor(lpdis->hDC, GetSysColor(COLOR\_HIGHLIGHTTEXT));
+1118                     SetBkColor(lpdis->hDC, GetSysColor(COLOR\_HIGHLIGHT));
+1119                     FillRect(lpdis->hDC, &rcBitmap, (HBRUSH)(COLOR\_HIGHLIGHT+1));
+1120                 \}
+1121                 \textcolor{keywordflow}{else} \{
+1122                     SetTextColor(lpdis->hDC, GetSysColor(COLOR\_INACTIVECAPTIONTEXT));
+1123                     SetBkColor(lpdis->hDC, GetSysColor(COLOR\_INACTIVECAPTION));
+1124                     FillRect(lpdis->hDC, &rcBitmap, (HBRUSH)(COLOR\_INACTIVECAPTION+1));
+1125                 \}
+1126             \}
+1127             \textcolor{keywordflow}{else}
+1128             \{
+1129                SetTextColor(lpdis->hDC, GetSysColor(COLOR\_MENUTEXT));
+1130                SetBkColor(lpdis->hDC, GetSysColor(COLOR\_WINDOW));
+1131                FillRect(lpdis->hDC, &rcBitmap, (HBRUSH)(COLOR\_WINDOW+1));
+1132             \}
+1133             TextOut(lpdis->hDC, \hyperlink{ApacheMonitor_8c_a7fda781eb1e8fb545b2a373e7f1cfe14}{XBITMAP} + 6, y, szBuf, (\textcolor{keywordtype}{int})\_tcslen(szBuf));
+1134             \textcolor{keywordflow}{break};
+1135         \}
+1136         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1137     \textcolor{keywordflow}{case} WM\_COMMAND:
+1138         \textcolor{keywordflow}{switch} (LOWORD(wParam))
+1139         \{
+1140         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_a8a92b22512cdc678bbec94a1479bf767}{IDL\_SERVICES}:
+1141             \textcolor{keywordflow}{switch} (HIWORD(wParam))
+1142             \{
+1143             \textcolor{keywordflow}{case} LBN\_DBLCLK:
+1144                 \textcolor{comment}{/* if started then stop, if stopped then start */}
+1145                 hListBox = GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a8a92b22512cdc678bbec94a1479bf767}{IDL\_SERVICES});
+1146                 nItem = SendMessage(hListBox, LB\_GETCURSEL, 0, 0);
+1147                 \textcolor{keywordflow}{if} (nItem != LB\_ERR)
+1148                 \{
+1149                     \hyperlink{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}{g\_hBmpPicture} = (HBITMAP)SendMessage(hListBox,
+1150                                                          LB\_GETITEMDATA,
+1151                                                          nItem, (LPARAM) 0);
+1152                     \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}{g\_hBmpPicture} == \hyperlink{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{g\_hBmpStop}) \{
+1153                         SendMessage(hDlg, \hyperlink{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}{WM\_MANAGEMESSAGE}, nItem,
+1154                                     SERVICE\_CONTROL\_CONTINUE);
+1155                     \}
+1156                     \textcolor{keywordflow}{else} \{
+1157                         SendMessage(hDlg, \hyperlink{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}{WM\_MANAGEMESSAGE}, nItem,
+1158                                     SERVICE\_CONTROL\_STOP);
+1159                     \}
+1160 
+1161                 \}
+1162                 \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1163             \}
+1164             \textcolor{keywordflow}{break};
+1165 
+1166         \textcolor{keywordflow}{case} IDCANCEL:
+1167             EndDialog(hDlg, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1168             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1169 
+1170         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}:
+1171             Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1172             hListBox = GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a8a92b22512cdc678bbec94a1479bf767}{IDL\_SERVICES});
+1173             nItem = SendMessage(hListBox, LB\_GETCURSEL, 0, 0);
+1174             \textcolor{keywordflow}{if} (nItem != LB\_ERR) \{
+1175                 SendMessage(hDlg, \hyperlink{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}{WM\_MANAGEMESSAGE}, nItem,
+1176                             SERVICE\_CONTROL\_CONTINUE);
+1177             \}
+1178             Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a3c74ead57e876a1a7347199e24968df1}{IDC\_SSTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1179             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1180 
+1181         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}:
+1182             Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1183             hListBox = GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a8a92b22512cdc678bbec94a1479bf767}{IDL\_SERVICES});
+1184             nItem = SendMessage(hListBox, LB\_GETCURSEL, 0, 0);
+1185             \textcolor{keywordflow}{if} (nItem != LB\_ERR) \{
+1186                 SendMessage(hDlg, \hyperlink{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}{WM\_MANAGEMESSAGE}, nItem,
+1187                             SERVICE\_CONTROL\_STOP);
+1188             \}
+1189             Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a9a565b8e5d95137f6527dd576dfaf6c2}{IDC\_SSTOP}), \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1190             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1191 
+1192         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}:
+1193             Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1194             hListBox = GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a8a92b22512cdc678bbec94a1479bf767}{IDL\_SERVICES});
+1195             nItem = SendMessage(hListBox, LB\_GETCURSEL, 0, 0);
+1196             \textcolor{keywordflow}{if} (nItem != LB\_ERR) \{
+1197                 SendMessage(hDlg, \hyperlink{ApacheMonitor_8c_ad66336777602854de258ba274bc1d7b2}{WM\_MANAGEMESSAGE}, nItem,
+1198                             \hyperlink{ApacheMonitor_8c_a9728584c8a48e10efacaf29f5899f587}{SERVICE\_APACHE\_RESTART});
+1199             \}
+1200             Button\_Enable(GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a20e60e7863caf9525ef993a9e33a102c}{IDC\_SRESTART}), \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1201             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1202 
+1203         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_ac0449c9fbbc85bd97b2ded294ae56e9f}{IDC\_SMANAGER}:
+1204             \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}{g\_dwOSVersion} >= \hyperlink{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}{OS\_VERSION\_WIN2K}) \{
+1205                 ShellExecute(hDlg, \_T(\textcolor{stringliteral}{"open"}), \_T(\textcolor{stringliteral}{"services.msc"}), \_T(\textcolor{stringliteral}{"/s"}),
+1206                              \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, SW\_NORMAL);
+1207             \}
+1208             \textcolor{keywordflow}{else} \{
+1209                 WinExec(\textcolor{stringliteral}{"Control.exe SrvMgr.cpl Services"}, SW\_NORMAL);
+1210             \}
+1211             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1212 
+1213         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_a9d18231dae0b7133dc02a52bc714dc85}{IDC\_SCONNECT}:
+1214             DialogBox(\hyperlink{ApacheMonitor_8c_ac3ac20e13a0100039a831961a786ca28}{g\_hInstance}, MAKEINTRESOURCE(\hyperlink{ApacheMonitor_8h_a541d900c8e0b197c5d8fb11e18136d88}{IDD\_DLGCONNECT}),
+1215                       hDlg, (DLGPROC)\hyperlink{ApacheMonitor_8c_aceb3d28feeb5ae0fecdd9d53dc4dd884}{ConnectDlgProc});
+1216             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1217 
+1218         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_a57e6fef32605ed116ac2025e9efd1621}{IDC\_SDISCONN}:
+1219             hListBox = GetDlgItem(hDlg, \hyperlink{ApacheMonitor_8h_a8a92b22512cdc678bbec94a1479bf767}{IDL\_SERVICES});
+1220             nItem = SendMessage(hListBox, LB\_GETCURSEL, 0, 0);
+1221             \textcolor{keywordflow}{if} (nItem != LB\_ERR) \{
+1222                 \hyperlink{ApacheMonitor_8c_a0dea6c1dcd4bc3e57dc9c26ce2911024}{am\_DisconnectComputer}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[nItem].szComputerName);
+1223                 SendMessage(\hyperlink{ApacheMonitor_8c_abaeab070683eb0781bf12d92bc68d430}{g\_hwndMain}, WM\_TIMER, \hyperlink{ApacheMonitor_8c_aba560eb64e9ec409c153585601512015}{WM\_TIMER\_RESCAN}, 0);
+1224             \}
+1225             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1226         \}
+1227         \textcolor{keywordflow}{break};
+1228 
+1229     \textcolor{keywordflow}{case} WM\_SIZE:
+1230         \textcolor{keywordflow}{switch} (LOWORD(wParam))
+1231         \{
+1232         \textcolor{keywordflow}{case} SIZE\_MINIMIZED:
+1233             EndDialog(hDlg, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1234             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1235             \textcolor{keywordflow}{break};
+1236         \}
+1237         \textcolor{keywordflow}{break};
+1238 
+1239     \textcolor{keywordflow}{case} WM\_QUIT:
+1240     \textcolor{keywordflow}{case} WM\_CLOSE:
+1241         EndDialog(hDlg, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1242         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1243 
+1244     \textcolor{keywordflow}{default}:
+1245         \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+1246     \}
+1247     \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+1248 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_af5961f2cd92c217189fabb303663f600_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_af5961f2cd92c217189fabb303663f600_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Show\+Try\+Popup\+Menu@{Show\+Try\+Popup\+Menu}}
+\index{Show\+Try\+Popup\+Menu@{Show\+Try\+Popup\+Menu}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Show\+Try\+Popup\+Menu(\+H\+W\+N\+D h\+Wnd)}{ShowTryPopupMenu(HWND hWnd)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} Show\+Try\+Popup\+Menu (
+\begin{DoxyParamCaption}
+\item[{H\+W\+ND}]{h\+Wnd}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a26ad31b5fe1a936eb78ec98714c67802}{}\label{ApacheMonitor_8c_a26ad31b5fe1a936eb78ec98714c67802}
+
+\begin{DoxyCode}
+426 \{
+427     \textcolor{comment}{/* create popup menu */}
+428     HMENU hMenu = CreatePopupMenu();
+429     POINT pt;
+430 
+431     \textcolor{keywordflow}{if} (hMenu)
+432     \{
+433         \hyperlink{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{appendMenuItem}(hMenu, \hyperlink{ApacheMonitor_8h_a847cbc79f5471922e295d9801d3ac990}{IDM\_RESTORE},
+434                        g\_lpMsg[\hyperlink{ApacheMonitor_8h_a885e87f83a1c4459eb2ee7157856eced}{IDS\_MSG\_MNUSHOW} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+435                        \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE}, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+436         \hyperlink{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{appendMenuItem}(hMenu, \hyperlink{ApacheMonitor_8h_ac0449c9fbbc85bd97b2ded294ae56e9f}{IDC\_SMANAGER},
+437                        g\_lpMsg[\hyperlink{ApacheMonitor_8h_adf836b828ee07ee55feeb58c324c1872}{IDS\_MSG\_MNUSERVICES} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+438                        \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+439         \hyperlink{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{appendMenuItem}(hMenu, 0, \_T(\textcolor{stringliteral}{""}), \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+440         \hyperlink{ApacheMonitor_8c_afad6f0a44f303534126ed2aefd950ce9}{appendMenuItem}(hMenu, \hyperlink{ApacheMonitor_8h_a79aeed168a959b22b32169e25f8c1f4d}{IDM\_EXIT},
+441                        g\_lpMsg[\hyperlink{ApacheMonitor_8h_afbfc29dce992259bb1df1fd6ac0aef25}{IDS\_MSG\_MNUEXIT} - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}],
+442                        \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+443 
+444         \textcolor{keywordflow}{if} (!SetForegroundWindow(hWnd)) \{
+445             SetForegroundWindow(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+446         \}
+447         GetCursorPos(&pt);
+448         TrackPopupMenu(hMenu, TPM\_LEFTALIGN|TPM\_RIGHTBUTTON,
+449                        pt.x, pt.y, 0, hWnd, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+450         DestroyMenu(hMenu);
+451     \}
+452 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=315pt]{ApacheMonitor_8c_a26ad31b5fe1a936eb78ec98714c67802_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a26ad31b5fe1a936eb78ec98714c67802_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Show\+Try\+Services\+Menu@{Show\+Try\+Services\+Menu}}
+\index{Show\+Try\+Services\+Menu@{Show\+Try\+Services\+Menu}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Show\+Try\+Services\+Menu(\+H\+W\+N\+D h\+Wnd)}{ShowTryServicesMenu(HWND hWnd)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} Show\+Try\+Services\+Menu (
+\begin{DoxyParamCaption}
+\item[{H\+W\+ND}]{h\+Wnd}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a8d6651ecbaa1c5daac907f3f7d0394e8}{}\label{ApacheMonitor_8c_a8d6651ecbaa1c5daac907f3f7d0394e8}
+
+\begin{DoxyCode}
+456 \{
+457     \textcolor{comment}{/* create services list popup menu and submenus */}
+458     HMENU hMenu = CreatePopupMenu();
+459     POINT pt;
+460     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0;
+461 
+462     \textcolor{keywordflow}{if} (hMenu)
+463     \{
+464         \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szServiceName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+465         \{
+466             \hyperlink{ApacheMonitor_8c_ac60667b9020c3690fd448ab3185732e0}{appendServiceMenu}(hMenu, i, \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].szDisplayName,
+467                               \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[i].dwPid != 0);
+468             ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+469         \}
+470         \textcolor{keywordflow}{if} (i)
+471         \{
+472             \textcolor{keywordflow}{if} (!SetForegroundWindow(hWnd)) \{
+473                 SetForegroundWindow(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+474             \}
+475             GetCursorPos(&pt);
+476             TrackPopupMenu(hMenu, TPM\_LEFTALIGN|TPM\_RIGHTBUTTON,
+477                            pt.x, pt.y, 0, hWnd, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+478             DestroyMenu(hMenu);
+479         \}
+480     \}
+481 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a8d6651ecbaa1c5daac907f3f7d0394e8_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a8d6651ecbaa1c5daac907f3f7d0394e8_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Win\+Main@{Win\+Main}}
+\index{Win\+Main@{Win\+Main}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Win\+Main(\+H\+I\+N\+S\+T\+A\+N\+C\+E h\+Instance, H\+I\+N\+S\+T\+A\+N\+C\+E h\+Prev\+Instance, L\+P\+S\+T\+R lp\+Cmd\+Line, int n\+Cmd\+Show)}{WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} W\+I\+N\+A\+PI Win\+Main (
+\begin{DoxyParamCaption}
+\item[{H\+I\+N\+S\+T\+A\+N\+CE}]{h\+Instance, }
+\item[{H\+I\+N\+S\+T\+A\+N\+CE}]{h\+Prev\+Instance, }
+\item[{L\+P\+S\+TR}]{lp\+Cmd\+Line, }
+\item[{{\bf int}}]{n\+Cmd\+Show}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a661c2abc03926acfaeb93b4ae7db4943}{}\label{ApacheMonitor_8c_a661c2abc03926acfaeb93b4ae7db4943}
+
+\begin{DoxyCode}
+1546 \{
+1547     TCHAR szTmp[\hyperlink{ApacheMonitor_8c_a2b68559d692760680c326428841254d1}{MAX\_LOADSTRING}];
+1548     TCHAR szCmp[MAX\_COMPUTERNAME\_LENGTH+4];
+1549     \hyperlink{testshm_8h_a0c719c414608ef14852670b063876c07}{MSG} msg;
+1550     \textcolor{comment}{/* existing window */}
+1551     HWND appwindow;
+1552     DWORD dwControl;
+1553     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+1554     DWORD \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+1555 
+1556     \textcolor{keywordflow}{if} (!\hyperlink{ApacheMonitor_8c_a6f6b208a3caeb3a480d020b0a1a587e3}{GetSystemOSVersion}(&\hyperlink{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}{g\_dwOSVersion}))
+1557     \{
+1558         \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+1559         \textcolor{keywordflow}{return} 1;
+1560     \}
+1561 
+1562     \hyperlink{ApacheMonitor_8c_a0d98d46a172f82e8904fe3e2ec095e2c}{g\_LangID} = GetUserDefaultLangID();
+1563     \textcolor{keywordflow}{if} ((\hyperlink{ApacheMonitor_8c_a0d98d46a172f82e8904fe3e2ec095e2c}{g\_LangID} & 0xFF) != LANG\_ENGLISH) \{
+1564         \hyperlink{ApacheMonitor_8c_a0d98d46a172f82e8904fe3e2ec095e2c}{g\_LangID} = MAKELANGID(LANG\_NEUTRAL, SUBLANG\_NEUTRAL);
+1565     \}
+1566     \textcolor{keywordflow}{for} (i = \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}; i <= \hyperlink{ApacheMonitor_8h_a7608cf5f26c08d611e5e6362e99237e8}{IDS\_MSG\_LAST}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+1567         LoadString(hInstance, i, szTmp, \hyperlink{ApacheMonitor_8c_a2b68559d692760680c326428841254d1}{MAX\_LOADSTRING});
+1568         g\_lpMsg[i - \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}] = \_tcsdup(szTmp);
+1569     \}
+1570     LoadString(hInstance, \hyperlink{ApacheMonitor_8h_abba42261d06e8969dc69b3baeddd1ee0}{IDS\_APMONITORTITLE}, szTmp, 
+      \hyperlink{ApacheMonitor_8c_a2b68559d692760680c326428841254d1}{MAX\_LOADSTRING});
+1571     d = MAX\_COMPUTERNAME\_LENGTH+1;
+1572     \_tcscpy(szCmp, \_T(\textcolor{stringliteral}{"\(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)"}));
+1573     GetComputerName(szCmp + 2, &d);
+1574     \_tcsupr(szCmp);
+1575     \hyperlink{ApacheMonitor_8c_a236a248f74e54c0ecf421d94646e766f}{g\_szLocalHost} = \_tcsdup(szCmp);
+1576 
+1577     memset(\hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}, 0, \textcolor{keyword}{sizeof}(\hyperlink{struct__st__MONITORED__COMPUTERS}{ST\_MONITORED\_COMP}) * 
+      \hyperlink{ApacheMonitor_8c_a0f13e7b8e97f05a5050f12bf0e78bfa1}{MAX\_APACHE\_COMPUTERS});
+1578     \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[0].\hyperlink{struct__st__MONITORED__COMPUTERS_a00f2db8f87493ab31ecd00253868891f}{szComputerName} = \_tcsdup(szCmp);
+1579     \hyperlink{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{g\_stComputers}[0].\hyperlink{struct__st__MONITORED__COMPUTERS_a5ff832bcc89cf9d9111d32f2677ca0de}{hRegistry} = HKEY\_LOCAL\_MACHINE;
+1580     \hyperlink{ApacheMonitor_8c_a7224c1ff0ea1d0a5f104da9022081db5}{g\_szTitle} = \_tcsdup(szTmp);
+1581     LoadString(hInstance, \hyperlink{ApacheMonitor_8h_affdbde2ad2573e40f2415512d27af130}{IDS\_APMONITORCLASS}, szTmp, 
+      \hyperlink{ApacheMonitor_8c_a2b68559d692760680c326428841254d1}{MAX\_LOADSTRING});
+1582     \hyperlink{ApacheMonitor_8c_a09081aff5af6d1aa3d8fea0876abe868}{g\_szWindowClass} = \_tcsdup(szTmp);
+1583 
+1584     appwindow = FindWindow(\hyperlink{ApacheMonitor_8c_a09081aff5af6d1aa3d8fea0876abe868}{g\_szWindowClass}, \hyperlink{ApacheMonitor_8c_a7224c1ff0ea1d0a5f104da9022081db5}{g\_szTitle});
+1585 
+1586 \textcolor{preprocessor}{#ifdef UNICODE}
+1587     \_\_wargv = \hyperlink{win32_2apr__arch__misc_8h_ab17abe495ef800a39044f5695163471f}{CommandLineToArgvW}(GetCommandLineW(), &\_\_argc);
+1588 \textcolor{preprocessor}{#else}
+1589 \textcolor{preprocessor}{#if defined(\_MSC\_VER) && \_MSC\_VER < 1800 }
+1590     \hyperlink{ApacheMonitor_8c_a26a86baed11120d322b658b775b373d7}{\_setargv}();
+1591 \textcolor{preprocessor}{#endif}
+1592 \textcolor{preprocessor}{#endif}
+1593 
+1594     \textcolor{keywordflow}{if} ((\_\_argc == 2) && (\_tcscmp(\_\_targv[1], \_T(\textcolor{stringliteral}{"--kill"})) == 0))
+1595     \{
+1596         \textcolor{comment}{/* Off to chase and close up every ApacheMonitor taskbar window */}
+1597         \textcolor{keywordflow}{return} KillAllMonitors();
+1598     \}
+1599     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((\_\_argc == 4) && (\hyperlink{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}{g\_dwOSVersion} >= \hyperlink{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}{OS\_VERSION\_WIN2K}))
+1600     \{
+1601         dwControl = \_ttoi(\_\_targv[1]);
+1602         \textcolor{keywordflow}{if} ((dwControl != SERVICE\_CONTROL\_CONTINUE) &&
+1603             (dwControl != \hyperlink{ApacheMonitor_8c_a9728584c8a48e10efacaf29f5899f587}{SERVICE\_APACHE\_RESTART}) &&
+1604             (dwControl != SERVICE\_CONTROL\_STOP))
+1605         \{
+1606             \textcolor{keywordflow}{return} 1;
+1607         \}
+1608 
+1609         \textcolor{comment}{/* Chase down and close up our session's previous window */}
+1610         \textcolor{keywordflow}{if} ((appwindow) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+1611             KillAWindow(appwindow);
+1612     \}
+1613     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\_\_argc != 1) \{
+1614         \textcolor{keywordflow}{return} 1;
+1615     \}
+1616     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (appwindow)
+1617     \{
+1618         \hyperlink{ApacheMonitor_8c_a39b4f577bc6282e6cb04e003d36f81f5}{ErrorMessage}(g\_lpMsg[\hyperlink{ApacheMonitor_8h_a9fb8fd37b61de30baeb980efb075c242}{IDS\_MSG\_APPRUNNING} - 
+      \hyperlink{ApacheMonitor_8h_af3a43afbc13b0abd0ebb20c650ea4014}{IDS\_MSG\_FIRST}], \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+1619         \textcolor{keywordflow}{return} 0;
+1620     \}
+1621 
+1622     \hyperlink{ApacheMonitor_8c_afd5c36b003e90ee47d2c73c17de2ac8f}{g\_icoStop}          = LoadImage(hInstance, MAKEINTRESOURCE(
+      \hyperlink{ApacheMonitor_8h_a73509e4db0db66dcf674a98134b41714}{IDI\_ICOSTOP}),
+1623                                    IMAGE\_ICON, 16, 16, LR\_DEFAULTCOLOR);
+1624     \hyperlink{ApacheMonitor_8c_a6c06029359cb44c6d96653719d3a86c5}{g\_icoRun}           = LoadImage(hInstance, MAKEINTRESOURCE(\hyperlink{ApacheMonitor_8h_a965734103de4c3879dfb5ef8d312b4c9}{IDI\_ICORUN}),
+1625                                    IMAGE\_ICON, 16, 16, LR\_DEFAULTCOLOR);
+1626     \hyperlink{ApacheMonitor_8c_adf2793c1ebbfd8ea69879e88877c6eb8}{g\_hCursorHourglass} = LoadImage(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, MAKEINTRESOURCE(OCR\_WAIT),
+1627                                    IMAGE\_CURSOR, LR\_DEFAULTSIZE,
+1628                                    LR\_DEFAULTSIZE, LR\_SHARED);
+1629     \hyperlink{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}{g\_hCursorArrow}     = LoadImage(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, MAKEINTRESOURCE(OCR\_NORMAL),
+1630                                    IMAGE\_CURSOR, LR\_DEFAULTSIZE,
+1631                                    LR\_DEFAULTSIZE, LR\_SHARED);
+1632     \hyperlink{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}{g\_hBmpStart}        = LoadImage(hInstance, MAKEINTRESOURCE(
+      \hyperlink{ApacheMonitor_8h_a259d50ceeebf1b13e4ab3ee230d2cd2b}{IDB\_BMPRUN}),
+1633                                    IMAGE\_BITMAP, \hyperlink{ApacheMonitor_8c_a7fda781eb1e8fb545b2a373e7f1cfe14}{XBITMAP}, \hyperlink{ApacheMonitor_8c_aba79305932e87f301cf27098dec70b35}{YBITMAP},
+1634                                    LR\_DEFAULTCOLOR);
+1635     \hyperlink{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{g\_hBmpStop}         = LoadImage(hInstance, MAKEINTRESOURCE(
+      \hyperlink{ApacheMonitor_8h_aea79d9a2de9fcebf28a2484c7a41f266}{IDB\_BMPSTOP}),
+1636                                    IMAGE\_BITMAP, \hyperlink{ApacheMonitor_8c_a7fda781eb1e8fb545b2a373e7f1cfe14}{XBITMAP}, \hyperlink{ApacheMonitor_8c_aba79305932e87f301cf27098dec70b35}{YBITMAP},
+1637                                    LR\_DEFAULTCOLOR);
+1638 
+1639     memset(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}, 0, \textcolor{keyword}{sizeof}(\hyperlink{struct__st__APACHE__SERVICE}{ST\_APACHE\_SERVICE}) * 
+      \hyperlink{ApacheMonitor_8c_a888e6bc4ccc9c165aa1522f02474f033}{MAX\_APACHE\_SERVICES});
+1640     CoInitialize(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1641     InitCommonControls();
+1642     \hyperlink{ApacheMonitor_8c_ac3ac20e13a0100039a831961a786ca28}{g\_hInstance} = hInstance;
+1643     \hyperlink{ApacheMonitor_8c_abaeab070683eb0781bf12d92bc68d430}{g\_hwndMain} = \hyperlink{ApacheMonitor_8c_a4c157499b414a516446108301e061979}{CreateMainWindow}(hInstance);
+1644     \hyperlink{ApacheMonitor_8c_aedec9ce315c13b2baba1d96aaf0e1e15}{g\_bUiTaskbarCreated} = RegisterWindowMessage(\_T(\textcolor{stringliteral}{"TaskbarCreated"}));
+1645     InitializeCriticalSection(&\hyperlink{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}{g\_stcSection});
+1646     \hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1647     \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_abaeab070683eb0781bf12d92bc68d430}{g\_hwndMain} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+1648     \{
+1649         \textcolor{comment}{/* To avoid recursion, pass ImagePath NULL (a noop on NT and later) */}
+1650         \textcolor{keywordflow}{if} ((\_\_argc == 4) && (\hyperlink{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}{g\_dwOSVersion} >= \hyperlink{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}{OS\_VERSION\_WIN2K}))
+1651             \hyperlink{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29}{ApacheManageService}(\_\_targv[2], \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \_\_targv[3], dwControl);
+1652 
+1653         \textcolor{keywordflow}{while} (GetMessage(&msg, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 0, 0) == \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE})
+1654         \{
+1655             TranslateMessage(&msg);
+1656             DispatchMessage(&msg);
+1657         \}
+1658         \hyperlink{ApacheMonitor_8c_abe05e747e5221061baf38f279cbdef12}{am\_ClearServicesSt}();
+1659     \}
+1660     \hyperlink{ApacheMonitor_8c_a32b8532b0104c27d2514e447b265d6b7}{am\_ClearComputersSt}();
+1661     DeleteCriticalSection(&\hyperlink{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}{g\_stcSection});
+1662     DestroyIcon(\hyperlink{ApacheMonitor_8c_afd5c36b003e90ee47d2c73c17de2ac8f}{g\_icoStop});
+1663     DestroyIcon(\hyperlink{ApacheMonitor_8c_a6c06029359cb44c6d96653719d3a86c5}{g\_icoRun});
+1664     DestroyCursor(\hyperlink{ApacheMonitor_8c_adf2793c1ebbfd8ea69879e88877c6eb8}{g\_hCursorHourglass});
+1665     DestroyCursor(\hyperlink{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}{g\_hCursorArrow});
+1666     DeleteObject(\hyperlink{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}{g\_hBmpStart});
+1667     DeleteObject(\hyperlink{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{g\_hBmpStop});
+1668     CoUninitialize();
+1669     \textcolor{keywordflow}{return} 0;
+1670 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a661c2abc03926acfaeb93b4ae7db4943_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!Wnd\+Proc@{Wnd\+Proc}}
+\index{Wnd\+Proc@{Wnd\+Proc}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{Wnd\+Proc(\+H\+W\+N\+D h\+Wnd, U\+I\+N\+T message, W\+P\+A\+R\+A\+M w\+Param, L\+P\+A\+R\+A\+M l\+Param)}{WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)}}]{\setlength{\rightskip}{0pt plus 5cm}L\+R\+E\+S\+U\+LT C\+A\+L\+L\+B\+A\+CK Wnd\+Proc (
+\begin{DoxyParamCaption}
+\item[{H\+W\+ND}]{h\+Wnd, }
+\item[{U\+I\+NT}]{message, }
+\item[{W\+P\+A\+R\+AM}]{w\+Param, }
+\item[{L\+P\+A\+R\+AM}]{l\+Param}
+\end{DoxyParamCaption}
+)}\hypertarget{ApacheMonitor_8c_a30a1e3b0304f1b083637664cbda94e72}{}\label{ApacheMonitor_8c_a30a1e3b0304f1b083637664cbda94e72}
+
+\begin{DoxyCode}
+1253 \{
+1254     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__PROXY_ga0c50798f43a2b6a973e0faf3b4038d54}{message} == \hyperlink{ApacheMonitor_8c_aedec9ce315c13b2baba1d96aaf0e1e15}{g\_bUiTaskbarCreated})
+1255     \{
+1256         \textcolor{comment}{/* restore the tray icon on shell restart */}
+1257         ShowNotifyIcon(hWnd, NIM\_ADD);
+1258         \textcolor{keywordflow}{return} DefWindowProc(hWnd, \hyperlink{group__MOD__PROXY_ga0c50798f43a2b6a973e0faf3b4038d54}{message}, wParam, lParam);
+1259     \}
+1260     \textcolor{keywordflow}{switch} (\hyperlink{group__MOD__PROXY_ga0c50798f43a2b6a973e0faf3b4038d54}{message})
+1261     \{
+1262     \textcolor{keywordflow}{case} WM\_CREATE:
+1263         \hyperlink{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86}{GetApacheServicesStatus}();
+1264         ShowNotifyIcon(hWnd, NIM\_ADD);
+1265         SetTimer(hWnd, \hyperlink{ApacheMonitor_8c_aff79c512ca2d42e987ffe198c7f76347}{WM\_TIMER\_REFRESH}, \hyperlink{ApacheMonitor_8c_a45a64d025faf2f8499d2192c5b033a4b}{REFRESH\_TIME}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1266         SetTimer(hWnd, \hyperlink{ApacheMonitor_8c_aba560eb64e9ec409c153585601512015}{WM\_TIMER\_RESCAN},  \hyperlink{ApacheMonitor_8c_a454b5643c2ee8d9c939ed0e87dc6d731}{RESCAN\_TIME}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1267         \textcolor{keywordflow}{break};
+1268 
+1269     \textcolor{keywordflow}{case} WM\_TIMER:
+1270         \textcolor{keywordflow}{switch} (wParam)
+1271         \{
+1272         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8c_aba560eb64e9ec409c153585601512015}{WM\_TIMER\_RESCAN}:
+1273         \{
+1274             \textcolor{keywordtype}{int} nPrev = 0, nNew = 0;
+1275             EnterCriticalSection(&\hyperlink{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}{g\_stcSection});
+1276             \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_aa1aa97222a0d05397de15ae34cc17229}{FindRunningServices}() || \hyperlink{ApacheMonitor_8c_a367f6a9a04f9ae13e95eefc98ae9b1af}{g\_bRescanServices})
+1277             \{
+1278                 ShowNotifyIcon(hWnd, NIM\_MODIFY);
+1279                 \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg})
+1280                     PostMessage(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}, 
+      \hyperlink{ApacheMonitor_8c_a22fdf378ef7aa9e39034b54b36ac5831}{WM\_UPDATEMESSAGE}, 0, 0);
+1281             \}
+1282             \textcolor{comment}{/* check if services list changed */}
+1283             \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[nPrev].szServiceName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+1284                 ++nPrev;
+1285             \hyperlink{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86}{GetApacheServicesStatus}();
+1286             \textcolor{keywordflow}{while} (\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[nNew].szServiceName != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+1287                 ++nNew;
+1288             \textcolor{keywordflow}{if} (nPrev != nNew)
+1289             \{
+1290                 ShowNotifyIcon(hWnd, NIM\_MODIFY);
+1291                 \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}) \{
+1292                     PostMessage(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}, 
+      \hyperlink{ApacheMonitor_8c_a22fdf378ef7aa9e39034b54b36ac5831}{WM\_UPDATEMESSAGE}, 0, 0);
+1293                 \}
+1294             \}
+1295             LeaveCriticalSection(&\hyperlink{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}{g\_stcSection});
+1296             \textcolor{keywordflow}{break};
+1297         \}
+1298 
+1299         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8c_aff79c512ca2d42e987ffe198c7f76347}{WM\_TIMER\_REFRESH}:
+1300         \{
+1301             EnterCriticalSection(&\hyperlink{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}{g\_stcSection});
+1302             \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a367f6a9a04f9ae13e95eefc98ae9b1af}{g\_bRescanServices})
+1303             \{
+1304                 \hyperlink{ApacheMonitor_8c_a260b2814cdd2b11290569fc74d1cbe86}{GetApacheServicesStatus}();
+1305                 ShowNotifyIcon(hWnd, NIM\_MODIFY);
+1306                 \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}) \{
+1307                     PostMessage(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}, 
+      \hyperlink{ApacheMonitor_8c_a22fdf378ef7aa9e39034b54b36ac5831}{WM\_UPDATEMESSAGE}, 0, 0);
+1308                 \}
+1309             \}
+1310             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_aa1aa97222a0d05397de15ae34cc17229}{FindRunningServices}())
+1311             \{
+1312                 ShowNotifyIcon(hWnd, NIM\_MODIFY);
+1313                 \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}) \{
+1314                     PostMessage(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}, 
+      \hyperlink{ApacheMonitor_8c_a22fdf378ef7aa9e39034b54b36ac5831}{WM\_UPDATEMESSAGE}, 0, 0);
+1315                 \}
+1316             \}
+1317             LeaveCriticalSection(&\hyperlink{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}{g\_stcSection});
+1318             \textcolor{keywordflow}{break};
+1319         \}
+1320         \}
+1321         \textcolor{keywordflow}{break};
+1322 
+1323     \textcolor{keywordflow}{case} WM\_QUIT:
+1324         ShowNotifyIcon(hWnd, NIM\_DELETE);
+1325         \textcolor{keywordflow}{break};
+1326 
+1327     \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8c_a9b9ef7c866f961e54d2770584b5f6820}{WM\_TRAYMESSAGE}:
+1328         \textcolor{keywordflow}{switch} (lParam)
+1329         \{
+1330         \textcolor{keywordflow}{case} WM\_LBUTTONDBLCLK:
+1331             \textcolor{keywordflow}{if} (!\hyperlink{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}{g\_bDlgServiceOn})
+1332             \{
+1333                 \hyperlink{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}{g\_bDlgServiceOn} = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1334                 DialogBox(\hyperlink{ApacheMonitor_8c_ac3ac20e13a0100039a831961a786ca28}{g\_hInstance}, MAKEINTRESOURCE(
+      \hyperlink{ApacheMonitor_8h_ad3b0befd380a7c521f12e5e57813dcdc}{IDD\_DLGSERVICES}),
+1335                           hWnd, (DLGPROC)\hyperlink{ApacheMonitor_8c_af5961f2cd92c217189fabb303663f600}{ServiceDlgProc});
+1336                 \hyperlink{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}{g\_bDlgServiceOn} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+1337                 \hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1338             \}
+1339             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (IsWindow(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}))
+1340             \{
+1341                 \textcolor{comment}{/* Dirty hack to bring the window to the foreground */}
+1342                 SetWindowPos(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}, HWND\_TOPMOST, 0, 0, 0, 0,
+1343                              SWP\_NOSIZE | SWP\_NOMOVE | SWP\_SHOWWINDOW);
+1344                 SetWindowPos(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg}, HWND\_NOTOPMOST, 0, 0, 0, 0,
+1345                              SWP\_NOSIZE | SWP\_NOMOVE | SWP\_SHOWWINDOW);
+1346                 SetFocus(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg});
+1347             \}
+1348             \textcolor{keywordflow}{break};
+1349 
+1350         \textcolor{keywordflow}{case} WM\_LBUTTONUP:
+1351             \hyperlink{ApacheMonitor_8c_a8d6651ecbaa1c5daac907f3f7d0394e8}{ShowTryServicesMenu}(hWnd);
+1352             \textcolor{keywordflow}{break};
+1353 
+1354         \textcolor{keywordflow}{case} WM\_RBUTTONUP:
+1355             \hyperlink{ApacheMonitor_8c_a26ad31b5fe1a936eb78ec98714c67802}{ShowTryPopupMenu}(hWnd);
+1356             \textcolor{keywordflow}{break};
+1357         \}
+1358         \textcolor{keywordflow}{break};
+1359 
+1360     \textcolor{keywordflow}{case} WM\_COMMAND:
+1361         \textcolor{keywordflow}{if} ((LOWORD(wParam) & \hyperlink{ApacheMonitor_8h_aab54b8aa0098db1d085585992f9dd6d2}{IDM\_SM\_START}) == IDM\_SM\_START)
+1362         \{
+1363             \hyperlink{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29}{ApacheManageService}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1364                                            - IDM\_SM\_START].szServiceName,
+1365                                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1366                                            - IDM\_SM\_START].szImagePath,
+1367                                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1368                                            - IDM\_SM\_START].szComputerName,
+1369                                 SERVICE\_CONTROL\_CONTINUE);
+1370             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1371         \}
+1372         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((LOWORD(wParam) & \hyperlink{ApacheMonitor_8h_a56d3e290d3f93b36aa914adc4e62b834}{IDM\_SM\_STOP}) == IDM\_SM\_STOP)
+1373         \{
+1374             \hyperlink{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29}{ApacheManageService}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1375                                            - IDM\_SM\_STOP].szServiceName,
+1376                                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1377                                            - IDM\_SM\_STOP].szImagePath,
+1378                                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1379                                            - IDM\_SM\_STOP].szComputerName,
+1380                                 SERVICE\_CONTROL\_STOP);
+1381             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1382         \}
+1383         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((LOWORD(wParam) & \hyperlink{ApacheMonitor_8h_aef275168c7bfeee939125298ecad93af}{IDM\_SM\_RESTART}) == IDM\_SM\_RESTART)
+1384         \{
+1385             \hyperlink{ApacheMonitor_8c_a677d2ba40c4fb94316390ed6aa952d29}{ApacheManageService}(\hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1386                                            - IDM\_SM\_RESTART].szServiceName,
+1387                                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1388                                            - IDM\_SM\_RESTART].szImagePath,
+1389                                 \hyperlink{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{g\_stServices}[LOWORD(wParam)
+1390                                            - IDM\_SM\_RESTART].szComputerName,
+1391                                 \hyperlink{ApacheMonitor_8c_a9728584c8a48e10efacaf29f5899f587}{SERVICE\_APACHE\_RESTART});
+1392             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1393         \}
+1394         \textcolor{keywordflow}{switch} (LOWORD(wParam))
+1395         \{
+1396         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_a847cbc79f5471922e295d9801d3ac990}{IDM\_RESTORE}:
+1397             \textcolor{keywordflow}{if} (!\hyperlink{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}{g\_bDlgServiceOn})
+1398             \{
+1399                 \hyperlink{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}{g\_bDlgServiceOn} = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1400                 DialogBox(\hyperlink{ApacheMonitor_8c_ac3ac20e13a0100039a831961a786ca28}{g\_hInstance}, MAKEINTRESOURCE(
+      \hyperlink{ApacheMonitor_8h_ad3b0befd380a7c521f12e5e57813dcdc}{IDD\_DLGSERVICES}),
+1401                           hWnd, (DLGPROC)\hyperlink{ApacheMonitor_8c_af5961f2cd92c217189fabb303663f600}{ServiceDlgProc});
+1402                 \hyperlink{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}{g\_bDlgServiceOn} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+1403                 \hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1404             \}
+1405             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (IsWindow(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg})) \{
+1406                 SetFocus(\hyperlink{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{g\_hwndServiceDlg});
+1407             \}
+1408             \textcolor{keywordflow}{break};
+1409 
+1410         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_ac0449c9fbbc85bd97b2ded294ae56e9f}{IDC\_SMANAGER}:
+1411             \textcolor{keywordflow}{if} (\hyperlink{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}{g\_dwOSVersion} >= \hyperlink{ApacheMonitor_8c_aa164552db39bdb85fa50015cc43419b9}{OS\_VERSION\_WIN2K}) \{
+1412                 ShellExecute(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \_T(\textcolor{stringliteral}{"open"}), \_T(\textcolor{stringliteral}{"services.msc"}), \_T(\textcolor{stringliteral}{"/s"}),
+1413                              \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, SW\_NORMAL);
+1414             \}
+1415             \textcolor{keywordflow}{else} \{
+1416                 WinExec(\textcolor{stringliteral}{"Control.exe SrvMgr.cpl Services"}, SW\_NORMAL);
+1417             \}
+1418             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1419 
+1420         \textcolor{keywordflow}{case} \hyperlink{ApacheMonitor_8h_a79aeed168a959b22b32169e25f8c1f4d}{IDM\_EXIT}:
+1421             ShowNotifyIcon(hWnd, NIM\_DELETE);
+1422             PostQuitMessage(0);
+1423             \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+1424         \}
+1425 
+1426     \textcolor{keywordflow}{default}:
+1427         \textcolor{keywordflow}{return} DefWindowProc(hWnd, \hyperlink{group__MOD__PROXY_ga0c50798f43a2b6a973e0faf3b4038d54}{message}, wParam, lParam);
+1428     \}
+1429 
+1430     \textcolor{keywordflow}{return} \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+1431 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a30a1e3b0304f1b083637664cbda94e72_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ApacheMonitor_8c_a30a1e3b0304f1b083637664cbda94e72_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+b\+Console\+Run@{g\+\_\+b\+Console\+Run}}
+\index{g\+\_\+b\+Console\+Run@{g\+\_\+b\+Console\+Run}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+b\+Console\+Run}{g_bConsoleRun}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} g\+\_\+b\+Console\+Run = {\bf F\+A\+L\+SE}}\hypertarget{ApacheMonitor_8c_a463973f56e605c5517d2461e7682070e}{}\label{ApacheMonitor_8c_a463973f56e605c5517d2461e7682070e}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+b\+Dlg\+Service\+On@{g\+\_\+b\+Dlg\+Service\+On}}
+\index{g\+\_\+b\+Dlg\+Service\+On@{g\+\_\+b\+Dlg\+Service\+On}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+b\+Dlg\+Service\+On}{g_bDlgServiceOn}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} g\+\_\+b\+Dlg\+Service\+On = {\bf F\+A\+L\+SE}}\hypertarget{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}{}\label{ApacheMonitor_8c_afef025943fc09fec3d0e897d3ed37b24}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+b\+Rescan\+Services@{g\+\_\+b\+Rescan\+Services}}
+\index{g\+\_\+b\+Rescan\+Services@{g\+\_\+b\+Rescan\+Services}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+b\+Rescan\+Services}{g_bRescanServices}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf B\+O\+OL} g\+\_\+b\+Rescan\+Services}\hypertarget{ApacheMonitor_8c_a367f6a9a04f9ae13e95eefc98ae9b1af}{}\label{ApacheMonitor_8c_a367f6a9a04f9ae13e95eefc98ae9b1af}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+b\+Ui\+Taskbar\+Created@{g\+\_\+b\+Ui\+Taskbar\+Created}}
+\index{g\+\_\+b\+Ui\+Taskbar\+Created@{g\+\_\+b\+Ui\+Taskbar\+Created}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+b\+Ui\+Taskbar\+Created}{g_bUiTaskbarCreated}}]{\setlength{\rightskip}{0pt plus 5cm}U\+I\+NT g\+\_\+b\+Ui\+Taskbar\+Created}\hypertarget{ApacheMonitor_8c_aedec9ce315c13b2baba1d96aaf0e1e15}{}\label{ApacheMonitor_8c_aedec9ce315c13b2baba1d96aaf0e1e15}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+dw\+O\+S\+Version@{g\+\_\+dw\+O\+S\+Version}}
+\index{g\+\_\+dw\+O\+S\+Version@{g\+\_\+dw\+O\+S\+Version}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+dw\+O\+S\+Version}{g_dwOSVersion}}]{\setlength{\rightskip}{0pt plus 5cm}D\+W\+O\+RD g\+\_\+dw\+O\+S\+Version}\hypertarget{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}{}\label{ApacheMonitor_8c_aae172cbf239265e4ff7c02be5cf4d25d}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+h\+Bmp\+Old@{g\+\_\+h\+Bmp\+Old}}
+\index{g\+\_\+h\+Bmp\+Old@{g\+\_\+h\+Bmp\+Old}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+h\+Bmp\+Old}{g_hBmpOld}}]{\setlength{\rightskip}{0pt plus 5cm}H\+B\+I\+T\+M\+AP g\+\_\+h\+Bmp\+Old}\hypertarget{ApacheMonitor_8c_afefe7c7cf8e229c511882c3a5186d8e8}{}\label{ApacheMonitor_8c_afefe7c7cf8e229c511882c3a5186d8e8}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+h\+Bmp\+Picture@{g\+\_\+h\+Bmp\+Picture}}
+\index{g\+\_\+h\+Bmp\+Picture@{g\+\_\+h\+Bmp\+Picture}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+h\+Bmp\+Picture}{g_hBmpPicture}}]{\setlength{\rightskip}{0pt plus 5cm}H\+B\+I\+T\+M\+AP g\+\_\+h\+Bmp\+Picture}\hypertarget{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}{}\label{ApacheMonitor_8c_aee564dfea91e5fb3f6418ceffbb80b1e}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+h\+Bmp\+Start@{g\+\_\+h\+Bmp\+Start}}
+\index{g\+\_\+h\+Bmp\+Start@{g\+\_\+h\+Bmp\+Start}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+h\+Bmp\+Start}{g_hBmpStart}}]{\setlength{\rightskip}{0pt plus 5cm}H\+B\+I\+T\+M\+AP g\+\_\+h\+Bmp\+Start}\hypertarget{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}{}\label{ApacheMonitor_8c_ae48f4a84140da23d41e2f1c7ca06bfe0}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+h\+Bmp\+Stop@{g\+\_\+h\+Bmp\+Stop}}
+\index{g\+\_\+h\+Bmp\+Stop@{g\+\_\+h\+Bmp\+Stop}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+h\+Bmp\+Stop}{g_hBmpStop}}]{\setlength{\rightskip}{0pt plus 5cm}H\+B\+I\+T\+M\+AP g\+\_\+h\+Bmp\+Stop}\hypertarget{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}{}\label{ApacheMonitor_8c_a8e82ed5285526e8079c98bdc9ffdbe9c}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+h\+Cursor\+Arrow@{g\+\_\+h\+Cursor\+Arrow}}
+\index{g\+\_\+h\+Cursor\+Arrow@{g\+\_\+h\+Cursor\+Arrow}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+h\+Cursor\+Arrow}{g_hCursorArrow}}]{\setlength{\rightskip}{0pt plus 5cm}H\+C\+U\+R\+S\+OR g\+\_\+h\+Cursor\+Arrow}\hypertarget{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}{}\label{ApacheMonitor_8c_a4a30355b66d503f82a7841bd3534f407}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+h\+Cursor\+Hourglass@{g\+\_\+h\+Cursor\+Hourglass}}
+\index{g\+\_\+h\+Cursor\+Hourglass@{g\+\_\+h\+Cursor\+Hourglass}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+h\+Cursor\+Hourglass}{g_hCursorHourglass}}]{\setlength{\rightskip}{0pt plus 5cm}H\+C\+U\+R\+S\+OR g\+\_\+h\+Cursor\+Hourglass}\hypertarget{ApacheMonitor_8c_adf2793c1ebbfd8ea69879e88877c6eb8}{}\label{ApacheMonitor_8c_adf2793c1ebbfd8ea69879e88877c6eb8}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+h\+Instance@{g\+\_\+h\+Instance}}
+\index{g\+\_\+h\+Instance@{g\+\_\+h\+Instance}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+h\+Instance}{g_hInstance}}]{\setlength{\rightskip}{0pt plus 5cm}H\+I\+N\+S\+T\+A\+N\+CE g\+\_\+h\+Instance = {\bf N\+U\+LL}}\hypertarget{ApacheMonitor_8c_ac3ac20e13a0100039a831961a786ca28}{}\label{ApacheMonitor_8c_ac3ac20e13a0100039a831961a786ca28}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+hwnd\+Connect\+Dlg@{g\+\_\+hwnd\+Connect\+Dlg}}
+\index{g\+\_\+hwnd\+Connect\+Dlg@{g\+\_\+hwnd\+Connect\+Dlg}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+hwnd\+Connect\+Dlg}{g_hwndConnectDlg}}]{\setlength{\rightskip}{0pt plus 5cm}H\+W\+ND g\+\_\+hwnd\+Connect\+Dlg}\hypertarget{ApacheMonitor_8c_a3ea986ce98d48630f99ea3b3f889f525}{}\label{ApacheMonitor_8c_a3ea986ce98d48630f99ea3b3f889f525}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+hwnd\+Main@{g\+\_\+hwnd\+Main}}
+\index{g\+\_\+hwnd\+Main@{g\+\_\+hwnd\+Main}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+hwnd\+Main}{g_hwndMain}}]{\setlength{\rightskip}{0pt plus 5cm}H\+W\+ND g\+\_\+hwnd\+Main}\hypertarget{ApacheMonitor_8c_abaeab070683eb0781bf12d92bc68d430}{}\label{ApacheMonitor_8c_abaeab070683eb0781bf12d92bc68d430}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+hwnd\+Service\+Dlg@{g\+\_\+hwnd\+Service\+Dlg}}
+\index{g\+\_\+hwnd\+Service\+Dlg@{g\+\_\+hwnd\+Service\+Dlg}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+hwnd\+Service\+Dlg}{g_hwndServiceDlg}}]{\setlength{\rightskip}{0pt plus 5cm}H\+W\+ND g\+\_\+hwnd\+Service\+Dlg}\hypertarget{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}{}\label{ApacheMonitor_8c_a30fc466db98c8725749bfd23805e6101}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+hwnd\+Stdout\+List@{g\+\_\+hwnd\+Stdout\+List}}
+\index{g\+\_\+hwnd\+Stdout\+List@{g\+\_\+hwnd\+Stdout\+List}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+hwnd\+Stdout\+List}{g_hwndStdoutList}}]{\setlength{\rightskip}{0pt plus 5cm}H\+W\+ND g\+\_\+hwnd\+Stdout\+List}\hypertarget{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}{}\label{ApacheMonitor_8c_aefa88fe0313fe67804aec96552df96dd}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+ico\+Run@{g\+\_\+ico\+Run}}
+\index{g\+\_\+ico\+Run@{g\+\_\+ico\+Run}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+ico\+Run}{g_icoRun}}]{\setlength{\rightskip}{0pt plus 5cm}H\+I\+C\+ON g\+\_\+ico\+Run}\hypertarget{ApacheMonitor_8c_a6c06029359cb44c6d96653719d3a86c5}{}\label{ApacheMonitor_8c_a6c06029359cb44c6d96653719d3a86c5}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+ico\+Stop@{g\+\_\+ico\+Stop}}
+\index{g\+\_\+ico\+Stop@{g\+\_\+ico\+Stop}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+ico\+Stop}{g_icoStop}}]{\setlength{\rightskip}{0pt plus 5cm}H\+I\+C\+ON g\+\_\+ico\+Stop}\hypertarget{ApacheMonitor_8c_afd5c36b003e90ee47d2c73c17de2ac8f}{}\label{ApacheMonitor_8c_afd5c36b003e90ee47d2c73c17de2ac8f}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+\+Lang\+ID@{g\+\_\+\+Lang\+ID}}
+\index{g\+\_\+\+Lang\+ID@{g\+\_\+\+Lang\+ID}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+\+Lang\+ID}{g_LangID}}]{\setlength{\rightskip}{0pt plus 5cm}L\+A\+N\+G\+ID g\+\_\+\+Lang\+ID}\hypertarget{ApacheMonitor_8c_a0d98d46a172f82e8904fe3e2ec095e2c}{}\label{ApacheMonitor_8c_a0d98d46a172f82e8904fe3e2ec095e2c}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+st\+Computers@{g\+\_\+st\+Computers}}
+\index{g\+\_\+st\+Computers@{g\+\_\+st\+Computers}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+st\+Computers}{g_stComputers}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+E\+D\+\_\+\+C\+O\+MP} g\+\_\+st\+Computers\mbox{[}{\bf M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+C\+O\+M\+P\+U\+T\+E\+RS}\mbox{]}}\hypertarget{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}{}\label{ApacheMonitor_8c_a2b41cdd76b5954d50af3d85255a14013}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+stc\+Section@{g\+\_\+stc\+Section}}
+\index{g\+\_\+stc\+Section@{g\+\_\+stc\+Section}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+stc\+Section}{g_stcSection}}]{\setlength{\rightskip}{0pt plus 5cm}C\+R\+I\+T\+I\+C\+A\+L\+\_\+\+S\+E\+C\+T\+I\+ON g\+\_\+stc\+Section}\hypertarget{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}{}\label{ApacheMonitor_8c_a6ae0af6f66ce41fa5d6dd22f02d73168}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+st\+Services@{g\+\_\+st\+Services}}
+\index{g\+\_\+st\+Services@{g\+\_\+st\+Services}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+st\+Services}{g_stServices}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+T\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+CE} g\+\_\+st\+Services\mbox{[}{\bf M\+A\+X\+\_\+\+A\+P\+A\+C\+H\+E\+\_\+\+S\+E\+R\+V\+I\+C\+ES}\mbox{]}}\hypertarget{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}{}\label{ApacheMonitor_8c_adcf64df266595a3bcd6968b282b87cee}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+sz\+Local\+Host@{g\+\_\+sz\+Local\+Host}}
+\index{g\+\_\+sz\+Local\+Host@{g\+\_\+sz\+Local\+Host}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+sz\+Local\+Host}{g_szLocalHost}}]{\setlength{\rightskip}{0pt plus 5cm}L\+P\+T\+S\+TR g\+\_\+sz\+Local\+Host}\hypertarget{ApacheMonitor_8c_a236a248f74e54c0ecf421d94646e766f}{}\label{ApacheMonitor_8c_a236a248f74e54c0ecf421d94646e766f}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+sz\+Title@{g\+\_\+sz\+Title}}
+\index{g\+\_\+sz\+Title@{g\+\_\+sz\+Title}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+sz\+Title}{g_szTitle}}]{\setlength{\rightskip}{0pt plus 5cm}T\+C\+H\+AR$\ast$ g\+\_\+sz\+Title}\hypertarget{ApacheMonitor_8c_a7224c1ff0ea1d0a5f104da9022081db5}{}\label{ApacheMonitor_8c_a7224c1ff0ea1d0a5f104da9022081db5}
+\index{Apache\+Monitor.\+c@{Apache\+Monitor.\+c}!g\+\_\+sz\+Window\+Class@{g\+\_\+sz\+Window\+Class}}
+\index{g\+\_\+sz\+Window\+Class@{g\+\_\+sz\+Window\+Class}!Apache\+Monitor.\+c@{Apache\+Monitor.\+c}}
+\subsubsection[{\texorpdfstring{g\+\_\+sz\+Window\+Class}{g_szWindowClass}}]{\setlength{\rightskip}{0pt plus 5cm}T\+C\+H\+AR$\ast$ g\+\_\+sz\+Window\+Class}\hypertarget{ApacheMonitor_8c_a09081aff5af6d1aa3d8fea0876abe868}{}\label{ApacheMonitor_8c_a09081aff5af6d1aa3d8fea0876abe868}

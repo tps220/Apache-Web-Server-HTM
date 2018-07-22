@@ -1,0 +1,138 @@
+\hypertarget{cls_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/test/cls.c File Reference}
+\label{cls_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/test/cls.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/test/cls.\+c}}
+{\ttfamily \#include $<$ctype.\+h$>$}\\*
+{\ttfamily \#include $<$dirent.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+Include dependency graph for cls.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{cls_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{cls_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$$\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{cls.\+c@{cls.\+c}!main@{main}}
+\index{main@{main}!cls.\+c@{cls.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{cls_8c_a3c04138a5bfe5d72780bb7e82a18e627}{}\label{cls_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+
+\begin{DoxyCode}
+91 \{
+92     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, ver;
+93     DIR *\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+94     \textcolor{keyword}{struct }dirent *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+95     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+96     FILE *fp;
+97     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path}[FILENAME\_MAX + 1];
+98     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__LOG_gaa843820216dea79b53a16310cb08e8dd}{line}[1035];
+99     time\_t date, lmod, expire;
+100     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+101     \textcolor{keyword}{struct }\hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm} ts;
+102     \textcolor{keywordtype}{char} sdate[30], slmod[30], sexpire[30];
+103     \textcolor{keyword}{const} \textcolor{keywordtype}{char} time\_format[] = \textcolor{stringliteral}{"%e %b %Y %R"};
+104 
+105     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} != 2) \{
+106         printf(\textcolor{stringliteral}{"Usage: cls directory\(\backslash\)n"});
+107         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(0);
+108     \}
+109 
+110     d = opendir(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1]);
+111     \textcolor{keywordflow}{if} (d == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+112         perror(\textcolor{stringliteral}{"opendir"});
+113         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+114     \}
+115 
+116     \textcolor{keywordflow}{for} (;;) \{
+117         e = readdir(d);
+118         \textcolor{keywordflow}{if} (e == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+119             \textcolor{keywordflow}{break};
+120         s = e->d\_name;
+121         \textcolor{keywordflow}{if} (s[0] == \textcolor{charliteral}{'.'} || s[0] == \textcolor{charliteral}{'#'})
+122             \textcolor{keywordflow}{continue};
+123         sprintf(path, \textcolor{stringliteral}{"%s/%s"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1], s);
+124         fp = fopen(path, \textcolor{stringliteral}{"r"});
+125         \textcolor{keywordflow}{if} (fp == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+126             perror(\textcolor{stringliteral}{"fopen"});
+127             \textcolor{keywordflow}{continue};
+128         \}
+129         \textcolor{keywordflow}{if} (\hyperlink{pcretest_8txt_ab7f0ba87211e31d6160eef5650b39b52}{fgets}(line, 1034, fp) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+130             perror(\textcolor{stringliteral}{"fgets"});
+131             fclose(fp);
+132             \textcolor{keywordflow}{continue};
+133         \}
+134         \textcolor{keywordflow}{if} (!checkmask(line, \textcolor{stringliteral}{"&&&&&&&& &&&&&&&& &&&&&&&& &&&&&&&& &&&&&&&&\(\backslash\)n"})) \{
+135             fprintf(stderr, \textcolor{stringliteral}{"Bad cache file\(\backslash\)n"});
+136             fclose(fp);
+137             \textcolor{keywordflow}{continue};
+138         \}
+139         date = hex2sec(line);
+140         lmod = hex2sec(line + 9);
+141         expire = hex2sec(line + 18);
+142         ver = hex2sec(line + 27);
+143         len = hex2sec(line + 35);
+144         \textcolor{keywordflow}{if} (\hyperlink{pcretest_8txt_ab7f0ba87211e31d6160eef5650b39b52}{fgets}(line, 1034, fp) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+145             perror(\textcolor{stringliteral}{"fgets"});
+146             fclose(fp);
+147             \textcolor{keywordflow}{continue};
+148         \}
+149         fclose(fp);
+150         i = strlen(line);
+151         \textcolor{keywordflow}{if} (strncmp(line, \textcolor{stringliteral}{"X-URL: "}, 7) != 0 || line[i - 1] != \textcolor{charliteral}{'\(\backslash\)n'}) \{
+152             fprintf(stderr, \textcolor{stringliteral}{"Bad cache file\(\backslash\)n"});
+153             \textcolor{keywordflow}{continue};
+154         \}
+155         line[i - 1] = \textcolor{charliteral}{'\(\backslash\)0'};
+156         \textcolor{keywordflow}{if} (date != -1) \{
+157             ts = *gmtime(&date);
+158             strftime(sdate, 30, time\_format, &ts);
+159         \}
+160         \textcolor{keywordflow}{else}
+161             strcpy(sdate, \textcolor{stringliteral}{"-"});
+162 
+163         \textcolor{keywordflow}{if} (lmod != -1) \{
+164             ts = *gmtime(&lmod);
+165             strftime(slmod, 30, time\_format, &ts);
+166         \}
+167         \textcolor{keywordflow}{else}
+168             strcpy(slmod, \textcolor{stringliteral}{"-"});
+169 
+170         \textcolor{keywordflow}{if} (expire != -1) \{
+171             ts = *gmtime(&expire);
+172             strftime(sexpire, 30, time\_format, &ts);
+173         \}
+174         \textcolor{keywordflow}{else}
+175             strcpy(sexpire, \textcolor{stringliteral}{"-"});
+176 
+177         printf(\textcolor{stringliteral}{"%s: %d; %s  %s  %s\(\backslash\)n"}, line + 7, ver, sdate, slmod, sexpire);
+178     \}
+179 
+180     closedir(d);
+181     \textcolor{keywordflow}{return} 0;
+182 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=192pt]{cls_8c_a3c04138a5bfe5d72780bb7e82a18e627_cgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,170 @@
+\hypertarget{mod__deflate_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/filters/mod\+\_\+deflate.c File Reference}
+\label{mod__deflate_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/mod\+\_\+deflate.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/mod\+\_\+deflate.\+c}}
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+ssl.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}zlib.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+deflate.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__deflate_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdeflate__filter__config__t}{deflate\+\_\+filter\+\_\+config\+\_\+t}
+\item 
+struct \hyperlink{structdeflate__dirconf__t}{deflate\+\_\+dirconf\+\_\+t}
+\item 
+struct \hyperlink{structdeflate__ctx__t}{deflate\+\_\+ctx\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__deflate_8c_aa3c005b88b9e5ba0660df7eba43832cb}{A\+S\+C\+I\+I\+\_\+\+F\+L\+AG}~0x01 /$\ast$ bit 0 set\+: file probably ascii text $\ast$/
+\item 
+\#define \hyperlink{mod__deflate_8c_a552e6306aac9df122ffc3ca089b4663b}{H\+E\+A\+D\+\_\+\+C\+RC}~0x02 /$\ast$ bit 1 set\+: header C\+R\+C present $\ast$/
+\item 
+\#define \hyperlink{mod__deflate_8c_a50beca0e4608c1ee356a8ced2497db75}{E\+X\+T\+R\+A\+\_\+\+F\+I\+E\+LD}~0x04 /$\ast$ bit 2 set\+: extra field present $\ast$/
+\item 
+\#define \hyperlink{mod__deflate_8c_ab16f7d2a15f2ef64ffa109a7cda5e65b}{O\+R\+I\+G\+\_\+\+N\+A\+ME}~0x08 /$\ast$ bit 3 set\+: original file name present $\ast$/
+\item 
+\#define \hyperlink{mod__deflate_8c_a180f5b3835bdbfc11b353fd2af5c8659}{C\+O\+M\+M\+E\+NT}~0x10 /$\ast$ bit 4 set\+: file comment present $\ast$/
+\item 
+\#define \hyperlink{mod__deflate_8c_a56701f18aaad537f7fc0e9be309503c3}{R\+E\+S\+E\+R\+V\+ED}~0x\+E0 /$\ast$ bits 5..\+7\+: reserved $\ast$/
+\item 
+\#define \hyperlink{mod__deflate_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__deflate_8c_a35e36be12080ac7a435f19f66bb767d8}{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+L\+I\+M\+IT}~200
+\item 
+\#define \hyperlink{mod__deflate_8c_a263a919fe7251e2968c48eba3cb67e0b}{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+B\+U\+R\+ST}~3
+\item 
+\#define \hyperlink{mod__deflate_8c_a689d6b5cd7f75bec7b8b104b0c3df0b1}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON}~Z\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON
+\item 
+\#define \hyperlink{mod__deflate_8c_a947faf188804eb1b43158cd836333a6f}{D\+E\+F\+A\+U\+L\+T\+\_\+\+W\+I\+N\+D\+O\+W\+S\+I\+ZE}~-\/15
+\item 
+\#define \hyperlink{mod__deflate_8c_a269bd97c3dff660e6c875143c0ff6d61}{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+E\+M\+L\+E\+V\+EL}~9
+\item 
+\#define \hyperlink{mod__deflate_8c_a81db355b83565bfef5e8d70529816e1f}{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+F\+E\+R\+S\+I\+ZE}~8096
+\item 
+\#define \hyperlink{mod__deflate_8c_acce548f40410d5a9cd4dccc8d1b3adc3}{V\+A\+L\+I\+D\+A\+T\+I\+O\+N\+\_\+\+S\+I\+ZE}~8
+\item 
+\#define \hyperlink{mod__deflate_8c_afdb75d74e9ced61ca385d7be6e432ba1}{N\+O\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+C\+RC}~0
+\item 
+\#define \hyperlink{mod__deflate_8c_aa011778cd5f81c7faa57d109d08f0e0f}{U\+P\+D\+A\+T\+E\+\_\+\+C\+RC}~1
+\item 
+\#define \hyperlink{mod__deflate_8c_a48c6ff40fc2133d529852885ab12c26b}{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}~\hyperlink{group__APACHE__CORE__FILTER_ga1e0ebc72e7e221c1fa62e81e3a8b3e25}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}$\vert$\hyperlink{group__APACHE__CORE__FILTER_ga45a85db5961f6aa2975acb30a7ba020e}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structdeflate__filter__config__t}{deflate\+\_\+filter\+\_\+config\+\_\+t} \hyperlink{mod__deflate_8c_a5ce4fd76f6d61f8b61a9bacd0024ba7f}{deflate\+\_\+filter\+\_\+config}
+\item 
+typedef struct \hyperlink{structdeflate__dirconf__t}{deflate\+\_\+dirconf\+\_\+t} \hyperlink{mod__deflate_8c_a6fde9e14d8aa527f36e14f9fff9f8858}{deflate\+\_\+dirconf\+\_\+t}
+\item 
+typedef struct \hyperlink{structdeflate__ctx__t}{deflate\+\_\+ctx\+\_\+t} \hyperlink{mod__deflate_8c_aef910a4eba44c9e018208d3485c1228a}{deflate\+\_\+ctx}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__deflate_8c_a86f5cf675495fa8e3c29d283e0b142de}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (deflate)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__deflate_8c_a14e09000f2381d7b3a967afecbf18f4a}{deflate\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+B\+U\+R\+ST@{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+B\+U\+R\+ST}}
+\index{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+B\+U\+R\+ST@{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+B\+U\+R\+ST}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+B\+U\+R\+ST}{AP_INFLATE_RATIO_BURST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+B\+U\+R\+ST~3}\hypertarget{mod__deflate_8c_a263a919fe7251e2968c48eba3cb67e0b}{}\label{mod__deflate_8c_a263a919fe7251e2968c48eba3cb67e0b}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+L\+I\+M\+IT@{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+L\+I\+M\+IT}}
+\index{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+L\+I\+M\+IT@{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+L\+I\+M\+IT}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+L\+I\+M\+IT}{AP_INFLATE_RATIO_LIMIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+I\+N\+F\+L\+A\+T\+E\+\_\+\+R\+A\+T\+I\+O\+\_\+\+L\+I\+M\+IT~200}\hypertarget{mod__deflate_8c_a35e36be12080ac7a435f19f66bb767d8}{}\label{mod__deflate_8c_a35e36be12080ac7a435f19f66bb767d8}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__deflate_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__deflate_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!A\+S\+C\+I\+I\+\_\+\+F\+L\+AG@{A\+S\+C\+I\+I\+\_\+\+F\+L\+AG}}
+\index{A\+S\+C\+I\+I\+\_\+\+F\+L\+AG@{A\+S\+C\+I\+I\+\_\+\+F\+L\+AG}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{A\+S\+C\+I\+I\+\_\+\+F\+L\+AG}{ASCII_FLAG}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+S\+C\+I\+I\+\_\+\+F\+L\+AG~0x01 /$\ast$ bit 0 set\+: file probably ascii text $\ast$/}\hypertarget{mod__deflate_8c_aa3c005b88b9e5ba0660df7eba43832cb}{}\label{mod__deflate_8c_aa3c005b88b9e5ba0660df7eba43832cb}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!C\+O\+M\+M\+E\+NT@{C\+O\+M\+M\+E\+NT}}
+\index{C\+O\+M\+M\+E\+NT@{C\+O\+M\+M\+E\+NT}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+M\+M\+E\+NT}{COMMENT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+M\+M\+E\+NT~0x10 /$\ast$ bit 4 set\+: file comment present $\ast$/}\hypertarget{mod__deflate_8c_a180f5b3835bdbfc11b353fd2af5c8659}{}\label{mod__deflate_8c_a180f5b3835bdbfc11b353fd2af5c8659}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+F\+E\+R\+S\+I\+ZE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+F\+E\+R\+S\+I\+ZE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+F\+E\+R\+S\+I\+ZE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+F\+E\+R\+S\+I\+ZE}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+F\+E\+R\+S\+I\+ZE}{DEFAULT_BUFFERSIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+F\+E\+R\+S\+I\+ZE~8096}\hypertarget{mod__deflate_8c_a81db355b83565bfef5e8d70529816e1f}{}\label{mod__deflate_8c_a81db355b83565bfef5e8d70529816e1f}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON}{DEFAULT_COMPRESSION}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON~Z\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+O\+M\+P\+R\+E\+S\+S\+I\+ON}\hypertarget{mod__deflate_8c_a689d6b5cd7f75bec7b8b104b0c3df0b1}{}\label{mod__deflate_8c_a689d6b5cd7f75bec7b8b104b0c3df0b1}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+E\+M\+L\+E\+V\+EL@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+E\+M\+L\+E\+V\+EL}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+E\+M\+L\+E\+V\+EL@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+E\+M\+L\+E\+V\+EL}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+E\+M\+L\+E\+V\+EL}{DEFAULT_MEMLEVEL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+E\+M\+L\+E\+V\+EL~9}\hypertarget{mod__deflate_8c_a269bd97c3dff660e6c875143c0ff6d61}{}\label{mod__deflate_8c_a269bd97c3dff660e6c875143c0ff6d61}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+W\+I\+N\+D\+O\+W\+S\+I\+ZE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+W\+I\+N\+D\+O\+W\+S\+I\+ZE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+W\+I\+N\+D\+O\+W\+S\+I\+ZE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+W\+I\+N\+D\+O\+W\+S\+I\+ZE}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+W\+I\+N\+D\+O\+W\+S\+I\+ZE}{DEFAULT_WINDOWSIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+W\+I\+N\+D\+O\+W\+S\+I\+ZE~-\/15}\hypertarget{mod__deflate_8c_a947faf188804eb1b43158cd836333a6f}{}\label{mod__deflate_8c_a947faf188804eb1b43158cd836333a6f}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!E\+X\+T\+R\+A\+\_\+\+F\+I\+E\+LD@{E\+X\+T\+R\+A\+\_\+\+F\+I\+E\+LD}}
+\index{E\+X\+T\+R\+A\+\_\+\+F\+I\+E\+LD@{E\+X\+T\+R\+A\+\_\+\+F\+I\+E\+LD}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{E\+X\+T\+R\+A\+\_\+\+F\+I\+E\+LD}{EXTRA_FIELD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define E\+X\+T\+R\+A\+\_\+\+F\+I\+E\+LD~0x04 /$\ast$ bit 2 set\+: extra field present $\ast$/}\hypertarget{mod__deflate_8c_a50beca0e4608c1ee356a8ced2497db75}{}\label{mod__deflate_8c_a50beca0e4608c1ee356a8ced2497db75}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!H\+E\+A\+D\+\_\+\+C\+RC@{H\+E\+A\+D\+\_\+\+C\+RC}}
+\index{H\+E\+A\+D\+\_\+\+C\+RC@{H\+E\+A\+D\+\_\+\+C\+RC}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{H\+E\+A\+D\+\_\+\+C\+RC}{HEAD_CRC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+E\+A\+D\+\_\+\+C\+RC~0x02 /$\ast$ bit 1 set\+: header C\+R\+C present $\ast$/}\hypertarget{mod__deflate_8c_a552e6306aac9df122ffc3ca089b4663b}{}\label{mod__deflate_8c_a552e6306aac9df122ffc3ca089b4663b}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!N\+O\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+C\+RC@{N\+O\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+C\+RC}}
+\index{N\+O\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+C\+RC@{N\+O\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+C\+RC}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{N\+O\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+C\+RC}{NO_UPDATE_CRC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+O\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+C\+RC~0}\hypertarget{mod__deflate_8c_afdb75d74e9ced61ca385d7be6e432ba1}{}\label{mod__deflate_8c_afdb75d74e9ced61ca385d7be6e432ba1}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!O\+R\+I\+G\+\_\+\+N\+A\+ME@{O\+R\+I\+G\+\_\+\+N\+A\+ME}}
+\index{O\+R\+I\+G\+\_\+\+N\+A\+ME@{O\+R\+I\+G\+\_\+\+N\+A\+ME}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{O\+R\+I\+G\+\_\+\+N\+A\+ME}{ORIG_NAME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\+R\+I\+G\+\_\+\+N\+A\+ME~0x08 /$\ast$ bit 3 set\+: original file name present $\ast$/}\hypertarget{mod__deflate_8c_ab16f7d2a15f2ef64ffa109a7cda5e65b}{}\label{mod__deflate_8c_ab16f7d2a15f2ef64ffa109a7cda5e65b}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS@{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}}
+\index{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS@{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}{PROTO_FLAGS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS~{\bf A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}$\vert${\bf A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}}\hypertarget{mod__deflate_8c_a48c6ff40fc2133d529852885ab12c26b}{}\label{mod__deflate_8c_a48c6ff40fc2133d529852885ab12c26b}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!R\+E\+S\+E\+R\+V\+ED@{R\+E\+S\+E\+R\+V\+ED}}
+\index{R\+E\+S\+E\+R\+V\+ED@{R\+E\+S\+E\+R\+V\+ED}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+S\+E\+R\+V\+ED}{RESERVED}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+S\+E\+R\+V\+ED~0x\+E0 /$\ast$ bits 5..\+7\+: reserved $\ast$/}\hypertarget{mod__deflate_8c_a56701f18aaad537f7fc0e9be309503c3}{}\label{mod__deflate_8c_a56701f18aaad537f7fc0e9be309503c3}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!U\+P\+D\+A\+T\+E\+\_\+\+C\+RC@{U\+P\+D\+A\+T\+E\+\_\+\+C\+RC}}
+\index{U\+P\+D\+A\+T\+E\+\_\+\+C\+RC@{U\+P\+D\+A\+T\+E\+\_\+\+C\+RC}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{U\+P\+D\+A\+T\+E\+\_\+\+C\+RC}{UPDATE_CRC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\+P\+D\+A\+T\+E\+\_\+\+C\+RC~1}\hypertarget{mod__deflate_8c_aa011778cd5f81c7faa57d109d08f0e0f}{}\label{mod__deflate_8c_aa011778cd5f81c7faa57d109d08f0e0f}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!V\+A\+L\+I\+D\+A\+T\+I\+O\+N\+\_\+\+S\+I\+ZE@{V\+A\+L\+I\+D\+A\+T\+I\+O\+N\+\_\+\+S\+I\+ZE}}
+\index{V\+A\+L\+I\+D\+A\+T\+I\+O\+N\+\_\+\+S\+I\+ZE@{V\+A\+L\+I\+D\+A\+T\+I\+O\+N\+\_\+\+S\+I\+ZE}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{V\+A\+L\+I\+D\+A\+T\+I\+O\+N\+\_\+\+S\+I\+ZE}{VALIDATION_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define V\+A\+L\+I\+D\+A\+T\+I\+O\+N\+\_\+\+S\+I\+ZE~8}\hypertarget{mod__deflate_8c_acce548f40410d5a9cd4dccc8d1b3adc3}{}\label{mod__deflate_8c_acce548f40410d5a9cd4dccc8d1b3adc3}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!deflate\+\_\+ctx@{deflate\+\_\+ctx}}
+\index{deflate\+\_\+ctx@{deflate\+\_\+ctx}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{deflate\+\_\+ctx}{deflate_ctx}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf deflate\+\_\+ctx\+\_\+t}  {\bf deflate\+\_\+ctx}}\hypertarget{mod__deflate_8c_aef910a4eba44c9e018208d3485c1228a}{}\label{mod__deflate_8c_aef910a4eba44c9e018208d3485c1228a}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!deflate\+\_\+dirconf\+\_\+t@{deflate\+\_\+dirconf\+\_\+t}}
+\index{deflate\+\_\+dirconf\+\_\+t@{deflate\+\_\+dirconf\+\_\+t}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{deflate\+\_\+dirconf\+\_\+t}{deflate_dirconf_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf deflate\+\_\+dirconf\+\_\+t}  {\bf deflate\+\_\+dirconf\+\_\+t}}\hypertarget{mod__deflate_8c_a6fde9e14d8aa527f36e14f9fff9f8858}{}\label{mod__deflate_8c_a6fde9e14d8aa527f36e14f9fff9f8858}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!deflate\+\_\+filter\+\_\+config@{deflate\+\_\+filter\+\_\+config}}
+\index{deflate\+\_\+filter\+\_\+config@{deflate\+\_\+filter\+\_\+config}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{deflate\+\_\+filter\+\_\+config}{deflate_filter_config}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf deflate\+\_\+filter\+\_\+config\+\_\+t}  {\bf deflate\+\_\+filter\+\_\+config}}\hypertarget{mod__deflate_8c_a5ce4fd76f6d61f8b61a9bacd0024ba7f}{}\label{mod__deflate_8c_a5ce4fd76f6d61f8b61a9bacd0024ba7f}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(deflate)}{AP_DECLARE_MODULE(deflate)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{deflate}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__deflate_8c_a86f5cf675495fa8e3c29d283e0b142de}{}\label{mod__deflate_8c_a86f5cf675495fa8e3c29d283e0b142de}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}!deflate\+\_\+module@{deflate\+\_\+module}}
+\index{deflate\+\_\+module@{deflate\+\_\+module}!mod\+\_\+deflate.\+c@{mod\+\_\+deflate.\+c}}
+\subsubsection[{\texorpdfstring{deflate\+\_\+module}{deflate_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} deflate\+\_\+module}\hypertarget{mod__deflate_8c_a14e09000f2381d7b3a967afecbf18f4a}{}\label{mod__deflate_8c_a14e09000f2381d7b3a967afecbf18f4a}

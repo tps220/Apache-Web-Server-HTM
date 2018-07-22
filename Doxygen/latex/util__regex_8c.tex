@@ -1,0 +1,239 @@
+\hypertarget{util__regex_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/util\+\_\+regex.c File Reference}
+\label{util__regex_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/util\+\_\+regex.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/util\+\_\+regex.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+regex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+Include dependency graph for util\+\_\+regex.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{util__regex_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{util__regex_8c_aa62eb476e94df5fccf9a38a9a3bf7c42}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__rxplus__t}{ap\+\_\+rxplus\+\_\+t} $\ast$)
+\item 
+\hyperlink{util__regex_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{util__regex_8c_a06b3fd33a5a08e9247c55ecf018e8e67}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (char $\ast$)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{util\+\_\+regex.\+c@{util\+\_\+regex.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+regex.\+c@{util\+\_\+regex.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(ap\+\_\+rxplus\+\_\+t $\ast$)}{AP_DECLARE(ap_rxplus_t *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+rxplus\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__regex_8c_aa62eb476e94df5fccf9a38a9a3bf7c42}{}\label{util__regex_8c_aa62eb476e94df5fccf9a38a9a3bf7c42}
+
+\begin{DoxyCode}
+33 \{
+34     \textcolor{comment}{/* perl style patterns}
+35 \textcolor{comment}{     * add support for more as and when wanted}
+36 \textcolor{comment}{     * substitute: s/rx/subs/}
+37 \textcolor{comment}{     * match: m/rx/ or just /rx/}
+38 \textcolor{comment}{     */}
+39 
+40     \textcolor{comment}{/* allow any nonalnum delimiter as first or second char.}
+41 \textcolor{comment}{     * If we ever use this with non-string pattern we'll need an extra check}
+42 \textcolor{comment}{     */}
+43     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *endp = 0;
+44     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str} = \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern};
+45     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *rxstr;
+46     \hyperlink{structap__rxplus__t}{ap\_rxplus\_t} *\hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret} = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, \textcolor{keyword}{sizeof}(
+      \hyperlink{structap__rxplus__t}{ap\_rxplus\_t}));
+47     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__DAEMON_ga06fee55efc4fe1dce4b42912a473beff}{delim} = 0;
+48     \textcolor{keyword}{enum} \{ SUBSTITUTE = \textcolor{charliteral}{'s'}, MATCH = \textcolor{charliteral}{'m'}\} \hyperlink{pcregrep_8txt_ad076c13c20d71c3dc183a56d9c6145d1}{action} = MATCH;
+49 
+50     \textcolor{keywordflow}{if} (!\hyperlink{group__apr__ctype_ga4fa78e6e7272dae64731768a17a2e003}{apr\_isalnum}(\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}[0])) \{
+51         delim = *str++;
+52     \}
+53     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}[0] == \textcolor{charliteral}{'s'} && !\hyperlink{group__apr__ctype_ga4fa78e6e7272dae64731768a17a2e003}{apr\_isalnum}(\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}[1])) \{
+54         \hyperlink{pcregrep_8txt_ad076c13c20d71c3dc183a56d9c6145d1}{action} = SUBSTITUTE;
+55         delim = \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}[1];
+56         str += 2;
+57     \}
+58     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}[0] == \textcolor{charliteral}{'m'} && !\hyperlink{group__apr__ctype_ga4fa78e6e7272dae64731768a17a2e003}{apr\_isalnum}(\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}[1])) \{
+59         delim = \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}[1];
+60         str += 2;
+61     \}
+62     \textcolor{comment}{/* TODO: support perl's after/before */}
+63     \textcolor{comment}{/* FIXME: fix these simplminded delims */}
+64 
+65     \textcolor{comment}{/* we think there's a delimiter.  Allow for it not to be if unmatched */}
+66     \textcolor{keywordflow}{if} (delim) \{
+67         endp = \hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\_strchr\_c}(str, delim);
+68     \}
+69     \textcolor{keywordflow}{if} (!endp) \{ \textcolor{comment}{/* there's no delim or flags */}
+70         \textcolor{keywordflow}{if} (ap\_regcomp(&ret->\hyperlink{structap__rxplus__t_a33c4c58e5669f37c8df083c30402ab8a}{rx}, \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}, 0) == 0) \{
+71             apr\_pool\_cleanup\_register(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, &ret->\hyperlink{structap__rxplus__t_a33c4c58e5669f37c8df083c30402ab8a}{rx}, rxplus\_cleanup,
+72                                       apr\_pool\_cleanup\_null);
+73             \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+74         \}
+75         \textcolor{keywordflow}{else} \{
+76             \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+77         \}
+78     \}
+79 
+80     \textcolor{comment}{/* We have a delimiter.  Use it to extract the regexp */}
+81     rxstr = apr\_pstrmemdup(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, str, endp-str);
+82 
+83     \textcolor{comment}{/* If it's a substitution, we need the replacement string}
+84 \textcolor{comment}{     * TODO: possible future enhancement - support other parsing}
+85 \textcolor{comment}{     * in the replacement string.}
+86 \textcolor{comment}{     */}
+87     \textcolor{keywordflow}{if} (\hyperlink{pcregrep_8txt_ad076c13c20d71c3dc183a56d9c6145d1}{action} == SUBSTITUTE) \{
+88         str = endp+1;
+89         \textcolor{keywordflow}{if} (!*str || (endp = \hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\_strchr\_c}(str, delim), !endp)) \{
+90             \textcolor{comment}{/* missing replacement string is an error */}
+91             \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+92         \}
+93         ret->\hyperlink{structap__rxplus__t_a41a7e2f61d38dc5ef5c58dcffc31e23e}{subs} = apr\_pstrmemdup(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, str, endp-str);
+94     \}
+95 
+96     \textcolor{comment}{/* anything after the current delimiter is flags */}
+97     \textcolor{keywordflow}{while} (*++endp) \{
+98         \textcolor{keywordflow}{switch} (*endp) \{
+99         \textcolor{keywordflow}{case} \textcolor{charliteral}{'i'}: ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} |= \hyperlink{ap__regex_8h_a1b9b918a53bffc54baadd6169159e2e4}{AP\_REG\_ICASE}; \textcolor{keywordflow}{break};
+100         \textcolor{keywordflow}{case} \textcolor{charliteral}{'m'}: ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} |= \hyperlink{ap__regex_8h_ab7793608e9fa8eaa2110920bc2c71541}{AP\_REG\_NEWLINE}; \textcolor{keywordflow}{break};
+101         \textcolor{keywordflow}{case} \textcolor{charliteral}{'n'}: ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} |= \hyperlink{ap__regex_8h_ab2e3819d02dd72ac97b28e6e3340edb3}{AP\_REG\_NOMEM}; \textcolor{keywordflow}{break};
+102         \textcolor{keywordflow}{case} \textcolor{charliteral}{'g'}: ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} |= \hyperlink{ap__regex_8h_a7c07e2d86a45347e538c58bfe86d430a}{AP\_REG\_MULTI}; \textcolor{keywordflow}{break};
+103         \textcolor{keywordflow}{case} \textcolor{charliteral}{'s'}: ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} |= \hyperlink{ap__regex_8h_a2e32e6b37a4f332acc13772b76d79dd2}{AP\_REG\_DOTALL}; \textcolor{keywordflow}{break};
+104         \textcolor{keywordflow}{case} \textcolor{charliteral}{'^'}: ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} |= \hyperlink{ap__regex_8h_abdaf69c322d853d7c112fd16fdb683a3}{AP\_REG\_NOTBOL}; \textcolor{keywordflow}{break};
+105         \textcolor{keywordflow}{case} \textcolor{charliteral}{'$'}: ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} |= \hyperlink{ap__regex_8h_a8a8ee9b5f2faea6a57905d54c0879df2}{AP\_REG\_NOTEOL}; \textcolor{keywordflow}{break};
+106         \textcolor{keywordflow}{default}: \textcolor{keywordflow}{break}; \textcolor{comment}{/* we should probably be stricter here */}
+107         \}
+108     \}
+109     \textcolor{keywordflow}{if} (ap\_regcomp(&ret->\hyperlink{structap__rxplus__t_a33c4c58e5669f37c8df083c30402ab8a}{rx}, rxstr, ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags}) == 0) \{
+110         apr\_pool\_cleanup\_register(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, &ret->\hyperlink{structap__rxplus__t_a33c4c58e5669f37c8df083c30402ab8a}{rx}, rxplus\_cleanup,
+111                                   apr\_pool\_cleanup\_null);
+112     \}
+113     \textcolor{keywordflow}{else} \{
+114         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+115     \}
+116     \textcolor{keywordflow}{if} (!(ret->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} & \hyperlink{ap__regex_8h_ab2e3819d02dd72ac97b28e6e3340edb3}{AP\_REG\_NOMEM})) \{
+117         \textcolor{comment}{/* count size of memory required, starting at 1 for the whole-match}
+118 \textcolor{comment}{         * Simpleminded should be fine 'cos regcomp already checked syntax}
+119 \textcolor{comment}{         */}
+120         ret->\hyperlink{structap__rxplus__t_ac3aefa5f1584981f3c795313f2b3f58c}{nmatch} = 1;
+121         \textcolor{keywordflow}{while} (*rxstr) \{
+122             \textcolor{keywordflow}{switch} (*rxstr++) \{
+123             \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'}:  \textcolor{comment}{/* next char is escaped - skip it */}
+124                 \textcolor{keywordflow}{if} (*rxstr != 0) \{
+125                     ++rxstr;
+126                 \}
+127                 \textcolor{keywordflow}{break};
+128             \textcolor{keywordflow}{case} \textcolor{charliteral}{'('}:   \textcolor{comment}{/* unescaped bracket implies memory */}
+129                 ++ret->\hyperlink{structap__rxplus__t_ac3aefa5f1584981f3c795313f2b3f58c}{nmatch};
+130                 \textcolor{keywordflow}{break};
+131             \textcolor{keywordflow}{default}:
+132                 \textcolor{keywordflow}{break};
+133             \}
+134         \}
+135         ret->\hyperlink{structap__rxplus__t_ab5940f990c32da862a530927809adf43}{pmatch} = apr\_palloc(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, ret->\hyperlink{structap__rxplus__t_ac3aefa5f1584981f3c795313f2b3f58c}{nmatch}*\textcolor{keyword}{sizeof}(
+      \hyperlink{structap__regmatch__t}{ap\_regmatch\_t}));
+136     \}
+137     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+138 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{util__regex_8c_aa62eb476e94df5fccf9a38a9a3bf7c42_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{util\+\_\+regex.\+c@{util\+\_\+regex.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+regex.\+c@{util\+\_\+regex.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{AP_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__regex_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{}\label{util__regex_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}
+
+\begin{DoxyCode}
+142 \{
+143     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret} = 1;
+144     \textcolor{keywordtype}{int} startl, oldl, newl, diffsz;
+145     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *remainder;
+146     \textcolor{keywordtype}{char} *subs;
+147 \textcolor{comment}{/* snrf process\_regexp from mod\_headers */}
+148     \textcolor{keywordflow}{if} (ap\_regexec(&\hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_a33c4c58e5669f37c8df083c30402ab8a}{rx}, \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}, \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_ac3aefa5f1584981f3c795313f2b3f58c}{nmatch}, \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_ab5940f990c32da862a530927809adf43}{pmatch}, 
+      \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags}) != 0) \{
+149         \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_a6cfdef7623d17fbab28e723e77b115c1}{match} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+150         \textcolor{keywordflow}{return} 0; \textcolor{comment}{/* no match, nothing to do */}
+151     \}
+152     \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_a6cfdef7623d17fbab28e723e77b115c1}{match} = \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern};
+153     \textcolor{keywordflow}{if} (\hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_a41a7e2f61d38dc5ef5c58dcffc31e23e}{subs}) \{
+154         *\hyperlink{ap__regex_8h_ac2a720023c668ad82c281efa6a9bf33c}{newpattern} = ap\_pregsub(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_a41a7e2f61d38dc5ef5c58dcffc31e23e}{subs}, \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern},
+155                                  \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_ac3aefa5f1584981f3c795313f2b3f58c}{nmatch}, \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_ab5940f990c32da862a530927809adf43}{pmatch});
+156         \textcolor{keywordflow}{if} (!*\hyperlink{ap__regex_8h_ac2a720023c668ad82c281efa6a9bf33c}{newpattern}) \{
+157             \textcolor{keywordflow}{return} 0; \textcolor{comment}{/* FIXME - should we do more to handle error? */}
+158         \}
+159         startl = \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_ab5940f990c32da862a530927809adf43}{pmatch}[0].\hyperlink{structap__regmatch__t_a703711f7db759120836dbfbf1e795e7f}{rm\_so};
+160         oldl = \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_ab5940f990c32da862a530927809adf43}{pmatch}[0].\hyperlink{structap__regmatch__t_a8129e8cff55a25435bd8aa00d57da8d2}{rm\_eo} - startl;
+161         newl = strlen(*\hyperlink{ap__regex_8h_ac2a720023c668ad82c281efa6a9bf33c}{newpattern});
+162         diffsz = newl - oldl;
+163         remainder = \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern} + startl + oldl;
+164         \textcolor{keywordflow}{if} (\hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}->\hyperlink{structap__rxplus__t_aa9cfb5c5e30c566d51e14c5fa36cfc3d}{flags} & \hyperlink{ap__regex_8h_a7c07e2d86a45347e538c58bfe86d430a}{AP\_REG\_MULTI}) \{
+165             \textcolor{comment}{/* recurse to do any further matches */}
+166             ret += ap\_rxplus\_exec(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, \hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}, remainder, &subs);
+167             \textcolor{keywordflow}{if} (ret > 1) \{
+168                 \textcolor{comment}{/* a further substitution happened */}
+169                 diffsz += strlen(subs) - strlen(remainder);
+170                 remainder = subs;
+171             \}
+172         \}
+173         subs  = apr\_palloc(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, strlen(\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}) + 1 + diffsz);
+174         memcpy(subs, \hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}, startl);
+175         memcpy(subs+startl, *\hyperlink{ap__regex_8h_ac2a720023c668ad82c281efa6a9bf33c}{newpattern}, newl);
+176         strcpy(subs+startl+newl, remainder);
+177         *\hyperlink{ap__regex_8h_ac2a720023c668ad82c281efa6a9bf33c}{newpattern} = subs;
+178     \}
+179     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+180 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{util__regex_8c_ace56382e8c8bdfffe9ffc8dbab06d36c_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{util\+\_\+regex.\+c@{util\+\_\+regex.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+regex.\+c@{util\+\_\+regex.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(char $\ast$)}{AP_DECLARE(char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__regex_8c_a06b3fd33a5a08e9247c55ecf018e8e67}{}\label{util__regex_8c_a06b3fd33a5a08e9247c55ecf018e8e67}
+
+\begin{DoxyCode}
+205 \{
+206     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+207     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{ap__regex_8h_a543b7bf3899cd49d687c072cb0124ea9}{match};
+208     ap\_rxplus\_match(\hyperlink{ap__regex_8h_a4c2b5a88f7e8a957688302701bd6726a}{rx}, \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}, &len, &match);
+209     \textcolor{keywordflow}{return} apr\_pstrndup(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, match, len);
+210 \}
+\end{DoxyCode}

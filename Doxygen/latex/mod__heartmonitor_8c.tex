@@ -1,0 +1,105 @@
+\hypertarget{mod__heartmonitor_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/cluster/mod\+\_\+heartmonitor.c File Reference}
+\label{mod__heartmonitor_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/cluster/mod\+\_\+heartmonitor.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/cluster/mod\+\_\+heartmonitor.\+c}}
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+watchdog.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+slotmem.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}heartbeat.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+heartmonitor.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__heartmonitor_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structhm__server__t}{hm\+\_\+server\+\_\+t}
+\item 
+struct \hyperlink{structhm__ctx__t}{hm\+\_\+ctx\+\_\+t}
+\item 
+struct \hyperlink{structhm__slot__server__ctx__t}{hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__heartmonitor_8c_ae899be6bbbc1c049b48075d6078bb595}{H\+M\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+S\+EC}~(5)
+\item 
+\#define \hyperlink{mod__heartmonitor_8c_a261ca8e6662c8c31d3800cd24211e89f}{H\+M\+\_\+\+W\+A\+T\+H\+C\+H\+D\+O\+G\+\_\+\+N\+A\+ME}~(\char`\"{}\+\_\+heartmonitor\+\_\+\char`\"{})
+\item 
+\#define \hyperlink{mod__heartmonitor_8c_aa72a046ead32cc082a52e886184f5ee2}{S\+E\+E\+N\+\_\+\+T\+I\+M\+E\+O\+UT}~(30)
+\item 
+\#define \hyperlink{mod__heartmonitor_8c_a51d90ea93d4b55e086cb490f7478e684}{M\+A\+X\+\_\+\+M\+S\+G\+\_\+\+L\+EN}~(1000)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structhm__server__t}{hm\+\_\+server\+\_\+t} \hyperlink{mod__heartmonitor_8c_a9d8c0e3f780c235dcd41baf1c72d2d76}{hm\+\_\+server\+\_\+t}
+\item 
+typedef struct \hyperlink{structhm__ctx__t}{hm\+\_\+ctx\+\_\+t} \hyperlink{mod__heartmonitor_8c_ac3a2f4a98f0559466f5fcd286d2109df}{hm\+\_\+ctx\+\_\+t}
+\item 
+typedef struct \hyperlink{structhm__slot__server__ctx__t}{hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t} \hyperlink{mod__heartmonitor_8c_ac06ebaea21ff4c940149fbde9d8297c4}{hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__heartmonitor_8c_accaebb6972a024aa3a57a61c3aec5574}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (heartmonitor)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__heartmonitor_8c_af2aee8388c882b90e5e00f45705b1a99}{heartmonitor\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!H\+M\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+S\+EC@{H\+M\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+S\+EC}}
+\index{H\+M\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+S\+EC@{H\+M\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+S\+EC}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{H\+M\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+S\+EC}{HM_UPDATE_SEC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+M\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+S\+EC~(5)}\hypertarget{mod__heartmonitor_8c_ae899be6bbbc1c049b48075d6078bb595}{}\label{mod__heartmonitor_8c_ae899be6bbbc1c049b48075d6078bb595}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!H\+M\+\_\+\+W\+A\+T\+H\+C\+H\+D\+O\+G\+\_\+\+N\+A\+ME@{H\+M\+\_\+\+W\+A\+T\+H\+C\+H\+D\+O\+G\+\_\+\+N\+A\+ME}}
+\index{H\+M\+\_\+\+W\+A\+T\+H\+C\+H\+D\+O\+G\+\_\+\+N\+A\+ME@{H\+M\+\_\+\+W\+A\+T\+H\+C\+H\+D\+O\+G\+\_\+\+N\+A\+ME}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{H\+M\+\_\+\+W\+A\+T\+H\+C\+H\+D\+O\+G\+\_\+\+N\+A\+ME}{HM_WATHCHDOG_NAME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+M\+\_\+\+W\+A\+T\+H\+C\+H\+D\+O\+G\+\_\+\+N\+A\+ME~(\char`\"{}\+\_\+heartmonitor\+\_\+\char`\"{})}\hypertarget{mod__heartmonitor_8c_a261ca8e6662c8c31d3800cd24211e89f}{}\label{mod__heartmonitor_8c_a261ca8e6662c8c31d3800cd24211e89f}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!M\+A\+X\+\_\+\+M\+S\+G\+\_\+\+L\+EN@{M\+A\+X\+\_\+\+M\+S\+G\+\_\+\+L\+EN}}
+\index{M\+A\+X\+\_\+\+M\+S\+G\+\_\+\+L\+EN@{M\+A\+X\+\_\+\+M\+S\+G\+\_\+\+L\+EN}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+M\+S\+G\+\_\+\+L\+EN}{MAX_MSG_LEN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+M\+S\+G\+\_\+\+L\+EN~(1000)}\hypertarget{mod__heartmonitor_8c_a51d90ea93d4b55e086cb490f7478e684}{}\label{mod__heartmonitor_8c_a51d90ea93d4b55e086cb490f7478e684}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!S\+E\+E\+N\+\_\+\+T\+I\+M\+E\+O\+UT@{S\+E\+E\+N\+\_\+\+T\+I\+M\+E\+O\+UT}}
+\index{S\+E\+E\+N\+\_\+\+T\+I\+M\+E\+O\+UT@{S\+E\+E\+N\+\_\+\+T\+I\+M\+E\+O\+UT}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{S\+E\+E\+N\+\_\+\+T\+I\+M\+E\+O\+UT}{SEEN_TIMEOUT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+E\+E\+N\+\_\+\+T\+I\+M\+E\+O\+UT~(30)}\hypertarget{mod__heartmonitor_8c_aa72a046ead32cc082a52e886184f5ee2}{}\label{mod__heartmonitor_8c_aa72a046ead32cc082a52e886184f5ee2}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!hm\+\_\+ctx\+\_\+t@{hm\+\_\+ctx\+\_\+t}}
+\index{hm\+\_\+ctx\+\_\+t@{hm\+\_\+ctx\+\_\+t}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{hm\+\_\+ctx\+\_\+t}{hm_ctx_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf hm\+\_\+ctx\+\_\+t}  {\bf hm\+\_\+ctx\+\_\+t}}\hypertarget{mod__heartmonitor_8c_ac3a2f4a98f0559466f5fcd286d2109df}{}\label{mod__heartmonitor_8c_ac3a2f4a98f0559466f5fcd286d2109df}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!hm\+\_\+server\+\_\+t@{hm\+\_\+server\+\_\+t}}
+\index{hm\+\_\+server\+\_\+t@{hm\+\_\+server\+\_\+t}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{hm\+\_\+server\+\_\+t}{hm_server_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf hm\+\_\+server\+\_\+t}  {\bf hm\+\_\+server\+\_\+t}}\hypertarget{mod__heartmonitor_8c_a9d8c0e3f780c235dcd41baf1c72d2d76}{}\label{mod__heartmonitor_8c_a9d8c0e3f780c235dcd41baf1c72d2d76}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t@{hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t}}
+\index{hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t@{hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t}{hm_slot_server_ctx_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t}  {\bf hm\+\_\+slot\+\_\+server\+\_\+ctx\+\_\+t}}\hypertarget{mod__heartmonitor_8c_ac06ebaea21ff4c940149fbde9d8297c4}{}\label{mod__heartmonitor_8c_ac06ebaea21ff4c940149fbde9d8297c4}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(heartmonitor)}{AP_DECLARE_MODULE(heartmonitor)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{heartmonitor}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__heartmonitor_8c_accaebb6972a024aa3a57a61c3aec5574}{}\label{mod__heartmonitor_8c_accaebb6972a024aa3a57a61c3aec5574}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}!heartmonitor\+\_\+module@{heartmonitor\+\_\+module}}
+\index{heartmonitor\+\_\+module@{heartmonitor\+\_\+module}!mod\+\_\+heartmonitor.\+c@{mod\+\_\+heartmonitor.\+c}}
+\subsubsection[{\texorpdfstring{heartmonitor\+\_\+module}{heartmonitor_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} heartmonitor\+\_\+module}\hypertarget{mod__heartmonitor_8c_af2aee8388c882b90e5e00f45705b1a99}{}\label{mod__heartmonitor_8c_af2aee8388c882b90e5e00f45705b1a99}

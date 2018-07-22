@@ -1,0 +1,88 @@
+\hypertarget{mod__cgi_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/generators/mod\+\_\+cgi.c File Reference}
+\label{mod__cgi_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/generators/mod\+\_\+cgi.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/generators/mod\+\_\+cgi.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+optional.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+poll.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+script.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+cgi.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+cgi.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__cgi_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcgi__server__conf}{cgi\+\_\+server\+\_\+conf}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__cgi_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__cgi_8c_a26faf43e3f61783d8b7aa928c0a41a11}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__cgi_8c_a66943496961804fddcba8ed563e347ff}{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+O\+G\+B\+Y\+T\+ES}~10385760
+\item 
+\#define \hyperlink{mod__cgi_8c_aa5520d5aed84a36df7e4f257eaf551c5}{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+B\+Y\+T\+ES}~1024
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__cgi_8c_a6516a5227a33fb9c340ad3d49de601a2}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (cgi)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__cgi_8c_a9e31cf8b857ea908db5ea4ba4635c5d9}{cgi\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}!mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}{APR_WANT_MEMFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}\hypertarget{mod__cgi_8c_a26faf43e3f61783d8b7aa928c0a41a11}{}\label{mod__cgi_8c_a26faf43e3f61783d8b7aa928c0a41a11}
+\index{mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__cgi_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__cgi_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+B\+Y\+T\+ES@{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+B\+Y\+T\+ES}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+B\+Y\+T\+ES@{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+B\+Y\+T\+ES}!mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+B\+Y\+T\+ES}{DEFAULT_BUFBYTES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+U\+F\+B\+Y\+T\+ES~1024}\hypertarget{mod__cgi_8c_aa5520d5aed84a36df7e4f257eaf551c5}{}\label{mod__cgi_8c_aa5520d5aed84a36df7e4f257eaf551c5}
+\index{mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+O\+G\+B\+Y\+T\+ES@{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+O\+G\+B\+Y\+T\+ES}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+O\+G\+B\+Y\+T\+ES@{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+O\+G\+B\+Y\+T\+ES}!mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+O\+G\+B\+Y\+T\+ES}{DEFAULT_LOGBYTES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+O\+G\+B\+Y\+T\+ES~10385760}\hypertarget{mod__cgi_8c_a66943496961804fddcba8ed563e347ff}{}\label{mod__cgi_8c_a66943496961804fddcba8ed563e347ff}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(cgi)}{AP_DECLARE_MODULE(cgi)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{cgi}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__cgi_8c_a6516a5227a33fb9c340ad3d49de601a2}{}\label{mod__cgi_8c_a6516a5227a33fb9c340ad3d49de601a2}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}!cgi\+\_\+module@{cgi\+\_\+module}}
+\index{cgi\+\_\+module@{cgi\+\_\+module}!mod\+\_\+cgi.\+c@{mod\+\_\+cgi.\+c}}
+\subsubsection[{\texorpdfstring{cgi\+\_\+module}{cgi_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} cgi\+\_\+module}\hypertarget{mod__cgi_8c_a9e31cf8b857ea908db5ea4ba4635c5d9}{}\label{mod__cgi_8c_a9e31cf8b857ea908db5ea4ba4635c5d9}

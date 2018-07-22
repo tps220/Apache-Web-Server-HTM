@@ -1,0 +1,243 @@
+\hypertarget{http__log_8h}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/include/http\+\_\+log.h File Reference}
+\label{http__log_8h}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/include/http\+\_\+log.\+h@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/include/http\+\_\+log.\+h}}
+
+
+\hyperlink{namespaceApache}{Apache} Logging library.  
+
+
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$syslog.\+h$>$}\\*
+Include dependency graph for http\+\_\+log.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{http__log_8h__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga709050545b621c5eba19d44e17b5da52}{L\+O\+G\+\_\+\+P\+R\+I\+M\+A\+SK}~7
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{A\+P\+L\+O\+G\+\_\+\+E\+M\+E\+RG}~L\+O\+G\+\_\+\+E\+M\+E\+RG       /$\ast$ \hyperlink{pcre_8txt_acd344400255173b94380e8f8cdfa5ddc}{system} \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a2569119f3fd3f0d7d7ecea3c96acb0bf}{is} unusable $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga80a3f6767c5810b74c36ab52abff7d87}{A\+P\+L\+O\+G\+\_\+\+A\+L\+E\+RT}~L\+O\+G\+\_\+\+A\+L\+E\+RT       /$\ast$ \hyperlink{pcregrep_8txt_ad076c13c20d71c3dc183a56d9c6145d1}{action} must \hyperlink{NON-AUTOTOOLS-BUILD_8txt_ac08ce70cbd4f453457597ad15ecbebdd}{be} taken immediately $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{A\+P\+L\+O\+G\+\_\+\+C\+R\+IT}~L\+O\+G\+\_\+\+C\+R\+IT        /$\ast$ critical conditions $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{A\+P\+L\+O\+G\+\_\+\+E\+RR}~L\+O\+G\+\_\+\+E\+RR         /$\ast$ \hyperlink{pcre_8txt_a49f154ded02555c4d15e7861acf2e434}{error} conditions $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga73e14aeff380a8a01c66d528162026fe}{A\+P\+L\+O\+G\+\_\+\+W\+A\+R\+N\+I\+NG}~L\+O\+G\+\_\+\+W\+A\+R\+N\+I\+NG     /$\ast$ warning conditions $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga23239084d07266623cf5f5830fd28c8c}{A\+P\+L\+O\+G\+\_\+\+N\+O\+T\+I\+CE}~L\+O\+G\+\_\+\+N\+O\+T\+I\+CE      /$\ast$ normal but significant condition $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{A\+P\+L\+O\+G\+\_\+\+I\+N\+FO}~L\+O\+G\+\_\+\+I\+N\+FO        /$\ast$ informational $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{A\+P\+L\+O\+G\+\_\+\+D\+E\+B\+UG}~L\+O\+G\+\_\+\+D\+E\+B\+UG       /$\ast$ \hyperlink{sdbm__tune_8h_a1614f028c1fef258edfb81fb963609cb}{debug}-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E1}~(L\+O\+G\+\_\+\+D\+E\+B\+UG + 1)  /$\ast$ trace-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} 1 messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E2}~(L\+O\+G\+\_\+\+D\+E\+B\+UG + 2)  /$\ast$ trace-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} 2 messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E3}~(L\+O\+G\+\_\+\+D\+E\+B\+UG + 3)  /$\ast$ trace-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} 3 messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga479289550d998526187ff78880378f9c}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E4}~(L\+O\+G\+\_\+\+D\+E\+B\+UG + 4)  /$\ast$ trace-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} 4 messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gab1a4bc833fc60cfbb6bc89eaa6550a2c}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E5}~(L\+O\+G\+\_\+\+D\+E\+B\+UG + 5)  /$\ast$ trace-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} 5 messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gad067edc2e8853edaa2a1b54792b62f87}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E6}~(L\+O\+G\+\_\+\+D\+E\+B\+UG + 6)  /$\ast$ trace-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} 6 messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga90c9ee0877e812054113ea3c9385a231}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E7}~(L\+O\+G\+\_\+\+D\+E\+B\+UG + 7)  /$\ast$ trace-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} 7 messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga08fc65b391ff4c007f69cd46f4423ac3}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E8}~(L\+O\+G\+\_\+\+D\+E\+B\+UG + 8)  /$\ast$ trace-\/\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} 8 messages $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gad670a9e39225b017388108507a432fd3}{A\+P\+L\+O\+G\+\_\+\+L\+E\+V\+E\+L\+M\+A\+SK}~15     /$\ast$ \hyperlink{group__APR__Util__Date_ga6bd7250007a3cfeadacf370fbf68cf5a}{mask} off the \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} \hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value} $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga24e0d748a992633c7fb9e1ac51a4d47f}{A\+P\+L\+O\+G\+\_\+\+N\+O\+E\+R\+R\+NO}~(\hyperlink{group__APACHE__CORE__LOG_gad670a9e39225b017388108507a432fd3}{A\+P\+L\+O\+G\+\_\+\+L\+E\+V\+E\+L\+M\+A\+SK} + 1)
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga5d58a2410e5f8be30429161385acd8dc}{A\+P\+L\+O\+G\+\_\+\+T\+O\+C\+L\+I\+E\+NT}~((\hyperlink{group__APACHE__CORE__LOG_gad670a9e39225b017388108507a432fd3}{A\+P\+L\+O\+G\+\_\+\+L\+E\+V\+E\+L\+M\+A\+SK} + 1) $\ast$ 2)
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{A\+P\+L\+O\+G\+\_\+\+S\+T\+A\+R\+T\+UP}~((\hyperlink{group__APACHE__CORE__LOG_gad670a9e39225b017388108507a432fd3}{A\+P\+L\+O\+G\+\_\+\+L\+E\+V\+E\+L\+M\+A\+SK} + 1) $\ast$ 4)
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gaec8c265923c6714be1f4a42e252bc872}{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+O\+G\+L\+E\+V\+EL}~\hyperlink{group__APACHE__CORE__LOG_ga73e14aeff380a8a01c66d528162026fe}{A\+P\+L\+O\+G\+\_\+\+W\+A\+R\+N\+I\+NG}
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{A\+P\+L\+O\+G\+NO}(\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~\char`\"{}AH\char`\"{} \#n \char`\"{}\+: \char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gad04ae11f8e466af433e82e961d12a6bf}{A\+P\+L\+O\+G\+\_\+\+N\+O\+\_\+\+M\+O\+D\+U\+LE}~-\/1
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~(aplog\+\_\+module\+\_\+index ? $\ast$aplog\+\_\+module\+\_\+index \+: \hyperlink{group__APACHE__CORE__LOG_gad04ae11f8e466af433e82e961d12a6bf}{A\+P\+L\+O\+G\+\_\+\+N\+O\+\_\+\+M\+O\+D\+U\+LE})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga69598d1723ee9b59c34037a809b46816}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{group__APACHE__CORE__SCRIPT_gafe3efe4874f4178a9d30f4a0889957c3}{module\+\_\+index},  \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga4b7f2a5f7ebe1ee0d3051ba65bbfd419}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{group__APACHE__CORE__SCRIPT_gafe3efe4874f4178a9d30f4a0889957c3}{module\+\_\+index},  \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga07b856edaebeec12af0c43e877ac7137}{A\+P\+L\+O\+G\+\_\+\+C\+S\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{group__APACHE__CORE__SCRIPT_gafe3efe4874f4178a9d30f4a0889957c3}{module\+\_\+index},  \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga4e4ee8a00151db017209c55718f24d64}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},  \hyperlink{group__APACHE__CORE__SCRIPT_gafe3efe4874f4178a9d30f4a0889957c3}{module\+\_\+index},  \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})~\hyperlink{group__APACHE__CORE__LOG_ga69598d1723ee9b59c34037a809b46816}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{vhost_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX},\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})~\hyperlink{group__APACHE__CORE__LOG_ga4b7f2a5f7ebe1ee0d3051ba65bbfd419}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{vhost_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX},\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gafb7ad6aa7a049a0605503883dec697f2}{A\+P\+L\+O\+G\+\_\+\+C\+S\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})~\hyperlink{group__APACHE__CORE__LOG_ga07b856edaebeec12af0c43e877ac7137}{A\+P\+L\+O\+G\+\_\+\+C\+S\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{vhost_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX},\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},  \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})~\hyperlink{group__APACHE__CORE__LOG_ga4e4ee8a00151db017209c55718f24d64}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{vhost_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX},\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga024b563d0a510cab0e2a9ac72154c4e6}{A\+P\+L\+O\+Ginfo}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{A\+P\+L\+O\+G\+\_\+\+I\+N\+FO})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga621be6f226bfc0c27955674a8106df5e}{A\+P\+L\+O\+Gdebug}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{A\+P\+L\+O\+G\+\_\+\+D\+E\+B\+UG})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gac7eb90f9a3530e3b8d0a2783461c9136}{A\+P\+L\+O\+Gtrace1}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E1})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gad636d87f0b5fc8e931b17943fc8bbc81}{A\+P\+L\+O\+Gtrace2}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E2})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gad74a62ddae19ec7b56a8e22ee380755e}{A\+P\+L\+O\+Gtrace3}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E3})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gae6e8fd9ee9c286935b7d9c008f5688ba}{A\+P\+L\+O\+Gtrace4}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_ga479289550d998526187ff78880378f9c}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E4})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gaea7d84a13e152087d99dde4a3c4289ce}{A\+P\+L\+O\+Gtrace5}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_gab1a4bc833fc60cfbb6bc89eaa6550a2c}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E5})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga5e4d147131fb3a86d2c5dde4f9bfa708}{A\+P\+L\+O\+Gtrace6}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_gad067edc2e8853edaa2a1b54792b62f87}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E6})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga2308951e55738c13e346bbe5df82b2e1}{A\+P\+L\+O\+Gtrace7}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_ga90c9ee0877e812054113ea3c9385a231}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E7})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga2f4a16c95cf4d4419bdc73dad350d2de}{A\+P\+L\+O\+Gtrace8}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{group__APACHE__CORE__LOG_ga6ecb1ad3cb029482b06109189e0dd914}{A\+P\+L\+O\+G\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},\hyperlink{group__APACHE__CORE__LOG_ga08fc65b391ff4c007f69cd46f4423ac3}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E8})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga1b7c75b164d905be15e38ff107bd6e43}{A\+P\+L\+O\+Grinfo}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{A\+P\+L\+O\+G\+\_\+\+I\+N\+FO})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga2f10e05b3b396226d247c1ee09fc8454}{A\+P\+L\+O\+Grdebug}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{A\+P\+L\+O\+G\+\_\+\+D\+E\+B\+UG})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga6d561a49029da4b63d47725305961c1f}{A\+P\+L\+O\+Grtrace1}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E1})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga0f9955c9ee75f0d87a3c2a9bcf9528a8}{A\+P\+L\+O\+Grtrace2}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E2})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gad0b4fb06c2ea5c7afbad2f45449d6c48}{A\+P\+L\+O\+Grtrace3}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E3})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga5dc894b606ab0c580215b2f7c94e27ae}{A\+P\+L\+O\+Grtrace4}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_ga479289550d998526187ff78880378f9c}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E4})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga4bf1083b57403af7463ea10d7940ec28}{A\+P\+L\+O\+Grtrace5}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_gab1a4bc833fc60cfbb6bc89eaa6550a2c}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E5})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga1dc9c83ea2ea0f26228e1fa48fece01f}{A\+P\+L\+O\+Grtrace6}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_gad067edc2e8853edaa2a1b54792b62f87}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E6})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga69231b9ee3247a6b9bafb322699dff5a}{A\+P\+L\+O\+Grtrace7}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_ga90c9ee0877e812054113ea3c9385a231}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E7})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gaada27bc8ded44001599800a4545c4f97}{A\+P\+L\+O\+Grtrace8}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~\hyperlink{group__APACHE__CORE__LOG_ga8920b2411d1bce242e18e62eb9910685}{A\+P\+L\+O\+G\+\_\+\+R\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},\hyperlink{group__APACHE__CORE__LOG_ga08fc65b391ff4c007f69cd46f4423ac3}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E8})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gaef65005964c48b847c32226d786a430d}{A\+P\+L\+O\+Gcinfo}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{A\+P\+L\+O\+G\+\_\+\+I\+N\+FO})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga42bed4833c9625f521ea562a7764a34a}{A\+P\+L\+O\+Gcdebug}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{A\+P\+L\+O\+G\+\_\+\+D\+E\+B\+UG})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gabbb273571a341789872b65a758aa01e1}{A\+P\+L\+O\+Gctrace1}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E1})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga3098e6fb9bd91223c970d65f1df64a4b}{A\+P\+L\+O\+Gctrace2}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E2})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gaaaa8ecc04f897a759c5125e4a3b3ddf8}{A\+P\+L\+O\+Gctrace3}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E3})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga631b4f53b9b42e3de8aec44d80b54cda}{A\+P\+L\+O\+Gctrace4}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_ga479289550d998526187ff78880378f9c}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E4})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga1998e307c1268d62ec3f3ea073bd98e4}{A\+P\+L\+O\+Gctrace5}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_gab1a4bc833fc60cfbb6bc89eaa6550a2c}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E5})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga23c736a4c9602da83b6f06810dd36ef7}{A\+P\+L\+O\+Gctrace6}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_gad067edc2e8853edaa2a1b54792b62f87}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E6})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gac2640d0550a1d7825fb89f2bde14209d}{A\+P\+L\+O\+Gctrace7}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_ga90c9ee0877e812054113ea3c9385a231}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E7})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gac6a0ac11f123729a40bc2ae53d5039bf}{A\+P\+L\+O\+Gctrace8}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{A\+P\+L\+O\+G\+\_\+\+C\+\_\+\+I\+S\+\_\+\+L\+E\+V\+EL}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},\hyperlink{group__APACHE__CORE__LOG_ga08fc65b391ff4c007f69cd46f4423ac3}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E8})
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{A\+P\+L\+O\+G\+\_\+\+M\+A\+RK}~\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+\_\+,\+\_\+\+\_\+\+L\+I\+N\+E\+\_\+\+\_\+,\hyperlink{vhost_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\+\_\+log\+\_\+error}~ap\+\_\+log\+\_\+error\+\_\+
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\+\_\+log\+\_\+perror}~ap\+\_\+log\+\_\+perror\+\_\+
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\+\_\+log\+\_\+rerror}~ap\+\_\+log\+\_\+rerror\+\_\+
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\+\_\+log\+\_\+cerror}~ap\+\_\+log\+\_\+cerror\+\_\+
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_gad5cf626e04304c783570bab02a7bd291}{ap\+\_\+log\+\_\+cserror}~ap\+\_\+log\+\_\+cserror\+\_\+
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga2bd7f0232a37435953971a8bb8a4d6ca}{A\+P\+\_\+\+L\+O\+G\+\_\+\+D\+A\+T\+A\+\_\+\+D\+E\+F\+A\+U\+LT}~0
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga177b79de2a0997a6de01fd94e7be1343}{A\+P\+\_\+\+L\+O\+G\+\_\+\+D\+A\+T\+A\+\_\+\+S\+H\+O\+W\+\_\+\+O\+F\+F\+S\+ET}~1
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga8ead657a9fca1b916e489340dd774b43}{ap\+\_\+log\+\_\+data}~ap\+\_\+log\+\_\+data\+\_\+
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga89727a9028ffe442e6b25308c6ea4cfd}{ap\+\_\+log\+\_\+rdata}~ap\+\_\+log\+\_\+rdata\+\_\+
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga7d8e44ab0c8871375499181416551cd6}{ap\+\_\+log\+\_\+cdata}~ap\+\_\+log\+\_\+cdata\+\_\+
+\item 
+\#define \hyperlink{group__APACHE__CORE__LOG_ga7d8e44ab0c8871375499181416551cd6}{ap\+\_\+log\+\_\+cdata}~ap\+\_\+log\+\_\+cdata\+\_\+
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structpiped__log}{piped\+\_\+log} \hyperlink{group__APACHE__CORE__LOG_gae96bc8ffa52ef0021799f881be200bdd}{piped\+\_\+log}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__LOG_ga7983b940b78ab08d31d0a7d4fa92ed3b}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) ap\+\_\+open\+\_\+stderr\+\_\+log(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__APACHE__CORE__LOG_ga319d9a68485463642109c701e1c06de4}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) ap\+\_\+replace\+\_\+stderr\+\_\+log(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__LOG_gac08123bb03c21f9c22d93856b0063393}{ap\+\_\+open\+\_\+logs} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_gade454c9a3dc13ac389d15bf30f6c92b2}{pconf}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_gaa034d01ac4c0f083d21feaeae4e9c860}{plog}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_ga276c3069e6bb618213a277e21f6f269e}{ptemp}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$s\+\_\+main)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__APACHE__CORE__LOG_gaafc5404fc9f6c5750de9ec57b8223b1d}{ap\+\_\+logs\+\_\+child\+\_\+init} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} const \hyperlink{structserver__rec}{server\+\_\+rec} const char \hyperlink{group__APACHE__CORE__LOG_ga3b3f03801dc9e2602b5a33f6f30df470}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((\hyperlink{group__apr__time_ga6427c3237144d9709aa13825289f0b78}{format}(printf, 7, 8)))
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} const \hyperlink{structconn__rec}{conn\+\_\+rec} const \hyperlink{structserver__rec}{server\+\_\+rec} const char \hyperlink{group__APACHE__CORE__LOG_ga155b2f0f701a85ec7602ca678da3e10e}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((\hyperlink{group__apr__time_ga6427c3237144d9709aa13825289f0b78}{format}(printf, 8, 9)))
+\item 
+\hyperlink{group__APACHE__CORE__LOG_ga7322705a6dfa616f54445a213631adef}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structpiped__log}{piped\+\_\+log} $\ast$) ap\+\_\+open\+\_\+piped\+\_\+log(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+\hyperlink{group__APACHE__CORE__LOG_gad014b80672b9da1e4aa67ec46b6e594d}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$) ap\+\_\+piped\+\_\+log\+\_\+read\+\_\+fd(\hyperlink{structpiped__log}{piped\+\_\+log} $\ast$\hyperlink{perltest_8txt_a841c59daab01e1f609fdd4547afbe6e6}{pl})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ap__config_8h_a0bb4c3adf74510a0dcdad5b125725fe0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__LOG_ga3306700b5a77a80df513749df63d1613}{ap\+\_\+default\+\_\+loglevel}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__LOG_gaa843820216dea79b53a16310cb08e8dd}{line}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__LOG_ga8347f4481f59a55b548b6a691741733a}{module\+\_\+index}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__CORE__LOG_gaa67063cfb88d04cd82302912b2c85838}{status}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} const \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__LOG_gac4d70082e9974ebc2dabf813f28a90e6}{s}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} const \hyperlink{structserver__rec}{server\+\_\+rec} const char $\ast$ \hyperlink{group__APACHE__CORE__LOG_gaacca67646a119f459e8e6eecb7f5e7ac}{fmt}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__LOG_ga4510da01634467fa38407ea48d0cc6b7}{p}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} const \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__LOG_ga5b2bb52600a076cc1b5d45711a21a517}{r}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} const \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__LOG_ga8b3d71ab71c4e47e4957f3e9df734823}{c}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const \hyperlink{structserver__rec}{server\+\_\+rec} const char $\ast$ \hyperlink{group__APACHE__CORE__LOG_ga0b7ff30caa1d4032dc5e6422f35b7485}{label}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const \hyperlink{structserver__rec}{server\+\_\+rec} const char const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{group__APACHE__CORE__LOG_gae4950db1dbfff8459a712737063b61aa}{data}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const \hyperlink{structserver__rec}{server\+\_\+rec} const char const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APACHE__CORE__LOG_ga81aaf8f11747fd23d6595b883debbf70}{len}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const \hyperlink{structserver__rec}{server\+\_\+rec} const char const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} unsigned \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__LOG_ga7e4dc9555382e7e748f65f1bcf814367}{flags}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__LOG_ga6a2fc0c236288b07ce5bd1335ca89fa2}{fname}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__LOG_ga28849770c8bfeb04039d7dd29d4dfa35}{filename}
+\item 
+const char pid\+\_\+t $\ast$ \hyperlink{group__APACHE__CORE__LOG_gab5f16f2092ef43bfe07a17d13f489b67}{mypid}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__LOG_gac21a604824a10f311a4fad1d701f5115}{program}
+\item 
+const char \hyperlink{group__apr__thread__proc_gadcb981d7748c580eb69ac11dbf709060}{apr\+\_\+cmdtype\+\_\+e} \hyperlink{group__APACHE__CORE__LOG_gab4c4e8081a1019039c687d48fa0a54ee}{cmdtype}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{namespaceApache}{Apache} Logging library. 
+

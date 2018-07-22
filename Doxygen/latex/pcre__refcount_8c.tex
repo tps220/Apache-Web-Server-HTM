@@ -1,0 +1,48 @@
+\hypertarget{pcre__refcount_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/pcre/pcre\+\_\+refcount.c File Reference}
+\label{pcre__refcount_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+refcount.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+refcount.\+c}}
+{\ttfamily \#include \char`\"{}pcre\+\_\+internal.\+h\char`\"{}}\\*
+Include dependency graph for pcre\+\_\+refcount.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__refcount_8c__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__refcount_8c__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre__internal_8h_a43f7c191f7b3645a85b184183534a961}{P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+FN} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre__internal_8h_a8696d535a0f4ad7b9fef8b2acc558ca0}{P\+C\+R\+E\+\_\+\+C\+A\+L\+L\+\_\+\+C\+O\+N\+V\+E\+N\+T\+I\+ON} \hyperlink{pcre__refcount_8c_a01ba6072cd272d970982bd2f4511f1fb}{pcre\+\_\+refcount} (\hyperlink{pcre_8h_a2bc1b88cfd3d453b96bdc5411a22484f}{pcre} $\ast$argument\+\_\+re, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} adjust)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{pcre\+\_\+refcount.\+c@{pcre\+\_\+refcount.\+c}!pcre\+\_\+refcount@{pcre\+\_\+refcount}}
+\index{pcre\+\_\+refcount@{pcre\+\_\+refcount}!pcre\+\_\+refcount.\+c@{pcre\+\_\+refcount.\+c}}
+\subsubsection[{\texorpdfstring{pcre\+\_\+refcount(pcre $\ast$argument\+\_\+re, int adjust)}{pcre_refcount(pcre *argument_re, int adjust)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+FN} {\bf int} {\bf P\+C\+R\+E\+\_\+\+C\+A\+L\+L\+\_\+\+C\+O\+N\+V\+E\+N\+T\+I\+ON} pcre\+\_\+refcount (
+\begin{DoxyParamCaption}
+\item[{{\bf pcre} $\ast$}]{argument\+\_\+re, }
+\item[{{\bf int}}]{adjust}
+\end{DoxyParamCaption}
+)}\hypertarget{pcre__refcount_8c_a01ba6072cd272d970982bd2f4511f1fb}{}\label{pcre__refcount_8c_a01ba6072cd272d970982bd2f4511f1fb}
+
+\begin{DoxyCode}
+81 \{
+82 \hyperlink{pcre__internal_8h_a2984f4df28d081d53978318a28d0c665}{REAL\_PCRE} *\hyperlink{pcre_8txt_abd134207f74532a8b094676c4a2ca9ed}{re} = (\hyperlink{pcre__internal_8h_a2984f4df28d081d53978318a28d0c665}{REAL\_PCRE} *)argument\_re;
+83 \textcolor{keywordflow}{if} (re == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \textcolor{keywordflow}{return} \hyperlink{pcre_8h_aa47d1a178fb529fed1b1f999ea98b0b9}{PCRE\_ERROR\_NULL};
+84 \textcolor{keywordflow}{if} (re->magic\_number != \hyperlink{pcre__internal_8h_a54061e5993a5517320d425f44408cc86}{MAGIC\_NUMBER}) \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a5c86cbd13e6c2770246f6da8a310f160}{PCRE\_ERROR\_BADMAGIC};
+85 \textcolor{keywordflow}{if} ((re->flags & \hyperlink{pcre__internal_8h_a0c980b9bdb3361277209921d22db216e}{PCRE\_MODE}) == 0) \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a1a3d95e2973925e87be01c3d1f9d2ebd}{PCRE\_ERROR\_BADMODE};
+86 re->ref\_count = (-adjust > re->ref\_count)? 0 :
+87                 (adjust + re->ref\_count > 65535)? 65535 :
+88                 re->ref\_count + adjust;
+89 \textcolor{keywordflow}{return} re->ref\_count;
+90 \}
+\end{DoxyCode}

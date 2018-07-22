@@ -1,0 +1,139 @@
+\hypertarget{netware_2filesys_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/file\+\_\+io/netware/filesys.c File Reference}
+\label{netware_2filesys_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/netware/filesys.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/netware/filesys.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+Include dependency graph for filesys.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{netware_2filesys_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{netware_2filesys_8c_a5db34f7c27906e8c7d819e22213b3226}{filepath\+\_\+root\+\_\+case} (char $\ast$$\ast$\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}, char $\ast$root, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{netware_2filesys_8c_ac2eb03955fc80e7ed46999d396a4b270}{filepath\+\_\+has\+\_\+drive} (const char $\ast$\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} only, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{netware_2filesys_8c_aaa8550c415275182e4f65f927e10d518}{filepath\+\_\+compare\+\_\+drive} (const char $\ast$path1, const char $\ast$path2, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__apr__allocator_ga9cb19a118179bbd8625eacfec66a9ab8}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{netware/filesys.\+c@{netware/filesys.\+c}!filepath\+\_\+compare\+\_\+drive@{filepath\+\_\+compare\+\_\+drive}}
+\index{filepath\+\_\+compare\+\_\+drive@{filepath\+\_\+compare\+\_\+drive}!netware/filesys.\+c@{netware/filesys.\+c}}
+\subsubsection[{\texorpdfstring{filepath\+\_\+compare\+\_\+drive(const char $\ast$path1, const char $\ast$path2, apr\+\_\+pool\+\_\+t $\ast$p)}{filepath_compare_drive(const char *path1, const char *path2, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} filepath\+\_\+compare\+\_\+drive (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{path1, }
+\item[{const char $\ast$}]{path2, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{netware_2filesys_8c_aaa8550c415275182e4f65f927e10d518}{}\label{netware_2filesys_8c_aaa8550c415275182e4f65f927e10d518}
+
+\begin{DoxyCode}
+50 \{
+51     \textcolor{keywordtype}{char} *s1, *\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2};
+52 
+53     \textcolor{keywordflow}{if} (path1 && path2) \{
+54         s1 = strchr (path1, \textcolor{charliteral}{':'});
+55         s2 = strchr (path2, \textcolor{charliteral}{':'});
+56 
+57         \textcolor{comment}{/* Make sure that they both have a drive/volume delimiter}
+58 \textcolor{comment}{            and are the same size.  Then see if they match.}
+59 \textcolor{comment}{        */}
+60         \textcolor{keywordflow}{if} (s1 && s2 && ((s1-path1) == (s2-path2))) \{
+61             \textcolor{keywordflow}{return} strnicmp (s1, s2, s1-path1);
+62         \}
+63     \}
+64     \textcolor{keywordflow}{return} -1;
+65 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{netware_2filesys_8c_aaa8550c415275182e4f65f927e10d518_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{netware/filesys.\+c@{netware/filesys.\+c}!filepath\+\_\+has\+\_\+drive@{filepath\+\_\+has\+\_\+drive}}
+\index{filepath\+\_\+has\+\_\+drive@{filepath\+\_\+has\+\_\+drive}!netware/filesys.\+c@{netware/filesys.\+c}}
+\subsubsection[{\texorpdfstring{filepath\+\_\+has\+\_\+drive(const char $\ast$rootpath, int only, apr\+\_\+pool\+\_\+t $\ast$p)}{filepath_has_drive(const char *rootpath, int only, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} filepath\+\_\+has\+\_\+drive (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{rootpath, }
+\item[{{\bf int}}]{only, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{netware_2filesys_8c_ac2eb03955fc80e7ed46999d396a4b270}{}\label{netware_2filesys_8c_ac2eb03955fc80e7ed46999d396a4b270}
+
+\begin{DoxyCode}
+32 \{
+33     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+34 
+35     \textcolor{keywordflow}{if} (\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}) \{
+36         s = strchr (\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}, \textcolor{charliteral}{':'});
+37         \textcolor{keywordflow}{if} (only)
+38             \textcolor{comment}{/* Test if the path only has a drive/volume and nothing else}
+39 \textcolor{comment}{            */}
+40             \textcolor{keywordflow}{return} (s && (s != \hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}) && !s[1]);
+41         \textcolor{keywordflow}{else}
+42             \textcolor{comment}{/* Test if the path includes a drive/volume}
+43 \textcolor{comment}{            */}
+44             \textcolor{keywordflow}{return} (s && (s != \hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}));
+45     \}
+46     \textcolor{keywordflow}{return} 0;
+47 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=302pt]{netware_2filesys_8c_ac2eb03955fc80e7ed46999d396a4b270_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{netware/filesys.\+c@{netware/filesys.\+c}!filepath\+\_\+root\+\_\+case@{filepath\+\_\+root\+\_\+case}}
+\index{filepath\+\_\+root\+\_\+case@{filepath\+\_\+root\+\_\+case}!netware/filesys.\+c@{netware/filesys.\+c}}
+\subsubsection[{\texorpdfstring{filepath\+\_\+root\+\_\+case(char $\ast$$\ast$rootpath, char $\ast$root, apr\+\_\+pool\+\_\+t $\ast$p)}{filepath_root_case(char **rootpath, char *root, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} filepath\+\_\+root\+\_\+case (
+\begin{DoxyParamCaption}
+\item[{char $\ast$$\ast$}]{rootpath, }
+\item[{char $\ast$}]{root, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{netware_2filesys_8c_a5db34f7c27906e8c7d819e22213b3226}{}\label{netware_2filesys_8c_a5db34f7c27906e8c7d819e22213b3226}
+
+\begin{DoxyCode}
+22 \{
+23 \textcolor{comment}{/* See the Windows code to figure out what to do here.}
+24 \textcolor{comment}{    It probably checks to make sure that the root exists }
+25 \textcolor{comment}{    and case it correctly according to the file system.}
+26 \textcolor{comment}{*/}
+27     *\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath} = apr\_pstrdup(p, root);
+28     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+29 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=303pt]{netware_2filesys_8c_a5db34f7c27906e8c7d819e22213b3226_icgraph}
+\end{center}
+\end{figure}
+
+

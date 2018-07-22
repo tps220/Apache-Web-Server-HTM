@@ -1,0 +1,478 @@
+\hypertarget{group__AP__EXPR}{}\section{Expression parser}
+\label{group__AP__EXPR}\index{Expression parser@{Expression parser}}
+Collaboration diagram for Expression parser\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=286pt]{group__AP__EXPR}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t}
+\item 
+struct \hyperlink{structap__expr__eval__ctx__t}{ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t}
+\item 
+struct \hyperlink{structap__expr__lookup__parms}{ap\+\_\+expr\+\_\+lookup\+\_\+parms}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__AP__EXPR_ga7ef4619dbf6564cf00390a193de2f499}{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+S\+L\+\_\+\+E\+X\+P\+R\+\_\+\+C\+O\+M\+P\+AT}~1
+\item 
+\#define \hyperlink{group__AP__EXPR_ga2b831a2e84340ada00100fa078dce1ed}{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+D\+O\+N\+T\+\_\+\+V\+A\+RY}~2
+\item 
+\#define \hyperlink{group__AP__EXPR_ga992f5ac0eb18743bdc13fd27d6911755}{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+S\+T\+R\+I\+C\+T\+ED}~4
+\item 
+\#define \hyperlink{group__AP__EXPR_ga2f6ad8c0e92760015d2792258baed049}{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+R\+E\+S\+U\+LT}~8
+\item 
+\#define \hyperlink{group__AP__EXPR_ga5e9970d44486a68f4805986f5b2b5f7b}{ap\+\_\+expr\+\_\+parse\+\_\+cmd}(\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd},  \hyperlink{group__AP__EXPR_ga678330dc2f7e5114b38824a310f676ed}{expr},  \hyperlink{pcre_8txt_ad7a10cd81a384ff727296d05bb827806}{flags},  \hyperlink{group__apr__thread__proc_ga156fcecee9d33dd7b55c3d8fdaba7159}{err},  \hyperlink{group__AP__EXPR_ga93d947e1eae744a3ca2acd84e9133f45}{lookup\+\_\+fn})~ap\+\_\+expr\+\_\+parse\+\_\+cmd\+\_\+mi(\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__AP__EXPR_ga678330dc2f7e5114b38824a310f676ed}{expr}, \hyperlink{pcre_8txt_ad7a10cd81a384ff727296d05bb827806}{flags}, \hyperlink{group__apr__thread__proc_ga156fcecee9d33dd7b55c3d8fdaba7159}{err}, \hyperlink{group__AP__EXPR_ga93d947e1eae744a3ca2acd84e9133f45}{lookup\+\_\+fn}, \hyperlink{vhost_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX})
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structap__expr__node}{ap\+\_\+expr\+\_\+node} \hyperlink{group__AP__EXPR_ga1495a85c3a89e64cf625dfe1a5905fcb}{ap\+\_\+expr\+\_\+t}
+\item 
+typedef \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__AP__EXPR_ga8069c0c1ecbf4d1804fcfd4b2132ce28}{ap\+\_\+expr\+\_\+op\+\_\+unary\+\_\+t}(\hyperlink{structap__expr__eval__ctx__t}{ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{structdata}{data}, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+typedef \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__AP__EXPR_gaa895dbebc552cf2357b653e5adb53980}{ap\+\_\+expr\+\_\+op\+\_\+binary\+\_\+t}(\hyperlink{structap__expr__eval__ctx__t}{ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{structdata}{data}, const char $\ast$arg1, const char $\ast$arg2)
+\item 
+typedef const char $\ast$( \hyperlink{group__AP__EXPR_gada66631d39bfe2affd40b4ed27d96af8}{ap\+\_\+expr\+\_\+string\+\_\+func\+\_\+t}) (\hyperlink{structap__expr__eval__ctx__t}{ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{structdata}{data}, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+typedef \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$( \hyperlink{group__AP__EXPR_gad7338728ffd7484f1426f2c1f3f19ac0}{ap\+\_\+expr\+\_\+list\+\_\+func\+\_\+t}) (\hyperlink{structap__expr__eval__ctx__t}{ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{structdata}{data}, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+typedef const char $\ast$( \hyperlink{group__AP__EXPR_ga7f4e46bc4e3f27e1ca50e59e45b6cc77}{ap\+\_\+expr\+\_\+var\+\_\+func\+\_\+t}) (\hyperlink{structap__expr__eval__ctx__t}{ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{structdata}{data})
+\item 
+typedef \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}( \hyperlink{group__AP__EXPR_gad1cddcb03e188322dedbc6021e12f7ea}{ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t}) (\hyperlink{structap__expr__lookup__parms}{ap\+\_\+expr\+\_\+lookup\+\_\+parms} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_ga3e664e44484c440b3d2347dcf848ab85}{parms})
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__AP__EXPR_ga1ac0588c7c2ca64ea23710360d5f6f85}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}) ap\+\_\+expr\+\_\+lookup\+\_\+default(\hyperlink{structap__expr__lookup__parms}{ap\+\_\+expr\+\_\+lookup\+\_\+parms} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_ga3e664e44484c440b3d2347dcf848ab85}{parms})
+\item 
+\hyperlink{group__AP__EXPR_ga130e11b78a562abb6ec795be9fca38cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} $\ast$) ap\+\_\+expr\+\_\+parse\+\_\+cmd\+\_\+mi(const \hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__AP__EXPR_gaeadb4dd705bf55c9634480632c456acc}{ap\+\_\+expr\+\_\+init} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} $\ast$ \hyperlink{group__AP__EXPR_ga678330dc2f7e5114b38824a310f676ed}{expr}
+\item 
+const \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} const char $\ast$$\ast$ \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err}
+\item 
+const \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__AP__EXPR_ga92a43aa0352eb452970c83ba3da95a8f}{nmatch}
+\item 
+const \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{structap__regmatch__t}{ap\+\_\+regmatch\+\_\+t} $\ast$ \hyperlink{group__AP__EXPR_ga144e8a242b3028b194fd8f301b15078b}{pmatch}
+\item 
+const \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{structap__regmatch__t}{ap\+\_\+regmatch\+\_\+t} const char $\ast$$\ast$ \hyperlink{group__AP__EXPR_ga0e8eb33ac3362aea4e83d2c415b2dc17}{source}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__AP__EXPR_gaab85d20515306c350c88fbc8f58673b7}{ptemp}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} $\ast$ \hyperlink{group__AP__EXPR_gae5e165b68fbb12afc88707b8e6eb2f08}{info}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} const char \hyperlink{group__AP__EXPR_gad1cddcb03e188322dedbc6021e12f7ea}{ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t} $\ast$ \hyperlink{group__AP__EXPR_ga93d947e1eae744a3ca2acd84e9133f45}{lookup\+\_\+fn}
+\item 
+const char unsigned \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__AP__EXPR_gad7a10cd81a384ff727296d05bb827806}{flags}
+\item 
+const char unsigned \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const char \hyperlink{group__AP__EXPR_gad1cddcb03e188322dedbc6021e12f7ea}{ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__AP__EXPR_gaebe144cbe4474da9d8a21f71bee43251}{module\+\_\+index}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Macro Definition Documentation}
+\index{Expression parser@{Expression parser}!A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+D\+O\+N\+T\+\_\+\+V\+A\+RY@{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+D\+O\+N\+T\+\_\+\+V\+A\+RY}}
+\index{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+D\+O\+N\+T\+\_\+\+V\+A\+RY@{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+D\+O\+N\+T\+\_\+\+V\+A\+RY}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+D\+O\+N\+T\+\_\+\+V\+A\+RY}{AP_EXPR_FLAG_DONT_VARY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+D\+O\+N\+T\+\_\+\+V\+A\+RY~2}\hypertarget{group__AP__EXPR_ga2b831a2e84340ada00100fa078dce1ed}{}\label{group__AP__EXPR_ga2b831a2e84340ada00100fa078dce1ed}
+Don\textquotesingle{}t add siginificant request headers to the Vary response header \index{Expression parser@{Expression parser}!A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+S\+T\+R\+I\+C\+T\+ED@{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+S\+T\+R\+I\+C\+T\+ED}}
+\index{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+S\+T\+R\+I\+C\+T\+ED@{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+S\+T\+R\+I\+C\+T\+ED}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+S\+T\+R\+I\+C\+T\+ED}{AP_EXPR_FLAG_RESTRICTED}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+R\+E\+S\+T\+R\+I\+C\+T\+ED~4}\hypertarget{group__AP__EXPR_ga992f5ac0eb18743bdc13fd27d6911755}{}\label{group__AP__EXPR_ga992f5ac0eb18743bdc13fd27d6911755}
+Don\textquotesingle{}t allow functions/vars that bypass the current request\textquotesingle{}s access restrictions or would otherwise leak confidential information. Used by e.\+g. mod\+\_\+include. \index{Expression parser@{Expression parser}!A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+S\+L\+\_\+\+E\+X\+P\+R\+\_\+\+C\+O\+M\+P\+AT@{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+S\+L\+\_\+\+E\+X\+P\+R\+\_\+\+C\+O\+M\+P\+AT}}
+\index{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+S\+L\+\_\+\+E\+X\+P\+R\+\_\+\+C\+O\+M\+P\+AT@{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+S\+L\+\_\+\+E\+X\+P\+R\+\_\+\+C\+O\+M\+P\+AT}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+S\+L\+\_\+\+E\+X\+P\+R\+\_\+\+C\+O\+M\+P\+AT}{AP_EXPR_FLAG_SSL_EXPR_COMPAT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+S\+L\+\_\+\+E\+X\+P\+R\+\_\+\+C\+O\+M\+P\+AT~1}\hypertarget{group__AP__EXPR_ga7ef4619dbf6564cf00390a193de2f499}{}\label{group__AP__EXPR_ga7ef4619dbf6564cf00390a193de2f499}
+Use ssl\+\_\+expr compatibility mode (changes the meaning of the comparison operators) \index{Expression parser@{Expression parser}!A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+R\+E\+S\+U\+LT@{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+R\+E\+S\+U\+LT}}
+\index{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+R\+E\+S\+U\+LT@{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+R\+E\+S\+U\+LT}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+R\+E\+S\+U\+LT}{AP_EXPR_FLAG_STRING_RESULT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+R\+E\+S\+U\+LT~8}\hypertarget{group__AP__EXPR_ga2f6ad8c0e92760015d2792258baed049}{}\label{group__AP__EXPR_ga2f6ad8c0e92760015d2792258baed049}
+Expression evaluates to a string, not to a bool \index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+parse\+\_\+cmd@{ap\+\_\+expr\+\_\+parse\+\_\+cmd}}
+\index{ap\+\_\+expr\+\_\+parse\+\_\+cmd@{ap\+\_\+expr\+\_\+parse\+\_\+cmd}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+parse\+\_\+cmd}{ap_expr_parse_cmd}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+expr\+\_\+parse\+\_\+cmd(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf cmd}, }
+\item[{}]{{\bf expr}, }
+\item[{}]{{\bf flags}, }
+\item[{}]{{\bf err}, }
+\item[{}]{{\bf lookup\+\_\+fn}}
+\end{DoxyParamCaption}
+)~ap\+\_\+expr\+\_\+parse\+\_\+cmd\+\_\+mi({\bf cmd}, {\bf expr}, {\bf flags}, {\bf err}, {\bf lookup\+\_\+fn}, {\bf A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX})}\hypertarget{group__AP__EXPR_ga5e9970d44486a68f4805986f5b2b5f7b}{}\label{group__AP__EXPR_ga5e9970d44486a68f4805986f5b2b5f7b}
+Convenience wrapper for ap\+\_\+expr\+\_\+parse\+\_\+cmd\+\_\+mi() that sets module\+\_\+index = A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX 
+
+\subsection{Typedef Documentation}
+\index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+list\+\_\+func\+\_\+t@{ap\+\_\+expr\+\_\+list\+\_\+func\+\_\+t}}
+\index{ap\+\_\+expr\+\_\+list\+\_\+func\+\_\+t@{ap\+\_\+expr\+\_\+list\+\_\+func\+\_\+t}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+list\+\_\+func\+\_\+t}{ap_expr_list_func_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+array\+\_\+header\+\_\+t}$\ast$( ap\+\_\+expr\+\_\+list\+\_\+func\+\_\+t) ({\bf ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast${\bf ctx}, const {\bf void} $\ast${\bf data}, const char $\ast${\bf arg})}\hypertarget{group__AP__EXPR_gad7338728ffd7484f1426f2c1f3f19ac0}{}\label{group__AP__EXPR_gad7338728ffd7484f1426f2c1f3f19ac0}
+List valued function, takes a string argument and returns a list of strings Can currently only be called following the builtin \textquotesingle{}-\/in\textquotesingle{} operator. 
+\begin{DoxyParams}{Parameters}
+{\em ctx} & The evaluation context \\
+\hline
+{\em data} & An opaque context provided by the lookup hook function \\
+\hline
+{\em arg} & The argument \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The functions result list of strings, may be N\+U\+LL for \textquotesingle{}empty array\textquotesingle{} 
+\end{DoxyReturn}
+\index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t@{ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t}}
+\index{ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t@{ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t}{ap_expr_lookup_fn_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf int}( ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t) ({\bf ap\+\_\+expr\+\_\+lookup\+\_\+parms} $\ast${\bf parms})}\hypertarget{group__AP__EXPR_gad1cddcb03e188322dedbc6021e12f7ea}{}\label{group__AP__EXPR_gad1cddcb03e188322dedbc6021e12f7ea}
+Function for looking up the provider function for a variable, operator or function in an expression. 
+\begin{DoxyParams}{Parameters}
+{\em parms} & The parameter struct, also determins where the result is stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK on success, !\+OK on failure, D\+E\+C\+L\+I\+N\+ED if the requested name is not handled by this function 
+\end{DoxyReturn}
+\index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+op\+\_\+binary\+\_\+t@{ap\+\_\+expr\+\_\+op\+\_\+binary\+\_\+t}}
+\index{ap\+\_\+expr\+\_\+op\+\_\+binary\+\_\+t@{ap\+\_\+expr\+\_\+op\+\_\+binary\+\_\+t}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+op\+\_\+binary\+\_\+t}{ap_expr_op_binary_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf int} ap\+\_\+expr\+\_\+op\+\_\+binary\+\_\+t({\bf ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast${\bf ctx}, const {\bf void} $\ast${\bf data}, const char $\ast$arg1, const char $\ast$arg2)}\hypertarget{group__AP__EXPR_gaa895dbebc552cf2357b653e5adb53980}{}\label{group__AP__EXPR_gaa895dbebc552cf2357b653e5adb53980}
+Binary operator, takes two string arguments and returns a bool value. The name must have the form \textquotesingle{}-\/cmp\textquotesingle{} (at least two letters). 
+\begin{DoxyParams}{Parameters}
+{\em ctx} & The evaluation context \\
+\hline
+{\em data} & An opaque context provided by the lookup hook function \\
+\hline
+{\em arg1} & The left operand \\
+\hline
+{\em arg2} & The right operand \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 or 1 
+\end{DoxyReturn}
+\index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+op\+\_\+unary\+\_\+t@{ap\+\_\+expr\+\_\+op\+\_\+unary\+\_\+t}}
+\index{ap\+\_\+expr\+\_\+op\+\_\+unary\+\_\+t@{ap\+\_\+expr\+\_\+op\+\_\+unary\+\_\+t}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+op\+\_\+unary\+\_\+t}{ap_expr_op_unary_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf int} ap\+\_\+expr\+\_\+op\+\_\+unary\+\_\+t({\bf ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast${\bf ctx}, const {\bf void} $\ast${\bf data}, const char $\ast${\bf arg})}\hypertarget{group__AP__EXPR_ga8069c0c1ecbf4d1804fcfd4b2132ce28}{}\label{group__AP__EXPR_ga8069c0c1ecbf4d1804fcfd4b2132ce28}
+The parser can be extended with variable lookup, functions, and and operators.
+
+During parsing, the parser calls the lookup function to resolve a name into a function pointer and an opaque context for the function. If the argument to a function or operator is constant, the lookup function may also parse that argument and store the parsed data in the context.
+
+The default lookup function is the hook \+::ap\+\_\+expr\+\_\+lookup\+\_\+default which just calls ap\+\_\+run\+\_\+expr\+\_\+lookup. Modules can use it to make functions and variables generally available.
+
+An ap\+\_\+expr consumer can also provide its own custom lookup function to modify the set of variables and functions that are available. The custom lookup function can in turn call \textquotesingle{}ap\+\_\+run\+\_\+expr\+\_\+lookup\textquotesingle{}. Unary operator, takes one string argument and returns a bool value. The name must have the form \textquotesingle{}-\/z\textquotesingle{} (one letter only). 
+\begin{DoxyParams}{Parameters}
+{\em ctx} & The evaluation context \\
+\hline
+{\em data} & An opaque context provided by the lookup hook function \\
+\hline
+{\em arg} & The (right) operand \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 or 1 
+\end{DoxyReturn}
+\index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+string\+\_\+func\+\_\+t@{ap\+\_\+expr\+\_\+string\+\_\+func\+\_\+t}}
+\index{ap\+\_\+expr\+\_\+string\+\_\+func\+\_\+t@{ap\+\_\+expr\+\_\+string\+\_\+func\+\_\+t}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+string\+\_\+func\+\_\+t}{ap_expr_string_func_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef const char$\ast$( ap\+\_\+expr\+\_\+string\+\_\+func\+\_\+t) ({\bf ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast${\bf ctx}, const {\bf void} $\ast${\bf data}, const char $\ast${\bf arg})}\hypertarget{group__AP__EXPR_gada66631d39bfe2affd40b4ed27d96af8}{}\label{group__AP__EXPR_gada66631d39bfe2affd40b4ed27d96af8}
+String valued function, takes a string argument and returns a string 
+\begin{DoxyParams}{Parameters}
+{\em ctx} & The evaluation context \\
+\hline
+{\em data} & An opaque context provided by the lookup hook function \\
+\hline
+{\em arg} & The argument \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The functions result string, may be N\+U\+LL for \textquotesingle{}empty string\textquotesingle{} 
+\end{DoxyReturn}
+\index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+t@{ap\+\_\+expr\+\_\+t}}
+\index{ap\+\_\+expr\+\_\+t@{ap\+\_\+expr\+\_\+t}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+t}{ap_expr_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf ap\+\_\+expr\+\_\+node} {\bf ap\+\_\+expr\+\_\+t}}\hypertarget{group__AP__EXPR_ga1495a85c3a89e64cf625dfe1a5905fcb}{}\label{group__AP__EXPR_ga1495a85c3a89e64cf625dfe1a5905fcb}
+A node in the expression parse tree \index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+var\+\_\+func\+\_\+t@{ap\+\_\+expr\+\_\+var\+\_\+func\+\_\+t}}
+\index{ap\+\_\+expr\+\_\+var\+\_\+func\+\_\+t@{ap\+\_\+expr\+\_\+var\+\_\+func\+\_\+t}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+var\+\_\+func\+\_\+t}{ap_expr_var_func_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef const char$\ast$( ap\+\_\+expr\+\_\+var\+\_\+func\+\_\+t) ({\bf ap\+\_\+expr\+\_\+eval\+\_\+ctx\+\_\+t} $\ast${\bf ctx}, const {\bf void} $\ast${\bf data})}\hypertarget{group__AP__EXPR_ga7f4e46bc4e3f27e1ca50e59e45b6cc77}{}\label{group__AP__EXPR_ga7f4e46bc4e3f27e1ca50e59e45b6cc77}
+Variable lookup function, takes no argument and returns a string 
+\begin{DoxyParams}{Parameters}
+{\em ctx} & The evaluation context \\
+\hline
+{\em data} & An opaque context provided by the lookup hook function \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The expanded variable 
+\end{DoxyReturn}
+
+
+\subsection{Function Documentation}
+\index{Expression parser@{Expression parser}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(ap\+\_\+expr\+\_\+info\+\_\+t $\ast$) ap\+\_\+expr\+\_\+parse\+\_\+cmd\+\_\+mi(const cmd\+\_\+parms $\ast$cmd}{AP_DECLARE(ap_expr_info_t *) ap_expr_parse_cmd_mi(const cmd_parms *cmd}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+expr\+\_\+info\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+) const}\hypertarget{group__AP__EXPR_ga130e11b78a562abb6ec795be9fca38cd}{}\label{group__AP__EXPR_ga130e11b78a562abb6ec795be9fca38cd}
+High level interface to ap\+\_\+expr\+\_\+parse that also creates \hyperlink{structap__expr__info__t}{ap\+\_\+expr\+\_\+info\+\_\+t} and uses info from cmd\+\_\+parms to fill in most of it. 
+\begin{DoxyParams}{Parameters}
+{\em cmd} & The cmd\+\_\+parms struct \\
+\hline
+{\em expr} & The expression string to parse \\
+\hline
+{\em flags} & The flags to use, see A\+P\+\_\+\+E\+X\+P\+R\+\_\+\+F\+L\+A\+G\+\_\+$\ast$ \\
+\hline
+{\em err} & Set to N\+U\+LL on success, error message on error \\
+\hline
+{\em lookup\+\_\+fn} & The lookup function used to lookup vars, functions, and operators \\
+\hline
+{\em module\+\_\+index} & The module\+\_\+index to set for the expression \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The parsed expression 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Usually \hyperlink{group__AP__EXPR_ga5e9970d44486a68f4805986f5b2b5f7b}{ap\+\_\+expr\+\_\+parse\+\_\+cmd()} should be used 
+\end{DoxyNote}
+\index{Expression parser@{Expression parser}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(int) ap\+\_\+expr\+\_\+lookup\+\_\+default(ap\+\_\+expr\+\_\+lookup\+\_\+parms $\ast$parms)}{AP_DECLARE_NONSTD(int) ap_expr_lookup_default(ap_expr_lookup_parms *parms)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__AP__EXPR_ga1ac0588c7c2ca64ea23710360d5f6f85}{}\label{group__AP__EXPR_ga1ac0588c7c2ca64ea23710360d5f6f85}
+Default lookup function which just calls ap\+\_\+run\+\_\+expr\+\_\+lookup(). ap\+\_\+run\+\_\+expr\+\_\+lookup cannot be used directly because it has the wrong calling convention under Windows.
+
+Output data to the client in a printf format 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em fmt} & The format string \\
+\hline
+{\em ...} & The arguments to use to fill out the format string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes sent
+\end{DoxyReturn}
+Write an unspecified number of strings to the current filter 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em ...} & The strings to write\\
+\hline
+\end{DoxyParams}
+Output data to the filter in printf format 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em fmt} & The format string \\
+\hline
+{\em ...} & The arguments to use to fill out the format string\\
+\hline
+\end{DoxyParams}
+Read headers strings from a script, ensuring that the output is valid. If the output is valid, then the headers are added to the headers out of the current request 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em buffer} & Empty when calling the function. On output, if there was an error, the string that cause the error is stored here. \\
+\hline
+{\em module\+\_\+index} & The module index to be used for logging \\
+\hline
+{\em termch} & Pointer to the last character parsed. \\
+\hline
+{\em termarg} & Pointer to an int to capture the last argument parsed.\\
+\hline
+\end{DoxyParams}
+The varargs are string arguments to parse consecutively for headers, with a N\+U\+LL argument to terminate the list.
+
+\begin{DoxyReturn}{Returns}
+H\+T\+T\+P\+\_\+\+OK on success, H\+T\+T\+P\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+E\+R\+R\+OR otherwise
+\end{DoxyReturn}
+Write an unspecified number of strings to the request 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em ...} & The strings to write \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes sent
+\end{DoxyReturn}
+Output data to the client in a printf format 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em fmt} & The format string \\
+\hline
+{\em ...} & The arguments to use to fill out the format string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes sent
+\end{DoxyReturn}
+Flush function for apr\+\_\+brigade\+\_\+$\ast$ calls. This calls ap\+\_\+pass\+\_\+brigade to flush the brigade if the brigade buffer overflows. 
+\begin{DoxyParams}{Parameters}
+{\em bb} & The brigade to flush \\
+\hline
+{\em ctx} & The filter to pass the brigade to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+this function has nothing to do with F\+L\+U\+SH buckets. It is simply a way to flush content out of a brigade and down a filter stack.
+\end{DoxyNote}
+Write an unspecified number of strings to the current filter 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em ...} & The strings to write\\
+\hline
+\end{DoxyParams}
+Output data to the filter in printf format 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em fmt} & The format string \\
+\hline
+{\em ...} & The arguments to use to fill out the format string\\
+\hline
+\end{DoxyParams}
+Read headers strings from a script, ensuring that the output is valid. If the output is valid, then the headers are added to the headers out of the current request 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em buffer} & Empty when calling the function. On output, if there was an error, the string that cause the error is stored here. \\
+\hline
+{\em termch} & Pointer to the last character parsed. \\
+\hline
+{\em termarg} & Pointer to an int to capture the last argument parsed.\\
+\hline
+\end{DoxyParams}
+The varargs are string arguments to parse consecutively for headers, with a N\+U\+LL argument to terminate the list.
+
+\begin{DoxyReturn}{Returns}
+H\+T\+T\+P\+\_\+\+OK on success, H\+T\+T\+P\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+E\+R\+R\+OR otherwise
+\end{DoxyReturn}
+Read headers strings from a script, ensuring that the output is valid. If the output is valid, then the headers are added to the headers out of the current request 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em buffer} & Empty when calling the function. On output, if there was an error, the string that cause the error is stored here. \\
+\hline
+{\em module\+\_\+index} & The module index to be used for logging \\
+\hline
+{\em termch} & Pointer to the last character parsed. \\
+\hline
+{\em termarg} & Pointer to an int to capture the last argument parsed.\\
+\hline
+\end{DoxyParams}
+The varargs are string arguments to parse consecutively for headers, with a N\+U\+LL argument to terminate the list.
+
+\begin{DoxyReturn}{Returns}
+H\+T\+T\+P\+\_\+\+OK on success, H\+T\+T\+P\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+E\+R\+R\+OR otherwise 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+2017 \{
+2018     va\_list \hyperlink{group__APR__Util__Bucket__Brigades_gafa1ac2f9aa9e56e3f87cbc5324a3114f}{va};
+2019     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+2020     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+2021     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} written = 0;
+2022 
+2023     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->aborted)
+2024         \textcolor{keywordflow}{return} -1;
+2025 
+2026     \textcolor{comment}{/* ### TODO: if the total output is large, put all the strings}
+2027 \textcolor{comment}{     * ### into a single brigade, rather than flushing each time we}
+2028 \textcolor{comment}{     * ### fill the buffer}
+2029 \textcolor{comment}{     */}
+2030     va\_start(va, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+2031     \textcolor{keywordflow}{while} (1) \{
+2032         s = va\_arg(va, \textcolor{keyword}{const} \textcolor{keywordtype}{char} *);
+2033         \textcolor{keywordflow}{if} (s == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+2034             \textcolor{keywordflow}{break};
+2035 
+2036         len = strlen(s);
+2037         \textcolor{keywordflow}{if} (buffer\_output(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, s, len) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2038             \textcolor{keywordflow}{return} -1;
+2039         \}
+2040 
+2041         written += \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+2042     \}
+2043     va\_end(va);
+2044 
+2045     \textcolor{keywordflow}{return} written;
+2046 \}
+\end{DoxyCode}
+\index{Expression parser@{Expression parser}!ap\+\_\+expr\+\_\+init@{ap\+\_\+expr\+\_\+init}}
+\index{ap\+\_\+expr\+\_\+init@{ap\+\_\+expr\+\_\+init}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ap\+\_\+expr\+\_\+init(apr\+\_\+pool\+\_\+t $\ast$pool)}{ap_expr_init(apr_pool_t *pool)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+expr\+\_\+init (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool}
+\end{DoxyParamCaption}
+)}\hypertarget{group__AP__EXPR_gaeadb4dd705bf55c9634480632c456acc}{}\label{group__AP__EXPR_gaeadb4dd705bf55c9634480632c456acc}
+Internal initialisation of ap\+\_\+expr (for httpd internal use) 
+\begin{DoxyCode}
+1817 \{
+1818     ap\_hook\_expr\_lookup(core\_expr\_lookup, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APR__Util__Hook_gab9a5d50c3478c4d640deccec6b0ce879}{APR\_HOOK\_MIDDLE});
+1819     ap\_hook\_expr\_lookup(expr\_lookup\_not\_found, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 
+      \hyperlink{group__APR__Util__Hook_gae3c7d2cf35e8c89828dfff7a85b0ed77}{APR\_HOOK\_REALLY\_LAST});
+1820     ap\_hook\_post\_config(ap\_expr\_post\_config, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APR__Util__Hook_gab9a5d50c3478c4d640deccec6b0ce879}{APR\_HOOK\_MIDDLE});
+1821 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{group__AP__EXPR_gaeadb4dd705bf55c9634480632c456acc_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{Expression parser@{Expression parser}!err@{err}}
+\index{err@{err}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{err}{err}}]{\setlength{\rightskip}{0pt plus 5cm}const char unsigned {\bf int} const char $\ast$$\ast$ err}\hypertarget{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{}\label{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}
+\index{Expression parser@{Expression parser}!expr@{expr}}
+\index{expr@{expr}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{expr}{expr}}]{\setlength{\rightskip}{0pt plus 5cm}const char $\ast$ expr}\hypertarget{group__AP__EXPR_ga678330dc2f7e5114b38824a310f676ed}{}\label{group__AP__EXPR_ga678330dc2f7e5114b38824a310f676ed}
+\index{Expression parser@{Expression parser}!flags@{flags}}
+\index{flags@{flags}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{flags}{flags}}]{\setlength{\rightskip}{0pt plus 5cm}T\+HE {\bf P\+C\+RE} {\bf B\+IT} L\+I\+B\+R\+A\+RY Starting {\bf with} {\bf it} {\bf is} {\bf possible} {\bf to} {\bf compile} {\bf a} {\bf P\+C\+RE} {\bf library} that supports {\bf bit} {\bf character} including U\+TF {\bf as} well {\bf as} {\bf or} instead {\bf of} the original {\bf bit} {\bf library} This work was {\bf done} by Christian based {\bf on} the work {\bf done} by Zoltan Herczeg for the {\bf bit} {\bf library} All three {\bf libraries} contain {\bf identical} sets {\bf of} {\bf func} {\bf used} {\bf in} {\bf exactly} the same {\bf way} Only the {\bf names} {\bf of} the {\bf functions} and the {\bf data} {\bf types} {\bf of} their {\bf arguments} and {\bf results} {\bf are} different To avoid over {\bf complication} and reduce the {\bf documentation} {\bf maintenance} most {\bf of} the {\bf P\+C\+RE} {\bf documentation} describes the {\bf bit} {\bf with} only occasional references {\bf to} the {\bf bit} and {\bf bit} {\bf libraries} This page describes {\bf what} {\bf is} different when you use the {\bf bit} {\bf library} but you must take care when processing {\bf any} {\bf particular} {\bf pattern} {\bf to} use {\bf functions} {\bf from} just one {\bf library} For {\bf if} you want {\bf to} {\bf study} {\bf a} {\bf pattern} that was {\bf compiled} {\bf with} you must {\bf do} {\bf so} {\bf with} {\bf not} and you must {\bf free} the {\bf study} {\bf data} {\bf with} {\bf pcre} {\bf h} It {\bf contains} prototypes for {\bf all} the {\bf functions} {\bf in} {\bf all} {\bf as} well {\bf as} definitions {\bf of} flags}\hypertarget{group__AP__EXPR_gad7a10cd81a384ff727296d05bb827806}{}\label{group__AP__EXPR_gad7a10cd81a384ff727296d05bb827806}
+\index{Expression parser@{Expression parser}!info@{info}}
+\index{info@{info}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{info}{info}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t} {\bf ap\+\_\+expr\+\_\+info\+\_\+t}$\ast$ info}\hypertarget{group__AP__EXPR_gae5e165b68fbb12afc88707b8e6eb2f08}{}\label{group__AP__EXPR_gae5e165b68fbb12afc88707b8e6eb2f08}
+\index{Expression parser@{Expression parser}!lookup\+\_\+fn@{lookup\+\_\+fn}}
+\index{lookup\+\_\+fn@{lookup\+\_\+fn}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{lookup\+\_\+fn}{lookup_fn}}]{\setlength{\rightskip}{0pt plus 5cm}const char unsigned {\bf int} const char {\bf ap\+\_\+expr\+\_\+lookup\+\_\+fn\+\_\+t} $\ast$ lookup\+\_\+fn}\hypertarget{group__AP__EXPR_ga93d947e1eae744a3ca2acd84e9133f45}{}\label{group__AP__EXPR_ga93d947e1eae744a3ca2acd84e9133f45}
+\index{Expression parser@{Expression parser}!module\+\_\+index@{module\+\_\+index}}
+\index{module\+\_\+index@{module\+\_\+index}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{module\+\_\+index}{module_index}}]{\setlength{\rightskip}{0pt plus 5cm}char {\bf int} module\+\_\+index}\hypertarget{group__AP__EXPR_gaebe144cbe4474da9d8a21f71bee43251}{}\label{group__AP__EXPR_gaebe144cbe4474da9d8a21f71bee43251}
+\index{Expression parser@{Expression parser}!nmatch@{nmatch}}
+\index{nmatch@{nmatch}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{nmatch}{nmatch}}]{\setlength{\rightskip}{0pt plus 5cm}char const char const char {\bf apr\+\_\+size\+\_\+t} nmatch}\hypertarget{group__AP__EXPR_ga92a43aa0352eb452970c83ba3da95a8f}{}\label{group__AP__EXPR_ga92a43aa0352eb452970c83ba3da95a8f}
+\index{Expression parser@{Expression parser}!pmatch@{pmatch}}
+\index{pmatch@{pmatch}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{pmatch}{pmatch}}]{\setlength{\rightskip}{0pt plus 5cm}char const char const char {\bf apr\+\_\+size\+\_\+t} {\bf ap\+\_\+regmatch\+\_\+t} pmatch}\hypertarget{group__AP__EXPR_ga144e8a242b3028b194fd8f301b15078b}{}\label{group__AP__EXPR_ga144e8a242b3028b194fd8f301b15078b}
+\index{Expression parser@{Expression parser}!ptemp@{ptemp}}
+\index{ptemp@{ptemp}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{ptemp}{ptemp}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+pool\+\_\+t} {\bf server\+\_\+rec} $\ast${\bf s} {\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+pool\+\_\+t} $\ast$ ptemp}\hypertarget{group__AP__EXPR_gaab85d20515306c350c88fbc8f58673b7}{}\label{group__AP__EXPR_gaab85d20515306c350c88fbc8f58673b7}
+\index{Expression parser@{Expression parser}!source@{source}}
+\index{source@{source}!Expression parser@{Expression parser}}
+\subsubsection[{\texorpdfstring{source}{source}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+sockaddr\+\_\+t} {\bf apr\+\_\+sockaddr\+\_\+t} {\bf apr\+\_\+sockaddr\+\_\+t} $\ast$ source}\hypertarget{group__AP__EXPR_ga0e8eb33ac3362aea4e83d2c415b2dc17}{}\label{group__AP__EXPR_ga0e8eb33ac3362aea4e83d2c415b2dc17}

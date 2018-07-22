@@ -1,0 +1,1392 @@
+\hypertarget{h2__bucket__beam_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http2/h2\+\_\+bucket\+\_\+beam.c File Reference}
+\label{h2__bucket__beam_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+bucket\+\_\+beam.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+bucket\+\_\+beam.\+c}}
+{\ttfamily \#include $<$apr\+\_\+lib.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+atomic.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+strings.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+time.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+buckets.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+mutex.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+cond.\+h$>$}\\*
+{\ttfamily \#include $<$httpd.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+protocol.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+log.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+util.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+bucket\+\_\+beam.\+h\char`\"{}}\\*
+Include dependency graph for h2\+\_\+bucket\+\_\+beam.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structh2__beam__proxy}{h2\+\_\+beam\+\_\+proxy}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a0b11e26d153344667731b4aba5071b36}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+N\+E\+XT}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})~\hyperlink{group__apr__ring_gae42e4f7148719aa534bdbbc82be26a06}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+N\+E\+XT}((\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e}), link)
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a26c09dee35887a1586dc90f7b054473d}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+P\+R\+EV}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})~\hyperlink{group__apr__ring_ga82d45623d505d59ea5619cf8f63d0ebb}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+P\+R\+EV}((\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e}), link)
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_aae35aa664b213289d4e80961213c02e9}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+R\+E\+M\+O\+VE}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})~\hyperlink{group__apr__ring_gaab4a57544bdb660ec1e306137387d9d7}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+R\+E\+M\+O\+VE}((\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e}), link)
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a8c20f4897e2813b9624d44f52c245007}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+IT}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_ga245e1a73b162a4a68ebd54c84683729d}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+I\+N\+IT}(\&(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})-\/$>$\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list}, \hyperlink{structh2__beam__proxy}{h2\+\_\+beam\+\_\+proxy}, link);
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a22c3f94fa8172958079cd7ea4051a385}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+S\+E\+N\+T\+I\+N\+EL}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_ga54210090292ebafcd0a0d75d9ff1563d}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+S\+E\+N\+T\+I\+N\+EL}(\&(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})-\/$>$\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list}, \hyperlink{structh2__beam__proxy}{h2\+\_\+beam\+\_\+proxy}, link)
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_ad5636d27a3e8283ce02b2818138468c5}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+E\+M\+P\+TY}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_ga9b64ad6eebea19f896d2aa90172b6b9a}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+E\+M\+P\+TY}(\&(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})-\/$>$\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list}, \hyperlink{structh2__beam__proxy}{h2\+\_\+beam\+\_\+proxy}, link)
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_abb99bcd4c95e1898cfbd06e040101672}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+F\+I\+R\+ST}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_gacacd9cfca24feb7ff754d4008422efcb}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+F\+I\+R\+ST}(\&(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})-\/$>$\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list})
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a604023cf45a7423288710399e9d44f4f}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+A\+ST}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_ga8b927069ba9dc13defaf45a87267b5d3}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+L\+A\+ST}(\&(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})-\/$>$\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list})
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a146c88b9500f1d4d4dff6b2ad8a31b8b}{H2\+\_\+\+P\+R\+O\+X\+Y\+\_\+\+B\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a761643eee6482e2d21d4b6863c57fe9d}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a9c8e7eac09b4a309bc7c914240f5ebf6}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+C\+O\+N\+C\+AT}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_a76cbd73906a4ead245fe69fb938b7ba8}{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+P\+R\+E\+P\+E\+ND}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})
+\item 
+\#define \hyperlink{h2__bucket__beam_8c_af6137d9f440d7416237c67200c8959ff}{H2\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+B\+E\+AM}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})~(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e}-\/$>$\hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type} == \&\hyperlink{h2__bucket__beam_8c_ae7e81a93c14fffae7d1a9efc3c0bdf89}{h2\+\_\+bucket\+\_\+type\+\_\+beam})
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_ae852d6fa1e8a9c1e23531c224acdede1}{h2\+\_\+register\+\_\+bucket\+\_\+beamer} (\hyperlink{h2__bucket__beam_8h_a00b3301f517d53c72407e8215a76e8c7}{h2\+\_\+bucket\+\_\+beamer} $\ast$beamer)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__bucket__beam_8c_a1eb7e877b1b6addd67a8d3556728b304}{h2\+\_\+beam\+\_\+is\+\_\+closed} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__bucket__beam_8c_aa25b2453ef8424ed4ca4d0596608c1ec}{h2\+\_\+beam\+\_\+destroy} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__bucket__beam_8c_aab87619fc289e89d02917e9190501236}{h2\+\_\+beam\+\_\+create} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$$\ast$pbeam, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id, const char $\ast$\hyperlink{group__APACHE__CORE__HTTPD_ga7bb5e40c10df6a41df64bda1f4bb3e26}{tag}, \hyperlink{h2__bucket__beam_8h_a58b344ca9a9d6f9eb565be35bb08cfd4}{h2\+\_\+beam\+\_\+owner\+\_\+t} owner, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} max\+\_\+buf\+\_\+size, \hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{group__APR__Util__RL_ga9ceb71d3d9fcd18962d16e49bef6153a}{timeout})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_aea33642973c0f46e5e1dc8681c60ab06}{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+set} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} buffer\+\_\+size)
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{h2__bucket__beam_8c_a1fd9f6c99be6c0f5912378ebcacab59c}{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+get} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_a50913e34bc790a39de11a4d90e5de39f}{h2\+\_\+beam\+\_\+timeout\+\_\+set} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{group__APR__Util__RL_ga9ceb71d3d9fcd18962d16e49bef6153a}{timeout})
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{h2__bucket__beam_8c_a24db301bff61e9328bce659fea69f5a5}{h2\+\_\+beam\+\_\+timeout\+\_\+get} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_a18fcdf460f20b412ce76dd68c93cdbe2}{h2\+\_\+beam\+\_\+abort} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__bucket__beam_8c_a756a84813d57b4df12deb88314374277}{h2\+\_\+beam\+\_\+close} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__bucket__beam_8c_a9c8148804ab779b45238332b594d8de8}{h2\+\_\+beam\+\_\+leave} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__bucket__beam_8c_a0162b08290c4fe9f7d6e3283636e9c17}{h2\+\_\+beam\+\_\+wait\+\_\+empty} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{group__APR__Util__Bucket__Brigades_ga756973fb6392bd1026c3d96b4519776d}{apr\+\_\+read\+\_\+type\+\_\+e} \hyperlink{pcretest_8txt_aebde0006968e3c574305c604c927277a}{block})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_aa68ff22a35d86f804eda82fba9fee122}{h2\+\_\+beam\+\_\+send\+\_\+from} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__bucket__beam_8c_abd0e8829e808a93cccdec17e06448a80}{h2\+\_\+beam\+\_\+send} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$sender\+\_\+bb, \hyperlink{group__APR__Util__Bucket__Brigades_ga756973fb6392bd1026c3d96b4519776d}{apr\+\_\+read\+\_\+type\+\_\+e} \hyperlink{pcretest_8txt_aebde0006968e3c574305c604c927277a}{block})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__bucket__beam_8c_afb11867e565237b6b2e7797444e445d7}{h2\+\_\+beam\+\_\+receive} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}, \hyperlink{group__APR__Util__Bucket__Brigades_ga756973fb6392bd1026c3d96b4519776d}{apr\+\_\+read\+\_\+type\+\_\+e} \hyperlink{pcretest_8txt_aebde0006968e3c574305c604c927277a}{block}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{readbytes})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_a6d193e70e5d65e51644687e2e0c03762}{h2\+\_\+beam\+\_\+on\+\_\+consumed} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{h2__bucket__beam_8h_a04990392212b958d85ea7dc19009ebce}{h2\+\_\+beam\+\_\+ev\+\_\+callback} $\ast$ev\+\_\+cb, \hyperlink{h2__bucket__beam_8h_ae2b209907927e16b196e2005efccb268}{h2\+\_\+beam\+\_\+io\+\_\+callback} $\ast$io\+\_\+cb, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_a7560e429dd9cd2848dbada8944ee3330}{h2\+\_\+beam\+\_\+on\+\_\+produced} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{h2__bucket__beam_8h_ae2b209907927e16b196e2005efccb268}{h2\+\_\+beam\+\_\+io\+\_\+callback} $\ast$io\+\_\+cb, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_acfc556b8668153697599d43ffe51dce5}{h2\+\_\+beam\+\_\+on\+\_\+file\+\_\+beam} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{h2__bucket__beam_8h_a402762f3cf9aa71a1e162cffb44374ba}{h2\+\_\+beam\+\_\+can\+\_\+beam\+\_\+callback} $\ast$cb, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{h2__bucket__beam_8c_ae5d97b52187376d68acb436f374a0e9d}{h2\+\_\+beam\+\_\+get\+\_\+buffered} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{h2__bucket__beam_8c_a993559328729de5b55a5cb37724c9932}{h2\+\_\+beam\+\_\+get\+\_\+mem\+\_\+used} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__bucket__beam_8c_a4ee1be1e659ba9dfdad0db85d89967fe}{h2\+\_\+beam\+\_\+empty} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__bucket__beam_8c_a6a8ab68481ca7eb68e59ee2b4c9ebeeb}{h2\+\_\+beam\+\_\+holds\+\_\+proxies} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__bucket__beam_8c_ac875e00e9dd5bf2a8cb64b5241f646b8}{h2\+\_\+beam\+\_\+was\+\_\+received} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{h2__bucket__beam_8c_ac7b1ec5f552b6e253518bbbff68203e0}{h2\+\_\+beam\+\_\+get\+\_\+files\+\_\+beamed} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__bucket__beam_8c_a13ae5b7721fe30348905ff5ae3836aaa}{h2\+\_\+beam\+\_\+no\+\_\+files} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, \hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__bucket__beam_8c_ad8499c5012a3e58019ad2ac3e1b1d905}{h2\+\_\+beam\+\_\+report\+\_\+consumption} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__bucket__beam_8c_ae7a6de19a8d0034d20cc4d4070f2d7dc}{h2\+\_\+beam\+\_\+log} (\hyperlink{structh2__bucket__beam}{h2\+\_\+bucket\+\_\+beam} $\ast$beam, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level}, const char $\ast$msg)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{structapr__bucket__type__t}{apr\+\_\+bucket\+\_\+type\+\_\+t} \hyperlink{h2__bucket__beam_8c_ae7e81a93c14fffae7d1a9efc3c0bdf89}{h2\+\_\+bucket\+\_\+type\+\_\+beam}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+C\+O\+N\+C\+AT@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+C\+O\+N\+C\+AT}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+C\+O\+N\+C\+AT@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+C\+O\+N\+C\+AT}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+C\+O\+N\+C\+AT}{H2_BPROXY_LIST_CONCAT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+C\+O\+N\+C\+AT(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a9c8e7eac09b4a309bc7c914240f5ebf6}{}\label{h2__bucket__beam_8c_a9c8e7eac09b4a309bc7c914240f5ebf6}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{                    \hyperlink{group__apr__ring_ga34ee7a0d6daa61117006bb74498ff5aa}{\(\backslash\)}
+\hyperlink{group__apr__ring_ga34ee7a0d6daa61117006bb74498ff5aa}{        APR\_RING\_CONCAT}(&(\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a})->\hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list}, &(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b})->\hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list}, 
+      \hyperlink{structh2__beam__proxy}{h2\_beam\_proxy}, link);  \(\backslash\)
+    \} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+E\+M\+P\+TY@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+E\+M\+P\+TY}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+E\+M\+P\+TY@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+E\+M\+P\+TY}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+E\+M\+P\+TY}{H2_BPROXY_LIST_EMPTY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+E\+M\+P\+TY(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+E\+M\+P\+TY}(\&({\bf b})-\/$>${\bf list}, {\bf h2\+\_\+beam\+\_\+proxy}, link)}\hypertarget{h2__bucket__beam_8c_ad5636d27a3e8283ce02b2818138468c5}{}\label{h2__bucket__beam_8c_ad5636d27a3e8283ce02b2818138468c5}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+F\+I\+R\+ST@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+F\+I\+R\+ST}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+F\+I\+R\+ST@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+F\+I\+R\+ST}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+F\+I\+R\+ST}{H2_BPROXY_LIST_FIRST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+F\+I\+R\+ST(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+F\+I\+R\+ST}(\&({\bf b})-\/$>${\bf list})}\hypertarget{h2__bucket__beam_8c_abb99bcd4c95e1898cfbd06e040101672}{}\label{h2__bucket__beam_8c_abb99bcd4c95e1898cfbd06e040101672}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+IT@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+IT}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+IT@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+IT}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+IT}{H2_BPROXY_LIST_INIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+IT(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+I\+N\+IT}(\&({\bf b})-\/$>${\bf list}, {\bf h2\+\_\+beam\+\_\+proxy}, link);}\hypertarget{h2__bucket__beam_8c_a8c20f4897e2813b9624d44f52c245007}{}\label{h2__bucket__beam_8c_a8c20f4897e2813b9624d44f52c245007}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL}{H2_BPROXY_LIST_INSERT_TAIL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a761643eee6482e2d21d4b6863c57fe9d}{}\label{h2__bucket__beam_8c_a761643eee6482e2d21d4b6863c57fe9d}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{                \hyperlink{h2__bucket__beam_8h_aac1500f2cfc8ef0c64d28fea9917a146}{\(\backslash\)}
+\hyperlink{h2__bucket__beam_8h_aac1500f2cfc8ef0c64d28fea9917a146}{    h2\_beam\_proxy} *ap\_\_b = (\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e});                  \hyperlink{group__apr__ring_ga235311035184125d72ce0689c9949a3e}{\(\backslash\)}
+\hyperlink{group__apr__ring_ga235311035184125d72ce0689c9949a3e}{    APR\_RING\_INSERT\_TAIL}(&(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b})->\hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list}, ap\_\_b, 
+      \hyperlink{structh2__beam__proxy}{h2\_beam\_proxy}, link);  \(\backslash\)
+    \} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+A\+ST@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+A\+ST}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+A\+ST@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+A\+ST}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+A\+ST}{H2_BPROXY_LIST_LAST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+A\+ST(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+L\+A\+ST}(\&({\bf b})-\/$>${\bf list})}\hypertarget{h2__bucket__beam_8c_a604023cf45a7423288710399e9d44f4f}{}\label{h2__bucket__beam_8c_a604023cf45a7423288710399e9d44f4f}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+P\+R\+E\+P\+E\+ND@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+P\+R\+E\+P\+E\+ND}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+P\+R\+E\+P\+E\+ND@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+P\+R\+E\+P\+E\+ND}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+P\+R\+E\+P\+E\+ND}{H2_BPROXY_LIST_PREPEND}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+P\+R\+E\+P\+E\+ND(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a76cbd73906a4ead245fe69fb938b7ba8}{}\label{h2__bucket__beam_8c_a76cbd73906a4ead245fe69fb938b7ba8}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{                    \hyperlink{group__apr__ring_ga4d5aaa9b6f02f96f98f234a0a428474d}{\(\backslash\)}
+\hyperlink{group__apr__ring_ga4d5aaa9b6f02f96f98f234a0a428474d}{        APR\_RING\_PREPEND}(&(\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a})->\hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list}, &(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b})->\hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list}, 
+      \hyperlink{structh2__beam__proxy}{h2\_beam\_proxy}, link);  \(\backslash\)
+    \} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+S\+E\+N\+T\+I\+N\+EL@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+S\+E\+N\+T\+I\+N\+EL}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+S\+E\+N\+T\+I\+N\+EL@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+S\+E\+N\+T\+I\+N\+EL}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+S\+E\+N\+T\+I\+N\+EL}{H2_BPROXY_LIST_SENTINEL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+S\+E\+N\+T\+I\+N\+EL(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+S\+E\+N\+T\+I\+N\+EL}(\&({\bf b})-\/$>${\bf list}, {\bf h2\+\_\+beam\+\_\+proxy}, link)}\hypertarget{h2__bucket__beam_8c_a22c3f94fa8172958079cd7ea4051a385}{}\label{h2__bucket__beam_8c_a22c3f94fa8172958079cd7ea4051a385}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+N\+E\+XT@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+N\+E\+XT}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+N\+E\+XT@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+N\+E\+XT}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+N\+E\+XT}{H2_BPROXY_NEXT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+N\+E\+XT(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+N\+E\+XT}(({\bf e}), link)}\hypertarget{h2__bucket__beam_8c_a0b11e26d153344667731b4aba5071b36}{}\label{h2__bucket__beam_8c_a0b11e26d153344667731b4aba5071b36}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+P\+R\+EV@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+P\+R\+EV}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+P\+R\+EV@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+P\+R\+EV}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+P\+R\+EV}{H2_BPROXY_PREV}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+P\+R\+EV(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+P\+R\+EV}(({\bf e}), link)}\hypertarget{h2__bucket__beam_8c_a26c09dee35887a1586dc90f7b054473d}{}\label{h2__bucket__beam_8c_a26c09dee35887a1586dc90f7b054473d}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+R\+E\+M\+O\+VE@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+R\+E\+M\+O\+VE}}
+\index{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+R\+E\+M\+O\+VE@{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+R\+E\+M\+O\+VE}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+R\+E\+M\+O\+VE}{H2_BPROXY_REMOVE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+P\+R\+O\+X\+Y\+\_\+\+R\+E\+M\+O\+VE(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+R\+E\+M\+O\+VE}(({\bf e}), link)}\hypertarget{h2__bucket__beam_8c_aae35aa664b213289d4e80961213c02e9}{}\label{h2__bucket__beam_8c_aae35aa664b213289d4e80961213c02e9}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+B\+E\+AM@{H2\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+B\+E\+AM}}
+\index{H2\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+B\+E\+AM@{H2\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+B\+E\+AM}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+B\+E\+AM}{H2_BUCKET_IS_BEAM}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+B\+E\+AM(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)~({\bf e}-\/$>${\bf type} == \&{\bf h2\+\_\+bucket\+\_\+type\+\_\+beam})}\hypertarget{h2__bucket__beam_8c_af6137d9f440d7416237c67200c8959ff}{}\label{h2__bucket__beam_8c_af6137d9f440d7416237c67200c8959ff}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!H2\+\_\+\+P\+R\+O\+X\+Y\+\_\+\+B\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD@{H2\+\_\+\+P\+R\+O\+X\+Y\+\_\+\+B\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD}}
+\index{H2\+\_\+\+P\+R\+O\+X\+Y\+\_\+\+B\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD@{H2\+\_\+\+P\+R\+O\+X\+Y\+\_\+\+B\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+P\+R\+O\+X\+Y\+\_\+\+B\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD}{H2_PROXY_BLIST_INSERT_HEAD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+P\+R\+O\+X\+Y\+\_\+\+B\+L\+I\+S\+T\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a146c88b9500f1d4d4dff6b2ad8a31b8b}{}\label{h2__bucket__beam_8c_a146c88b9500f1d4d4dff6b2ad8a31b8b}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{                \hyperlink{h2__bucket__beam_8h_aac1500f2cfc8ef0c64d28fea9917a146}{\(\backslash\)}
+\hyperlink{h2__bucket__beam_8h_aac1500f2cfc8ef0c64d28fea9917a146}{    h2\_beam\_proxy} *ap\_\_b = (\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e});                                        
+      \hyperlink{group__apr__ring_gad59352546dc9253c0057ad43cf728a63}{\(\backslash\)}
+\hyperlink{group__apr__ring_gad59352546dc9253c0057ad43cf728a63}{    APR\_RING\_INSERT\_HEAD}(&(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b})->\hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list}, ap\_\_b, 
+      \hyperlink{structh2__beam__proxy}{h2\_beam\_proxy}, link);  \(\backslash\)
+    \} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+abort@{h2\+\_\+beam\+\_\+abort}}
+\index{h2\+\_\+beam\+\_\+abort@{h2\+\_\+beam\+\_\+abort}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+abort(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_abort(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+beam\+\_\+abort (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a18fcdf460f20b412ce76dd68c93cdbe2}{}\label{h2__bucket__beam_8c_a18fcdf460f20b412ce76dd68c93cdbe2}
+Abort the beam. Will cleanup any buffered buckets and answer all send and receives with A\+P\+R\+\_\+\+E\+C\+O\+N\+N\+A\+B\+O\+R\+T\+ED.
+
+Call from the sender side only. 
+\begin{DoxyCode}
+696 \{
+697     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+698     
+699     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+700         \textcolor{keywordflow}{if} (!beam->\hyperlink{structh2__bucket__beam_ab94d4cbd58d09447fca78872d9a965ae}{aborted}) \{
+701             beam->\hyperlink{structh2__bucket__beam_ab94d4cbd58d09447fca78872d9a965ae}{aborted} = 1;
+702             r\_purge\_sent(beam);
+703             h2\_blist\_cleanup(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list});
+704             report\_consumption(beam, &bl);
+705         \}
+706         apr\_thread\_cond\_broadcast(beam->\hyperlink{structh2__bucket__beam_a2de8986ff46cd73eb43a5bb0d988a0a1}{change});
+707         leave\_yellow(beam, &bl);
+708     \}
+709 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_a18fcdf460f20b412ce76dd68c93cdbe2_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+get@{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+get}}
+\index{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+get@{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+get}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+get(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_buffer_size_get(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+get (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a1fd9f6c99be6c0f5912378ebcacab59c}{}\label{h2__bucket__beam_8c_a1fd9f6c99be6c0f5912378ebcacab59c}
+
+\begin{DoxyCode}
+662 \{
+663     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+664     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} buffer\_size = 0;
+665     
+666     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+667         buffer\_size = beam->\hyperlink{structh2__bucket__beam_a834617c8352877538dbae28da65cb464}{max\_buf\_size};
+668         leave\_yellow(beam, &bl);
+669     \}
+670     \textcolor{keywordflow}{return} buffer\_size;
+671 \}
+\end{DoxyCode}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+set@{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+set}}
+\index{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+set@{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+set}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+set(h2\+\_\+bucket\+\_\+beam $\ast$beam, apr\+\_\+size\+\_\+t buffer\+\_\+size)}{h2_beam_buffer_size_set(h2_bucket_beam *beam, apr_size_t buffer_size)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+beam\+\_\+buffer\+\_\+size\+\_\+set (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{buffer\+\_\+size}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_aea33642973c0f46e5e1dc8681c60ab06}{}\label{h2__bucket__beam_8c_aea33642973c0f46e5e1dc8681c60ab06}
+Set/get the maximum buffer size for beam data (memory footprint). 
+\begin{DoxyCode}
+652 \{
+653     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+654     
+655     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+656         beam->\hyperlink{structh2__bucket__beam_a834617c8352877538dbae28da65cb464}{max\_buf\_size} = buffer\_size;
+657         leave\_yellow(beam, &bl);
+658     \}
+659 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=311pt]{h2__bucket__beam_8c_aea33642973c0f46e5e1dc8681c60ab06_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+close@{h2\+\_\+beam\+\_\+close}}
+\index{h2\+\_\+beam\+\_\+close@{h2\+\_\+beam\+\_\+close}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+close(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_close(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+beam\+\_\+close (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a756a84813d57b4df12deb88314374277}{}\label{h2__bucket__beam_8c_a756a84813d57b4df12deb88314374277}
+Close the beam. Sending an E\+OS bucket serves the same purpose.
+
+Call from the sender side only. 
+\begin{DoxyCode}
+712 \{
+713     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+714     
+715     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+716         r\_purge\_sent(beam);
+717         beam\_close(beam);
+718         report\_consumption(beam, &bl);
+719         leave\_yellow(beam, &bl);
+720     \}
+721     \textcolor{keywordflow}{return} beam->\hyperlink{structh2__bucket__beam_ab94d4cbd58d09447fca78872d9a965ae}{aborted}? \hyperlink{group__APR__Error_ga9458da18e0ee46a5d37c9cdfdc43efd2}{APR\_ECONNABORTED} : \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+722 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_a756a84813d57b4df12deb88314374277_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+create@{h2\+\_\+beam\+\_\+create}}
+\index{h2\+\_\+beam\+\_\+create@{h2\+\_\+beam\+\_\+create}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+create(h2\+\_\+bucket\+\_\+beam $\ast$$\ast$pbeam, apr\+\_\+pool\+\_\+t $\ast$pool, int id, const char $\ast$tag, h2\+\_\+beam\+\_\+owner\+\_\+t owner, apr\+\_\+size\+\_\+t max\+\_\+buf\+\_\+size, apr\+\_\+interval\+\_\+time\+\_\+t timeout)}{h2_beam_create(h2_bucket_beam **pbeam, apr_pool_t *pool, int id, const char *tag, h2_beam_owner_t owner, apr_size_t max_buf_size, apr_interval_time_t timeout)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+beam\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$$\ast$}]{pbeam, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{id, }
+\item[{const char $\ast$}]{tag, }
+\item[{{\bf h2\+\_\+beam\+\_\+owner\+\_\+t}}]{owner, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{buffer\+\_\+size, }
+\item[{{\bf apr\+\_\+interval\+\_\+time\+\_\+t}}]{timeout}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_aab87619fc289e89d02917e9190501236}{}\label{h2__bucket__beam_8c_aab87619fc289e89d02917e9190501236}
+Creates a new bucket beam for transfer of buckets across threads.
+
+The pool the beam is created with will be protected by the given mutex and will be used in multiple threads. It needs a pool allocator that is only used inside that same mutex.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pbeam} & will hold the created beam on return \\
+\hline
+{\em pool} & pool owning the beam, beam will cleanup when pool released \\
+\hline
+{\em id} & identifier of the beam \\
+\hline
+{\em tag} & tag identifying beam for logging \\
+\hline
+{\em owner} & if the beam is owned by the sender or receiver, e.\+g. if the pool owner is using this beam for sending or receiving \\
+\hline
+{\em buffer\+\_\+size} & maximum memory footprint of buckets buffered in beam, or 0 for no limitation \\
+\hline
+{\em timeout} & timeout for blocking operations \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+619 \{
+620     \hyperlink{structh2__bucket__beam}{h2\_bucket\_beam} *beam;
+621     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+622     
+623     beam = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(*beam));
+624     \textcolor{keywordflow}{if} (!beam) \{
+625         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga6a453e60000000609a95817efabebf4f}{APR\_ENOMEM};
+626     \}
+627 
+628     beam->\hyperlink{structh2__bucket__beam_a1db363a58592968137a74e201e6f0cbd}{id} = id;
+629     beam->\hyperlink{structh2__bucket__beam_a466b18a57540f16a61ca8cd77fe7f671}{tag} = \hyperlink{group__APACHE__CORE__HTTPD_ga7bb5e40c10df6a41df64bda1f4bb3e26}{tag};
+630     beam->\hyperlink{structh2__bucket__beam_a12dbf9e2adca7f75e8b31e94077ff380}{pool} = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+631     beam->\hyperlink{structh2__bucket__beam_a6e809164f212ba83914fd0e9c718f8b8}{owner} = owner;
+632     \hyperlink{h2__bucket__beam_8h_a46151559458d61de69d7a39339d5d899}{H2\_BLIST\_INIT}(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list});
+633     \hyperlink{h2__bucket__beam_8h_a46151559458d61de69d7a39339d5d899}{H2\_BLIST\_INIT}(&beam->\hyperlink{structh2__bucket__beam_a2814c491bc0213e6ea3c083a6d08f496}{hold\_list});
+634     \hyperlink{h2__bucket__beam_8h_a46151559458d61de69d7a39339d5d899}{H2\_BLIST\_INIT}(&beam->\hyperlink{structh2__bucket__beam_acf26953a9598b9a3f89acbd061dedfca}{purge\_list});
+635     \hyperlink{h2__bucket__beam_8c_a8c20f4897e2813b9624d44f52c245007}{H2\_BPROXY\_LIST\_INIT}(&beam->\hyperlink{structh2__bucket__beam_a251b111e88c647ae607c2b531400ccc4}{proxies});
+636     beam->\hyperlink{structh2__bucket__beam_aedb697d0452b057d99490dc49d97d7f5}{tx\_mem\_limits} = 1;
+637     beam->\hyperlink{structh2__bucket__beam_a834617c8352877538dbae28da65cb464}{max\_buf\_size} = max\_buf\_size;
+638     beam->\hyperlink{structh2__bucket__beam_a9ba0775fefa710e2f7d5cd261725d943}{timeout} = \hyperlink{group__APACHE__CORE__DAEMON_ga48b7aa88e5841c0fe69f7d9a88646af3}{timeout};
+639 
+640     rv = apr\_thread\_mutex\_create(&beam->\hyperlink{structh2__bucket__beam_adc21448d563ff6cf1de7576e1d2a4254}{lock}, \hyperlink{group__apr__thread__mutex_ga579050872f9aff06e773b084264f7d06}{APR\_THREAD\_MUTEX\_DEFAULT}, pool);
+641     \textcolor{keywordflow}{if} (\hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} == rv) \{
+642         rv = apr\_thread\_cond\_create(&beam->\hyperlink{structh2__bucket__beam_a2de8986ff46cd73eb43a5bb0d988a0a1}{change}, pool);
+643         \textcolor{keywordflow}{if} (\hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} == rv) \{
+644             apr\_pool\_pre\_cleanup\_register(pool, beam, beam\_cleanup);
+645             *pbeam = beam;
+646         \}
+647     \}
+648     \textcolor{keywordflow}{return} rv;
+649 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=272pt]{h2__bucket__beam_8c_aab87619fc289e89d02917e9190501236_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+destroy@{h2\+\_\+beam\+\_\+destroy}}
+\index{h2\+\_\+beam\+\_\+destroy@{h2\+\_\+beam\+\_\+destroy}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+destroy(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_destroy(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+beam\+\_\+destroy (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_aa25b2453ef8424ed4ca4d0596608c1ec}{}\label{h2__bucket__beam_8c_aa25b2453ef8424ed4ca4d0596608c1ec}
+Destroys the beam immediately without cleanup. 
+\begin{DoxyCode}
+609 \{
+610     apr\_pool\_cleanup\_kill(beam->\hyperlink{structh2__bucket__beam_a12dbf9e2adca7f75e8b31e94077ff380}{pool}, beam, beam\_cleanup);
+611     \textcolor{keywordflow}{return} beam\_cleanup(beam);
+612 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_aa25b2453ef8424ed4ca4d0596608c1ec_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+empty@{h2\+\_\+beam\+\_\+empty}}
+\index{h2\+\_\+beam\+\_\+empty@{h2\+\_\+beam\+\_\+empty}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+empty(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_empty(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+beam\+\_\+empty (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a4ee1be1e659ba9dfdad0db85d89967fe}{}\label{h2__bucket__beam_8c_a4ee1be1e659ba9dfdad0db85d89967fe}
+Determine if beam is empty. 
+\begin{DoxyCode}
+1198 \{
+1199     \textcolor{keywordtype}{int} \hyperlink{pcregrep_8txt_a74ccf60a9189b77536f09f714297c3bf}{empty} = 1;
+1200     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1201     
+1202     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1203         empty = (\hyperlink{h2__bucket__beam_8h_ad8146376675cd57b0c1ea4b13e2a0af0}{H2\_BLIST\_EMPTY}(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list}) 
+1204                  && (!beam->\hyperlink{structh2__bucket__beam_a5db9d81dd0b2e09b20debb54d934b7ca}{recv\_buffer} || \hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(beam->
+      \hyperlink{structh2__bucket__beam_a5db9d81dd0b2e09b20debb54d934b7ca}{recv\_buffer})));
+1205         leave\_yellow(beam, &bl);
+1206     \}
+1207     \textcolor{keywordflow}{return} \hyperlink{pcregrep_8txt_a74ccf60a9189b77536f09f714297c3bf}{empty};
+1208 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_a4ee1be1e659ba9dfdad0db85d89967fe_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+get\+\_\+buffered@{h2\+\_\+beam\+\_\+get\+\_\+buffered}}
+\index{h2\+\_\+beam\+\_\+get\+\_\+buffered@{h2\+\_\+beam\+\_\+get\+\_\+buffered}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+get\+\_\+buffered(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_get_buffered(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+off\+\_\+t} h2\+\_\+beam\+\_\+get\+\_\+buffered (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_ae5d97b52187376d68acb436f374a0e9d}{}\label{h2__bucket__beam_8c_ae5d97b52187376d68acb436f374a0e9d}
+Get the amount of bytes currently buffered in the beam (unread). 
+\begin{DoxyCode}
+1163 \{
+1164     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+1165     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} \hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l} = 0;
+1166     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1167     
+1168     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1169         \textcolor{keywordflow}{for} (b = \hyperlink{h2__bucket__beam_8h_a1a811d6d89317819b9b421cce5703a39}{H2\_BLIST\_FIRST}(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list}); 
+1170             b != \hyperlink{h2__bucket__beam_8h_ac1fd5a4c2f4a61c58416fccff9c3f671}{H2\_BLIST\_SENTINEL}(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list});
+1171             b = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(b)) \{
+1172             \textcolor{comment}{/* should all have determinate length */}
+1173             l += b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1174         \}
+1175         leave\_yellow(beam, &bl);
+1176     \}
+1177     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l};
+1178 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_ae5d97b52187376d68acb436f374a0e9d_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+get\+\_\+files\+\_\+beamed@{h2\+\_\+beam\+\_\+get\+\_\+files\+\_\+beamed}}
+\index{h2\+\_\+beam\+\_\+get\+\_\+files\+\_\+beamed@{h2\+\_\+beam\+\_\+get\+\_\+files\+\_\+beamed}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+get\+\_\+files\+\_\+beamed(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_get_files_beamed(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} h2\+\_\+beam\+\_\+get\+\_\+files\+\_\+beamed (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_ac7b1ec5f552b6e253518bbbff68203e0}{}\label{h2__bucket__beam_8c_ac7b1ec5f552b6e253518bbbff68203e0}
+
+\begin{DoxyCode}
+1235 \{
+1236     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = 0;
+1237     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1238     
+1239     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1240         n = beam->\hyperlink{structh2__bucket__beam_a866ef48570c08eda38f8526fd61aae33}{files\_beamed};
+1241         leave\_yellow(beam, &bl);
+1242     \}
+1243     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n};
+1244 \}
+\end{DoxyCode}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+get\+\_\+mem\+\_\+used@{h2\+\_\+beam\+\_\+get\+\_\+mem\+\_\+used}}
+\index{h2\+\_\+beam\+\_\+get\+\_\+mem\+\_\+used@{h2\+\_\+beam\+\_\+get\+\_\+mem\+\_\+used}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+get\+\_\+mem\+\_\+used(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_get_mem_used(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+off\+\_\+t} h2\+\_\+beam\+\_\+get\+\_\+mem\+\_\+used (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a993559328729de5b55a5cb37724c9932}{}\label{h2__bucket__beam_8c_a993559328729de5b55a5cb37724c9932}
+Get the memory used by the buffered buckets, approximately. 
+\begin{DoxyCode}
+1181 \{
+1182     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+1183     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} \hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l} = 0;
+1184     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1185     
+1186     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1187         \textcolor{keywordflow}{for} (b = \hyperlink{h2__bucket__beam_8h_a1a811d6d89317819b9b421cce5703a39}{H2\_BLIST\_FIRST}(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list}); 
+1188             b != \hyperlink{h2__bucket__beam_8h_ac1fd5a4c2f4a61c58416fccff9c3f671}{H2\_BLIST\_SENTINEL}(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list});
+1189             b = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(b)) \{
+1190             l += bucket\_mem\_used(b);
+1191         \}
+1192         leave\_yellow(beam, &bl);
+1193     \}
+1194     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l};
+1195 \}
+\end{DoxyCode}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+holds\+\_\+proxies@{h2\+\_\+beam\+\_\+holds\+\_\+proxies}}
+\index{h2\+\_\+beam\+\_\+holds\+\_\+proxies@{h2\+\_\+beam\+\_\+holds\+\_\+proxies}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+holds\+\_\+proxies(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_holds_proxies(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+beam\+\_\+holds\+\_\+proxies (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a6a8ab68481ca7eb68e59ee2b4c9ebeeb}{}\label{h2__bucket__beam_8c_a6a8ab68481ca7eb68e59ee2b4c9ebeeb}
+Determine if beam has handed out proxy buckets that are not destroyed. 
+\begin{DoxyCode}
+1211 \{
+1212     \textcolor{keywordtype}{int} has\_proxies = 1;
+1213     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1214     
+1215     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1216         has\_proxies = !\hyperlink{h2__bucket__beam_8c_ad5636d27a3e8283ce02b2818138468c5}{H2\_BPROXY\_LIST\_EMPTY}(&beam->\hyperlink{structh2__bucket__beam_a251b111e88c647ae607c2b531400ccc4}{proxies});
+1217         leave\_yellow(beam, &bl);
+1218     \}
+1219     \textcolor{keywordflow}{return} has\_proxies;
+1220 \}
+\end{DoxyCode}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+is\+\_\+closed@{h2\+\_\+beam\+\_\+is\+\_\+closed}}
+\index{h2\+\_\+beam\+\_\+is\+\_\+closed@{h2\+\_\+beam\+\_\+is\+\_\+closed}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+is\+\_\+closed(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_is_closed(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+beam\+\_\+is\+\_\+closed (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a1eb7e877b1b6addd67a8d3556728b304}{}\label{h2__bucket__beam_8c_a1eb7e877b1b6addd67a8d3556728b304}
+
+\begin{DoxyCode}
+473 \{
+474     \textcolor{keywordflow}{return} beam->\hyperlink{structh2__bucket__beam_a158e47f249fda83fe694adedd3982919}{closed};
+475 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_a1eb7e877b1b6addd67a8d3556728b304_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+leave@{h2\+\_\+beam\+\_\+leave}}
+\index{h2\+\_\+beam\+\_\+leave@{h2\+\_\+beam\+\_\+leave}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+leave(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_leave(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+beam\+\_\+leave (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a9c8148804ab779b45238332b594d8de8}{}\label{h2__bucket__beam_8c_a9c8148804ab779b45238332b594d8de8}
+Receives leaves the beam, e.\+g. will no longer read. This will interrupt any sender blocked writing and fail future send.
+
+Call from the receiver side only. 
+\begin{DoxyCode}
+725 \{
+726     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+727     
+728     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+729         recv\_buffer\_cleanup(beam, &bl);
+730         beam->\hyperlink{structh2__bucket__beam_ab94d4cbd58d09447fca78872d9a965ae}{aborted} = 1;
+731         beam\_close(beam);
+732         leave\_yellow(beam, &bl);
+733     \}
+734     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+735 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_a9c8148804ab779b45238332b594d8de8_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+log@{h2\+\_\+beam\+\_\+log}}
+\index{h2\+\_\+beam\+\_\+log@{h2\+\_\+beam\+\_\+log}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+log(h2\+\_\+bucket\+\_\+beam $\ast$beam, conn\+\_\+rec $\ast$c, int level, const char $\ast$msg)}{h2_beam_log(h2_bucket_beam *beam, conn_rec *c, int level, const char *msg)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+beam\+\_\+log (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf conn\+\_\+rec} $\ast$}]{c, }
+\item[{{\bf int}}]{level, }
+\item[{const char $\ast$}]{msg}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_ae7a6de19a8d0034d20cc4d4070f2d7dc}{}\label{h2__bucket__beam_8c_ae7a6de19a8d0034d20cc4d4070f2d7dc}
+
+\begin{DoxyCode}
+1263 \{
+1264     \textcolor{keywordflow}{if} (beam && \hyperlink{group__APACHE__CORE__LOG_ga908c272570434c93c7a833f60aef30f8}{APLOG\_C\_IS\_LEVEL}(c,\hyperlink{group__APACHE__CORE__CONFIG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})) \{
+1265         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__CONFIG_ga46c1c4bc138aad1e20504bbee34f35a7}{level}, 0, c, 
+1266                       \textcolor{stringliteral}{"beam(%ld-%d,%s,closed=%d,aborted=%d,empty=%d,buf=%ld): %s"}, 
+1267                       (c->\hyperlink{structconn__rec_acc75f0de138c66d0dc80a59ea4a61094}{master}? c->\hyperlink{structconn__rec_acc75f0de138c66d0dc80a59ea4a61094}{master}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id} : c->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}), beam->
+      \hyperlink{structh2__bucket__beam_a1db363a58592968137a74e201e6f0cbd}{id}, beam->\hyperlink{structh2__bucket__beam_a466b18a57540f16a61ca8cd77fe7f671}{tag}, 
+1268                       beam->\hyperlink{structh2__bucket__beam_a158e47f249fda83fe694adedd3982919}{closed}, beam->\hyperlink{structh2__bucket__beam_ab94d4cbd58d09447fca78872d9a965ae}{aborted}, \hyperlink{h2__bucket__beam_8c_a4ee1be1e659ba9dfdad0db85d89967fe}{h2\_beam\_empty}(beam), 
+1269                       (\textcolor{keywordtype}{long})\hyperlink{h2__bucket__beam_8c_ae5d97b52187376d68acb436f374a0e9d}{h2\_beam\_get\_buffered}(beam), msg);
+1270     \}
+1271 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=306pt]{h2__bucket__beam_8c_ae7a6de19a8d0034d20cc4d4070f2d7dc_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_ae7a6de19a8d0034d20cc4d4070f2d7dc_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+no\+\_\+files@{h2\+\_\+beam\+\_\+no\+\_\+files}}
+\index{h2\+\_\+beam\+\_\+no\+\_\+files@{h2\+\_\+beam\+\_\+no\+\_\+files}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+no\+\_\+files(void $\ast$ctx, h2\+\_\+bucket\+\_\+beam $\ast$beam, apr\+\_\+file\+\_\+t $\ast$file)}{h2_beam_no_files(void *ctx, h2_bucket_beam *beam, apr_file_t *file)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+beam\+\_\+no\+\_\+files (
+\begin{DoxyParamCaption}
+\item[{{\bf void} $\ast$}]{ctx, }
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf apr\+\_\+file\+\_\+t} $\ast$}]{file}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a13ae5b7721fe30348905ff5ae3836aaa}{}\label{h2__bucket__beam_8c_a13ae5b7721fe30348905ff5ae3836aaa}
+Will deny all transfer of \hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} across the beam and force a data copy instead. 
+\begin{DoxyCode}
+1247 \{
+1248     \textcolor{keywordflow}{return} 0;
+1249 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=323pt]{h2__bucket__beam_8c_a13ae5b7721fe30348905ff5ae3836aaa_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+on\+\_\+consumed@{h2\+\_\+beam\+\_\+on\+\_\+consumed}}
+\index{h2\+\_\+beam\+\_\+on\+\_\+consumed@{h2\+\_\+beam\+\_\+on\+\_\+consumed}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+on\+\_\+consumed(h2\+\_\+bucket\+\_\+beam $\ast$beam, h2\+\_\+beam\+\_\+ev\+\_\+callback $\ast$ev\+\_\+cb, h2\+\_\+beam\+\_\+io\+\_\+callback $\ast$io\+\_\+cb, void $\ast$ctx)}{h2_beam_on_consumed(h2_bucket_beam *beam, h2_beam_ev_callback *ev_cb, h2_beam_io_callback *io_cb, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+beam\+\_\+on\+\_\+consumed (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf h2\+\_\+beam\+\_\+ev\+\_\+callback} $\ast$}]{ev\+\_\+cb, }
+\item[{{\bf h2\+\_\+beam\+\_\+io\+\_\+callback} $\ast$}]{io\+\_\+cb, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a6d193e70e5d65e51644687e2e0c03762}{}\label{h2__bucket__beam_8c_a6d193e70e5d65e51644687e2e0c03762}
+Register a callback to be invoked on the sender side with the amount of bytes that have been consumed by the receiver, since the last callback invocation or reset. 
+\begin{DoxyParams}{Parameters}
+{\em beam} & the beam to set the callback on \\
+\hline
+{\em ev\+\_\+cb} & the callback or N\+U\+LL, called when bytes are consumed \\
+\hline
+{\em io\+\_\+cb} & the callback or N\+U\+LL, called on sender with bytes consumed \\
+\hline
+{\em ctx} & the context to use in callback invocation\\
+\hline
+\end{DoxyParams}
+Call from the sender side, io callbacks invoked on sender side, ev callback from any side. 
+\begin{DoxyCode}
+1128 \{
+1129     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1130     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1131         beam->\hyperlink{structh2__bucket__beam_a87f02ac2e24fbca7fb41441bd7b2e609}{cons\_ev\_cb} = ev\_cb;
+1132         beam->\hyperlink{structh2__bucket__beam_ac2cf8e4adfc170ed3601da1d38b53ff6}{cons\_io\_cb} = io\_cb;
+1133         beam->\hyperlink{structh2__bucket__beam_a1a25d5a9e6c09d477aab626691aea573}{cons\_ctx} = \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx};
+1134         leave\_yellow(beam, &bl);
+1135     \}
+1136 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_a6d193e70e5d65e51644687e2e0c03762_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+on\+\_\+file\+\_\+beam@{h2\+\_\+beam\+\_\+on\+\_\+file\+\_\+beam}}
+\index{h2\+\_\+beam\+\_\+on\+\_\+file\+\_\+beam@{h2\+\_\+beam\+\_\+on\+\_\+file\+\_\+beam}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+on\+\_\+file\+\_\+beam(h2\+\_\+bucket\+\_\+beam $\ast$beam, h2\+\_\+beam\+\_\+can\+\_\+beam\+\_\+callback $\ast$cb, void $\ast$ctx)}{h2_beam_on_file_beam(h2_bucket_beam *beam, h2_beam_can_beam_callback *cb, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+beam\+\_\+on\+\_\+file\+\_\+beam (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf h2\+\_\+beam\+\_\+can\+\_\+beam\+\_\+callback} $\ast$}]{cb, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_acfc556b8668153697599d43ffe51dce5}{}\label{h2__bucket__beam_8c_acfc556b8668153697599d43ffe51dce5}
+Register a callback that may prevent a file from being beam as file handle, forcing the file content to be copied. Then no callback is set (N\+U\+LL), file handles are transferred directly. 
+\begin{DoxyParams}{Parameters}
+{\em beam} & the beam to set the callback on \\
+\hline
+{\em io\+\_\+cb} & the callback or N\+U\+LL, called on receiver with bytes produced \\
+\hline
+{\em ctx} & the context to use in callback invocation\\
+\hline
+\end{DoxyParams}
+Call from the receiver side, callbacks invoked on either side. 
+\begin{DoxyCode}
+1151 \{
+1152     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1153     
+1154     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1155         beam->\hyperlink{structh2__bucket__beam_ae95b9e00f8fc9636ccd4d2eac3927b5d}{can\_beam\_fn} = cb;
+1156         beam->\hyperlink{structh2__bucket__beam_a7f7bbc1b2d1835a5d74444e010635adb}{can\_beam\_ctx} = \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx};
+1157         leave\_yellow(beam, &bl);
+1158     \}
+1159 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=347pt]{h2__bucket__beam_8c_acfc556b8668153697599d43ffe51dce5_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+on\+\_\+produced@{h2\+\_\+beam\+\_\+on\+\_\+produced}}
+\index{h2\+\_\+beam\+\_\+on\+\_\+produced@{h2\+\_\+beam\+\_\+on\+\_\+produced}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+on\+\_\+produced(h2\+\_\+bucket\+\_\+beam $\ast$beam, h2\+\_\+beam\+\_\+io\+\_\+callback $\ast$io\+\_\+cb, void $\ast$ctx)}{h2_beam_on_produced(h2_bucket_beam *beam, h2_beam_io_callback *io_cb, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+beam\+\_\+on\+\_\+produced (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf h2\+\_\+beam\+\_\+io\+\_\+callback} $\ast$}]{io\+\_\+cb, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a7560e429dd9cd2848dbada8944ee3330}{}\label{h2__bucket__beam_8c_a7560e429dd9cd2848dbada8944ee3330}
+Register a callback to be invoked on the receiver side with the amount of bytes that have been produces by the sender, since the last callback invocation or reset. 
+\begin{DoxyParams}{Parameters}
+{\em beam} & the beam to set the callback on \\
+\hline
+{\em io\+\_\+cb} & the callback or N\+U\+LL, called on receiver with bytes produced \\
+\hline
+{\em ctx} & the context to use in callback invocation\\
+\hline
+\end{DoxyParams}
+Call from the receiver side, callbacks invoked on either side. 
+\begin{DoxyCode}
+1140 \{
+1141     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1142     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1143         beam->\hyperlink{structh2__bucket__beam_a81c184200177a5ce1b19ef6e9060b257}{prod\_io\_cb} = io\_cb;
+1144         beam->\hyperlink{structh2__bucket__beam_a4dd611ecddb160e368d87b4aa8ed83e8}{prod\_ctx} = \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx};
+1145         leave\_yellow(beam, &bl);
+1146     \}
+1147 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=340pt]{h2__bucket__beam_8c_a7560e429dd9cd2848dbada8944ee3330_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+receive@{h2\+\_\+beam\+\_\+receive}}
+\index{h2\+\_\+beam\+\_\+receive@{h2\+\_\+beam\+\_\+receive}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+receive(h2\+\_\+bucket\+\_\+beam $\ast$beam, apr\+\_\+bucket\+\_\+brigade $\ast$bb, apr\+\_\+read\+\_\+type\+\_\+e block, apr\+\_\+off\+\_\+t readbytes)}{h2_beam_receive(h2_bucket_beam *beam, apr_bucket_brigade *bb, apr_read_type_e block, apr_off_t readbytes)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+beam\+\_\+receive (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{green\+\_\+buckets, }
+\item[{{\bf apr\+\_\+read\+\_\+type\+\_\+e}}]{block, }
+\item[{{\bf apr\+\_\+off\+\_\+t}}]{readbytes}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_afb11867e565237b6b2e7797444e445d7}{}\label{h2__bucket__beam_8c_afb11867e565237b6b2e7797444e445d7}
+Receive buckets from the beam into the given brigade. Will return A\+P\+R\+\_\+\+E\+OF when reading past an E\+OS bucket. Reads can be blocking until data is available or the beam has been closed. Non-\/blocking calls return A\+P\+R\+\_\+\+E\+A\+G\+A\+IN if no data is available.
+
+Call from the receiver side only. 
+\begin{DoxyCode}
+939 \{
+940     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+941     \hyperlink{structapr__bucket}{apr\_bucket} *bsender, *brecv, *ng;
+942     \textcolor{keywordtype}{int} transferred = 0;
+943     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+944     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} remain;
+945     \textcolor{keywordtype}{int} transferred\_buckets = 0;
+946     
+947     \textcolor{comment}{/* Called from the receiver thread to take buckets from the beam */}
+948     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+949         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{readbytes} <= 0) \{
+950             \hyperlink{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{readbytes} = \hyperlink{group__apr__platform_gab5865d64b134a3924014837dd44627a7}{APR\_SIZE\_MAX};
+951         \}
+952         remain = \hyperlink{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{readbytes};
+953         
+954 transfer:
+955         \textcolor{keywordflow}{if} (beam->\hyperlink{structh2__bucket__beam_ab94d4cbd58d09447fca78872d9a965ae}{aborted}) \{
+956             recv\_buffer\_cleanup(beam, &bl);
+957             status = \hyperlink{group__APR__Error_ga9458da18e0ee46a5d37c9cdfdc43efd2}{APR\_ECONNABORTED};
+958             \textcolor{keywordflow}{goto} leave;
+959         \}
+960 
+961         \textcolor{comment}{/* transfer enough buckets from our receiver brigade, if we have one */}
+962         \textcolor{keywordflow}{while} (remain >= 0 
+963                && beam->\hyperlink{structh2__bucket__beam_a5db9d81dd0b2e09b20debb54d934b7ca}{recv\_buffer} 
+964                && !\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(beam->\hyperlink{structh2__bucket__beam_a5db9d81dd0b2e09b20debb54d934b7ca}{recv\_buffer})) \{
+965                
+966             brecv = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(beam->\hyperlink{structh2__bucket__beam_a5db9d81dd0b2e09b20debb54d934b7ca}{recv\_buffer});
+967             \textcolor{keywordflow}{if} (brecv->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} > 0 && remain <= 0) \{
+968                 \textcolor{keywordflow}{break};
+969             \}            
+970             \hyperlink{group__APR__Util__Bucket__Brigades_ga2c46a1b717a87b68bd98b425e0c64977}{APR\_BUCKET\_REMOVE}(brecv);
+971             \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bb, brecv);
+972             remain -= brecv->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+973             ++transferred;
+974         \}
+975 
+976         \textcolor{comment}{/* transfer from our sender brigade, transforming sender buckets to}
+977 \textcolor{comment}{         * receiver ones until we have enough */}
+978         \textcolor{keywordflow}{while} (remain >= 0 && !\hyperlink{h2__bucket__beam_8h_ad8146376675cd57b0c1ea4b13e2a0af0}{H2\_BLIST\_EMPTY}(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list})) \{
+979                
+980             brecv = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+981             bsender = \hyperlink{h2__bucket__beam_8h_a1a811d6d89317819b9b421cce5703a39}{H2\_BLIST\_FIRST}(&beam->\hyperlink{structh2__bucket__beam_a4d34acc931115f6fbedfacf854c32982}{send\_list});            
+982             \textcolor{keywordflow}{if} (bsender->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} > 0 && remain <= 0) \{
+983                 \textcolor{keywordflow}{break};
+984             \}
+985                         
+986             \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga506cb29cc1ec1abeb487e01b122bd4d9}{APR\_BUCKET\_IS\_METADATA}(bsender)) \{
+987                 \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(bsender)) \{
+988                     brecv = apr\_bucket\_eos\_create(bb->\hyperlink{structapr__bucket__brigade_a9f58f90a088f02ebb6f935f004092aaa}{bucket\_alloc});
+989                     beam->\hyperlink{structh2__bucket__beam_a27487f07ae2b139cbe761f0982b85117}{close\_sent} = 1;
+990                 \}
+991                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga24105da0bb755a775c4b2a519d7c25f9}{APR\_BUCKET\_IS\_FLUSH}(bsender)) \{
+992                     brecv = apr\_bucket\_flush\_create(bb->\hyperlink{structapr__bucket__brigade_a9f58f90a088f02ebb6f935f004092aaa}{bucket\_alloc});
+993                 \}
+994                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__PROTO_gaab791518d091322fdc35b084f5b9f642}{AP\_BUCKET\_IS\_ERROR}(bsender)) \{
+995                     \hyperlink{structap__bucket__error}{ap\_bucket\_error} *eb = (\hyperlink{structap__bucket__error}{ap\_bucket\_error} *)bsender;
+996                     brecv = ap\_bucket\_error\_create(eb->\hyperlink{structap__bucket__error_a7866fe685d7b0a09232731025c001976}{status}, eb->\hyperlink{structap__bucket__error_a29a06548c68ecb88939c5ebb8b043826}{data},
+997                                                     bb->\hyperlink{structapr__bucket__brigade_a8e03b4dd531903709ae3ae8ebe9e46ee}{p}, bb->\hyperlink{structapr__bucket__brigade_a9f58f90a088f02ebb6f935f004092aaa}{bucket\_alloc});
+998                 \}
+999             \}
+1000             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bsender->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == 0) \{
+1001                 \hyperlink{group__APR__Util__Bucket__Brigades_ga2c46a1b717a87b68bd98b425e0c64977}{APR\_BUCKET\_REMOVE}(bsender);
+1002                 \hyperlink{h2__bucket__beam_8h_ae2acfa2983908f3ce783c090fa97c97f}{H2\_BLIST\_INSERT\_TAIL}(&beam->\hyperlink{structh2__bucket__beam_a2814c491bc0213e6ea3c083a6d08f496}{hold\_list}, bsender);
+1003                 \textcolor{keywordflow}{continue};
+1004             \}
+1005             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga1d54037bb6953c73d5c61f64c311d470}{APR\_BUCKET\_IS\_FILE}(bsender)) \{
+1006                 \textcolor{comment}{/* This is set aside into the target brigade pool so that }
+1007 \textcolor{comment}{                 * any read operation messes with that pool and not }
+1008 \textcolor{comment}{                 * the sender one. */}
+1009                 \hyperlink{structapr__bucket__file}{apr\_bucket\_file} *\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f} = (\hyperlink{structapr__bucket__file}{apr\_bucket\_file} *)bsender->
+      \hyperlink{structapr__bucket_a7fc4604750889b3f762bda1a786d276a}{data};
+1010                 \hyperlink{structapr__file__t}{apr\_file\_t} *\hyperlink{group__APR__Util__Bucket__Brigades_gae38fbe4f355ac2094e78a8762aa51d02}{fd} = f->\hyperlink{structapr__bucket__file_aa43154c0bc9d41ba4b0762c906de432f}{fd};
+1011                 \textcolor{keywordtype}{int} setaside = (f->\hyperlink{structapr__bucket__file_a61b5603482215f6c9ace7b26fa12b884}{readpool} != bb->\hyperlink{structapr__bucket__brigade_a8e03b4dd531903709ae3ae8ebe9e46ee}{p});
+1012                 
+1013                 \textcolor{keywordflow}{if} (setaside) \{
+1014                     status = apr\_file\_setaside(&\hyperlink{group__APR__Util__Bucket__Brigades_gae38fbe4f355ac2094e78a8762aa51d02}{fd}, \hyperlink{group__APR__Util__Bucket__Brigades_gae38fbe4f355ac2094e78a8762aa51d02}{fd}, bb->\hyperlink{structapr__bucket__brigade_a8e03b4dd531903709ae3ae8ebe9e46ee}{p});
+1015                     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1016                         \textcolor{keywordflow}{goto} leave;
+1017                     \}
+1018                     ++beam->\hyperlink{structh2__bucket__beam_a866ef48570c08eda38f8526fd61aae33}{files\_beamed};
+1019                 \}
+1020                 ng = apr\_brigade\_insert\_file(bb, \hyperlink{group__APR__Util__Bucket__Brigades_gae38fbe4f355ac2094e78a8762aa51d02}{fd}, bsender->\hyperlink{structapr__bucket_a4a8791b606b3ad613b8672ec94145628}{start}, bsender->
+      \hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length}, 
+1021                                              bb->\hyperlink{structapr__bucket__brigade_a8e03b4dd531903709ae3ae8ebe9e46ee}{p});
+1022 \textcolor{preprocessor}{#if APR\_HAS\_MMAP}
+1023                 \textcolor{comment}{/* disable mmap handling as this leads to segfaults when}
+1024 \textcolor{comment}{                 * the underlying file is changed while memory pointer has}
+1025 \textcolor{comment}{                 * been handed out. See also PR 59348 */}
+1026                 apr\_bucket\_file\_enable\_mmap(ng, 0);
+1027 \textcolor{preprocessor}{#endif}
+1028                 \hyperlink{group__APR__Util__Bucket__Brigades_ga2c46a1b717a87b68bd98b425e0c64977}{APR\_BUCKET\_REMOVE}(bsender);
+1029                 \hyperlink{h2__bucket__beam_8h_ae2acfa2983908f3ce783c090fa97c97f}{H2\_BLIST\_INSERT\_TAIL}(&beam->\hyperlink{structh2__bucket__beam_a2814c491bc0213e6ea3c083a6d08f496}{hold\_list}, bsender);
+1030 
+1031                 remain -= bsender->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1032                 ++transferred;
+1033                 ++transferred\_buckets;
+1034                 \textcolor{keywordflow}{continue};
+1035             \}
+1036             \textcolor{keywordflow}{else} \{
+1037                 \textcolor{comment}{/* create a "receiver" standin bucket. we took care about the}
+1038 \textcolor{comment}{                 * underlying sender bucket and its data when we placed it into}
+1039 \textcolor{comment}{                 * the sender brigade.}
+1040 \textcolor{comment}{                 * the beam bucket will notify us on destruction that bsender is}
+1041 \textcolor{comment}{                 * no longer needed. */}
+1042                 brecv = h2\_beam\_bucket\_create(beam, bsender, bb->\hyperlink{structapr__bucket__brigade_a9f58f90a088f02ebb6f935f004092aaa}{bucket\_alloc},
+1043                                                beam->\hyperlink{structh2__bucket__beam_a6a95c5418325d9f68ea7948440a7e836}{buckets\_sent}++);
+1044             \}
+1045             
+1046             \textcolor{comment}{/* Place the sender bucket into our hold, to be destroyed when no}
+1047 \textcolor{comment}{             * receiver bucket references it any more. */}
+1048             \hyperlink{group__APR__Util__Bucket__Brigades_ga2c46a1b717a87b68bd98b425e0c64977}{APR\_BUCKET\_REMOVE}(bsender);
+1049             \hyperlink{h2__bucket__beam_8h_ae2acfa2983908f3ce783c090fa97c97f}{H2\_BLIST\_INSERT\_TAIL}(&beam->\hyperlink{structh2__bucket__beam_a2814c491bc0213e6ea3c083a6d08f496}{hold\_list}, bsender);
+1050             
+1051             beam->\hyperlink{structh2__bucket__beam_ae8decf58294566fb392a582c1182bbe2}{received\_bytes} += bsender->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1052             ++transferred\_buckets;
+1053             
+1054             \textcolor{keywordflow}{if} (brecv) \{
+1055                 \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bb, brecv);
+1056                 remain -= brecv->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1057                 ++transferred;
+1058             \}
+1059             \textcolor{keywordflow}{else} \{
+1060                 \textcolor{comment}{/* let outside hook determine how bucket is beamed */}
+1061                 leave\_yellow(beam, &bl);
+1062                 brecv = h2\_beam\_bucket(beam, bb, bsender);
+1063                 enter\_yellow(beam, &bl);
+1064                 
+1065                 \textcolor{keywordflow}{while} (brecv && brecv != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb)) \{
+1066                     ++transferred;
+1067                     remain -= brecv->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1068                     brecv = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(brecv);
+1069                 \}
+1070             \}
+1071         \}
+1072 
+1073         \textcolor{keywordflow}{if} (remain < 0) \{
+1074             \textcolor{comment}{/* too much, put some back into out recv\_buffer */}
+1075             remain = \hyperlink{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{readbytes};
+1076             \textcolor{keywordflow}{for} (brecv = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb);
+1077                  brecv != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb);
+1078                  brecv = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(brecv)) \{
+1079                 remain -= (beam->\hyperlink{structh2__bucket__beam_aedb697d0452b057d99490dc49d97d7f5}{tx\_mem\_limits}? bucket\_mem\_used(brecv) 
+1080                            : brecv->\hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length});
+1081                 \textcolor{keywordflow}{if} (remain < 0) \{
+1082                     \hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{apr\_bucket\_split}(brecv, brecv->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length}+remain);
+1083                     beam->\hyperlink{structh2__bucket__beam_a5db9d81dd0b2e09b20debb54d934b7ca}{recv\_buffer} = apr\_brigade\_split\_ex(bb, 
+1084                                                              \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(brecv), 
+1085                                                              beam->\hyperlink{structh2__bucket__beam_a5db9d81dd0b2e09b20debb54d934b7ca}{recv\_buffer});
+1086                     \textcolor{keywordflow}{break};
+1087                 \}
+1088             \}
+1089         \}
+1090 
+1091         \textcolor{keywordflow}{if} (beam->\hyperlink{structh2__bucket__beam_a158e47f249fda83fe694adedd3982919}{closed} && buffer\_is\_empty(beam)) \{
+1092             \textcolor{comment}{/* beam is closed and we have nothing more to receive */} 
+1093             \textcolor{keywordflow}{if} (!beam->\hyperlink{structh2__bucket__beam_a27487f07ae2b139cbe761f0982b85117}{close\_sent}) \{
+1094                 \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b} = apr\_bucket\_eos\_create(bb->
+      \hyperlink{structapr__bucket__brigade_a9f58f90a088f02ebb6f935f004092aaa}{bucket\_alloc});
+1095                 \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bb, b);
+1096                 beam->\hyperlink{structh2__bucket__beam_a27487f07ae2b139cbe761f0982b85117}{close\_sent} = 1;
+1097                 ++transferred;
+1098                 status = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1099             \}
+1100         \}
+1101         
+1102         \textcolor{keywordflow}{if} (transferred\_buckets > 0) \{
+1103            \textcolor{keywordflow}{if} (beam->\hyperlink{structh2__bucket__beam_a87f02ac2e24fbca7fb41441bd7b2e609}{cons\_ev\_cb}) \{ 
+1104                beam->\hyperlink{structh2__bucket__beam_a87f02ac2e24fbca7fb41441bd7b2e609}{cons\_ev\_cb}(beam->\hyperlink{structh2__bucket__beam_a1a25d5a9e6c09d477aab626691aea573}{cons\_ctx}, beam);
+1105             \}
+1106         \}
+1107         
+1108         \textcolor{keywordflow}{if} (transferred) \{
+1109             apr\_thread\_cond\_broadcast(beam->\hyperlink{structh2__bucket__beam_a2de8986ff46cd73eb43a5bb0d988a0a1}{change});
+1110             status = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1111         \}
+1112         \textcolor{keywordflow}{else} \{
+1113             status = wait\_not\_empty(beam, \hyperlink{group__APACHE__CORE__FILTER_gafe0ebf200b97a61a45c0513334da9ab6}{block}, bl.\hyperlink{structh2__beam__lock_a7c133e17917c7c200909e0670e8bdb9a}{mutex});
+1114             \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1115                 \textcolor{keywordflow}{goto} leave;
+1116             \}
+1117             \textcolor{keywordflow}{goto} transfer;
+1118         \}
+1119 leave:        
+1120         leave\_yellow(beam, &bl);
+1121     \}
+1122     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1123 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_afb11867e565237b6b2e7797444e445d7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+report\+\_\+consumption@{h2\+\_\+beam\+\_\+report\+\_\+consumption}}
+\index{h2\+\_\+beam\+\_\+report\+\_\+consumption@{h2\+\_\+beam\+\_\+report\+\_\+consumption}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+report\+\_\+consumption(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_report_consumption(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+beam\+\_\+report\+\_\+consumption (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_ad8499c5012a3e58019ad2ac3e1b1d905}{}\label{h2__bucket__beam_8c_ad8499c5012a3e58019ad2ac3e1b1d905}
+Call any registered consumed handler, if any changes have happened since the last invocation. \begin{DoxyReturn}{Returns}
+!=0 iff a handler has been called
+\end{DoxyReturn}
+Needs to be invoked from the sending side. 
+\begin{DoxyCode}
+1252 \{
+1253     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1254     \textcolor{keywordtype}{int} rv = 0;
+1255     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1256         rv = report\_consumption(beam, &bl);
+1257         leave\_yellow(beam, &bl);
+1258     \}
+1259     \textcolor{keywordflow}{return} rv;
+1260 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_ad8499c5012a3e58019ad2ac3e1b1d905_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+send@{h2\+\_\+beam\+\_\+send}}
+\index{h2\+\_\+beam\+\_\+send@{h2\+\_\+beam\+\_\+send}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+send(h2\+\_\+bucket\+\_\+beam $\ast$beam, apr\+\_\+bucket\+\_\+brigade $\ast$sender\+\_\+bb, apr\+\_\+read\+\_\+type\+\_\+e block)}{h2_beam_send(h2_bucket_beam *beam, apr_bucket_brigade *sender_bb, apr_read_type_e block)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+beam\+\_\+send (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{bb, }
+\item[{{\bf apr\+\_\+read\+\_\+type\+\_\+e}}]{block}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_abd0e8829e808a93cccdec17e06448a80}{}\label{h2__bucket__beam_8c_abd0e8829e808a93cccdec17e06448a80}
+Send buckets from the given brigade through the beam. Will hold buckets internally as long as they have not been processed by the receiving side. All accepted buckets are removed from the given brigade. Will return with A\+P\+R\+\_\+\+E\+A\+G\+A\+IN on non-\/blocking sends when not all buckets could be accepted.
+
+Call from the sender side only. 
+\begin{DoxyCode}
+895 \{
+896     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+897     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+898     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} space\_left = 0;
+899     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+900 
+901     \textcolor{comment}{/* Called from the sender thread to add buckets to the beam */}
+902     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+903         \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(beam->\hyperlink{structh2__bucket__beam_a6f8b5ac7e0727af4a3f660e49516dd93}{send\_pool});
+904         r\_purge\_sent(beam);
+905         
+906         \textcolor{keywordflow}{if} (beam->\hyperlink{structh2__bucket__beam_ab94d4cbd58d09447fca78872d9a965ae}{aborted}) \{
+907             move\_to\_hold(beam, sender\_bb);
+908             rv = \hyperlink{group__APR__Error_ga9458da18e0ee46a5d37c9cdfdc43efd2}{APR\_ECONNABORTED};
+909         \}
+910         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (sender\_bb) \{
+911             \textcolor{keywordtype}{int} force\_report = !\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(sender\_bb);
+912             
+913             space\_left = calc\_space\_left(beam);
+914             \textcolor{keywordflow}{while} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(sender\_bb) && \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} == rv) \{
+915                 \textcolor{keywordflow}{if} (space\_left <= 0) \{
+916                     report\_prod\_io(beam, force\_report, &bl);
+917                     rv = wait\_not\_full(beam, \hyperlink{group__APACHE__CORE__FILTER_gafe0ebf200b97a61a45c0513334da9ab6}{block}, &space\_left, &bl);
+918                     \textcolor{keywordflow}{if} (\hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} != rv) \{
+919                         \textcolor{keywordflow}{break};
+920                     \}
+921                 \}
+922                 b = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(sender\_bb);
+923                 rv = append\_bucket(beam, b, \hyperlink{group__APACHE__CORE__FILTER_gafe0ebf200b97a61a45c0513334da9ab6}{block}, &space\_left, &bl);
+924             \}
+925             
+926             report\_prod\_io(beam, force\_report, &bl);
+927             apr\_thread\_cond\_broadcast(beam->\hyperlink{structh2__bucket__beam_a2de8986ff46cd73eb43a5bb0d988a0a1}{change});
+928         \}
+929         report\_consumption(beam, &bl);
+930         leave\_yellow(beam, &bl);
+931     \}
+932     \textcolor{keywordflow}{return} rv;
+933 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_abd0e8829e808a93cccdec17e06448a80_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+send\+\_\+from@{h2\+\_\+beam\+\_\+send\+\_\+from}}
+\index{h2\+\_\+beam\+\_\+send\+\_\+from@{h2\+\_\+beam\+\_\+send\+\_\+from}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+send\+\_\+from(h2\+\_\+bucket\+\_\+beam $\ast$beam, apr\+\_\+pool\+\_\+t $\ast$p)}{h2_beam_send_from(h2_bucket_beam *beam, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+beam\+\_\+send\+\_\+from (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_aa68ff22a35d86f804eda82fba9fee122}{}\label{h2__bucket__beam_8c_aa68ff22a35d86f804eda82fba9fee122}
+Register the pool from which future buckets are send. This defines the lifetime of the buckets, e.\+g. the pool should not be cleared/destroyed until the data is no longer needed (or has been received). 
+\begin{DoxyCode}
+882 \{
+883     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+884     \textcolor{comment}{/* Called from the sender thread to add buckets to the beam */}
+885     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+886         r\_purge\_sent(beam);
+887         beam\_set\_send\_pool(beam, p);
+888         leave\_yellow(beam, &bl);
+889     \}
+890 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=290pt]{h2__bucket__beam_8c_aa68ff22a35d86f804eda82fba9fee122_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+timeout\+\_\+get@{h2\+\_\+beam\+\_\+timeout\+\_\+get}}
+\index{h2\+\_\+beam\+\_\+timeout\+\_\+get@{h2\+\_\+beam\+\_\+timeout\+\_\+get}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+timeout\+\_\+get(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_timeout_get(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+interval\+\_\+time\+\_\+t} h2\+\_\+beam\+\_\+timeout\+\_\+get (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a24db301bff61e9328bce659fea69f5a5}{}\label{h2__bucket__beam_8c_a24db301bff61e9328bce659fea69f5a5}
+
+\begin{DoxyCode}
+684 \{
+685     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+686     \hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\_interval\_time\_t} \hyperlink{group__APACHE__CORE__DAEMON_ga48b7aa88e5841c0fe69f7d9a88646af3}{timeout} = 0;
+687     
+688     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+689         timeout = beam->\hyperlink{structh2__bucket__beam_a9ba0775fefa710e2f7d5cd261725d943}{timeout};
+690         leave\_yellow(beam, &bl);
+691     \}
+692     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_ga48b7aa88e5841c0fe69f7d9a88646af3}{timeout};
+693 \}
+\end{DoxyCode}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+timeout\+\_\+set@{h2\+\_\+beam\+\_\+timeout\+\_\+set}}
+\index{h2\+\_\+beam\+\_\+timeout\+\_\+set@{h2\+\_\+beam\+\_\+timeout\+\_\+set}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+timeout\+\_\+set(h2\+\_\+bucket\+\_\+beam $\ast$beam, apr\+\_\+interval\+\_\+time\+\_\+t timeout)}{h2_beam_timeout_set(h2_bucket_beam *beam, apr_interval_time_t timeout)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+beam\+\_\+timeout\+\_\+set (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf apr\+\_\+interval\+\_\+time\+\_\+t}}]{timeout}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a50913e34bc790a39de11a4d90e5de39f}{}\label{h2__bucket__beam_8c_a50913e34bc790a39de11a4d90e5de39f}
+Set/get the timeout for blocking read/write operations. Only works if a mutex has been set for the beam. 
+\begin{DoxyCode}
+674 \{
+675     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+676     
+677     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+678         beam->\hyperlink{structh2__bucket__beam_a9ba0775fefa710e2f7d5cd261725d943}{timeout} = \hyperlink{group__APACHE__CORE__DAEMON_ga48b7aa88e5841c0fe69f7d9a88646af3}{timeout};
+679         leave\_yellow(beam, &bl);
+680     \}
+681 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=296pt]{h2__bucket__beam_8c_a50913e34bc790a39de11a4d90e5de39f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+wait\+\_\+empty@{h2\+\_\+beam\+\_\+wait\+\_\+empty}}
+\index{h2\+\_\+beam\+\_\+wait\+\_\+empty@{h2\+\_\+beam\+\_\+wait\+\_\+empty}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+wait\+\_\+empty(h2\+\_\+bucket\+\_\+beam $\ast$beam, apr\+\_\+read\+\_\+type\+\_\+e block)}{h2_beam_wait_empty(h2_bucket_beam *beam, apr_read_type_e block)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+beam\+\_\+wait\+\_\+empty (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam, }
+\item[{{\bf apr\+\_\+read\+\_\+type\+\_\+e}}]{block}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_a0162b08290c4fe9f7d6e3283636e9c17}{}\label{h2__bucket__beam_8c_a0162b08290c4fe9f7d6e3283636e9c17}
+Return A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS when all buckets in transit have been handled. When called with A\+P\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+\+R\+E\+AD and a mutex set, will wait until the green side has consumed all data. Otherwise A\+P\+R\+\_\+\+E\+A\+G\+A\+IN is returned. With clear\+\_\+buffers set, any queued data is discarded. If a timeout is set on the beam, waiting might also time out and return A\+P\+R\+\_\+\+E\+T\+I\+M\+E\+UP.
+
+Call from the sender side only. 
+\begin{DoxyCode}
+738 \{
+739     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+740     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+741     
+742     \textcolor{keywordflow}{if} ((status = enter\_yellow(beam, &bl)) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+743         status = wait\_empty(beam, \hyperlink{group__APACHE__CORE__FILTER_gafe0ebf200b97a61a45c0513334da9ab6}{block}, bl.\hyperlink{structh2__beam__lock_a7c133e17917c7c200909e0670e8bdb9a}{mutex});
+744         leave\_yellow(beam, &bl);
+745     \}
+746     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+747 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=329pt]{h2__bucket__beam_8c_a0162b08290c4fe9f7d6e3283636e9c17_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+beam\+\_\+was\+\_\+received@{h2\+\_\+beam\+\_\+was\+\_\+received}}
+\index{h2\+\_\+beam\+\_\+was\+\_\+received@{h2\+\_\+beam\+\_\+was\+\_\+received}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+beam\+\_\+was\+\_\+received(h2\+\_\+bucket\+\_\+beam $\ast$beam)}{h2_beam_was_received(h2_bucket_beam *beam)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+beam\+\_\+was\+\_\+received (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beam} $\ast$}]{beam}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_ac875e00e9dd5bf2a8cb64b5241f646b8}{}\label{h2__bucket__beam_8c_ac875e00e9dd5bf2a8cb64b5241f646b8}
+Return != 0 iff (some) data from the beam has been received. 
+\begin{DoxyCode}
+1223 \{
+1224     \textcolor{keywordtype}{int} happend = 0;
+1225     \hyperlink{structh2__beam__lock}{h2\_beam\_lock} bl;
+1226     
+1227     \textcolor{keywordflow}{if} (enter\_yellow(beam, &bl) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1228         happend = (beam->\hyperlink{structh2__bucket__beam_ae8decf58294566fb392a582c1182bbe2}{received\_bytes} > 0);
+1229         leave\_yellow(beam, &bl);
+1230     \}
+1231     \textcolor{keywordflow}{return} happend;
+1232 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__bucket__beam_8c_ac875e00e9dd5bf2a8cb64b5241f646b8_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+register\+\_\+bucket\+\_\+beamer@{h2\+\_\+register\+\_\+bucket\+\_\+beamer}}
+\index{h2\+\_\+register\+\_\+bucket\+\_\+beamer@{h2\+\_\+register\+\_\+bucket\+\_\+beamer}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+register\+\_\+bucket\+\_\+beamer(h2\+\_\+bucket\+\_\+beamer $\ast$beamer)}{h2_register_bucket_beamer(h2_bucket_beamer *beamer)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+register\+\_\+bucket\+\_\+beamer (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+bucket\+\_\+beamer} $\ast$}]{beamer}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__bucket__beam_8c_ae852d6fa1e8a9c1e23531c224acdede1}{}\label{h2__bucket__beam_8c_ae852d6fa1e8a9c1e23531c224acdede1}
+
+\begin{DoxyCode}
+166 \{
+167     \textcolor{keywordflow}{if} (!beamers) \{
+168         apr\_pool\_cleanup\_register(\hyperlink{group__APR__Util__Hook_gabef8cf5f8a4528192b0aa66200b09ccc}{apr\_hook\_global\_pool}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+169                                   cleanup\_beamers, apr\_pool\_cleanup\_null);
+170         beamers = apr\_array\_make(\hyperlink{group__APR__Util__Hook_gabef8cf5f8a4528192b0aa66200b09ccc}{apr\_hook\_global\_pool}, 10, 
+171                                  \textcolor{keyword}{sizeof}(\hyperlink{h2__bucket__beam_8h_a00b3301f517d53c72407e8215a76e8c7}{h2\_bucket\_beamer}*));
+172     \}
+173     \hyperlink{group__apr__tables_ga1833b0f940ec03d0b95926812152e1ca}{APR\_ARRAY\_PUSH}(beamers, \hyperlink{h2__bucket__beam_8h_a00b3301f517d53c72407e8215a76e8c7}{h2\_bucket\_beamer}*) = beamer;
+174 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{h2__bucket__beam_8c_ae852d6fa1e8a9c1e23531c224acdede1_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}!h2\+\_\+bucket\+\_\+type\+\_\+beam@{h2\+\_\+bucket\+\_\+type\+\_\+beam}}
+\index{h2\+\_\+bucket\+\_\+type\+\_\+beam@{h2\+\_\+bucket\+\_\+type\+\_\+beam}!h2\+\_\+bucket\+\_\+beam.\+c@{h2\+\_\+bucket\+\_\+beam.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+bucket\+\_\+type\+\_\+beam}{h2_bucket_type_beam}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf apr\+\_\+bucket\+\_\+type\+\_\+t} h2\+\_\+bucket\+\_\+type\+\_\+beam}\hypertarget{h2__bucket__beam_8c_ae7e81a93c14fffae7d1a9efc3c0bdf89}{}\label{h2__bucket__beam_8c_ae7e81a93c14fffae7d1a9efc3c0bdf89}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+    \textcolor{stringliteral}{"BEAM"}, 5, APR\_BUCKET\_DATA,
+    beam\_bucket\_destroy,
+    beam\_bucket\_read,
+    apr\_bucket\_setaside\_noop,
+    apr\_bucket\_shared\_split,
+    apr\_bucket\_shared\_copy
+\}
+\end{DoxyCode}

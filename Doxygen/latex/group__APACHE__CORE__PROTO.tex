@@ -1,0 +1,1754 @@
+\hypertarget{group__APACHE__CORE__PROTO}{}\section{H\+T\+TP Protocol Handling}
+\label{group__APACHE__CORE__PROTO}\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+Collaboration diagram for H\+T\+TP Protocol Handling\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{group__APACHE__CORE__PROTO}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structap__bucket__error}{ap\+\_\+bucket\+\_\+error}
+\begin{DoxyCompactList}\small\item\em A bucket referring to an H\+T\+TP error. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__APACHE__CORE__PROTO_ga21b69babd24f92e0dc0ad664ca619b30}{A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+C\+H\+E\+C\+K\+\_\+\+A\+L\+L\+O\+W\+ED}(\hyperlink{group__APR__Util__Date_ga6bd7250007a3cfeadacf370fbf68cf5a}{mask},  \hyperlink{group__APACHE__CORE__PROTO_ga881b3e130b3a53164706c3e1e76cfe7b}{methname})~((\hyperlink{group__APR__Util__Date_ga6bd7250007a3cfeadacf370fbf68cf5a}{mask}) \& (\hyperlink{group__Methods_ga2c2414cfae1856a90350b3fba8a6dde9}{A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+B\+IT} $<$$<$ ap\+\_\+method\+\_\+number\+\_\+of((\hyperlink{group__APACHE__CORE__PROTO_ga881b3e130b3a53164706c3e1e76cfe7b}{methname}))))
+\item 
+\#define \hyperlink{group__APACHE__CORE__PROTO_ga2dda4a866ca39f2135b98326e57d047c}{A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE}~\char`\"{}A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__PROTO_ga160736b41dc11d8872c7be9d97aa7cad}{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD}~1 /$\ast$ Whether \hyperlink{pcretest_8txt_aa22c98f630e4b3fe86ee17ce5150c62f}{to} merge continuation \hyperlink{pcregrep_8txt_a0fcc426e1c273f0ffcfbd2e3b2412ac3}{lines} $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__PROTO_ga2b968d6cf2ac96ca58ffee626b917aeb}{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF}~2 /$\ast$Whether \hyperlink{README_8txt_a2cf996e2a4004681ed2e0dfbca5b7993}{line} ends must \hyperlink{NON-AUTOTOOLS-BUILD_8txt_ac08ce70cbd4f453457597ad15ecbebdd}{be} \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in} the form \hyperlink{pcregrep_8txt_a2fcacc757c8ae01ef81fe1c3bf2e55b9}{CR} \hyperlink{pcretest_8txt_ad35f128d4e5819c911ef56fc08161a63}{LF} $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__PROTO_ga4b31458cae55948009a7de050dd6acc4}{ap\+\_\+rgetline}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n},  \hyperlink{pcregrep_8txt_a889d26474f6571c80796a6143c968573}{read},  \hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r},  fold,  \hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb})~ap\+\_\+rgetline\+\_\+core((\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}), (\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}), (\hyperlink{pcregrep_8txt_a889d26474f6571c80796a6143c968573}{read}), (\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}), (fold), (\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}))
+\item 
+\#define \hyperlink{group__APACHE__CORE__PROTO_gaf1adbf6c91063f2485826455469d0881}{A\+P\+\_\+\+P\+R\+O\+T\+O\+C\+O\+L\+\_\+\+H\+T\+T\+P1}~\char`\"{}http/1.\+1\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__PROTO_gaab791518d091322fdc35b084f5b9f642}{A\+P\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+E\+R\+R\+OR}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})~(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e}-\/$>$\hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type} == \&\hyperlink{group__APACHE__CORE__PROTO_gaef3fea180ac64dff60327a7eda6161f4}{ap\+\_\+bucket\+\_\+type\+\_\+error})
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structap__bucket__error}{ap\+\_\+bucket\+\_\+error} \hyperlink{group__APACHE__CORE__PROTO_ga12c66073be4f51efcab50ec993758f39}{ap\+\_\+bucket\+\_\+error}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{group__APACHE__CORE__PROTO_ga0c22f044612f116fb81886e73bbce80b}{ap\+\_\+condition\+\_\+e} \{ \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba17467018aa3f4f491951e6b278df0f7c}{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE}, 
+\hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80baa8fec426bc27e2c7c079f92975cc24f9}{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH}, 
+\hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba9d92b60c761cdd20d7c4a14a7b792a5e}{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK}, 
+\hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba6d0b908f370f8abf6844212b00450138}{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gac0e6bdb5b96c1a7e3a7957576dee312b}{ap\+\_\+read\+\_\+request} (\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_gadcd9668318a93e6285c7e8b00d4a150f}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) ap\+\_\+get\+\_\+mime\+\_\+headers(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga79d3c244357d43510706a32d493c7640}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}) ap\+\_\+set\+\_\+keepalive(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga87fb7f51679c806c557542975df44ddc}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t}) ap\+\_\+rationalize\+\_\+mtime(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga797241525d691947413a10e2522a4212}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$) ap\+\_\+make\+\_\+content\+\_\+type(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga0f01505639e103e822e650351daa86b7}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (char $\ast$) ap\+\_\+make\+\_\+etag(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga38a67300f881ecfcc3d842d2ce8e2162}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__APACHE__CORE__PROTO_ga0c22f044612f116fb81886e73bbce80b}{ap\+\_\+condition\+\_\+e}) ap\+\_\+condition\+\_\+if\+\_\+match(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga8dd7ea784cd8c1cdbcb2f8a9d5476e37}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__method__list__t}{ap\+\_\+method\+\_\+list\+\_\+t} $\ast$) ap\+\_\+make\+\_\+method\+\_\+list(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga701f77422322b2d476b71ed9e6f6b859}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}) ap\+\_\+rvputs(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}
+\item 
+const char \hyperlink{group__APACHE__CORE__PROTO_ga44bb214856b287cad23bb7a57bbdd7ac}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((\hyperlink{group__apr__time_ga6427c3237144d9709aa13825289f0b78}{format}(printf, 2, 3)))
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_gaff322f7b2924074b4e4a713859093219}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) ap\+\_\+parse\+\_\+uri(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga6750389239653e3c73ff261c96777ff0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+OK} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, protocol\+\_\+propose,(\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, const \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$offers, \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$proposals)) A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+OK(\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_gaef6837c210057cfadec403116b208b11}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__bucket}{apr\+\_\+bucket} $\ast$) ap\+\_\+bucket\+\_\+error\+\_\+make(\hyperlink{structapr__bucket}{apr\+\_\+bucket} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_gac9eda13e5edf45edc5788be0643a71c5}{recursive\+\_\+error}
+\item 
+\hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length}
+\item 
+\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} \hyperlink{group__APACHE__CORE__PROTO_gaea0b3fefc4391f71693a7858bcdf5e27}{mtime}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga763fd8db6bba8fbbbc113ca0d61c47c2}{type}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_gaa10508626cb1e5068f2724d3dc581300}{force\+\_\+weak}
+\item 
+\hyperlink{structapr__table__t}{apr\+\_\+table\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gac89055d45eb7f03e605757210b4adba7}{r}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga19e46b20186d519fe175ae699db0008d}{nbytes}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga881b3e130b3a53164706c3e1e76cfe7b}{methname}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_ga3f892b271cc0564b2d8e9536a96abd7c}{nelts}
+\item 
+\hyperlink{structap__method__list__t}{ap\+\_\+method\+\_\+list\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga3250c7d76063d957a24f2ecbb3d93c2c}{src}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga8b44a03925325ceaf2de7b079b1541a1}{method}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}{ct}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_ga19a56d6f9dcf813c74420f84a3d1c062}{nbyte}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga6b0ec9d6c145a38da4ccf06941af8d97}{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga381d684d94e6e91dee650357e8f02fa8}{fmt}
+\item 
+const char va\+\_\+list \hyperlink{group__APACHE__CORE__PROTO_ga5c9cb20591e8d38a4c372c544d01a14e}{vlist}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_ga92179f9948688ca8144f0d3bff73aec1}{read\+\_\+policy}
+\item 
+char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}
+\item 
+char \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APACHE__CORE__PROTO_gab5121d4d91ca81860ed7c296210087f0}{bufsiz}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_ga6e27f49150e9a14580fb313cc2777e00}{status}
+\item 
+const char $\ast$$\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga4b22922ccb91d71d170bf2bbca3d241e}{pw}
+\item 
+const char $\ast$$\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga5389d939c3316982842a29d3694f2e23}{username}
+\item 
+const char const char $\ast$$\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga69b970a42043daa64861aba281a1e6f0}{password}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga69ec24fb2d0a5f5e532deb9adaab81d6}{uri}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_gac5c62ba2b6352882ff76f945b74d6793}{n}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_ga24687595987232775dbdc5d7f6c0d8d8}{flags}
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga1a70a7c483d1279dc2cbfc7f098ce8db}{read}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_ga3f3e2e6463dfe34ca20b33c43326f4c3}{methnum}
+\item 
+\hyperlink{group__APACHE__CORE__PROTO_ga7d412a99ad93bc7e0cb671033448099d}{protocol\+\_\+switch}
+\item 
+\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga836f65c6714b5c90becd1203d4c1048b}{c}
+\item 
+\hyperlink{structconn__rec}{conn\+\_\+rec} \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gabd83702f32647fad7e6a3f51b7851845}{s}
+\item 
+\hyperlink{structconn__rec}{conn\+\_\+rec} \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structserver__rec}{server\+\_\+rec} const char $\ast$\hyperlink{group__apr__network__io_gaffe05cd2fe14c30ec8ea72e19680fbda}{protocol} \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structserver__rec}{server\+\_\+rec} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_ga744b8606483ea012f9c77bbe4c7b1732}{report\+\_\+all}
+\item 
+\hyperlink{structconn__rec}{conn\+\_\+rec} \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structserver__rec}{server\+\_\+rec} const char $\ast$\hyperlink{group__apr__network__io_gaffe05cd2fe14c30ec8ea72e19680fbda}{protocol} \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structserver__rec}{server\+\_\+rec} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$$\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga587e44266cc9b55f474e6e3896f4a3eb}{pupgrades}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structserver__rec}{server\+\_\+rec} const \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gaad026036a61deca62b44551b09f67628}{choices}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structserver__rec}{server\+\_\+rec} const char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gab4455c9ffced5cbd2748a0585c988a2f}{protocol}
+\item 
+\hyperlink{ap__config_8h_a0bb4c3adf74510a0dcdad5b125725fe0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} const \hyperlink{structapr__bucket__type__t}{apr\+\_\+bucket\+\_\+type\+\_\+t} \hyperlink{group__APACHE__CORE__PROTO_gaef3fea180ac64dff60327a7eda6161f4}{ap\+\_\+bucket\+\_\+type\+\_\+error}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_ga11614f44ef4d939bdd984953346a7572}{error}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const char $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const char \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga2b87ce5c0cd5c5aa97fd3ba98460ab16}{p}
+\item 
+const char \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{structapr__bucket__alloc__t}{apr\+\_\+bucket\+\_\+alloc\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$ \hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_gac891dd64bc992a549275a12793e2b90a}{send\+\_\+headers}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Macro Definition Documentation}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+E\+R\+R\+OR@{A\+P\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+E\+R\+R\+OR}}
+\index{A\+P\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+E\+R\+R\+OR@{A\+P\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+E\+R\+R\+OR}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+E\+R\+R\+OR}{AP_BUCKET_IS_ERROR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+I\+S\+\_\+\+E\+R\+R\+OR(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)~({\bf e}-\/$>${\bf type} == \&{\bf ap\+\_\+bucket\+\_\+type\+\_\+error})}\hypertarget{group__APACHE__CORE__PROTO_gaab791518d091322fdc35b084f5b9f642}{}\label{group__APACHE__CORE__PROTO_gaab791518d091322fdc35b084f5b9f642}
+Determine if a bucket is an error bucket 
+\begin{DoxyParams}{Parameters}
+{\em e} & The bucket to inspect \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true or false 
+\end{DoxyReturn}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE@{A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE}}
+\index{A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE@{A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE}{AP_GET_BASIC_AUTH_PW_NOTE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE~\char`\"{}A\+P\+\_\+\+G\+E\+T\+\_\+\+B\+A\+S\+I\+C\+\_\+\+A\+U\+T\+H\+\_\+\+P\+W\+\_\+\+N\+O\+TE\char`\"{}}\hypertarget{group__APACHE__CORE__PROTO_ga2dda4a866ca39f2135b98326e57d047c}{}\label{group__APACHE__CORE__PROTO_ga2dda4a866ca39f2135b98326e57d047c}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF@{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF}}
+\index{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF@{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF}{AP_GETLINE_CRLF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF~2 /$\ast$Whether {\bf line} ends must {\bf be} {\bf in} the form {\bf CR} {\bf LF} $\ast$/}\hypertarget{group__APACHE__CORE__PROTO_ga2b968d6cf2ac96ca58ffee626b917aeb}{}\label{group__APACHE__CORE__PROTO_ga2b968d6cf2ac96ca58ffee626b917aeb}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD@{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD}}
+\index{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD@{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD}{AP_GETLINE_FOLD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD~1 /$\ast$ Whether {\bf to} merge continuation {\bf lines} $\ast$/}\hypertarget{group__APACHE__CORE__PROTO_ga160736b41dc11d8872c7be9d97aa7cad}{}\label{group__APACHE__CORE__PROTO_ga160736b41dc11d8872c7be9d97aa7cad}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+C\+H\+E\+C\+K\+\_\+\+A\+L\+L\+O\+W\+ED@{A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+C\+H\+E\+C\+K\+\_\+\+A\+L\+L\+O\+W\+ED}}
+\index{A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+C\+H\+E\+C\+K\+\_\+\+A\+L\+L\+O\+W\+ED@{A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+C\+H\+E\+C\+K\+\_\+\+A\+L\+L\+O\+W\+ED}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+C\+H\+E\+C\+K\+\_\+\+A\+L\+L\+O\+W\+ED}{AP_METHOD_CHECK_ALLOWED}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+C\+H\+E\+C\+K\+\_\+\+A\+L\+L\+O\+W\+ED(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf mask}, }
+\item[{}]{{\bf methname}}
+\end{DoxyParamCaption}
+)~(({\bf mask}) \& ({\bf A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+B\+IT} $<$$<$ ap\+\_\+method\+\_\+number\+\_\+of(({\bf methname}))))}\hypertarget{group__APACHE__CORE__PROTO_ga21b69babd24f92e0dc0ad664ca619b30}{}\label{group__APACHE__CORE__PROTO_ga21b69babd24f92e0dc0ad664ca619b30}
+This is a convenience macro to ease with checking a mask against a method name. \index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+P\+R\+O\+T\+O\+C\+O\+L\+\_\+\+H\+T\+T\+P1@{A\+P\+\_\+\+P\+R\+O\+T\+O\+C\+O\+L\+\_\+\+H\+T\+T\+P1}}
+\index{A\+P\+\_\+\+P\+R\+O\+T\+O\+C\+O\+L\+\_\+\+H\+T\+T\+P1@{A\+P\+\_\+\+P\+R\+O\+T\+O\+C\+O\+L\+\_\+\+H\+T\+T\+P1}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+P\+R\+O\+T\+O\+C\+O\+L\+\_\+\+H\+T\+T\+P1}{AP_PROTOCOL_HTTP1}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+P\+R\+O\+T\+O\+C\+O\+L\+\_\+\+H\+T\+T\+P1~\char`\"{}http/1.\+1\char`\"{}}\hypertarget{group__APACHE__CORE__PROTO_gaf1adbf6c91063f2485826455469d0881}{}\label{group__APACHE__CORE__PROTO_gaf1adbf6c91063f2485826455469d0881}
+This hook allows modules to affect the request or connection immediately before the request has been read, and before any other phases have been processes. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request of the soon-\/to-\/be-\/read request \\
+\hline
+{\em c} & The connection \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None/void This hook allows modules to affect the request immediately after the request has been read, and before any other phases have been processes. This allows modules to make decisions based upon the input header fields 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or D\+E\+C\+L\+I\+N\+ED This hook allows modules to perform any module-\/specific logging activities over and above the normal server things. 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, D\+E\+C\+L\+I\+N\+ED, or H\+T\+T\+P\+\_\+... This hook allows modules to retrieve the http scheme for a request. This allows \hyperlink{namespaceApache}{Apache} modules to easily extend the schemes that \hyperlink{namespaceApache}{Apache} understands 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The http scheme from the request Return the default port from the current request 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current port 
+\end{DoxyReturn}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!ap\+\_\+rgetline@{ap\+\_\+rgetline}}
+\index{ap\+\_\+rgetline@{ap\+\_\+rgetline}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{ap\+\_\+rgetline}{ap_rgetline}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+rgetline(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf s}, }
+\item[{}]{{\bf n}, }
+\item[{}]{{\bf read}, }
+\item[{}]{{\bf r}, }
+\item[{}]{fold, }
+\item[{}]{{\bf bb}}
+\end{DoxyParamCaption}
+)~ap\+\_\+rgetline\+\_\+core(({\bf s}), ({\bf n}), ({\bf read}), ({\bf r}), (fold), ({\bf bb}))}\hypertarget{group__APACHE__CORE__PROTO_ga4b31458cae55948009a7de050dd6acc4}{}\label{group__APACHE__CORE__PROTO_ga4b31458cae55948009a7de050dd6acc4}
+Get the next line of input for the request
+
+Note\+: on A\+S\+C\+II boxes, ap\+\_\+rgetline is a macro which simply calls ap\+\_\+rgetline\+\_\+core to get the line of input.
+
+on E\+B\+C\+D\+IC boxes, ap\+\_\+rgetline is a wrapper function which translates A\+S\+C\+II protocol lines to the local E\+B\+C\+D\+IC code page after getting the line of input.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Pointer to the pointer to the buffer into which the line should be read; if $\ast$s==N\+U\+LL, a buffer of the necessary size to hold the data will be allocated from the request pool \\
+\hline
+{\em n} & The size of the buffer \\
+\hline
+{\em read} & The length of the line. \\
+\hline
+{\em r} & The request \\
+\hline
+{\em flags} & Bit flag of multiple parsing options A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD Whether to merge continuation lines A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF Whether line ends must be in the form CR LF \\
+\hline
+{\em bb} & Working brigade to use when reading buckets \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS, if successful A\+P\+R\+\_\+\+E\+N\+O\+S\+PC, if the line is too big to fit in the buffer Other errors where appropriate 
+\end{DoxyReturn}
+
+
+\subsection{Typedef Documentation}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!ap\+\_\+bucket\+\_\+error@{ap\+\_\+bucket\+\_\+error}}
+\index{ap\+\_\+bucket\+\_\+error@{ap\+\_\+bucket\+\_\+error}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{ap\+\_\+bucket\+\_\+error}{ap_bucket_error}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf ap\+\_\+bucket\+\_\+error} {\bf ap\+\_\+bucket\+\_\+error}}\hypertarget{group__APACHE__CORE__PROTO_ga12c66073be4f51efcab50ec993758f39}{}\label{group__APACHE__CORE__PROTO_ga12c66073be4f51efcab50ec993758f39}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__APACHE__CORE__PROTO_gaef3fea180ac64dff60327a7eda6161f4}{ap\+\_\+bucket\+\_\+type\+\_\+error} 
+\end{DoxySeeAlso}
+
+
+\subsection{Enumeration Type Documentation}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!ap\+\_\+condition\+\_\+e@{ap\+\_\+condition\+\_\+e}}
+\index{ap\+\_\+condition\+\_\+e@{ap\+\_\+condition\+\_\+e}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{ap\+\_\+condition\+\_\+e}{ap_condition_e}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf ap\+\_\+condition\+\_\+e}}\hypertarget{group__APACHE__CORE__PROTO_ga0c22f044612f116fb81886e73bbce80b}{}\label{group__APACHE__CORE__PROTO_ga0c22f044612f116fb81886e73bbce80b}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE@{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE@{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE}}\item[{\em 
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE\hypertarget{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba17467018aa3f4f491951e6b278df0f7c}{}\label{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba17467018aa3f4f491951e6b278df0f7c}
+}]\index{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH@{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH@{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH}}\item[{\em 
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH\hypertarget{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80baa8fec426bc27e2c7c079f92975cc24f9}{}\label{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80baa8fec426bc27e2c7c079f92975cc24f9}
+}]\index{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK@{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK@{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK}}\item[{\em 
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK\hypertarget{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba9d92b60c761cdd20d7c4a14a7b792a5e}{}\label{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba9d92b60c761cdd20d7c4a14a7b792a5e}
+}]\index{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG@{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG@{A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG}}\item[{\em 
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG\hypertarget{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba6d0b908f370f8abf6844212b00450138}{}\label{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba6d0b908f370f8abf6844212b00450138}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+170              \{
+171     \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba17467018aa3f4f491951e6b278df0f7c}{AP\_CONDITION\_NONE},
+172     \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80baa8fec426bc27e2c7c079f92975cc24f9}{AP\_CONDITION\_NOMATCH},
+173     \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba9d92b60c761cdd20d7c4a14a7b792a5e}{AP\_CONDITION\_WEAK},
+174     \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba6d0b908f370f8abf6844212b00450138}{AP\_CONDITION\_STRONG}
+175 \} \hyperlink{group__APACHE__CORE__PROTO_ga0c22f044612f116fb81886e73bbce80b}{ap\_condition\_e};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+attribute\+\_\+\+\_\+((format(printf, 2, 3)))}{__attribute__((format(printf, 2, 3)))}}]{\setlength{\rightskip}{0pt plus 5cm}const char \+\_\+\+\_\+attribute\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{({\bf format}(printf, 2, 3))}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga44bb214856b287cad23bb7a57bbdd7ac}{}\label{group__APACHE__CORE__PROTO_ga44bb214856b287cad23bb7a57bbdd7ac}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E(void) ap\+\_\+parse\+\_\+uri(request\+\_\+rec $\ast$r}{AP_CORE_DECLARE(void) ap_parse_uri(request_rec *r}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_gaff322f7b2924074b4e4a713859093219}{}\label{group__APACHE__CORE__PROTO_gaff322f7b2924074b4e4a713859093219}
+parse\+\_\+uri\+: break apart the uri \begin{DoxyWarning}{Warning}
+Side Effects\+: \begin{DoxyItemize}
+\item sets r-\/$>$args to rest after \textquotesingle{}?\textquotesingle{} (or N\+U\+LL if no \textquotesingle{}?\textquotesingle{}) \item sets r-\/$>$uri to request uri (without r-\/$>$args part) \item sets r-\/$>$hostname (if not set already) from request (scheme\+://host\+:port) \end{DoxyItemize}
+
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em uri} & The uri to break apart \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+216 \{
+217     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+218     ap\_update\_vhost\_given\_ip(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c});
+219 
+220     rc = ap\_run\_pre\_connection(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}, \hyperlink{group__APACHE__CORE__CONNECTION_ga37491385bd0907d7a64ed8a3ec309aaa}{csd});
+221     \textcolor{keywordflow}{if} (rc != \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK} && rc != \hyperlink{group__APACHE__CORE__DAEMON_gabe6b865c045f3e7c6892ef4f15ff5779}{DONE}) \{
+222         \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_aead9e56515e09e4f4b32a543e988e123}{aborted} = 1;
+223     \}
+224 
+225     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_aead9e56515e09e4f4b32a543e988e123}{aborted}) \{
+226         ap\_run\_process\_connection(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c});
+227     \}
+228 \}
+\end{DoxyCode}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(void) ap\+\_\+get\+\_\+mime\+\_\+headers(request\+\_\+rec $\ast$r)}{AP_DECLARE(void) ap_get_mime_headers(request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_gadcd9668318a93e6285c7e8b00d4a150f}{}\label{group__APACHE__CORE__PROTO_gadcd9668318a93e6285c7e8b00d4a150f}
+Read the mime-\/encoded headers. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request\\
+\hline
+\end{DoxyParams}
+Optimized version of ap\+\_\+get\+\_\+mime\+\_\+headers() that requires a temporary brigade to work with 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em bb} & temp brigade\\
+\hline
+\end{DoxyParams}
+Called at completion of sending the response. It sends the terminating protocol information. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request\\
+\hline
+\end{DoxyParams}
+Send error back to client. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em recursive\+\_\+error} & last arg indicates error status in case we get an error in the process of trying to deal with an Error\+Document to handle some other error. In that case, we print the default report for the first thing that went wrong, and more briefly report on the problem with the Error\+Document.\\
+\hline
+\end{DoxyParams}
+Set the content length for this request 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em length} & The new content length\\
+\hline
+\end{DoxyParams}
+Precompile metadata structures used by ap\+\_\+make\+\_\+content\+\_\+type() 
+\begin{DoxyParams}{Parameters}
+{\em pool} & The pool to use for allocations\\
+\hline
+\end{DoxyParams}
+Set the E-\/tag outgoing header 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request\\
+\hline
+\end{DoxyParams}
+Set the last modified time for the file being sent 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request\\
+\hline
+\end{DoxyParams}
+Initialize the method\+\_\+registry and allocate memory for it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate memory for the registry from.\\
+\hline
+\end{DoxyParams}
+Copy a method list
+
+
+\begin{DoxyParams}{Parameters}
+{\em dest} & List to copy to \\
+\hline
+{\em src} & List to copy from\\
+\hline
+\end{DoxyParams}
+Add an H\+T\+TP method name to an \hyperlink{structap__method__list__t}{ap\+\_\+method\+\_\+list\+\_\+t} structure if it isn\textquotesingle{}t already listed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em method} & String containing the name of the method to check. \\
+\hline
+{\em l} & Pointer to a method list, such as r-\/$>$allowed\+\_\+methods. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None.
+\end{DoxyReturn}
+Remove an H\+T\+TP method name from an \hyperlink{structap__method__list__t}{ap\+\_\+method\+\_\+list\+\_\+t} structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em l} & Pointer to a method list, such as r-\/$>$allowed\+\_\+methods. \\
+\hline
+{\em method} & String containing the name of the method to remove. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None.
+\end{DoxyReturn}
+Reset a method list to be completely empty.
+
+
+\begin{DoxyParams}{Parameters}
+{\em l} & Pointer to a method list, such as r-\/$>$allowed\+\_\+methods. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None.
+\end{DoxyReturn}
+Set the content type for this request (r-\/$>$\hyperlink{structcontent__type}{content\+\_\+type}). 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em ct} & The new content type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+This function must be called to set r-\/$>$\hyperlink{structcontent__type}{content\+\_\+type} in order for the Add\+Output\+Filter\+By\+Type directive to work correctly.
+\end{DoxyWarning}
+Set the Accept-\/\+Ranges header for this response 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request\\
+\hline
+\end{DoxyParams}
+Setup the output headers so that the client knows how to authenticate itself the next time, if an authentication request failed. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Deprecated}
+\item[\hyperlink{deprecated__deprecated000002}{Deprecated}]\end{DoxyRefDesc}
+\begin{DoxySeeAlso}{See also}
+ap\+\_\+note\+\_\+auth\+\_\+failure
+\end{DoxySeeAlso}
+\begin{DoxyRefDesc}{Deprecated}
+\item[\hyperlink{deprecated__deprecated000003}{Deprecated}]\end{DoxyRefDesc}
+\begin{DoxySeeAlso}{See also}
+ap\+\_\+note\+\_\+auth\+\_\+failure
+\end{DoxySeeAlso}
+Sett up the protocol fields for subsidiary requests 
+\begin{DoxyParams}{Parameters}
+{\em rnew} & New Sub Request \\
+\hline
+{\em r} & current request\\
+\hline
+\end{DoxyParams}
+A wrapup function to keep the internal accounting straight. Indicates that there is no more content coming. 
+\begin{DoxyParams}{Parameters}
+{\em sub\+\_\+r} & Subrequest that is now compete\\
+\hline
+\end{DoxyParams}
+Send an interim (H\+T\+TP 1xx) response immediately. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The request \\
+\hline
+{\em send\+\_\+headers} & Whether to send\&clear headers in r-\/$>$headers\+\_\+out \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1075 \{
+1076     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}{ct}) \{
+1077         \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1078     \}
+1079     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type} || strcmp(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type}, 
+      \hyperlink{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}{ct})) \{
+1080         \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type} = \hyperlink{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}{ct};
+1081     \}
+1082 \}
+\end{DoxyCode}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(int) ap\+\_\+set\+\_\+keepalive(request\+\_\+rec $\ast$r)}{AP_DECLARE(int) ap_set_keepalive(request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga79d3c244357d43510706a32d493c7640}{}\label{group__APACHE__CORE__PROTO_ga79d3c244357d43510706a32d493c7640}
+Set the keepalive status for this request 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if keepalive can be set, 0 otherwise
+\end{DoxyReturn}
+Implements condition G\+ET rules for H\+T\+T\+P/1.\+1 specification. This function inspects the client headers and determines if the response fulfills the requirements specified. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if the response fulfills the condition G\+ET rules, some other status code otherwise
+\end{DoxyReturn}
+Send an entire file to the client, using sendfile if supported by the current platform 
+\begin{DoxyParams}{Parameters}
+{\em fd} & The file to send. \\
+\hline
+{\em r} & The current request \\
+\hline
+{\em offset} & Offset into the file to start sending. \\
+\hline
+{\em length} & Amount of data to send \\
+\hline
+{\em nbytes} & Amount of data actually sent\\
+\hline
+\end{DoxyParams}
+Register a new request method, and return the offset that will be associated with that method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & The pool to create registered method numbers from. \\
+\hline
+{\em methname} & The name of the new method to register. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An int value representing an offset into a bitmask.
+\end{DoxyReturn}
+Search for an H\+T\+TP method name in an \hyperlink{structap__method__list__t}{ap\+\_\+method\+\_\+list\+\_\+t} structure, and return true if found.
+
+
+\begin{DoxyParams}{Parameters}
+{\em method} & String containing the name of the method to check. \\
+\hline
+{\em l} & Pointer to a method list, such as r-\/$>$allowed\+\_\+methods. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if method is in the list, otherwise 0
+\end{DoxyReturn}
+Output one character for this request 
+\begin{DoxyParams}{Parameters}
+{\em c} & the character to output \\
+\hline
+{\em r} & the current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes sent
+\end{DoxyReturn}
+Write a buffer for the current request 
+\begin{DoxyParams}{Parameters}
+{\em buf} & The buffer to write \\
+\hline
+{\em nbyte} & The number of bytes to send from the buffer \\
+\hline
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes sent
+\end{DoxyReturn}
+Output data to the client in a printf format 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em fmt} & The format string \\
+\hline
+{\em vlist} & The arguments to use to fill out the format string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes sent
+\end{DoxyReturn}
+Flush all of the data for the current request to the client 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, -\/1 if an error occurred
+\end{DoxyReturn}
+Index used in custom\+\_\+responses array for a specific error code (only use outside protocol.\+c is in getting them configured). 
+\begin{DoxyParams}{Parameters}
+{\em status} & H\+T\+TP status code \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the response
+\end{DoxyReturn}
+Setup the client to allow \hyperlink{namespaceApache}{Apache} to read the request body. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em read\+\_\+policy} & How the server should interpret a chunked transfer-\/encoding. One of\+: 
+\begin{DoxyPre}
+   REQUEST\_NO\_BODY          Send 413 error if message has any body
+   REQUEST\_CHUNKED\_ERROR    Send 411 error if body without Content-Length
+   REQUEST\_CHUNKED\_DECHUNK  If chunked, remove the chunks for me.
+\end{DoxyPre}
+ \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+either OK or an error code
+\end{DoxyReturn}
+Determine if the client has sent any data. This also sends a 100 Continue response to H\+T\+T\+P/1.\+1 clients, so modules should not be called until the module is ready to read content. \begin{DoxyWarning}{Warning}
+Never call this function more than once. 
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if there is no message to read, 1 otherwise
+\end{DoxyReturn}
+Map specific A\+PR codes returned by the filter stack to H\+T\+TP error codes, or the default status code provided. Use it as follows\+:
+
+return ap\+\_\+map\+\_\+http\+\_\+request\+\_\+error(rv, H\+T\+T\+P\+\_\+\+B\+A\+D\+\_\+\+R\+E\+Q\+U\+E\+S\+T);
+
+If the filter has already handled the error, A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+E\+R\+R\+OR will be returned, which is cleanly passed through.
+
+These mappings imply that the filter stack is reading from the downstream client, the proxy will map these codes differently. 
+\begin{DoxyParams}{Parameters}
+{\em rv} & A\+PR status code \\
+\hline
+{\em status} & Default H\+T\+TP code should the A\+PR code not be recognised \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mapped H\+T\+TP status code
+\end{DoxyReturn}
+In H\+T\+T\+P/1.\+1, any method can have a body. However, most G\+ET handlers wouldn\textquotesingle{}t know what to do with a request body if they received one. This helper routine tests for and reads any message body in the request, simply discarding whatever it receives. We need to do this because failing to read the request body would cause it to be interpreted as the next request on a persistent connection. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+error status if request is malformed, OK otherwise
+\end{DoxyReturn}
+This hook allows modules to add support for a specific auth type to ap\+\_\+note\+\_\+auth\+\_\+failure 
+\begin{DoxyParams}{Parameters}
+{\em r} & the current request \\
+\hline
+{\em auth\+\_\+type} & the configured auth\+\_\+type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, D\+E\+C\+L\+I\+N\+ED Get the password from the request headers. This function has multiple side effects due to its prior use in the old authentication framework. ap\+\_\+get\+\_\+basic\+\_\+auth\+\_\+components() should be preferred.
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Deprecated}
+\item[\hyperlink{deprecated__deprecated000004}{Deprecated}]\end{DoxyRefDesc}
+\begin{DoxySeeAlso}{See also}
+ap\+\_\+get\+\_\+basic\+\_\+auth\+\_\+components 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em pw} & The password as set in the headers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 (OK) if it set the \textquotesingle{}pw\textquotesingle{} argument (and assured a correct value in r-\/$>$user); otherwise it returns an error code, either H\+T\+T\+P\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+E\+R\+R\+OR if things are really confused, H\+T\+T\+P\+\_\+\+U\+N\+A\+U\+T\+H\+O\+R\+I\+Z\+ED if no authentication at all seemed to be in use, or D\+E\+C\+L\+I\+N\+ED if there was authentication but it wasn\textquotesingle{}t Basic (in which case, the caller should presumably decline as well).
+\end{DoxyReturn}
+Get the username and/or password from the request\textquotesingle{}s Basic authentication headers. Unlike ap\+\_\+get\+\_\+basic\+\_\+auth\+\_\+pw(), calling this function has no side effects on the passed \hyperlink{structrequest__rec}{request\+\_\+rec}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em username} & If not N\+U\+LL, set to the username sent by the client \\
+\hline
+{\em password} & If not N\+U\+LL, set to the password sent by the client \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS if the credentials were successfully parsed and returned; A\+P\+R\+\_\+\+E\+I\+N\+V\+AL if there was no authentication header sent or if the client was not using the Basic authentication scheme. username and password are unchanged on failure.
+\end{DoxyReturn}
+Get the next line of input for the request 
+\begin{DoxyParams}{Parameters}
+{\em s} & The buffer into which to read the line \\
+\hline
+{\em n} & The size of the buffer \\
+\hline
+{\em r} & The request \\
+\hline
+{\em flags} & Bit flag of multiple parsing options A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+F\+O\+LD Whether to merge continuation lines A\+P\+\_\+\+G\+E\+T\+L\+I\+N\+E\+\_\+\+C\+R\+LF Whether line ends must be in the form CR LF \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The length of the line, if successful n, if the line is too big to fit in the buffer -\/1 for miscellaneous errors
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__APACHE__CORE__PROTO_ga4b31458cae55948009a7de050dd6acc4}{ap\+\_\+rgetline}
+\end{DoxySeeAlso}
+Get the method number associated with the given string, assumed to contain an H\+T\+TP method. Returns M\+\_\+\+I\+N\+V\+A\+L\+ID if not recognized. 
+\begin{DoxyParams}{Parameters}
+{\em method} & A string containing a valid H\+T\+TP method \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The method number
+\end{DoxyReturn}
+Return the protocol used on the connection. Modules implementing protocol switching must register here and return the correct protocol identifier for connections they switched.
+
+To find out the protocol for the current connection, better call \begin{DoxySeeAlso}{See also}
+ap\+\_\+get\+\_\+protocol \hyperlink{README_8txt_a9d3df0d4bed2ac7e1c01860363ab4ac2}{which} internally uses \hyperlink{pcregrep_8txt_a1d4586f0a85ecec85237e5fb0f611dd1}{this} hook.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The current connection \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The identifier of the protocol in place or N\+U\+LL 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000003}{Bug}]This A\+PI or implementation and order of operations should be considered experimental and will continue to evolve in future 2.\+4 releases, with a corresponding minor module magic number (M\+MN) bump to indicate the A\+PI revision level. \end{DoxyRefDesc}
+Get the protocols that the connection and optional request may upgrade to -\/ besides the protocol currently active on the connection. These values may be used to announce to a client what choices it has.
+
+If report\+\_\+all == 0, only protocols more preferable than the one currently being used, are reported. Otherwise, all available protocols beside the current one are being reported.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The current connection \\
+\hline
+{\em r} & The current request or N\+U\+LL \\
+\hline
+{\em s} & The server/virtual host selected or N\+U\+LL \\
+\hline
+{\em report\+\_\+all} & include also protocols less preferred than the current one \\
+\hline
+{\em pupgrades} & on return, possible protocols to upgrade to in descending order of preference. Maybe N\+U\+LL if none are available. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000004}{Bug}]This A\+PI or implementation and order of operations should be considered experimental and will continue to evolve in future 2.\+4 releases, with a corresponding minor module magic number (M\+MN) bump to indicate the A\+PI revision level. \end{DoxyRefDesc}
+
+
+Perform the actual protocol switch. The protocol given must have been selected before on the very same connection and request pair.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The current connection \\
+\hline
+{\em r} & The current request or N\+U\+LL \\
+\hline
+{\em s} & The server/virtual host selected \\
+\hline
+{\em protocol} & the protocol to switch to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS, if caller may continue processing as usual A\+P\+R\+\_\+\+E\+OF, if caller needs to stop processing the connection A\+P\+R\+\_\+\+E\+I\+N\+V\+AL, if the protocol is already in place A\+P\+R\+\_\+\+N\+O\+T\+I\+M\+PL, if no module performed the switch Other errors where appropriate 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000006}{Bug}]This A\+PI or implementation and order of operations should be considered experimental and will continue to evolve in future 2.\+4 releases, with a corresponding minor module magic number (M\+MN) bump to indicate the A\+PI revision level. \end{DoxyRefDesc}
+
+
+Check if the given protocol is an allowed choice on the given combination of connection, request and server.
+
+When server is N\+U\+LL, it is taken from \hyperlink{structrequest__rec}{request\+\_\+rec}, unless \hyperlink{structrequest__rec}{request\+\_\+rec} is N\+U\+LL. Then it is taken from the connection base server.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The current connection \\
+\hline
+{\em r} & The current request or N\+U\+LL \\
+\hline
+{\em s} & The server/virtual host selected or N\+U\+LL \\
+\hline
+{\em protocol} & the protocol to switch to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+!= 0 iff protocol is allowed 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000008}{Bug}]This A\+PI or implementation and order of operations should be considered experimental and will continue to evolve in future 2.\+4 releases, with a corresponding minor module magic number (M\+MN) bump to indicate the A\+PI revision level. \end{DoxyRefDesc}
+
+\begin{DoxyCode}
+1593 \{
+1594     \hyperlink{structapr__bucket__brigade}{apr\_bucket\_brigade} *\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb};
+1595     \textcolor{keywordtype}{int} seen\_eos;
+1596     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+1597 
+1598     \textcolor{comment}{/* Sometimes we'll get in a state where the input handling has}
+1599 \textcolor{comment}{     * detected an error where we want to drop the connection, so if}
+1600 \textcolor{comment}{     * that's the case, don't read the data as that is what we're trying}
+1601 \textcolor{comment}{     * to avoid.}
+1602 \textcolor{comment}{     *}
+1603 \textcolor{comment}{     * This function is also a no-op on a subrequest.}
+1604 \textcolor{comment}{     */}
+1605     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa15c110738953554b82619d8d2ee25b3}{main} || \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->keepalive == \hyperlink{group__APACHE__CORE__DAEMON_gga0fc39bb8f47f9c1f418f28354416db79ac991e8ec951fe03c8c2f36495859034d}{AP\_CONN\_CLOSE} ||
+1606         \hyperlink{group__HTTP__Status_gaf6029c20b468032acad1f82c4806ac6f}{ap\_status\_drops\_connection}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a09b59ad2fa51be73efea7369b5484eb0}{status})) \{
+1607         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+1608     \}
+1609 
+1610     bb = apr\_brigade\_create(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->bucket\_alloc);
+1611     seen\_eos = 0;
+1612     \textcolor{keywordflow}{do} \{
+1613         \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__FILTER_ga6550e0bd0ee31e160be60d67874dbcbc}{bucket};
+1614 
+1615         rv = ap\_get\_brigade(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_ab07868ed8240b6236a51aa1e7b198d3e}{input\_filters}, bb, 
+      \hyperlink{util__filter_8h_ab570898d09fbbe5b6d838e28b90134e0a2d8e63e1da380c3909ac0a1325339de4}{AP\_MODE\_READBYTES},
+1616                             \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ}, \hyperlink{group__APACHE__CORE__DAEMON_ga0c9dd98f46b90b5bcd4cbf75e252d0da}{HUGE\_STRING\_LEN});
+1617 
+1618         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1619             apr\_brigade\_destroy(bb);
+1620             \textcolor{keywordflow}{return} ap\_map\_http\_request\_error(rv, \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST});
+1621         \}
+1622 
+1623         \textcolor{keywordflow}{for} (bucket = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb);
+1624              bucket != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb);
+1625              bucket = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(bucket))
+1626         \{
+1627             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LOG_gae4950db1dbfff8459a712737063b61aa}{data};
+1628             \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+1629 
+1630             \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(bucket)) \{
+1631                 seen\_eos = 1;
+1632                 \textcolor{keywordflow}{break};
+1633             \}
+1634 
+1635             \textcolor{comment}{/* These are metadata buckets. */}
+1636             \textcolor{keywordflow}{if} (bucket->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == 0) \{
+1637                 \textcolor{keywordflow}{continue};
+1638             \}
+1639 
+1640             \textcolor{comment}{/* We MUST read because in case we have an unknown-length}
+1641 \textcolor{comment}{             * bucket or one that morphs, we want to exhaust it.}
+1642 \textcolor{comment}{             */}
+1643             rv = \hyperlink{group__APR__Util__Bucket__Brigades_gae44ae938c6c60e148430fdb098dcf28f}{apr\_bucket\_read}(bucket, &data, &len, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ});
+1644             \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1645                 apr\_brigade\_destroy(bb);
+1646                 \textcolor{keywordflow}{return} \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST};
+1647             \}
+1648         \}
+1649         apr\_brigade\_cleanup(bb);
+1650     \} \textcolor{keywordflow}{while} (!seen\_eos);
+1651 
+1652     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+1653 \}
+\end{DoxyCode}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+time\+\_\+t) ap\+\_\+rationalize\+\_\+mtime(request\+\_\+rec $\ast$r}{AP_DECLARE(apr_time_t) ap_rationalize_mtime(request_rec *r}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+time\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga87fb7f51679c806c557542975df44ddc}{}\label{group__APACHE__CORE__PROTO_ga87fb7f51679c806c557542975df44ddc}
+Return the latest rational time from a request/mtime pair. Mtime is returned unless it\textquotesingle{}s in the future, in which case we return the current time. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em mtime} & The last modified time \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the latest rational time.
+\end{DoxyReturn}
+Call this in a loop. It will put data into a buffer and return the length of the input block 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em buffer} & The buffer in which to store the data \\
+\hline
+{\em bufsiz} & The size of the buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Number of bytes inserted into the buffer. When done reading, 0 if E\+OF, or -\/1 if there was an error 
+\end{DoxyReturn}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(const char $\ast$) ap\+\_\+make\+\_\+content\+\_\+type(request\+\_\+rec $\ast$r}{AP_DECLARE(const char *) ap_make_content_type(request_rec *r}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga797241525d691947413a10e2522a4212}{}\label{group__APACHE__CORE__PROTO_ga797241525d691947413a10e2522a4212}
+Build the content-\/type that should be sent to the client from the content-\/type specified. The following rules are followed\+:
+\begin{DoxyItemize}
+\item if type is N\+U\+LL or \char`\"{}\char`\"{}, return N\+U\+LL (do not set content-\/type).
+\item if charset adding is disabled, stop processing and return type.
+\item then, if there are no parameters on type, add the default charset
+\item return type 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em type} & The content type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The content-\/type
+\end{DoxyReturn}
+Return the Status-\/\+Line for a given status code (excluding the H\+T\+T\+P-\/\+Version field). If an invalid or unknown status code is passed, \char`\"{}500 Internal Server Error\char`\"{} will be returned. 
+\begin{DoxyParams}{Parameters}
+{\em status} & The H\+T\+TP status code \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The Status-\/\+Line
+\end{DoxyReturn}
+Get the method name associated with the given internal method number. Returns N\+U\+LL if not recognized. 
+\begin{DoxyParams}{Parameters}
+{\em p} & A pool to use for temporary allocations. \\
+\hline
+{\em methnum} & An integer value corresponding to an internal method number \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The name corresponding to the method number
+\end{DoxyReturn}
+Select a protocol for the given connection and optional request. Will return the protocol identifier selected which may be the protocol already in place on the connection. The selected protocol will be N\+U\+LL if non of the given choices could be agreed upon (e.\+g. no proposal as made).
+\end{DoxyItemize}
+
+A special case is where the choices itself is N\+U\+LL (instead of empty). In this case there are no restrictions imposed on protocol selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The current connection \\
+\hline
+{\em r} & The current request or N\+U\+LL \\
+\hline
+{\em s} & The server/virtual host selected \\
+\hline
+{\em choices} & A list of protocol identifiers, normally the clients whishes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The selected protocol or N\+U\+LL if no protocol could be agreed upon 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000005}{Bug}]This A\+PI or implementation and order of operations should be considered experimental and will continue to evolve in future 2.\+4 releases, with a corresponding minor module magic number (M\+MN) bump to indicate the A\+PI revision level. \end{DoxyRefDesc}
+
+
+Call the protocol\+\_\+get hook to determine the protocol currently in use for the given connection.
+
+Unless another protocol has been switch to, will default to \begin{DoxySeeAlso}{See also}
+\hyperlink{group__APACHE__CORE__PROTO_gaf1adbf6c91063f2485826455469d0881}{A\+P\+\_\+\+P\+R\+O\+T\+O\+C\+O\+L\+\_\+\+H\+T\+T\+P1} and modules implementing \hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a} new \hyperlink{group__APACHE__CORE__PROTO_gab4455c9ffced5cbd2748a0585c988a2f}{protocol} must report \hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a} switched \hyperlink{structconnection}{connection} via the protocol\+\_\+get hook.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The connection to determine the protocol for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the protocol in use, never N\+U\+LL 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000007}{Bug}]This A\+PI or implementation and order of operations should be considered experimental and will continue to evolve in future 2.\+4 releases, with a corresponding minor module magic number (M\+MN) bump to indicate the A\+PI revision level. \end{DoxyRefDesc}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(char $\ast$) ap\+\_\+make\+\_\+etag(request\+\_\+rec $\ast$r}{AP_DECLARE(char *) ap_make_etag(request_rec *r}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga0f01505639e103e822e650351daa86b7}{}\label{group__APACHE__CORE__PROTO_ga0f01505639e103e822e650351daa86b7}
+Construct an entity tag from the resource information. If it\textquotesingle{}s a real file, build in some of the file characteristics. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em force\+\_\+weak} & Force the entity tag to be weak -\/ it could be modified again in as short an interval. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The entity tag 
+\end{DoxyReturn}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(ap\+\_\+condition\+\_\+e) ap\+\_\+condition\+\_\+if\+\_\+match(request\+\_\+rec $\ast$r}{AP_DECLARE(ap_condition_e) ap_condition_if_match(request_rec *r}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+condition\+\_\+e}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga38a67300f881ecfcc3d842d2ce8e2162}{}\label{group__APACHE__CORE__PROTO_ga38a67300f881ecfcc3d842d2ce8e2162}
+Tests conditional request rules for the If-\/\+Match header. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em headers} & The response headers to check against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE if the header is missing, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH if the header does not match, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG for a strong match. Weak matches are not permitted for the If-\/\+Match header.
+\end{DoxyReturn}
+Tests conditional request rules for the If-\/\+Unmodified-\/\+Since header. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em headers} & The response headers to check against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE if the header is missing, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH if the header does not match, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK if a weak match was present and allowed by R\+F\+C2616, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG for a strong match.
+\end{DoxyReturn}
+Tests conditional request rules for the If-\/\+None-\/\+Match header. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em headers} & The response headers to check against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE if the header is missing, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH if the header does not match, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK if a weak match was present and allowed by R\+F\+C2616, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG for a strong match.
+\end{DoxyReturn}
+Tests conditional request rules for the If-\/\+Modified-\/\+Since header. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em headers} & The response headers to check against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE if the header is missing, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH if the header does not match, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+W\+E\+AK if a weak match was present and allowed by R\+F\+C2616, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG for a strong match.
+\end{DoxyReturn}
+Tests conditional request rules for the If-\/\+Range header. 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em headers} & The response headers to check against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+NE if either the If-\/\+Range or Range header is missing, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+N\+O\+M\+A\+T\+CH if the header does not match, A\+P\+\_\+\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+S\+T\+R\+O\+NG for a strong match. Weak matches are not permitted for the If-\/\+Range header. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+353 \{
+354     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *if\_unmodified;
+355 
+356     if\_unmodified = apr\_table\_get(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in}, \textcolor{stringliteral}{"If-Unmodified-Since"});
+357     \textcolor{keywordflow}{if} (if\_unmodified) \{
+358         \hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\_int64\_t} \hyperlink{group__APACHE__CORE__PROTO_gaea0b3fefc4391f71693a7858bcdf5e27}{mtime}, reqtime;
+359 
+360         \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\_time\_t} ius = \hyperlink{group__apr__time_gae0237f70a9a3206b5263c0a474219476}{apr\_time\_sec}(apr\_date\_parse\_http(if\_unmodified));
+361 
+362         \textcolor{comment}{/* All of our comparisons must be in seconds, because that's the}
+363 \textcolor{comment}{         * highest time resolution the HTTP specification allows.}
+364 \textcolor{comment}{         */}
+365         mtime = \hyperlink{group__apr__time_gae0237f70a9a3206b5263c0a474219476}{apr\_time\_sec}(apr\_date\_parse\_http(
+366                         apr\_table\_get(\hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers}, \textcolor{stringliteral}{"Last-Modified"})));
+367         \textcolor{keywordflow}{if} (mtime == \hyperlink{group__APR__Util__Date_ga8be88b25f4b477ad13c4067c959411b0}{APR\_DATE\_BAD}) \{
+368             mtime = \hyperlink{group__apr__time_gae0237f70a9a3206b5263c0a474219476}{apr\_time\_sec}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a25d43eb990fee28e18daefe42bf1d996}{mtime} ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a25d43eb990fee28e18daefe42bf1d996}{mtime} : apr\_time\_now());
+369         \}
+370 
+371         reqtime = \hyperlink{group__apr__time_gae0237f70a9a3206b5263c0a474219476}{apr\_time\_sec}(apr\_date\_parse\_http(
+372                         apr\_table\_get(\hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers}, \textcolor{stringliteral}{"Date"})));
+373         \textcolor{keywordflow}{if} (!reqtime) \{
+374             reqtime = \hyperlink{group__apr__time_gae0237f70a9a3206b5263c0a474219476}{apr\_time\_sec}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a2dadff0630a13ea1ccc2037356ffbb81}{request\_time});
+375         \}
+376 
+377         \textcolor{keywordflow}{if} ((ius != \hyperlink{group__APR__Util__Date_ga8be88b25f4b477ad13c4067c959411b0}{APR\_DATE\_BAD}) && (mtime > ius)) \{
+378             \textcolor{keywordflow}{if} (reqtime < mtime + 60) \{
+379                 \textcolor{keywordflow}{if} (apr\_table\_get(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in}, \textcolor{stringliteral}{"Range"})) \{
+380                     \textcolor{comment}{/* weak matches not allowed with Range requests */}
+381                     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80baa8fec426bc27e2c7c079f92975cc24f9}{AP\_CONDITION\_NOMATCH};
+382                 \}
+383                 \textcolor{keywordflow}{else} \{
+384                     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba9d92b60c761cdd20d7c4a14a7b792a5e}{AP\_CONDITION\_WEAK};
+385                 \}
+386             \}
+387             \textcolor{keywordflow}{else} \{
+388                 \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba6d0b908f370f8abf6844212b00450138}{AP\_CONDITION\_STRONG};
+389             \}
+390         \}
+391         \textcolor{keywordflow}{else} \{
+392             \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80baa8fec426bc27e2c7c079f92975cc24f9}{AP\_CONDITION\_NOMATCH};
+393         \}
+394     \}
+395 
+396     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_gga0c22f044612f116fb81886e73bbce80ba17467018aa3f4f491951e6b278df0f7c}{AP\_CONDITION\_NONE};
+397 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{group__APACHE__CORE__PROTO_ga38a67300f881ecfcc3d842d2ce8e2162_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(ap\+\_\+method\+\_\+list\+\_\+t $\ast$) ap\+\_\+make\+\_\+method\+\_\+list(apr\+\_\+pool\+\_\+t $\ast$p}{AP_DECLARE(ap_method_list_t *) ap_make_method_list(apr_pool_t *p}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+method\+\_\+list\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga8dd7ea784cd8c1cdbcb2f8a9d5476e37}{}\label{group__APACHE__CORE__PROTO_ga8dd7ea784cd8c1cdbcb2f8a9d5476e37}
+Create a new method list with the specified number of preallocated slots for extension methods.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & Pointer to a pool in which the structure should be allocated. \\
+\hline
+{\em nelts} & Number of preallocated extension slots \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the newly created structure. 
+\end{DoxyReturn}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+bucket $\ast$) ap\+\_\+bucket\+\_\+error\+\_\+make(apr\+\_\+bucket $\ast$b}{AP_DECLARE(apr_bucket *) ap_bucket_error_make(apr_bucket *b}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+bucket} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_gaef6837c210057cfadec403116b208b11}{}\label{group__APACHE__CORE__PROTO_gaef6837c210057cfadec403116b208b11}
+Make the bucket passed in an error bucket 
+\begin{DoxyParams}{Parameters}
+{\em b} & The bucket to make into an error bucket \\
+\hline
+{\em error} & The H\+T\+TP error code to put in the bucket. \\
+\hline
+{\em buf} & An optional error string to put in the bucket. \\
+\hline
+{\em p} & A pool to allocate out of. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new bucket, or N\+U\+LL if allocation failed
+\end{DoxyReturn}
+Create a bucket referring to an H\+T\+TP error. 
+\begin{DoxyParams}{Parameters}
+{\em error} & The H\+T\+TP error code to put in the bucket. \\
+\hline
+{\em buf} & An optional error string to put in the bucket. \\
+\hline
+{\em p} & A pool to allocate the error string out of. \\
+\hline
+{\em list} & The bucket allocator from which to allocate the bucket \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new bucket, or N\+U\+LL if allocation failed 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+39 \{
+40     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b} = apr\_bucket\_alloc(\textcolor{keyword}{sizeof}(*b), \hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list});
+41 
+42     \hyperlink{group__APR__Util__Bucket__Brigades_ga00c2e104125f124c3a52627863432de9}{APR\_BUCKET\_INIT}(b);
+43     b->\hyperlink{structapr__bucket_a0949c5d398756496e69449c2633975f1}{free} = apr\_bucket\_free;
+44     b->\hyperlink{structapr__bucket_a5a500b80105834621514d6c0814d0966}{list} = \hyperlink{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{list};
+45     \textcolor{keywordflow}{return} ap\_bucket\_eoc\_make(b);
+46 \}
+\end{DoxyCode}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+OK@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+OK}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+OK@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+OK}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+O\+K(int, protocol\+\_\+propose,(conn\+\_\+rec $\ast$c, request\+\_\+rec $\ast$r, server\+\_\+rec $\ast$s, const apr\+\_\+array\+\_\+header\+\_\+t $\ast$offers, apr\+\_\+array\+\_\+header\+\_\+t $\ast$proposals)) A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+O\+K(int}{AP_DECLARE_HOOK(int, protocol_propose,(conn_rec *c, request_rec *r, server_rec *s, const apr_array_header_t *offers, apr_array_header_t *proposals)) AP_DECLARE_HOOK(int}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+H\+O\+OK (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{, }
+\item[{protocol\+\_\+propose}]{, }
+\item[{({\bf conn\+\_\+rec} $\ast${\bf c}, {\bf request\+\_\+rec} $\ast${\bf r},{\bf server\+\_\+rec} $\ast${\bf s},const {\bf apr\+\_\+array\+\_\+header\+\_\+t} $\ast$offers,{\bf apr\+\_\+array\+\_\+header\+\_\+t} $\ast$proposals)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga6750389239653e3c73ff261c96777ff0}{}\label{group__APACHE__CORE__PROTO_ga6750389239653e3c73ff261c96777ff0}
+Determine the list of protocols available for a connection/request. This may be collected with or without any request sent, in which case the request is N\+U\+LL. Or it may be triggered by the request received, e.\+g. through the \char`\"{}\+Upgrade\char`\"{} header.
+
+This hook will be run whenever protocols are being negotiated (A\+L\+PN as one example). It may also be invoked at other times, e.\+g. when the server wants to advertise protocols it is capable of switching to.
+
+The identifiers for protocols are taken from the T\+LS extension type A\+L\+PN\+: \href{https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xml}{\tt https\+://www.\+iana.\+org/assignments/tls-\/extensiontype-\/values/tls-\/extensiontype-\/values.\+xml}
+
+If no protocols are added to the proposals, the server not perform any switch. If the protocol selected from the proposals is the protocol already in place, also no protocol switch will be invoked.
+
+The client may already have announced the protocols it is willing to accept. These will then be listed as offers. This parameter may also be N\+U\+LL, indicating that offers from the client are not known and the hooks should propose all protocols that are valid for the current connection/request.
+
+All hooks are run, unless one returns an error. Proposals may contain duplicates. The order in which proposals are added is usually ignored.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The current connection \\
+\hline
+{\em r} & The current request or N\+U\+LL \\
+\hline
+{\em s} & The server/virtual host selected \\
+\hline
+{\em offers} & A list of protocol identifiers offered by the client or N\+U\+LL to indicated that the hooks are free to propose \\
+\hline
+{\em proposals} & The list of protocol identifiers proposed by the hooks \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or D\+E\+C\+L\+I\+N\+ED 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000001}{Bug}]This A\+PI or implementation and order of operations should be considered experimental and will continue to evolve in future 2.\+4 releases, with a corresponding minor module magic number (M\+MN) bump to indicate the A\+PI revision level. \end{DoxyRefDesc}
+Perform a protocol switch on the connection. The exact requirements for that depend on the protocol in place and the one switched to. The first protocol module to handle the switch is the last module run.
+
+For a connection level switch (r == N\+U\+LL), the handler must on return leave the \hyperlink{structconn__rec}{conn\+\_\+rec} in a state suitable for processing the switched protocol, e.\+g. correct filters in place.
+
+For a request triggered switch (r != N\+U\+LL), the protocol switch is done before the response is sent out. When switching from \char`\"{}http/1.\+1\char`\"{} via Upgrade header, the 101 intermediate response will have been sent. The hook needs then to process the connection until it can be closed. Which the server will enforce on hook return. Any error the hook might encounter must already be sent by the hook itself to the client in whatever form the new protocol requires.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The current connection \\
+\hline
+{\em r} & The current request or N\+U\+LL \\
+\hline
+{\em s} & The server/virtual host selected \\
+\hline
+{\em choices} & A list of protocol identifiers, normally the clients whishes \\
+\hline
+{\em proposals} & the list of protocol identifiers proposed by the hooks \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or D\+E\+C\+L\+I\+N\+ED 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000002}{Bug}]This A\+PI or implementation and order of operations should be considered experimental and will continue to evolve in future 2.\+4 releases, with a corresponding minor module magic number (M\+MN) bump to indicate the A\+PI revision level. \end{DoxyRefDesc}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(int) ap\+\_\+rvputs(request\+\_\+rec $\ast$r}{AP_DECLARE_NONSTD(int) ap_rvputs(request_rec *r}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_ga701f77422322b2d476b71ed9e6f6b859}{}\label{group__APACHE__CORE__PROTO_ga701f77422322b2d476b71ed9e6f6b859}
+Write an unspecified number of strings to the request 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em ...} & The strings to write \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes sent
+\end{DoxyReturn}
+Output data to the client in a printf format 
+\begin{DoxyParams}{Parameters}
+{\em r} & The current request \\
+\hline
+{\em fmt} & The format string \\
+\hline
+{\em ...} & The arguments to use to fill out the format string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes sent 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+2017 \{
+2018     va\_list \hyperlink{group__APR__Util__Bucket__Brigades_gafa1ac2f9aa9e56e3f87cbc5324a3114f}{va};
+2019     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+2020     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+2021     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} written = 0;
+2022 
+2023     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->aborted)
+2024         \textcolor{keywordflow}{return} -1;
+2025 
+2026     \textcolor{comment}{/* ### TODO: if the total output is large, put all the strings}
+2027 \textcolor{comment}{     * ### into a single brigade, rather than flushing each time we}
+2028 \textcolor{comment}{     * ### fill the buffer}
+2029 \textcolor{comment}{     */}
+2030     va\_start(va, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+2031     \textcolor{keywordflow}{while} (1) \{
+2032         s = va\_arg(va, \textcolor{keyword}{const} \textcolor{keywordtype}{char} *);
+2033         \textcolor{keywordflow}{if} (s == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+2034             \textcolor{keywordflow}{break};
+2035 
+2036         len = strlen(s);
+2037         \textcolor{keywordflow}{if} (buffer\_output(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, s, len) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2038             \textcolor{keywordflow}{return} -1;
+2039         \}
+2040 
+2041         written += \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+2042     \}
+2043     va\_end(va);
+2044 
+2045     \textcolor{keywordflow}{return} written;
+2046 \}
+\end{DoxyCode}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!ap\+\_\+read\+\_\+request@{ap\+\_\+read\+\_\+request}}
+\index{ap\+\_\+read\+\_\+request@{ap\+\_\+read\+\_\+request}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{ap\+\_\+read\+\_\+request(conn\+\_\+rec $\ast$c)}{ap_read_request(conn_rec *c)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf request\+\_\+rec}$\ast$ ap\+\_\+read\+\_\+request (
+\begin{DoxyParamCaption}
+\item[{{\bf conn\+\_\+rec} $\ast$}]{c}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__PROTO_gac0e6bdb5b96c1a7e3a7957576dee312b}{}\label{group__APACHE__CORE__PROTO_gac0e6bdb5b96c1a7e3a7957576dee312b}
+Read a request and fill in the fields. 
+\begin{DoxyParams}{Parameters}
+{\em c} & The current connection \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new \hyperlink{structrequest__rec}{request\+\_\+rec} 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1195 \{
+1196     \hyperlink{structrequest__rec}{request\_rec} *\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+1197     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+1198     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *expect;
+1199     \textcolor{keywordtype}{int} access\_status;
+1200     \hyperlink{structapr__bucket__brigade}{apr\_bucket\_brigade} *tmp\_bb;
+1201     \hyperlink{structapr__socket__t}{apr\_socket\_t} *\hyperlink{group__APACHE__CORE__CONNECTION_ga37491385bd0907d7a64ed8a3ec309aaa}{csd};
+1202     \hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\_interval\_time\_t} cur\_timeout;
+1203 
+1204 
+1205     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&p, \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->pool);
+1206     apr\_pool\_tag(p, \textcolor{stringliteral}{"request"});
+1207     r = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(p, \textcolor{keyword}{sizeof}(\hyperlink{structrequest__rec}{request\_rec}));
+1208     \hyperlink{apache__noprobes_8h_ae565508225e30eb021fb3b4abd9a94df}{AP\_READ\_REQUEST\_ENTRY}((intptr\_t)r, (uintptr\_t)\hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn});
+1209     r->pool            = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+1210     r->connection      = \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn};
+1211     r->server          = \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->base\_server;
+1212 
+1213     r->user            = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1214     r->ap\_auth\_type    = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1215 
+1216     r->allowed\_methods = ap\_make\_method\_list(p, 2);
+1217 
+1218     r->headers\_in      = apr\_table\_make(r->pool, 25);
+1219     r->trailers\_in     = apr\_table\_make(r->pool, 5);
+1220     r->subprocess\_env  = apr\_table\_make(r->pool, 25);
+1221     r->headers\_out     = apr\_table\_make(r->pool, 12);
+1222     r->err\_headers\_out = apr\_table\_make(r->pool, 5);
+1223     r->trailers\_out    = apr\_table\_make(r->pool, 5);
+1224     r->notes           = apr\_table\_make(r->pool, 5);
+1225 
+1226     r->request\_config  = ap\_create\_request\_config(r->pool);
+1227     \textcolor{comment}{/* Must be set before we run create request hook */}
+1228 
+1229     r->proto\_output\_filters = \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->output\_filters;
+1230     r->output\_filters  = r->proto\_output\_filters;
+1231     r->proto\_input\_filters = \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->input\_filters;
+1232     r->input\_filters   = r->proto\_input\_filters;
+1233     ap\_run\_create\_request(r);
+1234     r->per\_dir\_config  = r->server->lookup\_defaults;
+1235 
+1236     r->sent\_bodyct     = 0;                      \textcolor{comment}{/* bytect isn't for body */}
+1237 
+1238     r->read\_length     = 0;
+1239     r->read\_body       = \hyperlink{group__values__request__rec__body_gaf74625e7d4f8f352ed14a4bdf3f7262b}{REQUEST\_NO\_BODY};
+1240 
+1241     r->status          = \hyperlink{group__HTTP__Status_ga02e6d59009dee759528ec81fc9a8eeff}{HTTP\_OK};  \textcolor{comment}{/* Until further notice */}
+1242     r->the\_request     = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1243 
+1244     \textcolor{comment}{/* Begin by presuming any module can make its own path\_info assumptions,}
+1245 \textcolor{comment}{     * until some module interjects and changes the value.}
+1246 \textcolor{comment}{     */}
+1247     r->used\_path\_info = \hyperlink{group__values__request__rec__used__path__info_ga0a636f7227021011d3fa0c2418b918fa}{AP\_REQ\_DEFAULT\_PATH\_INFO};
+1248 
+1249     r->useragent\_addr = \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->client\_addr;
+1250     r->useragent\_ip = \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->client\_ip;
+1251 
+1252     tmp\_bb = apr\_brigade\_create(r->pool, r->connection->bucket\_alloc);
+1253 
+1254     ap\_run\_pre\_read\_request(r, \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn});
+1255 
+1256     \textcolor{comment}{/* Get the request... */}
+1257     \textcolor{keywordflow}{if} (!read\_request\_line(r, tmp\_bb)) \{
+1258         \textcolor{keywordflow}{switch} (r->status) \{
+1259         \textcolor{keywordflow}{case} \hyperlink{group__HTTP__Status_ga4a24fc2734c1665d39672a81ee2a45a6}{HTTP\_REQUEST\_URI\_TOO\_LARGE}:
+1260         \textcolor{keywordflow}{case} \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST}:
+1261         \textcolor{keywordflow}{case} \hyperlink{group__HTTP__Status_ga5afac709466d3e236035fcb89a432098}{HTTP\_VERSION\_NOT\_SUPPORTED}:
+1262         \textcolor{keywordflow}{case} \hyperlink{group__HTTP__Status_gad8950a9ac05b1fe42c9a39dc7d8cbddf}{HTTP\_NOT\_IMPLEMENTED}:
+1263             \textcolor{keywordflow}{if} (r->status == \hyperlink{group__HTTP__Status_ga4a24fc2734c1665d39672a81ee2a45a6}{HTTP\_REQUEST\_URI\_TOO\_LARGE}) \{
+1264                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00565)
+1265                               \textcolor{stringliteral}{"request failed: client's request-line exceeds LimitRequestLine (longer than
+       %d)"},
+1266                               r->server->limit\_req\_line);
+1267             \}
+1268             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (r->method == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1269                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00566)
+1270                               \textcolor{stringliteral}{"request failed: malformed request line"});
+1271             \}
+1272             access\_status = r->status;
+1273             r->status = \hyperlink{group__HTTP__Status_ga02e6d59009dee759528ec81fc9a8eeff}{HTTP\_OK};
+1274             ap\_die(access\_status, r);
+1275             ap\_update\_child\_status(\hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->sbh, \hyperlink{scoreboard_8h_a27a5c403b65794dc90e380a76a500924}{SERVER\_BUSY\_LOG}, r);
+1276             ap\_run\_log\_transaction(r);
+1277             r = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1278             apr\_brigade\_destroy(tmp\_bb);
+1279             \textcolor{keywordflow}{goto} traceout;
+1280         \textcolor{keywordflow}{case} \hyperlink{group__HTTP__Status_ga19f05d6acd556bd28c1ffdbb763cf9aa}{HTTP\_REQUEST\_TIME\_OUT}:
+1281             ap\_update\_child\_status(\hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->sbh, \hyperlink{scoreboard_8h_a27a5c403b65794dc90e380a76a500924}{SERVER\_BUSY\_LOG}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1282             \textcolor{keywordflow}{if} (!r->connection->keepalives)
+1283                 ap\_run\_log\_transaction(r);
+1284             apr\_brigade\_destroy(tmp\_bb);
+1285             \textcolor{keywordflow}{goto} traceout;
+1286         \textcolor{keywordflow}{default}:
+1287             apr\_brigade\_destroy(tmp\_bb);
+1288             r = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1289             \textcolor{keywordflow}{goto} traceout;
+1290         \}
+1291     \}
+1292 
+1293     \textcolor{comment}{/* We may have been in keep\_alive\_timeout mode, so toggle back}
+1294 \textcolor{comment}{     * to the normal timeout mode as we fetch the header lines,}
+1295 \textcolor{comment}{     * as necessary.}
+1296 \textcolor{comment}{     */}
+1297     csd = ap\_get\_conn\_socket(\hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn});
+1298     \hyperlink{unix_2sockopt_8c_aa32313b54afed590367c8571075d2bc1}{apr\_socket\_timeout\_get}(csd, &cur\_timeout);
+1299     \textcolor{keywordflow}{if} (cur\_timeout != \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->base\_server->timeout) \{
+1300         \hyperlink{unix_2sockopt_8c_a945bdbe807ec5635d65a6fd9ddb78c29}{apr\_socket\_timeout\_set}(csd, \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->base\_server->timeout);
+1301         cur\_timeout = \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->base\_server->timeout;
+1302     \}
+1303 
+1304     \textcolor{keywordflow}{if} (!r->assbackwards) \{
+1305         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *tenc;
+1306 
+1307         ap\_get\_mime\_headers\_core(r, tmp\_bb);
+1308         \textcolor{keywordflow}{if} (r->status != \hyperlink{group__HTTP__Status_ga02e6d59009dee759528ec81fc9a8eeff}{HTTP\_OK}) \{
+1309             \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00567)
+1310                           \textcolor{stringliteral}{"request failed: error reading the headers"});
+1311             ap\_send\_error\_response(r, 0);
+1312             ap\_update\_child\_status(\hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->sbh, \hyperlink{scoreboard_8h_a27a5c403b65794dc90e380a76a500924}{SERVER\_BUSY\_LOG}, r);
+1313             ap\_run\_log\_transaction(r);
+1314             apr\_brigade\_destroy(tmp\_bb);
+1315             \textcolor{keywordflow}{goto} traceout;
+1316         \}
+1317 
+1318         tenc = apr\_table\_get(r->headers\_in, \textcolor{stringliteral}{"Transfer-Encoding"});
+1319         \textcolor{keywordflow}{if} (tenc) \{
+1320             \textcolor{comment}{/* http://tools.ietf.org/html/draft-ietf-httpbis-p1-messaging-23}
+1321 \textcolor{comment}{             * Section 3.3.3.3: "If a Transfer-Encoding header field is}
+1322 \textcolor{comment}{             * present in a request and the chunked transfer coding is not}
+1323 \textcolor{comment}{             * the final encoding ...; the server MUST respond with the 400}
+1324 \textcolor{comment}{             * (Bad Request) status code and then close the connection".}
+1325 \textcolor{comment}{             */}
+1326             \textcolor{keywordflow}{if} (!(\hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(tenc, \textcolor{stringliteral}{"chunked"}) == 0 \textcolor{comment}{/* fast path */}
+1327                     || ap\_find\_last\_token(r->pool, tenc, \textcolor{stringliteral}{"chunked"}))) \{
+1328                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02539)
+1329                               \textcolor{stringliteral}{"client sent unknown Transfer-Encoding "}
+1330                               \textcolor{stringliteral}{"(%s): %s"}, tenc, r->uri);
+1331                 r->status = \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST};
+1332                 \hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->keepalive = \hyperlink{group__APACHE__CORE__DAEMON_gga0fc39bb8f47f9c1f418f28354416db79ac991e8ec951fe03c8c2f36495859034d}{AP\_CONN\_CLOSE};
+1333                 ap\_send\_error\_response(r, 0);
+1334                 ap\_update\_child\_status(\hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->sbh, \hyperlink{scoreboard_8h_a27a5c403b65794dc90e380a76a500924}{SERVER\_BUSY\_LOG}, r);
+1335                 ap\_run\_log\_transaction(r);
+1336                 apr\_brigade\_destroy(tmp\_bb);
+1337                 \textcolor{keywordflow}{goto} traceout;
+1338             \}
+1339 
+1340             \textcolor{comment}{/* http://tools.ietf.org/html/draft-ietf-httpbis-p1-messaging-23}
+1341 \textcolor{comment}{             * Section 3.3.3.3: "If a message is received with both a}
+1342 \textcolor{comment}{             * Transfer-Encoding and a Content-Length header field, the}
+1343 \textcolor{comment}{             * Transfer-Encoding overrides the Content-Length. ... A sender}
+1344 \textcolor{comment}{             * MUST remove the received Content-Length field".}
+1345 \textcolor{comment}{             */}
+1346             apr\_table\_unset(r->headers\_in, \textcolor{stringliteral}{"Content-Length"});
+1347         \}
+1348     \}
+1349 
+1350     apr\_brigade\_destroy(tmp\_bb);
+1351 
+1352     \textcolor{comment}{/* update what we think the virtual host is based on the headers we've}
+1353 \textcolor{comment}{     * now read. may update status.}
+1354 \textcolor{comment}{     */}
+1355     ap\_update\_vhost\_from\_headers(r);
+1356     access\_status = r->status;
+1357 
+1358     \textcolor{comment}{/* Toggle to the Host:-based vhost's timeout mode to fetch the}
+1359 \textcolor{comment}{     * request body and send the response body, if needed.}
+1360 \textcolor{comment}{     */}
+1361     \textcolor{keywordflow}{if} (cur\_timeout != r->server->timeout) \{
+1362         \hyperlink{unix_2sockopt_8c_a945bdbe807ec5635d65a6fd9ddb78c29}{apr\_socket\_timeout\_set}(csd, r->server->\hyperlink{structapr__socket__t_a3626689cdb39190d306a43cbd7f9e90c}{timeout});
+1363         cur\_timeout = r->server->timeout;
+1364     \}
+1365 
+1366     \textcolor{comment}{/* we may have switched to another server */}
+1367     r->per\_dir\_config = r->server->lookup\_defaults;
+1368 
+1369     \textcolor{keywordflow}{if} ((!r->hostname && (r->proto\_num >= \hyperlink{group__APACHE__CORE__DAEMON_gab48aba3b8935a26d38b88710041a1b6a}{HTTP\_VERSION}(1, 1)))
+1370         || ((r->proto\_num == \hyperlink{group__APACHE__CORE__DAEMON_gab48aba3b8935a26d38b88710041a1b6a}{HTTP\_VERSION}(1, 1))
+1371             && !apr\_table\_get(r->headers\_in, \textcolor{stringliteral}{"Host"}))) \{
+1372         \textcolor{comment}{/*}
+1373 \textcolor{comment}{         * Client sent us an HTTP/1.1 or later request without telling us the}
+1374 \textcolor{comment}{         * hostname, either with a full URL or a Host: header. We therefore}
+1375 \textcolor{comment}{         * need to (as per the 1.1 spec) send an error.  As a special case,}
+1376 \textcolor{comment}{         * HTTP/1.1 mentions twice (S9, S14.23) that a request MUST contain}
+1377 \textcolor{comment}{         * a Host: header, and the server MUST respond with 400 if it doesn't.}
+1378 \textcolor{comment}{         */}
+1379         access\_status = \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST};
+1380         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00569)
+1381                       \textcolor{stringliteral}{"client sent HTTP/1.1 request without hostname "}
+1382                       \textcolor{stringliteral}{"(see RFC2616 section 14.23): %s"}, r->uri);
+1383     \}
+1384 
+1385     \textcolor{comment}{/*}
+1386 \textcolor{comment}{     * Add the HTTP\_IN filter here to ensure that ap\_discard\_request\_body}
+1387 \textcolor{comment}{     * called by ap\_die and by ap\_send\_error\_response works correctly on}
+1388 \textcolor{comment}{     * status codes that do not cause the connection to be dropped and}
+1389 \textcolor{comment}{     * in situations where the connection should be kept alive.}
+1390 \textcolor{comment}{     */}
+1391 
+1392     ap\_add\_input\_filter\_handle(\hyperlink{group__MOD__CORE_gaeb746d5b6cdbaa812be4a7f25430cc02}{ap\_http\_input\_filter\_handle},
+1393                                \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, r, r->connection);
+1394 
+1395     \textcolor{keywordflow}{if} (access\_status != \hyperlink{group__HTTP__Status_ga02e6d59009dee759528ec81fc9a8eeff}{HTTP\_OK}
+1396         || (access\_status = ap\_run\_post\_read\_request(r))) \{
+1397         ap\_die(access\_status, r);
+1398         ap\_update\_child\_status(\hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->sbh, \hyperlink{scoreboard_8h_a27a5c403b65794dc90e380a76a500924}{SERVER\_BUSY\_LOG}, r);
+1399         ap\_run\_log\_transaction(r);
+1400         r = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1401         \textcolor{keywordflow}{goto} traceout;
+1402     \}
+1403 
+1404     \textcolor{keywordflow}{if} (((expect = apr\_table\_get(r->headers\_in, \textcolor{stringliteral}{"Expect"})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+1405         && (expect[0] != \textcolor{charliteral}{'\(\backslash\)0'})) \{
+1406         \textcolor{comment}{/*}
+1407 \textcolor{comment}{         * The Expect header field was added to HTTP/1.1 after RFC 2068}
+1408 \textcolor{comment}{         * as a means to signal when a 100 response is desired and,}
+1409 \textcolor{comment}{         * unfortunately, to signal a poor man's mandatory extension that}
+1410 \textcolor{comment}{         * the server must understand or return 417 Expectation Failed.}
+1411 \textcolor{comment}{         */}
+1412         \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(expect, \textcolor{stringliteral}{"100-continue"}) == 0) \{
+1413             r->expecting\_100 = 1;
+1414         \}
+1415         \textcolor{keywordflow}{else} \{
+1416             r->status = \hyperlink{group__HTTP__Status_ga9419cf3e03b1b3e36c67335cb59edf57}{HTTP\_EXPECTATION\_FAILED};
+1417             \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00570)
+1418                           \textcolor{stringliteral}{"client sent an unrecognized expectation value of "}
+1419                           \textcolor{stringliteral}{"Expect: %s"}, expect);
+1420             ap\_send\_error\_response(r, 0);
+1421             ap\_update\_child\_status(\hyperlink{group__MOD__PROXY_gaaf2a99e7e3709d3e41bf0a33f1004b4e}{conn}->sbh, \hyperlink{scoreboard_8h_a27a5c403b65794dc90e380a76a500924}{SERVER\_BUSY\_LOG}, r);
+1422             ap\_run\_log\_transaction(r);
+1423             \textcolor{keywordflow}{goto} traceout;
+1424         \}
+1425     \}
+1426 
+1427     \hyperlink{apache__noprobes_8h_a4dc77c1a444f774f8900f290dc8e476a}{AP\_READ\_REQUEST\_SUCCESS}((uintptr\_t)r, (\textcolor{keywordtype}{char} *)r->method, (\textcolor{keywordtype}{char} *)r->uri, (\textcolor{keywordtype}{char} 
+      *)r->server->defn\_name, r->status);
+1428     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+1429     traceout:
+1430     \hyperlink{apache__noprobes_8h_ae00487df19337e9792c7ed6dd5a0bd88}{AP\_READ\_REQUEST\_FAILURE}((uintptr\_t)r);
+1431     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+1432 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{group__APACHE__CORE__PROTO_gac0e6bdb5b96c1a7e3a7957576dee312b_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!ap\+\_\+bucket\+\_\+type\+\_\+error@{ap\+\_\+bucket\+\_\+type\+\_\+error}}
+\index{ap\+\_\+bucket\+\_\+type\+\_\+error@{ap\+\_\+bucket\+\_\+type\+\_\+error}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{ap\+\_\+bucket\+\_\+type\+\_\+error}{ap_bucket_type_error}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} const {\bf apr\+\_\+bucket\+\_\+type\+\_\+t} ap\+\_\+bucket\+\_\+type\+\_\+error}\hypertarget{group__APACHE__CORE__PROTO_gaef3fea180ac64dff60327a7eda6161f4}{}\label{group__APACHE__CORE__PROTO_gaef3fea180ac64dff60327a7eda6161f4}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__APACHE__CORE__PROTO_gaef3fea180ac64dff60327a7eda6161f4}{ap\+\_\+bucket\+\_\+type\+\_\+error} 
+\end{DoxySeeAlso}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL@{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}}
+\index{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL@{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}{AP_FN_ATTR_SENTINEL}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}\hypertarget{group__APACHE__CORE__PROTO_ga6b0ec9d6c145a38da4ccf06941af8d97}{}\label{group__APACHE__CORE__PROTO_ga6b0ec9d6c145a38da4ccf06941af8d97}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!b@{b}}
+\index{b@{b}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{b}{b}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket} $\ast$$\ast$ b}\hypertarget{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{}\label{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!bb@{bb}}
+\index{bb@{bb}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{bb}{bb}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$ bb}\hypertarget{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{}\label{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!buf@{buf}}
+\index{buf@{buf}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{buf}{buf}}]{\setlength{\rightskip}{0pt plus 5cm}const char $\ast$ buf}\hypertarget{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{}\label{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!buffer@{buffer}}
+\index{buffer@{buffer}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{buffer}{buffer}}]{\setlength{\rightskip}{0pt plus 5cm}char $\ast$ buffer}\hypertarget{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{}\label{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!bufsiz@{bufsiz}}
+\index{bufsiz@{bufsiz}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{bufsiz}{bufsiz}}]{\setlength{\rightskip}{0pt plus 5cm}char {\bf apr\+\_\+size\+\_\+t} bufsiz}\hypertarget{group__APACHE__CORE__PROTO_gab5121d4d91ca81860ed7c296210087f0}{}\label{group__APACHE__CORE__PROTO_gab5121d4d91ca81860ed7c296210087f0}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!c@{c}}
+\index{c@{c}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{c}{c}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf conn\+\_\+rec}$\ast$ c}\hypertarget{group__APACHE__CORE__PROTO_ga836f65c6714b5c90becd1203d4c1048b}{}\label{group__APACHE__CORE__PROTO_ga836f65c6714b5c90becd1203d4c1048b}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!choices@{choices}}
+\index{choices@{choices}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{choices}{choices}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf request\+\_\+rec} {\bf server\+\_\+rec} const {\bf apr\+\_\+array\+\_\+header\+\_\+t}$\ast$ choices}\hypertarget{group__APACHE__CORE__PROTO_gaad026036a61deca62b44551b09f67628}{}\label{group__APACHE__CORE__PROTO_gaad026036a61deca62b44551b09f67628}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!ct@{ct}}
+\index{ct@{ct}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{ct}{ct}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ ct}\hypertarget{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}{}\label{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!error@{error}}
+\index{error@{error}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{error}{error}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} error}\hypertarget{group__APACHE__CORE__PROTO_ga11614f44ef4d939bdd984953346a7572}{}\label{group__APACHE__CORE__PROTO_ga11614f44ef4d939bdd984953346a7572}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!flags@{flags}}
+\index{flags@{flags}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{flags}{flags}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} {\bf apr\+\_\+size\+\_\+t} {\bf request\+\_\+rec} {\bf int} flags}\hypertarget{group__APACHE__CORE__PROTO_ga24687595987232775dbdc5d7f6c0d8d8}{}\label{group__APACHE__CORE__PROTO_ga24687595987232775dbdc5d7f6c0d8d8}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!fmt@{fmt}}
+\index{fmt@{fmt}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{fmt}{fmt}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ fmt}\hypertarget{group__APACHE__CORE__PROTO_ga381d684d94e6e91dee650357e8f02fa8}{}\label{group__APACHE__CORE__PROTO_ga381d684d94e6e91dee650357e8f02fa8}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!force\+\_\+weak@{force\+\_\+weak}}
+\index{force\+\_\+weak@{force\+\_\+weak}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{force\+\_\+weak}{force_weak}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} force\+\_\+weak}\hypertarget{group__APACHE__CORE__PROTO_gaa10508626cb1e5068f2724d3dc581300}{}\label{group__APACHE__CORE__PROTO_gaa10508626cb1e5068f2724d3dc581300}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!headers@{headers}}
+\index{headers@{headers}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{headers}{headers}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+table\+\_\+t} $\ast$ headers}\hypertarget{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{}\label{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!length@{length}}
+\index{length@{length}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{length}{length}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+size\+\_\+t} length}\hypertarget{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{}\label{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!list@{list}}
+\index{list@{list}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{list}{list}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf it} does {\bf not} apply {\bf to} {\bf patterns} {\bf specified} by {\bf any} {\bf of} the {\bf include} {\bf or} {\bf exclude} {\bf options} E\+N\+V\+I\+R\+O\+N\+M\+E\+NT V\+A\+R\+I\+A\+B\+L\+ES The {\bf environment} {\bf variables} L\+C\+\_\+\+A\+LL and L\+C\+\_\+\+C\+T\+Y\+PE {\bf are} {\bf in} that for {\bf a} {\bf locale} The {\bf first} one that {\bf is} {\bf set} {\bf is} {\bf used} This {\bf can} {\bf be} overridden by the {\bf locale} {\bf option} If no {\bf locale} {\bf is} the {\bf P\+C\+RE} {\bf library} {\bf s} {\bf with} {\bf what} {\bf ever} {\bf newline} sequences they have {\bf in} the {\bf input} the {\bf setting} {\bf of} {\bf this} {\bf option} does {\bf not} affect the interpretation {\bf of} {\bf files} {\bf specified} by the {\bf exclude} {\bf or} {\bf include} {\bf from} {\bf which} {\bf are} assumed {\bf to} use the operating {\bf system} {\bf s} standard {\bf newline} nor does {\bf it} affect the {\bf way} {\bf in} {\bf which} pcregrep writes informational messages {\bf to} the standard {\bf error} and {\bf output} streams For these {\bf it} uses the {\bf string} {\bf n} {\bf to} indicate relying {\bf on} the {\bf C} {\bf I} O {\bf library} {\bf to} convert {\bf this} {\bf to} an appropriate {\bf sequence} {\bf O\+P\+T\+I\+O\+NS} C\+O\+M\+P\+A\+T\+I\+B\+I\+L\+I\+TY Many {\bf of} the short and long forms {\bf of} pcregrep {\bf s} {\bf options} {\bf are} the same {\bf as} {\bf in} the G\+NU {\bf grep} {\bf program} Any long {\bf option} {\bf of} the form {\bf xxx} the {\bf file} list}\hypertarget{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}{}\label{group__APACHE__CORE__PROTO_gaeb6b944e4524f915483b5696b7f2f424}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!methname@{methname}}
+\index{methname@{methname}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{methname}{methname}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ methname}\hypertarget{group__APACHE__CORE__PROTO_ga881b3e130b3a53164706c3e1e76cfe7b}{}\label{group__APACHE__CORE__PROTO_ga881b3e130b3a53164706c3e1e76cfe7b}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!methnum@{methnum}}
+\index{methnum@{methnum}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{methnum}{methnum}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} methnum}\hypertarget{group__APACHE__CORE__PROTO_ga3f3e2e6463dfe34ca20b33c43326f4c3}{}\label{group__APACHE__CORE__PROTO_ga3f3e2e6463dfe34ca20b33c43326f4c3}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!method@{method}}
+\index{method@{method}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{method}{method}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ method}\hypertarget{group__APACHE__CORE__PROTO_ga8b44a03925325ceaf2de7b079b1541a1}{}\label{group__APACHE__CORE__PROTO_ga8b44a03925325ceaf2de7b079b1541a1}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!mtime@{mtime}}
+\index{mtime@{mtime}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{mtime}{mtime}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+time\+\_\+t} mtime}\hypertarget{group__APACHE__CORE__PROTO_gaea0b3fefc4391f71693a7858bcdf5e27}{}\label{group__APACHE__CORE__PROTO_gaea0b3fefc4391f71693a7858bcdf5e27}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!n@{n}}
+\index{n@{n}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{n}{n}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+int32\+\_\+t} n}\hypertarget{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{}\label{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!n@{n}}
+\index{n@{n}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{n}{n}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} n}\hypertarget{group__APACHE__CORE__PROTO_gac5c62ba2b6352882ff76f945b74d6793}{}\label{group__APACHE__CORE__PROTO_gac5c62ba2b6352882ff76f945b74d6793}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!nbyte@{nbyte}}
+\index{nbyte@{nbyte}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{nbyte}{nbyte}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+size\+\_\+t} nbyte}\hypertarget{group__APACHE__CORE__PROTO_ga19a56d6f9dcf813c74420f84a3d1c062}{}\label{group__APACHE__CORE__PROTO_ga19a56d6f9dcf813c74420f84a3d1c062}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!nbytes@{nbytes}}
+\index{nbytes@{nbytes}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{nbytes}{nbytes}}]{\setlength{\rightskip}{0pt plus 5cm}const struct iovec {\bf apr\+\_\+size\+\_\+t} {\bf apr\+\_\+size\+\_\+t} $\ast$ nbytes}\hypertarget{group__APACHE__CORE__PROTO_ga19e46b20186d519fe175ae699db0008d}{}\label{group__APACHE__CORE__PROTO_ga19e46b20186d519fe175ae699db0008d}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!nelts@{nelts}}
+\index{nelts@{nelts}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{nelts}{nelts}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} nelts}\hypertarget{group__APACHE__CORE__PROTO_ga3f892b271cc0564b2d8e9536a96abd7c}{}\label{group__APACHE__CORE__PROTO_ga3f892b271cc0564b2d8e9536a96abd7c}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!offset@{offset}}
+\index{offset@{offset}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{offset}{offset}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+file\+\_\+t} {\bf apr\+\_\+off\+\_\+t} offset}\hypertarget{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{}\label{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!p@{p}}
+\index{p@{p}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{p}{p}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+pool\+\_\+t}$\ast$ p}\hypertarget{group__APACHE__CORE__PROTO_ga2b87ce5c0cd5c5aa97fd3ba98460ab16}{}\label{group__APACHE__CORE__PROTO_ga2b87ce5c0cd5c5aa97fd3ba98460ab16}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!password@{password}}
+\index{password@{password}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{password}{password}}]{\setlength{\rightskip}{0pt plus 5cm}const char const char$\ast$$\ast$ password}\hypertarget{group__APACHE__CORE__PROTO_ga69b970a42043daa64861aba281a1e6f0}{}\label{group__APACHE__CORE__PROTO_ga69b970a42043daa64861aba281a1e6f0}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!protocol@{protocol}}
+\index{protocol@{protocol}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{protocol}{protocol}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} $\ast$ protocol}\hypertarget{group__APACHE__CORE__PROTO_gab4455c9ffced5cbd2748a0585c988a2f}{}\label{group__APACHE__CORE__PROTO_gab4455c9ffced5cbd2748a0585c988a2f}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!protocol\+\_\+switch@{protocol\+\_\+switch}}
+\index{protocol\+\_\+switch@{protocol\+\_\+switch}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{protocol\+\_\+switch}{protocol_switch}}]{\setlength{\rightskip}{0pt plus 5cm}protocol\+\_\+switch}\hypertarget{group__APACHE__CORE__PROTO_ga7d412a99ad93bc7e0cb671033448099d}{}\label{group__APACHE__CORE__PROTO_ga7d412a99ad93bc7e0cb671033448099d}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!pupgrades@{pupgrades}}
+\index{pupgrades@{pupgrades}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{pupgrades}{pupgrades}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf conn\+\_\+rec} {\bf request\+\_\+rec} {\bf server\+\_\+rec} const char$\ast$ {\bf protocol} {\bf request\+\_\+rec} {\bf server\+\_\+rec} {\bf int} const {\bf apr\+\_\+array\+\_\+header\+\_\+t}$\ast$$\ast$ pupgrades}\hypertarget{group__APACHE__CORE__PROTO_ga587e44266cc9b55f474e6e3896f4a3eb}{}\label{group__APACHE__CORE__PROTO_ga587e44266cc9b55f474e6e3896f4a3eb}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!pw@{pw}}
+\index{pw@{pw}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{pw}{pw}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$$\ast$ pw}\hypertarget{group__APACHE__CORE__PROTO_ga4b22922ccb91d71d170bf2bbca3d241e}{}\label{group__APACHE__CORE__PROTO_ga4b22922ccb91d71d170bf2bbca3d241e}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!r@{r}}
+\index{r@{r}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{r}{r}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf request\+\_\+rec}$\ast$ r}\hypertarget{group__APACHE__CORE__PROTO_gac89055d45eb7f03e605757210b4adba7}{}\label{group__APACHE__CORE__PROTO_gac89055d45eb7f03e605757210b4adba7}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!read@{read}}
+\index{read@{read}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{read}{read}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} {\bf apr\+\_\+size\+\_\+t}$\ast$ read}\hypertarget{group__APACHE__CORE__PROTO_ga1a70a7c483d1279dc2cbfc7f098ce8db}{}\label{group__APACHE__CORE__PROTO_ga1a70a7c483d1279dc2cbfc7f098ce8db}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!read\+\_\+policy@{read\+\_\+policy}}
+\index{read\+\_\+policy@{read\+\_\+policy}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{read\+\_\+policy}{read_policy}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} read\+\_\+policy}\hypertarget{group__APACHE__CORE__PROTO_ga92179f9948688ca8144f0d3bff73aec1}{}\label{group__APACHE__CORE__PROTO_ga92179f9948688ca8144f0d3bff73aec1}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!recursive\+\_\+error@{recursive\+\_\+error}}
+\index{recursive\+\_\+error@{recursive\+\_\+error}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{recursive\+\_\+error}{recursive_error}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} recursive\+\_\+error}\hypertarget{group__APACHE__CORE__PROTO_gac9eda13e5edf45edc5788be0643a71c5}{}\label{group__APACHE__CORE__PROTO_gac9eda13e5edf45edc5788be0643a71c5}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!report\+\_\+all@{report\+\_\+all}}
+\index{report\+\_\+all@{report\+\_\+all}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{report\+\_\+all}{report_all}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf conn\+\_\+rec} {\bf request\+\_\+rec} {\bf server\+\_\+rec} const char$\ast$ {\bf protocol} {\bf request\+\_\+rec} {\bf server\+\_\+rec} {\bf int} report\+\_\+all}\hypertarget{group__APACHE__CORE__PROTO_ga744b8606483ea012f9c77bbe4c7b1732}{}\label{group__APACHE__CORE__PROTO_ga744b8606483ea012f9c77bbe4c7b1732}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!s@{s}}
+\index{s@{s}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{s}{s}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf request\+\_\+rec} {\bf server\+\_\+rec}$\ast$ s}\hypertarget{group__APACHE__CORE__PROTO_gabd83702f32647fad7e6a3f51b7851845}{}\label{group__APACHE__CORE__PROTO_gabd83702f32647fad7e6a3f51b7851845}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!send\+\_\+headers@{send\+\_\+headers}}
+\index{send\+\_\+headers@{send\+\_\+headers}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{send\+\_\+headers}{send_headers}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} send\+\_\+headers}\hypertarget{group__APACHE__CORE__PROTO_gac891dd64bc992a549275a12793e2b90a}{}\label{group__APACHE__CORE__PROTO_gac891dd64bc992a549275a12793e2b90a}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!src@{src}}
+\index{src@{src}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{src}{src}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf void} $\ast$ src}\hypertarget{group__APACHE__CORE__PROTO_ga3250c7d76063d957a24f2ecbb3d93c2c}{}\label{group__APACHE__CORE__PROTO_ga3250c7d76063d957a24f2ecbb3d93c2c}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!status@{status}}
+\index{status@{status}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{status}{status}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} status}\hypertarget{group__APACHE__CORE__PROTO_ga6e27f49150e9a14580fb313cc2777e00}{}\label{group__APACHE__CORE__PROTO_ga6e27f49150e9a14580fb313cc2777e00}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!type@{type}}
+\index{type@{type}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{type}{type}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ type}\hypertarget{group__APACHE__CORE__PROTO_ga763fd8db6bba8fbbbc113ca0d61c47c2}{}\label{group__APACHE__CORE__PROTO_ga763fd8db6bba8fbbbc113ca0d61c47c2}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!uri@{uri}}
+\index{uri@{uri}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{uri}{uri}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ uri}\hypertarget{group__APACHE__CORE__PROTO_ga69ec24fb2d0a5f5e532deb9adaab81d6}{}\label{group__APACHE__CORE__PROTO_ga69ec24fb2d0a5f5e532deb9adaab81d6}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!username@{username}}
+\index{username@{username}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{username}{username}}]{\setlength{\rightskip}{0pt plus 5cm}const char $\ast$ username}\hypertarget{group__APACHE__CORE__PROTO_ga5389d939c3316982842a29d3694f2e23}{}\label{group__APACHE__CORE__PROTO_ga5389d939c3316982842a29d3694f2e23}
+\index{H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}!vlist@{vlist}}
+\index{vlist@{vlist}!H\+T\+T\+P Protocol Handling@{H\+T\+T\+P Protocol Handling}}
+\subsubsection[{\texorpdfstring{vlist}{vlist}}]{\setlength{\rightskip}{0pt plus 5cm}const char va\+\_\+list vlist}\hypertarget{group__APACHE__CORE__PROTO_ga5c9cb20591e8d38a4c372c544d01a14e}{}\label{group__APACHE__CORE__PROTO_ga5c9cb20591e8d38a4c372c544d01a14e}

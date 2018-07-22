@@ -1,0 +1,216 @@
+\hypertarget{ssl__engine__config_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/ssl/ssl\+\_\+engine\+\_\+config.c File Reference}
+\label{ssl__engine__config_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/ssl/ssl\+\_\+engine\+\_\+config.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/ssl/ssl\+\_\+engine\+\_\+config.\+c}}
+{\ttfamily \#include \char`\"{}ssl\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+Include dependency graph for ssl\+\_\+engine\+\_\+config.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ssl__engine__config_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{ssl__engine__config_8c_a38f1e4e69e942073bcf66d1df1fdd7f3}{S\+S\+L\+\_\+\+M\+O\+D\+\_\+\+C\+O\+N\+F\+I\+G\+\_\+\+K\+EY}~\char`\"{}ssl\+\_\+module\char`\"{}
+\item 
+\#define \hyperlink{ssl__engine__config_8c_a90213e148ada3eded13ce10eee217094}{cfg\+Merge}(el,  unset)~mrg-\/$>$el = (add-\/$>$el == (unset)) ? \hyperlink{group__apr__tables_ga74964146831939c658b798439fc32f6d}{base}-\/$>$el \+: add-\/$>$el
+\item 
+\#define \hyperlink{ssl__engine__config_8c_a9592405ae0ea52318c97fee43a15162f}{cfg\+Merge\+Array}(el)~mrg-\/$>$el = \hyperlink{apr__tables_8c_a22a878ba64776b0c7a0875c118c5c2c0}{apr\+\_\+array\+\_\+append}(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__apr__tables_ga74964146831939c658b798439fc32f6d}{base}-\/$>$el, add-\/$>$el)
+\item 
+\#define \hyperlink{ssl__engine__config_8c_a8dc471d6048b1a9a8c849bd2d9a9c012}{cfg\+Merge\+String}(el)~\hyperlink{ssl__engine__config_8c_a90213e148ada3eded13ce10eee217094}{cfg\+Merge}(el, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL})
+\item 
+\#define \hyperlink{ssl__engine__config_8c_ad3db8740ca15a604796c35b3c01ce455}{cfg\+Merge\+Bool}(el)~\hyperlink{ssl__engine__config_8c_a90213e148ada3eded13ce10eee217094}{cfg\+Merge}(el, \hyperlink{group__MOD__SSL__PRIVATE_gab0b265b69299aeccfade9365cf04db2a}{U\+N\+S\+ET})
+\item 
+\#define \hyperlink{ssl__engine__config_8c_a4c9be73a84ace1af16fee420460ec461}{cfg\+Merge\+Int}(el)~\hyperlink{ssl__engine__config_8c_a90213e148ada3eded13ce10eee217094}{cfg\+Merge}(el, \hyperlink{group__MOD__SSL__PRIVATE_gab0b265b69299aeccfade9365cf04db2a}{U\+N\+S\+ET})
+\item 
+\#define \hyperlink{ssl__engine__config_8c_a6168dc1fbe96dac5da3c11b593d1f3df}{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+F\+I\+LE}~(\hyperlink{group__MOD__SSL__PRIVATE_gad2e4ca718c4947d62fae0d3c80391d98}{S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+E\+X\+I\+S\+TS}$\vert$\hyperlink{group__MOD__SSL__PRIVATE_gaf6c6ed18cc0c9536ac6388a028088ad4}{S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+I\+S\+R\+EG}$\vert$\hyperlink{group__MOD__SSL__PRIVATE_ga210d029c8b5399e32a8a78f7243f5e21}{S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+I\+S\+N\+O\+N\+Z\+E\+RO})
+\item 
+\#define \hyperlink{ssl__engine__config_8c_af6e7f6bebdea2ac2d8908b1f406d6c93}{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+D\+IR}~(\hyperlink{group__MOD__SSL__PRIVATE_gad2e4ca718c4947d62fae0d3c80391d98}{S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+E\+X\+I\+S\+TS}$\vert$\hyperlink{group__MOD__SSL__PRIVATE_ga56b63865a7b14ea38ba500e7cbd00b4d}{S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+I\+S\+D\+IR})
+\item 
+\#define \hyperlink{ssl__engine__config_8c_ad17f83b1eec1af2a0102f42196dee1e8}{N\+O\+\_\+\+P\+E\+R\+\_\+\+D\+I\+R\+\_\+\+S\+S\+L\+\_\+\+CA}~\char`\"{}Your \hyperlink{group__MOD__SSL_gac05889312301718b3fc106564942ad68}{S\+SL} \hyperlink{pcretest_8txt_a7d2e848fb4392b4e74cbf478dbdc6ad1}{library} does \hyperlink{pcre_8txt_aab236af6334f68eebb41dff13921475a}{not} have \hyperlink{pcregrep_8txt_ad138d584026b091836ba441440a66ff5}{support} for per-\/\hyperlink{pcregrep_8txt_ac33d049ccd70185ffba7bed3d06d9ea2}{directory} CA\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structSSLModConfigRec}{S\+S\+L\+Mod\+Config\+Rec} $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga0365faa903562ac63083df6d04227521}{ssl\+\_\+config\+\_\+global\+\_\+create} (\hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__SSL__PRIVATE_gafe1cfce41c29de1c8980f2a0caa6fe4f}{ssl\+\_\+config\+\_\+global\+\_\+fix} (\hyperlink{structSSLModConfigRec}{S\+S\+L\+Mod\+Config\+Rec} $\ast$\hyperlink{group__APR__Util__MC_ga1cf8c9d89cfb411f224cae715e8c2aaa}{mc})
+\item 
+\hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} \hyperlink{group__MOD__SSL__PRIVATE_ga7b617989eaed8441685c2301ea87044a}{ssl\+\_\+config\+\_\+global\+\_\+isfixed} (\hyperlink{structSSLModConfigRec}{S\+S\+L\+Mod\+Config\+Rec} $\ast$\hyperlink{group__APR__Util__MC_ga1cf8c9d89cfb411f224cae715e8c2aaa}{mc})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga64e7868513bbdfcdcecbdb9dfbf185e6}{ssl\+\_\+config\+\_\+server\+\_\+create} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gaeb1adecf91162c750ea580b872996f32}{ssl\+\_\+config\+\_\+server\+\_\+merge} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$basev, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$addv)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gac349d01ebf73781e164c581e8a6f25b8}{ssl\+\_\+config\+\_\+perdir\+\_\+create} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, char $\ast$\hyperlink{pcregrep_8txt_a6d902c83b02c43071b972ed0416729bc}{dir})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga6ad87436d17cf9df9aeb088e9f288871}{ssl\+\_\+config\+\_\+perdir\+\_\+merge} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$basev, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$addv)
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga4932a2e159559a529c6f7b8acb228d01}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Pass\+Phrase\+Dialog} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga9a004e9d6ce2fb8f1c7d0db9dd6793ab}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Random\+Seed} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$arg1, const char $\ast$arg2, const char $\ast$arg3)
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga130bb4d9d6834fbef197653ee20dbc86}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Engine} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga25550ea970d97e41a0e4680c5eb4be1d}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+F\+I\+PS} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga39db087122d646d82db4909d17b5a789}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Cipher\+Suite} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga8dd3e15bff27f921d13e552a68485046}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Compression} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga53ccd428317d4ef6b6c12cff95485f26}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Honor\+Cipher\+Order} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga36e1f7d512e1c1b347484cf276cafff5}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Session\+Tickets} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga46e62989f24c499e60aa3e976b30646d}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Insecure\+Renegotiation} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gad626d0764f53ef190589a1b4a2c037dc}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Certificate\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gacf62182f849b1b97d34a7a845a5db0c2}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Certificate\+Key\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga2541dcab4b3759445633b89a53cdccba}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Certificate\+Chain\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga8b212a95fa9bbb551758cf3f81ff6db1}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+C\+A\+Certificate\+Path} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gaa65c886725a20a1b134618feef643380}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+C\+A\+Certificate\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga07f9e088d83acf48df3dc90d6c547d01}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+C\+A\+D\+N\+Request\+Path} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga2edb1687f5897368f27e33a3a53a9df1}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+C\+A\+D\+N\+Request\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga18a4fde5bce7877b645f63729be6838d}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+C\+A\+Revocation\+Path} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga424321dbcb8acf3752efeedbcba2e0d6}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+C\+A\+Revocation\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga12320b36dcc0ed936a79f652061417b0}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+C\+A\+Revocation\+Check} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga2d87d6368326fb8bdc2fc3e283612f9e}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Verify\+Client} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga79d1bfd3da1378dbc3d497aeb6c63735}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Verify\+Depth} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gab977447a91234c86f116a6958da8ab34}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Session\+Cache} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga0814f5be34952db55da30f90fba63cfc}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Session\+Cache\+Timeout} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gada7401ec64413cbf68b485094276b59e}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Options} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gab90543b8540d697239a6b993d41459fc}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Require\+S\+SL} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg)
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga96d1a8b44a1728954993558a3cb1c342}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Require} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga36c54cd51cd4098e1f5fd4c952900f7a}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Reneg\+Buffer\+Size} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga3d73a1f70f5c721aaa5c7668578aeff5}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Protocol} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga2dbaa69477b259f1caf1fba3e360dccc}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Engine} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga8b9d0dd4e7fd576e38bcf7137f7e9c53}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Protocol} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga5752f72e1dc89273eaae902d4b406162}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Cipher\+Suite} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga0165ffaf9608ae191863509ec411b965}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Verify} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gaf1cf7532d8ad67b6d83ce29b6a46df96}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Verify\+Depth} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga35f4c9d6581ae25ace4fcb505c03edc9}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+C\+A\+Certificate\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga485e02d2a4c99e5e5c436dbbced9059e}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+C\+A\+Certificate\+Path} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga58b498de6b57f94e4195a09fc44a9f58}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+C\+A\+Revocation\+Path} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga061cdab13b9eecb645a2b332cc16de64}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+C\+A\+Revocation\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga8b5d15afdd7e5e95a0c0d6893030a247}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+C\+A\+Revocation\+Check} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga8aa34c2ae9acfc109106407841231c65}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Machine\+Certificate\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga6419a22d6f145e8c9938c39740fcdaf9}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Machine\+Certificate\+Path} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga09f8dd26dcb9da79d4786acaa7bdb156}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Machine\+Certificate\+Chain\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga6c485fc03af997bfc0d39bca87ba853a}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+User\+Name} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga2ef57fa2961578183aab6d222cd9f53c}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Enable} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga19370828f87340e0ddd9bee5dfa74638}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Override\+Responder} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga33fbb291289472efd27beb62940c44f5}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Default\+Responder} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga2e4c6b9977860eaacee0f78edc5d8d0e}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Response\+Time\+Skew} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gaa5356f67990fd4833cb307a92fb0df8e}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Response\+Max\+Age} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga5a1355c2985cc9459c8d8baabb6ffcb7}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Responder\+Timeout} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gac244f55b7e0c3c2b2182eaed95d9aecd}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Use\+Request\+Nonce} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gafc864827c2e87ece4889d43f7b74961f}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Proxy\+U\+RL} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gab801e1e4f9b24df7f49049ce8e0ef1f2}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+No\+Verify} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gad2009c8ecb89510a647770f4dbd490c0}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Check\+Peer\+Expire} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gade1aa0a2e0ace51b6c58c1acc5e3d0ce}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Check\+Peer\+CN} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga1680991d78101944b35d1033291deefc}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Proxy\+Check\+Peer\+Name} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga68dbf1f0886d0576745d1ece9d8d5965}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+Strict\+S\+N\+I\+V\+Host\+Check} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag})
+\item 
+const char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_gaa59ac03a2db9d1027ac7943c7e760159}{ssl\+\_\+cmd\+\_\+\+S\+S\+L\+O\+C\+S\+P\+Responder\+Certificate\+File} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$dcfg, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__SSL__PRIVATE_gafdb363562ba5aa242ef17cfb82e84488}{ssl\+\_\+hook\+\_\+\+Config\+Test} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_gade454c9a3dc13ac389d15bf30f6c92b2}{pconf}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!cfg\+Merge@{cfg\+Merge}}
+\index{cfg\+Merge@{cfg\+Merge}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{cfg\+Merge}{cfgMerge}}]{\setlength{\rightskip}{0pt plus 5cm}\#define cfg\+Merge(
+\begin{DoxyParamCaption}
+\item[{}]{el, }
+\item[{}]{unset}
+\end{DoxyParamCaption}
+)~mrg-\/$>$el = (add-\/$>$el == (unset)) ? {\bf base}-\/$>$el \+: add-\/$>$el}\hypertarget{ssl__engine__config_8c_a90213e148ada3eded13ce10eee217094}{}\label{ssl__engine__config_8c_a90213e148ada3eded13ce10eee217094}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!cfg\+Merge\+Array@{cfg\+Merge\+Array}}
+\index{cfg\+Merge\+Array@{cfg\+Merge\+Array}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{cfg\+Merge\+Array}{cfgMergeArray}}]{\setlength{\rightskip}{0pt plus 5cm}\#define cfg\+Merge\+Array(
+\begin{DoxyParamCaption}
+\item[{}]{el}
+\end{DoxyParamCaption}
+)~mrg-\/$>$el = {\bf apr\+\_\+array\+\_\+append}({\bf p}, {\bf base}-\/$>$el, add-\/$>$el)}\hypertarget{ssl__engine__config_8c_a9592405ae0ea52318c97fee43a15162f}{}\label{ssl__engine__config_8c_a9592405ae0ea52318c97fee43a15162f}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!cfg\+Merge\+Bool@{cfg\+Merge\+Bool}}
+\index{cfg\+Merge\+Bool@{cfg\+Merge\+Bool}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{cfg\+Merge\+Bool}{cfgMergeBool}}]{\setlength{\rightskip}{0pt plus 5cm}\#define cfg\+Merge\+Bool(
+\begin{DoxyParamCaption}
+\item[{}]{el}
+\end{DoxyParamCaption}
+)~{\bf cfg\+Merge}(el, {\bf U\+N\+S\+ET})}\hypertarget{ssl__engine__config_8c_ad3db8740ca15a604796c35b3c01ce455}{}\label{ssl__engine__config_8c_ad3db8740ca15a604796c35b3c01ce455}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!cfg\+Merge\+Int@{cfg\+Merge\+Int}}
+\index{cfg\+Merge\+Int@{cfg\+Merge\+Int}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{cfg\+Merge\+Int}{cfgMergeInt}}]{\setlength{\rightskip}{0pt plus 5cm}\#define cfg\+Merge\+Int(
+\begin{DoxyParamCaption}
+\item[{}]{el}
+\end{DoxyParamCaption}
+)~{\bf cfg\+Merge}(el, {\bf U\+N\+S\+ET})}\hypertarget{ssl__engine__config_8c_a4c9be73a84ace1af16fee420460ec461}{}\label{ssl__engine__config_8c_a4c9be73a84ace1af16fee420460ec461}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!cfg\+Merge\+String@{cfg\+Merge\+String}}
+\index{cfg\+Merge\+String@{cfg\+Merge\+String}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{cfg\+Merge\+String}{cfgMergeString}}]{\setlength{\rightskip}{0pt plus 5cm}\#define cfg\+Merge\+String(
+\begin{DoxyParamCaption}
+\item[{}]{el}
+\end{DoxyParamCaption}
+)~{\bf cfg\+Merge}(el, {\bf N\+U\+LL})}\hypertarget{ssl__engine__config_8c_a8dc471d6048b1a9a8c849bd2d9a9c012}{}\label{ssl__engine__config_8c_a8dc471d6048b1a9a8c849bd2d9a9c012}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!N\+O\+\_\+\+P\+E\+R\+\_\+\+D\+I\+R\+\_\+\+S\+S\+L\+\_\+\+CA@{N\+O\+\_\+\+P\+E\+R\+\_\+\+D\+I\+R\+\_\+\+S\+S\+L\+\_\+\+CA}}
+\index{N\+O\+\_\+\+P\+E\+R\+\_\+\+D\+I\+R\+\_\+\+S\+S\+L\+\_\+\+CA@{N\+O\+\_\+\+P\+E\+R\+\_\+\+D\+I\+R\+\_\+\+S\+S\+L\+\_\+\+CA}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{N\+O\+\_\+\+P\+E\+R\+\_\+\+D\+I\+R\+\_\+\+S\+S\+L\+\_\+\+CA}{NO_PER_DIR_SSL_CA}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+O\+\_\+\+P\+E\+R\+\_\+\+D\+I\+R\+\_\+\+S\+S\+L\+\_\+\+CA~\char`\"{}Your {\bf S\+SL} {\bf library} does {\bf not} have {\bf support} for per-\/{\bf directory} CA\char`\"{}}\hypertarget{ssl__engine__config_8c_ad17f83b1eec1af2a0102f42196dee1e8}{}\label{ssl__engine__config_8c_ad17f83b1eec1af2a0102f42196dee1e8}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+D\+IR@{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+D\+IR}}
+\index{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+D\+IR@{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+D\+IR}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+D\+IR}{SSL_FLAGS_CHECK_DIR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+D\+IR~({\bf S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+E\+X\+I\+S\+TS}$\vert${\bf S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+I\+S\+D\+IR})}\hypertarget{ssl__engine__config_8c_af6e7f6bebdea2ac2d8908b1f406d6c93}{}\label{ssl__engine__config_8c_af6e7f6bebdea2ac2d8908b1f406d6c93}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+F\+I\+LE@{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+F\+I\+LE}}
+\index{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+F\+I\+LE@{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+F\+I\+LE}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+F\+I\+LE}{SSL_FLAGS_CHECK_FILE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+S\+L\+\_\+\+F\+L\+A\+G\+S\+\_\+\+C\+H\+E\+C\+K\+\_\+\+F\+I\+LE~({\bf S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+E\+X\+I\+S\+TS}$\vert${\bf S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+I\+S\+R\+EG}$\vert${\bf S\+S\+L\+\_\+\+P\+C\+M\+\_\+\+I\+S\+N\+O\+N\+Z\+E\+RO})}\hypertarget{ssl__engine__config_8c_a6168dc1fbe96dac5da3c11b593d1f3df}{}\label{ssl__engine__config_8c_a6168dc1fbe96dac5da3c11b593d1f3df}
+\index{ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}!S\+S\+L\+\_\+\+M\+O\+D\+\_\+\+C\+O\+N\+F\+I\+G\+\_\+\+K\+EY@{S\+S\+L\+\_\+\+M\+O\+D\+\_\+\+C\+O\+N\+F\+I\+G\+\_\+\+K\+EY}}
+\index{S\+S\+L\+\_\+\+M\+O\+D\+\_\+\+C\+O\+N\+F\+I\+G\+\_\+\+K\+EY@{S\+S\+L\+\_\+\+M\+O\+D\+\_\+\+C\+O\+N\+F\+I\+G\+\_\+\+K\+EY}!ssl\+\_\+engine\+\_\+config.\+c@{ssl\+\_\+engine\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{S\+S\+L\+\_\+\+M\+O\+D\+\_\+\+C\+O\+N\+F\+I\+G\+\_\+\+K\+EY}{SSL_MOD_CONFIG_KEY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+S\+L\+\_\+\+M\+O\+D\+\_\+\+C\+O\+N\+F\+I\+G\+\_\+\+K\+EY~\char`\"{}ssl\+\_\+module\char`\"{}}\hypertarget{ssl__engine__config_8c_a38f1e4e69e942073bcf66d1df1fdd7f3}{}\label{ssl__engine__config_8c_a38f1e4e69e942073bcf66d1df1fdd7f3}

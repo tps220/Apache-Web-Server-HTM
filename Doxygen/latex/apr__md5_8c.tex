@@ -1,0 +1,1713 @@
+\hypertarget{apr__md5_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr-\/util/crypto/apr\+\_\+md5.c File Reference}
+\label{apr__md5_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/crypto/apr\+\_\+md5.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/crypto/apr\+\_\+md5.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apu\+\_\+config.\+h\char`\"{}}\\*
+Include dependency graph for apr\+\_\+md5.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{apr__md5_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{apr__md5_8c_a51398c0e5541164ad4d6615880073305}{S11}~7
+\item 
+\#define \hyperlink{apr__md5_8c_a1ec499cd0e54ecc28c2ac2afea5b038e}{S12}~12
+\item 
+\#define \hyperlink{apr__md5_8c_aaeec90429105fb54d853dd4fc7027a54}{S13}~17
+\item 
+\#define \hyperlink{apr__md5_8c_a78342b0ccde2ed12fdf19a113cc266cf}{S14}~22
+\item 
+\#define \hyperlink{apr__md5_8c_ab6d5354f647a0e7592a1f051fc8377b2}{S21}~5
+\item 
+\#define \hyperlink{apr__md5_8c_addad30455da936bc1879ee9c72b46d59}{S22}~9
+\item 
+\#define \hyperlink{apr__md5_8c_a6321a8b29628936f76e9e78cf5bda95f}{S23}~14
+\item 
+\#define \hyperlink{apr__md5_8c_a0c09eb77d30a0d5f9154914147b86c20}{S24}~20
+\item 
+\#define \hyperlink{apr__md5_8c_aef26590f8a880ee6f4a158168defcd89}{S31}~4
+\item 
+\#define \hyperlink{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{S32}~11
+\item 
+\#define \hyperlink{apr__md5_8c_a1c854214533f6220e859b0063196abb3}{S33}~16
+\item 
+\#define \hyperlink{apr__md5_8c_af6472be1d535970afee8e5266a74aa07}{S34}~23
+\item 
+\#define \hyperlink{apr__md5_8c_ab674ba129e588da55d1d494e1cf3c15e}{S41}~6
+\item 
+\#define \hyperlink{apr__md5_8c_a268ef1a49114a94b931cc6b313e3cd1b}{S42}~10
+\item 
+\#define \hyperlink{apr__md5_8c_a5aaa7121f39650d472746942ca68f959}{S43}~15
+\item 
+\#define \hyperlink{apr__md5_8c_a6a3989af72b55d169bd73a66f8620aae}{S44}~21
+\item 
+\#define \hyperlink{apr__md5_8c_a2cbfe6a1c4846ccedd96563b6aaa04d8}{D\+O\+\_\+\+X\+L\+A\+TE}~0
+\item 
+\#define \hyperlink{apr__md5_8c_ade8b8d4d8776c1ecb93143ab2141701d}{S\+K\+I\+P\+\_\+\+X\+L\+A\+TE}~1
+\item 
+\#define \hyperlink{apr__md5_8c_a96d73bbd7af15cb1fc38c3f4a3bd82e9}{F}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) \& (\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y})) $\vert$ (($\sim$\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) \& (z)))
+\item 
+\#define \hyperlink{apr__md5_8c_ad96b7cf3182ce2ba85e5a7a93b12c441}{G}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) \& (z)) $\vert$ ((\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}) \& ($\sim$z)))
+\item 
+\#define \hyperlink{apr__md5_8c_ae42219072d798876e6b08e6b78614ff6}{H}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $^\wedge$ (\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}) $^\wedge$ (z))
+\item 
+\#define \hyperlink{apr__md5_8c_ac0eafdc9ee161b71e7af98af736952fd}{I}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y},  z)~((\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}) $^\wedge$ ((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $\vert$ ($\sim$z)))
+\item 
+\#define \hyperlink{apr__md5_8c_a7417fd4e875360c0533fa5b412cdab49}{R\+O\+T\+A\+T\+E\+\_\+\+L\+E\+FT}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$$<$ (\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})) $\vert$ ((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$$>$ (32-\/(\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}))))
+\item 
+\#define \hyperlink{apr__md5_8c_a0a143972cb6c4fe16f0ffa8a3d41ebf3}{FF}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  ac)
+\item 
+\#define \hyperlink{apr__md5_8c_a685f32faa2a66e743850b990a13b8bfa}{GG}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  ac)
+\item 
+\#define \hyperlink{apr__md5_8c_a8b9f1c4778df01ef970b87dbe5541dc5}{HH}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  ac)
+\item 
+\#define \hyperlink{apr__md5_8c_ad26626e5efb37b2dadef4e88e35e4329}{II}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c},  \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d},  \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  ac)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{apr__md5_8c_aac2a5ebd110b5bf5a9f6733dac29fc3e}{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!D\+O\+\_\+\+X\+L\+A\+TE@{D\+O\+\_\+\+X\+L\+A\+TE}}
+\index{D\+O\+\_\+\+X\+L\+A\+TE@{D\+O\+\_\+\+X\+L\+A\+TE}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{D\+O\+\_\+\+X\+L\+A\+TE}{DO_XLATE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+O\+\_\+\+X\+L\+A\+TE~0}\hypertarget{apr__md5_8c_a2cbfe6a1c4846ccedd96563b6aaa04d8}{}\label{apr__md5_8c_a2cbfe6a1c4846ccedd96563b6aaa04d8}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!F@{F}}
+\index{F@{F}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{F}{F}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~((({\bf x}) \& ({\bf y})) $\vert$ (($\sim${\bf x}) \& (z)))}\hypertarget{apr__md5_8c_a96d73bbd7af15cb1fc38c3f4a3bd82e9}{}\label{apr__md5_8c_a96d73bbd7af15cb1fc38c3f4a3bd82e9}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!FF@{FF}}
+\index{FF@{FF}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{FF}{FF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define FF(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf c}, }
+\item[{}]{{\bf d}, }
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf s}, }
+\item[{}]{ac}
+\end{DoxyParamCaption}
+)}\hypertarget{apr__md5_8c_a0a143972cb6c4fe16f0ffa8a3d41ebf3}{}\label{apr__md5_8c_a0a143972cb6c4fe16f0ffa8a3d41ebf3}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) += \hyperlink{apr__md5_8c_a96d73bbd7af15cb1fc38c3f4a3bd82e9}{F} ((\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}), (\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}), (\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d})) + (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}) + (\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\_uint32\_t})(ac); \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) = \hyperlink{apr__md5_8c_a7417fd4e875360c0533fa5b412cdab49}{ROTATE\_LEFT} ((\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}), (\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s})); \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) += (\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}); \(\backslash\)
+  \}
+\end{DoxyCode}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!G@{G}}
+\index{G@{G}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{G}{G}}]{\setlength{\rightskip}{0pt plus 5cm}\#define G(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~((({\bf x}) \& (z)) $\vert$ (({\bf y}) \& ($\sim$z)))}\hypertarget{apr__md5_8c_ad96b7cf3182ce2ba85e5a7a93b12c441}{}\label{apr__md5_8c_ad96b7cf3182ce2ba85e5a7a93b12c441}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!GG@{GG}}
+\index{GG@{GG}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{GG}{GG}}]{\setlength{\rightskip}{0pt plus 5cm}\#define GG(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf c}, }
+\item[{}]{{\bf d}, }
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf s}, }
+\item[{}]{ac}
+\end{DoxyParamCaption}
+)}\hypertarget{apr__md5_8c_a685f32faa2a66e743850b990a13b8bfa}{}\label{apr__md5_8c_a685f32faa2a66e743850b990a13b8bfa}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) += \hyperlink{apr__md5_8c_ad96b7cf3182ce2ba85e5a7a93b12c441}{G} ((\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}), (\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}), (\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d})) + (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}) + (\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\_uint32\_t})(ac); \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) = \hyperlink{apr__md5_8c_a7417fd4e875360c0533fa5b412cdab49}{ROTATE\_LEFT} ((\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}), (\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s})); \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) += (\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}); \(\backslash\)
+  \}
+\end{DoxyCode}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!H@{H}}
+\index{H@{H}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{H}{H}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~(({\bf x}) $^\wedge$ ({\bf y}) $^\wedge$ (z))}\hypertarget{apr__md5_8c_ae42219072d798876e6b08e6b78614ff6}{}\label{apr__md5_8c_ae42219072d798876e6b08e6b78614ff6}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!HH@{HH}}
+\index{HH@{HH}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{HH}{HH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define HH(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf c}, }
+\item[{}]{{\bf d}, }
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf s}, }
+\item[{}]{ac}
+\end{DoxyParamCaption}
+)}\hypertarget{apr__md5_8c_a8b9f1c4778df01ef970b87dbe5541dc5}{}\label{apr__md5_8c_a8b9f1c4778df01ef970b87dbe5541dc5}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) += \hyperlink{apr__md5_8c_ae42219072d798876e6b08e6b78614ff6}{H} ((\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}), (\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}), (\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d})) + (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}) + (\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\_uint32\_t})(ac); \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) = \hyperlink{apr__md5_8c_a7417fd4e875360c0533fa5b412cdab49}{ROTATE\_LEFT} ((\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}), (\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s})); \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) += (\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}); \(\backslash\)
+  \}
+\end{DoxyCode}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!I@{I}}
+\index{I@{I}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{I}{I}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}, }
+\item[{}]{z}
+\end{DoxyParamCaption}
+)~(({\bf y}) $^\wedge$ (({\bf x}) $\vert$ ($\sim$z)))}\hypertarget{apr__md5_8c_ac0eafdc9ee161b71e7af98af736952fd}{}\label{apr__md5_8c_ac0eafdc9ee161b71e7af98af736952fd}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!II@{II}}
+\index{II@{II}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{II}{II}}]{\setlength{\rightskip}{0pt plus 5cm}\#define II(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf c}, }
+\item[{}]{{\bf d}, }
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf s}, }
+\item[{}]{ac}
+\end{DoxyParamCaption}
+)}\hypertarget{apr__md5_8c_ad26626e5efb37b2dadef4e88e35e4329}{}\label{apr__md5_8c_ad26626e5efb37b2dadef4e88e35e4329}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) += \hyperlink{apr__md5_8c_ac0eafdc9ee161b71e7af98af736952fd}{I} ((\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}), (\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}), (\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d})) + (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}) + (\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\_uint32\_t})(ac); \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) = \hyperlink{apr__md5_8c_a7417fd4e875360c0533fa5b412cdab49}{ROTATE\_LEFT} ((\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}), (\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s})); \(\backslash\)
+ (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}) += (\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}); \(\backslash\)
+  \}
+\end{DoxyCode}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!R\+O\+T\+A\+T\+E\+\_\+\+L\+E\+FT@{R\+O\+T\+A\+T\+E\+\_\+\+L\+E\+FT}}
+\index{R\+O\+T\+A\+T\+E\+\_\+\+L\+E\+FT@{R\+O\+T\+A\+T\+E\+\_\+\+L\+E\+FT}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{R\+O\+T\+A\+T\+E\+\_\+\+L\+E\+FT}{ROTATE_LEFT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+O\+T\+A\+T\+E\+\_\+\+L\+E\+FT(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~((({\bf x}) $<$$<$ ({\bf n})) $\vert$ (({\bf x}) $>$$>$ (32-\/({\bf n}))))}\hypertarget{apr__md5_8c_a7417fd4e875360c0533fa5b412cdab49}{}\label{apr__md5_8c_a7417fd4e875360c0533fa5b412cdab49}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S11@{S11}}
+\index{S11@{S11}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S11}{S11}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S11~7}\hypertarget{apr__md5_8c_a51398c0e5541164ad4d6615880073305}{}\label{apr__md5_8c_a51398c0e5541164ad4d6615880073305}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S12@{S12}}
+\index{S12@{S12}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S12}{S12}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S12~12}\hypertarget{apr__md5_8c_a1ec499cd0e54ecc28c2ac2afea5b038e}{}\label{apr__md5_8c_a1ec499cd0e54ecc28c2ac2afea5b038e}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S13@{S13}}
+\index{S13@{S13}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S13}{S13}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S13~17}\hypertarget{apr__md5_8c_aaeec90429105fb54d853dd4fc7027a54}{}\label{apr__md5_8c_aaeec90429105fb54d853dd4fc7027a54}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S14@{S14}}
+\index{S14@{S14}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S14}{S14}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S14~22}\hypertarget{apr__md5_8c_a78342b0ccde2ed12fdf19a113cc266cf}{}\label{apr__md5_8c_a78342b0ccde2ed12fdf19a113cc266cf}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S21@{S21}}
+\index{S21@{S21}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S21}{S21}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S21~5}\hypertarget{apr__md5_8c_ab6d5354f647a0e7592a1f051fc8377b2}{}\label{apr__md5_8c_ab6d5354f647a0e7592a1f051fc8377b2}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S22@{S22}}
+\index{S22@{S22}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S22}{S22}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S22~9}\hypertarget{apr__md5_8c_addad30455da936bc1879ee9c72b46d59}{}\label{apr__md5_8c_addad30455da936bc1879ee9c72b46d59}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S23@{S23}}
+\index{S23@{S23}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S23}{S23}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S23~14}\hypertarget{apr__md5_8c_a6321a8b29628936f76e9e78cf5bda95f}{}\label{apr__md5_8c_a6321a8b29628936f76e9e78cf5bda95f}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S24@{S24}}
+\index{S24@{S24}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S24}{S24}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S24~20}\hypertarget{apr__md5_8c_a0c09eb77d30a0d5f9154914147b86c20}{}\label{apr__md5_8c_a0c09eb77d30a0d5f9154914147b86c20}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S31@{S31}}
+\index{S31@{S31}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S31}{S31}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S31~4}\hypertarget{apr__md5_8c_aef26590f8a880ee6f4a158168defcd89}{}\label{apr__md5_8c_aef26590f8a880ee6f4a158168defcd89}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S32@{S32}}
+\index{S32@{S32}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S32}{S32}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S32~11}\hypertarget{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}{}\label{apr__md5_8c_a1d512424dd8a91e0a5bcc98563f33914}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S33@{S33}}
+\index{S33@{S33}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S33}{S33}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S33~16}\hypertarget{apr__md5_8c_a1c854214533f6220e859b0063196abb3}{}\label{apr__md5_8c_a1c854214533f6220e859b0063196abb3}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S34@{S34}}
+\index{S34@{S34}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S34}{S34}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S34~23}\hypertarget{apr__md5_8c_af6472be1d535970afee8e5266a74aa07}{}\label{apr__md5_8c_af6472be1d535970afee8e5266a74aa07}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S41@{S41}}
+\index{S41@{S41}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S41}{S41}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S41~6}\hypertarget{apr__md5_8c_ab674ba129e588da55d1d494e1cf3c15e}{}\label{apr__md5_8c_ab674ba129e588da55d1d494e1cf3c15e}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S42@{S42}}
+\index{S42@{S42}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S42}{S42}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S42~10}\hypertarget{apr__md5_8c_a268ef1a49114a94b931cc6b313e3cd1b}{}\label{apr__md5_8c_a268ef1a49114a94b931cc6b313e3cd1b}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S43@{S43}}
+\index{S43@{S43}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S43}{S43}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S43~15}\hypertarget{apr__md5_8c_a5aaa7121f39650d472746942ca68f959}{}\label{apr__md5_8c_a5aaa7121f39650d472746942ca68f959}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S44@{S44}}
+\index{S44@{S44}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S44}{S44}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S44~21}\hypertarget{apr__md5_8c_a6a3989af72b55d169bd73a66f8620aae}{}\label{apr__md5_8c_a6a3989af72b55d169bd73a66f8620aae}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!S\+K\+I\+P\+\_\+\+X\+L\+A\+TE@{S\+K\+I\+P\+\_\+\+X\+L\+A\+TE}}
+\index{S\+K\+I\+P\+\_\+\+X\+L\+A\+TE@{S\+K\+I\+P\+\_\+\+X\+L\+A\+TE}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{S\+K\+I\+P\+\_\+\+X\+L\+A\+TE}{SKIP_XLATE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+K\+I\+P\+\_\+\+X\+L\+A\+TE~1}\hypertarget{apr__md5_8c_ade8b8d4d8776c1ecb93143ab2141701d}{}\label{apr__md5_8c_ade8b8d4d8776c1ecb93143ab2141701d}
+
+
+\subsection{Function Documentation}
+\index{apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}!A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE}!apr\+\_\+md5.\+c@{apr\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t)}{APU_DECLARE(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{apr__md5_8c_aac2a5ebd110b5bf5a9f6733dac29fc3e}{}\label{apr__md5_8c_aac2a5ebd110b5bf5a9f6733dac29fc3e}
+Encode a text string using base64encoding. 
+\begin{DoxyParams}{Parameters}
+{\em coded\+\_\+dst} & The destination string for the encoded string. \\
+\hline
+{\em plain\+\_\+src} & The original string in plain text \\
+\hline
+{\em len\+\_\+plain\+\_\+src} & The length of the plain text string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the length of the encoded string
+\end{DoxyReturn}
+Encode an E\+B\+C\+D\+IC string using base64encoding. 
+\begin{DoxyParams}{Parameters}
+{\em coded\+\_\+dst} & The destination string for the encoded string. \\
+\hline
+{\em plain\+\_\+src} & The original string in plain text \\
+\hline
+{\em len\+\_\+plain\+\_\+src} & The length of the plain text string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the length of the encoded string
+\end{DoxyReturn}
+Determine the maximum buffer length required to decode the plain text string given the encoded string. 
+\begin{DoxyParams}{Parameters}
+{\em coded\+\_\+src} & The encoded string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the maximum required buffer length for the plain text string
+\end{DoxyReturn}
+Decode a string to plain text 
+\begin{DoxyParams}{Parameters}
+{\em plain\+\_\+dst} & The destination string for the plain text \\
+\hline
+{\em coded\+\_\+src} & The encoded string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the length of the plain text string
+\end{DoxyReturn}
+Decode an E\+B\+C\+D\+IC string to plain text 
+\begin{DoxyParams}{Parameters}
+{\em plain\+\_\+dst} & The destination string for the plain text \\
+\hline
+{\em coded\+\_\+src} & The encoded string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the length of the plain text string
+\end{DoxyReturn}
+empty out an entire bucket brigade. This includes destroying all of the buckets within the bucket brigade\textquotesingle{}s bucket list. This is similar to apr\+\_\+brigade\+\_\+destroy(), except that it does not deregister the brigade\textquotesingle{}s pool cleanup function. 
+\begin{DoxyParams}{Parameters}
+{\em data} & The bucket brigade to clean up \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Generally, you should use apr\+\_\+brigade\+\_\+destroy(). This function can be useful in situations where you have a single brigade that you wish to reuse many times by destroying all of the buckets in the brigade and putting new buckets into it later.
+\end{DoxyRemark}
+Partition a bucket brigade at a given offset (in bytes from the start of the brigade). This is useful whenever a filter wants to use known ranges of bytes from the brigade; the ranges can even overlap. 
+\begin{DoxyParams}{Parameters}
+{\em b} & The brigade to partition \\
+\hline
+{\em point} & The offset at which to partition the brigade \\
+\hline
+{\em after\+\_\+point} & Returns a pointer to the first bucket after the partition \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS on success, A\+P\+R\+\_\+\+I\+N\+C\+O\+M\+P\+L\+E\+TE if the contents of the brigade were shorter than {\itshape point}, or an error code. 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+if A\+P\+R\+\_\+\+I\+N\+C\+O\+M\+P\+L\+E\+TE is returned, {\itshape after\+\_\+point} will be set to the brigade sentinel.
+\end{DoxyRemark}
+Return the total length of the brigade. 
+\begin{DoxyParams}{Parameters}
+{\em bb} & The brigade to compute the length of \\
+\hline
+{\em read\+\_\+all} & Read unknown-\/length buckets to force a size \\
+\hline
+{\em length} & Returns the length of the brigade (up to the end, or up to a bucket read error), or -\/1 if the brigade has buckets of indeterminate length and read\+\_\+all is 0.\\
+\hline
+\end{DoxyParams}
+Take a bucket brigade and store the data in a flat char$\ast$ 
+\begin{DoxyParams}{Parameters}
+{\em bb} & The bucket brigade to create the char$\ast$ from \\
+\hline
+{\em c} & The char$\ast$ to write into \\
+\hline
+{\em len} & The maximum length of the char array. On return, it is the actual length of the char array.\\
+\hline
+\end{DoxyParams}
+Creates a pool-\/allocated string representing a flat bucket brigade 
+\begin{DoxyParams}{Parameters}
+{\em bb} & The bucket brigade to create the char array from \\
+\hline
+{\em c} & On return, the allocated char array \\
+\hline
+{\em len} & On return, the length of the char array. \\
+\hline
+{\em pool} & The pool to allocate the string from.\\
+\hline
+\end{DoxyParams}
+Split a brigade to represent one LF line. 
+\begin{DoxyParams}{Parameters}
+{\em bb\+Out} & The bucket brigade that will have the LF line appended to. \\
+\hline
+{\em bb\+In} & The input bucket brigade to search for a L\+F-\/line. \\
+\hline
+{\em block} & The blocking mode to be used to split the line. \\
+\hline
+{\em maxbytes} & The maximum bytes to read. If this many bytes are seen without a LF, the brigade will contain a partial line.\\
+\hline
+\end{DoxyParams}
+Create an iovec of the elements in a bucket\+\_\+brigade... return number of elements used. This is useful for writing to a file or to the network efficiently. 
+\begin{DoxyParams}{Parameters}
+{\em b} & The bucket brigade to create the iovec from \\
+\hline
+{\em vec} & The iovec to create \\
+\hline
+{\em nvec} & The number of elements in the iovec. On return, it is the number of iovec elements actually filled out.\\
+\hline
+\end{DoxyParams}
+This function writes a list of strings into a bucket brigade. 
+\begin{DoxyParams}{Parameters}
+{\em b} & The bucket brigade to add to \\
+\hline
+{\em flush} & The flush function to use if the brigade is full \\
+\hline
+{\em ctx} & The structure to pass to the flush function \\
+\hline
+{\em va} & A list of strings to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code.
+\end{DoxyReturn}
+This function writes a string into a bucket brigade.
+
+The apr\+\_\+brigade\+\_\+write function attempts to be efficient with the handling of heap buckets. Regardless of the amount of data stored inside a heap bucket, heap buckets are a fixed size to promote their reuse.
+
+If an attempt is made to write a string to a brigade that already ends with a heap bucket, this function will attempt to pack the string into the remaining space in the previous heap bucket, before allocating a new heap bucket.
+
+This function always returns A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS, unless a flush function is passed, in which case the return value of the flush function will be returned if used. 
+\begin{DoxyParams}{Parameters}
+{\em b} & The bucket brigade to add to \\
+\hline
+{\em flush} & The flush function to use if the brigade is full \\
+\hline
+{\em ctx} & The structure to pass to the flush function \\
+\hline
+{\em str} & The string to add \\
+\hline
+{\em nbyte} & The number of bytes to write \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+This function writes multiple strings into a bucket brigade. 
+\begin{DoxyParams}{Parameters}
+{\em b} & The bucket brigade to add to \\
+\hline
+{\em flush} & The flush function to use if the brigade is full \\
+\hline
+{\em ctx} & The structure to pass to the flush function \\
+\hline
+{\em vec} & The strings to add (address plus length for each) \\
+\hline
+{\em nvec} & The number of entries in iovec \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+This function writes a string into a bucket brigade. 
+\begin{DoxyParams}{Parameters}
+{\em bb} & The bucket brigade to add to \\
+\hline
+{\em flush} & The flush function to use if the brigade is full \\
+\hline
+{\em ctx} & The structure to pass to the flush function \\
+\hline
+{\em str} & The string to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+This function writes a character into a bucket brigade. 
+\begin{DoxyParams}{Parameters}
+{\em b} & The bucket brigade to add to \\
+\hline
+{\em flush} & The flush function to use if the brigade is full \\
+\hline
+{\em ctx} & The structure to pass to the flush function \\
+\hline
+{\em c} & The character to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+Evaluate a printf and put the resulting string at the end of the bucket brigade. 
+\begin{DoxyParams}{Parameters}
+{\em b} & The brigade to write to \\
+\hline
+{\em flush} & The flush function to use if the brigade is full \\
+\hline
+{\em ctx} & The structure to pass to the flush function \\
+\hline
+{\em fmt} & The format of the string to write \\
+\hline
+{\em va} & The arguments to fill out the format \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+Decrement the refcount of the data in the bucket. This function should only be called by type-\/specific bucket destruction functions. 
+\begin{DoxyParams}{Parameters}
+{\em data} & The private data pointer from the bucket to be destroyed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+R\+UE or F\+A\+L\+SE; T\+R\+UE if the reference count is now zero, indicating that the shared resource itself can be destroyed by the caller.
+\end{DoxyReturn}
+Enable or disable memory-\/mapping for a F\+I\+LE bucket (default is enabled) 
+\begin{DoxyParams}{Parameters}
+{\em b} & The bucket \\
+\hline
+{\em enabled} & Whether memory-\/mapping should be enabled \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS normally, or an error code if the operation fails
+\end{DoxyReturn}
+Set the size of the read buffer allocated by a F\+I\+LE bucket (default is {\itshape A\+P\+R\+\_\+\+B\+U\+C\+K\+E\+T\+\_\+\+B\+U\+F\+F\+\_\+\+S\+I\+ZE}) memory-\/mapping is disabled only) 
+\begin{DoxyParams}{Parameters}
+{\em b} & The bucket \\
+\hline
+{\em size} & Size of the allocated buffers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS normally, or an error code if the operation fails 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+Relevant/used only when memory-\/mapping is disabled (
+\end{DoxyRemark}
+\begin{DoxySeeAlso}{See also}
+apr\+\_\+bucket\+\_\+file\+\_\+enable\+\_\+mmap)
+\end{DoxySeeAlso}
+apr\+\_\+dbd\+\_\+get\+\_\+driver\+: get the driver struct for a name
+
+
+\begin{DoxyParams}{Parameters}
+{\em pool} & -\/ (process) pool to register cleanup \\
+\hline
+{\em name} & -\/ driver name \\
+\hline
+{\em driver} & -\/ pointer to driver struct. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS for success 
+
+A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL for no driver (when D\+SO not enabled) 
+
+A\+P\+R\+\_\+\+E\+D\+S\+O\+O\+P\+EN if D\+SO driver file can\textquotesingle{}t be opened 
+
+A\+P\+R\+\_\+\+E\+S\+Y\+M\+N\+O\+T\+F\+O\+U\+ND if the driver file doesn\textquotesingle{}t contain a driver
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+open\+\_\+ex\+: open a connection to a backend
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ driver struct. \\
+\hline
+{\em pool} & -\/ working pool \\
+\hline
+{\em params} & -\/ arguments to driver (implementation-\/dependent) \\
+\hline
+{\em handle} & -\/ pointer to handle to return \\
+\hline
+{\em error} & -\/ descriptive error. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS for success 
+
+A\+P\+R\+\_\+\+E\+G\+E\+N\+E\+R\+AL if driver exists but connection failed 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+Postgre\+S\+QL\+: the params is passed directly to the P\+Qconnectdb() function (check Postgre\+S\+QL documentation for more details on the syntax). 
+
+S\+Q\+Lite2\+: the params is split on a colon, with the first part used as the filename and second part converted to an integer and used as file mode. 
+
+S\+Q\+Lite3\+: the params is passed directly to the sqlite3\+\_\+open() function as a filename to be opened (check S\+Q\+Lite3 documentation for more details). 
+
+Oracle\+: the params can have \char`\"{}user\char`\"{}, \char`\"{}pass\char`\"{}, \char`\"{}dbname\char`\"{} and \char`\"{}server\char`\"{} keys, each followed by an equal sign and a value. Such key/value pairs can be delimited by space, CR, LF, tab, semicolon, vertical bar or comma. 
+
+My\+S\+QL\+: the params can have \char`\"{}host\char`\"{}, \char`\"{}port\char`\"{}, \char`\"{}user\char`\"{}, \char`\"{}pass\char`\"{}, \char`\"{}dbname\char`\"{}, \char`\"{}sock\char`\"{}, \char`\"{}flags\char`\"{} \char`\"{}fldsz\char`\"{}, \char`\"{}group\char`\"{} and \char`\"{}reconnect\char`\"{} keys, each followed by an equal sign and a value. Such key/value pairs can be delimited by space, CR, LF, tab, semicolon, vertical bar or comma. For now, \char`\"{}flags\char`\"{} can only recognise C\+L\+I\+E\+N\+T\+\_\+\+F\+O\+U\+N\+D\+\_\+\+R\+O\+WS (check My\+S\+QL manual for details). The value associated with \char`\"{}fldsz\char`\"{} determines maximum amount of memory (in bytes) for each of the fields in the result set of prepared statements. By default, this value is 1 MB. The value associated with \char`\"{}group\char`\"{} determines which group from configuration file to use (see M\+Y\+S\+Q\+L\+\_\+\+R\+E\+A\+D\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+R\+O\+UP option of mysql\+\_\+options() in My\+S\+QL manual). Reconnect is set to 1 by default (i.\+e. true).
+\end{DoxyRemark}
+apr\+\_\+dbd\+\_\+open\+: open a connection to a backend
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ driver struct. \\
+\hline
+{\em pool} & -\/ working pool \\
+\hline
+{\em params} & -\/ arguments to driver (implementation-\/dependent) \\
+\hline
+{\em handle} & -\/ pointer to handle to return \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS for success 
+
+A\+P\+R\+\_\+\+E\+G\+E\+N\+E\+R\+AL if driver exists but connection failed 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+apr\+\_\+dbd\+\_\+open\+\_\+ex
+\end{DoxySeeAlso}
+apr\+\_\+dbd\+\_\+close\+: close a connection to a backend
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ driver struct. \\
+\hline
+{\em handle} & -\/ handle to close \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS for success or error status
+\end{DoxyReturn}
+check\+\_\+conn\+: check status of a database connection
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ working pool \\
+\hline
+{\em handle} & -\/ the connection to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+set\+\_\+dbname\+: select database name. May be a no-\/op if not supported.
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ working pool \\
+\hline
+{\em handle} & -\/ the connection \\
+\hline
+{\em name} & -\/ the database to select \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+transaction\+\_\+start\+: start a transaction. May be a no-\/op.
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ a pool to use for error messages (if any). \\
+\hline
+{\em handle} & -\/ the db connection \\
+\hline
+{\em trans} & -\/ ptr to a transaction. May be null on entry \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+Note that transaction modes, set by calling apr\+\_\+dbd\+\_\+transaction\+\_\+mode\+\_\+set(), will affect all query/select calls within a transaction. By default, any error in query/select during a transaction will cause the transaction to inherit the error code and any further query/select calls will fail immediately. Put transaction in \char`\"{}ignore
+errors\char`\"{} mode to avoid that. Use \char`\"{}rollback\char`\"{} mode to do explicit rollback.
+\end{DoxyRemark}
+apr\+\_\+dbd\+\_\+transaction\+\_\+end\+: end a transaction (commit on success, rollback on error). May be a no-\/op.
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em handle} & -\/ the db connection \\
+\hline
+{\em trans} & -\/ the transaction. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+transaction\+\_\+mode\+\_\+get\+: get the mode of transaction
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em trans} & -\/ the transaction \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+mode of transaction
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+transaction\+\_\+mode\+\_\+set\+: set the mode of transaction
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em trans} & -\/ the transaction \\
+\hline
+{\em mode} & -\/ new mode of the transaction \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the mode of transaction in force after the call
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+query\+: execute an S\+QL query that doesn\textquotesingle{}t return a result set
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em handle} & -\/ the connection \\
+\hline
+{\em nrows} & -\/ number of rows affected. \\
+\hline
+{\em statement} & -\/ the S\+QL statement to execute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+select\+: execute an S\+QL query that returns a result set
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ pool to allocate the result set \\
+\hline
+{\em handle} & -\/ the connection \\
+\hline
+{\em res} & -\/ pointer to result set pointer. May point to N\+U\+LL on entry \\
+\hline
+{\em statement} & -\/ the S\+QL statement to execute \\
+\hline
+{\em random} & -\/ 1 to support random access to results (seek any row); 0 to support only looping through results in order (async access -\/ faster) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+num\+\_\+cols\+: get the number of columns in a results set
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em res} & -\/ result set. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of columns
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+num\+\_\+tuples\+: get the number of rows in a results set of a synchronous select
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em res} & -\/ result set. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of rows, or -\/1 if the results are asynchronous
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+get\+\_\+row\+: get a row from a result set
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ pool to allocate the row \\
+\hline
+{\em res} & -\/ result set pointer \\
+\hline
+{\em row} & -\/ pointer to row pointer. May point to N\+U\+LL on entry \\
+\hline
+{\em rownum} & -\/ row number (counting from 1), or -\/1 for \char`\"{}next row\char`\"{}. Ignored if random access is not supported. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success, -\/1 for rownum out of range or data finished
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+prepare\+: prepare a statement
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ pool to alloc the result from \\
+\hline
+{\em handle} & -\/ the connection \\
+\hline
+{\em query} & -\/ the S\+QL query \\
+\hline
+{\em label} & -\/ A label for the prepared statement. use N\+U\+LL for temporary prepared statements (eg within a Request in httpd) \\
+\hline
+{\em statement} & -\/ statement to prepare. May point to null on entry. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+To specify parameters of the prepared query, use \%s, \%d etc. (see below for full list) in place of database specific parameter syntax (e.\+g. for Postgre\+S\+QL, this would be \$1, \$2, for S\+Q\+Lite3 this would be ? etc.). For instance\+: \char`\"{}\+S\+E\+L\+E\+C\+T name F\+R\+O\+M customers W\+H\+E\+R\+E name=\%s\char`\"{} would be a query that this function understands. 
+
+Here is the full list of format specifiers that this function understands and what they map to in S\+QL\+: \%hhd (T\+I\+NY I\+NT), \%hhu (U\+N\+S\+I\+G\+N\+ED T\+I\+NY I\+NT), \%hd (S\+H\+O\+RT), \%hu (U\+N\+S\+I\+G\+N\+ED S\+H\+O\+RT), \%d (I\+NT), \%u (U\+N\+S\+I\+G\+N\+ED I\+NT), \%ld (L\+O\+NG), \%lu (U\+N\+S\+I\+G\+N\+ED L\+O\+NG), \%lld (L\+O\+NG L\+O\+NG), \%llu (U\+N\+S\+I\+G\+N\+ED L\+O\+NG L\+O\+NG), \%f (F\+L\+O\+AT, R\+E\+AL), \%lf (D\+O\+U\+B\+LE P\+R\+E\+C\+I\+S\+I\+ON), \%s (V\+A\+R\+C\+H\+AR), \%p\+Dt (T\+E\+XT), \%p\+Di (T\+I\+ME), \%p\+Dd (D\+A\+TE), \%p\+Da (D\+A\+T\+E\+T\+I\+ME), \%p\+Ds (T\+I\+M\+E\+S\+T\+A\+MP), \%p\+Dz (T\+I\+M\+E\+S\+T\+A\+MP W\+I\+TH T\+I\+ME Z\+O\+NE), \%p\+Db (B\+L\+OB), \%p\+Dc (C\+L\+OB) and \%p\+Dn (N\+U\+LL). Not all databases have support for all these types, so the underlying driver will attempt the \char`\"{}best match\char`\"{} where possible. A \% followed by any letter not in the above list will be interpreted as V\+A\+R\+C\+H\+AR (i.\+e. \%s).
+\end{DoxyRemark}
+apr\+\_\+dbd\+\_\+pquery\+: query using a prepared statement + args
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ working pool \\
+\hline
+{\em handle} & -\/ the connection \\
+\hline
+{\em nrows} & -\/ number of rows affected. \\
+\hline
+{\em statement} & -\/ the prepared statement to execute \\
+\hline
+{\em nargs} & -\/ ignored (for backward compatibility only) \\
+\hline
+{\em args} & -\/ args to prepared statement \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+pselect\+: select using a prepared statement + args
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ working pool \\
+\hline
+{\em handle} & -\/ the connection \\
+\hline
+{\em res} & -\/ pointer to query results. May point to N\+U\+LL on entry \\
+\hline
+{\em statement} & -\/ the prepared statement to execute \\
+\hline
+{\em random} & -\/ Whether to support random-\/access to results \\
+\hline
+{\em nargs} & -\/ ignored (for backward compatibility only) \\
+\hline
+{\em args} & -\/ args to prepared statement \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+pbquery\+: query using a prepared statement + binary args
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ working pool \\
+\hline
+{\em handle} & -\/ the connection \\
+\hline
+{\em nrows} & -\/ number of rows affected. \\
+\hline
+{\em statement} & -\/ the prepared statement to execute \\
+\hline
+{\em args} & -\/ binary args to prepared statement \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+pbselect\+: select using a prepared statement + binary args
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em pool} & -\/ working pool \\
+\hline
+{\em handle} & -\/ the connection \\
+\hline
+{\em res} & -\/ pointer to query results. May point to N\+U\+LL on entry \\
+\hline
+{\em statement} & -\/ the prepared statement to execute \\
+\hline
+{\em random} & -\/ Whether to support random-\/access to results \\
+\hline
+{\em args} & -\/ binary args to prepared statement \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 for success or error code
+\end{DoxyReturn}
+apr\+\_\+dbd\+\_\+datum\+\_\+get\+: get a binary entry from a row
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver} & -\/ the driver \\
+\hline
+{\em row} & -\/ row pointer \\
+\hline
+{\em col} & -\/ entry number \\
+\hline
+{\em type} & -\/ type of data to get \\
+\hline
+{\em data} & -\/ pointer to data, allocated by the caller \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS on success, A\+P\+R\+\_\+\+E\+N\+O\+E\+NT if data is N\+U\+LL or A\+P\+R\+\_\+\+E\+G\+E\+N\+E\+R\+AL
+\end{DoxyReturn}
+Open a dbm file by file name 
+\begin{DoxyParams}{Parameters}
+{\em dbm} & The newly opened database \\
+\hline
+{\em name} & The dbm file name to open \\
+\hline
+{\em mode} & The flag value 
+\begin{DoxyPre}
+          APR\_DBM\_READONLY   open for read-only access
+          APR\_DBM\_READWRITE  open for read-write access
+          APR\_DBM\_RWCREATE   open for r/w, create if needed
+          APR\_DBM\_RWTRUNC    open for r/w, truncate if already there
+\end{DoxyPre}
+ \\
+\hline
+{\em perm} & Permissions to apply to if created \\
+\hline
+{\em cntxt} & The pool to use when creating the dbm \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+The dbm name may not be a true file name, as many dbm packages append suffixes for seperate data and index files.
+\end{DoxyRemark}
+Fetch a dbm record value by key 
+\begin{DoxyParams}{Parameters}
+{\em dbm} & The database \\
+\hline
+{\em key} & The key datum to find this record \\
+\hline
+{\em pvalue} & The value datum retrieved for this record\\
+\hline
+\end{DoxyParams}
+Store a dbm record value by key 
+\begin{DoxyParams}{Parameters}
+{\em dbm} & The database \\
+\hline
+{\em key} & The key datum to store this record by \\
+\hline
+{\em value} & The value datum to store in this record\\
+\hline
+\end{DoxyParams}
+Delete a dbm record value by key 
+\begin{DoxyParams}{Parameters}
+{\em dbm} & The database \\
+\hline
+{\em key} & The key datum of the record to delete \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+It is not an error to delete a non-\/existent record.
+\end{DoxyRemark}
+Search for a key within the dbm 
+\begin{DoxyParams}{Parameters}
+{\em dbm} & The database \\
+\hline
+{\em key} & The datum describing a key to test\\
+\hline
+\end{DoxyParams}
+Retrieve the first record key from a dbm 
+\begin{DoxyParams}{Parameters}
+{\em dbm} & The database \\
+\hline
+{\em pkey} & The key datum of the first record\\
+\hline
+\end{DoxyParams}
+Retrieve the next record key from a dbm 
+\begin{DoxyParams}{Parameters}
+{\em dbm} & The database \\
+\hline
+{\em pkey} & The key datum of the next record\\
+\hline
+\end{DoxyParams}
+If the specified file/path were passed to apr\+\_\+dbm\+\_\+open(), return the actual file/path names which would be (created and) used. At most, two files may be used; used2 may be N\+U\+LL if only one file is used. 
+\begin{DoxyParams}{Parameters}
+{\em pool} & The pool for allocating used1 and used2. \\
+\hline
+{\em type} & The type of D\+BM you require info on \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+apr\+\_\+dbm\+\_\+open\+\_\+ex 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & The path name to generate used-\/names from. \\
+\hline
+{\em used1} & The first pathname used by the apr\+\_\+dbm implementation. \\
+\hline
+{\em used2} & The second pathname used by apr\+\_\+dbm. If only one file is used by the specific implementation, this will be set to N\+U\+LL. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An error if the specified type is invalid. 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+The dbm \hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file(s)} don\textquotesingle{}t need to exist. This function only manipulates the pathnames.
+\end{DoxyRemark}
+M\+Dr4 translation setup. Provides the A\+PR translation handle to be used for translating the content before calculating the digest. 
+\begin{DoxyParams}{Parameters}
+{\em context} & The M\+D4 content to set the translation for. \\
+\hline
+{\em xlate} & The translation handle to use for this M\+D4 context\\
+\hline
+\end{DoxyParams}
+M\+D4 block update operation. Continue an M\+D4 message-\/digest operation, processing another message block, and updating the context. 
+\begin{DoxyParams}{Parameters}
+{\em context} & The M\+D4 content to update. \\
+\hline
+{\em input} & next message block to update \\
+\hline
+{\em input\+Len} & The length of the next message block\\
+\hline
+\end{DoxyParams}
+M\+D4 finalization. Ends an M\+D4 message-\/digest operation, writing the message digest and zeroing the context 
+\begin{DoxyParams}{Parameters}
+{\em digest} & The final M\+D4 digest \\
+\hline
+{\em context} & The M\+D4 content we are finalizing.\\
+\hline
+\end{DoxyParams}
+M\+D4 digest computation 
+\begin{DoxyParams}{Parameters}
+{\em digest} & The M\+D4 digest \\
+\hline
+{\em input} & message block to use \\
+\hline
+{\em input\+Len} & The length of the message block\\
+\hline
+\end{DoxyParams}
+M\+D5 translation setup. Provides the A\+PR translation handle to be used for translating the content before calculating the digest. 
+\begin{DoxyParams}{Parameters}
+{\em context} & The M\+D5 content to set the translation for. \\
+\hline
+{\em xlate} & The translation handle to use for this M\+D5 context\\
+\hline
+\end{DoxyParams}
+M\+D5 block update operation. Continue an M\+D5 message-\/digest operation, processing another message block, and updating the context. 
+\begin{DoxyParams}{Parameters}
+{\em context} & The M\+D5 content to update. \\
+\hline
+{\em input} & next message block to update \\
+\hline
+{\em input\+Len} & The length of the next message block\\
+\hline
+\end{DoxyParams}
+M\+D5 finalization. Ends an M\+D5 message-\/digest operation, writing the message digest and zeroing the context 
+\begin{DoxyParams}{Parameters}
+{\em digest} & The final M\+D5 digest \\
+\hline
+{\em context} & The M\+D5 content we are finalizing.\\
+\hline
+\end{DoxyParams}
+M\+D5 in one step 
+\begin{DoxyParams}{Parameters}
+{\em digest} & The final M\+D5 digest \\
+\hline
+{\em input} & The message block to use \\
+\hline
+{\em input\+Len} & The length of the message block\\
+\hline
+\end{DoxyParams}
+Encode a password using an M\+D5 algorithm 
+\begin{DoxyParams}{Parameters}
+{\em password} & The password to encode \\
+\hline
+{\em salt} & The salt string to use for the encoding \\
+\hline
+{\em result} & The string to store the encoded password in \\
+\hline
+{\em nbytes} & The size of the result buffer\\
+\hline
+\end{DoxyParams}
+Encode a password using the bcrypt algorithm 
+\begin{DoxyParams}{Parameters}
+{\em password} & The password to encode \\
+\hline
+{\em count} & The cost of the encoding, possible values are 4 to 31 \\
+\hline
+{\em salt} & Pointer to binary data to be used as salt for the encoding \\
+\hline
+{\em salt\+\_\+len} & The size of the salt data (must be $>$= 16) \\
+\hline
+{\em out} & The string to store the encoded password in \\
+\hline
+{\em out\+\_\+len} & The size of the result buffer (must be $>$= 61)\\
+\hline
+\end{DoxyParams}
+Validate hashes created by A\+P\+R-\/supported algorithms\+: md5, bcrypt, and sha1. hashes created by crypt are supported only on platforms that provide crypt(3), so don\textquotesingle{}t rely on that function unless you know that your application will be run only on platforms that support it. On platforms that don\textquotesingle{}t support crypt(3), this falls back to a clear text string comparison. 
+\begin{DoxyParams}{Parameters}
+{\em passwd} & The password to validate \\
+\hline
+{\em hash} & The password to validate against\\
+\hline
+\end{DoxyParams}
+Enables a Server for use again 
+\begin{DoxyParams}{Parameters}
+{\em mc} & The memcache client object to use \\
+\hline
+{\em ms} & Server to Activate\\
+\hline
+\end{DoxyParams}
+Disable a Server 
+\begin{DoxyParams}{Parameters}
+{\em mc} & The memcache client object to use \\
+\hline
+{\em ms} & Server to Disable\\
+\hline
+\end{DoxyParams}
+Creates a new Server Object 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to use \\
+\hline
+{\em host} & hostname of the server \\
+\hline
+{\em port} & port of the server \\
+\hline
+{\em min} & minimum number of client sockets to open \\
+\hline
+{\em smax} & soft maximum number of client connections to open \\
+\hline
+{\em max} & hard maximum number of client connections \\
+\hline
+{\em ttl} & time to live in microseconds of a client connection \\
+\hline
+{\em ns} & location of the new server object \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+apr\+\_\+reslist\+\_\+create 
+\end{DoxySeeAlso}
+\begin{DoxyRemark}{Remarks}
+min, smax, and max are only used when A\+P\+R\+\_\+\+H\+A\+S\+\_\+\+T\+H\+R\+E\+A\+DS
+\end{DoxyRemark}
+Creates a new memcached client object 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to use \\
+\hline
+{\em max\+\_\+servers} & maximum number of servers \\
+\hline
+{\em flags} & Not currently used \\
+\hline
+{\em mc} & location of the new memcache client object\\
+\hline
+\end{DoxyParams}
+Gets a value from the server, allocating the value out of p 
+\begin{DoxyParams}{Parameters}
+{\em mc} & client to use \\
+\hline
+{\em p} & Pool to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & location of the allocated value \\
+\hline
+{\em len} & length of data at baton \\
+\hline
+{\em flags} & any flags set by the client for this key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+Gets multiple values from the server, allocating the values out of p 
+\begin{DoxyParams}{Parameters}
+{\em mc} & client to use \\
+\hline
+{\em temp\+\_\+pool} & Pool used for temporary allocations. May be cleared inside this call. \\
+\hline
+{\em data\+\_\+pool} & Pool used to allocate data for the returned values. \\
+\hline
+{\em values} & hash of \hyperlink{structapr__memcache__value__t}{apr\+\_\+memcache\+\_\+value\+\_\+t} keyed by strings, contains the result of the multiget call. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+Sets a value by key on the server 
+\begin{DoxyParams}{Parameters}
+{\em mc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & data to store on the server \\
+\hline
+{\em data\+\_\+size} & length of data at baton \\
+\hline
+{\em timeout} & time in seconds for the data to live on the server \\
+\hline
+{\em flags} & any flags set by the client for this key\\
+\hline
+\end{DoxyParams}
+Adds value by key on the server 
+\begin{DoxyParams}{Parameters}
+{\em mc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & data to store on the server \\
+\hline
+{\em data\+\_\+size} & length of data at baton \\
+\hline
+{\em timeout} & time for the data to live on the server \\
+\hline
+{\em flags} & any flags set by the client for this key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS if the key was added, A\+P\+R\+\_\+\+E\+E\+X\+I\+ST if the key already exists on the server.
+\end{DoxyReturn}
+Replaces value by key on the server 
+\begin{DoxyParams}{Parameters}
+{\em mc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & data to store on the server \\
+\hline
+{\em data\+\_\+size} & length of data at baton \\
+\hline
+{\em timeout} & time for the data to live on the server \\
+\hline
+{\em flags} & any flags set by the client for this key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS if the key was added, A\+P\+R\+\_\+\+E\+E\+X\+I\+ST if the key did not exist on the server.
+\end{DoxyReturn}
+Deletes a key from a server 
+\begin{DoxyParams}{Parameters}
+{\em mc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em timeout} & time for the delete to stop other clients from adding\\
+\hline
+\end{DoxyParams}
+Increments a value 
+\begin{DoxyParams}{Parameters}
+{\em mc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em n} & number to increment by \\
+\hline
+{\em nv} & new value after incrementing\\
+\hline
+\end{DoxyParams}
+Decrements a value 
+\begin{DoxyParams}{Parameters}
+{\em mc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em n} & number to decrement by \\
+\hline
+{\em new\+\_\+value} & new value after decrementing\\
+\hline
+\end{DoxyParams}
+Query a server\textquotesingle{}s version 
+\begin{DoxyParams}{Parameters}
+{\em ms} & server to query \\
+\hline
+{\em p} & Pool to allocate answer from \\
+\hline
+{\em baton} & location to store server version string \\
+\hline
+{\em len} & length of the server version string\\
+\hline
+\end{DoxyParams}
+Query a server for statistics 
+\begin{DoxyParams}{Parameters}
+{\em ms} & server to query \\
+\hline
+{\em p} & Pool to allocate answer from \\
+\hline
+{\em stats} & location of the new statistics structure\\
+\hline
+\end{DoxyParams}
+Enables a Server for use again 
+\begin{DoxyParams}{Parameters}
+{\em rc} & The redis client object to use \\
+\hline
+{\em rs} & Server to Activate\\
+\hline
+\end{DoxyParams}
+Disable a Server 
+\begin{DoxyParams}{Parameters}
+{\em rc} & The redis client object to use \\
+\hline
+{\em rs} & Server to Disable\\
+\hline
+\end{DoxyParams}
+Creates a new Server Object 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to use \\
+\hline
+{\em host} & hostname of the server \\
+\hline
+{\em port} & port of the server \\
+\hline
+{\em min} & minimum number of client sockets to open \\
+\hline
+{\em smax} & soft maximum number of client connections to open \\
+\hline
+{\em max} & hard maximum number of client connections \\
+\hline
+{\em ttl} & time to live in microseconds of a client connection \\
+\hline
+{\em rwto} & r/w timeout value in seconds of a client connection \\
+\hline
+{\em ns} & location of the new server object \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+apr\+\_\+reslist\+\_\+create 
+\end{DoxySeeAlso}
+\begin{DoxyRemark}{Remarks}
+min, smax, and max are only used when A\+P\+R\+\_\+\+H\+A\+S\+\_\+\+T\+H\+R\+E\+A\+DS
+\end{DoxyRemark}
+Creates a new redisd client object 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to use \\
+\hline
+{\em max\+\_\+servers} & maximum number of servers \\
+\hline
+{\em flags} & Not currently used \\
+\hline
+{\em rc} & location of the new redis client object\\
+\hline
+\end{DoxyParams}
+Gets a value from the server, allocating the value out of p 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em p} & Pool to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & location of the allocated value \\
+\hline
+{\em len} & length of data at baton \\
+\hline
+{\em flags} & any flags set by the client for this key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+Sets a value by key on the server 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & data to store on the server \\
+\hline
+{\em data\+\_\+size} & length of data at baton \\
+\hline
+{\em flags} & any flags set by the client for this key\\
+\hline
+\end{DoxyParams}
+Sets a value by key on the server 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & data to store on the server \\
+\hline
+{\em data\+\_\+size} & length of data at baton \\
+\hline
+{\em timeout} & time in seconds for the data to live on the server \\
+\hline
+{\em flags} & any flags set by the client for this key\\
+\hline
+\end{DoxyParams}
+Deletes a key from a server 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em timeout} & time for the delete to stop other clients from adding\\
+\hline
+\end{DoxyParams}
+Query a server\textquotesingle{}s version 
+\begin{DoxyParams}{Parameters}
+{\em rs} & server to query \\
+\hline
+{\em p} & Pool to allocate answer from \\
+\hline
+{\em baton} & location to store server version string\\
+\hline
+\end{DoxyParams}
+Query a server\textquotesingle{}s I\+N\+FO 
+\begin{DoxyParams}{Parameters}
+{\em rs} & server to query \\
+\hline
+{\em p} & Pool to allocate answer from \\
+\hline
+{\em baton} & location to store server I\+N\+FO response string\\
+\hline
+\end{DoxyParams}
+Increments a value 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em inc} & number to increment by \\
+\hline
+{\em new\+\_\+value} & new value after incrementing\\
+\hline
+\end{DoxyParams}
+Decrements a value 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em inc} & number to decrement by \\
+\hline
+{\em new\+\_\+value} & new value after decrementing\\
+\hline
+\end{DoxyParams}
+Pings the server 
+\begin{DoxyParams}{Parameters}
+{\em rs} & Server to ping\\
+\hline
+\end{DoxyParams}
+Gets multiple values from the server, allocating the values out of p 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em temp\+\_\+pool} & Pool used for temporary allocations. May be cleared inside this call. \\
+\hline
+{\em data\+\_\+pool} & Pool used to allocate data for the returned values. \\
+\hline
+{\em values} & hash of apr\+\_\+redis\+\_\+value\+\_\+t keyed by strings, contains the result of the multiget call. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+Query a server for statistics 
+\begin{DoxyParams}{Parameters}
+{\em rs} & server to query \\
+\hline
+{\em p} & Pool to allocate answer from \\
+\hline
+{\em stats} & location of the new statistics structure\\
+\hline
+\end{DoxyParams}
+Destroy the given resource list and all resources controlled by this list. F\+I\+X\+ME\+: Should this block until all resources become available, or maybe just destroy all the free ones, or maybe destroy them even though they might be in use by something else? Currently it will abort if there are resources that haven\textquotesingle{}t been released, so there is an assumption that all resources have been released to the list before calling this function. 
+\begin{DoxyParams}{Parameters}
+{\em reslist} & The reslist to destroy\\
+\hline
+\end{DoxyParams}
+Retrieve a resource from the list, creating a new one if necessary. If we have met our maximum number of resources, we will block until one becomes available. 
+\begin{DoxyParams}{Parameters}
+{\em reslist} & The resource list. \\
+\hline
+{\em resource} & An address where the pointer to the resource will be stored.\\
+\hline
+\end{DoxyParams}
+Return a resource back to the list of available resources. 
+\begin{DoxyParams}{Parameters}
+{\em reslist} & The resource list. \\
+\hline
+{\em resource} & The resource to return to the list.\\
+\hline
+\end{DoxyParams}
+Invalidate a resource in the pool -\/ e.\+g. a database connection that returns a \char`\"{}lost connection\char`\"{} error and can\textquotesingle{}t be restored. Use this instead of apr\+\_\+reslist\+\_\+release if the resource is bad. 
+\begin{DoxyParams}{Parameters}
+{\em reslist} & The resource list. \\
+\hline
+{\em resource} & The resource to invalidate.\\
+\hline
+\end{DoxyParams}
+Perform routine maintenance on the resource list. This call may instantiate new resources or expire old resources. 
+\begin{DoxyParams}{Parameters}
+{\em reslist} & The resource list.\\
+\hline
+\end{DoxyParams}
+Destroy a managed memory block. 
+\begin{DoxyParams}{Parameters}
+{\em rmm} & The relocatable memory block to destroy\\
+\hline
+\end{DoxyParams}
+Attach to a relocatable memory block already managed by the apr\+\_\+rmm A\+PI. 
+\begin{DoxyParams}{Parameters}
+{\em rmm} & The relocatable memory block \\
+\hline
+{\em lock} & An \hyperlink{structapr__anylock__t}{apr\+\_\+anylock\+\_\+t} of the appropriate type of lock \\
+\hline
+{\em membuf} & The block of relocatable memory already under management \\
+\hline
+{\em cont} & The pool to use for local storage and management\\
+\hline
+\end{DoxyParams}
+Detach from the managed block of memory. 
+\begin{DoxyParams}{Parameters}
+{\em rmm} & The relocatable memory block to detach from\\
+\hline
+\end{DoxyParams}
+Free allocation returned by apr\+\_\+rmm\+\_\+malloc or apr\+\_\+rmm\+\_\+calloc. 
+\begin{DoxyParams}{Parameters}
+{\em rmm} & The relocatable memory block \\
+\hline
+{\em entity} & The memory allocation to free\\
+\hline
+\end{DoxyParams}
+Close an sdbm file previously opened by apr\+\_\+sdbm\+\_\+open 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database to close\\
+\hline
+\end{DoxyParams}
+Lock an sdbm database for concurency of multiple operations 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database to lock \\
+\hline
+{\em type} & The lock type 
+\begin{DoxyPre}
+          APR\_FLOCK\_SHARED
+          APR\_FLOCK\_EXCLUSIVE
+\end{DoxyPre}
+ \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Calls to apr\+\_\+sdbm\+\_\+lock may be nested. All apr\+\_\+sdbm functions perform implicit locking. Since an A\+P\+R\+\_\+\+F\+L\+O\+C\+K\+\_\+\+S\+H\+A\+R\+ED lock cannot be portably promoted to an A\+P\+R\+\_\+\+F\+L\+O\+C\+K\+\_\+\+E\+X\+C\+L\+U\+S\+I\+VE lock, apr\+\_\+sdbm\+\_\+store and apr\+\_\+sdbm\+\_\+delete calls will fail if an A\+P\+R\+\_\+\+F\+L\+O\+C\+K\+\_\+\+S\+H\+A\+R\+ED lock is held. The apr\+\_\+sdbm\+\_\+lock call requires the database to be opened with the A\+P\+R\+\_\+\+S\+H\+A\+R\+E\+L\+O\+CK mode value.
+\end{DoxyRemark}
+Release an sdbm lock previously aquired by apr\+\_\+sdbm\+\_\+lock 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database to unlock\\
+\hline
+\end{DoxyParams}
+Fetch an sdbm record value by key 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database \\
+\hline
+{\em value} & The value datum retrieved for this record \\
+\hline
+{\em key} & The key datum to find this record\\
+\hline
+\end{DoxyParams}
+Store an sdbm record value by key 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database \\
+\hline
+{\em key} & The key datum to store this record by \\
+\hline
+{\em value} & The value datum to store in this record \\
+\hline
+{\em opt} & The method used to store the record 
+\begin{DoxyPre}
+          APR\_SDBM\_INSERT     return an error if the record exists
+          APR\_SDBM\_REPLACE    overwrite any existing record for key
+\end{DoxyPre}
+\\
+\hline
+\end{DoxyParams}
+Delete an sdbm record value by key 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database \\
+\hline
+{\em key} & The key datum of the record to delete \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+It is not an error to delete a non-\/existent record.
+\end{DoxyRemark}
+Retrieve the first record key from a dbm 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database \\
+\hline
+{\em key} & The key datum of the first record \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+The keys returned are not ordered. To traverse the list of keys for an sdbm opened with A\+P\+R\+\_\+\+S\+H\+A\+R\+E\+L\+O\+CK, the caller must use apr\+\_\+sdbm\+\_\+lock prior to retrieving the first record, and hold the lock until after the last call to apr\+\_\+sdbm\+\_\+nextkey.
+\end{DoxyRemark}
+Retrieve the next record key from an sdbm 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database \\
+\hline
+{\em key} & The key datum of the next record\\
+\hline
+\end{DoxyParams}
+Returns true if the sdbm database opened for read-\/only access 
+\begin{DoxyParams}{Parameters}
+{\em db} & The database to test\\
+\hline
+\end{DoxyParams}
+Special case for C\+O\+N\+N\+E\+CT parsing\+: it comes with the hostinfo part only 
+\begin{DoxyParams}{Parameters}
+{\em p} & The pool to allocate out of \\
+\hline
+{\em hostinfo} & The hostinfo string to parse \\
+\hline
+{\em uptr} & The \hyperlink{structapr__uri__t}{apr\+\_\+uri\+\_\+t} to fill out \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS for success or error code
+\end{DoxyReturn}
+Find out whether or not the specified conversion is single-\/byte-\/only. 
+\begin{DoxyParams}{Parameters}
+{\em convset} & The handle allocated by apr\+\_\+xlate\+\_\+open, specifying the parameters of conversion \\
+\hline
+{\em onoff} & Output\+: whether or not the conversion is single-\/byte-\/only \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Return A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL if charset transcoding is not available in this instance of apr-\/util (i.\+e., A\+P\+R\+\_\+\+H\+A\+S\+\_\+\+X\+L\+A\+TE is undefined).
+\end{DoxyRemark}
+Convert a buffer of text from one codepage to another. 
+\begin{DoxyParams}{Parameters}
+{\em convset} & The handle allocated by apr\+\_\+xlate\+\_\+open, specifying the parameters of conversion \\
+\hline
+{\em inbuf} & The address of the source buffer \\
+\hline
+{\em inbytes\+\_\+left} & Input\+: the amount of input data to be translated Output\+: the amount of input data not yet translated \\
+\hline
+{\em outbuf} & The address of the destination buffer \\
+\hline
+{\em outbytes\+\_\+left} & Input\+: the size of the output buffer Output\+: the amount of the output buffer not yet used \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Returns A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL if charset transcoding is not available in this instance of apr-\/util (i.\+e., A\+P\+R\+\_\+\+H\+A\+S\+\_\+\+X\+L\+A\+TE is undefined). Returns A\+P\+R\+\_\+\+I\+N\+C\+O\+M\+P\+L\+E\+TE if the input buffer ends in an incomplete multi-\/byte character.
+\end{DoxyRemark}
+To correctly terminate the output buffer for some multi-\/byte character set encodings, a final call must be made to this function after the complete input string has been converted, passing the inbuf and inbytes\+\_\+left parameters as N\+U\+LL. (Note that this mode only works from version 1.\+1.\+0 onwards)
+
+Convert a single-\/byte character from one charset to another. 
+\begin{DoxyParams}{Parameters}
+{\em convset} & The handle allocated by apr\+\_\+xlate\+\_\+open, specifying the parameters of conversion \\
+\hline
+{\em inchar} & The single-\/byte character to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+This only works when converting between single-\/byte character sets. -\/1 will be returned if the conversion can\textquotesingle{}t be performed.
+\end{DoxyWarning}
+Close a codepage translation handle. 
+\begin{DoxyParams}{Parameters}
+{\em convset} & The codepage translation handle to close \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Return A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL if charset transcoding is not available in this instance of apr-\/util (i.\+e., A\+P\+R\+\_\+\+H\+A\+S\+\_\+\+X\+L\+A\+TE is undefined).
+\end{DoxyRemark}
+Feed input into the parser 
+\begin{DoxyParams}{Parameters}
+{\em parser} & The X\+ML parser for parsing this data. \\
+\hline
+{\em data} & The data to parse. \\
+\hline
+{\em len} & The length of the data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Any errors found during parsing. 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+Use apr\+\_\+xml\+\_\+parser\+\_\+geterror() to get more error information.
+\end{DoxyRemark}
+Terminate the parsing and return the result 
+\begin{DoxyParams}{Parameters}
+{\em parser} & The X\+ML parser for parsing this data. \\
+\hline
+{\em pdoc} & The resulting parse information. May be N\+U\+LL to simply terminate the parsing without fetching the info. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Any errors found during the final stage of parsing. 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+Use apr\+\_\+xml\+\_\+parser\+\_\+geterror() to get more error information.
+\end{DoxyRemark}
+return the U\+RI\textquotesingle{}s (existing) index, or insert it and return a new index 
+\begin{DoxyParams}{Parameters}
+{\em uri\+\_\+array} & array to insert into \\
+\hline
+{\em uri} & The uri to insert \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The uri\textquotesingle{}s index 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+146 \{
+147     \hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context}->\hyperlink{structapr__md5__ctx__t_a3234a76e68a4ef546026a9854f9ba6d0}{count}[0] = \hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context}->\hyperlink{structapr__md5__ctx__t_a3234a76e68a4ef546026a9854f9ba6d0}{count}[1] = 0;
+148     
+149     \textcolor{comment}{/* Load magic initialization constants. */}
+150     \hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context}->\hyperlink{structapr__md5__ctx__t_ab8acbc6cd7a3dcd16e66e64a7f5357b5}{state}[0] = 0x67452301;
+151     \hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context}->\hyperlink{structapr__md5__ctx__t_ab8acbc6cd7a3dcd16e66e64a7f5357b5}{state}[1] = 0xefcdab89;
+152     \hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context}->\hyperlink{structapr__md5__ctx__t_ab8acbc6cd7a3dcd16e66e64a7f5357b5}{state}[2] = 0x98badcfe;
+153     \hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context}->\hyperlink{structapr__md5__ctx__t_ab8acbc6cd7a3dcd16e66e64a7f5357b5}{state}[3] = 0x10325476;
+154     \hyperlink{group__APACHE__CORE__MD5_ga651ed26971b1d49911883c4eb87db1ad}{context}->\hyperlink{structapr__md5__ctx__t_a391a62bc9e7fada71d03f786df4f49ba}{xlate} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+155     
+156     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+157 \}
+\end{DoxyCode}

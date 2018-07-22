@@ -1,0 +1,157 @@
+\hypertarget{unixd_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/os/unix/unixd.c File Reference}
+\label{unixd_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/os/unix/unixd.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/os/unix/unixd.\+c}}
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}unixd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}os.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$sys/stat.\+h$>$}\\*
+Include dependency graph for unixd.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{unixd_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{unixd_8c_a1af305aa9aaa7a72651daac75d43d7eb}{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE} (core)
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{unixd_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT} ()
+\item 
+\hyperlink{unixd_8c_ad4e49a371518f348d13b2d4e83b79b9e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{group__APACHE__OS__UNIX_ga907a3566dc8a714f5dd69eefc720631e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__unixd__mpm__retained__data}{ap\+\_\+unixd\+\_\+mpm\+\_\+retained\+\_\+data} $\ast$)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structunixd__config__rec}{unixd\+\_\+config\+\_\+rec} \hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\+\_\+unixd\+\_\+config}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{unixd.\+c@{unixd.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!unixd.\+c@{unixd.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t)}{AP_DECLARE(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{unixd_8c_ad4e49a371518f348d13b2d4e83b79b9e}{}\label{unixd_8c_ad4e49a371518f348d13b2d4e83b79b9e}
+
+\begin{DoxyCode}
+201 \{
+202     \hyperlink{structap__unix__identity__t}{ap\_unix\_identity\_t} *ugid = ap\_run\_get\_suexec\_identity(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+203 
+204     \textcolor{keywordflow}{if} (ugid == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+205         \textcolor{keywordflow}{return} apr\_proc\_create(\hyperlink{group__APACHE__CORE__MPM_ga8fcead6a09878f3797cd4eed89245aa6}{newproc}, \hyperlink{group__APACHE__CORE__MPM_ga754795253280be76a58e8b21fbac11dc}{progname}, \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}, \hyperlink{group__APACHE__CORE__MPM_ga050c00b1a538603bac07d58e6e1c4ec7}{env}, 
+      \hyperlink{group__APACHE__CORE__MPM_ga00d7b614621096a3637da8a7387f6476}{attr}, \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p});
+206     \}
+207 
+208     \textcolor{keywordflow}{return} ap\_unix\_create\_privileged\_process(\hyperlink{group__APACHE__CORE__MPM_ga8fcead6a09878f3797cd4eed89245aa6}{newproc}, \hyperlink{group__APACHE__CORE__MPM_ga754795253280be76a58e8b21fbac11dc}{progname}, 
+      \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}, \hyperlink{group__APACHE__CORE__MPM_ga050c00b1a538603bac07d58e6e1c4ec7}{env},
+209                                               \hyperlink{group__APACHE__CORE__MPM_ga00d7b614621096a3637da8a7387f6476}{attr}, ugid, \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p});
+210 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{unixd_8c_ad4e49a371518f348d13b2d4e83b79b9e_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{unixd.\+c@{unixd.\+c}!A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}!unixd.\+c@{unixd.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+L\+E(core)}{APLOG_USE_MODULE(core)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{core}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{unixd_8c_a1af305aa9aaa7a72651daac75d43d7eb}{}\label{unixd_8c_a1af305aa9aaa7a72651daac75d43d7eb}
+\index{unixd.\+c@{unixd.\+c}!A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}}
+\index{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}!unixd.\+c@{unixd.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+C\+T()}{APR_HOOK_STRUCT()}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{unixd_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{}\label{unixd_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}
+
+\begin{DoxyCode}
+134 \{
+135     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0;
+136     \textcolor{keyword}{const} \textcolor{keywordtype}{char} **newargs;
+137     \textcolor{keywordtype}{char} *newprogname;
+138     \textcolor{keywordtype}{char} *execuser, *execgroup;
+139     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *argv0;
+140 
+141     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.\hyperlink{structunixd__config__rec_ad1e0300695719bb0925a9e271e5c3d10}{suexec\_enabled}) \{
+142         \textcolor{keywordflow}{return} apr\_proc\_create(\hyperlink{group__APACHE__CORE__MPM_ga8fcead6a09878f3797cd4eed89245aa6}{newproc}, \hyperlink{group__APACHE__CORE__MPM_ga754795253280be76a58e8b21fbac11dc}{progname}, \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}, \hyperlink{group__APACHE__CORE__MPM_ga050c00b1a538603bac07d58e6e1c4ec7}{env}, 
+      \hyperlink{group__APACHE__CORE__MPM_ga00d7b614621096a3637da8a7387f6476}{attr}, \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p});
+143     \}
+144 
+145     argv0 = \hyperlink{group__APACHE__CORE__DAEMON_ga469c14311b354f1b7e3013adbde2b50b}{ap\_strrchr\_c}(\hyperlink{group__APACHE__CORE__MPM_ga754795253280be76a58e8b21fbac11dc}{progname}, \textcolor{charliteral}{'/'});
+146     \textcolor{comment}{/* Allow suexec's "/" check to succeed */}
+147     \textcolor{keywordflow}{if} (argv0 != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+148         argv0++;
+149     \}
+150     \textcolor{keywordflow}{else} \{
+151         argv0 = \hyperlink{group__APACHE__CORE__MPM_ga754795253280be76a58e8b21fbac11dc}{progname};
+152     \}
+153 
+154 
+155     \textcolor{keywordflow}{if} (ugid->userdir) \{
+156         execuser = apr\_psprintf(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \textcolor{stringliteral}{"~%ld"}, (\textcolor{keywordtype}{long}) ugid->uid);
+157     \}
+158     \textcolor{keywordflow}{else} \{
+159         execuser = apr\_psprintf(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \textcolor{stringliteral}{"%ld"}, (\textcolor{keywordtype}{long}) ugid->uid);
+160     \}
+161     execgroup = apr\_psprintf(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \textcolor{stringliteral}{"%ld"}, (\textcolor{keywordtype}{long}) ugid->gid);
+162 
+163     \textcolor{keywordflow}{if} (!execuser || !execgroup) \{
+164         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga6a453e60000000609a95817efabebf4f}{APR\_ENOMEM};
+165     \}
+166 
+167     i = 0;
+168     \textcolor{keywordflow}{while} (\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}[i])
+169         i++;
+170     \textcolor{comment}{/* allocate space for 4 new args, the input args, and a null terminator */}
+171     newargs = apr\_palloc(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char} *) * (i + 4));
+172     newprogname = \hyperlink{ap__config__auto_8h_af27b1638b814ec288a858c3e93561acd}{SUEXEC\_BIN};
+173     newargs[0] = \hyperlink{ap__config__auto_8h_af27b1638b814ec288a858c3e93561acd}{SUEXEC\_BIN};
+174     newargs[1] = execuser;
+175     newargs[2] = execgroup;
+176     newargs[3] = apr\_pstrdup(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, argv0);
+177 
+178     \textcolor{comment}{/*}
+179 \textcolor{comment}{    ** using a shell to execute suexec makes no sense thus}
+180 \textcolor{comment}{    ** we force everything to be APR\_PROGRAM, and never}
+181 \textcolor{comment}{    ** APR\_SHELLCMD}
+182 \textcolor{comment}{    */}
+183     \textcolor{keywordflow}{if}(apr\_procattr\_cmdtype\_set(\hyperlink{group__APACHE__CORE__MPM_ga00d7b614621096a3637da8a7387f6476}{attr}, \hyperlink{group__apr__thread__proc_ggadcb981d7748c580eb69ac11dbf709060ac128c1239a524cf21300b8ed6248ac99}{APR\_PROGRAM}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+184         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL};
+185     \}
+186 
+187     i = 1;
+188     \textcolor{keywordflow}{do} \{
+189         newargs[i + 3] = \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+190     \} \textcolor{keywordflow}{while} (\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}[i++]);
+191 
+192     \textcolor{keywordflow}{return} apr\_proc\_create(\hyperlink{group__APACHE__CORE__MPM_ga8fcead6a09878f3797cd4eed89245aa6}{newproc}, newprogname, newargs, \hyperlink{group__APACHE__CORE__MPM_ga050c00b1a538603bac07d58e6e1c4ec7}{env}, \hyperlink{group__APACHE__CORE__MPM_ga00d7b614621096a3637da8a7387f6476}{attr}, 
+      \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p});
+193 \}
+\end{DoxyCode}

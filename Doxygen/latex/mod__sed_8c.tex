@@ -1,0 +1,91 @@
+\hypertarget{mod__sed_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/filters/mod\+\_\+sed.c File Reference}
+\label{mod__sed_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/mod\+\_\+sed.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/mod\+\_\+sed.\+c}}
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}libsed.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+sed.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__sed_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structsed__expr__config}{sed\+\_\+expr\+\_\+config}
+\item 
+struct \hyperlink{structsed__config}{sed\+\_\+config}
+\item 
+struct \hyperlink{structsed__filter__ctxt}{sed\+\_\+filter\+\_\+ctxt}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__sed_8c_a8238d0c9df20c394de7567bdac5c0896}{M\+O\+D\+S\+E\+D\+\_\+\+O\+U\+T\+B\+U\+F\+\_\+\+S\+I\+ZE}~8000
+\item 
+\#define \hyperlink{mod__sed_8c_a906c4ddc21fc76f4c48f075c1b6ddee5}{M\+A\+X\+\_\+\+T\+R\+A\+N\+S\+I\+E\+N\+T\+\_\+\+B\+U\+C\+K\+E\+TS}~50
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structsed__expr__config}{sed\+\_\+expr\+\_\+config} \hyperlink{mod__sed_8c_afff0686960f63de751575ea5bd8bce94}{sed\+\_\+expr\+\_\+config}
+\item 
+typedef struct \hyperlink{structsed__config}{sed\+\_\+config} \hyperlink{mod__sed_8c_a7fc7463620b3bfe58b95aea8533e533c}{sed\+\_\+config}
+\item 
+typedef struct \hyperlink{structsed__filter__ctxt}{sed\+\_\+filter\+\_\+ctxt} \hyperlink{mod__sed_8c_a50cb5ea07b628e4797748509000810de}{sed\+\_\+filter\+\_\+ctxt}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__sed_8c_a45b82b730e3cd6a5248e2f7c1426127e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (sed)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__sed_8c_af239646887053d5cc03e9b05ecb74d74}{sed\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}!M\+A\+X\+\_\+\+T\+R\+A\+N\+S\+I\+E\+N\+T\+\_\+\+B\+U\+C\+K\+E\+TS@{M\+A\+X\+\_\+\+T\+R\+A\+N\+S\+I\+E\+N\+T\+\_\+\+B\+U\+C\+K\+E\+TS}}
+\index{M\+A\+X\+\_\+\+T\+R\+A\+N\+S\+I\+E\+N\+T\+\_\+\+B\+U\+C\+K\+E\+TS@{M\+A\+X\+\_\+\+T\+R\+A\+N\+S\+I\+E\+N\+T\+\_\+\+B\+U\+C\+K\+E\+TS}!mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+T\+R\+A\+N\+S\+I\+E\+N\+T\+\_\+\+B\+U\+C\+K\+E\+TS}{MAX_TRANSIENT_BUCKETS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+T\+R\+A\+N\+S\+I\+E\+N\+T\+\_\+\+B\+U\+C\+K\+E\+TS~50}\hypertarget{mod__sed_8c_a906c4ddc21fc76f4c48f075c1b6ddee5}{}\label{mod__sed_8c_a906c4ddc21fc76f4c48f075c1b6ddee5}
+\index{mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}!M\+O\+D\+S\+E\+D\+\_\+\+O\+U\+T\+B\+U\+F\+\_\+\+S\+I\+ZE@{M\+O\+D\+S\+E\+D\+\_\+\+O\+U\+T\+B\+U\+F\+\_\+\+S\+I\+ZE}}
+\index{M\+O\+D\+S\+E\+D\+\_\+\+O\+U\+T\+B\+U\+F\+\_\+\+S\+I\+ZE@{M\+O\+D\+S\+E\+D\+\_\+\+O\+U\+T\+B\+U\+F\+\_\+\+S\+I\+ZE}!mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}}
+\subsubsection[{\texorpdfstring{M\+O\+D\+S\+E\+D\+\_\+\+O\+U\+T\+B\+U\+F\+\_\+\+S\+I\+ZE}{MODSED_OUTBUF_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+O\+D\+S\+E\+D\+\_\+\+O\+U\+T\+B\+U\+F\+\_\+\+S\+I\+ZE~8000}\hypertarget{mod__sed_8c_a8238d0c9df20c394de7567bdac5c0896}{}\label{mod__sed_8c_a8238d0c9df20c394de7567bdac5c0896}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}!sed\+\_\+config@{sed\+\_\+config}}
+\index{sed\+\_\+config@{sed\+\_\+config}!mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}}
+\subsubsection[{\texorpdfstring{sed\+\_\+config}{sed_config}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf sed\+\_\+config}  {\bf sed\+\_\+config}}\hypertarget{mod__sed_8c_a7fc7463620b3bfe58b95aea8533e533c}{}\label{mod__sed_8c_a7fc7463620b3bfe58b95aea8533e533c}
+\index{mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}!sed\+\_\+expr\+\_\+config@{sed\+\_\+expr\+\_\+config}}
+\index{sed\+\_\+expr\+\_\+config@{sed\+\_\+expr\+\_\+config}!mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}}
+\subsubsection[{\texorpdfstring{sed\+\_\+expr\+\_\+config}{sed_expr_config}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf sed\+\_\+expr\+\_\+config}  {\bf sed\+\_\+expr\+\_\+config}}\hypertarget{mod__sed_8c_afff0686960f63de751575ea5bd8bce94}{}\label{mod__sed_8c_afff0686960f63de751575ea5bd8bce94}
+\index{mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}!sed\+\_\+filter\+\_\+ctxt@{sed\+\_\+filter\+\_\+ctxt}}
+\index{sed\+\_\+filter\+\_\+ctxt@{sed\+\_\+filter\+\_\+ctxt}!mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}}
+\subsubsection[{\texorpdfstring{sed\+\_\+filter\+\_\+ctxt}{sed_filter_ctxt}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf sed\+\_\+filter\+\_\+ctxt}  {\bf sed\+\_\+filter\+\_\+ctxt}}\hypertarget{mod__sed_8c_a50cb5ea07b628e4797748509000810de}{}\label{mod__sed_8c_a50cb5ea07b628e4797748509000810de}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(sed)}{AP_DECLARE_MODULE(sed)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{sed}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__sed_8c_a45b82b730e3cd6a5248e2f7c1426127e}{}\label{mod__sed_8c_a45b82b730e3cd6a5248e2f7c1426127e}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}!sed\+\_\+module@{sed\+\_\+module}}
+\index{sed\+\_\+module@{sed\+\_\+module}!mod\+\_\+sed.\+c@{mod\+\_\+sed.\+c}}
+\subsubsection[{\texorpdfstring{sed\+\_\+module}{sed_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} sed\+\_\+module}\hypertarget{mod__sed_8c_af239646887053d5cc03e9b05ecb74d74}{}\label{mod__sed_8c_af239646887053d5cc03e9b05ecb74d74}

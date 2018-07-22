@@ -1,0 +1,49 @@
+\hypertarget{group__PoolDebug}{}\section{Pool Debugging functions.}
+\label{group__PoolDebug}\index{Pool Debugging functions.@{Pool Debugging functions.}}
+Collaboration diagram for Pool Debugging functions.\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__PoolDebug}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__PoolDebug_ga2f4a522b89e7bf12e17bf8427ec1a50f}{apr\+\_\+pool\+\_\+join}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})
+\item 
+\#define \hyperlink{group__PoolDebug_gaf225c04d565ebc6c37bbf018d6e407d5}{apr\+\_\+pool\+\_\+lock}(\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool},  \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+pools have nested lifetimes -- sub\+\_\+pools are destroyed when the parent pool is cleared. We allow certain liberties with operations on things such as tables (and on other structures in a more general sense) where we allow the caller to insert values into a table which were not allocated from the table\textquotesingle{}s pool. The table\textquotesingle{}s data will remain valid as long as all the pools from which its values are allocated remain valid.
+
+For example, if B is a sub pool of A, and you build a table T in pool B, then it\textquotesingle{}s safe to insert data allocated in A or B into T (because B lives at most as long as A does, and T is destroyed when B is cleared/destroyed). On the other hand, if S is a table in pool A, it is safe to insert data allocated in A into S, but it is {\itshape not safe} to insert data allocated from B into S... because B can be cleared/destroyed before A is (which would leave dangling pointers in T\textquotesingle{}s data structures).
+
+In general we say that it is safe to insert data into a table T if the data is allocated in any ancestor of T\textquotesingle{}s pool. This is the basis on which the A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+B\+UG code works -- it tests these ancestor relationships for all data inserted into tables. A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+B\+UG also provides tools (apr\+\_\+pool\+\_\+find, and apr\+\_\+pool\+\_\+is\+\_\+ancestor) for other folks to implement similar restrictions for their own data structures.
+
+However, sometimes this ancestor requirement is inconvenient -- sometimes it\textquotesingle{}s necessary to create a sub pool where the sub pool is guaranteed to have the same lifetime as the parent pool. This is a guarantee implemented by the {\itshape caller}, not by the pool code. That is, the caller guarantees they won\textquotesingle{}t destroy the sub pool individually prior to destroying the parent pool.
+
+In this case the caller must call \hyperlink{group__PoolDebug_ga2f4a522b89e7bf12e17bf8427ec1a50f}{apr\+\_\+pool\+\_\+join()} to indicate this guarantee to the A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+B\+UG code.
+
+These functions are only implemented when \#\+A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+B\+UG is set. 
+
+\subsection{Macro Definition Documentation}
+\index{Pool Debugging functions.@{Pool Debugging functions.}!apr\+\_\+pool\+\_\+join@{apr\+\_\+pool\+\_\+join}}
+\index{apr\+\_\+pool\+\_\+join@{apr\+\_\+pool\+\_\+join}!Pool Debugging functions.@{Pool Debugging functions.}}
+\subsubsection[{\texorpdfstring{apr\+\_\+pool\+\_\+join}{apr_pool_join}}]{\setlength{\rightskip}{0pt plus 5cm}\#define apr\+\_\+pool\+\_\+join(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)}\hypertarget{group__PoolDebug_ga2f4a522b89e7bf12e17bf8427ec1a50f}{}\label{group__PoolDebug_ga2f4a522b89e7bf12e17bf8427ec1a50f}
+\index{Pool Debugging functions.@{Pool Debugging functions.}!apr\+\_\+pool\+\_\+lock@{apr\+\_\+pool\+\_\+lock}}
+\index{apr\+\_\+pool\+\_\+lock@{apr\+\_\+pool\+\_\+lock}!Pool Debugging functions.@{Pool Debugging functions.}}
+\subsubsection[{\texorpdfstring{apr\+\_\+pool\+\_\+lock}{apr_pool_lock}}]{\setlength{\rightskip}{0pt plus 5cm}\#define apr\+\_\+pool\+\_\+lock(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf pool}, }
+\item[{}]{{\bf lock}}
+\end{DoxyParamCaption}
+)}\hypertarget{group__PoolDebug_gaf225c04d565ebc6c37bbf018d6e407d5}{}\label{group__PoolDebug_gaf225c04d565ebc6c37bbf018d6e407d5}

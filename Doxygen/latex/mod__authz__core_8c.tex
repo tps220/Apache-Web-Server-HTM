@@ -1,0 +1,152 @@
+\hypertarget{mod__authz__core_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/aaa/mod\+\_\+authz\+\_\+core.c File Reference}
+\label{mod__authz__core_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/aaa/mod\+\_\+authz\+\_\+core.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/aaa/mod\+\_\+authz\+\_\+core.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+network\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+expr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+auth.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+authz\+\_\+core.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__authz__core_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structprovider__alias__rec}{provider\+\_\+alias\+\_\+rec}
+\item 
+struct \hyperlink{structauthz__section__conf}{authz\+\_\+section\+\_\+conf}
+\item 
+struct \hyperlink{structauthz__core__dir__conf}{authz\+\_\+core\+\_\+dir\+\_\+conf}
+\item 
+struct \hyperlink{structauthz__core__srv__conf}{authz\+\_\+core\+\_\+srv\+\_\+conf}
+\item 
+struct \hyperlink{structrequire__expr__info}{require\+\_\+expr\+\_\+info}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__authz__core_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__authz__core_8c_a8190f5b47166b4efe3f7377915210250}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__authz__core_8c_ab0b265b69299aeccfade9365cf04db2a}{U\+N\+S\+ET}~-\/1
+\item 
+\#define \hyperlink{mod__authz__core_8c_a5c7839a931bf1b44ef7cfed13d49ddbd}{R\+E\+Q\+U\+I\+R\+E\+\_\+\+E\+X\+P\+R\+\_\+\+N\+O\+TE}~\char`\"{}Require\+\_\+expr\+\_\+info\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structprovider__alias__rec}{provider\+\_\+alias\+\_\+rec} \hyperlink{mod__authz__core_8c_a74242c13c044bc681912f303769398e1}{provider\+\_\+alias\+\_\+rec}
+\item 
+typedef struct \hyperlink{structauthz__section__conf}{authz\+\_\+section\+\_\+conf} \hyperlink{mod__authz__core_8c_a5b602013f9c6fb0c65ea1530d476b6e1}{authz\+\_\+section\+\_\+conf}
+\item 
+typedef struct \hyperlink{structauthz__core__dir__conf}{authz\+\_\+core\+\_\+dir\+\_\+conf} \hyperlink{mod__authz__core_8c_a97a219adeffb45be90a1b5465446308d}{authz\+\_\+core\+\_\+dir\+\_\+conf}
+\item 
+typedef struct \hyperlink{structauthz__core__srv__conf}{authz\+\_\+core\+\_\+srv\+\_\+conf} \hyperlink{mod__authz__core_8c_ac92956320141c77bfbe9ea0a2a77b0cb}{authz\+\_\+core\+\_\+srv\+\_\+conf}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767}{authz\+\_\+logic\+\_\+op} \{ \hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767af8c77e358a2b011af8a873dd9db20306}{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+A\+ND}, 
+\hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767ad1ccb71e21ecd690ce79c6879f23cf0f}{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+OR}, 
+\hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767a256d03f7fd155565422afb0b2e01cca4}{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+O\+FF}, 
+\hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767a6c35b7ecad8f5e8e6341699d4fd9632a}{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+U\+N\+S\+ET}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__authz__core_8c_a872ad095da68585bfc3c40b7b12ed1c7}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (authz\+\_\+core)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__authz__core_8c_aa7fa7e24263f9ff253d23b41f6959861}{authz\+\_\+core\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}{APR_WANT_BYTEFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}\hypertarget{mod__authz__core_8c_a8190f5b47166b4efe3f7377915210250}{}\label{mod__authz__core_8c_a8190f5b47166b4efe3f7377915210250}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__authz__core_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__authz__core_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!R\+E\+Q\+U\+I\+R\+E\+\_\+\+E\+X\+P\+R\+\_\+\+N\+O\+TE@{R\+E\+Q\+U\+I\+R\+E\+\_\+\+E\+X\+P\+R\+\_\+\+N\+O\+TE}}
+\index{R\+E\+Q\+U\+I\+R\+E\+\_\+\+E\+X\+P\+R\+\_\+\+N\+O\+TE@{R\+E\+Q\+U\+I\+R\+E\+\_\+\+E\+X\+P\+R\+\_\+\+N\+O\+TE}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+Q\+U\+I\+R\+E\+\_\+\+E\+X\+P\+R\+\_\+\+N\+O\+TE}{REQUIRE_EXPR_NOTE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+Q\+U\+I\+R\+E\+\_\+\+E\+X\+P\+R\+\_\+\+N\+O\+TE~\char`\"{}Require\+\_\+expr\+\_\+info\char`\"{}}\hypertarget{mod__authz__core_8c_a5c7839a931bf1b44ef7cfed13d49ddbd}{}\label{mod__authz__core_8c_a5c7839a931bf1b44ef7cfed13d49ddbd}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!U\+N\+S\+ET@{U\+N\+S\+ET}}
+\index{U\+N\+S\+ET@{U\+N\+S\+ET}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{U\+N\+S\+ET}{UNSET}}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\+N\+S\+ET~-\/1}\hypertarget{mod__authz__core_8c_ab0b265b69299aeccfade9365cf04db2a}{}\label{mod__authz__core_8c_ab0b265b69299aeccfade9365cf04db2a}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!authz\+\_\+core\+\_\+dir\+\_\+conf@{authz\+\_\+core\+\_\+dir\+\_\+conf}}
+\index{authz\+\_\+core\+\_\+dir\+\_\+conf@{authz\+\_\+core\+\_\+dir\+\_\+conf}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{authz\+\_\+core\+\_\+dir\+\_\+conf}{authz_core_dir_conf}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf authz\+\_\+core\+\_\+dir\+\_\+conf} {\bf authz\+\_\+core\+\_\+dir\+\_\+conf}}\hypertarget{mod__authz__core_8c_a97a219adeffb45be90a1b5465446308d}{}\label{mod__authz__core_8c_a97a219adeffb45be90a1b5465446308d}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!authz\+\_\+core\+\_\+srv\+\_\+conf@{authz\+\_\+core\+\_\+srv\+\_\+conf}}
+\index{authz\+\_\+core\+\_\+srv\+\_\+conf@{authz\+\_\+core\+\_\+srv\+\_\+conf}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{authz\+\_\+core\+\_\+srv\+\_\+conf}{authz_core_srv_conf}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf authz\+\_\+core\+\_\+srv\+\_\+conf}  {\bf authz\+\_\+core\+\_\+srv\+\_\+conf}}\hypertarget{mod__authz__core_8c_ac92956320141c77bfbe9ea0a2a77b0cb}{}\label{mod__authz__core_8c_ac92956320141c77bfbe9ea0a2a77b0cb}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!authz\+\_\+section\+\_\+conf@{authz\+\_\+section\+\_\+conf}}
+\index{authz\+\_\+section\+\_\+conf@{authz\+\_\+section\+\_\+conf}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{authz\+\_\+section\+\_\+conf}{authz_section_conf}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf authz\+\_\+section\+\_\+conf} {\bf authz\+\_\+section\+\_\+conf}}\hypertarget{mod__authz__core_8c_a5b602013f9c6fb0c65ea1530d476b6e1}{}\label{mod__authz__core_8c_a5b602013f9c6fb0c65ea1530d476b6e1}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!provider\+\_\+alias\+\_\+rec@{provider\+\_\+alias\+\_\+rec}}
+\index{provider\+\_\+alias\+\_\+rec@{provider\+\_\+alias\+\_\+rec}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{provider\+\_\+alias\+\_\+rec}{provider_alias_rec}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf provider\+\_\+alias\+\_\+rec}  {\bf provider\+\_\+alias\+\_\+rec}}\hypertarget{mod__authz__core_8c_a74242c13c044bc681912f303769398e1}{}\label{mod__authz__core_8c_a74242c13c044bc681912f303769398e1}
+
+
+\subsection{Enumeration Type Documentation}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!authz\+\_\+logic\+\_\+op@{authz\+\_\+logic\+\_\+op}}
+\index{authz\+\_\+logic\+\_\+op@{authz\+\_\+logic\+\_\+op}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{authz\+\_\+logic\+\_\+op}{authz_logic_op}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf authz\+\_\+logic\+\_\+op}}\hypertarget{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767}{}\label{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+A\+ND@{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+A\+ND}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+A\+ND@{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+A\+ND}}\item[{\em 
+A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+A\+ND\hypertarget{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767af8c77e358a2b011af8a873dd9db20306}{}\label{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767af8c77e358a2b011af8a873dd9db20306}
+}]\index{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+OR@{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+OR}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+OR@{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+OR}}\item[{\em 
+A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+OR\hypertarget{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767ad1ccb71e21ecd690ce79c6879f23cf0f}{}\label{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767ad1ccb71e21ecd690ce79c6879f23cf0f}
+}]\index{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+O\+FF@{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+O\+FF}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+O\+FF@{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+O\+FF}}\item[{\em 
+A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+O\+FF\hypertarget{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767a256d03f7fd155565422afb0b2e01cca4}{}\label{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767a256d03f7fd155565422afb0b2e01cca4}
+}]\index{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+U\+N\+S\+ET@{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+U\+N\+S\+ET}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+U\+N\+S\+ET@{A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+U\+N\+S\+ET}}\item[{\em 
+A\+U\+T\+H\+Z\+\_\+\+L\+O\+G\+I\+C\+\_\+\+U\+N\+S\+ET\hypertarget{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767a6c35b7ecad8f5e8e6341699d4fd9632a}{}\label{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767a6c35b7ecad8f5e8e6341699d4fd9632a}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+59              \{
+60     \hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767af8c77e358a2b011af8a873dd9db20306}{AUTHZ\_LOGIC\_AND},
+61     \hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767ad1ccb71e21ecd690ce79c6879f23cf0f}{AUTHZ\_LOGIC\_OR},
+62     \hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767a256d03f7fd155565422afb0b2e01cca4}{AUTHZ\_LOGIC\_OFF},
+63     \hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767a6c35b7ecad8f5e8e6341699d4fd9632a}{AUTHZ\_LOGIC\_UNSET}
+64 \} \hyperlink{mod__authz__core_8c_a2f7ea245f9aec9f2a9caee7eced5c767}{authz\_logic\_op};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(authz\+\_\+core)}{AP_DECLARE_MODULE(authz_core)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{authz\+\_\+core}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__authz__core_8c_a872ad095da68585bfc3c40b7b12ed1c7}{}\label{mod__authz__core_8c_a872ad095da68585bfc3c40b7b12ed1c7}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}!authz\+\_\+core\+\_\+module@{authz\+\_\+core\+\_\+module}}
+\index{authz\+\_\+core\+\_\+module@{authz\+\_\+core\+\_\+module}!mod\+\_\+authz\+\_\+core.\+c@{mod\+\_\+authz\+\_\+core.\+c}}
+\subsubsection[{\texorpdfstring{authz\+\_\+core\+\_\+module}{authz_core_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} authz\+\_\+core\+\_\+module}\hypertarget{mod__authz__core_8c_aa7fa7e24263f9ff253d23b41f6959861}{}\label{mod__authz__core_8c_aa7fa7e24263f9ff253d23b41f6959861}

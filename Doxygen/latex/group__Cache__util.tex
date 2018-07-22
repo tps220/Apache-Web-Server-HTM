@@ -1,0 +1,1235 @@
+\hypertarget{group__Cache__util}{}\section{Cache Utility Functions}
+\label{group__Cache__util}\index{Cache Utility Functions@{Cache Utility Functions}}
+Collaboration diagram for Cache Utility Functions\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=302pt]{group__Cache__util}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcache__enable}{cache\+\_\+enable}
+\item 
+struct \hyperlink{structcache__disable}{cache\+\_\+disable}
+\item 
+struct \hyperlink{structcache__server__conf}{cache\+\_\+server\+\_\+conf}
+\item 
+struct \hyperlink{structcache__dir__conf}{cache\+\_\+dir\+\_\+conf}
+\item 
+struct \hyperlink{structcache__provider__list}{cache\+\_\+provider\+\_\+list}
+\item 
+struct \hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__Cache__util_ga88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{group__Cache__util_gafa99ec4acc4ecb2dc3c2d05da15d0e3f}{M\+AX}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~((\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}) $>$ (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}) ? (\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}) \+: (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))
+\item 
+\#define \hyperlink{group__Cache__util_ga3acffbd305ee72dcd4593c0d8af64a4f}{M\+IN}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~((\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}) $<$ (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}) ? (\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}) \+: (\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}))
+\item 
+\#define \hyperlink{group__Cache__util_ga11c1c155b3b983d8a53ee6f62d054c5c}{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY}~((\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t})(86400$\ast$\hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{A\+P\+R\+\_\+\+U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+S\+EC})) /$\ast$ one day, \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in} microseconds $\ast$/
+\item 
+\#define \hyperlink{group__Cache__util_ga99f59d6743883a270e59e4d49616b054}{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR}~((\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t})(3600$\ast$\hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{A\+P\+R\+\_\+\+U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+S\+EC}))  /$\ast$ one hour, \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in} microseconds $\ast$/
+\item 
+\#define \hyperlink{group__Cache__util_ga06c93f90cd6b42720767c458a27ba49c}{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+M\+IN}~((\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t})(60$\ast$\hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{A\+P\+R\+\_\+\+U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+S\+EC}))    /$\ast$ one minute, \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in} microseconds $\ast$/
+\item 
+\#define \hyperlink{group__Cache__util_ga99bdcd9c38d9afadf961bf71103fb44e}{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+S\+EC}~((\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t})(\hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{A\+P\+R\+\_\+\+U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+S\+EC}))       /$\ast$ one \hyperlink{group__apr__tables_gade8df35e4d83c24788cf409262f7fc51}{second}, \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in} microseconds $\ast$/
+\item 
+\#define \hyperlink{group__Cache__util_gadfe1ae1ee42160d9c183cfac20c25ad1}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+E\+X\+P\+I\+RE}~\hyperlink{group__Cache__util_ga11c1c155b3b983d8a53ee6f62d054c5c}{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY}
+\item 
+\#define \hyperlink{group__Cache__util_ga1777581186d443f1a84aad75245f526e}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+I\+N\+E\+X\+P\+I\+RE}~0
+\item 
+\#define \hyperlink{group__Cache__util_ga4a4dac2e0dccccc4f1e4485bfc529724}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+E\+X\+P\+I\+RE}~\hyperlink{group__Cache__util_ga99f59d6743883a270e59e4d49616b054}{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR}
+\item 
+\#define \hyperlink{group__Cache__util_ga3a7f13c74ab54bb2ec8419463f95fa1d}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+M\+F\+A\+C\+T\+OR}~(0.\+1)
+\item 
+\#define \hyperlink{group__Cache__util_gab7892c35c420dde1a8050b5bd7c437c5}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+A\+GE}~5
+\item 
+\#define \hyperlink{group__Cache__util_ga201e22bbaa4aa67b58a109afaabf6959}{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+HE}~0
+\item 
+\#define \hyperlink{group__Cache__util_ga5774f5c44b82783922fe3c741cb4c093}{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+H\+E\+\_\+\+D\+E\+T\+A\+IL}~0
+\item 
+\#define \hyperlink{group__Cache__util_gac909357ff2b12a32397146be2a3a8b74}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+S\+T\+A\+L\+E\+\_\+\+O\+N\+\_\+\+E\+R\+R\+OR}~1
+\item 
+\#define \hyperlink{group__Cache__util_ga8529c15e3f5e3e6598f8313495f50598}{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+P\+A\+TH}~\char`\"{}/mod\+\_\+cache-\/\hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}\char`\"{}
+\item 
+\#define \hyperlink{group__Cache__util_gaa55455b9316bd74826d36a89914580b8}{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+N\+A\+M\+E\+\_\+\+K\+EY}~\char`\"{}mod\+\_\+cache-\/lockname\char`\"{}
+\item 
+\#define \hyperlink{group__Cache__util_ga18f46c3a4173d016f51fce82d596fec7}{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+F\+I\+L\+E\+\_\+\+K\+EY}~\char`\"{}mod\+\_\+cache-\/lockfile\char`\"{}
+\item 
+\#define \hyperlink{group__Cache__util_gac10632e313af1b7ac2c619b65290f5d7}{C\+A\+C\+H\+E\+\_\+\+C\+T\+X\+\_\+\+K\+EY}~\char`\"{}mod\+\_\+cache-\/\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}\char`\"{}
+\item 
+\#define \hyperlink{group__Cache__util_ga2916636af38fdf277cb80c1c698c291a}{C\+A\+C\+H\+E\+\_\+\+S\+E\+P\+A\+R\+A\+T\+OR}~\char`\"{}, \textbackslash{}t\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structcache__provider__list}{cache\+\_\+provider\+\_\+list} \hyperlink{group__Cache__util_gaf1d145ae80afe048c683ac2da4e9c298}{cache\+\_\+provider\+\_\+list}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__Cache__util_ga565962a760117aaaed7e13445f79e831}{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+cache} (\hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec} $\ast$\hyperlink{structcache}{cache}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__Cache__util_gabddbd6cc98e9791c643ea64a26e165b0}{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+store} (\hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec} $\ast$\hyperlink{structcache}{cache}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__Cache__util_ga8719ff14e3ad87c32614da9fc10cb119}{cache\+\_\+check\+\_\+freshness} (\hyperlink{group__MOD__CACHE_ga6b7854a2592838a565bdee8f94343aab}{cache\+\_\+handle\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_a373589baca2cb79ec87f46d6599640b9}{h}, \hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec} $\ast$\hyperlink{structcache}{cache}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__Cache__util_gaffa94dfea5098ffab89d1dc91e094415}{cache\+\_\+try\+\_\+lock} (\hyperlink{structcache__server__conf}{cache\+\_\+server\+\_\+conf} $\ast$\hyperlink{group__MOD__PROXY_ga4d7edd451c4bb8ed9ce9012e5dea2b14}{conf}, \hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec} $\ast$\hyperlink{structcache}{cache}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__Cache__util_ga6936350ce1acc1f19e336eb95be153fb}{cache\+\_\+remove\+\_\+lock} (\hyperlink{structcache__server__conf}{cache\+\_\+server\+\_\+conf} $\ast$\hyperlink{group__MOD__PROXY_ga4d7edd451c4bb8ed9ce9012e5dea2b14}{conf}, \hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec} $\ast$\hyperlink{structcache}{cache}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb})
+\item 
+\hyperlink{structcache__provider__list}{cache\+\_\+provider\+\_\+list} $\ast$ \hyperlink{group__Cache__util_ga3bb0227007e96351ef9b155cd0720abb}{cache\+\_\+get\+\_\+providers} (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, \hyperlink{structcache__server__conf}{cache\+\_\+server\+\_\+conf} $\ast$\hyperlink{group__MOD__PROXY_ga4d7edd451c4bb8ed9ce9012e5dea2b14}{conf})
+\item 
+const char $\ast$ \hyperlink{group__Cache__util_ga46b2ea303b9ec2767a61d0f121835b43}{cache\+\_\+table\+\_\+getm} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, const \hyperlink{structapr__table__t}{apr\+\_\+table\+\_\+t} $\ast$\hyperlink{pcretest_8txt_a9ffb27fb8e1f90c17b13303fee2fb883}{t}, const char $\ast$\hyperlink{apr__siphash_8h_adac0b6a30345ea1d0daa8a692b0b7ad9}{key})
+\item 
+char $\ast$ \hyperlink{group__Cache__util_gada03570414af2b2d9349449858036d90}{cache\+\_\+strqtok} (char $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga6a62b60443be1d042194af15ce934193}{str}, const char $\ast$\hyperlink{group__apr__tables_ga37d96adf842aef6b03690e17874c9ed8}{sep}, char $\ast$$\ast$\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last})
+\item 
+\hyperlink{structapr__table__t}{apr\+\_\+table\+\_\+t} $\ast$ \hyperlink{group__Cache__util_ga81c4df4762c014811f81be66e236f62b}{cache\+\_\+merge\+\_\+headers\+\_\+out} (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__Cache__util_gaea2f7fee82fd07fce89934bee0939987}{cache\+\_\+use\+\_\+early\+\_\+url} (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Macro Definition Documentation}
+\index{Cache Utility Functions@{Cache Utility Functions}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{group__Cache__util_ga88a4bf7f483aad3f3945773f3383e713}{}\label{group__Cache__util_ga88a4bf7f483aad3f3945773f3383e713}
+\index{Cache Utility Functions@{Cache Utility Functions}!C\+A\+C\+H\+E\+\_\+\+C\+T\+X\+\_\+\+K\+EY@{C\+A\+C\+H\+E\+\_\+\+C\+T\+X\+\_\+\+K\+EY}}
+\index{C\+A\+C\+H\+E\+\_\+\+C\+T\+X\+\_\+\+K\+EY@{C\+A\+C\+H\+E\+\_\+\+C\+T\+X\+\_\+\+K\+EY}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{C\+A\+C\+H\+E\+\_\+\+C\+T\+X\+\_\+\+K\+EY}{CACHE_CTX_KEY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+A\+C\+H\+E\+\_\+\+C\+T\+X\+\_\+\+K\+EY~\char`\"{}mod\+\_\+cache-\/{\bf ctx}\char`\"{}}\hypertarget{group__Cache__util_gac10632e313af1b7ac2c619b65290f5d7}{}\label{group__Cache__util_gac10632e313af1b7ac2c619b65290f5d7}
+\index{Cache Utility Functions@{Cache Utility Functions}!C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+F\+I\+L\+E\+\_\+\+K\+EY@{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+F\+I\+L\+E\+\_\+\+K\+EY}}
+\index{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+F\+I\+L\+E\+\_\+\+K\+EY@{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+F\+I\+L\+E\+\_\+\+K\+EY}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+F\+I\+L\+E\+\_\+\+K\+EY}{CACHE_LOCKFILE_KEY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+F\+I\+L\+E\+\_\+\+K\+EY~\char`\"{}mod\+\_\+cache-\/lockfile\char`\"{}}\hypertarget{group__Cache__util_ga18f46c3a4173d016f51fce82d596fec7}{}\label{group__Cache__util_ga18f46c3a4173d016f51fce82d596fec7}
+\index{Cache Utility Functions@{Cache Utility Functions}!C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+N\+A\+M\+E\+\_\+\+K\+EY@{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+N\+A\+M\+E\+\_\+\+K\+EY}}
+\index{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+N\+A\+M\+E\+\_\+\+K\+EY@{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+N\+A\+M\+E\+\_\+\+K\+EY}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+N\+A\+M\+E\+\_\+\+K\+EY}{CACHE_LOCKNAME_KEY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+N\+A\+M\+E\+\_\+\+K\+EY~\char`\"{}mod\+\_\+cache-\/lockname\char`\"{}}\hypertarget{group__Cache__util_gaa55455b9316bd74826d36a89914580b8}{}\label{group__Cache__util_gaa55455b9316bd74826d36a89914580b8}
+\index{Cache Utility Functions@{Cache Utility Functions}!C\+A\+C\+H\+E\+\_\+\+S\+E\+P\+A\+R\+A\+T\+OR@{C\+A\+C\+H\+E\+\_\+\+S\+E\+P\+A\+R\+A\+T\+OR}}
+\index{C\+A\+C\+H\+E\+\_\+\+S\+E\+P\+A\+R\+A\+T\+OR@{C\+A\+C\+H\+E\+\_\+\+S\+E\+P\+A\+R\+A\+T\+OR}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{C\+A\+C\+H\+E\+\_\+\+S\+E\+P\+A\+R\+A\+T\+OR}{CACHE_SEPARATOR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+A\+C\+H\+E\+\_\+\+S\+E\+P\+A\+R\+A\+T\+OR~\char`\"{}, \textbackslash{}t\char`\"{}}\hypertarget{group__Cache__util_ga2916636af38fdf277cb80c1c698c291a}{}\label{group__Cache__util_ga2916636af38fdf277cb80c1c698c291a}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+E\+X\+P\+I\+RE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+E\+X\+P\+I\+RE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+E\+X\+P\+I\+RE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+E\+X\+P\+I\+RE}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+E\+X\+P\+I\+RE}{DEFAULT_CACHE_EXPIRE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+E\+X\+P\+I\+RE~{\bf M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR}}\hypertarget{group__Cache__util_ga4a4dac2e0dccccc4f1e4485bfc529724}{}\label{group__Cache__util_ga4a4dac2e0dccccc4f1e4485bfc529724}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+M\+F\+A\+C\+T\+OR@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+M\+F\+A\+C\+T\+OR}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+M\+F\+A\+C\+T\+OR@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+M\+F\+A\+C\+T\+OR}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+M\+F\+A\+C\+T\+OR}{DEFAULT_CACHE_LMFACTOR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+M\+F\+A\+C\+T\+OR~(0.\+1)}\hypertarget{group__Cache__util_ga3a7f13c74ab54bb2ec8419463f95fa1d}{}\label{group__Cache__util_ga3a7f13c74ab54bb2ec8419463f95fa1d}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+P\+A\+TH@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+P\+A\+TH}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+P\+A\+TH@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+P\+A\+TH}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+P\+A\+TH}{DEFAULT_CACHE_LOCKPATH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+L\+O\+C\+K\+P\+A\+TH~\char`\"{}/mod\+\_\+cache-\/{\bf lock}\char`\"{}}\hypertarget{group__Cache__util_ga8529c15e3f5e3e6598f8313495f50598}{}\label{group__Cache__util_ga8529c15e3f5e3e6598f8313495f50598}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+A\+GE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+A\+GE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+A\+GE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+A\+GE}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+A\+GE}{DEFAULT_CACHE_MAXAGE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+A\+GE~5}\hypertarget{group__Cache__util_gab7892c35c420dde1a8050b5bd7c437c5}{}\label{group__Cache__util_gab7892c35c420dde1a8050b5bd7c437c5}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+E\+X\+P\+I\+RE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+E\+X\+P\+I\+RE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+E\+X\+P\+I\+RE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+E\+X\+P\+I\+RE}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+E\+X\+P\+I\+RE}{DEFAULT_CACHE_MAXEXPIRE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+A\+X\+E\+X\+P\+I\+RE~{\bf M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY}}\hypertarget{group__Cache__util_gadfe1ae1ee42160d9c183cfac20c25ad1}{}\label{group__Cache__util_gadfe1ae1ee42160d9c183cfac20c25ad1}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+I\+N\+E\+X\+P\+I\+RE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+I\+N\+E\+X\+P\+I\+RE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+I\+N\+E\+X\+P\+I\+RE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+I\+N\+E\+X\+P\+I\+RE}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+I\+N\+E\+X\+P\+I\+RE}{DEFAULT_CACHE_MINEXPIRE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+M\+I\+N\+E\+X\+P\+I\+RE~0}\hypertarget{group__Cache__util_ga1777581186d443f1a84aad75245f526e}{}\label{group__Cache__util_ga1777581186d443f1a84aad75245f526e}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+S\+T\+A\+L\+E\+\_\+\+O\+N\+\_\+\+E\+R\+R\+OR@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+S\+T\+A\+L\+E\+\_\+\+O\+N\+\_\+\+E\+R\+R\+OR}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+S\+T\+A\+L\+E\+\_\+\+O\+N\+\_\+\+E\+R\+R\+OR@{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+S\+T\+A\+L\+E\+\_\+\+O\+N\+\_\+\+E\+R\+R\+OR}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+S\+T\+A\+L\+E\+\_\+\+O\+N\+\_\+\+E\+R\+R\+OR}{DEFAULT_CACHE_STALE_ON_ERROR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+A\+C\+H\+E\+\_\+\+S\+T\+A\+L\+E\+\_\+\+O\+N\+\_\+\+E\+R\+R\+OR~1}\hypertarget{group__Cache__util_gac909357ff2b12a32397146be2a3a8b74}{}\label{group__Cache__util_gac909357ff2b12a32397146be2a3a8b74}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+HE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+HE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+HE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+HE}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+HE}{DEFAULT_X_CACHE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+HE~0}\hypertarget{group__Cache__util_ga201e22bbaa4aa67b58a109afaabf6959}{}\label{group__Cache__util_ga201e22bbaa4aa67b58a109afaabf6959}
+\index{Cache Utility Functions@{Cache Utility Functions}!D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+H\+E\+\_\+\+D\+E\+T\+A\+IL@{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+H\+E\+\_\+\+D\+E\+T\+A\+IL}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+H\+E\+\_\+\+D\+E\+T\+A\+IL@{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+H\+E\+\_\+\+D\+E\+T\+A\+IL}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+H\+E\+\_\+\+D\+E\+T\+A\+IL}{DEFAULT_X_CACHE_DETAIL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+X\+\_\+\+C\+A\+C\+H\+E\+\_\+\+D\+E\+T\+A\+IL~0}\hypertarget{group__Cache__util_ga5774f5c44b82783922fe3c741cb4c093}{}\label{group__Cache__util_ga5774f5c44b82783922fe3c741cb4c093}
+\index{Cache Utility Functions@{Cache Utility Functions}!M\+AX@{M\+AX}}
+\index{M\+AX@{M\+AX}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{M\+AX}{MAX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+AX(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~(({\bf a}) $>$ ({\bf b}) ? ({\bf a}) \+: ({\bf b}))}\hypertarget{group__Cache__util_gafa99ec4acc4ecb2dc3c2d05da15d0e3f}{}\label{group__Cache__util_gafa99ec4acc4ecb2dc3c2d05da15d0e3f}
+\index{Cache Utility Functions@{Cache Utility Functions}!M\+IN@{M\+IN}}
+\index{M\+IN@{M\+IN}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{M\+IN}{MIN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+IN(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~(({\bf a}) $<$ ({\bf b}) ? ({\bf a}) \+: ({\bf b}))}\hypertarget{group__Cache__util_ga3acffbd305ee72dcd4593c0d8af64a4f}{}\label{group__Cache__util_ga3acffbd305ee72dcd4593c0d8af64a4f}
+\index{Cache Utility Functions@{Cache Utility Functions}!M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY@{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY}}
+\index{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY@{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY}{MSEC_ONE_DAY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+D\+AY~(({\bf apr\+\_\+time\+\_\+t})(86400$\ast${\bf A\+P\+R\+\_\+\+U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+S\+EC})) /$\ast$ one day, {\bf in} microseconds $\ast$/}\hypertarget{group__Cache__util_ga11c1c155b3b983d8a53ee6f62d054c5c}{}\label{group__Cache__util_ga11c1c155b3b983d8a53ee6f62d054c5c}
+\index{Cache Utility Functions@{Cache Utility Functions}!M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR@{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR}}
+\index{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR@{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR}{MSEC_ONE_HR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+HR~(({\bf apr\+\_\+time\+\_\+t})(3600$\ast${\bf A\+P\+R\+\_\+\+U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+S\+EC}))  /$\ast$ one hour, {\bf in} microseconds $\ast$/}\hypertarget{group__Cache__util_ga99f59d6743883a270e59e4d49616b054}{}\label{group__Cache__util_ga99f59d6743883a270e59e4d49616b054}
+\index{Cache Utility Functions@{Cache Utility Functions}!M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+M\+IN@{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+M\+IN}}
+\index{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+M\+IN@{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+M\+IN}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+M\+IN}{MSEC_ONE_MIN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+M\+IN~(({\bf apr\+\_\+time\+\_\+t})(60$\ast${\bf A\+P\+R\+\_\+\+U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+S\+EC}))    /$\ast$ one minute, {\bf in} microseconds $\ast$/}\hypertarget{group__Cache__util_ga06c93f90cd6b42720767c458a27ba49c}{}\label{group__Cache__util_ga06c93f90cd6b42720767c458a27ba49c}
+\index{Cache Utility Functions@{Cache Utility Functions}!M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+S\+EC@{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+S\+EC}}
+\index{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+S\+EC@{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+S\+EC}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+S\+EC}{MSEC_ONE_SEC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+S\+E\+C\+\_\+\+O\+N\+E\+\_\+\+S\+EC~(({\bf apr\+\_\+time\+\_\+t})({\bf A\+P\+R\+\_\+\+U\+S\+E\+C\+\_\+\+P\+E\+R\+\_\+\+S\+EC}))       /$\ast$ one {\bf second}, {\bf in} microseconds $\ast$/}\hypertarget{group__Cache__util_ga99bdcd9c38d9afadf961bf71103fb44e}{}\label{group__Cache__util_ga99bdcd9c38d9afadf961bf71103fb44e}
+
+
+\subsection{Typedef Documentation}
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+provider\+\_\+list@{cache\+\_\+provider\+\_\+list}}
+\index{cache\+\_\+provider\+\_\+list@{cache\+\_\+provider\+\_\+list}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+provider\+\_\+list}{cache_provider_list}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf cache\+\_\+provider\+\_\+list} {\bf cache\+\_\+provider\+\_\+list}}\hypertarget{group__Cache__util_gaf1d145ae80afe048c683ac2da4e9c298}{}\label{group__Cache__util_gaf1d145ae80afe048c683ac2da4e9c298}
+
+
+\subsection{Function Documentation}
+\index{Cache Utility Functions@{Cache Utility Functions}!ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+cache@{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+cache}}
+\index{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+cache@{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+cache}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+cache(cache\+\_\+request\+\_\+rec $\ast$cache, request\+\_\+rec $\ast$r)}{ap_cache_check_no_cache(cache_request_rec *cache, request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+cache (
+\begin{DoxyParamCaption}
+\item[{{\bf cache\+\_\+request\+\_\+rec} $\ast$}]{cache, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_ga565962a760117aaaed7e13445f79e831}{}\label{group__Cache__util_ga565962a760117aaaed7e13445f79e831}
+Check the whether the request allows a cached object to be served as per R\+F\+C2616 section 14.\+9.\+4 (Cache Revalidation and Reload Controls) 
+\begin{DoxyParams}{Parameters}
+{\em cache} & \hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec} \\
+\hline
+{\em r} & \hyperlink{structrequest__rec}{request\+\_\+rec} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 ==$>$ cache object may not be served, 1 ==$>$ cache object may be served 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+451 \{
+452 
+453     \hyperlink{structcache__server__conf}{cache\_server\_conf} *\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf} =
+454       (\hyperlink{structcache__server__conf}{cache\_server\_conf} *)\hyperlink{group__APACHE__CORE__CONFIG_ga1093a5908a384eacc929b028c79f2a02}{ap\_get\_module\_config}(r->
+      \hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->module\_config,
+455                                                 &\hyperlink{mod__cache_8c_a315b551bc967794e90417b5538a128f1}{cache\_module});
+456 
+457     \textcolor{comment}{/*}
+458 \textcolor{comment}{     * At this point, we may have data cached, but the request may have}
+459 \textcolor{comment}{     * specified that cached data may not be used in a response.}
+460 \textcolor{comment}{     *}
+461 \textcolor{comment}{     * This is covered under RFC2616 section 14.9.4 (Cache Revalidation and}
+462 \textcolor{comment}{     * Reload Controls).}
+463 \textcolor{comment}{     *}
+464 \textcolor{comment}{     * - RFC2616 14.9.4 End to end reload, Cache-Control: no-cache, or Pragma:}
+465 \textcolor{comment}{     * no-cache. The server MUST NOT use a cached copy when responding to such}
+466 \textcolor{comment}{     * a request.}
+467 \textcolor{comment}{     */}
+468 
+469     \textcolor{comment}{/* This value comes from the client's initial request. */}
+470     \textcolor{keywordflow}{if} (!cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.\hyperlink{structcache__control_a386401082305485525836ed568c6b46a}{parsed}) \{
+471         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *cc\_req = \hyperlink{group__Cache__util_ga46b2ea303b9ec2767a61d0f121835b43}{cache\_table\_getm}(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, r->
+      \hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in},
+472                 \textcolor{stringliteral}{"Cache-Control"});
+473         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *pragma = \hyperlink{group__Cache__util_ga46b2ea303b9ec2767a61d0f121835b43}{cache\_table\_getm}(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, r->
+      \hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in}, \textcolor{stringliteral}{"Pragma"});
+474         \hyperlink{group__MOD__CACHE_ga22e3955e21c6e60450101eb1e3c6919b}{ap\_cache\_control}(r, &cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}, cc\_req, pragma, r->
+      \hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in});
+475     \}
+476 
+477     \textcolor{keywordflow}{if} (cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.\hyperlink{structcache__control_a76e5095344c47d185ef638ba1b66f267}{no\_cache}) \{
+478 
+479         \textcolor{keywordflow}{if} (!conf->\hyperlink{structcache__server__conf_a2372aa3f5b681975bd629bb1c865735d}{ignorecachecontrol}) \{
+480             \textcolor{keywordflow}{return} 0;
+481         \}
+482         \textcolor{keywordflow}{else} \{
+483             \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02657)
+484                     \textcolor{stringliteral}{"Incoming request is asking for an uncached version of "}
+485                     \textcolor{stringliteral}{"%s, but we have been configured to ignore it and serve "}
+486                     \textcolor{stringliteral}{"cached content anyway"}, r->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri});
+487         \}
+488     \}
+489 
+490     \textcolor{keywordflow}{return} 1;
+491 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga565962a760117aaaed7e13445f79e831_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga565962a760117aaaed7e13445f79e831_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+store@{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+store}}
+\index{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+store@{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+store}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+store(cache\+\_\+request\+\_\+rec $\ast$cache, request\+\_\+rec $\ast$r)}{ap_cache_check_no_store(cache_request_rec *cache, request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ap\+\_\+cache\+\_\+check\+\_\+no\+\_\+store (
+\begin{DoxyParamCaption}
+\item[{{\bf cache\+\_\+request\+\_\+rec} $\ast$}]{cache, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_gabddbd6cc98e9791c643ea64a26e165b0}{}\label{group__Cache__util_gabddbd6cc98e9791c643ea64a26e165b0}
+Check the whether the request allows a cached object to be stored as per R\+F\+C2616 section 14.\+9.\+2 (What May be Stored by Caches) 
+\begin{DoxyParams}{Parameters}
+{\em cache} & \hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec} \\
+\hline
+{\em r} & \hyperlink{structrequest__rec}{request\+\_\+rec} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 ==$>$ cache object may not be served, 1 ==$>$ cache object may be served 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+494 \{
+495 
+496     \hyperlink{structcache__server__conf}{cache\_server\_conf} *\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf} =
+497       (\hyperlink{structcache__server__conf}{cache\_server\_conf} *)\hyperlink{group__APACHE__CORE__CONFIG_ga1093a5908a384eacc929b028c79f2a02}{ap\_get\_module\_config}(r->
+      \hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->module\_config,
+498                                                 &\hyperlink{mod__cache_8c_a315b551bc967794e90417b5538a128f1}{cache\_module});
+499 
+500     \textcolor{comment}{/*}
+501 \textcolor{comment}{     * At this point, we may have data cached, but the request may have}
+502 \textcolor{comment}{     * specified that cached data may not be used in a response.}
+503 \textcolor{comment}{     *}
+504 \textcolor{comment}{     * - RFC2616 14.9.2 What May be Stored by Caches. If Cache-Control:}
+505 \textcolor{comment}{     * no-store arrives, do not serve from or store to the cache.}
+506 \textcolor{comment}{     */}
+507 
+508     \textcolor{comment}{/* This value comes from the client's initial request. */}
+509     \textcolor{keywordflow}{if} (!cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.\hyperlink{structcache__control_a386401082305485525836ed568c6b46a}{parsed}) \{
+510         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *cc\_req = \hyperlink{group__Cache__util_ga46b2ea303b9ec2767a61d0f121835b43}{cache\_table\_getm}(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, r->
+      \hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in},
+511                 \textcolor{stringliteral}{"Cache-Control"});
+512         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *pragma = \hyperlink{group__Cache__util_ga46b2ea303b9ec2767a61d0f121835b43}{cache\_table\_getm}(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, r->
+      \hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in}, \textcolor{stringliteral}{"Pragma"});
+513         \hyperlink{group__MOD__CACHE_ga22e3955e21c6e60450101eb1e3c6919b}{ap\_cache\_control}(r, &cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}, cc\_req, pragma, r->
+      \hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in});
+514     \}
+515 
+516     \textcolor{keywordflow}{if} (cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.\hyperlink{structcache__control_a954d604960ef369d164db15b4574f5e2}{no\_store}) \{
+517 
+518         \textcolor{keywordflow}{if} (!conf->\hyperlink{structcache__server__conf_a2372aa3f5b681975bd629bb1c865735d}{ignorecachecontrol}) \{
+519             \textcolor{comment}{/* We're not allowed to serve a cached copy */}
+520             \textcolor{keywordflow}{return} 0;
+521         \}
+522         \textcolor{keywordflow}{else} \{
+523             \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02658)
+524                     \textcolor{stringliteral}{"Incoming request is asking for a no-store version of "}
+525                     \textcolor{stringliteral}{"%s, but we have been configured to ignore it and serve "}
+526                     \textcolor{stringliteral}{"cached content anyway"}, r->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri});
+527         \}
+528     \}
+529 
+530     \textcolor{keywordflow}{return} 1;
+531 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_gabddbd6cc98e9791c643ea64a26e165b0_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_gabddbd6cc98e9791c643ea64a26e165b0_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+check\+\_\+freshness@{cache\+\_\+check\+\_\+freshness}}
+\index{cache\+\_\+check\+\_\+freshness@{cache\+\_\+check\+\_\+freshness}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+check\+\_\+freshness(cache\+\_\+handle\+\_\+t $\ast$h, cache\+\_\+request\+\_\+rec $\ast$cache, request\+\_\+rec $\ast$r)}{cache_check_freshness(cache_handle_t *h, cache_request_rec *cache, request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} cache\+\_\+check\+\_\+freshness (
+\begin{DoxyParamCaption}
+\item[{{\bf cache\+\_\+handle\+\_\+t} $\ast$}]{h, }
+\item[{{\bf cache\+\_\+request\+\_\+rec} $\ast$}]{cache, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_ga8719ff14e3ad87c32614da9fc10cb119}{}\label{group__Cache__util_ga8719ff14e3ad87c32614da9fc10cb119}
+Check the freshness of the cache object per R\+F\+C2616 section 13.\+2 (Expiration Model) 
+\begin{DoxyParams}{Parameters}
+{\em h} & cache\+\_\+handle\+\_\+t \\
+\hline
+{\em cache} & \hyperlink{structcache__request__rec}{cache\+\_\+request\+\_\+rec} \\
+\hline
+{\em r} & \hyperlink{structrequest__rec}{request\+\_\+rec} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 ==$>$ cache object is stale, 1 ==$>$ cache object is fresh 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+535 \{
+536     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+537     \hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\_int64\_t} age, maxage\_req, maxage\_cresp, \hyperlink{group__APACHE__CORE__COOKIE_ga846f24530366d967942121cbfdca1ea7}{maxage}, smaxage, maxstale;
+538     \hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\_int64\_t} minfresh;
+539     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *cc\_req;
+540     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *pragma;
+541     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *agestr = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+542     \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\_time\_t} age\_c = 0;
+543     \hyperlink{structcache__info}{cache\_info} *\hyperlink{group__AP__EXPR_gae5e165b68fbb12afc88707b8e6eb2f08}{info} = &(h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_ab4b2aae3e314dfa7abe8304c33cedb83}{info});
+544     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *warn\_head;
+545     \hyperlink{structcache__server__conf}{cache\_server\_conf} *\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf} =
+546       (\hyperlink{structcache__server__conf}{cache\_server\_conf} *)\hyperlink{group__APACHE__CORE__CONFIG_ga1093a5908a384eacc929b028c79f2a02}{ap\_get\_module\_config}(r->
+      \hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->module\_config,
+547                                                 &\hyperlink{mod__cache_8c_a315b551bc967794e90417b5538a128f1}{cache\_module});
+548 
+549     \textcolor{comment}{/*}
+550 \textcolor{comment}{     * We now want to check if our cached data is still fresh. This depends}
+551 \textcolor{comment}{     * on a few things, in this order:}
+552 \textcolor{comment}{     *}
+553 \textcolor{comment}{     * - RFC2616 14.9.4 End to end reload, Cache-Control: no-cache. no-cache}
+554 \textcolor{comment}{     * in either the request or the cached response means that we must}
+555 \textcolor{comment}{     * perform the request unconditionally, and ignore cached content. We}
+556 \textcolor{comment}{     * should never reach here, but if we do, mark the content as stale,}
+557 \textcolor{comment}{     * as this is the best we can do.}
+558 \textcolor{comment}{     *}
+559 \textcolor{comment}{     * - RFC2616 14.32 Pragma: no-cache This is treated the same as}
+560 \textcolor{comment}{     * Cache-Control: no-cache.}
+561 \textcolor{comment}{     *}
+562 \textcolor{comment}{     * - RFC2616 14.9.3 Cache-Control: max-stale, must-revalidate,}
+563 \textcolor{comment}{     * proxy-revalidate if the max-stale request header exists, modify the}
+564 \textcolor{comment}{     * stale calculations below so that an object can be at most <max-stale>}
+565 \textcolor{comment}{     * seconds stale before we request a revalidation, \_UNLESS\_ a}
+566 \textcolor{comment}{     * must-revalidate or proxy-revalidate cached response header exists to}
+567 \textcolor{comment}{     * stop us doing this.}
+568 \textcolor{comment}{     *}
+569 \textcolor{comment}{     * - RFC2616 14.9.3 Cache-Control: s-maxage the origin server specifies the}
+570 \textcolor{comment}{     * maximum age an object can be before it is considered stale. This}
+571 \textcolor{comment}{     * directive has the effect of proxy|must revalidate, which in turn means}
+572 \textcolor{comment}{     * simple ignore any max-stale setting.}
+573 \textcolor{comment}{     *}
+574 \textcolor{comment}{     * - RFC2616 14.9.4 Cache-Control: max-age this header can appear in both}
+575 \textcolor{comment}{     * requests and responses. If both are specified, the smaller of the two}
+576 \textcolor{comment}{     * takes priority.}
+577 \textcolor{comment}{     *}
+578 \textcolor{comment}{     * - RFC2616 14.21 Expires: if this request header exists in the cached}
+579 \textcolor{comment}{     * entity, and it's value is in the past, it has expired.}
+580 \textcolor{comment}{     *}
+581 \textcolor{comment}{     */}
+582 
+583     \textcolor{comment}{/* This value comes from the client's initial request. */}
+584     cc\_req = apr\_table\_get(r->\hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in}, \textcolor{stringliteral}{"Cache-Control"});
+585     pragma = apr\_table\_get(r->\hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in}, \textcolor{stringliteral}{"Pragma"});
+586 
+587     \hyperlink{group__MOD__CACHE_ga22e3955e21c6e60450101eb1e3c6919b}{ap\_cache\_control}(r, &cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}, cc\_req, pragma, r->
+      \hyperlink{structrequest__rec_a5497da6c01af49acf70a4a9b975c1c83}{headers\_in});
+588 
+589     \textcolor{keywordflow}{if} (cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.\hyperlink{structcache__control_a76e5095344c47d185ef638ba1b66f267}{no\_cache}) \{
+590 
+591         \textcolor{keywordflow}{if} (!conf->\hyperlink{structcache__server__conf_a2372aa3f5b681975bd629bb1c865735d}{ignorecachecontrol}) \{
+592             \textcolor{comment}{/* Treat as stale, causing revalidation */}
+593             \textcolor{keywordflow}{return} 0;
+594         \}
+595 
+596         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00781)
+597                 \textcolor{stringliteral}{"Incoming request is asking for a uncached version of "}
+598                 \textcolor{stringliteral}{"%s, but we have been configured to ignore it and "}
+599                 \textcolor{stringliteral}{"serve a cached response anyway"},
+600                 r->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri});
+601     \}
+602 
+603     \textcolor{comment}{/* These come from the cached entity. */}
+604     \textcolor{keywordflow}{if} (h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_ab4b2aae3e314dfa7abe8304c33cedb83}{info}.\hyperlink{structcache__info_ad13eba54e179bd5b57b7e97b219b3c67}{control}.\hyperlink{structcache__control_a76e5095344c47d185ef638ba1b66f267}{no\_cache}
+605             || h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_ab4b2aae3e314dfa7abe8304c33cedb83}{info}.\hyperlink{structcache__info_ad13eba54e179bd5b57b7e97b219b3c67}{control}.invalidated) \{
+606         \textcolor{comment}{/*}
+607 \textcolor{comment}{         * The cached entity contained Cache-Control: no-cache, or a}
+608 \textcolor{comment}{         * no-cache with a header present, or a private with a header}
+609 \textcolor{comment}{         * present, or the cached entity has been invalidated in the}
+610 \textcolor{comment}{         * past, so treat as stale causing revalidation.}
+611 \textcolor{comment}{         */}
+612         \textcolor{keywordflow}{return} 0;
+613     \}
+614 
+615     \textcolor{keywordflow}{if} ((agestr = apr\_table\_get(h->\hyperlink{structcache__handle_a66c4c1875bb9740d34ddda4d3e71065e}{resp\_hdrs}, \textcolor{stringliteral}{"Age"}))) \{
+616         \textcolor{keywordtype}{char} *endp;
+617         \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} offt;
+618         \textcolor{keywordflow}{if} (!apr\_strtoff(&offt, agestr, &endp, 10)
+619                 && endp > agestr && !*endp) \{
+620             age\_c = offt;
+621         \}
+622     \}
+623 
+624     \textcolor{comment}{/* calculate age of object */}
+625     age = ap\_cache\_current\_age(info, age\_c, r->\hyperlink{structrequest__rec_a2dadff0630a13ea1ccc2037356ffbb81}{request\_time});
+626 
+627     \textcolor{comment}{/* extract s-maxage */}
+628     smaxage = h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_ab4b2aae3e314dfa7abe8304c33cedb83}{info}.\hyperlink{structcache__info_ad13eba54e179bd5b57b7e97b219b3c67}{control}.s\_maxage\_value;
+629 
+630     \textcolor{comment}{/* extract max-age from request */}
+631     maxage\_req = -1;
+632     \textcolor{keywordflow}{if} (!conf->\hyperlink{structcache__server__conf_a2372aa3f5b681975bd629bb1c865735d}{ignorecachecontrol}) \{
+633         maxage\_req = cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.max\_age\_value;
+634     \}
+635 
+636     \textcolor{comment}{/*}
+637 \textcolor{comment}{     * extract max-age from response, if both s-maxage and max-age, s-maxage}
+638 \textcolor{comment}{     * takes priority}
+639 \textcolor{comment}{     */}
+640     \textcolor{keywordflow}{if} (smaxage != -1) \{
+641         maxage\_cresp = smaxage;
+642     \}
+643     \textcolor{keywordflow}{else} \{
+644         maxage\_cresp = h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_ab4b2aae3e314dfa7abe8304c33cedb83}{info}.\hyperlink{structcache__info_ad13eba54e179bd5b57b7e97b219b3c67}{control}.max\_age\_value;
+645     \}
+646 
+647     \textcolor{comment}{/*}
+648 \textcolor{comment}{     * if both maxage request and response, the smaller one takes priority}
+649 \textcolor{comment}{     */}
+650     \textcolor{keywordflow}{if} (maxage\_req == -1) \{
+651         maxage = maxage\_cresp;
+652     \}
+653     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (maxage\_cresp == -1) \{
+654         maxage = maxage\_req;
+655     \}
+656     \textcolor{keywordflow}{else} \{
+657         maxage = \hyperlink{group__Cache__util_ga3acffbd305ee72dcd4593c0d8af64a4f}{MIN}(maxage\_req, maxage\_cresp);
+658     \}
+659 
+660     \textcolor{comment}{/* extract max-stale */}
+661     \textcolor{keywordflow}{if} (cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.\hyperlink{structcache__control_a86c0c3648dd91f6793e6150fc2fd2391}{max\_stale}) \{
+662         \textcolor{keywordflow}{if} (cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.max\_stale\_value != -1) \{
+663             maxstale = cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.max\_stale\_value;
+664         \}
+665         \textcolor{keywordflow}{else} \{
+666             \textcolor{comment}{/*}
+667 \textcolor{comment}{             * If no value is assigned to max-stale, then the client is willing}
+668 \textcolor{comment}{             * to accept a stale response of any age (RFC2616 14.9.3). We will}
+669 \textcolor{comment}{             * set it to one year in this case as this situation is somewhat}
+670 \textcolor{comment}{             * similar to a "never expires" Expires header (RFC2616 14.21)}
+671 \textcolor{comment}{             * which is set to a date one year from the time the response is}
+672 \textcolor{comment}{             * sent in this case.}
+673 \textcolor{comment}{             */}
+674             maxstale = \hyperlink{group__apr__platform_gaae749817bb595cd5dcb9c17c119ddb13}{APR\_INT64\_C}(86400*365);
+675         \}
+676     \}
+677     \textcolor{keywordflow}{else} \{
+678         maxstale = 0;
+679     \}
+680 
+681     \textcolor{comment}{/* extract min-fresh */}
+682     \textcolor{keywordflow}{if} (!conf->\hyperlink{structcache__server__conf_a2372aa3f5b681975bd629bb1c865735d}{ignorecachecontrol} && cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.
+      \hyperlink{structcache__control_aa2e69b28766eef731031b7b2d728273d}{min\_fresh}) \{
+683         minfresh = cache->\hyperlink{structcache__request__rec_aaea78b272eb05f1ba67a75bd6264b4df}{control\_in}.min\_fresh\_value;
+684     \}
+685     \textcolor{keywordflow}{else} \{
+686         minfresh = 0;
+687     \}
+688 
+689     \textcolor{comment}{/* override maxstale if must-revalidate, proxy-revalidate or s-maxage */}
+690     \textcolor{keywordflow}{if} (maxstale && (h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_ab4b2aae3e314dfa7abe8304c33cedb83}{info}.\hyperlink{structcache__info_ad13eba54e179bd5b57b7e97b219b3c67}{control}.must\_revalidate
+691             || h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_ab4b2aae3e314dfa7abe8304c33cedb83}{info}.\hyperlink{structcache__info_ad13eba54e179bd5b57b7e97b219b3c67}{control}.proxy\_revalidate || smaxage != -1)) \{
+692         maxstale = 0;
+693     \}
+694 
+695     \textcolor{comment}{/* handle expiration */}
+696     \textcolor{keywordflow}{if} (((maxage != -1) && (age < (maxage + maxstale - minfresh))) ||
+697         ((smaxage == -1) && (maxage == -1) &&
+698          (info->\hyperlink{structcache__info_acad1125058221e40207cc515f294d474}{expire} != \hyperlink{group__APR__Util__Date_ga8be88b25f4b477ad13c4067c959411b0}{APR\_DATE\_BAD}) &&
+699          (age < (\hyperlink{group__apr__time_gae0237f70a9a3206b5263c0a474219476}{apr\_time\_sec}(info->\hyperlink{structcache__info_acad1125058221e40207cc515f294d474}{expire} - info->\hyperlink{structcache__info_a25cd61e421d08b30595f6373d230f95f}{date}) + maxstale - minfresh)))) \{
+700 
+701         warn\_head = apr\_table\_get(h->\hyperlink{structcache__handle_a66c4c1875bb9740d34ddda4d3e71065e}{resp\_hdrs}, \textcolor{stringliteral}{"Warning"});
+702 
+703         \textcolor{comment}{/* it's fresh darlings... */}
+704         \textcolor{comment}{/* set age header on response */}
+705         apr\_table\_set(h->\hyperlink{structcache__handle_a66c4c1875bb9740d34ddda4d3e71065e}{resp\_hdrs}, \textcolor{stringliteral}{"Age"},
+706                       apr\_psprintf(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{stringliteral}{"%lu"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})age));
+707 
+708         \textcolor{comment}{/* add warning if maxstale overrode freshness calculation */}
+709         \textcolor{keywordflow}{if} (!(((maxage != -1) && age < maxage) ||
+710               (info->\hyperlink{structcache__info_acad1125058221e40207cc515f294d474}{expire} != \hyperlink{group__APR__Util__Date_ga8be88b25f4b477ad13c4067c959411b0}{APR\_DATE\_BAD} &&
+711                (\hyperlink{group__apr__time_gae0237f70a9a3206b5263c0a474219476}{apr\_time\_sec}(info->\hyperlink{structcache__info_acad1125058221e40207cc515f294d474}{expire} - info->\hyperlink{structcache__info_a25cd61e421d08b30595f6373d230f95f}{date})) > age))) \{
+712             \textcolor{comment}{/* make sure we don't stomp on a previous warning */}
+713             \textcolor{keywordflow}{if} ((warn\_head == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) ||
+714                 ((warn\_head != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) && (\hyperlink{group__APACHE__CORE__DAEMON_ga48f6ba4ea178ad3a334403ec7206d7a3}{ap\_strstr\_c}(warn\_head, \textcolor{stringliteral}{"110"}) == 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}))) \{
+715                 apr\_table\_mergen(h->\hyperlink{structcache__handle_a66c4c1875bb9740d34ddda4d3e71065e}{resp\_hdrs}, \textcolor{stringliteral}{"Warning"},
+716                                  \textcolor{stringliteral}{"110 Response is stale"});
+717             \}
+718         \}
+719 
+720         \textcolor{comment}{/*}
+721 \textcolor{comment}{         * If none of Expires, Cache-Control: max-age, or Cache-Control:}
+722 \textcolor{comment}{         * s-maxage appears in the response, and the response header age}
+723 \textcolor{comment}{         * calculated is more than 24 hours add the warning 113}
+724 \textcolor{comment}{         */}
+725         \textcolor{keywordflow}{if} ((maxage\_cresp == -1) && (smaxage == -1) && (apr\_table\_get(
+726                 h->\hyperlink{structcache__handle_a66c4c1875bb9740d34ddda4d3e71065e}{resp\_hdrs}, \textcolor{stringliteral}{"Expires"}) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) && (age > 86400)) \{
+727 
+728             \textcolor{comment}{/* Make sure we don't stomp on a previous warning, and don't dup}
+729 \textcolor{comment}{             * a 113 marning that is already present. Also, make sure to add}
+730 \textcolor{comment}{             * the new warning to the correct *headers\_out location.}
+731 \textcolor{comment}{             */}
+732             \textcolor{keywordflow}{if} ((warn\_head == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) ||
+733                 ((warn\_head != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) && (\hyperlink{group__APACHE__CORE__DAEMON_ga48f6ba4ea178ad3a334403ec7206d7a3}{ap\_strstr\_c}(warn\_head, \textcolor{stringliteral}{"113"}) == 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}))) \{
+734                 apr\_table\_mergen(h->\hyperlink{structcache__handle_a66c4c1875bb9740d34ddda4d3e71065e}{resp\_hdrs}, \textcolor{stringliteral}{"Warning"},
+735                                  \textcolor{stringliteral}{"113 Heuristic expiration"});
+736             \}
+737         \}
+738         \textcolor{keywordflow}{return} 1;    \textcolor{comment}{/* Cache object is fresh (enough) */}
+739     \}
+740 
+741     \textcolor{comment}{/*}
+742 \textcolor{comment}{     * At this point we are stale, but: if we are under load, we may let}
+743 \textcolor{comment}{     * a significant number of stale requests through before the first}
+744 \textcolor{comment}{     * stale request successfully revalidates itself, causing a sudden}
+745 \textcolor{comment}{     * unexpected thundering herd which in turn brings angst and drama.}
+746 \textcolor{comment}{     *}
+747 \textcolor{comment}{     * So.}
+748 \textcolor{comment}{     *}
+749 \textcolor{comment}{     * We want the first stale request to go through as normal. But the}
+750 \textcolor{comment}{     * second and subsequent request, we must pretend to be fresh until}
+751 \textcolor{comment}{     * the first request comes back with either new content or confirmation}
+752 \textcolor{comment}{     * that the stale content is still fresh.}
+753 \textcolor{comment}{     *}
+754 \textcolor{comment}{     * To achieve this, we create a very simple file based lock based on}
+755 \textcolor{comment}{     * the key of the cached object. We attempt to open the lock file with}
+756 \textcolor{comment}{     * exclusive write access. If we succeed, woohoo! we're first, and we}
+757 \textcolor{comment}{     * follow the stale path to the backend server. If we fail, oh well,}
+758 \textcolor{comment}{     * we follow the fresh path, and avoid being a thundering herd.}
+759 \textcolor{comment}{     *}
+760 \textcolor{comment}{     * The lock lives only as long as the stale request that went on ahead.}
+761 \textcolor{comment}{     * If the request succeeds, the lock is deleted. If the request fails,}
+762 \textcolor{comment}{     * the lock is deleted, and another request gets to make a new lock}
+763 \textcolor{comment}{     * and try again.}
+764 \textcolor{comment}{     *}
+765 \textcolor{comment}{     * At any time, a request marked "no-cache" will force a refresh,}
+766 \textcolor{comment}{     * ignoring the lock, ensuring an extended lockout is impossible.}
+767 \textcolor{comment}{     *}
+768 \textcolor{comment}{     * A lock that exceeds a maximum age will be deleted, and another}
+769 \textcolor{comment}{     * request gets to make a new lock and try again.}
+770 \textcolor{comment}{     */}
+771     status = \hyperlink{group__Cache__util_gaffa94dfea5098ffab89d1dc91e094415}{cache\_try\_lock}(conf, cache, r);
+772     \textcolor{keywordflow}{if} (\hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} == status) \{
+773         \textcolor{comment}{/* we obtained a lock, follow the stale path */}
+774         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00782)
+775                 \textcolor{stringliteral}{"Cache lock obtained for stale cached URL, "}
+776                 \textcolor{stringliteral}{"revalidating entry: %s"},
+777                 r->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri});
+778         \textcolor{keywordflow}{return} 0;
+779     \}
+780     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga37707a0f41b084f1ce1a13575f4f21db}{APR\_STATUS\_IS\_EEXIST}(status)) \{
+781         \textcolor{comment}{/* lock already exists, return stale data anyway, with a warning */}
+782         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, status, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00783)
+783                 \textcolor{stringliteral}{"Cache already locked for stale cached URL, "}
+784                 \textcolor{stringliteral}{"pretend it is fresh: %s"},
+785                 r->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri});
+786 
+787         \textcolor{comment}{/* make sure we don't stomp on a previous warning */}
+788         warn\_head = apr\_table\_get(h->\hyperlink{structcache__handle_a66c4c1875bb9740d34ddda4d3e71065e}{resp\_hdrs}, \textcolor{stringliteral}{"Warning"});
+789         \textcolor{keywordflow}{if} ((warn\_head == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) ||
+790             ((warn\_head != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) && (\hyperlink{group__APACHE__CORE__DAEMON_ga48f6ba4ea178ad3a334403ec7206d7a3}{ap\_strstr\_c}(warn\_head, \textcolor{stringliteral}{"110"}) == 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}))) \{
+791             apr\_table\_mergen(h->\hyperlink{structcache__handle_a66c4c1875bb9740d34ddda4d3e71065e}{resp\_hdrs}, \textcolor{stringliteral}{"Warning"},
+792                              \textcolor{stringliteral}{"110 Response is stale"});
+793         \}
+794 
+795         \textcolor{keywordflow}{return} 1;
+796     \}
+797     \textcolor{keywordflow}{else} \{
+798         \textcolor{comment}{/* some other error occurred, just treat the object as stale */}
+799         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, status, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00784)
+800                 \textcolor{stringliteral}{"Attempt to obtain a cache lock for stale "}
+801                 \textcolor{stringliteral}{"cached URL failed, revalidating entry anyway: %s"},
+802                 r->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri});
+803         \textcolor{keywordflow}{return} 0;
+804     \}
+805 
+806 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga8719ff14e3ad87c32614da9fc10cb119_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga8719ff14e3ad87c32614da9fc10cb119_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+get\+\_\+providers@{cache\+\_\+get\+\_\+providers}}
+\index{cache\+\_\+get\+\_\+providers@{cache\+\_\+get\+\_\+providers}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+get\+\_\+providers(request\+\_\+rec $\ast$r, cache\+\_\+server\+\_\+conf $\ast$conf)}{cache_get_providers(request_rec *r, cache_server_conf *conf)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf cache\+\_\+provider\+\_\+list}$\ast$ cache\+\_\+get\+\_\+providers (
+\begin{DoxyParamCaption}
+\item[{{\bf request\+\_\+rec} $\ast$}]{r, }
+\item[{{\bf cache\+\_\+server\+\_\+conf} $\ast$}]{conf}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_ga3bb0227007e96351ef9b155cd0720abb}{}\label{group__Cache__util_ga3bb0227007e96351ef9b155cd0720abb}
+
+\begin{DoxyCode}
+186 \{
+187     \hyperlink{structcache__dir__conf}{cache\_dir\_conf} *\hyperlink{group__MOD__PROXY_ga01226e8c588429d47a24e72bda63a5e3}{dconf} = \hyperlink{group__APACHE__CORE__CONFIG_ga1093a5908a384eacc929b028c79f2a02}{ap\_get\_module\_config}(r->
+      \hyperlink{structrequest__rec_a0935ac19a61c462c8986898b4c30547d}{per\_dir\_config}, &\hyperlink{mod__cache_8c_a315b551bc967794e90417b5538a128f1}{cache\_module});
+188     \hyperlink{structcache__provider__list}{cache\_provider\_list} *providers = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+189     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path};
+190     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+191 
+192     \textcolor{comment}{/* per directory cache disable */}
+193     \textcolor{keywordflow}{if} (dconf->\hyperlink{structcache__dir__conf_aff0b731349364c6d71d77508f1d2f3f1}{disable}) \{
+194         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+195     \}
+196 
+197     path = \hyperlink{group__Cache__util_gaea2f7fee82fd07fce89934bee0939987}{cache\_use\_early\_url}(r) ? r->\hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}.
+      \hyperlink{structapr__uri__t_a61cff1baadb3c1b52a34b502c25bba7f}{path} : r->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri};
+198 
+199     \textcolor{comment}{/* global cache disable */}
+200     \textcolor{keywordflow}{for} (i = 0; i < conf->\hyperlink{structcache__server__conf_a5cb017668213d1850a5b145f111ae4d1}{cachedisable}->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}; i++) \{
+201         \textcolor{keyword}{struct }\hyperlink{structcache__disable}{cache\_disable} *\hyperlink{structent}{ent} =
+202                                (\textcolor{keyword}{struct }\hyperlink{structcache__disable}{cache\_disable} *)conf->
+      \hyperlink{structcache__server__conf_a5cb017668213d1850a5b145f111ae4d1}{cachedisable}->\hyperlink{structapr__array__header__t_af8462fa2a1ddf6406c66cd3dd441a269}{elts};
+203         \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{if} (uri\_meets\_conditions(&ent[i].\hyperlink{group__MOD__PROXY_ga05d2db9f2dd75d18170f192bd1cc9b4e}{url}, ent[i].\hyperlink{structcache__disable_ad7ba683fd82f0243459781622258323c}{pathlen},
+204                                  &r->\hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}, path)) \{
+205             \textcolor{comment}{/* Stop searching now. */}
+206             \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+207         \}
+208     \}
+209 
+210     \textcolor{comment}{/* loop through all the per directory cacheenable entries */}
+211     \textcolor{keywordflow}{for} (i = 0; i < dconf->\hyperlink{structcache__dir__conf_a12a954532411f0c7534f8b1d77e433f4}{cacheenable}->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}; i++) \{
+212         \textcolor{keyword}{struct }\hyperlink{structcache__enable}{cache\_enable} *ent =
+213                                 (\textcolor{keyword}{struct }\hyperlink{structcache__enable}{cache\_enable} *)dconf->
+      \hyperlink{structcache__dir__conf_a12a954532411f0c7534f8b1d77e433f4}{cacheenable}->\hyperlink{structapr__array__header__t_af8462fa2a1ddf6406c66cd3dd441a269}{elts};
+214         providers = get\_provider(r, &ent[i], providers);
+215     \}
+216 
+217     \textcolor{comment}{/* loop through all the global cacheenable entries */}
+218     \textcolor{keywordflow}{for} (i = 0; i < conf->\hyperlink{structcache__server__conf_aaa7a7b0ab522f181bde5376c2673a9b4}{cacheenable}->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}; i++) \{
+219         \textcolor{keyword}{struct }\hyperlink{structcache__enable}{cache\_enable} *ent =
+220                                 (\textcolor{keyword}{struct }\hyperlink{structcache__enable}{cache\_enable} *)conf->
+      \hyperlink{structcache__server__conf_aaa7a7b0ab522f181bde5376c2673a9b4}{cacheenable}->\hyperlink{structapr__array__header__t_af8462fa2a1ddf6406c66cd3dd441a269}{elts};
+221         \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{if} (uri\_meets\_conditions(&ent[i].\hyperlink{group__MOD__PROXY_ga05d2db9f2dd75d18170f192bd1cc9b4e}{url}, ent[i].\hyperlink{structcache__enable_adce5084f188b489662db5aebcc678803}{pathlen},
+222                                  &r->\hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}, path)) \{
+223             providers = get\_provider(r, &ent[i], providers);
+224         \}
+225     \}
+226 
+227     \textcolor{keywordflow}{return} providers;
+228 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga3bb0227007e96351ef9b155cd0720abb_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga3bb0227007e96351ef9b155cd0720abb_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+merge\+\_\+headers\+\_\+out@{cache\+\_\+merge\+\_\+headers\+\_\+out}}
+\index{cache\+\_\+merge\+\_\+headers\+\_\+out@{cache\+\_\+merge\+\_\+headers\+\_\+out}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+merge\+\_\+headers\+\_\+out(request\+\_\+rec $\ast$r)}{cache_merge_headers_out(request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+table\+\_\+t}$\ast$ cache\+\_\+merge\+\_\+headers\+\_\+out (
+\begin{DoxyParamCaption}
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_ga81c4df4762c014811f81be66e236f62b}{}\label{group__Cache__util_ga81c4df4762c014811f81be66e236f62b}
+Merge err\+\_\+headers\+\_\+out into headers\+\_\+out and add request\textquotesingle{}s Content-\/\+Type and Content-\/\+Encoding if available. 
+\begin{DoxyCode}
+1268 \{
+1269     \hyperlink{structapr__table__t}{apr\_table\_t} *headers\_out;
+1270 
+1271     headers\_out = apr\_table\_overlay(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, r->\hyperlink{structrequest__rec_a0fd560d8d1118304dc33df8ee99efc04}{headers\_out},
+1272                                     r->\hyperlink{structrequest__rec_a691d46e2e4fcf604394aeda5cc6e21e2}{err\_headers\_out});
+1273 
+1274     \textcolor{keywordflow}{if} (r->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type}
+1275             && !apr\_table\_get(headers\_out, \textcolor{stringliteral}{"Content-Type"})) \{
+1276         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *ctype = ap\_make\_content\_type(r, r->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type});
+1277         \textcolor{keywordflow}{if} (ctype) \{
+1278             apr\_table\_setn(headers\_out, \textcolor{stringliteral}{"Content-Type"}, ctype);
+1279         \}
+1280     \}
+1281 
+1282     \textcolor{keywordflow}{if} (r->\hyperlink{structrequest__rec_aa90257968ba3fbed2c21de67fdb3cf02}{content\_encoding}
+1283             && !apr\_table\_get(headers\_out, \textcolor{stringliteral}{"Content-Encoding"})) \{
+1284         apr\_table\_setn(headers\_out, \textcolor{stringliteral}{"Content-Encoding"},
+1285                        r->\hyperlink{structrequest__rec_aa90257968ba3fbed2c21de67fdb3cf02}{content\_encoding});
+1286     \}
+1287 
+1288     \textcolor{keywordflow}{return} headers\_out;
+1289 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga81c4df4762c014811f81be66e236f62b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+remove\+\_\+lock@{cache\+\_\+remove\+\_\+lock}}
+\index{cache\+\_\+remove\+\_\+lock@{cache\+\_\+remove\+\_\+lock}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+remove\+\_\+lock(cache\+\_\+server\+\_\+conf $\ast$conf, cache\+\_\+request\+\_\+rec $\ast$cache, request\+\_\+rec $\ast$r, apr\+\_\+bucket\+\_\+brigade $\ast$bb)}{cache_remove_lock(cache_server_conf *conf, cache_request_rec *cache, request_rec *r, apr_bucket_brigade *bb)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} cache\+\_\+remove\+\_\+lock (
+\begin{DoxyParamCaption}
+\item[{{\bf cache\+\_\+server\+\_\+conf} $\ast$}]{conf, }
+\item[{{\bf cache\+\_\+request\+\_\+rec} $\ast$}]{cache, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r, }
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{bb}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_ga6936350ce1acc1f19e336eb95be153fb}{}\label{group__Cache__util_ga6936350ce1acc1f19e336eb95be153fb}
+Remove the cache lock, if present.
+
+First, try to close the file handle, whose delete-\/on-\/close should kill the file. Otherwise, just delete the file by name.
+
+If no lock name has yet been calculated, do the calculation of the lock name first before trying to delete the file.
+
+If an optional bucket brigade is passed, the lock will only be removed if the bucket brigade contains an E\+OS bucket. 
+\begin{DoxyCode}
+392 \{
+393     \textcolor{keywordtype}{void} *\hyperlink{group__APACHE__CORE__LISTEN_gafd856f29d11272d954fe05b9c1ca84dd}{dummy};
+394     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *lockname;
+395 
+396     \textcolor{keywordflow}{if} (!conf || !conf->\hyperlink{structcache__server__conf_ab459a77dbc1bbba26a954336d34d136e}{lock} || !conf->\hyperlink{structcache__server__conf_ab8f9316567111d3366fcc1edfaf0bc8c}{lockpath}) \{
+397         \textcolor{comment}{/* no locks configured, leave */}
+398         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+399     \}
+400     \textcolor{keywordflow}{if} (bb) \{
+401         \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+402         \textcolor{keywordtype}{int} eos\_found = 0;
+403         \textcolor{keywordflow}{for} (e = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb);
+404              e != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb);
+405              e = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(e))
+406         \{
+407             \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(e)) \{
+408                 eos\_found = 1;
+409                 \textcolor{keywordflow}{break};
+410             \}
+411         \}
+412         \textcolor{keywordflow}{if} (!eos\_found) \{
+413             \textcolor{comment}{/* no eos found in brigade, don't delete anything just yet,}
+414 \textcolor{comment}{             * we are not done.}
+415 \textcolor{comment}{             */}
+416             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+417         \}
+418     \}
+419     apr\_pool\_userdata\_get(&dummy, \hyperlink{group__Cache__util_ga18f46c3a4173d016f51fce82d596fec7}{CACHE\_LOCKFILE\_KEY}, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+420     \textcolor{keywordflow}{if} (dummy) \{
+421         \textcolor{keywordflow}{return} apr\_file\_close((\hyperlink{structapr__file__t}{apr\_file\_t} *)dummy);
+422     \}
+423     apr\_pool\_userdata\_get(&dummy, \hyperlink{group__Cache__util_gaa55455b9316bd74826d36a89914580b8}{CACHE\_LOCKNAME\_KEY}, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+424     lockname = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} *)dummy;
+425     \textcolor{keywordflow}{if} (!lockname) \{
+426         \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__DAEMON_ga6d902c83b02c43071b972ed0416729bc}{dir}[5];
+427 
+428         \textcolor{comment}{/* create the key if it doesn't exist */}
+429         \textcolor{keywordflow}{if} (!cache->\hyperlink{structcache__request__rec_a564726b5f7e5dc4fee2fb01d178677b4}{key}) \{
+430             cache\_generate\_key(r, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, &cache->\hyperlink{structcache__request__rec_a564726b5f7e5dc4fee2fb01d178677b4}{key});
+431         \}
+432 
+433         \textcolor{comment}{/* create a hashed filename from the key, and save it for later */}
+434         lockname = ap\_cache\_generate\_name(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, 0, 0, cache->\hyperlink{structcache__request__rec_a564726b5f7e5dc4fee2fb01d178677b4}{key});
+435 
+436         \textcolor{comment}{/* lock files represent discrete just-went-stale URLs "in flight", so}
+437 \textcolor{comment}{         * we support a simple two level directory structure, more is overkill.}
+438 \textcolor{comment}{         */}
+439         dir[0] = \textcolor{charliteral}{'/'};
+440         dir[1] = lockname[0];
+441         dir[2] = \textcolor{charliteral}{'/'};
+442         dir[3] = lockname[1];
+443         dir[4] = 0;
+444 
+445         lockname = apr\_pstrcat(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, conf->\hyperlink{structcache__server__conf_ab8f9316567111d3366fcc1edfaf0bc8c}{lockpath}, dir, \textcolor{stringliteral}{"/"}, lockname, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+446     \}
+447     \textcolor{keywordflow}{return} apr\_file\_remove(lockname, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+448 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga6936350ce1acc1f19e336eb95be153fb_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+strqtok@{cache\+\_\+strqtok}}
+\index{cache\+\_\+strqtok@{cache\+\_\+strqtok}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+strqtok(char $\ast$str, const char $\ast$sep, char $\ast$$\ast$last)}{cache_strqtok(char *str, const char *sep, char **last)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ cache\+\_\+strqtok (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str, }
+\item[{const char $\ast$}]{sep, }
+\item[{char $\ast$$\ast$}]{last}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_gada03570414af2b2d9349449858036d90}{}\label{group__Cache__util_gada03570414af2b2d9349449858036d90}
+String tokenizer that ignores separator characters within quoted strings and escaped characters, as per R\+F\+C2616 section 2.\+2. 
+\begin{DoxyCode}
+930 \{
+931     \textcolor{keywordtype}{char} *token;
+932     \textcolor{keywordtype}{int} quoted = 0;
+933 
+934     \textcolor{keywordflow}{if} (!\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str}) \{         \textcolor{comment}{/* subsequent call */}
+935         \hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str} = *\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};    \textcolor{comment}{/* start where we left off */}
+936     \}
+937 
+938     \textcolor{keywordflow}{if} (!\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str}) \{         \textcolor{comment}{/* no more tokens */}
+939         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+940     \}
+941 
+942     \textcolor{comment}{/* skip characters in sep (will terminate at '\(\backslash\)0') */}
+943     \textcolor{keywordflow}{while} (*\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str} && \hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\_strchr\_c}(\hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep}, *\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str})) \{
+944         ++\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str};
+945     \}
+946 
+947     \textcolor{keywordflow}{if} (!*\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str}) \{        \textcolor{comment}{/* no more tokens */}
+948         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+949     \}
+950 
+951     token = \hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str};
+952 
+953     \textcolor{comment}{/* skip valid token characters to terminate token and}
+954 \textcolor{comment}{     * prepare for the next call (will terminate at '\(\backslash\)0)}
+955 \textcolor{comment}{     * on the way, ignore all quoted strings, and within}
+956 \textcolor{comment}{     * quoted strings, escaped characters.}
+957 \textcolor{comment}{     */}
+958     *\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last} = token;
+959     \textcolor{keywordflow}{while} (**\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}) \{
+960         \textcolor{keywordflow}{if} (!quoted) \{
+961             \textcolor{keywordflow}{if} (**\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last} == \textcolor{charliteral}{'\(\backslash\)"'} && !\hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\_strchr\_c}(\hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep}, \textcolor{charliteral}{'\(\backslash\)"'})) \{
+962                 quoted = 1;
+963                 ++*\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+964             \}
+965             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\_strchr\_c}(\hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep}, **\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last})) \{
+966                 ++*\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+967             \}
+968             \textcolor{keywordflow}{else} \{
+969                 \textcolor{keywordflow}{break};
+970             \}
+971         \}
+972         \textcolor{keywordflow}{else} \{
+973             \textcolor{keywordflow}{if} (**\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last} == \textcolor{charliteral}{'\(\backslash\)"'}) \{
+974                 quoted = 0;
+975                 ++*\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+976             \}
+977             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (**\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last} == \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'}) \{
+978                 ++*\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+979                 \textcolor{keywordflow}{if} (**\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}) \{
+980                     ++*\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+981                 \}
+982             \}
+983             \textcolor{keywordflow}{else} \{
+984                 ++*\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+985             \}
+986         \}
+987     \}
+988 
+989     \textcolor{keywordflow}{if} (**\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}) \{
+990         **\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last} = \textcolor{charliteral}{'\(\backslash\)0'};
+991         ++*\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+992     \}
+993 
+994     \textcolor{keywordflow}{return} token;
+995 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_gada03570414af2b2d9349449858036d90_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+table\+\_\+getm@{cache\+\_\+table\+\_\+getm}}
+\index{cache\+\_\+table\+\_\+getm@{cache\+\_\+table\+\_\+getm}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+table\+\_\+getm(apr\+\_\+pool\+\_\+t $\ast$p, const apr\+\_\+table\+\_\+t $\ast$t, const char $\ast$key)}{cache_table_getm(apr_pool_t *p, const apr_table_t *t, const char *key)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ cache\+\_\+table\+\_\+getm (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{const {\bf apr\+\_\+table\+\_\+t} $\ast$}]{t, }
+\item[{const char $\ast$}]{key}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_ga46b2ea303b9ec2767a61d0f121835b43}{}\label{group__Cache__util_ga46b2ea303b9ec2767a61d0f121835b43}
+Get a value from a table, where the table may contain multiple values for a given key.
+
+When the table contains a single value, that value is returned unchanged.
+
+When the table contains two or more values for a key, all values for the key are returned, separated by commas. 
+\begin{DoxyCode}
+1326 \{
+1327     \hyperlink{structcache__table__getm__t}{cache\_table\_getm\_t} state;
+1328 
+1329     state.\hyperlink{structcache__table__getm__t_aef53ee2fbdd18ae818995ca2d0367c8f}{p} = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+1330     state.\hyperlink{structcache__table__getm__t_a32828dd02e32454edba8b5b0c82cefed}{first} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1331     state.\hyperlink{structcache__table__getm__t_a87987bba6b631eccdcb7dfa3dbf556b5}{merged} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1332 
+1333     apr\_table\_do(cache\_table\_getm\_do, &state, t, \hyperlink{group__MOD__CACHE_ga11d8023381192746eb96be162398fe1c}{key}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1334 
+1335     \textcolor{keywordflow}{if} (!state.\hyperlink{structcache__table__getm__t_a32828dd02e32454edba8b5b0c82cefed}{first}) \{
+1336         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1337     \}
+1338     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!state.\hyperlink{structcache__table__getm__t_a87987bba6b631eccdcb7dfa3dbf556b5}{merged}) \{
+1339         \textcolor{keywordflow}{return} state.\hyperlink{structcache__table__getm__t_a32828dd02e32454edba8b5b0c82cefed}{first};
+1340     \}
+1341     \textcolor{keywordflow}{else} \{
+1342         \textcolor{keywordflow}{return} apr\_array\_pstrcat(p, state.\hyperlink{structcache__table__getm__t_a87987bba6b631eccdcb7dfa3dbf556b5}{merged}, \textcolor{charliteral}{','});
+1343     \}
+1344 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_ga46b2ea303b9ec2767a61d0f121835b43_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+try\+\_\+lock@{cache\+\_\+try\+\_\+lock}}
+\index{cache\+\_\+try\+\_\+lock@{cache\+\_\+try\+\_\+lock}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+try\+\_\+lock(cache\+\_\+server\+\_\+conf $\ast$conf, cache\+\_\+request\+\_\+rec $\ast$cache, request\+\_\+rec $\ast$r)}{cache_try_lock(cache_server_conf *conf, cache_request_rec *cache, request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} cache\+\_\+try\+\_\+lock (
+\begin{DoxyParamCaption}
+\item[{{\bf cache\+\_\+server\+\_\+conf} $\ast$}]{conf, }
+\item[{{\bf cache\+\_\+request\+\_\+rec} $\ast$}]{cache, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_gaffa94dfea5098ffab89d1dc91e094415}{}\label{group__Cache__util_gaffa94dfea5098ffab89d1dc91e094415}
+Try obtain a cache wide lock on the given cache key.
+
+If we return A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS, we obtained the lock, and we are clear to proceed to the backend. If we return A\+P\+R\+\_\+\+E\+E\+X\+I\+S\+TS, then the lock is already locked, someone else has gone to refresh the backend data already, so we must return stale data with a warning in the mean time. If we return anything else, then something has gone pear shaped, and we allow the request through to the backend regardless.
+
+This lock is created from the request pool, meaning that should something go wrong and the lock isn\textquotesingle{}t deleted on return of the request headers from the backend for whatever reason, at worst the lock will be cleaned up when the request is dies or finishes.
+
+If something goes truly bananas and the lock isn\textquotesingle{}t deleted when the request dies, the lock will be trashed when its max-\/age is reached, or when a request arrives containing a Cache-\/\+Control\+: no-\/cache. At no point is it possible for this lock to permanently deny access to the backend.
+
+Try obtain a cache wide lock on the given cache key.
+
+If we return A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS, we obtained the lock, and we are clear to proceed to the backend. If we return A\+P\+R\+\_\+\+E\+E\+X\+I\+ST, then the lock is already locked, someone else has gone to refresh the backend data already, so we must return stale data with a warning in the mean time. If we return anything else, then something has gone pear shaped, and we allow the request through to the backend regardless.
+
+This lock is created from the request pool, meaning that should something go wrong and the lock isn\textquotesingle{}t deleted on return of the request headers from the backend for whatever reason, at worst the lock will be cleaned up when the request dies or finishes.
+
+If something goes truly bananas and the lock isn\textquotesingle{}t deleted when the request dies, the lock will be trashed when its max-\/age is reached, or when a request arrives containing a Cache-\/\+Control\+: no-\/cache. At no point is it possible for this lock to permanently deny access to the backend. 
+\begin{DoxyCode}
+281 \{
+282     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+283     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *lockname;
+284     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path};
+285     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__DAEMON_ga6d902c83b02c43071b972ed0416729bc}{dir}[5];
+286     \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\_time\_t} \hyperlink{group__MOD__CACHE_ga33504014e188d5d7506173cc14fb5801}{now} = apr\_time\_now();
+287     \hyperlink{structapr__finfo__t}{apr\_finfo\_t} finfo;
+288     \hyperlink{structapr__file__t}{apr\_file\_t} *lockfile;
+289     \textcolor{keywordtype}{void} *\hyperlink{group__APACHE__CORE__LISTEN_gafd856f29d11272d954fe05b9c1ca84dd}{dummy};
+290 
+291     finfo.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime} = 0;
+292 
+293     \textcolor{keywordflow}{if} (!conf || !conf->\hyperlink{structcache__server__conf_ab459a77dbc1bbba26a954336d34d136e}{lock} || !conf->\hyperlink{structcache__server__conf_ab8f9316567111d3366fcc1edfaf0bc8c}{lockpath}) \{
+294         \textcolor{comment}{/* no locks configured, leave */}
+295         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+296     \}
+297 
+298     \textcolor{comment}{/* lock already obtained earlier? if so, success */}
+299     apr\_pool\_userdata\_get(&dummy, \hyperlink{group__Cache__util_ga18f46c3a4173d016f51fce82d596fec7}{CACHE\_LOCKFILE\_KEY}, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+300     \textcolor{keywordflow}{if} (dummy) \{
+301         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+302     \}
+303 
+304     \textcolor{comment}{/* create the key if it doesn't exist */}
+305     \textcolor{keywordflow}{if} (!cache->\hyperlink{structcache__request__rec_a564726b5f7e5dc4fee2fb01d178677b4}{key}) \{
+306         \hyperlink{structcache__handle}{cache\_handle\_t} *\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h};
+307         \textcolor{comment}{/*}
+308 \textcolor{comment}{         * Try to use the key of a possible open but stale cache}
+309 \textcolor{comment}{         * entry if we have one.}
+310 \textcolor{comment}{         */}
+311         \textcolor{keywordflow}{if} (cache->\hyperlink{structcache__request__rec_ade71ff36fe9a713fd081fa45524151f1}{handle} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+312             h = cache->\hyperlink{structcache__request__rec_ade71ff36fe9a713fd081fa45524151f1}{handle};
+313         \}
+314         \textcolor{keywordflow}{else} \{
+315             h = cache->\hyperlink{structcache__request__rec_a17c5946aa60de5806a2af38ef7b91507}{stale\_handle};
+316         \}
+317         \textcolor{keywordflow}{if} ((h != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) &&
+318             (h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) &&
+319             (h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_a6dfc38a2cd449d6ede42716a80e11f92}{key} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})) \{
+320             cache->\hyperlink{structcache__request__rec_a564726b5f7e5dc4fee2fb01d178677b4}{key} = apr\_pstrdup(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, h->\hyperlink{structcache__handle_aea71e9fd166a32e0fe46a12668a1f3bd}{cache\_obj}->\hyperlink{structcache__object_a6dfc38a2cd449d6ede42716a80e11f92}{key});
+321         \}
+322         \textcolor{keywordflow}{else} \{
+323             cache\_generate\_key(r, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, &cache->\hyperlink{structcache__request__rec_a564726b5f7e5dc4fee2fb01d178677b4}{key});
+324         \}
+325     \}
+326 
+327     \textcolor{comment}{/* create a hashed filename from the key, and save it for later */}
+328     lockname = ap\_cache\_generate\_name(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, 0, 0, cache->\hyperlink{structcache__request__rec_a564726b5f7e5dc4fee2fb01d178677b4}{key});
+329 
+330     \textcolor{comment}{/* lock files represent discrete just-went-stale URLs "in flight", so}
+331 \textcolor{comment}{     * we support a simple two level directory structure, more is overkill.}
+332 \textcolor{comment}{     */}
+333     dir[0] = \textcolor{charliteral}{'/'};
+334     dir[1] = lockname[0];
+335     dir[2] = \textcolor{charliteral}{'/'};
+336     dir[3] = lockname[1];
+337     dir[4] = 0;
+338 
+339     \textcolor{comment}{/* make the directories */}
+340     path = apr\_pstrcat(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, conf->\hyperlink{structcache__server__conf_ab8f9316567111d3366fcc1edfaf0bc8c}{lockpath}, dir, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+341     \textcolor{keywordflow}{if} (\hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} != (status = \hyperlink{dir__make__recurse_8c_a6a3b2602f57ff148cd64096da02adbd2}{apr\_dir\_make\_recursive}(path,
+342             \hyperlink{group__apr__file__permissions_ga51dc87ecd94c98e97694e68d5d9620a0}{APR\_UREAD}|\hyperlink{group__apr__file__permissions_ga4faa7fdfa3bcda569dd1e23ae002c5e5}{APR\_UWRITE}|\hyperlink{group__apr__file__permissions_ga4c08d7e798ab4022e31ed70f06f202b5}{APR\_UEXECUTE}, r->
+      \hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}))) \{
+343         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, status, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00778)
+344                 \textcolor{stringliteral}{"Could not create a cache lock directory: %s"},
+345                 path);
+346         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+347     \}
+348     lockname = apr\_pstrcat(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, path, \textcolor{stringliteral}{"/"}, lockname, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+349     apr\_pool\_userdata\_set(lockname, \hyperlink{group__Cache__util_gaa55455b9316bd74826d36a89914580b8}{CACHE\_LOCKNAME\_KEY}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, r->
+      \hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+350 
+351     \textcolor{comment}{/* is an existing lock file too old? */}
+352     status = apr\_stat(&finfo, lockname,
+353                 \hyperlink{group__apr__file__stat_ga992ce1f4f75d519fd2a9d241c5a12515}{APR\_FINFO\_MTIME} | \hyperlink{group__apr__file__stat_gabb2ba05b8ed45e59b1f06e1b7b4c91c2}{APR\_FINFO\_NLINK}, r->
+      \hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+354     \textcolor{keywordflow}{if} (!(\hyperlink{group__APR__STATUS__IS_gad15c3b9bda78a88c02466a0d405c6047}{APR\_STATUS\_IS\_ENOENT}(status)) && \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} != status) \{
+355         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, status, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00779)
+356                 \textcolor{stringliteral}{"Could not stat a cache lock file: %s"},
+357                 lockname);
+358         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+359     \}
+360     \textcolor{keywordflow}{if} ((status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) && (((now - finfo.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime}) > conf->
+      \hyperlink{structcache__server__conf_a4a1fb68d2fc7f123fc7bc5c3d19f1f7d}{lockmaxage})
+361                                   || (now < finfo.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime}))) \{
+362         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, status, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00780)
+363                 \textcolor{stringliteral}{"Cache lock file for '%s' too old, removing: %s"},
+364                 r->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri}, lockname);
+365         apr\_file\_remove(lockname, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+366     \}
+367 
+368     \textcolor{comment}{/* try obtain a lock on the file */}
+369     \textcolor{keywordflow}{if} (\hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} == (status = apr\_file\_open(&lockfile, lockname,
+370             \hyperlink{group__apr__file__open__flags_ga3e427e53aceb1ccdb078d9a03cd63d01}{APR\_WRITE} | \hyperlink{group__apr__file__open__flags_gac210e96bc821dbaa83c326e775dad028}{APR\_CREATE} | \hyperlink{group__apr__file__open__flags_ga209c26b2b903cc23417f6781d4edf891}{APR\_EXCL} | 
+      \hyperlink{group__apr__file__open__flags_gaebc7f034a72dffe64858b1b9451994ff}{APR\_DELONCLOSE},
+371             \hyperlink{group__apr__file__permissions_ga51dc87ecd94c98e97694e68d5d9620a0}{APR\_UREAD} | \hyperlink{group__apr__file__permissions_ga4faa7fdfa3bcda569dd1e23ae002c5e5}{APR\_UWRITE}, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}))) \{
+372         apr\_pool\_userdata\_set(lockfile, \hyperlink{group__Cache__util_ga18f46c3a4173d016f51fce82d596fec7}{CACHE\_LOCKFILE\_KEY}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool});
+373     \}
+374     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+375 
+376 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_gaffa94dfea5098ffab89d1dc91e094415_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_gaffa94dfea5098ffab89d1dc91e094415_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Cache Utility Functions@{Cache Utility Functions}!cache\+\_\+use\+\_\+early\+\_\+url@{cache\+\_\+use\+\_\+early\+\_\+url}}
+\index{cache\+\_\+use\+\_\+early\+\_\+url@{cache\+\_\+use\+\_\+early\+\_\+url}!Cache Utility Functions@{Cache Utility Functions}}
+\subsubsection[{\texorpdfstring{cache\+\_\+use\+\_\+early\+\_\+url(request\+\_\+rec $\ast$r)}{cache_use_early_url(request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} cache\+\_\+use\+\_\+early\+\_\+url (
+\begin{DoxyParamCaption}
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{group__Cache__util_gaea2f7fee82fd07fce89934bee0939987}{}\label{group__Cache__util_gaea2f7fee82fd07fce89934bee0939987}
+Return whether to use request\textquotesingle{}s path/query from early stage (r-\/$>$parsed\+\_\+uri) or the current/rewritable ones (r-\/$>$uri/r-\/$>$args). 
+\begin{DoxyCode}
+131 \{
+132     \hyperlink{structcache__server__conf}{cache\_server\_conf} *\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf};
+133 
+134     \textcolor{keywordflow}{if} (r->\hyperlink{structrequest__rec_a82ca03c6dcfcacbf7001ff85e462289d}{proxyreq} == \hyperlink{group__ProxyReq_gaa879e84f9b9d334007ef4c542bf6374e}{PROXYREQ\_PROXY}) \{
+135         \textcolor{keywordflow}{return} 1;
+136     \}
+137 
+138     conf = \hyperlink{group__APACHE__CORE__CONFIG_ga1093a5908a384eacc929b028c79f2a02}{ap\_get\_module\_config}(r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->module\_config, &
+      \hyperlink{mod__cache_8c_a315b551bc967794e90417b5538a128f1}{cache\_module});
+139     \textcolor{keywordflow}{if} (conf->\hyperlink{structcache__server__conf_a9fcfca4177da5400a75f607f5d808b93}{quick}) \{
+140         \textcolor{keywordflow}{return} 1;
+141     \}
+142 
+143     \textcolor{keywordflow}{return} 0;
+144 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__Cache__util_gaea2f7fee82fd07fce89934bee0939987_icgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,158 @@
+\hypertarget{util__win32_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/os/win32/util\+\_\+win32.c File Reference}
+\label{util__win32_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/os/win32/util\+\_\+win32.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/os/win32/util\+\_\+win32.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}arch/win32/apr\+\_\+arch\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}arch/win32/apr\+\_\+arch\+\_\+misc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$stdarg.\+h$>$}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+Include dependency graph for util\+\_\+win32.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{util__win32_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{util__win32_8c_ad4e49a371518f348d13b2d4e83b79b9e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+F\+A\+R\+P\+R\+OC \hyperlink{util__win32_8c_a1011047b0dff3bbaa51df8eb4d2e4cc5}{ap\+\_\+load\+\_\+dll\+\_\+func} (ap\+\_\+dlltoken\+\_\+e fn\+Lib, char $\ast$fn\+Name, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} ordinal)
+\item 
+P\+S\+E\+C\+U\+R\+I\+T\+Y\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES \hyperlink{util__win32_8c_a21ffdcd494243db995198ec079526f5c}{Get\+Null\+A\+CL} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{util__win32_8c_a25f2021b390c010bf55b463205212cbf}{Clean\+Null\+A\+CL} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__apr__network__io_ga5dc1cb3876df6ab646ee9b3d528cbd9f}{sa})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{util\+\_\+win32.\+c@{util\+\_\+win32.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+win32.\+c@{util\+\_\+win32.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t)}{AP_DECLARE(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__win32_8c_ad4e49a371518f348d13b2d4e83b79b9e}{}\label{util__win32_8c_ad4e49a371518f348d13b2d4e83b79b9e}
+
+\begin{DoxyCode}
+31 \{
+32     \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} wbinpath[APR\_PATH\_MAX];
+33 
+34 \textcolor{preprocessor}{#if APR\_HAS\_UNICODE\_FS}
+35     \hyperlink{win32_2apr__arch__misc_8h_a8c631486790f65bd87ed0623a25bdd3d}{IF\_WIN\_OS\_IS\_UNICODE}
+36     \{
+37         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} binlen;
+38         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} wbinlen;
+39         \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+40         \textcolor{keywordflow}{if} (!GetModuleFileNameW(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, wbinpath, \textcolor{keyword}{sizeof}(wbinpath)
+41                                               / \textcolor{keyword}{sizeof}(\hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t}))) \{
+42             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_gaa76e122da00af0ce2e8c8d7ff538bdfa}{apr\_get\_os\_error}();
+43         \}
+44         wbinlen = wcslen(wbinpath) + 1;
+45         binlen = (wbinlen - 1) * 3 + 1;
+46         *binpath = apr\_palloc(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, binlen);
+47         rv = apr\_conv\_ucs2\_to\_utf8(wbinpath, &wbinlen, *binpath, &binlen);
+48         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS})
+49             \textcolor{keywordflow}{return} rv;
+50         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (wbinlen)
+51             \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga3db63b16c2b332efe441e2661f593377}{APR\_ENAMETOOLONG};
+52     \}
+53 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* APR\_HAS\_UNICODE\_FS */}\textcolor{preprocessor}{}
+54 \textcolor{preprocessor}{#if APR\_HAS\_ANSI\_FS}
+55     \hyperlink{win32_2apr__arch__misc_8h_a2d1423da7a6a46da1276017c8140be22}{ELSE\_WIN\_OS\_IS\_ANSI}
+56     \{
+57         \textcolor{comment}{/* share the same scratch buffer */}
+58         \textcolor{keywordtype}{char} *pathbuf = (\textcolor{keywordtype}{char}*) wbinpath;
+59         \textcolor{keywordflow}{if} (!GetModuleFileName(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, pathbuf, \textcolor{keyword}{sizeof}(wbinpath))) \{
+60             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_gaa76e122da00af0ce2e8c8d7ff538bdfa}{apr\_get\_os\_error}();
+61         \}
+62         *binpath = apr\_pstrdup(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, pathbuf);
+63     \}
+64 \textcolor{preprocessor}{#endif}
+65     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+66 \}
+\end{DoxyCode}
+\index{util\+\_\+win32.\+c@{util\+\_\+win32.\+c}!ap\+\_\+load\+\_\+dll\+\_\+func@{ap\+\_\+load\+\_\+dll\+\_\+func}}
+\index{ap\+\_\+load\+\_\+dll\+\_\+func@{ap\+\_\+load\+\_\+dll\+\_\+func}!util\+\_\+win32.\+c@{util\+\_\+win32.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+load\+\_\+dll\+\_\+func(ap\+\_\+dlltoken\+\_\+e fn\+Lib, char $\ast$fn\+Name, int ordinal)}{ap_load_dll_func(ap_dlltoken_e fnLib, char *fnName, int ordinal)}}]{\setlength{\rightskip}{0pt plus 5cm}F\+A\+R\+P\+R\+OC ap\+\_\+load\+\_\+dll\+\_\+func (
+\begin{DoxyParamCaption}
+\item[{ap\+\_\+dlltoken\+\_\+e}]{fn\+Lib, }
+\item[{char $\ast$}]{fn\+Name, }
+\item[{{\bf int}}]{ordinal}
+\end{DoxyParamCaption}
+)}\hypertarget{util__win32_8c_a1011047b0dff3bbaa51df8eb4d2e4cc5}{}\label{util__win32_8c_a1011047b0dff3bbaa51df8eb4d2e4cc5}
+
+\begin{DoxyCode}
+93 \{
+94     \textcolor{keywordflow}{if} (!lateDllHandle[fnLib]) \{
+95         lateDllHandle[fnLib] = LoadLibrary(lateDllName[fnLib]);
+96         \textcolor{keywordflow}{if} (!lateDllHandle[fnLib])
+97             \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+98     \}
+99     \textcolor{keywordflow}{if} (ordinal)
+100         \textcolor{keywordflow}{return} GetProcAddress(lateDllHandle[fnLib], (\textcolor{keywordtype}{char} *) ordinal);
+101     \textcolor{keywordflow}{else}
+102         \textcolor{keywordflow}{return} GetProcAddress(lateDllHandle[fnLib], fnName);
+103 \}
+\end{DoxyCode}
+\index{util\+\_\+win32.\+c@{util\+\_\+win32.\+c}!Clean\+Null\+A\+CL@{Clean\+Null\+A\+CL}}
+\index{Clean\+Null\+A\+CL@{Clean\+Null\+A\+CL}!util\+\_\+win32.\+c@{util\+\_\+win32.\+c}}
+\subsubsection[{\texorpdfstring{Clean\+Null\+A\+C\+L(void $\ast$sa)}{CleanNullACL(void *sa)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} Clean\+Null\+A\+CL (
+\begin{DoxyParamCaption}
+\item[{{\bf void} $\ast$}]{sa}
+\end{DoxyParamCaption}
+)}\hypertarget{util__win32_8c_a25f2021b390c010bf55b463205212cbf}{}\label{util__win32_8c_a25f2021b390c010bf55b463205212cbf}
+
+\begin{DoxyCode}
+143 \{
+144     \textcolor{keywordflow}{if} (\hyperlink{group__apr__network__io_ga5dc1cb3876df6ab646ee9b3d528cbd9f}{sa}) \{
+145         LocalFree(((PSECURITY\_ATTRIBUTES)\hyperlink{group__apr__network__io_ga5dc1cb3876df6ab646ee9b3d528cbd9f}{sa})->lpSecurityDescriptor);
+146         LocalFree(\hyperlink{group__apr__network__io_ga5dc1cb3876df6ab646ee9b3d528cbd9f}{sa});
+147     \}
+148 \}
+\end{DoxyCode}
+\index{util\+\_\+win32.\+c@{util\+\_\+win32.\+c}!Get\+Null\+A\+CL@{Get\+Null\+A\+CL}}
+\index{Get\+Null\+A\+CL@{Get\+Null\+A\+CL}!util\+\_\+win32.\+c@{util\+\_\+win32.\+c}}
+\subsubsection[{\texorpdfstring{Get\+Null\+A\+C\+L(void)}{GetNullACL(void)}}]{\setlength{\rightskip}{0pt plus 5cm}P\+S\+E\+C\+U\+R\+I\+T\+Y\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES Get\+Null\+A\+CL (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__win32_8c_a21ffdcd494243db995198ec079526f5c}{}\label{util__win32_8c_a21ffdcd494243db995198ec079526f5c}
+
+\begin{DoxyCode}
+110 \{
+111     PSECURITY\_DESCRIPTOR pSD;
+112     PSECURITY\_ATTRIBUTES \hyperlink{group__apr__network__io_ga5dc1cb3876df6ab646ee9b3d528cbd9f}{sa};
+113 
+114     sa  = (PSECURITY\_ATTRIBUTES) LocalAlloc(LPTR, \textcolor{keyword}{sizeof}(SECURITY\_ATTRIBUTES));
+115     sa->nLength = \textcolor{keyword}{sizeof}(SECURITY\_ATTRIBUTES);
+116 
+117     pSD = (PSECURITY\_DESCRIPTOR) LocalAlloc(LPTR, SECURITY\_DESCRIPTOR\_MIN\_LENGTH);
+118     sa->lpSecurityDescriptor = pSD;
+119 
+120     \textcolor{keywordflow}{if} (pSD == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} || sa == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+121         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+122     \}
+123     \hyperlink{group__apr__errno_ga9a2d9a03ad314b03a142574be6d7d8a7}{apr\_set\_os\_error}(0);
+124     \textcolor{keywordflow}{if} (!InitializeSecurityDescriptor(pSD, SECURITY\_DESCRIPTOR\_REVISION)
+125         || \hyperlink{group__apr__errno_gaa76e122da00af0ce2e8c8d7ff538bdfa}{apr\_get\_os\_error}()) \{
+126         LocalFree( pSD );
+127         LocalFree( sa );
+128         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+129     \}
+130     \textcolor{keywordflow}{if} (!SetSecurityDescriptorDacl(pSD, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE}, (PACL) \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE})
+131         || \hyperlink{group__apr__errno_gaa76e122da00af0ce2e8c8d7ff538bdfa}{apr\_get\_os\_error}()) \{
+132         LocalFree( pSD );
+133         LocalFree( sa );
+134         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+135     \}
+136 
+137     sa->bInheritHandle = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+138     \textcolor{keywordflow}{return} \hyperlink{group__apr__network__io_ga5dc1cb3876df6ab646ee9b3d528cbd9f}{sa};
+139 \}
+\end{DoxyCode}

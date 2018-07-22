@@ -1,0 +1,3090 @@
+\hypertarget{jlibtool_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/build/jlibtool.c File Reference}
+\label{jlibtool_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/build/jlibtool.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/build/jlibtool.\+c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$sys/stat.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$dirent.\+h$>$}\\*
+{\ttfamily \#include $<$errno.\+h$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+Include dependency graph for jlibtool.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcount__chars}{count\+\_\+chars}
+\item 
+struct \hyperlink{structlibrary__name}{library\+\_\+name}
+\item 
+struct \hyperlink{structlibrary__opts}{library\+\_\+opts}
+\item 
+struct \hyperlink{structoptions__t}{options\+\_\+t}
+\item 
+struct \hyperlink{structcommand__t}{command\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{P\+A\+T\+H\+\_\+\+M\+AX}~1024
+\item 
+\#define \hyperlink{jlibtool_8c_a1c6d5de492ac61ad29aec7aa9a436bbf}{V\+E\+R\+S\+I\+ON}~\char`\"{}1.\+4\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54}{tool\+\_\+mode\+\_\+t} \{ \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a35c088b54f8e0f8853938ea9399313ac}{m\+Unknown}, 
+\hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54aee6011f6f8d6045058675b115f49cdbd}{m\+Compile}, 
+\hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{m\+Link}, 
+\hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{m\+Install}
+ \}
+\item 
+enum \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405c}{output\+\_\+t} \{ \\*
+\hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca133ad1ba1b8dd8acb5b6e17a0953321f}{ot\+General}, 
+\hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca21739fb13ce0eaa7ef4c7565f5f71b79}{ot\+Object}, 
+\hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca07a21848098a9fa3ee69f34b07bebf50}{ot\+Program}, 
+\hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{ot\+Library}, 
+\\*
+\hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca2615d7d63a3d9165442674d4ad3708fa}{ot\+Static\+Library\+Only}, 
+\hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{ot\+Dynamic\+Library\+Only}, 
+\hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{ot\+Module}
+ \}
+\item 
+enum \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7}{pic\+\_\+mode\+\_\+e} \{ \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a7c8be715f581c6cdfe66681865a0beb2}{pic\+\_\+\+U\+N\+K\+N\+O\+WN}, 
+\hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a55f6572496f2d2599006822034b4ff08}{pic\+\_\+\+P\+R\+E\+F\+ER}, 
+\hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{pic\+\_\+\+A\+V\+O\+ID}
+ \}
+\item 
+enum \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7}{shared\+\_\+mode\+\_\+e} \{ \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a61efaad7a8f6792ef2f12a7430d18b44}{share\+\_\+\+U\+N\+S\+ET}, 
+\hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a271451515d9133b384acb49fdcacbe40}{share\+\_\+\+S\+T\+A\+T\+IC}, 
+\hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7aa1a0c4542b0d2d51eb0796d3f250142c}{share\+\_\+\+S\+H\+A\+R\+ED}
+ \}
+\item 
+enum \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eea}{lib\+\_\+type} \{ \\*
+\hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa5b0ca770f9322be1ef2cd8f2e5305e40}{type\+\_\+\+U\+N\+K\+N\+O\+WN}, 
+\hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa710eac0137d6028755338a13e2cb6d70}{type\+\_\+\+D\+Y\+N\+A\+M\+I\+C\+\_\+\+L\+IB}, 
+\hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaadadce705a76585089f76fcfc60cd9040}{type\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+L\+IB}, 
+\hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa7c804e53a600ab8303a32b4d47316177}{type\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+L\+IB}, 
+\\*
+\hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaaeafabf1da15f8fa2f1617d6e586608e7}{type\+\_\+\+O\+B\+J\+E\+CT}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\+\_\+count\+\_\+chars} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df}{clear\+\_\+count\+\_\+chars} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\+\_\+count\+\_\+chars} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc, const char $\ast$newval)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a9bdb91efc34e958992c13b6f71667ad5}{pop\+\_\+count\+\_\+chars} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57}{insert\+\_\+count\+\_\+chars} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc, const char $\ast$newval, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} position)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\+\_\+count\+\_\+chars} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc, \hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cctoadd)
+\item 
+const char $\ast$ \hyperlink{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787}{flatten\+\_\+count\+\_\+chars} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{README_8txt_a19182255958ecd8b8391dae50d6673c1}{space})
+\item 
+char $\ast$ \hyperlink{jlibtool_8c_af5e18c5c9bd77b6a820f64c1532088d5}{shell\+\_\+esc} (const char $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga6a62b60443be1d042194af15ce934193}{str})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7}{external\+\_\+spawn} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, const char $\ast$\hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file}, const char $\ast$$\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\+\_\+command} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data, \hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_ac7c8d9e5c9b0a3e2904557cbd5d20c32}{print\+\_\+config} ()
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_ae4287e4f104f42367e3df1551e407ee3}{add\+\_\+runtimedirlib} (char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg}, \hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_af8c3930b9ac3d6fa06a8b488fc370767}{parse\+\_\+long\+\_\+opt} (char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg}, \hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_a7ab34d07a01bb5f0b3cf713598c345b0}{parse\+\_\+short\+\_\+opt} (char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg}, \hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+char $\ast$ \hyperlink{jlibtool_8c_a88a4b902ca11d404e1c05fd1b5d04c71}{truncate\+\_\+dll\+\_\+name} (char $\ast$\hyperlink{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{path})
+\item 
+long \hyperlink{jlibtool_8c_ad2be7504517ae5b2a06f6a5c48b43bca}{safe\+\_\+strtol} (const char $\ast$nptr, const char $\ast$$\ast$endptr, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__tables_ga74964146831939c658b798439fc32f6d}{base})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_ad258402cd6605ab204e988bc09329b53}{safe\+\_\+mkdir} (const char $\ast$\hyperlink{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{path})
+\item 
+const char $\ast$ \hyperlink{jlibtool_8c_ab3fcab7e5654aad60313a6b9e80e13c1}{jlibtool\+\_\+basename} (const char $\ast$fullpath)
+\item 
+const char $\ast$ \hyperlink{jlibtool_8c_a07311c4d583bbf8ebb3b477c1dae2bb2}{nameof} (const char $\ast$fullpath)
+\item 
+const char $\ast$ \hyperlink{jlibtool_8c_a2fd864a8373d0dd55a499ab383fe8e16}{darwin\+\_\+dynamic\+\_\+link\+\_\+function} (const char $\ast$version\+\_\+info)
+\item 
+char $\ast$ \hyperlink{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196}{gen\+\_\+library\+\_\+name} (const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} genlib)
+\item 
+char $\ast$ \hyperlink{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}{gen\+\_\+install\+\_\+name} (const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} genlib)
+\item 
+char $\ast$ \hyperlink{jlibtool_8c_ae9adef83ae36fb1555d61cecd383b7bb}{check\+\_\+object\+\_\+exists} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} arglen)
+\item 
+char $\ast$ \hyperlink{jlibtool_8c_aa826c11573aa30a57b67fe324d074ac2}{check\+\_\+library\+\_\+exists} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} pathlen, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} libdircheck, enum \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eea}{lib\+\_\+type} $\ast$libtype)
+\item 
+char $\ast$ \hyperlink{jlibtool_8c_a27de15b7d54cedb409ae279f54c19b01}{load\+\_\+install\+\_\+path} (const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+char $\ast$ \hyperlink{jlibtool_8c_afb0d0eaf36330f4a714cd35f846590ed}{load\+\_\+noinstall\+\_\+path} (const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} pathlen)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a1b2eae20e3eb859f4897e9a1bda1e930}{add\+\_\+dynamic\+\_\+link\+\_\+opts} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data, \hyperlink{structcount__chars}{count\+\_\+chars} $\ast$\hyperlink{group__APR__Util__DBD_ga6b6dfca544bdc17e0e73e3ca56c2363d}{args})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a7d23120264beeebc44a8e794ce6b070f}{add\+\_\+minus\+\_\+l} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_ae0f56c5ceb390a48e6608c32ec734378}{add\+\_\+linker\+\_\+flag\+\_\+prefix} (\hyperlink{structcount__chars}{count\+\_\+chars} $\ast$cc, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_a9c661acdbeca948512135bdfa60d005c}{explode\+\_\+static\+\_\+lib} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data, const char $\ast$\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a25bfb1181d9fef7e40e828a146838ff6}{lib})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_a87826bc22a5f63248389fe3d6d2573c2}{parse\+\_\+input\+\_\+file\+\_\+name} (char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg}, \hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_a20e0830453e41067c512bd0c955cfb4f}{parse\+\_\+output\+\_\+file\+\_\+name} (char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg}, \hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_af6b1d66500a2394823585ba185a8da12}{parse\+\_\+args} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]}, \hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+const char $\ast$ \hyperlink{jlibtool_8c_a2d5b316e344a5225d06276bcd7a5b3a2}{expand\+\_\+path} (const char $\ast$relpath)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a0b7bcccbb2a139fa5678409d86e6ce6b}{link\+\_\+fixup} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a8a3bf34bb255873f482a4f0371174578}{post\+\_\+parse\+\_\+fixup} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_a4a1a749a78713447b3e2250b8567e6fb}{run\+\_\+mode} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_aa939821432d136b3afd42add10b4a919}{cleanup\+\_\+tmp\+\_\+dir} (const char $\ast$\hyperlink{group__apr__dir_gab8a2fd169b20f0b9d33959f7b17d35aa}{dirname})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{jlibtool_8c_a39ddf6193c1da4c766d0ea51d725f76f}{cleanup\+\_\+tmp\+\_\+dirs} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_ae24f24fed527125665a12384fe7936dd}{ensure\+\_\+fake\+\_\+uptodate} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_aa18ea13fd0f25167d6c54701f412ba4a}{add\+\_\+for\+\_\+runtime} (\hyperlink{structcommand__t}{command\+\_\+t} $\ast$cmd\+\_\+data)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{jlibtool_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{jlibtool.\+c@{jlibtool.\+c}!P\+A\+T\+H\+\_\+\+M\+AX@{P\+A\+T\+H\+\_\+\+M\+AX}}
+\index{P\+A\+T\+H\+\_\+\+M\+AX@{P\+A\+T\+H\+\_\+\+M\+AX}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{P\+A\+T\+H\+\_\+\+M\+AX}{PATH_MAX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+A\+T\+H\+\_\+\+M\+AX~1024}\hypertarget{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{}\label{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}
+\index{jlibtool.\+c@{jlibtool.\+c}!V\+E\+R\+S\+I\+ON@{V\+E\+R\+S\+I\+ON}}
+\index{V\+E\+R\+S\+I\+ON@{V\+E\+R\+S\+I\+ON}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{V\+E\+R\+S\+I\+ON}{VERSION}}]{\setlength{\rightskip}{0pt plus 5cm}\#define V\+E\+R\+S\+I\+ON~\char`\"{}1.\+4\char`\"{}}\hypertarget{jlibtool_8c_a1c6d5de492ac61ad29aec7aa9a436bbf}{}\label{jlibtool_8c_a1c6d5de492ac61ad29aec7aa9a436bbf}
+
+
+\subsection{Enumeration Type Documentation}
+\index{jlibtool.\+c@{jlibtool.\+c}!lib\+\_\+type@{lib\+\_\+type}}
+\index{lib\+\_\+type@{lib\+\_\+type}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{lib\+\_\+type}{lib_type}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf lib\+\_\+type}}\hypertarget{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eea}{}\label{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eea}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{type\+\_\+\+U\+N\+K\+N\+O\+WN@{type\+\_\+\+U\+N\+K\+N\+O\+WN}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!type\+\_\+\+U\+N\+K\+N\+O\+WN@{type\+\_\+\+U\+N\+K\+N\+O\+WN}}\item[{\em 
+type\+\_\+\+U\+N\+K\+N\+O\+WN\hypertarget{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa5b0ca770f9322be1ef2cd8f2e5305e40}{}\label{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa5b0ca770f9322be1ef2cd8f2e5305e40}
+}]\index{type\+\_\+\+D\+Y\+N\+A\+M\+I\+C\+\_\+\+L\+IB@{type\+\_\+\+D\+Y\+N\+A\+M\+I\+C\+\_\+\+L\+IB}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!type\+\_\+\+D\+Y\+N\+A\+M\+I\+C\+\_\+\+L\+IB@{type\+\_\+\+D\+Y\+N\+A\+M\+I\+C\+\_\+\+L\+IB}}\item[{\em 
+type\+\_\+\+D\+Y\+N\+A\+M\+I\+C\+\_\+\+L\+IB\hypertarget{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa710eac0137d6028755338a13e2cb6d70}{}\label{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa710eac0137d6028755338a13e2cb6d70}
+}]\index{type\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+L\+IB@{type\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+L\+IB}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!type\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+L\+IB@{type\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+L\+IB}}\item[{\em 
+type\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+L\+IB\hypertarget{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaadadce705a76585089f76fcfc60cd9040}{}\label{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaadadce705a76585089f76fcfc60cd9040}
+}]\index{type\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+L\+IB@{type\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+L\+IB}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!type\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+L\+IB@{type\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+L\+IB}}\item[{\em 
+type\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+L\+IB\hypertarget{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa7c804e53a600ab8303a32b4d47316177}{}\label{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa7c804e53a600ab8303a32b4d47316177}
+}]\index{type\+\_\+\+O\+B\+J\+E\+CT@{type\+\_\+\+O\+B\+J\+E\+CT}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!type\+\_\+\+O\+B\+J\+E\+CT@{type\+\_\+\+O\+B\+J\+E\+CT}}\item[{\em 
+type\+\_\+\+O\+B\+J\+E\+CT\hypertarget{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaaeafabf1da15f8fa2f1617d6e586608e7}{}\label{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaaeafabf1da15f8fa2f1617d6e586608e7}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+216               \{
+217     \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa5b0ca770f9322be1ef2cd8f2e5305e40}{type\_UNKNOWN},
+218     \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa710eac0137d6028755338a13e2cb6d70}{type\_DYNAMIC\_LIB},
+219     \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaadadce705a76585089f76fcfc60cd9040}{type\_STATIC\_LIB},
+220     \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa7c804e53a600ab8303a32b4d47316177}{type\_MODULE\_LIB},
+221     \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaaeafabf1da15f8fa2f1617d6e586608e7}{type\_OBJECT},
+222 \};
+\end{DoxyCode}
+\index{jlibtool.\+c@{jlibtool.\+c}!output\+\_\+t@{output\+\_\+t}}
+\index{output\+\_\+t@{output\+\_\+t}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{output\+\_\+t}{output_t}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf output\+\_\+t}}\hypertarget{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405c}{}\label{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405c}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{ot\+General@{ot\+General}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!ot\+General@{ot\+General}}\item[{\em 
+ot\+General\hypertarget{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca133ad1ba1b8dd8acb5b6e17a0953321f}{}\label{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca133ad1ba1b8dd8acb5b6e17a0953321f}
+}]\index{ot\+Object@{ot\+Object}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!ot\+Object@{ot\+Object}}\item[{\em 
+ot\+Object\hypertarget{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca21739fb13ce0eaa7ef4c7565f5f71b79}{}\label{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca21739fb13ce0eaa7ef4c7565f5f71b79}
+}]\index{ot\+Program@{ot\+Program}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!ot\+Program@{ot\+Program}}\item[{\em 
+ot\+Program\hypertarget{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca07a21848098a9fa3ee69f34b07bebf50}{}\label{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca07a21848098a9fa3ee69f34b07bebf50}
+}]\index{ot\+Library@{ot\+Library}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!ot\+Library@{ot\+Library}}\item[{\em 
+ot\+Library\hypertarget{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{}\label{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}
+}]\index{ot\+Static\+Library\+Only@{ot\+Static\+Library\+Only}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!ot\+Static\+Library\+Only@{ot\+Static\+Library\+Only}}\item[{\em 
+ot\+Static\+Library\+Only\hypertarget{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca2615d7d63a3d9165442674d4ad3708fa}{}\label{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca2615d7d63a3d9165442674d4ad3708fa}
+}]\index{ot\+Dynamic\+Library\+Only@{ot\+Dynamic\+Library\+Only}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!ot\+Dynamic\+Library\+Only@{ot\+Dynamic\+Library\+Only}}\item[{\em 
+ot\+Dynamic\+Library\+Only\hypertarget{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{}\label{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}
+}]\index{ot\+Module@{ot\+Module}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!ot\+Module@{ot\+Module}}\item[{\em 
+ot\+Module\hypertarget{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{}\label{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+194               \{
+195     \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca133ad1ba1b8dd8acb5b6e17a0953321f}{otGeneral},
+196     \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca21739fb13ce0eaa7ef4c7565f5f71b79}{otObject},
+197     \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca07a21848098a9fa3ee69f34b07bebf50}{otProgram},
+198     \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary},
+199     \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca2615d7d63a3d9165442674d4ad3708fa}{otStaticLibraryOnly},
+200     \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly},
+201     \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{otModule},
+202 \};
+\end{DoxyCode}
+\index{jlibtool.\+c@{jlibtool.\+c}!pic\+\_\+mode\+\_\+e@{pic\+\_\+mode\+\_\+e}}
+\index{pic\+\_\+mode\+\_\+e@{pic\+\_\+mode\+\_\+e}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{pic\+\_\+mode\+\_\+e}{pic_mode_e}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf pic\+\_\+mode\+\_\+e}}\hypertarget{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7}{}\label{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{pic\+\_\+\+U\+N\+K\+N\+O\+WN@{pic\+\_\+\+U\+N\+K\+N\+O\+WN}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!pic\+\_\+\+U\+N\+K\+N\+O\+WN@{pic\+\_\+\+U\+N\+K\+N\+O\+WN}}\item[{\em 
+pic\+\_\+\+U\+N\+K\+N\+O\+WN\hypertarget{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a7c8be715f581c6cdfe66681865a0beb2}{}\label{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a7c8be715f581c6cdfe66681865a0beb2}
+}]\index{pic\+\_\+\+P\+R\+E\+F\+ER@{pic\+\_\+\+P\+R\+E\+F\+ER}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!pic\+\_\+\+P\+R\+E\+F\+ER@{pic\+\_\+\+P\+R\+E\+F\+ER}}\item[{\em 
+pic\+\_\+\+P\+R\+E\+F\+ER\hypertarget{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a55f6572496f2d2599006822034b4ff08}{}\label{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a55f6572496f2d2599006822034b4ff08}
+}]\index{pic\+\_\+\+A\+V\+O\+ID@{pic\+\_\+\+A\+V\+O\+ID}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!pic\+\_\+\+A\+V\+O\+ID@{pic\+\_\+\+A\+V\+O\+ID}}\item[{\em 
+pic\+\_\+\+A\+V\+O\+ID\hypertarget{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{}\label{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+204                 \{
+205     \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a7c8be715f581c6cdfe66681865a0beb2}{pic\_UNKNOWN},
+206     \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a55f6572496f2d2599006822034b4ff08}{pic\_PREFER},
+207     \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{pic\_AVOID},
+208 \};
+\end{DoxyCode}
+\index{jlibtool.\+c@{jlibtool.\+c}!shared\+\_\+mode\+\_\+e@{shared\+\_\+mode\+\_\+e}}
+\index{shared\+\_\+mode\+\_\+e@{shared\+\_\+mode\+\_\+e}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{shared\+\_\+mode\+\_\+e}{shared_mode_e}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf shared\+\_\+mode\+\_\+e}}\hypertarget{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7}{}\label{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{share\+\_\+\+U\+N\+S\+ET@{share\+\_\+\+U\+N\+S\+ET}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!share\+\_\+\+U\+N\+S\+ET@{share\+\_\+\+U\+N\+S\+ET}}\item[{\em 
+share\+\_\+\+U\+N\+S\+ET\hypertarget{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a61efaad7a8f6792ef2f12a7430d18b44}{}\label{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a61efaad7a8f6792ef2f12a7430d18b44}
+}]\index{share\+\_\+\+S\+T\+A\+T\+IC@{share\+\_\+\+S\+T\+A\+T\+IC}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!share\+\_\+\+S\+T\+A\+T\+IC@{share\+\_\+\+S\+T\+A\+T\+IC}}\item[{\em 
+share\+\_\+\+S\+T\+A\+T\+IC\hypertarget{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a271451515d9133b384acb49fdcacbe40}{}\label{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a271451515d9133b384acb49fdcacbe40}
+}]\index{share\+\_\+\+S\+H\+A\+R\+ED@{share\+\_\+\+S\+H\+A\+R\+ED}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!share\+\_\+\+S\+H\+A\+R\+ED@{share\+\_\+\+S\+H\+A\+R\+ED}}\item[{\em 
+share\+\_\+\+S\+H\+A\+R\+ED\hypertarget{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7aa1a0c4542b0d2d51eb0796d3f250142c}{}\label{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7aa1a0c4542b0d2d51eb0796d3f250142c}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+210                    \{
+211     \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a61efaad7a8f6792ef2f12a7430d18b44}{share\_UNSET},
+212     \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a271451515d9133b384acb49fdcacbe40}{share\_STATIC},
+213     \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7aa1a0c4542b0d2d51eb0796d3f250142c}{share\_SHARED},
+214 \};
+\end{DoxyCode}
+\index{jlibtool.\+c@{jlibtool.\+c}!tool\+\_\+mode\+\_\+t@{tool\+\_\+mode\+\_\+t}}
+\index{tool\+\_\+mode\+\_\+t@{tool\+\_\+mode\+\_\+t}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{tool\+\_\+mode\+\_\+t}{tool_mode_t}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf tool\+\_\+mode\+\_\+t}}\hypertarget{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54}{}\label{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{m\+Unknown@{m\+Unknown}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!m\+Unknown@{m\+Unknown}}\item[{\em 
+m\+Unknown\hypertarget{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a35c088b54f8e0f8853938ea9399313ac}{}\label{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a35c088b54f8e0f8853938ea9399313ac}
+}]\index{m\+Compile@{m\+Compile}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!m\+Compile@{m\+Compile}}\item[{\em 
+m\+Compile\hypertarget{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54aee6011f6f8d6045058675b115f49cdbd}{}\label{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54aee6011f6f8d6045058675b115f49cdbd}
+}]\index{m\+Link@{m\+Link}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!m\+Link@{m\+Link}}\item[{\em 
+m\+Link\hypertarget{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{}\label{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}
+}]\index{m\+Install@{m\+Install}!jlibtool.\+c@{jlibtool.\+c}}\index{jlibtool.\+c@{jlibtool.\+c}!m\+Install@{m\+Install}}\item[{\em 
+m\+Install\hypertarget{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{}\label{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+187                  \{
+188     \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a35c088b54f8e0f8853938ea9399313ac}{mUnknown},
+189     \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54aee6011f6f8d6045058675b115f49cdbd}{mCompile},
+190     \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink},
+191     \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{mInstall},
+192 \};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{jlibtool.\+c@{jlibtool.\+c}!add\+\_\+dynamic\+\_\+link\+\_\+opts@{add\+\_\+dynamic\+\_\+link\+\_\+opts}}
+\index{add\+\_\+dynamic\+\_\+link\+\_\+opts@{add\+\_\+dynamic\+\_\+link\+\_\+opts}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{add\+\_\+dynamic\+\_\+link\+\_\+opts(command\+\_\+t $\ast$cmd\+\_\+data, count\+\_\+chars $\ast$args)}{add_dynamic_link_opts(command_t *cmd_data, count_chars *args)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} add\+\_\+dynamic\+\_\+link\+\_\+opts (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data, }
+\item[{{\bf count\+\_\+chars} $\ast$}]{args}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a1b2eae20e3eb859f4897e9a1bda1e930}{}\label{jlibtool_8c_a1b2eae20e3eb859f4897e9a1bda1e930}
+
+\begin{DoxyCode}
+1013 \{
+1014 \textcolor{preprocessor}{#ifdef DYNAMIC\_LINK\_OPTS}
+1015     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aed4211854d35e2c2d37a59f59f5d7add}{pic\_mode} != \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{pic\_AVOID}) \{
+1016         \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+1017            printf(\textcolor{stringliteral}{"Adding: %s\(\backslash\)n"}, DYNAMIC\_LINK\_OPTS);
+1018         \}
+1019         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(args, DYNAMIC\_LINK\_OPTS);
+1020         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a6a8b2427bbd4cb4bbe5e7470a109ebe5}{undefined\_flag}) \{
+1021             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(args, \textcolor{stringliteral}{"-undefined"});
+1022 \textcolor{preprocessor}{#if defined(\_\_APPLE\_\_)}
+1023             \textcolor{comment}{/* -undefined dynamic\_lookup is used by the bundled Python in}
+1024 \textcolor{comment}{             * 10.4, but if we don't set MACOSX\_DEPLOYMENT\_TARGET to 10.3+,}
+1025 \textcolor{comment}{             * we'll get a linker error if we pass this flag.}
+1026 \textcolor{comment}{             */}
+1027             \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(cmd\_data->\hyperlink{structcommand__t_a6a8b2427bbd4cb4bbe5e7470a109ebe5}{undefined\_flag},
+1028                            \textcolor{stringliteral}{"dynamic\_lookup"}) == 0) \{
+1029                 \hyperlink{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57}{insert\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts},
+1030                                    \textcolor{stringliteral}{"MACOSX\_DEPLOYMENT\_TARGET=10.3"}, 0);
+1031             \}
+1032 \textcolor{preprocessor}{#endif}
+1033             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(args, cmd\_data->\hyperlink{structcommand__t_a6a8b2427bbd4cb4bbe5e7470a109ebe5}{undefined\_flag});
+1034         \}
+1035         \textcolor{keywordflow}{else} \{
+1036 \textcolor{preprocessor}{#ifdef DYNAMIC\_LINK\_UNDEFINED}
+1037             \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+1038                 printf(\textcolor{stringliteral}{"Adding: %s\(\backslash\)n"}, DYNAMIC\_LINK\_UNDEFINED);
+1039             \}
+1040             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(args, DYNAMIC\_LINK\_UNDEFINED);
+1041 \textcolor{preprocessor}{#endif}
+1042         \}
+1043     \}
+1044 \textcolor{preprocessor}{#endif}
+1045 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a1b2eae20e3eb859f4897e9a1bda1e930_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a1b2eae20e3eb859f4897e9a1bda1e930_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!add\+\_\+for\+\_\+runtime@{add\+\_\+for\+\_\+runtime}}
+\index{add\+\_\+for\+\_\+runtime@{add\+\_\+for\+\_\+runtime}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{add\+\_\+for\+\_\+runtime(command\+\_\+t $\ast$cmd\+\_\+data)}{add_for_runtime(command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} add\+\_\+for\+\_\+runtime (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_aa18ea13fd0f25167d6c54701f412ba4a}{}\label{jlibtool_8c_aa18ea13fd0f25167d6c54701f412ba4a}
+
+\begin{DoxyCode}
+1992 \{
+1993     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} == \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{mInstall}) \{
+1994         \textcolor{keywordflow}{return} 0;
+1995     \}
+1996     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly} ||
+1997         cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary}) \{
+1998         FILE *\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}=fopen(cmd\_data->\hyperlink{structcommand__t_af54b7d7afd263340fd76962434f7aeb5}{fake\_output\_name},\textcolor{stringliteral}{"w"});
+1999         \textcolor{keywordflow}{if} (f == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+2000             \textcolor{keywordflow}{return} -1;
+2001         \}
+2002         fprintf(f,\textcolor{stringliteral}{"%s\(\backslash\)n"}, cmd\_data->\hyperlink{structcommand__t_a9a12ae8781cad01c7b3442cd5e74817b}{install\_path});
+2003         fclose(f);
+2004         \textcolor{keywordflow}{return}(0);
+2005     \} \textcolor{keywordflow}{else} \{
+2006         \textcolor{keywordflow}{return}(\hyperlink{jlibtool_8c_ae24f24fed527125665a12384fe7936dd}{ensure\_fake\_uptodate}(cmd\_data));
+2007     \}
+2008 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_aa18ea13fd0f25167d6c54701f412ba4a_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=240pt]{jlibtool_8c_aa18ea13fd0f25167d6c54701f412ba4a_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!add\+\_\+linker\+\_\+flag\+\_\+prefix@{add\+\_\+linker\+\_\+flag\+\_\+prefix}}
+\index{add\+\_\+linker\+\_\+flag\+\_\+prefix@{add\+\_\+linker\+\_\+flag\+\_\+prefix}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{add\+\_\+linker\+\_\+flag\+\_\+prefix(count\+\_\+chars $\ast$cc, const char $\ast$arg)}{add_linker_flag_prefix(count_chars *cc, const char *arg)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} add\+\_\+linker\+\_\+flag\+\_\+prefix (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc, }
+\item[{const char $\ast$}]{arg}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ae0f56c5ceb390a48e6608c32ec734378}{}\label{jlibtool_8c_ae0f56c5ceb390a48e6608c32ec734378}
+
+\begin{DoxyCode}
+1172 \{
+1173 \textcolor{preprocessor}{#ifndef LINKER\_FLAG\_PREFIX}
+1174     \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cc, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+1175 \textcolor{preprocessor}{#else}
+1176     \textcolor{keywordtype}{char} *newarg;
+1177     newarg = (\textcolor{keywordtype}{char}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}) + \textcolor{keyword}{sizeof}(LINKER\_FLAG\_PREFIX) + 1);
+1178     strcpy(newarg, LINKER\_FLAG\_PREFIX);
+1179     strcat(newarg, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+1180     \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cc, newarg);
+1181 \textcolor{preprocessor}{#endif}
+1182 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=323pt]{jlibtool_8c_ae0f56c5ceb390a48e6608c32ec734378_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!add\+\_\+minus\+\_\+l@{add\+\_\+minus\+\_\+l}}
+\index{add\+\_\+minus\+\_\+l@{add\+\_\+minus\+\_\+l}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{add\+\_\+minus\+\_\+l(count\+\_\+chars $\ast$cc, const char $\ast$arg)}{add_minus_l(count_chars *cc, const char *arg)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} add\+\_\+minus\+\_\+l (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc, }
+\item[{const char $\ast$}]{arg}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a7d23120264beeebc44a8e794ce6b070f}{}\label{jlibtool_8c_a7d23120264beeebc44a8e794ce6b070f}
+
+\begin{DoxyCode}
+1148 \{
+1149     \textcolor{keywordtype}{char} *newarg;
+1150     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name} = strrchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'/'});
+1151     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file} = strrchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'.'});
+1152     \textcolor{keywordtype}{char} *\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a25bfb1181d9fef7e40e828a146838ff6}{lib}  = \hyperlink{apr__cpystrn_8c_a230063e3f4d6c1324129ea552e026c27}{strstr}(name, \textcolor{stringliteral}{"lib"});
+1153 
+1154     \textcolor{keywordflow}{if} (name !=\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} && file != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} && lib == name+1) \{
+1155         *name = \textcolor{charliteral}{'\(\backslash\)0'};
+1156         *file = \textcolor{charliteral}{'\(\backslash\)0'};
+1157         file = \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name};
+1158         file = file+4;
+1159         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cc, \textcolor{stringliteral}{"-L"});
+1160         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cc, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+1161         \textcolor{comment}{/* we need one argument like -lapr-1 */}
+1162         newarg = \hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(file) + 3);
+1163         strcpy(newarg, \textcolor{stringliteral}{"-l"});
+1164         strcat(newarg, file);
+1165         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cc, newarg);
+1166     \} \textcolor{keywordflow}{else} \{
+1167         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cc, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+1168     \}
+1169 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=283pt]{jlibtool_8c_a7d23120264beeebc44a8e794ce6b070f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a7d23120264beeebc44a8e794ce6b070f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!add\+\_\+runtimedirlib@{add\+\_\+runtimedirlib}}
+\index{add\+\_\+runtimedirlib@{add\+\_\+runtimedirlib}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{add\+\_\+runtimedirlib(char $\ast$arg, command\+\_\+t $\ast$cmd\+\_\+data)}{add_runtimedirlib(char *arg, command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} add\+\_\+runtimedirlib (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{arg, }
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ae4287e4f104f42367e3df1551e407ee3}{}\label{jlibtool_8c_ae4287e4f104f42367e3df1551e407ee3}
+
+\begin{DoxyCode}
+516 \{
+517 \textcolor{preprocessor}{#ifdef RPATH}
+518     add\_rpath(cmd\_data->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies}, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+519 \textcolor{preprocessor}{#else}
+520 \textcolor{preprocessor}{#endif}
+521 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ae4287e4f104f42367e3df1551e407ee3_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!append\+\_\+count\+\_\+chars@{append\+\_\+count\+\_\+chars}}
+\index{append\+\_\+count\+\_\+chars@{append\+\_\+count\+\_\+chars}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{append\+\_\+count\+\_\+chars(count\+\_\+chars $\ast$cc, count\+\_\+chars $\ast$cctoadd)}{append_count_chars(count_chars *cc, count_chars *cctoadd)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} append\+\_\+count\+\_\+chars (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc, }
+\item[{{\bf count\+\_\+chars} $\ast$}]{cctoadd}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{}\label{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}
+
+\begin{DoxyCode}
+362 \{
+363     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+364     \textcolor{keywordflow}{for} (i = 0; i < cctoadd->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}; i++) \{
+365         \textcolor{keywordflow}{if} (cctoadd->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[i]) \{
+366             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cc, cctoadd->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[i]);
+367         \}
+368     \}
+369 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=319pt]{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!check\+\_\+library\+\_\+exists@{check\+\_\+library\+\_\+exists}}
+\index{check\+\_\+library\+\_\+exists@{check\+\_\+library\+\_\+exists}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{check\+\_\+library\+\_\+exists(command\+\_\+t $\ast$cmd, const char $\ast$arg, int pathlen, int libdircheck, enum lib\+\_\+type $\ast$libtype)}{check_library_exists(command_t *cmd, const char *arg, int pathlen, int libdircheck, enum lib_type *libtype)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ check\+\_\+library\+\_\+exists (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd, }
+\item[{const char $\ast$}]{arg, }
+\item[{{\bf int}}]{pathlen, }
+\item[{{\bf int}}]{libdircheck, }
+\item[{enum {\bf lib\+\_\+type} $\ast$}]{libtype}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_aa826c11573aa30a57b67fe324d074ac2}{}\label{jlibtool_8c_aa826c11573aa30a57b67fe324d074ac2}
+
+\begin{DoxyCode}
+895 \{
+896     \textcolor{keywordtype}{char} *newarg, *ext;
+897     \textcolor{keywordtype}{int} pass, rv, newpathlen;
+898 
+899     newarg = (\textcolor{keywordtype}{char} *)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}) + 10);
+900     strcpy(newarg, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+901     newarg[pathlen] = 0;
+902 
+903     newpathlen = pathlen;
+904     \textcolor{keywordflow}{if} (libdircheck) \{
+905         strcat(newarg, \textcolor{stringliteral}{".libs/"});
+906         newpathlen += \textcolor{keyword}{sizeof}(\textcolor{stringliteral}{".libs/"}) - 1;
+907     \}
+908 
+909     strcpy(newarg+newpathlen, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}+pathlen);
+910     ext = strrchr(newarg, \textcolor{charliteral}{'.'}) + 1;
+911 
+912     pass = 0;
+913 
+914     \textcolor{keywordflow}{do} \{
+915         \textcolor{keyword}{struct }stat sb;
+916 
+917         \textcolor{keywordflow}{switch} (pass) \{
+918         \textcolor{keywordflow}{case} 0:
+919             \textcolor{keywordflow}{if} (cmd->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aed4211854d35e2c2d37a59f59f5d7add}{pic\_mode} != \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{pic\_AVOID} &&
+920                 cmd->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_ada7e7fabb6fa763bb613576b005d9ebb}{shared} != \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a271451515d9133b384acb49fdcacbe40}{share\_STATIC}) \{
+921                 strcpy(ext, DYNAMIC\_LIB\_EXT);
+922                 *libtype = \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa710eac0137d6028755338a13e2cb6d70}{type\_DYNAMIC\_LIB};
+923                 \textcolor{keywordflow}{break};
+924             \}
+925             pass = 1;
+926             \textcolor{comment}{/* Fall through */}
+927         \textcolor{keywordflow}{case} 1:
+928             strcpy(ext, STATIC\_LIB\_EXT);
+929             *libtype = \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaadadce705a76585089f76fcfc60cd9040}{type\_STATIC\_LIB};
+930             \textcolor{keywordflow}{break};
+931         \textcolor{keywordflow}{case} 2:
+932             strcpy(ext, MODULE\_LIB\_EXT);
+933             *libtype = \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa7c804e53a600ab8303a32b4d47316177}{type\_MODULE\_LIB};
+934             \textcolor{keywordflow}{break};
+935         \textcolor{keywordflow}{case} 3:
+936             strcpy(ext, OBJECT\_EXT);
+937             *libtype = \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaaeafabf1da15f8fa2f1617d6e586608e7}{type\_OBJECT};
+938             \textcolor{keywordflow}{break};
+939         \textcolor{keywordflow}{default}:
+940             *libtype = \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa5b0ca770f9322be1ef2cd8f2e5305e40}{type\_UNKNOWN};
+941             \textcolor{keywordflow}{break};
+942         \} 
+943 
+944         \textcolor{keywordflow}{if} (!cmd->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+945             printf(\textcolor{stringliteral}{"Checking (lib): %s\(\backslash\)n"}, newarg);
+946         \}
+947         rv = stat(newarg, &sb);
+948     \}
+949     \textcolor{keywordflow}{while} (rv != 0 && ++pass < 4);
+950 
+951     \textcolor{keywordflow}{if} (rv == 0) \{
+952         \textcolor{keywordflow}{return} newarg;
+953     \}
+954 
+955     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+956 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=267pt]{jlibtool_8c_aa826c11573aa30a57b67fe324d074ac2_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_aa826c11573aa30a57b67fe324d074ac2_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!check\+\_\+object\+\_\+exists@{check\+\_\+object\+\_\+exists}}
+\index{check\+\_\+object\+\_\+exists@{check\+\_\+object\+\_\+exists}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{check\+\_\+object\+\_\+exists(command\+\_\+t $\ast$cmd, const char $\ast$arg, int arglen)}{check_object_exists(command_t *cmd, const char *arg, int arglen)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ check\+\_\+object\+\_\+exists (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd, }
+\item[{const char $\ast$}]{arg, }
+\item[{{\bf int}}]{arglen}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ae9adef83ae36fb1555d61cecd383b7bb}{}\label{jlibtool_8c_ae9adef83ae36fb1555d61cecd383b7bb}
+
+\begin{DoxyCode}
+845 \{
+846     \textcolor{keywordtype}{char} *newarg, *ext;
+847     \textcolor{keywordtype}{int} pass, rv;
+848 
+849     newarg = (\textcolor{keywordtype}{char} *)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(arglen + 10);
+850     memcpy(newarg, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, arglen);
+851     newarg[arglen] = 0;
+852     ext = newarg + arglen;
+853 
+854     pass = 0;
+855 
+856     \textcolor{keywordflow}{do} \{
+857         \textcolor{keyword}{struct }stat sb;
+858 
+859         \textcolor{keywordflow}{switch} (pass) \{
+860         \textcolor{keywordflow}{case} 0:
+861             strcpy(ext, OBJECT\_EXT);
+862             \textcolor{keywordflow}{break};
+863 \textcolor{comment}{/*}
+864 \textcolor{comment}{        case 1:}
+865 \textcolor{comment}{            strcpy(ext, NO\_PIC\_EXT);}
+866 \textcolor{comment}{            break;}
+867 \textcolor{comment}{*/}
+868         \textcolor{keywordflow}{default}:
+869             \textcolor{keywordflow}{break};
+870         \} 
+871 
+872         \textcolor{keywordflow}{if} (!cmd->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+873             printf(\textcolor{stringliteral}{"Checking (obj): %s\(\backslash\)n"}, newarg);
+874         \}
+875         rv = stat(newarg, &sb);
+876     \}
+877     \textcolor{keywordflow}{while} (rv != 0 && ++pass < 1);
+878 
+879     \textcolor{keywordflow}{if} (rv == 0) \{
+880         \textcolor{keywordflow}{if} (pass == 1) \{
+881             cmd->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aed4211854d35e2c2d37a59f59f5d7add}{pic\_mode} = \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{pic\_AVOID};
+882         \}
+883         \textcolor{keywordflow}{return} newarg;
+884     \}
+885 
+886     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+887 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=267pt]{jlibtool_8c_ae9adef83ae36fb1555d61cecd383b7bb_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ae9adef83ae36fb1555d61cecd383b7bb_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!cleanup\+\_\+tmp\+\_\+dir@{cleanup\+\_\+tmp\+\_\+dir}}
+\index{cleanup\+\_\+tmp\+\_\+dir@{cleanup\+\_\+tmp\+\_\+dir}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{cleanup\+\_\+tmp\+\_\+dir(const char $\ast$dirname)}{cleanup_tmp_dir(const char *dirname)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} cleanup\+\_\+tmp\+\_\+dir (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{dirname}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_aa939821432d136b3afd42add10b4a919}{}\label{jlibtool_8c_aa939821432d136b3afd42add10b4a919}
+
+\begin{DoxyCode}
+1941 \{
+1942     DIR *\hyperlink{group__APACHE__CORE__DAEMON_ga6d902c83b02c43071b972ed0416729bc}{dir};
+1943     \textcolor{keyword}{struct }dirent *entry;
+1944     \textcolor{keywordtype}{char} fullname[1024];
+1945 
+1946     dir = opendir(\hyperlink{group__apr__dir_gab8a2fd169b20f0b9d33959f7b17d35aa}{dirname});
+1947 
+1948     \textcolor{keywordflow}{if} (dir == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+1949         \textcolor{keywordflow}{return};
+1950 
+1951     \textcolor{keywordflow}{while} ((entry = readdir(dir)) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1952         \textcolor{keywordflow}{if} (entry->d\_name[0] != \textcolor{charliteral}{'.'}) \{
+1953             strcpy(fullname, \hyperlink{group__apr__dir_gab8a2fd169b20f0b9d33959f7b17d35aa}{dirname});
+1954             strcat(fullname, \textcolor{stringliteral}{"/"});
+1955             strcat(fullname, entry->d\_name);
+1956             \textcolor{keyword}{remove}(fullname);
+1957         \}
+1958     \}
+1959 
+1960     rmdir(\hyperlink{group__apr__dir_gab8a2fd169b20f0b9d33959f7b17d35aa}{dirname});
+1961 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_aa939821432d136b3afd42add10b4a919_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!cleanup\+\_\+tmp\+\_\+dirs@{cleanup\+\_\+tmp\+\_\+dirs}}
+\index{cleanup\+\_\+tmp\+\_\+dirs@{cleanup\+\_\+tmp\+\_\+dirs}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{cleanup\+\_\+tmp\+\_\+dirs(command\+\_\+t $\ast$cmd\+\_\+data)}{cleanup_tmp_dirs(command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} cleanup\+\_\+tmp\+\_\+dirs (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a39ddf6193c1da4c766d0ea51d725f76f}{}\label{jlibtool_8c_a39ddf6193c1da4c766d0ea51d725f76f}
+
+\begin{DoxyCode}
+1964 \{
+1965     \textcolor{keywordtype}{int} \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+1966 
+1967     \textcolor{keywordflow}{for} (d = 0; d < cmd\_data->\hyperlink{structcommand__t_a59ce72a2d719f4c49e3027aa41abe86a}{tmp\_dirs}->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}; d++) \{
+1968         \hyperlink{jlibtool_8c_aa939821432d136b3afd42add10b4a919}{cleanup\_tmp\_dir}(cmd\_data->\hyperlink{structcommand__t_a59ce72a2d719f4c49e3027aa41abe86a}{tmp\_dirs}->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[d]);
+1969     \}
+1970 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=297pt]{jlibtool_8c_a39ddf6193c1da4c766d0ea51d725f76f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=247pt]{jlibtool_8c_a39ddf6193c1da4c766d0ea51d725f76f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!clear\+\_\+count\+\_\+chars@{clear\+\_\+count\+\_\+chars}}
+\index{clear\+\_\+count\+\_\+chars@{clear\+\_\+count\+\_\+chars}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{clear\+\_\+count\+\_\+chars(count\+\_\+chars $\ast$cc)}{clear_count_chars(count_chars *cc)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} clear\+\_\+count\+\_\+chars (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df}{}\label{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df}
+
+\begin{DoxyCode}
+330 \{
+331     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+332     \textcolor{keywordflow}{for} (i = 0; i < cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}; i++) \{
+333         cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] = 0;
+334     \}
+335 
+336     cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num} = 0;
+337 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=345pt]{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!darwin\+\_\+dynamic\+\_\+link\+\_\+function@{darwin\+\_\+dynamic\+\_\+link\+\_\+function}}
+\index{darwin\+\_\+dynamic\+\_\+link\+\_\+function@{darwin\+\_\+dynamic\+\_\+link\+\_\+function}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{darwin\+\_\+dynamic\+\_\+link\+\_\+function(const char $\ast$version\+\_\+info)}{darwin_dynamic_link_function(const char *version_info)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ darwin\+\_\+dynamic\+\_\+link\+\_\+function (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{version\+\_\+info}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a2fd864a8373d0dd55a499ab383fe8e16}{}\label{jlibtool_8c_a2fd864a8373d0dd55a499ab383fe8e16}
+
+\begin{DoxyCode}
+740 \{
+741     \textcolor{keywordtype}{char} *newarg;
+742     \textcolor{keywordtype}{long} major, minor, patch;
+743 
+744     major = 0;
+745     minor = 0;
+746     patch = 0;
+747 
+748     \textcolor{keywordflow}{if} (version\_info) \{
+749         major = \hyperlink{jlibtool_8c_ad2be7504517ae5b2a06f6a5c48b43bca}{safe\_strtol}(version\_info, &version\_info, 10);
+750 
+751         \textcolor{keywordflow}{if} (version\_info) \{
+752             \textcolor{keywordflow}{if} (version\_info[0] == \textcolor{charliteral}{':'}) \{
+753                 version\_info++;
+754             \}
+755 
+756             minor = \hyperlink{jlibtool_8c_ad2be7504517ae5b2a06f6a5c48b43bca}{safe\_strtol}(version\_info, &version\_info, 10);
+757 
+758             \textcolor{keywordflow}{if} (version\_info) \{
+759                 \textcolor{keywordflow}{if} (version\_info[0] == \textcolor{charliteral}{':'}) \{
+760                     version\_info++;
+761                 \}
+762 
+763                 patch = \hyperlink{jlibtool_8c_ad2be7504517ae5b2a06f6a5c48b43bca}{safe\_strtol}(version\_info, &version\_info, 10);
+764 
+765             \}
+766         \}
+767     \}
+768 
+769     \textcolor{comment}{/* Avoid -dylib\_compatibility\_version must be greater than zero errors. */}
+770     \textcolor{keywordflow}{if} (major == 0) \{
+771         major = 1;
+772     \}
+773     newarg = (\textcolor{keywordtype}{char}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(100);
+774     snprintf(newarg, 99,
+775              \textcolor{stringliteral}{"-compatibility\_version %ld -current\_version %ld.%ld"},
+776              major, major, minor);
+777 
+778     \textcolor{keywordflow}{return} newarg;
+779 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=285pt]{jlibtool_8c_a2fd864a8373d0dd55a499ab383fe8e16_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!ensure\+\_\+fake\+\_\+uptodate@{ensure\+\_\+fake\+\_\+uptodate}}
+\index{ensure\+\_\+fake\+\_\+uptodate@{ensure\+\_\+fake\+\_\+uptodate}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{ensure\+\_\+fake\+\_\+uptodate(command\+\_\+t $\ast$cmd\+\_\+data)}{ensure_fake_uptodate(command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ensure\+\_\+fake\+\_\+uptodate (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ae24f24fed527125665a12384fe7936dd}{}\label{jlibtool_8c_ae24f24fed527125665a12384fe7936dd}
+
+\begin{DoxyCode}
+1973 \{
+1974     \textcolor{comment}{/* FIXME: could do the stat/touch here, but nah... */}
+1975     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *touch\_args[3];
+1976 
+1977     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} == \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{mInstall}) \{
+1978         \textcolor{keywordflow}{return} 0;
+1979     \}
+1980     \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_af54b7d7afd263340fd76962434f7aeb5}{fake\_output\_name}) \{
+1981         \textcolor{keywordflow}{return} 0;
+1982     \}
+1983 
+1984     touch\_args[0] = \textcolor{stringliteral}{"touch"};
+1985     touch\_args[1] = cmd\_data->\hyperlink{structcommand__t_af54b7d7afd263340fd76962434f7aeb5}{fake\_output\_name};
+1986     touch\_args[2] = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1987     \textcolor{keywordflow}{return} \hyperlink{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7}{external\_spawn}(cmd\_data, \textcolor{stringliteral}{"touch"}, touch\_args);
+1988 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ae24f24fed527125665a12384fe7936dd_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ae24f24fed527125665a12384fe7936dd_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!expand\+\_\+path@{expand\+\_\+path}}
+\index{expand\+\_\+path@{expand\+\_\+path}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{expand\+\_\+path(const char $\ast$relpath)}{expand_path(const char *relpath)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ expand\+\_\+path (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{relpath}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a2d5b316e344a5225d06276bcd7a5b3a2}{}\label{jlibtool_8c_a2d5b316e344a5225d06276bcd7a5b3a2}
+
+\begin{DoxyCode}
+1648 \{
+1649     \textcolor{keywordtype}{char} foo[\hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}], *newpath;
+1650 
+1651     getcwd(foo, \hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}-1);
+1652     newpath = (\textcolor{keywordtype}{char}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(foo)+strlen(relpath)+2);
+1653     strcpy(newpath, foo);
+1654     strcat(newpath, \textcolor{stringliteral}{"/"});
+1655     strcat(newpath, relpath);
+1656     \textcolor{keywordflow}{return} newpath;
+1657 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=233pt]{jlibtool_8c_a2d5b316e344a5225d06276bcd7a5b3a2_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!explode\+\_\+static\+\_\+lib@{explode\+\_\+static\+\_\+lib}}
+\index{explode\+\_\+static\+\_\+lib@{explode\+\_\+static\+\_\+lib}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{explode\+\_\+static\+\_\+lib(command\+\_\+t $\ast$cmd\+\_\+data, const char $\ast$lib)}{explode_static_lib(command_t *cmd_data, const char *lib)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} explode\+\_\+static\+\_\+lib (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data, }
+\item[{const char $\ast$}]{lib}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a9c661acdbeca948512135bdfa60d005c}{}\label{jlibtool_8c_a9c661acdbeca948512135bdfa60d005c}
+
+\begin{DoxyCode}
+1185 \{
+1186     \hyperlink{structcount__chars}{count\_chars} tmpdir\_cc, libname\_cc;
+1187     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *tmpdir, *libname;
+1188     \textcolor{keywordtype}{char} savewd[\hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}];
+1189     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name};
+1190     DIR *\hyperlink{group__APACHE__CORE__DAEMON_ga6d902c83b02c43071b972ed0416729bc}{dir};
+1191     \textcolor{keyword}{struct }dirent *entry;
+1192     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *lib\_args[4];
+1193 
+1194     \textcolor{comment}{/* Bah! */}
+1195     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aaa396db773355addeefffab83395c627}{dry\_run}) \{
+1196         \textcolor{keywordflow}{return} 0;
+1197     \}
+1198 
+1199     name = \hyperlink{jlibtool_8c_ab3fcab7e5654aad60313a6b9e80e13c1}{jlibtool\_basename}(\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a25bfb1181d9fef7e40e828a146838ff6}{lib});
+1200 
+1201     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(&tmpdir\_cc);
+1202     \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(&tmpdir\_cc, \textcolor{stringliteral}{".libs/"});
+1203     \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(&tmpdir\_cc, name);
+1204     \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(&tmpdir\_cc, \textcolor{stringliteral}{".exploded/"});
+1205     tmpdir = \hyperlink{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787}{flatten\_count\_chars}(&tmpdir\_cc, 0);
+1206 
+1207     \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+1208         printf(\textcolor{stringliteral}{"Making: %s\(\backslash\)n"}, tmpdir);
+1209     \}
+1210     \hyperlink{jlibtool_8c_ad258402cd6605ab204e988bc09329b53}{safe\_mkdir}(tmpdir);
+1211 
+1212     \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a59ce72a2d719f4c49e3027aa41abe86a}{tmp\_dirs}, tmpdir);
+1213 
+1214     getcwd(savewd, \textcolor{keyword}{sizeof}(savewd));
+1215 
+1216     \textcolor{keywordflow}{if} (chdir(tmpdir) != 0) \{
+1217         \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+1218             printf(\textcolor{stringliteral}{"Warning: could not explode %s\(\backslash\)n"}, \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a25bfb1181d9fef7e40e828a146838ff6}{lib});
+1219         \}
+1220         \textcolor{keywordflow}{return} 1;
+1221     \}
+1222 
+1223     \textcolor{keywordflow}{if} (\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a25bfb1181d9fef7e40e828a146838ff6}{lib}[0] == \textcolor{charliteral}{'/'}) \{
+1224         libname = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a25bfb1181d9fef7e40e828a146838ff6}{lib};
+1225     \}
+1226     \textcolor{keywordflow}{else} \{
+1227         \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(&libname\_cc);
+1228         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(&libname\_cc, \textcolor{stringliteral}{"../../"});
+1229         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(&libname\_cc, \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a25bfb1181d9fef7e40e828a146838ff6}{lib});
+1230         libname = \hyperlink{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787}{flatten\_count\_chars}(&libname\_cc, 0);
+1231     \}
+1232 
+1233     lib\_args[0] = LIBRARIAN;
+1234     lib\_args[1] = \textcolor{stringliteral}{"x"};
+1235     lib\_args[2] = libname;
+1236     lib\_args[3] = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1237 
+1238     \hyperlink{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7}{external\_spawn}(cmd\_data, LIBRARIAN, lib\_args);
+1239 
+1240     chdir(savewd);
+1241     dir = opendir(tmpdir);
+1242 
+1243     \textcolor{keywordflow}{while} ((entry = readdir(dir)) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1244 \textcolor{preprocessor}{#if defined(\_\_APPLE\_\_) && defined(RANLIB)}
+1245         \textcolor{comment}{/* Apple inserts \_\_.SYMDEF which isn't needed.}
+1246 \textcolor{comment}{         * Leopard (10.5+) can also add '\_\_.SYMDEF SORTED' which isn't}
+1247 \textcolor{comment}{         * much fun either.  Just skip them.}
+1248 \textcolor{comment}{         */}
+1249         \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a230063e3f4d6c1324129ea552e026c27}{strstr}(entry->d\_name, \textcolor{stringliteral}{"\_\_.SYMDEF"}) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1250             \textcolor{keywordflow}{continue};
+1251         \}
+1252 \textcolor{preprocessor}{#endif}
+1253         \textcolor{keywordflow}{if} (entry->d\_name[0] != \textcolor{charliteral}{'.'}) \{
+1254             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(&tmpdir\_cc, entry->d\_name);
+1255             name = \hyperlink{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787}{flatten\_count\_chars}(&tmpdir\_cc, 0);
+1256             \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+1257                 printf(\textcolor{stringliteral}{"Adding: %s\(\backslash\)n"}, name);
+1258             \}
+1259             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a98ae4574250fc2c45f6decd7b28dfb21}{obj\_files}, name);
+1260             \hyperlink{jlibtool_8c_a9bdb91efc34e958992c13b6f71667ad5}{pop\_count\_chars}(&tmpdir\_cc);
+1261         \}
+1262     \}
+1263 
+1264     closedir(dir);
+1265     \textcolor{keywordflow}{return} 0;
+1266 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a9c661acdbeca948512135bdfa60d005c_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a9c661acdbeca948512135bdfa60d005c_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!external\+\_\+spawn@{external\+\_\+spawn}}
+\index{external\+\_\+spawn@{external\+\_\+spawn}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{external\+\_\+spawn(command\+\_\+t $\ast$cmd, const char $\ast$file, const char $\ast$$\ast$argv)}{external_spawn(command_t *cmd, const char *file, const char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} external\+\_\+spawn (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd, }
+\item[{const char $\ast$}]{file, }
+\item[{const char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7}{}\label{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7}
+
+\begin{DoxyCode}
+436 \{
+437     \textcolor{keywordflow}{if} (!cmd->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+438         \textcolor{keyword}{const} \textcolor{keywordtype}{char} **\hyperlink{pcre_8txt_aef9a8267198039bf879dc40e1abc41f2}{argument} = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv};
+439         printf(\textcolor{stringliteral}{"Executing: "});
+440         \textcolor{keywordflow}{while} (*argument) \{
+441             printf(\textcolor{stringliteral}{"%s "}, *argument);
+442             argument++;
+443         \}
+444         puts(\textcolor{stringliteral}{""});
+445     \}
+446 
+447     \textcolor{keywordflow}{if} (cmd->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aaa396db773355addeefffab83395c627}{dry\_run}) \{
+448         \textcolor{keywordflow}{return} 0;
+449     \}
+450 \textcolor{preprocessor}{#if defined(\_\_EMX\_\_) || defined(\_\_MINGW32\_\_)}
+451     \textcolor{keywordflow}{return} spawnvp(P\_WAIT, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+452 \textcolor{preprocessor}{#else}
+453     \{
+454         pid\_t pid;
+455         pid = fork();
+456         \textcolor{keywordflow}{if} (pid == 0) \{
+457             \textcolor{keywordflow}{return} execvp(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], (\textcolor{keywordtype}{char}**)\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+458         \}
+459         \textcolor{keywordflow}{else} \{
+460             \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga5bace9ccde1bc807518a5076c01f0f85}{statuscode};
+461             \hyperlink{unix_2procsup_8c_ac7a6489ac1c0c6ac76b0122a1bfe5588}{waitpid}(pid, &statuscode, 0);
+462             \textcolor{keywordflow}{if} (WIFEXITED(statuscode)) \{
+463                 \textcolor{keywordflow}{return} \hyperlink{group__apr__platform_ga77f17ed4771a558a0f16e5f3aecee222}{WEXITSTATUS}(statuscode);
+464             \}
+465             \textcolor{keywordflow}{return} 0;
+466         \}
+467     \}
+468 \textcolor{preprocessor}{#endif}
+469 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=248pt]{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!flatten\+\_\+count\+\_\+chars@{flatten\+\_\+count\+\_\+chars}}
+\index{flatten\+\_\+count\+\_\+chars@{flatten\+\_\+count\+\_\+chars}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{flatten\+\_\+count\+\_\+chars(count\+\_\+chars $\ast$cc, int space)}{flatten_count_chars(count_chars *cc, int space)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ flatten\+\_\+count\+\_\+chars (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc, }
+\item[{{\bf int}}]{space}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787}{}\label{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787}
+
+\begin{DoxyCode}
+372 \{
+373     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, \hyperlink{group__APACHE__CORE__CONFIG_ga2bd3edb50f631a96f1b729fde236ff43}{size};
+374     \textcolor{keywordtype}{char} *newval;
+375 
+376     size = 0;
+377     \textcolor{keywordflow}{for} (i = 0; i < cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}; i++) \{
+378         \textcolor{keywordflow}{if} (cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[i]) \{
+379             size += strlen(cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[i]) + 1;
+380             \textcolor{keywordflow}{if} (\hyperlink{README_8txt_a19182255958ecd8b8391dae50d6673c1}{space}) \{
+381               size++;
+382             \}
+383         \}
+384     \}
+385 
+386     newval = (\textcolor{keywordtype}{char}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(size + 1);
+387     newval[0] = 0;
+388 
+389     \textcolor{keywordflow}{for} (i = 0; i < cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}; i++) \{
+390         \textcolor{keywordflow}{if} (cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[i]) \{
+391             strcat(newval, cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[i]);
+392             \textcolor{keywordflow}{if} (\hyperlink{README_8txt_a19182255958ecd8b8391dae50d6673c1}{space}) \{
+393                 strcat(newval, \textcolor{stringliteral}{" "});
+394             \}
+395         \}
+396     \}
+397 
+398     \textcolor{keywordflow}{return} newval;
+399 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=263pt]{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!gen\+\_\+install\+\_\+name@{gen\+\_\+install\+\_\+name}}
+\index{gen\+\_\+install\+\_\+name@{gen\+\_\+install\+\_\+name}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{gen\+\_\+install\+\_\+name(const char $\ast$name, int genlib)}{gen_install_name(const char *name, int genlib)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ gen\+\_\+install\+\_\+name (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name, }
+\item[{{\bf int}}]{genlib}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}{}\label{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}
+
+\begin{DoxyCode}
+827 \{
+828     \textcolor{keyword}{struct }stat sb;
+829     \textcolor{keywordtype}{char} *newname;
+830     \textcolor{keywordtype}{int} rv;
+831 
+832     newname = \hyperlink{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196}{gen\_library\_name}(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, genlib);
+833 
+834     \textcolor{comment}{/* Check if it exists. If not, return NULL.  */}
+835     rv = stat(newname, &sb);
+836 
+837     \textcolor{keywordflow}{if} (rv) \{
+838         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+839     \}
+840 
+841     \textcolor{keywordflow}{return} newname;
+842 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!gen\+\_\+library\+\_\+name@{gen\+\_\+library\+\_\+name}}
+\index{gen\+\_\+library\+\_\+name@{gen\+\_\+library\+\_\+name}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{gen\+\_\+library\+\_\+name(const char $\ast$name, int genlib)}{gen_library_name(const char *name, int genlib)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ gen\+\_\+library\+\_\+name (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name, }
+\item[{{\bf int}}]{genlib}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196}{}\label{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196}
+
+\begin{DoxyCode}
+787 \{
+788     \textcolor{keywordtype}{char} *newarg, *newext;
+789 
+790     newarg = (\textcolor{keywordtype}{char} *)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}) + 11);
+791     strcpy(newarg, \textcolor{stringliteral}{".libs/"});
+792 
+793     \textcolor{keywordflow}{if} (genlib == 2 && strncmp(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, \textcolor{stringliteral}{"lib"}, 3) == 0) \{
+794         \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name} += 3;
+795     \}
+796 
+797     \textcolor{keywordflow}{if} (genlib == 2) \{
+798         strcat(newarg, \hyperlink{jlibtool_8c_ab3fcab7e5654aad60313a6b9e80e13c1}{jlibtool\_basename}(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}));
+799     \}
+800     \textcolor{keywordflow}{else} \{
+801         strcat(newarg, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name});
+802     \}
+803 
+804     newext = strrchr(newarg, \textcolor{charliteral}{'.'}) + 1;
+805 
+806     \textcolor{keywordflow}{switch} (genlib) \{
+807     \textcolor{keywordflow}{case} 0:
+808         strcpy(newext, STATIC\_LIB\_EXT);
+809         \textcolor{keywordflow}{break};
+810     \textcolor{keywordflow}{case} 1:
+811         strcpy(newext, DYNAMIC\_LIB\_EXT);
+812         \textcolor{keywordflow}{break};
+813     \textcolor{keywordflow}{case} 2:
+814         strcpy(newext, MODULE\_LIB\_EXT);
+815         \textcolor{keywordflow}{break};
+816     \}
+817 
+818     \textcolor{keywordflow}{return} newarg;
+819 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!init\+\_\+count\+\_\+chars@{init\+\_\+count\+\_\+chars}}
+\index{init\+\_\+count\+\_\+chars@{init\+\_\+count\+\_\+chars}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{init\+\_\+count\+\_\+chars(count\+\_\+chars $\ast$cc)}{init_count_chars(count_chars *cc)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} init\+\_\+count\+\_\+chars (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{}\label{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}
+
+\begin{DoxyCode}
+324 \{
+325     cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals} = (\textcolor{keyword}{const} \textcolor{keywordtype}{char}**)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}*));
+326     cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num} = 0;
+327 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=249pt]{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!insert\+\_\+count\+\_\+chars@{insert\+\_\+count\+\_\+chars}}
+\index{insert\+\_\+count\+\_\+chars@{insert\+\_\+count\+\_\+chars}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{insert\+\_\+count\+\_\+chars(count\+\_\+chars $\ast$cc, const char $\ast$newval, int position)}{insert_count_chars(count_chars *cc, const char *newval, int position)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} insert\+\_\+count\+\_\+chars (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc, }
+\item[{const char $\ast$}]{newval, }
+\item[{{\bf int}}]{position}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57}{}\label{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57}
+
+\begin{DoxyCode}
+350 \{
+351     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+352 
+353     \textcolor{keywordflow}{for} (i = cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}; i > position; i--) \{
+354         cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] = cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[i-1];
+355     \}
+356 
+357     cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[position] = newval;
+358     cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}++;
+359 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!jlibtool\+\_\+basename@{jlibtool\+\_\+basename}}
+\index{jlibtool\+\_\+basename@{jlibtool\+\_\+basename}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{jlibtool\+\_\+basename(const char $\ast$fullpath)}{jlibtool_basename(const char *fullpath)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ jlibtool\+\_\+basename (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{fullpath}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ab3fcab7e5654aad60313a6b9e80e13c1}{}\label{jlibtool_8c_ab3fcab7e5654aad60313a6b9e80e13c1}
+
+\begin{DoxyCode}
+702 \{
+703     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name} = strrchr(fullpath, \textcolor{charliteral}{'/'});
+704 
+705     \textcolor{keywordflow}{if} (name == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+706         name = strrchr(fullpath, \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'});
+707     \}
+708 
+709     \textcolor{keywordflow}{if} (name == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+710         name = fullpath;
+711     \} \textcolor{keywordflow}{else} \{
+712         name++;
+713     \}
+714 
+715     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name};
+716 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ab3fcab7e5654aad60313a6b9e80e13c1_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!link\+\_\+fixup@{link\+\_\+fixup}}
+\index{link\+\_\+fixup@{link\+\_\+fixup}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{link\+\_\+fixup(command\+\_\+t $\ast$c)}{link_fixup(command_t *c)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} link\+\_\+fixup (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{c}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a0b7bcccbb2a139fa5678409d86e6ce6b}{}\label{jlibtool_8c_a0b7bcccbb2a139fa5678409d86e6ce6b}
+
+\begin{DoxyCode}
+1660 \{
+1661     \textcolor{comment}{/* If we were passed an -rpath directive, we need to build}
+1662 \textcolor{comment}{     * shared objects too.  Otherwise, we should only create static}
+1663 \textcolor{comment}{     * libraries.}
+1664 \textcolor{comment}{     */}
+1665     \textcolor{keywordflow}{if} (!c->\hyperlink{structcommand__t_a9a12ae8781cad01c7b3442cd5e74817b}{install\_path} && (c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly} ||
+1666         c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{otModule} || c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary})) \{
+1667         c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca2615d7d63a3d9165442674d4ad3708fa}{otStaticLibraryOnly};
+1668     \}
+1669 
+1670     \textcolor{keywordflow}{if} (c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly} ||
+1671         c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{otModule} ||
+1672         c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary}) \{
+1673 
+1674         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, \textcolor{stringliteral}{"-o"});
+1675         \textcolor{keywordflow}{if} (c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{otModule}) \{
+1676             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, c->
+      \hyperlink{structcommand__t_a643313eb225f71780cc53d48a2813a85}{module\_name}.\hyperlink{structlibrary__name_adcb558772c92c93af0ec6ab6535c73d9}{normal});
+1677         \}
+1678         \textcolor{keywordflow}{else} \{
+1679             \textcolor{keywordtype}{char} *tmp;
+1680             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, c->
+      \hyperlink{structcommand__t_ae7710fc5599d65e7e23a09db78428189}{shared\_name}.\hyperlink{structlibrary__name_adcb558772c92c93af0ec6ab6535c73d9}{normal});
+1681 \textcolor{preprocessor}{#ifdef DYNAMIC\_INSTALL\_NAME}
+1682             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, DYNAMIC\_INSTALL\_NAME);
+1683 
+1684             tmp = (\textcolor{keywordtype}{char}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX});
+1685             strcpy(tmp, c->\hyperlink{structcommand__t_a9a12ae8781cad01c7b3442cd5e74817b}{install\_path});
+1686             strcat(tmp, strrchr(c->\hyperlink{structcommand__t_ae7710fc5599d65e7e23a09db78428189}{shared\_name}.\hyperlink{structlibrary__name_adcb558772c92c93af0ec6ab6535c73d9}{normal}, \textcolor{charliteral}{'/'}));
+1687             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, tmp);
+1688 \textcolor{preprocessor}{#endif}
+1689         \}
+1690 
+1691         \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(c->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, c->
+      \hyperlink{structcommand__t_a98ae4574250fc2c45f6decd7b28dfb21}{obj\_files});
+1692         \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(c->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, c->
+      \hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies});
+1693 
+1694         \textcolor{keywordflow}{if} (c->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_ae55377513b239904f00b9d96c056ef32}{export\_all}) \{
+1695 \textcolor{preprocessor}{#ifdef GEN\_EXPORTS}
+1696             \hyperlink{aplibtool_8c_a6ee7132fd7b89d44eb0c0da41446c026}{generate\_def\_file}(c);
+1697 \textcolor{preprocessor}{#endif}
+1698         \}
+1699     \}
+1700 
+1701     \textcolor{keywordflow}{if} (c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary} || c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == 
+      \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca2615d7d63a3d9165442674d4ad3708fa}{otStaticLibraryOnly}) \{
+1702         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_af8226723c019e4346a0e58f8cf60969f}{static\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, \textcolor{stringliteral}{"-o"});
+1703         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_af8226723c019e4346a0e58f8cf60969f}{static\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal}, c->
+      \hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name});
+1704     \}
+1705 
+1706     \textcolor{keywordflow}{if} (c->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca07a21848098a9fa3ee69f34b07bebf50}{otProgram}) \{
+1707         \textcolor{keywordflow}{if} (c->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name}) \{
+1708             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, \textcolor{stringliteral}{"-o"});
+1709             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(c->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, c->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name});
+1710             \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(c->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, c->\hyperlink{structcommand__t_a98ae4574250fc2c45f6decd7b28dfb21}{obj\_files});
+1711             \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(c->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, c->
+      \hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies});
+1712             \hyperlink{jlibtool_8c_a1b2eae20e3eb859f4897e9a1bda1e930}{add\_dynamic\_link\_opts}(c, c->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1713         \}
+1714     \}
+1715 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a0b7bcccbb2a139fa5678409d86e6ce6b_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{jlibtool_8c_a0b7bcccbb2a139fa5678409d86e6ce6b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!load\+\_\+install\+\_\+path@{load\+\_\+install\+\_\+path}}
+\index{load\+\_\+install\+\_\+path@{load\+\_\+install\+\_\+path}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{load\+\_\+install\+\_\+path(const char $\ast$arg)}{load_install_path(const char *arg)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ load\+\_\+install\+\_\+path (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{arg}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a27de15b7d54cedb409ae279f54c19b01}{}\label{jlibtool_8c_a27de15b7d54cedb409ae279f54c19b01}
+
+\begin{DoxyCode}
+959 \{
+960     FILE *\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f};
+961     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path};
+962 
+963     path = \hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX});
+964 
+965     f = fopen(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg},\textcolor{stringliteral}{"r"});
+966     \textcolor{keywordflow}{if} (f == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+967         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+968     \}
+969     \hyperlink{pcretest_8txt_ab7f0ba87211e31d6160eef5650b39b52}{fgets}(path, \hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}, f);
+970     fclose(f);
+971     \textcolor{keywordflow}{if} (path[strlen(path)-1] == \textcolor{charliteral}{'\(\backslash\)n'}) \{
+972         path[strlen(path)-1] = \textcolor{charliteral}{'\(\backslash\)0'};
+973     \}
+974     \textcolor{comment}{/* Check that we have an absolute path.}
+975 \textcolor{comment}{     * Otherwise the file could be a GNU libtool file.}
+976 \textcolor{comment}{     */}
+977     \textcolor{keywordflow}{if} (path[0] != \textcolor{charliteral}{'/'}) \{
+978         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+979     \}
+980     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path};
+981 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=250pt]{jlibtool_8c_a27de15b7d54cedb409ae279f54c19b01_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a27de15b7d54cedb409ae279f54c19b01_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!load\+\_\+noinstall\+\_\+path@{load\+\_\+noinstall\+\_\+path}}
+\index{load\+\_\+noinstall\+\_\+path@{load\+\_\+noinstall\+\_\+path}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{load\+\_\+noinstall\+\_\+path(const char $\ast$arg, int pathlen)}{load_noinstall_path(const char *arg, int pathlen)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ load\+\_\+noinstall\+\_\+path (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{arg, }
+\item[{{\bf int}}]{pathlen}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_afb0d0eaf36330f4a714cd35f846590ed}{}\label{jlibtool_8c_afb0d0eaf36330f4a714cd35f846590ed}
+
+\begin{DoxyCode}
+984 \{
+985     \textcolor{keywordtype}{char} *newarg, *expanded\_path;
+986     \textcolor{keywordtype}{int} newpathlen;
+987 
+988     newarg = (\textcolor{keywordtype}{char} *)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}) + 10);
+989     strcpy(newarg, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+990     newarg[pathlen] = 0;
+991 
+992     newpathlen = pathlen;
+993     strcat(newarg, \textcolor{stringliteral}{".libs"});
+994     newpathlen += \textcolor{keyword}{sizeof}(\textcolor{stringliteral}{".libs"}) - 1;
+995     newarg[newpathlen] = 0;
+996 
+997 \textcolor{preprocessor}{#ifdef HAS\_REALPATH}
+998     expanded\_path = \hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\hyperlink{jlibtool_8c_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX});
+999     expanded\_path = realpath(newarg, expanded\_path);
+1000     \textcolor{comment}{/* Uh, oh.  There was an error.  Fall back on our first guess. */}
+1001     \textcolor{keywordflow}{if} (!expanded\_path) \{
+1002         expanded\_path = newarg;
+1003     \}
+1004 \textcolor{preprocessor}{#else}
+1005     \textcolor{comment}{/* We might get ../ or something goofy.  Oh, well. */}
+1006     expanded\_path = newarg;
+1007 \textcolor{preprocessor}{#endif}
+1008 
+1009     \textcolor{keywordflow}{return} expanded\_path;
+1010 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=261pt]{jlibtool_8c_afb0d0eaf36330f4a714cd35f846590ed_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_afb0d0eaf36330f4a714cd35f846590ed_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!main@{main}}
+\index{main@{main}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a0ddf1224851353fc92bfbff6f499fa97}{}\label{jlibtool_8c_a0ddf1224851353fc92bfbff6f499fa97}
+
+\begin{DoxyCode}
+2011 \{
+2012     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+2013     \hyperlink{structcommand__t}{command\_t} cmd\_data;
+2014 
+2015     memset(&cmd\_data, 0, \textcolor{keyword}{sizeof}(cmd\_data));
+2016 
+2017     cmd\_data.\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aed4211854d35e2c2d37a59f59f5d7add}{pic\_mode} = \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a7c8be715f581c6cdfe66681865a0beb2}{pic\_UNKNOWN};
+2018 
+2019     cmd\_data.\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts} = (\hyperlink{structcount__chars}{count\_chars}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(
+      \hyperlink{structcount__chars}{count\_chars}));
+2020     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts});
+2021     cmd\_data.\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist} = (\hyperlink{structcount__chars}{count\_chars}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(
+      \hyperlink{structcount__chars}{count\_chars}));
+2022     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+2023     cmd\_data.\hyperlink{structcommand__t_a59ce72a2d719f4c49e3027aa41abe86a}{tmp\_dirs} = (\hyperlink{structcount__chars}{count\_chars}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(
+      \hyperlink{structcount__chars}{count\_chars}));
+2024     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_a59ce72a2d719f4c49e3027aa41abe86a}{tmp\_dirs});
+2025     cmd\_data.\hyperlink{structcommand__t_a98ae4574250fc2c45f6decd7b28dfb21}{obj\_files} = (\hyperlink{structcount__chars}{count\_chars}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(
+      \hyperlink{structcount__chars}{count\_chars}));
+2026     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_a98ae4574250fc2c45f6decd7b28dfb21}{obj\_files});
+2027     cmd\_data.\hyperlink{structcommand__t_a209378e7c863cae228690025a95e1747}{dep\_rpaths} = (\hyperlink{structcount__chars}{count\_chars}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(
+      \hyperlink{structcount__chars}{count\_chars}));
+2028     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_a209378e7c863cae228690025a95e1747}{dep\_rpaths});
+2029     cmd\_data.\hyperlink{structcommand__t_a7ccf305438f17150d10ea87f6f025f07}{rpaths} = (\hyperlink{structcount__chars}{count\_chars}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(
+      \hyperlink{structcount__chars}{count\_chars}));
+2030     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_a7ccf305438f17150d10ea87f6f025f07}{rpaths});
+2031     cmd\_data.\hyperlink{structcommand__t_af8226723c019e4346a0e58f8cf60969f}{static\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal} = (\hyperlink{structcount__chars}{count\_chars}*)
+      \hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(\hyperlink{structcount__chars}{count\_chars}));
+2032     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_af8226723c019e4346a0e58f8cf60969f}{static\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal});
+2033     cmd\_data.\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal} = (\hyperlink{structcount__chars}{count\_chars}*)
+      \hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(\hyperlink{structcount__chars}{count\_chars}));
+2034     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal});
+2035     cmd\_data.\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies} = (\hyperlink{structcount__chars}{count\_chars}*)
+      \hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(\hyperlink{structcount__chars}{count\_chars}));
+2036     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cmd\_data.\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.
+      \hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies});
+2037 
+2038     cmd\_data.\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} = \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a35c088b54f8e0f8853938ea9399313ac}{mUnknown};
+2039     cmd\_data.\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca133ad1ba1b8dd8acb5b6e17a0953321f}{otGeneral};
+2040 
+2041     \hyperlink{jlibtool_8c_af6b1d66500a2394823585ba185a8da12}{parse\_args}(\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}, &cmd\_data);
+2042     \hyperlink{jlibtool_8c_a8a3bf34bb255873f482a4f0371174578}{post\_parse\_fixup}(&cmd\_data);
+2043 
+2044     \textcolor{keywordflow}{if} (cmd\_data.\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} == \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a35c088b54f8e0f8853938ea9399313ac}{mUnknown}) \{
+2045         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(0);
+2046     \}
+2047 
+2048     rc = \hyperlink{jlibtool_8c_a4a1a749a78713447b3e2250b8567e6fb}{run\_mode}(&cmd\_data);
+2049 
+2050     \textcolor{keywordflow}{if} (!rc) \{
+2051        \hyperlink{jlibtool_8c_aa18ea13fd0f25167d6c54701f412ba4a}{add\_for\_runtime}(&cmd\_data); 
+2052     \}
+2053 
+2054     \hyperlink{jlibtool_8c_a39ddf6193c1da4c766d0ea51d725f76f}{cleanup\_tmp\_dirs}(&cmd\_data);
+2055     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+2056 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{jlibtool_8c_a0ddf1224851353fc92bfbff6f499fa97_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!nameof@{nameof}}
+\index{nameof@{nameof}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{nameof(const char $\ast$fullpath)}{nameof(const char *fullpath)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ nameof (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{fullpath}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a07311c4d583bbf8ebb3b477c1dae2bb2}{}\label{jlibtool_8c_a07311c4d583bbf8ebb3b477c1dae2bb2}
+
+\begin{DoxyCode}
+720 \{
+721     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name};
+722     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *ext;
+723 
+724     name = \hyperlink{jlibtool_8c_ab3fcab7e5654aad60313a6b9e80e13c1}{jlibtool\_basename}(fullpath);
+725     ext = strrchr(name, \textcolor{charliteral}{'.'});
+726 
+727     \textcolor{keywordflow}{if} (ext) \{
+728         \textcolor{keywordtype}{char} *trimmed;
+729         trimmed = \hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(ext - name + 1);
+730         strncpy(trimmed, name, ext - name);
+731         trimmed[ext-\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}] = 0;
+732         \textcolor{keywordflow}{return} trimmed;
+733     \}
+734 
+735     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name};
+736 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=260pt]{jlibtool_8c_a07311c4d583bbf8ebb3b477c1dae2bb2_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{jlibtool_8c_a07311c4d583bbf8ebb3b477c1dae2bb2_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!parse\+\_\+args@{parse\+\_\+args}}
+\index{parse\+\_\+args@{parse\+\_\+args}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{parse\+\_\+args(int argc, char $\ast$argv[], command\+\_\+t $\ast$cmd\+\_\+data)}{parse_args(int argc, char *argv[], command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} parse\+\_\+args (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_af6b1d66500a2394823585ba185a8da12}{}\label{jlibtool_8c_af6b1d66500a2394823585ba185a8da12}
+
+\begin{DoxyCode}
+1498 \{
+1499     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a};
+1500     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1501     \textcolor{keywordtype}{int} argused;
+1502 
+1503     \textcolor{keywordflow}{for} (a = 1; a < \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}; a++) \{
+1504         arg = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}];
+1505         argused = 1;
+1506 
+1507         \textcolor{keywordflow}{if} (arg[0] == \textcolor{charliteral}{'-'}) \{
+1508             \textcolor{keywordflow}{if} (arg[1] == \textcolor{charliteral}{'-'}) \{
+1509                 argused = \hyperlink{jlibtool_8c_af8c3930b9ac3d6fa06a8b488fc370767}{parse\_long\_opt}(arg + 2, cmd\_data);
+1510             \}
+1511             \textcolor{keywordflow}{else} \{
+1512                 argused = \hyperlink{jlibtool_8c_a7ab34d07a01bb5f0b3cf713598c345b0}{parse\_short\_opt}(arg + 1, cmd\_data);
+1513             \}
+1514 
+1515             \textcolor{comment}{/* We haven't done anything with it yet, try some of the}
+1516 \textcolor{comment}{             * more complicated short opts... */}
+1517             \textcolor{keywordflow}{if} (argused == 0 && a + 1 < argc) \{
+1518                 \textcolor{keywordflow}{if} (arg[1] == \textcolor{charliteral}{'o'} && !arg[2]) \{
+1519                     arg = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[++\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}];
+1520                     argused = \hyperlink{jlibtool_8c_a20e0830453e41067c512bd0c955cfb4f}{parse\_output\_file\_name}(arg, cmd\_data);
+1521                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(arg+1, \textcolor{stringliteral}{"MT"}) == 0) \{
+1522                     \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+1523                         printf(\textcolor{stringliteral}{"Adding: %s\(\backslash\)n"}, arg);
+1524                     \}
+1525                     \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, arg);
+1526                     arg = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[++\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}];
+1527                     \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+1528                         printf(\textcolor{stringliteral}{" %s\(\backslash\)n"}, arg);
+1529                     \}
+1530                     \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, arg);
+1531                     argused = 1;
+1532                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(arg+1, \textcolor{stringliteral}{"rpath"}) == 0) \{
+1533                     \textcolor{comment}{/* Aha, we should try to link both! */}
+1534                     cmd\_data->\hyperlink{structcommand__t_a9a12ae8781cad01c7b3442cd5e74817b}{install\_path} = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[++\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}];
+1535                     argused = 1;
+1536                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(arg+1, \textcolor{stringliteral}{"release"}) == 0) \{
+1537                     \textcolor{comment}{/* Store for later deciphering */}
+1538                     cmd\_data->\hyperlink{structcommand__t_a0481afee06e3820c8f43a5ccc7bdaed2}{version\_info} = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[++\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}];
+1539                     argused = 1;
+1540                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(arg+1, \textcolor{stringliteral}{"version-info"}) == 0) \{
+1541                     \textcolor{comment}{/* Store for later deciphering */}
+1542                     cmd\_data->\hyperlink{structcommand__t_a0481afee06e3820c8f43a5ccc7bdaed2}{version\_info} = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[++\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}];
+1543                     argused = 1;
+1544                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(arg+1, \textcolor{stringliteral}{"export-symbols-regex"}) == 0) \{
+1545                     \textcolor{comment}{/* Skip the argument. */}
+1546                     ++\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a};
+1547                     argused = 1;
+1548                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(arg+1, \textcolor{stringliteral}{"release"}) == 0) \{
+1549                     \textcolor{comment}{/* Skip the argument. */}
+1550                     ++\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a};
+1551                     argused = 1;
+1552                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(arg+1, \textcolor{stringliteral}{"undefined"}) == 0) \{
+1553                     cmd\_data->\hyperlink{structcommand__t_a6a8b2427bbd4cb4bbe5e7470a109ebe5}{undefined\_flag} = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[++\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}];
+1554                     argused = 1;
+1555                 \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (arg[1] == \textcolor{charliteral}{'R'} && !arg[2]) \{
+1556                     \textcolor{comment}{/* -R dir Add dir to runtime library search path. */}
+1557                     \hyperlink{jlibtool_8c_ae4287e4f104f42367e3df1551e407ee3}{add\_runtimedirlib}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[++a], cmd\_data);
+1558                     argused = 1;
+1559                 \}
+1560             \}
+1561         \} \textcolor{keywordflow}{else} \{
+1562             argused = \hyperlink{jlibtool_8c_a87826bc22a5f63248389fe3d6d2573c2}{parse\_input\_file\_name}(arg, cmd\_data);
+1563         \}
+1564 
+1565         \textcolor{keywordflow}{if} (!argused) \{
+1566             \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent}) \{
+1567                 printf(\textcolor{stringliteral}{"Adding: %s\(\backslash\)n"}, arg);
+1568             \}
+1569             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, arg);
+1570         \}
+1571     \}
+1572 
+1573 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_af6b1d66500a2394823585ba185a8da12_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=219pt]{jlibtool_8c_af6b1d66500a2394823585ba185a8da12_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!parse\+\_\+input\+\_\+file\+\_\+name@{parse\+\_\+input\+\_\+file\+\_\+name}}
+\index{parse\+\_\+input\+\_\+file\+\_\+name@{parse\+\_\+input\+\_\+file\+\_\+name}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{parse\+\_\+input\+\_\+file\+\_\+name(char $\ast$arg, command\+\_\+t $\ast$cmd\+\_\+data)}{parse_input_file_name(char *arg, command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} parse\+\_\+input\+\_\+file\+\_\+name (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{arg, }
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a87826bc22a5f63248389fe3d6d2573c2}{}\label{jlibtool_8c_a87826bc22a5f63248389fe3d6d2573c2}
+
+\begin{DoxyCode}
+1269 \{
+1270     \textcolor{keywordtype}{char} *ext = strrchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'.'});
+1271     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name} = strrchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'/'});
+1272     \textcolor{keywordtype}{int} pathlen;
+1273     \textcolor{keyword}{enum} \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eea}{lib\_type} libtype;
+1274     \textcolor{keywordtype}{char} *newarg;
+1275 
+1276     \textcolor{keywordflow}{if} (!ext) \{
+1277         \textcolor{keywordflow}{return} 0;
+1278     \}
+1279 
+1280     ext++;
+1281 
+1282     \textcolor{keywordflow}{if} (name == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1283         name = strrchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'});
+1284 
+1285         \textcolor{keywordflow}{if} (name == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1286             name = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1287         \} \textcolor{keywordflow}{else} \{
+1288             name++;
+1289         \}
+1290     \} \textcolor{keywordflow}{else} \{
+1291         name++;
+1292     \}
+1293 
+1294     pathlen = name - \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1295 
+1296     \textcolor{keywordflow}{if} (strcmp(ext, \textcolor{stringliteral}{"lo"}) == 0) \{
+1297         newarg = \hyperlink{jlibtool_8c_ae9adef83ae36fb1555d61cecd383b7bb}{check\_object\_exists}(cmd\_data, arg, ext - arg);
+1298         \textcolor{keywordflow}{if} (!newarg) \{
+1299             printf(\textcolor{stringliteral}{"Can not find suitable object file for %s\(\backslash\)n"}, arg);
+1300             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+1301         \}
+1302         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} != \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink}) \{
+1303             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, newarg);
+1304         \}
+1305         \textcolor{keywordflow}{else} \{
+1306             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a98ae4574250fc2c45f6decd7b28dfb21}{obj\_files}, newarg);
+1307         \}
+1308         \textcolor{keywordflow}{return} 1;
+1309     \}
+1310 
+1311     \textcolor{keywordflow}{if} (strcmp(ext, \textcolor{stringliteral}{"la"}) == 0) \{
+1312         \textcolor{keywordflow}{switch} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode}) \{
+1313         \textcolor{keywordflow}{case} \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink}:
+1314             \textcolor{comment}{/* Try the .libs dir first! */}
+1315             newarg = \hyperlink{jlibtool_8c_aa826c11573aa30a57b67fe324d074ac2}{check\_library\_exists}(cmd\_data, arg, pathlen, 1, &libtype);
+1316             \textcolor{keywordflow}{if} (!newarg) \{
+1317                 \textcolor{comment}{/* Try the normal dir next. */}
+1318                 newarg = \hyperlink{jlibtool_8c_aa826c11573aa30a57b67fe324d074ac2}{check\_library\_exists}(cmd\_data, arg, pathlen, 0, &libtype);
+1319                 \textcolor{keywordflow}{if} (!newarg) \{
+1320                     printf(\textcolor{stringliteral}{"Can not find suitable library for %s\(\backslash\)n"}, arg);
+1321                     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+1322                 \}
+1323             \}
+1324 
+1325             \textcolor{comment}{/* It is not ok to just add the file: a library may added with:}
+1326 \textcolor{comment}{               1 - -L path library\_name. (For *.so in Linux).}
+1327 \textcolor{comment}{               2 - library\_name.}
+1328 \textcolor{comment}{             */}
+1329 \textcolor{preprocessor}{#ifdef ADD\_MINUS\_L}
+1330             \textcolor{keywordflow}{if} (libtype == \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa710eac0137d6028755338a13e2cb6d70}{type\_DYNAMIC\_LIB}) \{
+1331                  \hyperlink{jlibtool_8c_a7d23120264beeebc44a8e794ce6b070f}{add\_minus\_l}(cmd\_data->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.
+      \hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies}, newarg);
+1332             \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary} &&
+1333                        libtype == \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaadadce705a76585089f76fcfc60cd9040}{type\_STATIC\_LIB}) \{
+1334                 \hyperlink{jlibtool_8c_a9c661acdbeca948512135bdfa60d005c}{explode\_static\_lib}(cmd\_data, newarg);
+1335             \} \textcolor{keywordflow}{else} \{
+1336                  \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.
+      \hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies}, newarg);
+1337             \}
+1338 \textcolor{preprocessor}{#else}
+1339             \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary} && libtype == 
+      \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaadadce705a76585089f76fcfc60cd9040}{type\_STATIC\_LIB}) \{
+1340                 \hyperlink{jlibtool_8c_a9c661acdbeca948512135bdfa60d005c}{explode\_static\_lib}(cmd\_data, newarg);
+1341             \}
+1342             \textcolor{keywordflow}{else} \{
+1343                 \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.
+      \hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies}, newarg);
+1344             \}
+1345 \textcolor{preprocessor}{#endif}
+1346             \textcolor{keywordflow}{if} (libtype == \hyperlink{jlibtool_8c_a0ea96dd3d96fb207d01d1416f2db2eeaa710eac0137d6028755338a13e2cb6d70}{type\_DYNAMIC\_LIB}) \{
+1347                 \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a90eefacc16c51e3b259580633858f430}{no\_install}) \{
+1348 \textcolor{preprocessor}{#ifdef RPATH}
+1349                     add\_rpath\_noinstall(cmd\_data->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.
+      \hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies},
+1350                                         arg, pathlen);
+1351 \textcolor{preprocessor}{#endif}
+1352 \textcolor{preprocessor}{#ifdef DYNAMIC\_LINK\_NO\_INSTALL}
+1353                     \textcolor{comment}{/*}
+1354 \textcolor{comment}{                     * This doesn't work as Darwin's linker has no way to}
+1355 \textcolor{comment}{                     * override at link-time the search paths for a}
+1356 \textcolor{comment}{                     * non-installed library.}
+1357 \textcolor{comment}{                     */}
+1358                     \textcolor{comment}{/*}
+1359 \textcolor{comment}{                    add\_dylink\_noinstall(cmd\_data->shared\_opts.dependencies,}
+1360 \textcolor{comment}{                                         arg, pathlen, ext - arg);}
+1361 \textcolor{comment}{                    */}
+1362 \textcolor{preprocessor}{#endif}
+1363                 \}
+1364                 \textcolor{keywordflow}{else} \{
+1365 \textcolor{preprocessor}{#ifdef RPATH}
+1366                     add\_rpath\_file(cmd\_data->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.\hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies}, arg);
+1367 \textcolor{preprocessor}{#endif}
+1368                 \}
+1369             \}
+1370             \textcolor{keywordflow}{break};
+1371         \textcolor{keywordflow}{case} \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{mInstall}:
+1372             \textcolor{comment}{/* If we've already recorded a library to install, we're most}
+1373 \textcolor{comment}{             * likely getting the .la file that we want to install as.}
+1374 \textcolor{comment}{             * The problem is that we need to add it as the directory,}
+1375 \textcolor{comment}{             * not the .la file itself.  Otherwise, we'll do odd things.}
+1376 \textcolor{comment}{             */}
+1377             \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary}) \{
+1378                 arg[pathlen] = \textcolor{charliteral}{'\(\backslash\)0'};
+1379                 \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, arg);
+1380             \}
+1381             \textcolor{keywordflow}{else} \{
+1382                 cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary};
+1383                 cmd\_data->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1384                 cmd\_data->\hyperlink{structcommand__t_a01000f3a9b0c640de2b4e7ecf8fe963d}{static\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install} = 
+      \hyperlink{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}{gen\_install\_name}(arg, 0);
+1385                 cmd\_data->\hyperlink{structcommand__t_ae7710fc5599d65e7e23a09db78428189}{shared\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install} = 
+      \hyperlink{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}{gen\_install\_name}(arg, 1);
+1386                 cmd\_data->\hyperlink{structcommand__t_a643313eb225f71780cc53d48a2813a85}{module\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install} = 
+      \hyperlink{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}{gen\_install\_name}(arg, 2);
+1387             \}
+1388             \textcolor{keywordflow}{break};
+1389         \textcolor{keywordflow}{default}:
+1390             \textcolor{keywordflow}{break};
+1391         \}
+1392         \textcolor{keywordflow}{return} 1;
+1393     \}
+1394 
+1395     \textcolor{keywordflow}{if} (strcmp(ext, \textcolor{stringliteral}{"c"}) == 0) \{
+1396         \textcolor{comment}{/* If we don't already have an idea what our output name will be. */}
+1397         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1398             cmd\_data->\hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename} = (\textcolor{keywordtype}{char} *)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(arg) + 4);
+1399             strcpy(cmd\_data->\hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename}, arg);
+1400             strcpy(strrchr(cmd\_data->\hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename}, \textcolor{charliteral}{'.'}) + 1, \textcolor{stringliteral}{"lo"});
+1401 
+1402             cmd\_data->\hyperlink{structcommand__t_af54b7d7afd263340fd76962434f7aeb5}{fake\_output\_name} = strrchr(cmd\_data->
+      \hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename}, \textcolor{charliteral}{'/'});
+1403             \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_af54b7d7afd263340fd76962434f7aeb5}{fake\_output\_name}) \{
+1404                 cmd\_data->\hyperlink{structcommand__t_af54b7d7afd263340fd76962434f7aeb5}{fake\_output\_name}++;
+1405             \}
+1406             \textcolor{keywordflow}{else} \{
+1407                 cmd\_data->\hyperlink{structcommand__t_af54b7d7afd263340fd76962434f7aeb5}{fake\_output\_name} = cmd\_data->\hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename};
+1408             \}
+1409         \}
+1410     \}
+1411 
+1412     \textcolor{keywordflow}{return} 0;
+1413 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a87826bc22a5f63248389fe3d6d2573c2_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a87826bc22a5f63248389fe3d6d2573c2_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!parse\+\_\+long\+\_\+opt@{parse\+\_\+long\+\_\+opt}}
+\index{parse\+\_\+long\+\_\+opt@{parse\+\_\+long\+\_\+opt}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{parse\+\_\+long\+\_\+opt(char $\ast$arg, command\+\_\+t $\ast$cmd\+\_\+data)}{parse_long_opt(char *arg, command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} parse\+\_\+long\+\_\+opt (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{arg, }
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_af8c3930b9ac3d6fa06a8b488fc370767}{}\label{jlibtool_8c_af8c3930b9ac3d6fa06a8b488fc370767}
+
+\begin{DoxyCode}
+524 \{
+525     \textcolor{keywordtype}{char} *equal\_pos = strchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'='});
+526     \textcolor{keywordtype}{char} \hyperlink{group__MOD__PROXY_ga81bb7fed3eaa4dd24455759f1cb26176}{var}[50];
+527     \textcolor{keywordtype}{char} \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}[500];
+528 
+529     \textcolor{keywordflow}{if} (equal\_pos) \{
+530         strncpy(var, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, equal\_pos - \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+531         var[equal\_pos - \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}] = 0;
+532         strcpy(value, equal\_pos + 1);
+533     \} \textcolor{keywordflow}{else} \{
+534         strcpy(var, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+535     \}
+536 
+537     \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"silent"}) == 0) \{
+538         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a4003119916f574a1f52bcd8d9373e989}{silent} = 1;
+539     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"mode"}) == 0) \{
+540         \textcolor{keywordflow}{if} (strcmp(value, \textcolor{stringliteral}{"compile"}) == 0) \{
+541             cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} = \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54aee6011f6f8d6045058675b115f49cdbd}{mCompile};
+542             cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca21739fb13ce0eaa7ef4c7565f5f71b79}{otObject};
+543         \}
+544 
+545         \textcolor{keywordflow}{if} (strcmp(value, \textcolor{stringliteral}{"link"}) == 0) \{
+546             cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} = \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink};
+547             cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary};
+548         \}
+549 
+550         \textcolor{keywordflow}{if} (strcmp(value, \textcolor{stringliteral}{"install"}) == 0) \{
+551             cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} = \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{mInstall};
+552         \}
+553     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"shared"}) == 0) \{
+554         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} == \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink}) \{
+555             cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly};
+556         \}
+557         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_ada7e7fabb6fa763bb613576b005d9ebb}{shared} = \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7aa1a0c4542b0d2d51eb0796d3f250142c}{share\_SHARED};
+558     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"export-all"}) == 0) \{
+559         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_ae55377513b239904f00b9d96c056ef32}{export\_all} = 1;
+560     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"dry-run"}) == 0) \{
+561         printf(\textcolor{stringliteral}{"Dry-run mode on!\(\backslash\)n"});
+562         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aaa396db773355addeefffab83395c627}{dry\_run} = 1;
+563     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"version"}) == 0) \{
+564         printf(\textcolor{stringliteral}{"Version "} \hyperlink{jlibtool_8c_a1c6d5de492ac61ad29aec7aa9a436bbf}{VERSION} \textcolor{stringliteral}{"\(\backslash\)n"});
+565     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"help"}) == 0) \{
+566         printf(\textcolor{stringliteral}{"Sorry.  No help available.\(\backslash\)n"});
+567     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"config"}) == 0) \{
+568         \hyperlink{jlibtool_8c_ac7c8d9e5c9b0a3e2904557cbd5d20c32}{print\_config}();
+569     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(var, \textcolor{stringliteral}{"tag"}) == 0) \{
+570         \textcolor{keywordflow}{if} (strcmp(value, \textcolor{stringliteral}{"CC"}) == 0) \{
+571             \textcolor{comment}{/* Do nothing. */}
+572         \}
+573         \textcolor{keywordflow}{if} (strcmp(value, \textcolor{stringliteral}{"CXX"}) == 0) \{
+574             \textcolor{comment}{/* Do nothing. */}
+575         \}
+576     \} \textcolor{keywordflow}{else} \{
+577         \textcolor{keywordflow}{return} 0;
+578     \}
+579 
+580     \textcolor{keywordflow}{return} 1;
+581 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=266pt]{jlibtool_8c_af8c3930b9ac3d6fa06a8b488fc370767_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=338pt]{jlibtool_8c_af8c3930b9ac3d6fa06a8b488fc370767_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!parse\+\_\+output\+\_\+file\+\_\+name@{parse\+\_\+output\+\_\+file\+\_\+name}}
+\index{parse\+\_\+output\+\_\+file\+\_\+name@{parse\+\_\+output\+\_\+file\+\_\+name}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{parse\+\_\+output\+\_\+file\+\_\+name(char $\ast$arg, command\+\_\+t $\ast$cmd\+\_\+data)}{parse_output_file_name(char *arg, command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} parse\+\_\+output\+\_\+file\+\_\+name (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{arg, }
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a20e0830453e41067c512bd0c955cfb4f}{}\label{jlibtool_8c_a20e0830453e41067c512bd0c955cfb4f}
+
+\begin{DoxyCode}
+1416 \{
+1417     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name} = strrchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'/'});
+1418     \textcolor{keywordtype}{char} *ext = strrchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'.'});
+1419     \textcolor{keywordtype}{char} *newarg = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1420     \textcolor{keywordtype}{int} pathlen;
+1421 
+1422     cmd\_data->\hyperlink{structcommand__t_af54b7d7afd263340fd76962434f7aeb5}{fake\_output\_name} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1423 
+1424     \textcolor{keywordflow}{if} (name) \{
+1425         name++;
+1426     \}
+1427     \textcolor{keywordflow}{else} \{
+1428         name = strrchr(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'});
+1429 
+1430         \textcolor{keywordflow}{if} (name == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1431             name = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1432         \}
+1433         \textcolor{keywordflow}{else} \{
+1434             name++;
+1435         \}
+1436     \}
+1437 
+1438 \textcolor{preprocessor}{#ifdef EXE\_EXT}
+1439     \textcolor{keywordflow}{if} (!ext || strcmp(ext, EXE\_EXT) == 0) \{
+1440 \textcolor{preprocessor}{#else}
+1441     \textcolor{keywordflow}{if} (!ext) \{
+1442 \textcolor{preprocessor}{#endif}
+1443         cmd\_data->\hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1444         cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca07a21848098a9fa3ee69f34b07bebf50}{otProgram};
+1445 \textcolor{preprocessor}{#if defined(\_OSD\_POSIX)}
+1446         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aed4211854d35e2c2d37a59f59f5d7add}{pic\_mode} = \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{pic\_AVOID};
+1447 \textcolor{preprocessor}{#endif}
+1448         newarg = (\textcolor{keywordtype}{char} *)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}) + 5);
+1449         strcpy(newarg, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+1450 \textcolor{preprocessor}{#ifdef EXE\_EXT}
+1451         \textcolor{keywordflow}{if} (!ext) \{
+1452             strcat(newarg, EXE\_EXT);
+1453         \}
+1454 \textcolor{preprocessor}{#endif}
+1455         cmd\_data->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name} = newarg;
+1456         \textcolor{keywordflow}{return} 1;
+1457     \}
+1458 
+1459     ext++;
+1460     pathlen = name - \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1461 
+1462     \textcolor{keywordflow}{if} (strcmp(ext, \textcolor{stringliteral}{"la"}) == 0) \{
+1463         assert(cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} == \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink});
+1464 
+1465         cmd\_data->\hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1466         cmd\_data->\hyperlink{structcommand__t_a01000f3a9b0c640de2b4e7ecf8fe963d}{static\_name}.\hyperlink{structlibrary__name_adcb558772c92c93af0ec6ab6535c73d9}{normal} = \hyperlink{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196}{gen\_library\_name}(arg, 0);
+1467         cmd\_data->\hyperlink{structcommand__t_ae7710fc5599d65e7e23a09db78428189}{shared\_name}.\hyperlink{structlibrary__name_adcb558772c92c93af0ec6ab6535c73d9}{normal} = \hyperlink{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196}{gen\_library\_name}(arg, 1);
+1468         cmd\_data->\hyperlink{structcommand__t_a643313eb225f71780cc53d48a2813a85}{module\_name}.\hyperlink{structlibrary__name_adcb558772c92c93af0ec6ab6535c73d9}{normal} = \hyperlink{jlibtool_8c_a3541e2fda4b587e964ba198037eb4196}{gen\_library\_name}(arg, 2);
+1469         cmd\_data->\hyperlink{structcommand__t_a01000f3a9b0c640de2b4e7ecf8fe963d}{static\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install} = \hyperlink{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}{gen\_install\_name}(arg, 0);
+1470         cmd\_data->\hyperlink{structcommand__t_ae7710fc5599d65e7e23a09db78428189}{shared\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install} = \hyperlink{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}{gen\_install\_name}(arg, 1);
+1471         cmd\_data->\hyperlink{structcommand__t_a643313eb225f71780cc53d48a2813a85}{module\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install} = \hyperlink{jlibtool_8c_a5bbad5aa661c3a46d26e4f5dd6d60392}{gen\_install\_name}(arg, 2);
+1472 
+1473 \textcolor{preprocessor}{#ifdef TRUNCATE\_DLL\_NAME}
+1474         \textcolor{keywordflow}{if} (\hyperlink{aplibtool_8c_a99ec2b032d474191fd477772cde15036}{shared}) \{
+1475           arg = \hyperlink{jlibtool_8c_a88a4b902ca11d404e1c05fd1b5d04c71}{truncate\_dll\_name}(arg);
+1476         \}
+1477 \textcolor{preprocessor}{#endif}
+1478 
+1479         cmd\_data->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1480         \textcolor{keywordflow}{return} 1;
+1481     \}
+1482 
+1483     \textcolor{keywordflow}{if} (strcmp(ext, \textcolor{stringliteral}{"lo"}) == 0) \{
+1484         cmd\_data->\hyperlink{structcommand__t_a78695c3792a2ef8e8213ea2ba378c4a2}{basename} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1485         cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca21739fb13ce0eaa7ef4c7565f5f71b79}{otObject};
+1486         newarg = (\textcolor{keywordtype}{char} *)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(strlen(arg) + 2);
+1487         strcpy(newarg, arg);
+1488         ext = strrchr(newarg, \textcolor{charliteral}{'.'}) + 1;
+1489         strcpy(ext, OBJECT\_EXT);
+1490         cmd\_data->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name} = newarg;
+1491         \textcolor{keywordflow}{return} 1;
+1492     \}
+1493 
+1494     \textcolor{keywordflow}{return} 0;
+1495 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a20e0830453e41067c512bd0c955cfb4f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a20e0830453e41067c512bd0c955cfb4f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!parse\+\_\+short\+\_\+opt@{parse\+\_\+short\+\_\+opt}}
+\index{parse\+\_\+short\+\_\+opt@{parse\+\_\+short\+\_\+opt}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{parse\+\_\+short\+\_\+opt(char $\ast$arg, command\+\_\+t $\ast$cmd\+\_\+data)}{parse_short_opt(char *arg, command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} parse\+\_\+short\+\_\+opt (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{arg, }
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a7ab34d07a01bb5f0b3cf713598c345b0}{}\label{jlibtool_8c_a7ab34d07a01bb5f0b3cf713598c345b0}
+
+\begin{DoxyCode}
+585 \{
+586     \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"export-dynamic"}) == 0) \{
+587         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a7a7049a86168876f7c948f48bb5c39a2}{export\_dynamic} = 1;
+588         \textcolor{keywordflow}{return} 1;
+589     \}
+590 
+591     \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"module"}) == 0) \{
+592         cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{otModule};
+593         \textcolor{keywordflow}{return} 1;
+594     \}
+595 
+596     \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"shared"}) == 0) \{
+597         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} == \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink}) \{
+598             cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} = \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly};
+599         \}
+600         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_ada7e7fabb6fa763bb613576b005d9ebb}{shared} = \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7aa1a0c4542b0d2d51eb0796d3f250142c}{share\_SHARED};
+601         \textcolor{keywordflow}{return} 1;
+602     \}
+603 
+604     \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"Zexe"}) == 0) \{
+605         \textcolor{keywordflow}{return} 1;
+606     \}
+607 
+608     \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"avoid-version"}) == 0) \{
+609         \textcolor{keywordflow}{return} 1;
+610     \}
+611 
+612     \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"prefer-pic"}) == 0) \{
+613         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aed4211854d35e2c2d37a59f59f5d7add}{pic\_mode} = \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7a55f6572496f2d2599006822034b4ff08}{pic\_PREFER};
+614         \textcolor{keywordflow}{return} 1;
+615     \}
+616 
+617     \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"prefer-non-pic"}) == 0) \{
+618         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aed4211854d35e2c2d37a59f59f5d7add}{pic\_mode} = \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{pic\_AVOID};
+619         \textcolor{keywordflow}{return} 1;
+620     \}
+621 
+622     \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"static"}) == 0) \{
+623         cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_ada7e7fabb6fa763bb613576b005d9ebb}{shared} = \hyperlink{jlibtool_8c_a1856ee0ca4f47c05fd68b88cadaab1b7a271451515d9133b384acb49fdcacbe40}{share\_STATIC};
+624         \textcolor{keywordflow}{return} 1;
+625     \}
+626 
+627     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode} == \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink}) \{
+628         \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{stringliteral}{"no-install"}) == 0) \{
+629             cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_a90eefacc16c51e3b259580633858f430}{no\_install} = 1;
+630             \textcolor{keywordflow}{return} 1;
+631         \}
+632         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}[0] == \textcolor{charliteral}{'L'} || \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}[0] == \textcolor{charliteral}{'l'}) \{
+633             \textcolor{comment}{/* Hack... */}
+634             \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}--;
+635             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.
+      \hyperlink{structlibrary__opts_a6c2bbecd5e4f75d14e7892eda54843c9}{dependencies}, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+636             \textcolor{keywordflow}{return} 1;
+637         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}[0] == \textcolor{charliteral}{'R'} && \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}[1]) \{
+638             \textcolor{comment}{/* -Rdir Add dir to runtime library search path. */}
+639             \hyperlink{jlibtool_8c_ae4287e4f104f42367e3df1551e407ee3}{add\_runtimedirlib}(&\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}[1], cmd\_data);
+640             \textcolor{keywordflow}{return} 1;
+641         \}
+642     \}
+643     \textcolor{keywordflow}{return} 0;
+644 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{jlibtool_8c_a7ab34d07a01bb5f0b3cf713598c345b0_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=341pt]{jlibtool_8c_a7ab34d07a01bb5f0b3cf713598c345b0_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!pop\+\_\+count\+\_\+chars@{pop\+\_\+count\+\_\+chars}}
+\index{pop\+\_\+count\+\_\+chars@{pop\+\_\+count\+\_\+chars}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{pop\+\_\+count\+\_\+chars(count\+\_\+chars $\ast$cc)}{pop_count_chars(count_chars *cc)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} pop\+\_\+count\+\_\+chars (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a9bdb91efc34e958992c13b6f71667ad5}{}\label{jlibtool_8c_a9bdb91efc34e958992c13b6f71667ad5}
+
+\begin{DoxyCode}
+345 \{
+346     cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}--;
+347 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a9bdb91efc34e958992c13b6f71667ad5_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!post\+\_\+parse\+\_\+fixup@{post\+\_\+parse\+\_\+fixup}}
+\index{post\+\_\+parse\+\_\+fixup@{post\+\_\+parse\+\_\+fixup}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{post\+\_\+parse\+\_\+fixup(command\+\_\+t $\ast$cmd\+\_\+data)}{post_parse_fixup(command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} post\+\_\+parse\+\_\+fixup (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a8a3bf34bb255873f482a4f0371174578}{}\label{jlibtool_8c_a8a3bf34bb255873f482a4f0371174578}
+
+\begin{DoxyCode}
+1718 \{
+1719     \textcolor{keywordflow}{switch} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode})
+1720     \{
+1721     \textcolor{keywordflow}{case} \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54aee6011f6f8d6045058675b115f49cdbd}{mCompile}:
+1722 \textcolor{preprocessor}{#ifdef PIC\_FLAG}
+1723         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aed4211854d35e2c2d37a59f59f5d7add}{pic\_mode} != \hyperlink{jlibtool_8c_ad545e201a345fc3d693e387abe3185e7ac259462ed583bfe597d19e92ac610c5b}{pic\_AVOID}) \{
+1724             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, PIC\_FLAG);
+1725         \}
+1726 \textcolor{preprocessor}{#endif}
+1727         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name}) \{
+1728             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, \textcolor{stringliteral}{"-o"});
+1729             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, cmd\_data->
+      \hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name});
+1730         \}
+1731         \textcolor{keywordflow}{break};
+1732     \textcolor{keywordflow}{case} \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink}:
+1733         \hyperlink{jlibtool_8c_a0b7bcccbb2a139fa5678409d86e6ce6b}{link\_fixup}(cmd\_data);
+1734         \textcolor{keywordflow}{break};
+1735     \textcolor{keywordflow}{case} \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{mInstall}:
+1736         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary}) \{
+1737             \hyperlink{jlibtool_8c_a0b7bcccbb2a139fa5678409d86e6ce6b}{link\_fixup}(cmd\_data);
+1738         \}
+1739     \textcolor{keywordflow}{default}:
+1740         \textcolor{keywordflow}{break};
+1741     \}
+1742 
+1743 \textcolor{preprocessor}{#if USE\_OMF}
+1744     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca21739fb13ce0eaa7ef4c7565f5f71b79}{otObject} ||
+1745         cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca07a21848098a9fa3ee69f34b07bebf50}{otProgram} ||
+1746         cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary} ||
+1747         cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly}) \{
+1748         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, \textcolor{stringliteral}{"-Zomf"});
+1749     \}
+1750 \textcolor{preprocessor}{#endif}
+1751 
+1752     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_ada7e7fabb6fa763bb613576b005d9ebb}{shared} &&
+1753             (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca21739fb13ce0eaa7ef4c7565f5f71b79}{otObject} ||
+1754              cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary} ||
+1755              cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly})) \{
+1756 \textcolor{preprocessor}{#ifdef SHARE\_SW}
+1757         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}, SHARE\_SW);
+1758 \textcolor{preprocessor}{#endif}
+1759     \}
+1760 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a8a3bf34bb255873f482a4f0371174578_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=245pt]{jlibtool_8c_a8a3bf34bb255873f482a4f0371174578_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!print\+\_\+config@{print\+\_\+config}}
+\index{print\+\_\+config@{print\+\_\+config}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{print\+\_\+config()}{print_config()}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} print\+\_\+config (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ac7c8d9e5c9b0a3e2904557cbd5d20c32}{}\label{jlibtool_8c_ac7c8d9e5c9b0a3e2904557cbd5d20c32}
+
+\begin{DoxyCode}
+501 \{
+502 \textcolor{preprocessor}{#ifdef LD\_RUN\_PATH}
+503     printf(\textcolor{stringliteral}{"runpath\_var=%s\(\backslash\)n"}, LD\_RUN\_PATH);
+504 \textcolor{preprocessor}{#endif}
+505 \textcolor{preprocessor}{#ifdef LD\_LIBRARY\_PATH}
+506     printf(\textcolor{stringliteral}{"shlibpath\_var=%s\(\backslash\)n"}, LD\_LIBRARY\_PATH);
+507 \textcolor{preprocessor}{#endif}
+508 \textcolor{preprocessor}{#ifdef SHELL\_CMD}
+509     printf(\textcolor{stringliteral}{"SHELL=\(\backslash\)"%s\(\backslash\)"\(\backslash\)n"}, SHELL\_CMD);
+510 \textcolor{preprocessor}{#endif}
+511 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ac7c8d9e5c9b0a3e2904557cbd5d20c32_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!push\+\_\+count\+\_\+chars@{push\+\_\+count\+\_\+chars}}
+\index{push\+\_\+count\+\_\+chars@{push\+\_\+count\+\_\+chars}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{push\+\_\+count\+\_\+chars(count\+\_\+chars $\ast$cc, const char $\ast$newval)}{push_count_chars(count_chars *cc, const char *newval)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} push\+\_\+count\+\_\+chars (
+\begin{DoxyParamCaption}
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc, }
+\item[{const char $\ast$}]{newval}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{}\label{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}
+
+\begin{DoxyCode}
+340 \{
+341     cc->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[cc->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num}++] = newval;
+342 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!run\+\_\+command@{run\+\_\+command}}
+\index{run\+\_\+command@{run\+\_\+command}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{run\+\_\+command(command\+\_\+t $\ast$cmd\+\_\+data, count\+\_\+chars $\ast$cc)}{run_command(command_t *cmd_data, count_chars *cc)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} run\+\_\+command (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data, }
+\item[{{\bf count\+\_\+chars} $\ast$}]{cc}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{}\label{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}
+
+\begin{DoxyCode}
+472 \{
+473     \textcolor{keywordtype}{char} *\hyperlink{pcre_8txt_af29527e37cc7b19ef4261feb5b8a831d}{command};
+474     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *spawn\_args[4];
+475     \hyperlink{structcount__chars}{count\_chars} tmpcc;
+476 
+477     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(&tmpcc);
+478 
+479     \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_acbe7a361efbbb25cae2c5e5eead0a70a}{program}) \{
+480         \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(&tmpcc, cmd\_data->\hyperlink{structcommand__t_acbe7a361efbbb25cae2c5e5eead0a70a}{program});
+481     \}
+482 
+483     \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(&tmpcc, cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts});
+484 
+485     \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(&tmpcc, cc);
+486 
+487     command = \hyperlink{jlibtool_8c_af5e18c5c9bd77b6a820f64c1532088d5}{shell\_esc}(\hyperlink{jlibtool_8c_a36e633ccc4adf31f69c1942d5f99b787}{flatten\_count\_chars}(&tmpcc, 1));
+488 
+489     spawn\_args[0] = SHELL\_CMD;
+490     spawn\_args[1] = \textcolor{stringliteral}{"-c"};
+491     spawn\_args[2] = command;
+492     spawn\_args[3] = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+493     \textcolor{keywordflow}{return} \hyperlink{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7}{external\_spawn}(cmd\_data, spawn\_args[0], (\textcolor{keyword}{const} \textcolor{keywordtype}{char}**)spawn\_args);
+494 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!run\+\_\+mode@{run\+\_\+mode}}
+\index{run\+\_\+mode@{run\+\_\+mode}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{run\+\_\+mode(command\+\_\+t $\ast$cmd\+\_\+data)}{run_mode(command_t *cmd_data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} run\+\_\+mode (
+\begin{DoxyParamCaption}
+\item[{{\bf command\+\_\+t} $\ast$}]{cmd\+\_\+data}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a4a1a749a78713447b3e2250b8567e6fb}{}\label{jlibtool_8c_a4a1a749a78713447b3e2250b8567e6fb}
+
+\begin{DoxyCode}
+1763 \{
+1764     \textcolor{keywordtype}{int} rv;
+1765     \hyperlink{structcount__chars}{count\_chars} *cctemp;
+1766 
+1767     cctemp = (\hyperlink{structcount__chars}{count\_chars}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(\hyperlink{structcount__chars}{count\_chars}));
+1768     \hyperlink{jlibtool_8c_a288f9494d3e499d49ec7cc99d702d814}{init\_count\_chars}(cctemp);
+1769 
+1770     \textcolor{keywordflow}{switch} (cmd\_data->\hyperlink{structcommand__t_ab859cb879d5afe524fdc0ca32f8b3320}{mode})
+1771     \{
+1772     \textcolor{keywordflow}{case} \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54aee6011f6f8d6045058675b115f49cdbd}{mCompile}:
+1773         rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1774         \textcolor{keywordflow}{if} (rv) \{
+1775             \textcolor{keywordflow}{return} rv;
+1776         \}
+1777         \textcolor{keywordflow}{break};
+1778     \textcolor{keywordflow}{case} \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54afe25c2ac7676cd4b56ee5f33a0bb71c9}{mInstall}:
+1779         \textcolor{comment}{/* Well, we'll assume it's a file going to a directory... */}
+1780         \textcolor{comment}{/* For brain-dead install-sh based scripts, we have to repeat}
+1781 \textcolor{comment}{         * the command N-times.  install-sh should die.}
+1782 \textcolor{comment}{         */}
+1783         \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name}) \{
+1784             rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1785             \textcolor{keywordflow}{if} (rv) \{
+1786                 \textcolor{keywordflow}{return} rv;
+1787             \}
+1788         \}
+1789         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name}) \{
+1790             \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(cctemp, cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1791             \hyperlink{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57}{insert\_count\_chars}(cctemp,
+1792                                cmd\_data->\hyperlink{structcommand__t_a334c62ee92f60a89a20d52b506779d1e}{output\_name},
+1793                                cctemp->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num} - 1);
+1794             rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cctemp);
+1795             \textcolor{keywordflow}{if} (rv) \{
+1796                 \textcolor{keywordflow}{return} rv;
+1797             \}
+1798             \hyperlink{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df}{clear\_count\_chars}(cctemp);
+1799         \}
+1800         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a01000f3a9b0c640de2b4e7ecf8fe963d}{static\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install}) \{
+1801             \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(cctemp, cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1802             \hyperlink{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57}{insert\_count\_chars}(cctemp,
+1803                                cmd\_data->\hyperlink{structcommand__t_a01000f3a9b0c640de2b4e7ecf8fe963d}{static\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install},
+1804                                cctemp->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num} - 1);
+1805             rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cctemp);
+1806             \textcolor{keywordflow}{if} (rv) \{
+1807                 \textcolor{keywordflow}{return} rv;
+1808             \}
+1809 \textcolor{preprocessor}{#if defined(\_\_APPLE\_\_) && defined(RANLIB)}
+1810             \textcolor{comment}{/* From the Apple libtool(1) manpage on Tiger/10.4:}
+1811 \textcolor{comment}{             * ----}
+1812 \textcolor{comment}{             * With  the way libraries used to be created, errors were possible}
+1813 \textcolor{comment}{             * if the library was modified with ar(1) and  the  table  of}
+1814 \textcolor{comment}{             * contents  was  not updated  by  rerunning ranlib(1).  Thus the}
+1815 \textcolor{comment}{             * link editor, ld, warns when the modification date of a library}
+1816 \textcolor{comment}{             * is more  recent  than  the  creation date  of its table of}
+1817 \textcolor{comment}{             * contents.  Unfortunately, this means that you get the warning}
+1818 \textcolor{comment}{             * even if you only copy the library.}
+1819 \textcolor{comment}{             * ----}
+1820 \textcolor{comment}{             *}
+1821 \textcolor{comment}{             * This means that when we install the static archive, we need to}
+1822 \textcolor{comment}{             * rerun ranlib afterwards.}
+1823 \textcolor{comment}{             */}
+1824             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *lib\_args[3], *static\_lib\_name;
+1825             \textcolor{keywordtype}{char} *tmp;
+1826             \textcolor{keywordtype}{size\_t} len1, len2;
+1827             len1 = strlen(cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}->
+      \hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num} - 1]);
+1828 
+1829             static\_lib\_name = \hyperlink{jlibtool_8c_ab3fcab7e5654aad60313a6b9e80e13c1}{jlibtool\_basename}(cmd\_data->
+      \hyperlink{structcommand__t_a01000f3a9b0c640de2b4e7ecf8fe963d}{static\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install});
+1830             len2 = strlen(static\_lib\_name);
+1831 
+1832             tmp = \hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(len1 + len2 + 2);
+1833 
+1834             snprintf(tmp, len1 + len2 + 2, \textcolor{stringliteral}{"%s/%s"},
+1835                     cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}->\hyperlink{structcount__chars_a444461a0241450ff5739b709e8979244}{vals}[cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist}->
+      \hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num} - 1],
+1836                     static\_lib\_name);
+1837 
+1838             lib\_args[0] = RANLIB;
+1839             lib\_args[1] = tmp;
+1840             lib\_args[2] = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1841             \hyperlink{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7}{external\_spawn}(cmd\_data, RANLIB, lib\_args);
+1842             \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(tmp);
+1843 \textcolor{preprocessor}{#endif}
+1844             \hyperlink{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df}{clear\_count\_chars}(cctemp);
+1845         \}
+1846         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_ae7710fc5599d65e7e23a09db78428189}{shared\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install}) \{
+1847             \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(cctemp, cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1848             \hyperlink{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57}{insert\_count\_chars}(cctemp,
+1849                                cmd\_data->\hyperlink{structcommand__t_ae7710fc5599d65e7e23a09db78428189}{shared\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install},
+1850                                cctemp->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num} - 1);
+1851             rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cctemp);
+1852             \textcolor{keywordflow}{if} (rv) \{
+1853                 \textcolor{keywordflow}{return} rv;
+1854             \}
+1855             \hyperlink{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df}{clear\_count\_chars}(cctemp);
+1856         \}
+1857         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_a643313eb225f71780cc53d48a2813a85}{module\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install}) \{
+1858             \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(cctemp, cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1859             \hyperlink{jlibtool_8c_ab9bcebbae8070c10f41b6d8cd4f4ec57}{insert\_count\_chars}(cctemp,
+1860                                cmd\_data->\hyperlink{structcommand__t_a643313eb225f71780cc53d48a2813a85}{module\_name}.\hyperlink{structlibrary__name_af62aa6c40add90f91fa309c2cc0008f2}{install},
+1861                                cctemp->\hyperlink{structcount__chars_a8f632a08dc5e8da7c385f37d1b8cdb5d}{num} - 1);
+1862             rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cctemp);
+1863             \textcolor{keywordflow}{if} (rv) \{
+1864                 \textcolor{keywordflow}{return} rv;
+1865             \}
+1866             \hyperlink{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df}{clear\_count\_chars}(cctemp);
+1867         \}
+1868         \textcolor{keywordflow}{break};
+1869     \textcolor{keywordflow}{case} \hyperlink{jlibtool_8c_a66bdf42fa1cbffcc32b5ced12a8dec54a946e70d90559d6581629805f226f28f0}{mLink}:
+1870         \textcolor{keywordflow}{if} (!cmd\_data->\hyperlink{structcommand__t_a632a0da6ed994b4482afad7bc6e86503}{options}.\hyperlink{structoptions__t_aaa396db773355addeefffab83395c627}{dry\_run}) \{
+1871             \textcolor{comment}{/* Check first to see if the dir already exists! */}
+1872             \hyperlink{jlibtool_8c_ad258402cd6605ab204e988bc09329b53}{safe\_mkdir}(\textcolor{stringliteral}{".libs"});
+1873         \}
+1874 
+1875         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca2615d7d63a3d9165442674d4ad3708fa}{otStaticLibraryOnly} ||
+1876             cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary}) \{
+1877 \textcolor{preprocessor}{#ifdef RANLIB}
+1878             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *lib\_args[3];
+1879 \textcolor{preprocessor}{#endif}
+1880             \textcolor{comment}{/* Removes compiler! */}
+1881             cmd\_data->\hyperlink{structcommand__t_acbe7a361efbbb25cae2c5e5eead0a70a}{program} = LIBRARIAN;
+1882             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts}, LIBRARIAN\_OPTS);
+1883             \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts},
+1884                              cmd\_data->\hyperlink{structcommand__t_a01000f3a9b0c640de2b4e7ecf8fe963d}{static\_name}.\hyperlink{structlibrary__name_adcb558772c92c93af0ec6ab6535c73d9}{normal});
+1885 
+1886             rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cmd\_data->\hyperlink{structcommand__t_a98ae4574250fc2c45f6decd7b28dfb21}{obj\_files});
+1887             \textcolor{keywordflow}{if} (rv) \{
+1888                 \textcolor{keywordflow}{return} rv;
+1889             \}
+1890 
+1891 \textcolor{preprocessor}{#ifdef RANLIB}
+1892             lib\_args[0] = RANLIB;
+1893             lib\_args[1] = cmd\_data->\hyperlink{structcommand__t_a01000f3a9b0c640de2b4e7ecf8fe963d}{static\_name}.\hyperlink{structlibrary__name_adcb558772c92c93af0ec6ab6535c73d9}{normal};
+1894             lib\_args[2] = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1895             \hyperlink{jlibtool_8c_a3efd1804f0284bcb67a0a9d53ec362a7}{external\_spawn}(cmd\_data, RANLIB, lib\_args);
+1896 \textcolor{preprocessor}{#endif}
+1897         \}
+1898 
+1899         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405caf562c6a2f42d6258d24a3af26b24d282}{otDynamicLibraryOnly} ||
+1900             cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{otModule} ||
+1901             cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca72548c674f972672d598e90f61b59c31}{otLibrary}) \{
+1902             cmd\_data->\hyperlink{structcommand__t_acbe7a361efbbb25cae2c5e5eead0a70a}{program} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1903             \hyperlink{jlibtool_8c_a7de0ff3778727cbb4d49f13eaff910df}{clear\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts});
+1904 
+1905             \hyperlink{jlibtool_8c_a10364bcffeb664e07f966f8a58591c24}{append\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts}, cmd\_data->
+      \hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1906             \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405cacbf7eb266ff66aec794e128a4f8848e2}{otModule}) \{
+1907 \textcolor{preprocessor}{#ifdef MODULE\_OPTS}
+1908                 \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts}, MODULE\_OPTS);
+1909 \textcolor{preprocessor}{#endif}
+1910             \} \textcolor{keywordflow}{else} \{
+1911 \textcolor{preprocessor}{#ifdef SHARED\_OPTS}
+1912                 \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts}, SHARED\_OPTS);
+1913 \textcolor{preprocessor}{#endif}
+1914 \textcolor{preprocessor}{#ifdef dynamic\_link\_version\_func}
+1915                 \hyperlink{jlibtool_8c_a1fdb7e9ad9138a8055d598bdc3446981}{push\_count\_chars}(cmd\_data->\hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts},
+1916                              dynamic\_link\_version\_func(cmd\_data->\hyperlink{structcommand__t_a0481afee06e3820c8f43a5ccc7bdaed2}{version\_info}));
+1917 \textcolor{preprocessor}{#endif}
+1918             \}
+1919             \hyperlink{jlibtool_8c_a1b2eae20e3eb859f4897e9a1bda1e930}{add\_dynamic\_link\_opts}(cmd\_data, cmd\_data->
+      \hyperlink{structcommand__t_aec96be4925c8df350e63c8839ad6b8e7}{program\_opts});
+1920 
+1921             rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cmd\_data->\hyperlink{structcommand__t_ae4be9b24f47470491479e1463df860cc}{shared\_opts}.
+      \hyperlink{structlibrary__opts_ad3503036347d561d385275741e4799fe}{normal});
+1922             \textcolor{keywordflow}{if} (rv) \{
+1923                 \textcolor{keywordflow}{return} rv;
+1924             \}
+1925         \}
+1926         \textcolor{keywordflow}{if} (cmd\_data->\hyperlink{structcommand__t_afb7c0e23ed1ac392ed77a194ae7a2fd2}{output} == \hyperlink{jlibtool_8c_ab575fa20098c7d37cce6dd7e923f405ca07a21848098a9fa3ee69f34b07bebf50}{otProgram}) \{
+1927             rv = \hyperlink{jlibtool_8c_ae28bd9faddda066bd8fc7d01d2161b0a}{run\_command}(cmd\_data, cmd\_data->\hyperlink{structcommand__t_a9b6049a8a68adcbf76ad8139fc5f965b}{arglist});
+1928             \textcolor{keywordflow}{if} (rv) \{
+1929                 \textcolor{keywordflow}{return} rv;
+1930             \}
+1931         \}
+1932         \textcolor{keywordflow}{break};
+1933     \textcolor{keywordflow}{default}:
+1934         \textcolor{keywordflow}{break};
+1935     \} 
+1936 
+1937     \textcolor{keywordflow}{return} 0;
+1938 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a4a1a749a78713447b3e2250b8567e6fb_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{jlibtool_8c_a4a1a749a78713447b3e2250b8567e6fb_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!safe\+\_\+mkdir@{safe\+\_\+mkdir}}
+\index{safe\+\_\+mkdir@{safe\+\_\+mkdir}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{safe\+\_\+mkdir(const char $\ast$path)}{safe_mkdir(const char *path)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} safe\+\_\+mkdir (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ad258402cd6605ab204e988bc09329b53}{}\label{jlibtool_8c_ad258402cd6605ab204e988bc09329b53}
+
+\begin{DoxyCode}
+687 \{
+688     \hyperlink{aplibtool_8c_a18c6d44ab22b2cd0d38a2dd0ef13ed1c}{mode\_t} old\_umask;
+689 
+690     old\_umask = umask(0);
+691     umask(old\_umask);
+692 
+693 \textcolor{preprocessor}{#ifdef MKDIR\_NO\_UMASK}
+694     mkdir(\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path});
+695 \textcolor{preprocessor}{#else}
+696     mkdir(\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path}, ~old\_umask);
+697 \textcolor{preprocessor}{#endif}
+698 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_ad258402cd6605ab204e988bc09329b53_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!safe\+\_\+strtol@{safe\+\_\+strtol}}
+\index{safe\+\_\+strtol@{safe\+\_\+strtol}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{safe\+\_\+strtol(const char $\ast$nptr, const char $\ast$$\ast$endptr, int base)}{safe_strtol(const char *nptr, const char **endptr, int base)}}]{\setlength{\rightskip}{0pt plus 5cm}long safe\+\_\+strtol (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{nptr, }
+\item[{const char $\ast$$\ast$}]{endptr, }
+\item[{{\bf int}}]{base}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_ad2be7504517ae5b2a06f6a5c48b43bca}{}\label{jlibtool_8c_ad2be7504517ae5b2a06f6a5c48b43bca}
+
+\begin{DoxyCode}
+672 \{
+673     \textcolor{keywordtype}{long} rv;
+674 
+675     errno = 0;
+676 
+677     rv = strtol(nptr, (\textcolor{keywordtype}{char}**)endptr, 10);
+678 
+679     \textcolor{keywordflow}{if} (errno == ERANGE) \{
+680         \textcolor{keywordflow}{return} 0;
+681     \}
+682 
+683     \textcolor{keywordflow}{return} rv; 
+684 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=285pt]{jlibtool_8c_ad2be7504517ae5b2a06f6a5c48b43bca_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!shell\+\_\+esc@{shell\+\_\+esc}}
+\index{shell\+\_\+esc@{shell\+\_\+esc}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{shell\+\_\+esc(const char $\ast$str)}{shell_esc(const char *str)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ shell\+\_\+esc (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_af5e18c5c9bd77b6a820f64c1532088d5}{}\label{jlibtool_8c_af5e18c5c9bd77b6a820f64c1532088d5}
+
+\begin{DoxyCode}
+402 \{
+403     \textcolor{keywordtype}{int} in\_quote = 0;
+404     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd};
+405     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+406     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+407 
+408     cmd = (\textcolor{keywordtype}{char} *)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(2 * strlen(\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str}) + 3);
+409     d = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *)cmd;
+410     s = (\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *)\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str};
+411 
+412 \textcolor{preprocessor}{#ifdef \_\_MINGW32\_\_}
+413     *d++ = \textcolor{charliteral}{'\(\backslash\)"'};
+414 \textcolor{preprocessor}{#endif}
+415 
+416     \textcolor{keywordflow}{for} (; *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}; ++\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}) \{
+417         \textcolor{keywordflow}{if} (*s == \textcolor{charliteral}{'"'}) \{
+418             *d++ = \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'};
+419             in\_quote++;
+420         \}
+421         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (*s == \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'} || (*s == \textcolor{charliteral}{' '} && (in\_quote % 2))) \{
+422             *d++ = \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'};
+423         \}
+424         *d++ = *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+425     \}
+426 
+427 \textcolor{preprocessor}{#ifdef \_\_MINGW32\_\_}
+428     *d++ = \textcolor{charliteral}{'\(\backslash\)"'};
+429 \textcolor{preprocessor}{#endif}
+430 
+431     *d = \textcolor{charliteral}{'\(\backslash\)0'};
+432     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd};
+433 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=219pt]{jlibtool_8c_af5e18c5c9bd77b6a820f64c1532088d5_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_af5e18c5c9bd77b6a820f64c1532088d5_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{jlibtool.\+c@{jlibtool.\+c}!truncate\+\_\+dll\+\_\+name@{truncate\+\_\+dll\+\_\+name}}
+\index{truncate\+\_\+dll\+\_\+name@{truncate\+\_\+dll\+\_\+name}!jlibtool.\+c@{jlibtool.\+c}}
+\subsubsection[{\texorpdfstring{truncate\+\_\+dll\+\_\+name(char $\ast$path)}{truncate_dll_name(char *path)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ truncate\+\_\+dll\+\_\+name (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{jlibtool_8c_a88a4b902ca11d404e1c05fd1b5d04c71}{}\label{jlibtool_8c_a88a4b902ca11d404e1c05fd1b5d04c71}
+
+\begin{DoxyCode}
+647 \{
+648     \textcolor{comment}{/* Cut DLL name down to 8 characters after removing any mod\_ prefix */}
+649     \textcolor{keywordtype}{char} *tmppath = \hyperlink{apr__cpystrn_8c_a2c4f14c424a31db9c57fd046c3b9f0df}{strdup}(\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path});
+650     \textcolor{keywordtype}{char} *newname = strrchr(tmppath, \textcolor{charliteral}{'/'}) + 1;
+651     \textcolor{keywordtype}{char} *ext = strrchr(tmppath, \textcolor{charliteral}{'.'});
+652     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+653 
+654     \textcolor{keywordflow}{if} (ext == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+655         \textcolor{keywordflow}{return} tmppath;
+656 
+657     len = ext - newname;
+658 
+659     \textcolor{keywordflow}{if} (strncmp(newname, \textcolor{stringliteral}{"mod\_"}, 4) == 0) \{
+660         strcpy(newname, newname + 4);
+661         len -= 4;
+662     \}
+663 
+664     \textcolor{keywordflow}{if} (len > 8) \{
+665         strcpy(newname + 8, strchr(newname, \textcolor{charliteral}{'.'}));
+666     \}
+667 
+668     \textcolor{keywordflow}{return} tmppath;
+669 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=337pt]{jlibtool_8c_a88a4b902ca11d404e1c05fd1b5d04c71_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{jlibtool_8c_a88a4b902ca11d404e1c05fd1b5d04c71_icgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,294 @@
+\hypertarget{mod__nw__ssl_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/arch/netware/mod\+\_\+nw\+\_\+ssl.c File Reference}
+\label{mod__nw__ssl_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/arch/netware/mod\+\_\+nw\+\_\+ssl.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/arch/netware/mod\+\_\+nw\+\_\+ssl.\+c}}
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+connection.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+listen.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+optional.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$unilib.\+h$>$}\\*
+Include dependency graph for mod\+\_\+nw\+\_\+ssl.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__nw__ssl_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structseclisten__rec}{seclisten\+\_\+rec}
+\item 
+struct \hyperlink{structseclistenup__rec}{seclistenup\+\_\+rec}
+\item 
+struct \hyperlink{structNWSSLSrvConfigRec}{N\+W\+S\+S\+L\+Srv\+Config\+Rec}
+\item 
+struct \hyperlink{structsecsocket__data}{secsocket\+\_\+data}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_aa3c34e2c2ffd83bfddafb45abad6b0af}{W\+S\+\_\+\+S\+SL}
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_aaba07841c3e227bc8bdd8ccdad149349}{M\+A\+X\+\_\+\+A\+D\+D\+R\+E\+SS}~512
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a3cb816ed7690a32c5d6f67d7cb615ca4}{M\+A\+X\+\_\+\+K\+EY}~80
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a06d7e815951a01c359093e4b536a3b77}{S\+O\+\_\+\+T\+L\+S\+\_\+\+U\+N\+C\+L\+E\+A\+N\+\_\+\+S\+H\+U\+T\+D\+O\+WN}~0
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a28f07278031630624caac61cb2c75656}{str\+EQ}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2})~(strcmp(s1,\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2})        == 0)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_ae33436358033ca0381a8946069278b70}{str\+NE}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2})~(strcmp(s1,\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2})        != 0)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a1aad5b7999f03d6b6096729abe8f9863}{str\+E\+Qn}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~(strncmp(s1,\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})     == 0)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a81a75c2a0fa8ad8d08c620b8a4350bf1}{str\+N\+En}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~(strncmp(s1,\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})     != 0)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a8c9b1bea39b1e4f8b9ecad58e16b6e71}{strc\+EQ}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2})~(\hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(s1,\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2})    == 0)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_ae20a336b58a88a15384f654f48731400}{strc\+NE}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2})~(\hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(s1,\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2})    != 0)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a8eb2c43ff3c5a6eff7bf59437c6c27d7}{strc\+E\+Qn}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~(\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(s1,\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}) == 0)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a81b2c02242f57dc16c37e2bb3eaf531a}{strc\+N\+En}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~(\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(s1,\hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}) != 0)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a68e7d3b35b17497614d4479c527b2b9c}{str\+Is\+Empty}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL} $\vert$$\vert$ \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}\mbox{[}0\mbox{]} == \hyperlink{apr__snprintf_8c_af19d48b9f61047a668649a2f9dc317ff}{N\+UL})
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a16937c909bd387eec8df1c18b229d356}{get\+\_\+nwssl\+\_\+cfg}(srv)~(\hyperlink{structNWSSLSrvConfigRec}{N\+W\+S\+S\+L\+Srv\+Config\+Rec} $\ast$) \hyperlink{group__APACHE__CORE__CONFIG_ga1093a5908a384eacc929b028c79f2a02}{ap\+\_\+get\+\_\+module\+\_\+config}(srv-\/$>$module\+\_\+config, \&\hyperlink{mod__nw__ssl_8c_a18463aa7e10b9c117628b8ca2aa6addc}{nwssl\+\_\+module})
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a53908fffe820d3d7fec063f5a744c448}{M\+K\+T\+I\+M\+E\+S\+TR}(\hyperlink{group__apr__time_ga6427c3237144d9709aa13825289f0b78}{format},  tmfield)
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a7109f3a364d053d7fd0261d9128c182f}{S\+W\+I\+T\+C\+H\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+L\+I\+NE}~\char`\"{}H\+T\+TP/1.\+1 101 Switching Protocols\char`\"{}
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a7fe85594e0cb24e2d617328e3931875e}{U\+P\+G\+R\+A\+D\+E\+\_\+\+H\+E\+A\+D\+ER}~\char`\"{}Upgrade\+: T\+LS/1.\+0, H\+T\+TP/1.\+1\char`\"{}
+\item 
+\#define \hyperlink{mod__nw__ssl_8c_a9cc592e91f7ea3a90c20bd03749e5039}{C\+O\+N\+N\+E\+C\+T\+I\+O\+N\+\_\+\+H\+E\+A\+D\+ER}~\char`\"{}Connection\+: Upgrade\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structNWSSLSrvConfigRec}{N\+W\+S\+S\+L\+Srv\+Config\+Rec} \hyperlink{mod__nw__ssl_8c_ad2845df1f8af654706d8b1f8fa405ecf}{N\+W\+S\+S\+L\+Srv\+Config\+Rec}
+\item 
+typedef struct \hyperlink{structseclisten__rec}{seclisten\+\_\+rec} \hyperlink{mod__nw__ssl_8c_a15dd24a3f20d076f6fe8b1067ec083d5}{seclisten\+\_\+rec}
+\item 
+typedef struct \hyperlink{structseclistenup__rec}{seclistenup\+\_\+rec} \hyperlink{mod__nw__ssl_8c_a87a8c3c9211221f34d20ddabe552f4b0}{seclistenup\+\_\+rec}
+\item 
+typedef struct \hyperlink{structsecsocket__data}{secsocket\+\_\+data} \hyperlink{mod__nw__ssl_8c_acb0433441ccc4d8b7cafd4eb8654a674}{secsocket\+\_\+data}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__nw__ssl_8c_adad253b500d00cf4479342906c2aeda5}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN} (char $\ast$, \hyperlink{group__MOD__SSL__PRIVATE_ga42e6f981345c92e377fc830d91667fa5}{ssl\+\_\+var\+\_\+lookup},(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$, char $\ast$))
+\item 
+\hyperlink{mod__nw__ssl_8c_a2fdb487292dbbe59e5a8470bf065d7e3}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, ssl\+\_\+is\+\_\+https,(\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$))
+\item 
+\hyperlink{mod__nw__ssl_8c_a01a25e4dc2ff9db34bc735eca4ab1f42}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, \hyperlink{group__MOD__SSL__PRIVATE_ga91da4675ca466046f81ee17bee79c10d}{ssl\+\_\+proxy\+\_\+enable},(\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$))
+\item 
+\hyperlink{mod__nw__ssl_8c_aff4c22d6b9c993f4d9f54bea16895182}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, \hyperlink{group__MOD__SSL__PRIVATE_ga9e7bf408b385a57ebf50196312adb023}{ssl\+\_\+engine\+\_\+disable},(\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$))
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__SSL__PRIVATE_ga91da4675ca466046f81ee17bee79c10d}{ssl\+\_\+proxy\+\_\+enable} (\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__SSL__PRIVATE_ga9e7bf408b385a57ebf50196312adb023}{ssl\+\_\+engine\+\_\+disable} (\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+char $\ast$ \hyperlink{group__MOD__SSL__PRIVATE_ga42e6f981345c92e377fc830d91667fa5}{ssl\+\_\+var\+\_\+lookup} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, char $\ast$\hyperlink{group__MOD__PROXY_ga81bb7fed3eaa4dd24455759f1cb26176}{var})
+\item 
+\hyperlink{mod__nw__ssl_8c_a5ae228e92234d486f13f82a04835b084}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (nwssl)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__nw__ssl_8c_a18463aa7e10b9c117628b8ca2aa6addc}{nwssl\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!C\+O\+N\+N\+E\+C\+T\+I\+O\+N\+\_\+\+H\+E\+A\+D\+ER@{C\+O\+N\+N\+E\+C\+T\+I\+O\+N\+\_\+\+H\+E\+A\+D\+ER}}
+\index{C\+O\+N\+N\+E\+C\+T\+I\+O\+N\+\_\+\+H\+E\+A\+D\+ER@{C\+O\+N\+N\+E\+C\+T\+I\+O\+N\+\_\+\+H\+E\+A\+D\+ER}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+N\+E\+C\+T\+I\+O\+N\+\_\+\+H\+E\+A\+D\+ER}{CONNECTION_HEADER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+N\+E\+C\+T\+I\+O\+N\+\_\+\+H\+E\+A\+D\+ER~\char`\"{}Connection\+: Upgrade\char`\"{}}\hypertarget{mod__nw__ssl_8c_a9cc592e91f7ea3a90c20bd03749e5039}{}\label{mod__nw__ssl_8c_a9cc592e91f7ea3a90c20bd03749e5039}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!get\+\_\+nwssl\+\_\+cfg@{get\+\_\+nwssl\+\_\+cfg}}
+\index{get\+\_\+nwssl\+\_\+cfg@{get\+\_\+nwssl\+\_\+cfg}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{get\+\_\+nwssl\+\_\+cfg}{get_nwssl_cfg}}]{\setlength{\rightskip}{0pt plus 5cm}\#define get\+\_\+nwssl\+\_\+cfg(
+\begin{DoxyParamCaption}
+\item[{}]{srv}
+\end{DoxyParamCaption}
+)~({\bf N\+W\+S\+S\+L\+Srv\+Config\+Rec} $\ast$) {\bf ap\+\_\+get\+\_\+module\+\_\+config}(srv-\/$>$module\+\_\+config, \&{\bf nwssl\+\_\+module})}\hypertarget{mod__nw__ssl_8c_a16937c909bd387eec8df1c18b229d356}{}\label{mod__nw__ssl_8c_a16937c909bd387eec8df1c18b229d356}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!M\+A\+X\+\_\+\+A\+D\+D\+R\+E\+SS@{M\+A\+X\+\_\+\+A\+D\+D\+R\+E\+SS}}
+\index{M\+A\+X\+\_\+\+A\+D\+D\+R\+E\+SS@{M\+A\+X\+\_\+\+A\+D\+D\+R\+E\+SS}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+A\+D\+D\+R\+E\+SS}{MAX_ADDRESS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+A\+D\+D\+R\+E\+SS~512}\hypertarget{mod__nw__ssl_8c_aaba07841c3e227bc8bdd8ccdad149349}{}\label{mod__nw__ssl_8c_aaba07841c3e227bc8bdd8ccdad149349}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!M\+A\+X\+\_\+\+K\+EY@{M\+A\+X\+\_\+\+K\+EY}}
+\index{M\+A\+X\+\_\+\+K\+EY@{M\+A\+X\+\_\+\+K\+EY}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+K\+EY}{MAX_KEY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+K\+EY~80}\hypertarget{mod__nw__ssl_8c_a3cb816ed7690a32c5d6f67d7cb615ca4}{}\label{mod__nw__ssl_8c_a3cb816ed7690a32c5d6f67d7cb615ca4}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!M\+K\+T\+I\+M\+E\+S\+TR@{M\+K\+T\+I\+M\+E\+S\+TR}}
+\index{M\+K\+T\+I\+M\+E\+S\+TR@{M\+K\+T\+I\+M\+E\+S\+TR}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{M\+K\+T\+I\+M\+E\+S\+TR}{MKTIMESTR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+K\+T\+I\+M\+E\+S\+TR(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf format}, }
+\item[{}]{tmfield}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__nw__ssl_8c_a53908fffe820d3d7fec063f5a744c448}{}\label{mod__nw__ssl_8c_a53908fffe820d3d7fec063f5a744c448}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+apr\_time\_exp\_lt(&\hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}, apr\_time\_now()); \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{            result} = apr\_psprintf(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__apr__file__io_ga34332e75afdd7ed8d280f2a09b4329ea}{format}, \hyperlink{group__apr__time_ga3ea988e6273ca725c8210dcfdc48402f}{tm}.tmfield); \(\backslash\)
+            resdup = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+\end{DoxyCode}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!S\+O\+\_\+\+T\+L\+S\+\_\+\+U\+N\+C\+L\+E\+A\+N\+\_\+\+S\+H\+U\+T\+D\+O\+WN@{S\+O\+\_\+\+T\+L\+S\+\_\+\+U\+N\+C\+L\+E\+A\+N\+\_\+\+S\+H\+U\+T\+D\+O\+WN}}
+\index{S\+O\+\_\+\+T\+L\+S\+\_\+\+U\+N\+C\+L\+E\+A\+N\+\_\+\+S\+H\+U\+T\+D\+O\+WN@{S\+O\+\_\+\+T\+L\+S\+\_\+\+U\+N\+C\+L\+E\+A\+N\+\_\+\+S\+H\+U\+T\+D\+O\+WN}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{S\+O\+\_\+\+T\+L\+S\+\_\+\+U\+N\+C\+L\+E\+A\+N\+\_\+\+S\+H\+U\+T\+D\+O\+WN}{SO_TLS_UNCLEAN_SHUTDOWN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+O\+\_\+\+T\+L\+S\+\_\+\+U\+N\+C\+L\+E\+A\+N\+\_\+\+S\+H\+U\+T\+D\+O\+WN~0}\hypertarget{mod__nw__ssl_8c_a06d7e815951a01c359093e4b536a3b77}{}\label{mod__nw__ssl_8c_a06d7e815951a01c359093e4b536a3b77}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!strc\+EQ@{strc\+EQ}}
+\index{strc\+EQ@{strc\+EQ}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{strc\+EQ}{strcEQ}}]{\setlength{\rightskip}{0pt plus 5cm}\#define strc\+EQ(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}}
+\end{DoxyParamCaption}
+)~({\bf strcasecmp}(s1,{\bf s2})    == 0)}\hypertarget{mod__nw__ssl_8c_a8c9b1bea39b1e4f8b9ecad58e16b6e71}{}\label{mod__nw__ssl_8c_a8c9b1bea39b1e4f8b9ecad58e16b6e71}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!strc\+E\+Qn@{strc\+E\+Qn}}
+\index{strc\+E\+Qn@{strc\+E\+Qn}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{strc\+E\+Qn}{strcEQn}}]{\setlength{\rightskip}{0pt plus 5cm}\#define strc\+E\+Qn(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~({\bf strncasecmp}(s1,{\bf s2},{\bf n}) == 0)}\hypertarget{mod__nw__ssl_8c_a8eb2c43ff3c5a6eff7bf59437c6c27d7}{}\label{mod__nw__ssl_8c_a8eb2c43ff3c5a6eff7bf59437c6c27d7}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!strc\+NE@{strc\+NE}}
+\index{strc\+NE@{strc\+NE}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{strc\+NE}{strcNE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define strc\+NE(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}}
+\end{DoxyParamCaption}
+)~({\bf strcasecmp}(s1,{\bf s2})    != 0)}\hypertarget{mod__nw__ssl_8c_ae20a336b58a88a15384f654f48731400}{}\label{mod__nw__ssl_8c_ae20a336b58a88a15384f654f48731400}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!strc\+N\+En@{strc\+N\+En}}
+\index{strc\+N\+En@{strc\+N\+En}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{strc\+N\+En}{strcNEn}}]{\setlength{\rightskip}{0pt plus 5cm}\#define strc\+N\+En(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~({\bf strncasecmp}(s1,{\bf s2},{\bf n}) != 0)}\hypertarget{mod__nw__ssl_8c_a81b2c02242f57dc16c37e2bb3eaf531a}{}\label{mod__nw__ssl_8c_a81b2c02242f57dc16c37e2bb3eaf531a}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!str\+EQ@{str\+EQ}}
+\index{str\+EQ@{str\+EQ}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{str\+EQ}{strEQ}}]{\setlength{\rightskip}{0pt plus 5cm}\#define str\+EQ(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}}
+\end{DoxyParamCaption}
+)~(strcmp(s1,{\bf s2})        == 0)}\hypertarget{mod__nw__ssl_8c_a28f07278031630624caac61cb2c75656}{}\label{mod__nw__ssl_8c_a28f07278031630624caac61cb2c75656}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!str\+E\+Qn@{str\+E\+Qn}}
+\index{str\+E\+Qn@{str\+E\+Qn}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{str\+E\+Qn}{strEQn}}]{\setlength{\rightskip}{0pt plus 5cm}\#define str\+E\+Qn(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~(strncmp(s1,{\bf s2},{\bf n})     == 0)}\hypertarget{mod__nw__ssl_8c_a1aad5b7999f03d6b6096729abe8f9863}{}\label{mod__nw__ssl_8c_a1aad5b7999f03d6b6096729abe8f9863}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!str\+Is\+Empty@{str\+Is\+Empty}}
+\index{str\+Is\+Empty@{str\+Is\+Empty}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{str\+Is\+Empty}{strIsEmpty}}]{\setlength{\rightskip}{0pt plus 5cm}\#define str\+Is\+Empty(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf s}}
+\end{DoxyParamCaption}
+)~({\bf s} == {\bf N\+U\+LL} $\vert$$\vert$ {\bf s}\mbox{[}0\mbox{]} == {\bf N\+UL})}\hypertarget{mod__nw__ssl_8c_a68e7d3b35b17497614d4479c527b2b9c}{}\label{mod__nw__ssl_8c_a68e7d3b35b17497614d4479c527b2b9c}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!str\+NE@{str\+NE}}
+\index{str\+NE@{str\+NE}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{str\+NE}{strNE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define str\+NE(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}}
+\end{DoxyParamCaption}
+)~(strcmp(s1,{\bf s2})        != 0)}\hypertarget{mod__nw__ssl_8c_ae33436358033ca0381a8946069278b70}{}\label{mod__nw__ssl_8c_ae33436358033ca0381a8946069278b70}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!str\+N\+En@{str\+N\+En}}
+\index{str\+N\+En@{str\+N\+En}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{str\+N\+En}{strNEn}}]{\setlength{\rightskip}{0pt plus 5cm}\#define str\+N\+En(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~(strncmp(s1,{\bf s2},{\bf n})     != 0)}\hypertarget{mod__nw__ssl_8c_a81a75c2a0fa8ad8d08c620b8a4350bf1}{}\label{mod__nw__ssl_8c_a81a75c2a0fa8ad8d08c620b8a4350bf1}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!S\+W\+I\+T\+C\+H\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+L\+I\+NE@{S\+W\+I\+T\+C\+H\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+L\+I\+NE}}
+\index{S\+W\+I\+T\+C\+H\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+L\+I\+NE@{S\+W\+I\+T\+C\+H\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+L\+I\+NE}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{S\+W\+I\+T\+C\+H\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+L\+I\+NE}{SWITCH_STATUS_LINE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+W\+I\+T\+C\+H\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+L\+I\+NE~\char`\"{}H\+T\+TP/1.\+1 101 Switching Protocols\char`\"{}}\hypertarget{mod__nw__ssl_8c_a7109f3a364d053d7fd0261d9128c182f}{}\label{mod__nw__ssl_8c_a7109f3a364d053d7fd0261d9128c182f}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!U\+P\+G\+R\+A\+D\+E\+\_\+\+H\+E\+A\+D\+ER@{U\+P\+G\+R\+A\+D\+E\+\_\+\+H\+E\+A\+D\+ER}}
+\index{U\+P\+G\+R\+A\+D\+E\+\_\+\+H\+E\+A\+D\+ER@{U\+P\+G\+R\+A\+D\+E\+\_\+\+H\+E\+A\+D\+ER}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{U\+P\+G\+R\+A\+D\+E\+\_\+\+H\+E\+A\+D\+ER}{UPGRADE_HEADER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\+P\+G\+R\+A\+D\+E\+\_\+\+H\+E\+A\+D\+ER~\char`\"{}Upgrade\+: T\+LS/1.\+0, H\+T\+TP/1.\+1\char`\"{}}\hypertarget{mod__nw__ssl_8c_a7fe85594e0cb24e2d617328e3931875e}{}\label{mod__nw__ssl_8c_a7fe85594e0cb24e2d617328e3931875e}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!W\+S\+\_\+\+S\+SL@{W\+S\+\_\+\+S\+SL}}
+\index{W\+S\+\_\+\+S\+SL@{W\+S\+\_\+\+S\+SL}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{W\+S\+\_\+\+S\+SL}{WS_SSL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+S\+\_\+\+S\+SL}\hypertarget{mod__nw__ssl_8c_aa3c34e2c2ffd83bfddafb45abad6b0af}{}\label{mod__nw__ssl_8c_aa3c34e2c2ffd83bfddafb45abad6b0af}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!N\+W\+S\+S\+L\+Srv\+Config\+Rec@{N\+W\+S\+S\+L\+Srv\+Config\+Rec}}
+\index{N\+W\+S\+S\+L\+Srv\+Config\+Rec@{N\+W\+S\+S\+L\+Srv\+Config\+Rec}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{N\+W\+S\+S\+L\+Srv\+Config\+Rec}{NWSSLSrvConfigRec}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf N\+W\+S\+S\+L\+Srv\+Config\+Rec} {\bf N\+W\+S\+S\+L\+Srv\+Config\+Rec}}\hypertarget{mod__nw__ssl_8c_ad2845df1f8af654706d8b1f8fa405ecf}{}\label{mod__nw__ssl_8c_ad2845df1f8af654706d8b1f8fa405ecf}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!seclisten\+\_\+rec@{seclisten\+\_\+rec}}
+\index{seclisten\+\_\+rec@{seclisten\+\_\+rec}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{seclisten\+\_\+rec}{seclisten_rec}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf seclisten\+\_\+rec} {\bf seclisten\+\_\+rec}}\hypertarget{mod__nw__ssl_8c_a15dd24a3f20d076f6fe8b1067ec083d5}{}\label{mod__nw__ssl_8c_a15dd24a3f20d076f6fe8b1067ec083d5}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!seclistenup\+\_\+rec@{seclistenup\+\_\+rec}}
+\index{seclistenup\+\_\+rec@{seclistenup\+\_\+rec}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{seclistenup\+\_\+rec}{seclistenup_rec}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf seclistenup\+\_\+rec} {\bf seclistenup\+\_\+rec}}\hypertarget{mod__nw__ssl_8c_a87a8c3c9211221f34d20ddabe552f4b0}{}\label{mod__nw__ssl_8c_a87a8c3c9211221f34d20ddabe552f4b0}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!secsocket\+\_\+data@{secsocket\+\_\+data}}
+\index{secsocket\+\_\+data@{secsocket\+\_\+data}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{secsocket\+\_\+data}{secsocket_data}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf secsocket\+\_\+data} {\bf secsocket\+\_\+data}}\hypertarget{mod__nw__ssl_8c_acb0433441ccc4d8b7cafd4eb8654a674}{}\label{mod__nw__ssl_8c_acb0433441ccc4d8b7cafd4eb8654a674}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(nwssl)}{AP_DECLARE_MODULE(nwssl)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{nwssl}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__nw__ssl_8c_a5ae228e92234d486f13f82a04835b084}{}\label{mod__nw__ssl_8c_a5ae228e92234d486f13f82a04835b084}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N(char $\ast$, ssl\+\_\+var\+\_\+lookup,(apr\+\_\+pool\+\_\+t $\ast$, server\+\_\+rec $\ast$, conn\+\_\+rec $\ast$, request\+\_\+rec $\ast$, char $\ast$))}{APR_DECLARE_OPTIONAL_FN(char *, ssl_var_lookup,(apr_pool_t *, server_rec *, conn_rec *, request_rec *, char *))}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{, }
+\item[{{\bf ssl\+\_\+var\+\_\+lookup}}]{, }
+\item[{({\bf apr\+\_\+pool\+\_\+t} $\ast$, {\bf server\+\_\+rec} $\ast$, {\bf conn\+\_\+rec} $\ast$, {\bf request\+\_\+rec} $\ast$, char $\ast$)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__nw__ssl_8c_adad253b500d00cf4479342906c2aeda5}{}\label{mod__nw__ssl_8c_adad253b500d00cf4479342906c2aeda5}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N(int, ssl\+\_\+is\+\_\+https,(conn\+\_\+rec $\ast$))}{APR_DECLARE_OPTIONAL_FN(int, ssl_is_https,(conn_rec *))}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{, }
+\item[{ssl\+\_\+is\+\_\+https}]{, }
+\item[{({\bf conn\+\_\+rec} $\ast$)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__nw__ssl_8c_a2fdb487292dbbe59e5a8470bf065d7e3}{}\label{mod__nw__ssl_8c_a2fdb487292dbbe59e5a8470bf065d7e3}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N(int, ssl\+\_\+proxy\+\_\+enable,(conn\+\_\+rec $\ast$))}{APR_DECLARE_OPTIONAL_FN(int, ssl_proxy_enable,(conn_rec *))}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{, }
+\item[{{\bf ssl\+\_\+proxy\+\_\+enable}}]{, }
+\item[{({\bf conn\+\_\+rec} $\ast$)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__nw__ssl_8c_a01a25e4dc2ff9db34bc735eca4ab1f42}{}\label{mod__nw__ssl_8c_a01a25e4dc2ff9db34bc735eca4ab1f42}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N(int, ssl\+\_\+engine\+\_\+disable,(conn\+\_\+rec $\ast$))}{APR_DECLARE_OPTIONAL_FN(int, ssl_engine_disable,(conn_rec *))}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{, }
+\item[{{\bf ssl\+\_\+engine\+\_\+disable}}]{, }
+\item[{({\bf conn\+\_\+rec} $\ast$)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__nw__ssl_8c_aff4c22d6b9c993f4d9f54bea16895182}{}\label{mod__nw__ssl_8c_aff4c22d6b9c993f4d9f54bea16895182}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}!nwssl\+\_\+module@{nwssl\+\_\+module}}
+\index{nwssl\+\_\+module@{nwssl\+\_\+module}!mod\+\_\+nw\+\_\+ssl.\+c@{mod\+\_\+nw\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{nwssl\+\_\+module}{nwssl_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} nwssl\+\_\+module}\hypertarget{mod__nw__ssl_8c_a18463aa7e10b9c117628b8ca2aa6addc}{}\label{mod__nw__ssl_8c_a18463aa7e10b9c117628b8ca2aa6addc}

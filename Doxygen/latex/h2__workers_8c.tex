@@ -1,0 +1,252 @@
+\hypertarget{h2__workers_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http2/h2\+\_\+workers.c File Reference}
+\label{h2__workers_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+workers.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+workers.\+c}}
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+atomic.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+mutex.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+cond.\+h$>$}\\*
+{\ttfamily \#include $<$mpm\+\_\+common.\+h$>$}\\*
+{\ttfamily \#include $<$httpd.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+core.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+log.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+mplx.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+task.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+workers.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+util.\+h\char`\"{}}\\*
+Include dependency graph for h2\+\_\+workers.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__workers_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structh2__slot}{h2\+\_\+slot}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structh2__slot}{h2\+\_\+slot} \hyperlink{h2__workers_8c_ae8c126f3d6509ef905752e6f327e9f99}{h2\+\_\+slot}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structh2__workers}{h2\+\_\+workers} $\ast$ \hyperlink{h2__workers_8c_a7087d26a8f57ff45f6a423a319938aa5}{h2\+\_\+workers\+\_\+create} (\hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$server\+\_\+pool, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} min\+\_\+workers, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} max\+\_\+workers, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} idle\+\_\+secs)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__workers_8c_a00fb6329ef8aca683c2a90d5950c31d8}{h2\+\_\+workers\+\_\+register} (\hyperlink{structh2__workers}{h2\+\_\+workers} $\ast$workers, struct \hyperlink{structh2__mplx}{h2\+\_\+mplx} $\ast$\hyperlink{pcretest_8txt_a26e37b17bbd51407fc4163ca327065e4}{m})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__workers_8c_ae0a105f11ce19edf4db5ca016fe0ed96}{h2\+\_\+workers\+\_\+unregister} (\hyperlink{structh2__workers}{h2\+\_\+workers} $\ast$workers, struct \hyperlink{structh2__mplx}{h2\+\_\+mplx} $\ast$\hyperlink{pcretest_8txt_a26e37b17bbd51407fc4163ca327065e4}{m})
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\index{h2\+\_\+workers.\+c@{h2\+\_\+workers.\+c}!h2\+\_\+slot@{h2\+\_\+slot}}
+\index{h2\+\_\+slot@{h2\+\_\+slot}!h2\+\_\+workers.\+c@{h2\+\_\+workers.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+slot}{h2_slot}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf h2\+\_\+slot} {\bf h2\+\_\+slot}}\hypertarget{h2__workers_8c_ae8c126f3d6509ef905752e6f327e9f99}{}\label{h2__workers_8c_ae8c126f3d6509ef905752e6f327e9f99}
+
+
+\subsection{Function Documentation}
+\index{h2\+\_\+workers.\+c@{h2\+\_\+workers.\+c}!h2\+\_\+workers\+\_\+create@{h2\+\_\+workers\+\_\+create}}
+\index{h2\+\_\+workers\+\_\+create@{h2\+\_\+workers\+\_\+create}!h2\+\_\+workers.\+c@{h2\+\_\+workers.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+workers\+\_\+create(server\+\_\+rec $\ast$s, apr\+\_\+pool\+\_\+t $\ast$server\+\_\+pool, int min\+\_\+workers, int max\+\_\+workers, int idle\+\_\+secs)}{h2_workers_create(server_rec *s, apr_pool_t *server_pool, int min_workers, int max_workers, int idle_secs)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+workers}$\ast$ h2\+\_\+workers\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf server\+\_\+rec} $\ast$}]{s, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{server\+\_\+pool, }
+\item[{{\bf int}}]{min\+\_\+workers, }
+\item[{{\bf int}}]{max\+\_\+workers, }
+\item[{{\bf int}}]{idle\+\_\+secs}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__workers_8c_a7087d26a8f57ff45f6a423a319938aa5}{}\label{h2__workers_8c_a7087d26a8f57ff45f6a423a319938aa5}
+
+\begin{DoxyCode}
+281 \{
+282     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+283     \hyperlink{structh2__workers}{h2\_workers} *workers;
+284     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+285     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n};
+286 
+287     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(s);
+288     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(server\_pool);
+289 
+290     \textcolor{comment}{/* let's have our own pool that will be parent to all h2\_worker}
+291 \textcolor{comment}{     * instances we create. This happens in various threads, but always}
+292 \textcolor{comment}{     * guarded by our lock. Without this pool, all subpool creations would}
+293 \textcolor{comment}{     * happen on the pool handed to us, which we do not guard.}
+294 \textcolor{comment}{     */}
+295     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pool, server\_pool);
+296     apr\_pool\_tag(pool, \textcolor{stringliteral}{"h2\_workers"});
+297     workers = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(\hyperlink{structh2__workers}{h2\_workers}));
+298     \textcolor{keywordflow}{if} (!workers) \{
+299         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+300     \}
+301     
+302     workers->\hyperlink{structh2__workers_a5cdc76df2d91977b6596471c5bf89ab1}{s} = \hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+303     workers->\hyperlink{structh2__workers_a4a6f1316a0a960a41c4acaae4fe3d1f6}{pool} = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+304     workers->\hyperlink{structh2__workers_a2f9146472357988e152728e2f75aebdf}{min\_workers} = min\_workers;
+305     workers->\hyperlink{structh2__workers_aadaf15dfdd211a908c16876dbe624f83}{max\_workers} = max\_workers;
+306     workers->\hyperlink{structh2__workers_a124da2075be6c3670fc873ba12c2395a}{max\_idle\_secs} = (idle\_secs > 0)? idle\_secs : 10;
+307 
+308     status = \hyperlink{h2__util_8c_a5691fd0f7e04bff491141354c8314d96}{h2\_fifo\_create}(&workers->\hyperlink{structh2__workers_a091c5f9521ae6dae1f01221fb3bf50c9}{mplxs}, pool, 2 * workers->
+      \hyperlink{structh2__workers_aadaf15dfdd211a908c16876dbe624f83}{max\_workers});
+309     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+310         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+311     \}
+312     
+313     status = \hyperlink{netware_2thread_8c_ad8a75134b8a7aa1160ca49688ade415b}{apr\_threadattr\_create}(&workers->\hyperlink{structh2__workers_a8fc62165a55dd338d37bd24778e96f1f}{thread\_attr}, workers->
+      \hyperlink{structh2__workers_a4a6f1316a0a960a41c4acaae4fe3d1f6}{pool});
+314     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+315         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+316     \}
+317     
+318     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__MPM_ga503cc99968a43d83d6204b104a305e42}{ap\_thread\_stacksize} != 0) \{
+319         apr\_threadattr\_stacksize\_set(workers->\hyperlink{structh2__workers_a8fc62165a55dd338d37bd24778e96f1f}{thread\_attr},
+320                                      \hyperlink{group__APACHE__MPM_ga503cc99968a43d83d6204b104a305e42}{ap\_thread\_stacksize});
+321         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, 0, s,
+322                      \textcolor{stringliteral}{"h2\_workers: using stacksize=%ld"}, 
+323                      (\textcolor{keywordtype}{long})\hyperlink{group__APACHE__MPM_ga503cc99968a43d83d6204b104a305e42}{ap\_thread\_stacksize});
+324     \}
+325     
+326     status = apr\_thread\_mutex\_create(&workers->\hyperlink{structh2__workers_a7a483e64d1eb98bdac0f2e41d1ffeae9}{lock},
+327                                      \hyperlink{group__apr__thread__mutex_ga579050872f9aff06e773b084264f7d06}{APR\_THREAD\_MUTEX\_DEFAULT},
+328                                      workers->\hyperlink{structh2__workers_a4a6f1316a0a960a41c4acaae4fe3d1f6}{pool});
+329     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{        
+330         n = workers->\hyperlink{structh2__workers_a5aeca2bf5d96ce8e570c4f24277f39f6}{nslots} = workers->\hyperlink{structh2__workers_aadaf15dfdd211a908c16876dbe624f83}{max\_workers};
+331         workers->\hyperlink{structh2__workers_a0864d31736bec5780751ec52a6f5798b}{slots} = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(workers->\hyperlink{structh2__workers_a4a6f1316a0a960a41c4acaae4fe3d1f6}{pool}, n * \textcolor{keyword}{sizeof}(
+      \hyperlink{structh2__slot}{h2\_slot}));
+332         \textcolor{keywordflow}{if} (workers->\hyperlink{structh2__workers_a0864d31736bec5780751ec52a6f5798b}{slots} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+333             workers->\hyperlink{structh2__workers_a5aeca2bf5d96ce8e570c4f24277f39f6}{nslots} = 0;
+334             status = \hyperlink{group__APR__Error_ga6a453e60000000609a95817efabebf4f}{APR\_ENOMEM};
+335         \}
+336         \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+337             workers->\hyperlink{structh2__workers_a0864d31736bec5780751ec52a6f5798b}{slots}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}].\hyperlink{structh2__slot_a4b036d4099740896ae67ec8eaf98a26e}{id} = \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+338         \}
+339     \}
+340     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+341         \textcolor{comment}{/* we activate all for now, TODO: support min\_workers again.}
+342 \textcolor{comment}{         * do this in reverse for vanity reasons so slot 0 will most}
+343 \textcolor{comment}{         * likely be at head of idle queue. */}
+344         n = workers->\hyperlink{structh2__workers_aadaf15dfdd211a908c16876dbe624f83}{max\_workers};
+345         \textcolor{keywordflow}{for} (i = n-1; i >= 0; --\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+346             status = activate\_slot(workers, &workers->\hyperlink{structh2__workers_a0864d31736bec5780751ec52a6f5798b}{slots}[i]);
+347         \}
+348         \textcolor{comment}{/* the rest of the slots go on the free list */}
+349         \textcolor{keywordflow}{for}(i = n; i < workers->\hyperlink{structh2__workers_a5aeca2bf5d96ce8e570c4f24277f39f6}{nslots}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+350             push\_slot(&workers->\hyperlink{structh2__workers_ae9f9de2d0be6f92c6a5e54056800f2e9}{free}, &workers->\hyperlink{structh2__workers_a0864d31736bec5780751ec52a6f5798b}{slots}[i]);
+351         \}
+352         workers->\hyperlink{structh2__workers_a00d0f096c6b8b1946852a34c202253cb}{dynamic} = (workers->\hyperlink{structh2__workers_a9f9fcece7bbf08f65ab1aac955310d75}{worker\_count} < workers->
+      \hyperlink{structh2__workers_aadaf15dfdd211a908c16876dbe624f83}{max\_workers});
+353     \}
+354     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+355         apr\_pool\_pre\_cleanup\_register(pool, workers, workers\_pool\_cleanup);    
+356         \textcolor{keywordflow}{return} workers;
+357     \}
+358     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+359 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{h2__workers_8c_a7087d26a8f57ff45f6a423a319938aa5_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=312pt]{h2__workers_8c_a7087d26a8f57ff45f6a423a319938aa5_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+workers.\+c@{h2\+\_\+workers.\+c}!h2\+\_\+workers\+\_\+register@{h2\+\_\+workers\+\_\+register}}
+\index{h2\+\_\+workers\+\_\+register@{h2\+\_\+workers\+\_\+register}!h2\+\_\+workers.\+c@{h2\+\_\+workers.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+workers\+\_\+register(h2\+\_\+workers $\ast$workers, struct h2\+\_\+mplx $\ast$m)}{h2_workers_register(h2_workers *workers, struct h2_mplx *m)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+workers\+\_\+register (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+workers} $\ast$}]{workers, }
+\item[{struct {\bf h2\+\_\+mplx} $\ast$}]{m}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__workers_8c_a00fb6329ef8aca683c2a90d5950c31d8}{}\label{h2__workers_8c_a00fb6329ef8aca683c2a90d5950c31d8}
+Registers a \hyperlink{structh2__mplx}{h2\+\_\+mplx} for task scheduling. If this \hyperlink{structh2__mplx}{h2\+\_\+mplx} runs out of tasks, it will be automatically be unregistered. Should new tasks arrive, it needs to be registered again. 
+\begin{DoxyCode}
+362 \{
+363     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{h2__util_8c_ac4ea1ec7b996302732577ec411ac4451}{h2\_fifo\_push}(workers->
+      \hyperlink{structh2__workers_a091c5f9521ae6dae1f01221fb3bf50c9}{mplxs}, m);
+364     wake\_idle\_worker(workers);
+365     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+366 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=292pt]{h2__workers_8c_a00fb6329ef8aca683c2a90d5950c31d8_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__workers_8c_a00fb6329ef8aca683c2a90d5950c31d8_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+workers.\+c@{h2\+\_\+workers.\+c}!h2\+\_\+workers\+\_\+unregister@{h2\+\_\+workers\+\_\+unregister}}
+\index{h2\+\_\+workers\+\_\+unregister@{h2\+\_\+workers\+\_\+unregister}!h2\+\_\+workers.\+c@{h2\+\_\+workers.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+workers\+\_\+unregister(h2\+\_\+workers $\ast$workers, struct h2\+\_\+mplx $\ast$m)}{h2_workers_unregister(h2_workers *workers, struct h2_mplx *m)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+workers\+\_\+unregister (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+workers} $\ast$}]{workers, }
+\item[{struct {\bf h2\+\_\+mplx} $\ast$}]{m}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__workers_8c_ae0a105f11ce19edf4db5ca016fe0ed96}{}\label{h2__workers_8c_ae0a105f11ce19edf4db5ca016fe0ed96}
+Remove a \hyperlink{structh2__mplx}{h2\+\_\+mplx} from the worker registry. 
+\begin{DoxyCode}
+369 \{
+370     \textcolor{keywordflow}{return} \hyperlink{h2__util_8c_ac52573d613412f386e15412d8c5f53cd}{h2\_fifo\_remove}(workers->\hyperlink{structh2__workers_a091c5f9521ae6dae1f01221fb3bf50c9}{mplxs}, m);
+371 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{h2__workers_8c_ae0a105f11ce19edf4db5ca016fe0ed96_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__workers_8c_ae0a105f11ce19edf4db5ca016fe0ed96_icgraph}
+\end{center}
+\end{figure}
+
+

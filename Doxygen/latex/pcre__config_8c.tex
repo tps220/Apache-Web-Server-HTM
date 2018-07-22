@@ -1,0 +1,149 @@
+\hypertarget{pcre__config_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/pcre/pcre\+\_\+config.c File Reference}
+\label{pcre__config_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+config.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+config.\+c}}
+{\ttfamily \#include \char`\"{}pcre\+\_\+internal.\+h\char`\"{}}\\*
+Include dependency graph for pcre\+\_\+config.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__config_8c__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__config_8c__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre__internal_8h_a43f7c191f7b3645a85b184183534a961}{P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+FN} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre__internal_8h_a8696d535a0f4ad7b9fef8b2acc558ca0}{P\+C\+R\+E\+\_\+\+C\+A\+L\+L\+\_\+\+C\+O\+N\+V\+E\+N\+T\+I\+ON} \hyperlink{pcre__config_8c_abc67898fd6806d2b33479a77471ac7ee}{pcre\+\_\+config} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__thread__proc_gaf132f350c1657f61f533df7066e903c4}{what}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__apr__network__io_ga40101ce9c63cc7ab2b80f6f8c0e7086c}{where})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{pcre\+\_\+config.\+c@{pcre\+\_\+config.\+c}!pcre\+\_\+config@{pcre\+\_\+config}}
+\index{pcre\+\_\+config@{pcre\+\_\+config}!pcre\+\_\+config.\+c@{pcre\+\_\+config.\+c}}
+\subsubsection[{\texorpdfstring{pcre\+\_\+config(int what, void $\ast$where)}{pcre_config(int what, void *where)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+FN} {\bf int} {\bf P\+C\+R\+E\+\_\+\+C\+A\+L\+L\+\_\+\+C\+O\+N\+V\+E\+N\+T\+I\+ON} pcre\+\_\+config (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{what, }
+\item[{{\bf void} $\ast$}]{where}
+\end{DoxyParamCaption}
+)}\hypertarget{pcre__config_8c_abc67898fd6806d2b33479a77471ac7ee}{}\label{pcre__config_8c_abc67898fd6806d2b33479a77471ac7ee}
+
+\begin{DoxyCode}
+78 \{
+79 \textcolor{keywordflow}{switch} (\hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what})
+80   \{
+81   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_ad18c644c262f41db8f031cb56f385489}{PCRE\_CONFIG\_UTF8}:
+82 \textcolor{preprocessor}{#if defined COMPILE\_PCRE16 || defined COMPILE\_PCRE32}
+83   *((\textcolor{keywordtype}{int} *)\hyperlink{group__apr__file__io_ga36413100270e49e571f3f52170bc5a1f}{where}) = 0;
+84   \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a2e1578015eb678450a1c8327c97509e7}{PCRE\_ERROR\_BADOPTION};
+85 \textcolor{preprocessor}{#else}
+86 \textcolor{preprocessor}{#if defined SUPPORT\_UTF}
+87   *((\textcolor{keywordtype}{int} *)where) = 1;
+88 \textcolor{preprocessor}{#else}
+89   *((\textcolor{keywordtype}{int} *)where) = 0;
+90 \textcolor{preprocessor}{#endif}
+91   \textcolor{keywordflow}{break};
+92 \textcolor{preprocessor}{#endif}
+93 
+94   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a15e87352e992cb29558c44336e04fc68}{PCRE\_CONFIG\_UTF16}:
+95 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8 || defined COMPILE\_PCRE32}
+96   *((\textcolor{keywordtype}{int} *)where) = 0;
+97   \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a2e1578015eb678450a1c8327c97509e7}{PCRE\_ERROR\_BADOPTION};
+98 \textcolor{preprocessor}{#else}
+99 \textcolor{preprocessor}{#if defined SUPPORT\_UTF}
+100   *((\textcolor{keywordtype}{int} *)where) = 1;
+101 \textcolor{preprocessor}{#else}
+102   *((\textcolor{keywordtype}{int} *)where) = 0;
+103 \textcolor{preprocessor}{#endif}
+104   \textcolor{keywordflow}{break};
+105 \textcolor{preprocessor}{#endif}
+106 
+107   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a9efdf33e33c6f0dd8beeba4d043c8484}{PCRE\_CONFIG\_UTF32}:
+108 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8 || defined COMPILE\_PCRE16}
+109   *((\textcolor{keywordtype}{int} *)where) = 0;
+110   \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a2e1578015eb678450a1c8327c97509e7}{PCRE\_ERROR\_BADOPTION};
+111 \textcolor{preprocessor}{#else}
+112 \textcolor{preprocessor}{#if defined SUPPORT\_UTF}
+113   *((\textcolor{keywordtype}{int} *)where) = 1;
+114 \textcolor{preprocessor}{#else}
+115   *((\textcolor{keywordtype}{int} *)where) = 0;
+116 \textcolor{preprocessor}{#endif}
+117   \textcolor{keywordflow}{break};
+118 \textcolor{preprocessor}{#endif}
+119 
+120   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a0498601a046ad7249ffd094a4f576ef7}{PCRE\_CONFIG\_UNICODE\_PROPERTIES}:
+121 \textcolor{preprocessor}{#ifdef SUPPORT\_UCP}
+122   *((\textcolor{keywordtype}{int} *)where) = 1;
+123 \textcolor{preprocessor}{#else}
+124   *((\textcolor{keywordtype}{int} *)where) = 0;
+125 \textcolor{preprocessor}{#endif}
+126   \textcolor{keywordflow}{break};
+127 
+128   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a08c40099fbddb1af4eb0367ef02de04e}{PCRE\_CONFIG\_JIT}:
+129 \textcolor{preprocessor}{#ifdef SUPPORT\_JIT}
+130   *((\textcolor{keywordtype}{int} *)where) = 1;
+131 \textcolor{preprocessor}{#else}
+132   *((\textcolor{keywordtype}{int} *)where) = 0;
+133 \textcolor{preprocessor}{#endif}
+134   \textcolor{keywordflow}{break};
+135 
+136   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a0ec94d067429ed5e683c18fe895fa3c9}{PCRE\_CONFIG\_JITTARGET}:
+137 \textcolor{preprocessor}{#ifdef SUPPORT\_JIT}
+138   *((\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)where) = \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(jit\_get\_target)();
+139 \textcolor{preprocessor}{#else}
+140   *((\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)where) = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+141 \textcolor{preprocessor}{#endif}
+142   \textcolor{keywordflow}{break};
+143 
+144   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_ac9cd3aaf1d94ff1e846082b3c69b68f0}{PCRE\_CONFIG\_NEWLINE}:
+145   *((\textcolor{keywordtype}{int} *)where) = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_ab26dfb3784697f4ae91f356713845063}{NEWLINE};
+146   \textcolor{keywordflow}{break};
+147 
+148   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_aee81a372fe78664fd6a78e04c8fd3eb1}{PCRE\_CONFIG\_BSR}:
+149 \textcolor{preprocessor}{#ifdef BSR\_ANYCRLF}
+150   *((\textcolor{keywordtype}{int} *)where) = 1;
+151 \textcolor{preprocessor}{#else}
+152   *((\textcolor{keywordtype}{int} *)where) = 0;
+153 \textcolor{preprocessor}{#endif}
+154   \textcolor{keywordflow}{break};
+155 
+156   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a021a346383e3c6adaf16f7e67224be73}{PCRE\_CONFIG\_LINK\_SIZE}:
+157   *((\textcolor{keywordtype}{int} *)where) = real\_link\_size;
+158   \textcolor{keywordflow}{break};
+159 
+160   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a92a8371791568a85cb1f4a60f1762fcd}{PCRE\_CONFIG\_POSIX\_MALLOC\_THRESHOLD}:
+161   *((\textcolor{keywordtype}{int} *)where) = \hyperlink{util__pcre_8c_a07a4f45cc7e8348280ea89e3336596ae}{POSIX\_MALLOC\_THRESHOLD};
+162   \textcolor{keywordflow}{break};
+163 
+164   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a901dcb140a6a2f43b780219e92b11727}{PCRE\_CONFIG\_PARENS\_LIMIT}:
+165   *((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} \textcolor{keywordtype}{int} *)where) = \hyperlink{config_8h_abd8e1f2f64fd75fd9a1f4e22eeac7423}{PARENS\_NEST\_LIMIT};
+166   \textcolor{keywordflow}{break};
+167 
+168   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a4b5a3d2cc8eca45f8117a90780ce2cea}{PCRE\_CONFIG\_MATCH\_LIMIT}:
+169   *((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} \textcolor{keywordtype}{int} *)where) = \hyperlink{config_8h_a773b8a98906274de291a85c13f49bf18}{MATCH\_LIMIT};
+170   \textcolor{keywordflow}{break};
+171 
+172   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a926aa8aa1743fca147e98fbeed4c5e58}{PCRE\_CONFIG\_MATCH\_LIMIT\_RECURSION}:
+173   *((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} \textcolor{keywordtype}{int} *)where) = \hyperlink{config_8h_a2fdc81a373471b7759fb4bcb5f7033ad}{MATCH\_LIMIT\_RECURSION};
+174   \textcolor{keywordflow}{break};
+175 
+176   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_acd39a87d50b7915ea4ff25edcf2df538}{PCRE\_CONFIG\_STACKRECURSE}:
+177 \textcolor{preprocessor}{#ifdef NO\_RECURSE}
+178   *((\textcolor{keywordtype}{int} *)where) = 0;
+179 \textcolor{preprocessor}{#else}
+180   *((\textcolor{keywordtype}{int} *)where) = 1;
+181 \textcolor{preprocessor}{#endif}
+182   \textcolor{keywordflow}{break};
+183 
+184   \textcolor{keywordflow}{default}: \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a2e1578015eb678450a1c8327c97509e7}{PCRE\_ERROR\_BADOPTION};
+185   \}
+186 
+187 \textcolor{keywordflow}{return} 0;
+188 \}
+\end{DoxyCode}

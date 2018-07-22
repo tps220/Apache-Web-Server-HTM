@@ -1,0 +1,444 @@
+\hypertarget{scoreboard_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/scoreboard.c File Reference}
+\label{scoreboard_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/scoreboard.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/scoreboard.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+Include dependency graph for scoreboard.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{scoreboard_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{scoreboard_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{scoreboard_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~\hyperlink{group__APACHE__CORE__HTTPD_gaf1cdaac5f4562d9d20bae417471ad422}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\item 
+\#define \hyperlink{scoreboard_8c_ab3e0134c7a142a41ec0ffac62a7bf20c}{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+scoreboard}~\hyperlink{group__apr__general_gab484e98426221f3212fcb67af0467381}{A\+P\+R\+\_\+\+A\+L\+I\+G\+N\+\_\+\+D\+E\+F\+A\+U\+LT}(sizeof(\hyperlink{structscoreboard}{scoreboard}))
+\item 
+\#define \hyperlink{scoreboard_8c_a14e13b4e36e3d4247e1153d5065f2c2e}{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+global\+\_\+score}~\hyperlink{group__apr__general_gab484e98426221f3212fcb67af0467381}{A\+P\+R\+\_\+\+A\+L\+I\+G\+N\+\_\+\+D\+E\+F\+A\+U\+LT}(sizeof(\hyperlink{structglobal__score}{global\+\_\+score}))
+\item 
+\#define \hyperlink{scoreboard_8c_a006145e443f66ad9c880d7da080b0299}{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+process\+\_\+score}~\hyperlink{group__apr__general_gab484e98426221f3212fcb67af0467381}{A\+P\+R\+\_\+\+A\+L\+I\+G\+N\+\_\+\+D\+E\+F\+A\+U\+LT}(sizeof(\hyperlink{structprocess__score}{process\+\_\+score}))
+\item 
+\#define \hyperlink{scoreboard_8c_a97f8ca53a22e751fd70dfd64d3b6201b}{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+worker\+\_\+score}~\hyperlink{group__apr__general_gab484e98426221f3212fcb67af0467381}{A\+P\+R\+\_\+\+A\+L\+I\+G\+N\+\_\+\+D\+E\+F\+A\+U\+LT}(sizeof(\hyperlink{structworker__score}{worker\+\_\+score}))
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{scoreboard_8c_aed18d048b824300bef7cb37b7686c310}{ap\+\_\+set\+\_\+scoreboard} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{modules_2cache_2mod__cache__socache_8c_a7c1d654b7b6114d7a0abc8d351dd1bcd}{dummy}, const char $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{scoreboard_8c_a17f77d81435b6c77ee4f6f4ed055e942}{ap\+\_\+set\+\_\+extended\+\_\+status} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{modules_2cache_2mod__cache__socache_8c_a7c1d654b7b6114d7a0abc8d351dd1bcd}{dummy}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+const char $\ast$ \hyperlink{scoreboard_8c_a14f1e986c30514d8c26ce979afbecf6b}{ap\+\_\+set\+\_\+reqtail} (\hyperlink{group__APACHE__CORE__CONFIG_ga1791fbd28d06a9847bad001541c5241e}{cmd\+\_\+parms} $\ast$\hyperlink{group__apr__thread__proc_ga7b715f5a87a71c6766684c1798251237}{cmd}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{modules_2cache_2mod__cache__socache_8c_a7c1d654b7b6114d7a0abc8d351dd1bcd}{dummy}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+\hyperlink{scoreboard_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT} ()
+\item 
+\hyperlink{scoreboard_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{scoreboard_8c_a57c750d137d702bf2f1ea182b631ddec}{ap\+\_\+cleanup\+\_\+scoreboard} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{scoreboard_8c_a6f3b3bf18ec576c8f38ca88645ab0692}{ap\+\_\+create\+\_\+scoreboard} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{scoreboard_8h_a928db86c1a57efc32810872e245b9f4c}{ap\+\_\+scoreboard\+\_\+e} sb\+\_\+type)
+\item 
+\hyperlink{scoreboard_8c_ae79ff7da1f629d7b05bb728249d0e6cf}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structworker__score}{worker\+\_\+score} $\ast$)
+\item 
+\hyperlink{scoreboard_8c_ae130592c0024886bbb1412fb74c0b417}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structprocess__score}{process\+\_\+score} $\ast$)
+\item 
+\hyperlink{scoreboard_8c_a2ef7c88640be151323d2772507e98f74}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structglobal__score}{global\+\_\+score} $\ast$)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ap__config_8h_a0bb4c3adf74510a0dcdad5b125725fe0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{structscoreboard}{scoreboard} $\ast$ \hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\+\_\+scoreboard\+\_\+image} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL}
+\item 
+\hyperlink{ap__config_8h_a0bb4c3adf74510a0dcdad5b125725fe0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} const char $\ast$ \hyperlink{scoreboard_8c_a81b2cececded474fb5fe871f8e64009b}{ap\+\_\+scoreboard\+\_\+fname} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL}
+\item 
+\hyperlink{ap__config_8h_a0bb4c3adf74510a0dcdad5b125725fe0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{scoreboard_8c_ab8fc7e9c22bde7df97bb285f4954dc65}{ap\+\_\+extended\+\_\+status} = 0
+\item 
+\hyperlink{ap__config_8h_a0bb4c3adf74510a0dcdad5b125725fe0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{scoreboard_8c_a10f0a0bee57d0b9323ad99e05199e266}{ap\+\_\+mod\+\_\+status\+\_\+reqtail} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{scoreboard.\+c@{scoreboard.\+c}!A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}
+\index{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}{APLOG_MODULE_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX~{\bf A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}\hypertarget{scoreboard_8c_ae75325996d1b2cf6120dded4cb153a22}{}\label{scoreboard_8c_ae75325996d1b2cf6120dded4cb153a22}
+\index{scoreboard.\+c@{scoreboard.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{scoreboard_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{scoreboard_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{scoreboard.\+c@{scoreboard.\+c}!S\+I\+Z\+E\+\_\+\+O\+F\+\_\+global\+\_\+score@{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+global\+\_\+score}}
+\index{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+global\+\_\+score@{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+global\+\_\+score}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+global\+\_\+score}{SIZE_OF_global_score}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+I\+Z\+E\+\_\+\+O\+F\+\_\+global\+\_\+score~{\bf A\+P\+R\+\_\+\+A\+L\+I\+G\+N\+\_\+\+D\+E\+F\+A\+U\+LT}(sizeof({\bf global\+\_\+score}))}\hypertarget{scoreboard_8c_a14e13b4e36e3d4247e1153d5065f2c2e}{}\label{scoreboard_8c_a14e13b4e36e3d4247e1153d5065f2c2e}
+\index{scoreboard.\+c@{scoreboard.\+c}!S\+I\+Z\+E\+\_\+\+O\+F\+\_\+process\+\_\+score@{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+process\+\_\+score}}
+\index{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+process\+\_\+score@{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+process\+\_\+score}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+process\+\_\+score}{SIZE_OF_process_score}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+I\+Z\+E\+\_\+\+O\+F\+\_\+process\+\_\+score~{\bf A\+P\+R\+\_\+\+A\+L\+I\+G\+N\+\_\+\+D\+E\+F\+A\+U\+LT}(sizeof({\bf process\+\_\+score}))}\hypertarget{scoreboard_8c_a006145e443f66ad9c880d7da080b0299}{}\label{scoreboard_8c_a006145e443f66ad9c880d7da080b0299}
+\index{scoreboard.\+c@{scoreboard.\+c}!S\+I\+Z\+E\+\_\+\+O\+F\+\_\+scoreboard@{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+scoreboard}}
+\index{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+scoreboard@{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+scoreboard}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+scoreboard}{SIZE_OF_scoreboard}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+I\+Z\+E\+\_\+\+O\+F\+\_\+scoreboard~{\bf A\+P\+R\+\_\+\+A\+L\+I\+G\+N\+\_\+\+D\+E\+F\+A\+U\+LT}(sizeof({\bf scoreboard}))}\hypertarget{scoreboard_8c_ab3e0134c7a142a41ec0ffac62a7bf20c}{}\label{scoreboard_8c_ab3e0134c7a142a41ec0ffac62a7bf20c}
+\index{scoreboard.\+c@{scoreboard.\+c}!S\+I\+Z\+E\+\_\+\+O\+F\+\_\+worker\+\_\+score@{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+worker\+\_\+score}}
+\index{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+worker\+\_\+score@{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+worker\+\_\+score}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{S\+I\+Z\+E\+\_\+\+O\+F\+\_\+worker\+\_\+score}{SIZE_OF_worker_score}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+I\+Z\+E\+\_\+\+O\+F\+\_\+worker\+\_\+score~{\bf A\+P\+R\+\_\+\+A\+L\+I\+G\+N\+\_\+\+D\+E\+F\+A\+U\+LT}(sizeof({\bf worker\+\_\+score}))}\hypertarget{scoreboard_8c_a97f8ca53a22e751fd70dfd64d3b6201b}{}\label{scoreboard_8c_a97f8ca53a22e751fd70dfd64d3b6201b}
+
+
+\subsection{Function Documentation}
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+cleanup\+\_\+scoreboard@{ap\+\_\+cleanup\+\_\+scoreboard}}
+\index{ap\+\_\+cleanup\+\_\+scoreboard@{ap\+\_\+cleanup\+\_\+scoreboard}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+cleanup\+\_\+scoreboard(void $\ast$d)}{ap_cleanup_scoreboard(void *d)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} ap\+\_\+cleanup\+\_\+scoreboard (
+\begin{DoxyParamCaption}
+\item[{{\bf void} $\ast$}]{d}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_a57c750d137d702bf2f1ea182b631ddec}{}\label{scoreboard_8c_a57c750d137d702bf2f1ea182b631ddec}
+
+\begin{DoxyCode}
+286 \{
+287     \textcolor{keywordflow}{if} (\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+288         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+289     \}
+290     \textcolor{keywordflow}{if} (scoreboard\_type == \hyperlink{scoreboard_8h_a928db86c1a57efc32810872e245b9f4caad960ec4f7eb89cf08eb20cba1fc87c0}{SB\_SHARED}) \{
+291         ap\_cleanup\_shared\_mem(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+292     \}
+293     \textcolor{keywordflow}{else} \{
+294         \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_adf777c5f1639e4d91bcf1a21bdc573ae}{global});
+295         \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image});
+296         \hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+297     \}
+298     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+299 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{scoreboard_8c_a57c750d137d702bf2f1ea182b631ddec_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{scoreboard_8c_a57c750d137d702bf2f1ea182b631ddec_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+create\+\_\+scoreboard@{ap\+\_\+create\+\_\+scoreboard}}
+\index{ap\+\_\+create\+\_\+scoreboard@{ap\+\_\+create\+\_\+scoreboard}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+create\+\_\+scoreboard(apr\+\_\+pool\+\_\+t $\ast$p, ap\+\_\+scoreboard\+\_\+e sb\+\_\+type)}{ap_create_scoreboard(apr_pool_t *p, ap_scoreboard_e sb_type)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ap\+\_\+create\+\_\+scoreboard (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{{\bf ap\+\_\+scoreboard\+\_\+e}}]{sb\+\_\+type}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_a6f3b3bf18ec576c8f38ca88645ab0692}{}\label{scoreboard_8c_a6f3b3bf18ec576c8f38ca88645ab0692}
+
+\begin{DoxyCode}
+305 \{
+306     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+307 \textcolor{preprocessor}{#if APR\_HAS\_SHARED\_MEMORY}
+308     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+309 \textcolor{preprocessor}{#endif}
+310 
+311     \textcolor{keywordflow}{if} (\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}) \{
+312         \hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_adf777c5f1639e4d91bcf1a21bdc573ae}{global}->\hyperlink{structglobal__score_ace1aec17d7958881da29c9c2938bf238}{restart\_time} = apr\_time\_now();
+313         memset(\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa6f6cac3fd4d9881efaf5a2e0b0a98c7}{parent}, 0,
+314                \hyperlink{scoreboard_8c_a006145e443f66ad9c880d7da080b0299}{SIZE\_OF\_process\_score} * server\_limit);
+315         \textcolor{keywordflow}{for} (i = 0; i < server\_limit; i++) \{
+316             memset(\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[i], 0,
+317                    \hyperlink{scoreboard_8c_a97f8ca53a22e751fd70dfd64d3b6201b}{SIZE\_OF\_worker\_score} * thread\_limit);
+318         \}
+319         ap\_init\_scoreboard(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+320         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+321     \}
+322 
+323     ap\_calc\_scoreboard\_size();
+324 \textcolor{preprocessor}{#if APR\_HAS\_SHARED\_MEMORY}
+325     \textcolor{keywordflow}{if} (sb\_type == \hyperlink{scoreboard_8h_a928db86c1a57efc32810872e245b9f4caad960ec4f7eb89cf08eb20cba1fc87c0}{SB\_SHARED}) \{
+326         \textcolor{keywordtype}{void} *sb\_shared;
+327         rv = open\_scoreboard(p);
+328         \textcolor{keywordflow}{if} (rv || !(sb\_shared = apr\_shm\_baseaddr\_get(ap\_scoreboard\_shm))) \{
+329             \textcolor{keywordflow}{return} \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{HTTP\_INTERNAL\_SERVER\_ERROR};
+330         \}
+331         memset(sb\_shared, 0, scoreboard\_size);
+332         ap\_init\_scoreboard(sb\_shared);
+333     \}
+334     \textcolor{keywordflow}{else}
+335 \textcolor{preprocessor}{#endif}
+336     \{
+337         \textcolor{comment}{/* A simple malloc will suffice */}
+338         \textcolor{keywordtype}{void} *sb\_mem = ap\_calloc(1, scoreboard\_size);
+339         ap\_init\_scoreboard(sb\_mem);
+340     \}
+341 
+342     scoreboard\_type = sb\_type;
+343     \hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_adf777c5f1639e4d91bcf1a21bdc573ae}{global}->\hyperlink{structglobal__score_a2d68d2a23841cbc2d727acf3ff1ad5d2}{running\_generation} = 0;
+344     \hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_adf777c5f1639e4d91bcf1a21bdc573ae}{global}->\hyperlink{structglobal__score_ace1aec17d7958881da29c9c2938bf238}{restart\_time} = apr\_time\_now();
+345 
+346     apr\_pool\_cleanup\_register(p, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{scoreboard_8c_a57c750d137d702bf2f1ea182b631ddec}{ap\_cleanup\_scoreboard}, 
+      apr\_pool\_cleanup\_null);
+347 
+348     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+349 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{scoreboard_8c_a6f3b3bf18ec576c8f38ca88645ab0692_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=312pt]{scoreboard_8c_a6f3b3bf18ec576c8f38ca88645ab0692_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{scoreboard.\+c@{scoreboard.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{AP_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{}\label{scoreboard_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}
+
+\begin{DoxyCode}
+139 \{
+140     ap\_mpm\_query(\hyperlink{group__APACHE__CORE__MPM_ga75ad3f7d2fbb2aae4a57af8c0ebd6e87}{AP\_MPMQ\_HARD\_LIMIT\_THREADS}, &thread\_limit);
+141     ap\_mpm\_query(\hyperlink{group__APACHE__CORE__MPM_gad5f8f89d2ba341935e89ceb99ee39ec2}{AP\_MPMQ\_HARD\_LIMIT\_DAEMONS}, &server\_limit);
+142 
+143     scoreboard\_size  = \hyperlink{scoreboard_8c_a14e13b4e36e3d4247e1153d5065f2c2e}{SIZE\_OF\_global\_score};
+144     scoreboard\_size += \hyperlink{scoreboard_8c_a006145e443f66ad9c880d7da080b0299}{SIZE\_OF\_process\_score} * server\_limit;
+145     scoreboard\_size += \hyperlink{scoreboard_8c_a97f8ca53a22e751fd70dfd64d3b6201b}{SIZE\_OF\_worker\_score} * server\_limit * thread\_limit;
+146 
+147     \textcolor{keywordflow}{return} scoreboard\_size;
+148 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{scoreboard_8c_ace56382e8c8bdfffe9ffc8dbab06d36c_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{scoreboard.\+c@{scoreboard.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(worker\+\_\+score $\ast$)}{AP_DECLARE(worker_score *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf worker\+\_\+score} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_ae79ff7da1f629d7b05bb728249d0e6cf}{}\label{scoreboard_8c_ae79ff7da1f629d7b05bb728249d0e6cf}
+
+\begin{DoxyCode}
+622 \{
+623     \textcolor{keywordflow}{if} (((\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x} < 0) || (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x} >= server\_limit)) ||
+624         ((\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y} < 0) || (\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y} >= thread\_limit))) \{
+625         \textcolor{keywordflow}{return}(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}); \textcolor{comment}{/* Out of range */}
+626     \}
+627     \textcolor{keywordflow}{return} &\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}][\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}];
+628 \}
+\end{DoxyCode}
+\index{scoreboard.\+c@{scoreboard.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(process\+\_\+score $\ast$)}{AP_DECLARE(process_score *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf process\+\_\+score} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_ae130592c0024886bbb1412fb74c0b417}{}\label{scoreboard_8c_ae130592c0024886bbb1412fb74c0b417}
+
+\begin{DoxyCode}
+656 \{
+657     \textcolor{keywordflow}{if} ((\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x} < 0) || (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x} >= server\_limit)) \{
+658         \textcolor{keywordflow}{return}(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}); \textcolor{comment}{/* Out of range */}
+659     \}
+660     \textcolor{keywordflow}{return} &\hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa6f6cac3fd4d9881efaf5a2e0b0a98c7}{parent}[\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}];
+661 \}
+\end{DoxyCode}
+\index{scoreboard.\+c@{scoreboard.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(global\+\_\+score $\ast$)}{AP_DECLARE(global_score *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf global\+\_\+score} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_a2ef7c88640be151323d2772507e98f74}{}\label{scoreboard_8c_a2ef7c88640be151323d2772507e98f74}
+
+\begin{DoxyCode}
+664 \{
+665     \textcolor{keywordflow}{return} \hyperlink{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_adf777c5f1639e4d91bcf1a21bdc573ae}{global};
+666 \}
+\end{DoxyCode}
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+set\+\_\+extended\+\_\+status@{ap\+\_\+set\+\_\+extended\+\_\+status}}
+\index{ap\+\_\+set\+\_\+extended\+\_\+status@{ap\+\_\+set\+\_\+extended\+\_\+status}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+set\+\_\+extended\+\_\+status(cmd\+\_\+parms $\ast$cmd, void $\ast$dummy, int arg)}{ap_set_extended_status(cmd_parms *cmd, void *dummy, int arg)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ ap\+\_\+set\+\_\+extended\+\_\+status (
+\begin{DoxyParamCaption}
+\item[{{\bf cmd\+\_\+parms} $\ast$}]{cmd, }
+\item[{{\bf void} $\ast$}]{dummy, }
+\item[{{\bf int}}]{arg}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_a17f77d81435b6c77ee4f6f4ed055e942}{}\label{scoreboard_8c_a17f77d81435b6c77ee4f6f4ed055e942}
+
+\begin{DoxyCode}
+64 \{
+65     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err} = ap\_check\_cmd\_context(cmd, \hyperlink{group__ap__check__cmd__context_ga8f2f401b1d57a151c5ba871088ba097e}{GLOBAL\_ONLY});
+66     \textcolor{keywordflow}{if} (err != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+67         \textcolor{keywordflow}{return} \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+68     \}
+69     \hyperlink{scoreboard_8c_ab8fc7e9c22bde7df97bb285f4954dc65}{ap\_extended\_status} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+70     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+71 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=322pt]{scoreboard_8c_a17f77d81435b6c77ee4f6f4ed055e942_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+set\+\_\+reqtail@{ap\+\_\+set\+\_\+reqtail}}
+\index{ap\+\_\+set\+\_\+reqtail@{ap\+\_\+set\+\_\+reqtail}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+set\+\_\+reqtail(cmd\+\_\+parms $\ast$cmd, void $\ast$dummy, int arg)}{ap_set_reqtail(cmd_parms *cmd, void *dummy, int arg)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ ap\+\_\+set\+\_\+reqtail (
+\begin{DoxyParamCaption}
+\item[{{\bf cmd\+\_\+parms} $\ast$}]{cmd, }
+\item[{{\bf void} $\ast$}]{dummy, }
+\item[{{\bf int}}]{arg}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_a14f1e986c30514d8c26ce979afbecf6b}{}\label{scoreboard_8c_a14f1e986c30514d8c26ce979afbecf6b}
+
+\begin{DoxyCode}
+76 \{
+77     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err} = ap\_check\_cmd\_context(cmd, \hyperlink{group__ap__check__cmd__context_ga8f2f401b1d57a151c5ba871088ba097e}{GLOBAL\_ONLY});
+78     \textcolor{keywordflow}{if} (err != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+79         \textcolor{keywordflow}{return} \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+80     \}
+81     \hyperlink{scoreboard_8c_a10f0a0bee57d0b9323ad99e05199e266}{ap\_mod\_status\_reqtail} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+82     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+83 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=276pt]{scoreboard_8c_a14f1e986c30514d8c26ce979afbecf6b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+set\+\_\+scoreboard@{ap\+\_\+set\+\_\+scoreboard}}
+\index{ap\+\_\+set\+\_\+scoreboard@{ap\+\_\+set\+\_\+scoreboard}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+set\+\_\+scoreboard(cmd\+\_\+parms $\ast$cmd, void $\ast$dummy, const char $\ast$arg)}{ap_set_scoreboard(cmd_parms *cmd, void *dummy, const char *arg)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ ap\+\_\+set\+\_\+scoreboard (
+\begin{DoxyParamCaption}
+\item[{{\bf cmd\+\_\+parms} $\ast$}]{cmd, }
+\item[{{\bf void} $\ast$}]{dummy, }
+\item[{const char $\ast$}]{arg}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_aed18d048b824300bef7cb37b7686c310}{}\label{scoreboard_8c_aed18d048b824300bef7cb37b7686c310}
+
+\begin{DoxyCode}
+50 \{
+51     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err} = ap\_check\_cmd\_context(cmd, \hyperlink{group__ap__check__cmd__context_ga8f2f401b1d57a151c5ba871088ba097e}{GLOBAL\_ONLY});
+52     \textcolor{keywordflow}{if} (err != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+53         \textcolor{keywordflow}{return} \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+54     \}
+55 
+56     \hyperlink{scoreboard_8c_a81b2cececded474fb5fe871f8e64009b}{ap\_scoreboard\_fname} = \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+57     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+58 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{scoreboard_8c_aed18d048b824300bef7cb37b7686c310_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{scoreboard.\+c@{scoreboard.\+c}!A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}}
+\index{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+C\+T()}{APR_HOOK_STRUCT()}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{scoreboard_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{}\label{scoreboard_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}
+
+\begin{DoxyCode}
+107                       \{
+108     \textcolor{keywordtype}{int} \hyperlink{scoreboard_8h_a2acdad153575221fa5dc1c31517c46da}{child\_num};
+109     \textcolor{keywordtype}{int} \hyperlink{scoreboard_8h_a72ef57badf760c9f924ce35625453c33}{thread\_num};
+110 \};
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{scoreboard_8c_a7be86665d9cf471d2cc24c9f6a4b63fc_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+extended\+\_\+status@{ap\+\_\+extended\+\_\+status}}
+\index{ap\+\_\+extended\+\_\+status@{ap\+\_\+extended\+\_\+status}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+extended\+\_\+status}{ap_extended_status}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} {\bf int} ap\+\_\+extended\+\_\+status = 0}\hypertarget{scoreboard_8c_ab8fc7e9c22bde7df97bb285f4954dc65}{}\label{scoreboard_8c_ab8fc7e9c22bde7df97bb285f4954dc65}
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+mod\+\_\+status\+\_\+reqtail@{ap\+\_\+mod\+\_\+status\+\_\+reqtail}}
+\index{ap\+\_\+mod\+\_\+status\+\_\+reqtail@{ap\+\_\+mod\+\_\+status\+\_\+reqtail}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+mod\+\_\+status\+\_\+reqtail}{ap_mod_status_reqtail}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} {\bf int} ap\+\_\+mod\+\_\+status\+\_\+reqtail = 0}\hypertarget{scoreboard_8c_a10f0a0bee57d0b9323ad99e05199e266}{}\label{scoreboard_8c_a10f0a0bee57d0b9323ad99e05199e266}
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+scoreboard\+\_\+fname@{ap\+\_\+scoreboard\+\_\+fname}}
+\index{ap\+\_\+scoreboard\+\_\+fname@{ap\+\_\+scoreboard\+\_\+fname}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+scoreboard\+\_\+fname}{ap_scoreboard_fname}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} const char$\ast$ ap\+\_\+scoreboard\+\_\+fname = {\bf N\+U\+LL}}\hypertarget{scoreboard_8c_a81b2cececded474fb5fe871f8e64009b}{}\label{scoreboard_8c_a81b2cececded474fb5fe871f8e64009b}
+\index{scoreboard.\+c@{scoreboard.\+c}!ap\+\_\+scoreboard\+\_\+image@{ap\+\_\+scoreboard\+\_\+image}}
+\index{ap\+\_\+scoreboard\+\_\+image@{ap\+\_\+scoreboard\+\_\+image}!scoreboard.\+c@{scoreboard.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+scoreboard\+\_\+image}{ap_scoreboard_image}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} {\bf scoreboard}$\ast$ ap\+\_\+scoreboard\+\_\+image = {\bf N\+U\+LL}}\hypertarget{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}{}\label{scoreboard_8c_a102e0a64bb8d9106854cf97302d8e52d}

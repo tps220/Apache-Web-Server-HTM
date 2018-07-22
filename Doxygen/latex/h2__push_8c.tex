@@ -1,0 +1,565 @@
+\hypertarget{h2__push_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http2/h2\+\_\+push.c File Reference}
+\label{h2__push_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+push.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+push.\+c}}
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+lib.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+strings.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+hash.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+time.\+h$>$}\\*
+{\ttfamily \#include $<$httpd.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+core.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+log.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+util.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+push.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+headers.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+session.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+stream.\+h\char`\"{}}\\*
+Include dependency graph for h2\+\_\+push.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structlink__ctx}{link\+\_\+ctx}
+\item 
+struct \hyperlink{structh2__push__diary__entry}{h2\+\_\+push\+\_\+diary\+\_\+entry}
+\item 
+struct \hyperlink{structgset__encoder}{gset\+\_\+encoder}
+\item 
+struct \hyperlink{structgset__decoder}{gset\+\_\+decoder}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{G\+C\+S\+L\+O\+G\+\_\+\+L\+E\+V\+EL}~\hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E1}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structh2__push__diary__entry}{h2\+\_\+push\+\_\+diary\+\_\+entry} \hyperlink{h2__push_8c_af11c1c4f4e4a564c9b4a6bc72552de9d}{h2\+\_\+push\+\_\+diary\+\_\+entry}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$ \hyperlink{h2__push_8c_a59d6a4f024f9bad56b3023de17d5137d}{h2\+\_\+push\+\_\+collect} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, const \hyperlink{structh2__request}{h2\+\_\+request} $\ast$req, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} push\+\_\+policy, const \hyperlink{structh2__headers}{h2\+\_\+headers} $\ast$\hyperlink{group__APR__Util__DBD_ga3bb17d78322a086f98b82abd8bb9a8cd}{res})
+\item 
+\hyperlink{structh2__push__diary}{h2\+\_\+push\+\_\+diary} $\ast$ \hyperlink{h2__push_8c_ab6694529da5bd728663ae39084a873f8}{h2\+\_\+push\+\_\+diary\+\_\+create} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcregrep_8txt_a0513277caa5c1730b9f0e841fd4c30fc}{N})
+\item 
+\hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$ \hyperlink{h2__push_8c_a84db00b607fb6e1ef26ffa022282ee1f}{h2\+\_\+push\+\_\+diary\+\_\+update} (\hyperlink{structh2__session}{h2\+\_\+session} $\ast$session, \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$pushes)
+\item 
+\hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$ \hyperlink{h2__push_8c_a472b2fcc2974feb81969d04dd1aa07cf}{h2\+\_\+push\+\_\+collect\+\_\+update} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, const struct \hyperlink{structh2__request}{h2\+\_\+request} $\ast$req, const struct \hyperlink{structh2__headers}{h2\+\_\+headers} $\ast$\hyperlink{group__APR__Util__DBD_ga3bb17d78322a086f98b82abd8bb9a8cd}{res})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__push_8c_a70f31f903396ce30f520df8e98e8af01}{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+get} (\hyperlink{structh2__push__diary}{h2\+\_\+push\+\_\+diary} $\ast$diary, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} maxP, const char $\ast$authority, const char $\ast$$\ast$pdata, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} $\ast$plen)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__push_8c_adb420b979f0ee9a54f8a353b6b3aaeb0}{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+set} (\hyperlink{structh2__push__diary}{h2\+\_\+push\+\_\+diary} $\ast$diary, const char $\ast$authority, const char $\ast$\hyperlink{structdata}{data}, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__push_8c_a3acefab6eecc2c75624d6bec56424929}{h2\+\_\+push\+\_\+diary\+\_\+digest64\+\_\+set} (\hyperlink{structh2__push__diary}{h2\+\_\+push\+\_\+diary} $\ast$diary, const char $\ast$authority, const char $\ast$data64url, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!G\+C\+S\+L\+O\+G\+\_\+\+L\+E\+V\+EL@{G\+C\+S\+L\+O\+G\+\_\+\+L\+E\+V\+EL}}
+\index{G\+C\+S\+L\+O\+G\+\_\+\+L\+E\+V\+EL@{G\+C\+S\+L\+O\+G\+\_\+\+L\+E\+V\+EL}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{G\+C\+S\+L\+O\+G\+\_\+\+L\+E\+V\+EL}{GCSLOG_LEVEL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\+C\+S\+L\+O\+G\+\_\+\+L\+E\+V\+EL~{\bf A\+P\+L\+O\+G\+\_\+\+T\+R\+A\+C\+E1}}\hypertarget{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{}\label{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}
+
+
+\subsection{Typedef Documentation}
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!h2\+\_\+push\+\_\+diary\+\_\+entry@{h2\+\_\+push\+\_\+diary\+\_\+entry}}
+\index{h2\+\_\+push\+\_\+diary\+\_\+entry@{h2\+\_\+push\+\_\+diary\+\_\+entry}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+diary\+\_\+entry}{h2_push_diary_entry}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf h2\+\_\+push\+\_\+diary\+\_\+entry}  {\bf h2\+\_\+push\+\_\+diary\+\_\+entry}}\hypertarget{h2__push_8c_af11c1c4f4e4a564c9b4a6bc72552de9d}{}\label{h2__push_8c_af11c1c4f4e4a564c9b4a6bc72552de9d}
+
+
+\subsection{Function Documentation}
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!h2\+\_\+push\+\_\+collect@{h2\+\_\+push\+\_\+collect}}
+\index{h2\+\_\+push\+\_\+collect@{h2\+\_\+push\+\_\+collect}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+collect(apr\+\_\+pool\+\_\+t $\ast$p, const h2\+\_\+request $\ast$req, int push\+\_\+policy, const h2\+\_\+headers $\ast$res)}{h2_push_collect(apr_pool_t *p, const h2_request *req, int push_policy, const h2_headers *res)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+array\+\_\+header\+\_\+t}$\ast$ h2\+\_\+push\+\_\+collect (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{const {\bf h2\+\_\+request} $\ast$}]{req, }
+\item[{{\bf int}}]{push\+\_\+policy, }
+\item[{const {\bf h2\+\_\+headers} $\ast$}]{res}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__push_8c_a59d6a4f024f9bad56b3023de17d5137d}{}\label{h2__push_8c_a59d6a4f024f9bad56b3023de17d5137d}
+
+\begin{DoxyCode}
+437 \{
+438     \textcolor{keywordflow}{if} (req && push\_policy != \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292aea358d7758179325814ce5d5560a2b2fe7}{H2\_PUSH\_NONE}) \{
+439         \textcolor{comment}{/* Collect push candidates from the request/response pair.}
+440 \textcolor{comment}{         * }
+441 \textcolor{comment}{         * One source for pushes are "rel=preload" link headers}
+442 \textcolor{comment}{         * in the response.}
+443 \textcolor{comment}{         * }
+444 \textcolor{comment}{         * TODO: This may be extended in the future by hooks or callbacks}
+445 \textcolor{comment}{         * where other modules can provide push information directly.}
+446 \textcolor{comment}{         */}
+447         \textcolor{keywordflow}{if} (res->\hyperlink{structh2__headers_a6b07b460b8fb9e98c8cfdeff2f9b116c}{headers}) \{
+448             \hyperlink{structlink__ctx}{link\_ctx} \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx};
+449             
+450             memset(&ctx, 0, \textcolor{keyword}{sizeof}(ctx));
+451             ctx.\hyperlink{structlink__ctx_aa929974742a5e92a97982b19bfa04511}{req} = req;
+452             ctx.\hyperlink{structlink__ctx_a00704e320fb48c1513cb39efcdd33628}{push\_policy} = push\_policy;
+453             ctx.\hyperlink{structlink__ctx_a6e2e678f2b78d117d926f8356e1f5cbb}{pool} = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+454             
+455             apr\_table\_do(head\_iter, &ctx, res->\hyperlink{structh2__headers_a6b07b460b8fb9e98c8cfdeff2f9b116c}{headers}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+456             \textcolor{keywordflow}{if} (ctx.\hyperlink{structlink__ctx_a27a1b354d180785b5517dba36444647f}{pushes}) \{
+457                 apr\_table\_setn(res->\hyperlink{structh2__headers_a6b07b460b8fb9e98c8cfdeff2f9b116c}{headers}, \textcolor{stringliteral}{"push-policy"}, 
+458                                policy\_str(push\_policy));
+459             \}
+460             \textcolor{keywordflow}{return} ctx.\hyperlink{structlink__ctx_a27a1b354d180785b5517dba36444647f}{pushes};
+461         \}
+462     \}
+463     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+464 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c_a59d6a4f024f9bad56b3023de17d5137d_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!h2\+\_\+push\+\_\+collect\+\_\+update@{h2\+\_\+push\+\_\+collect\+\_\+update}}
+\index{h2\+\_\+push\+\_\+collect\+\_\+update@{h2\+\_\+push\+\_\+collect\+\_\+update}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+collect\+\_\+update(h2\+\_\+stream $\ast$stream, const struct h2\+\_\+request $\ast$req, const struct h2\+\_\+headers $\ast$res)}{h2_push_collect_update(h2_stream *stream, const struct h2_request *req, const struct h2_headers *res)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+array\+\_\+header\+\_\+t}$\ast$ h2\+\_\+push\+\_\+collect\+\_\+update (
+\begin{DoxyParamCaption}
+\item[{struct {\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{const struct {\bf h2\+\_\+request} $\ast$}]{req, }
+\item[{const struct {\bf h2\+\_\+headers} $\ast$}]{res}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__push_8c_a472b2fcc2974feb81969d04dd1aa07cf}{}\label{h2__push_8c_a472b2fcc2974feb81969d04dd1aa07cf}
+Collect pushes for the given request/response pair, enter them into the diary and return those pushes newly entered. 
+\begin{DoxyCode}
+692 \{
+693     \hyperlink{structh2__session}{h2\_session} *session = stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session};
+694     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *cache\_digest = apr\_table\_get(req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}, \textcolor{stringliteral}{"Cache-Digest"});
+695     \hyperlink{structapr__array__header__t}{apr\_array\_header\_t} *pushes;
+696     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+697     
+698     \textcolor{keywordflow}{if} (cache\_digest && session->\hyperlink{structh2__session_a252ee2bfdfc80fd135875274855cdf2b}{push\_diary}) \{
+699         status = \hyperlink{h2__push_8c_a3acefab6eecc2c75624d6bec56424929}{h2\_push\_diary\_digest64\_set}(session->
+      \hyperlink{structh2__session_a252ee2bfdfc80fd135875274855cdf2b}{push\_diary}, req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority}, 
+700                                             cache\_digest, stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool});
+701         \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+702             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, status, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+703                           \hyperlink{h2__session_8h_a28df7ff9f5f9745ac52f65e5f216ed1f}{H2\_SSSN\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03057), session,
+704                           \textcolor{stringliteral}{"push diary set from Cache-Digest: %s"}), cache\_digest);
+705         \}
+706     \}
+707     pushes = \hyperlink{h2__push_8c_a59d6a4f024f9bad56b3023de17d5137d}{h2\_push\_collect}(stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, req, stream->
+      \hyperlink{structh2__stream_a215ba87e42c6e63de04d902bc0e3cc06}{push\_policy}, res);
+708     \textcolor{keywordflow}{return} \hyperlink{h2__push_8c_a84db00b607fb6e1ef26ffa022282ee1f}{h2\_push\_diary\_update}(stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}, pushes);
+709 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c_a472b2fcc2974feb81969d04dd1aa07cf_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c_a472b2fcc2974feb81969d04dd1aa07cf_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!h2\+\_\+push\+\_\+diary\+\_\+create@{h2\+\_\+push\+\_\+diary\+\_\+create}}
+\index{h2\+\_\+push\+\_\+diary\+\_\+create@{h2\+\_\+push\+\_\+diary\+\_\+create}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+diary\+\_\+create(apr\+\_\+pool\+\_\+t $\ast$p, int N)}{h2_push_diary_create(apr_pool_t *p, int N)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+push\+\_\+diary}$\ast$ h2\+\_\+push\+\_\+diary\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{{\bf int}}]{N}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__push_8c_ab6694529da5bd728663ae39084a873f8}{}\label{h2__push_8c_ab6694529da5bd728663ae39084a873f8}
+Create a new push diary for the given maximum number of entries.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & the pool to use \\
+\hline
+{\em N} & the max number of entries, rounded up to 2$^\wedge$x \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the created diary, might be N\+U\+LL of max\+\_\+entries is 0 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+598 \{
+599     \textcolor{keywordflow}{return} diary\_create(p, \hyperlink{h2__push_8h_a6bc44d699c1575f95d1a25884f154b9da80eff275148c82ae7579ab1fa1e134f9}{H2\_PUSH\_DIGEST\_SHA256}, \hyperlink{pcregrep_8txt_ac57ff056e0ddc70c1a49ba17b6c9a69e}{N});
+600 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c_ab6694529da5bd728663ae39084a873f8_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!h2\+\_\+push\+\_\+diary\+\_\+digest64\+\_\+set@{h2\+\_\+push\+\_\+diary\+\_\+digest64\+\_\+set}}
+\index{h2\+\_\+push\+\_\+diary\+\_\+digest64\+\_\+set@{h2\+\_\+push\+\_\+diary\+\_\+digest64\+\_\+set}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+diary\+\_\+digest64\+\_\+set(h2\+\_\+push\+\_\+diary $\ast$diary, const char $\ast$authority, const char $\ast$data64url, apr\+\_\+pool\+\_\+t $\ast$pool)}{h2_push_diary_digest64_set(h2_push_diary *diary, const char *authority, const char *data64url, apr_pool_t *pool)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+push\+\_\+diary\+\_\+digest64\+\_\+set (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+push\+\_\+diary} $\ast$}]{diary, }
+\item[{const char $\ast$}]{authority, }
+\item[{const char $\ast$}]{data64url, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__push_8c_a3acefab6eecc2c75624d6bec56424929}{}\label{h2__push_8c_a3acefab6eecc2c75624d6bec56424929}
+
+\begin{DoxyCode}
+1050 \{
+1051     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LOG_gae4950db1dbfff8459a712737063b61aa}{data};
+1052     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} = \hyperlink{h2__util_8c_ac5ef011a192124e3388bbcea2e1924e3}{h2\_util\_base64url\_decode}(&data, data64url, pool);
+1053     \textcolor{comment}{/* Intentional no APLOGNO */}
+1054     \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{GCSLOG\_LEVEL}, 0, pool,
+1055                   \textcolor{stringliteral}{"h2\_push\_diary\_digest64\_set: digest=%s, dlen=%d"}, 
+1056                   data64url, (\textcolor{keywordtype}{int})len);
+1057     \textcolor{keywordflow}{return} \hyperlink{h2__push_8c_adb420b979f0ee9a54f8a353b6b3aaeb0}{h2\_push\_diary\_digest\_set}(diary, authority, data, len);
+1058 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c_a3acefab6eecc2c75624d6bec56424929_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c_a3acefab6eecc2c75624d6bec56424929_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+get@{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+get}}
+\index{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+get@{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+get}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+get(h2\+\_\+push\+\_\+diary $\ast$diary, apr\+\_\+pool\+\_\+t $\ast$pool, int max\+P, const char $\ast$authority, const char $\ast$$\ast$pdata, apr\+\_\+size\+\_\+t $\ast$plen)}{h2_push_diary_digest_get(h2_push_diary *diary, apr_pool_t *pool, int maxP, const char *authority, const char **pdata, apr_size_t *plen)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+get (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+push\+\_\+diary} $\ast$}]{diary, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{maxP, }
+\item[{const char $\ast$}]{authority, }
+\item[{const char $\ast$$\ast$}]{pdata, }
+\item[{{\bf apr\+\_\+size\+\_\+t} $\ast$}]{plen}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__push_8c_a70f31f903396ce30f520df8e98e8af01}{}\label{h2__push_8c_a70f31f903396ce30f520df8e98e8af01}
+Get a cache digest as described in \href{https://datatracker.ietf.org/doc/draft-kazuho-h2-cache-digest/}{\tt https\+://datatracker.\+ietf.\+org/doc/draft-\/kazuho-\/h2-\/cache-\/digest/} from the contents of the push diary.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diary} & the diary to calculdate the digest from \\
+\hline
+{\em p} & the pool to use \\
+\hline
+{\em pdata} & on successful return, the binary cache digest \\
+\hline
+{\em plen} & on successful return, the length of the binary data \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+823 \{
+824     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_ga3f892b271cc0564b2d8e9536a96abd7c}{nelts}, \hyperlink{pcregrep_8txt_ac57ff056e0ddc70c1a49ba17b6c9a69e}{N}, \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+825     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} log2n, log2pmax;
+826     \hyperlink{structgset__encoder}{gset\_encoder} encoder;
+827     \hyperlink{group__apr__platform_ga722b277a42230f3fd41cb5be7a76cfb4}{apr\_uint64\_t} *hashes;
+828     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} hash\_count;
+829     
+830     nelts = diary->\hyperlink{structh2__push__diary_a9bc1418c2ec0e8ab5cfc58decd178087}{entries}->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts};
+831     
+832     \textcolor{keywordflow}{if} (nelts > \hyperlink{group__apr__platform_ga239c26656c361f627f7db619997abaac}{APR\_UINT32\_MAX}) \{
+833         \textcolor{comment}{/* should not happen */}
+834         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga939ddb834a30bc9a5a0a329b13000161}{APR\_ENOTIMPL};
+835     \}
+836     N = ceil\_power\_of\_2(nelts);
+837     log2n = \hyperlink{h2__util_8c_ac7bf0a13db732827b4236c0fe7fee87b}{h2\_log2}(N);
+838     
+839     \textcolor{comment}{/* Now log2p is the max number of relevant bits, so that}
+840 \textcolor{comment}{     * log2p + log2n == mask\_bits. We can uise a lower log2p}
+841 \textcolor{comment}{     * and have a shorter set encoding...}
+842 \textcolor{comment}{     */}
+843     log2pmax = \hyperlink{h2__util_8c_ac7bf0a13db732827b4236c0fe7fee87b}{h2\_log2}(ceil\_power\_of\_2(maxP));
+844     
+845     memset(&encoder, 0, \textcolor{keyword}{sizeof}(encoder));
+846     encoder.\hyperlink{structgset__encoder_a7a035e82739d1397d41e663466f23777}{diary} = diary;
+847     encoder.\hyperlink{structgset__encoder_ac162715f1ee3736bba1cb6989b510a12}{log2p} = \hyperlink{h2_8h_acd3215da569b00c8a029a4810bd48f50}{H2MIN}(diary->\hyperlink{structh2__push__diary_a3c7dfc74de2c5b21b4bfd6585e77469f}{mask\_bits} - log2n, log2pmax);
+848     encoder.\hyperlink{structgset__encoder_a5fc015f2e2807c55315aacd4c665e606}{mask\_bits} = log2n + encoder.\hyperlink{structgset__encoder_ac162715f1ee3736bba1cb6989b510a12}{log2p};
+849     encoder.\hyperlink{structgset__encoder_ad68c57103a8791f5d098852574f5adc0}{delta\_bits} = diary->\hyperlink{structh2__push__diary_a3c7dfc74de2c5b21b4bfd6585e77469f}{mask\_bits} - encoder.\hyperlink{structgset__encoder_a5fc015f2e2807c55315aacd4c665e606}{mask\_bits};
+850     encoder.\hyperlink{structgset__encoder_a87aa70073707e58d547a0b27058aa5c9}{fixed\_bits} = encoder.\hyperlink{structgset__encoder_ac162715f1ee3736bba1cb6989b510a12}{log2p};
+851     encoder.\hyperlink{structgset__encoder_a6969c0db35e5ab6d354c83b3d14e8716}{fixed\_mask} = 1;
+852     encoder.\hyperlink{structgset__encoder_a6969c0db35e5ab6d354c83b3d14e8716}{fixed\_mask} = (encoder.\hyperlink{structgset__encoder_a6969c0db35e5ab6d354c83b3d14e8716}{fixed\_mask} << encoder.
+      \hyperlink{structgset__encoder_a87aa70073707e58d547a0b27058aa5c9}{fixed\_bits}) - 1;
+853     encoder.\hyperlink{structgset__encoder_a9b16366f9a92961fe86e32fb2963acde}{pool} = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+854     encoder.\hyperlink{structgset__encoder_a450a099419f155bf1427e8f75f6b1048}{datalen} = 512;
+855     encoder.\hyperlink{structgset__encoder_aa2deb9f7347ef6f50634bdfeabeb2144}{data} = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(encoder.\hyperlink{structgset__encoder_a9b16366f9a92961fe86e32fb2963acde}{pool}, encoder.\hyperlink{structgset__encoder_a450a099419f155bf1427e8f75f6b1048}{datalen});
+856     
+857     encoder.\hyperlink{structgset__encoder_aa2deb9f7347ef6f50634bdfeabeb2144}{data}[0] = log2n;
+858     encoder.\hyperlink{structgset__encoder_aa2deb9f7347ef6f50634bdfeabeb2144}{data}[1] = encoder.\hyperlink{structgset__encoder_ac162715f1ee3736bba1cb6989b510a12}{log2p};
+859     encoder.\hyperlink{structgset__encoder_ad8c4e1489f085caf097ad9fbe0d985dc}{offset} = 1;
+860     encoder.\hyperlink{structgset__encoder_a1e6b079f2ffba706ecd46bf8ba24f6c6}{bit} = 8;
+861     encoder.\hyperlink{structgset__encoder_a695c445df7312cdb5d2ab03595f77bb5}{last} = 0;
+862     
+863     \textcolor{comment}{/* Intentional no APLOGNO */}
+864     \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{GCSLOG\_LEVEL}, 0, pool,
+865                   \textcolor{stringliteral}{"h2\_push\_diary\_digest\_get: %d entries, N=%d, log2n=%d, "}
+866                   \textcolor{stringliteral}{"mask\_bits=%d, enc.mask\_bits=%d, delta\_bits=%d, enc.log2p=%d, authority=%s"}, 
+867                   (\textcolor{keywordtype}{int})nelts, (\textcolor{keywordtype}{int})N, (\textcolor{keywordtype}{int})log2n, diary->\hyperlink{structh2__push__diary_a3c7dfc74de2c5b21b4bfd6585e77469f}{mask\_bits}, 
+868                   (\textcolor{keywordtype}{int})encoder.\hyperlink{structgset__encoder_a5fc015f2e2807c55315aacd4c665e606}{mask\_bits}, (\textcolor{keywordtype}{int})encoder.\hyperlink{structgset__encoder_ad68c57103a8791f5d098852574f5adc0}{delta\_bits}, 
+869                   (\textcolor{keywordtype}{int})encoder.\hyperlink{structgset__encoder_ac162715f1ee3736bba1cb6989b510a12}{log2p}, authority);
+870                   
+871     \textcolor{keywordflow}{if} (!authority || !diary->\hyperlink{structh2__push__diary_ac593a2e68c7e68137e2ccf4dc82fc7f7}{authority} 
+872         || !strcmp(\textcolor{stringliteral}{"*"}, authority) || !strcmp(diary->\hyperlink{structh2__push__diary_ac593a2e68c7e68137e2ccf4dc82fc7f7}{authority}, authority)) \{
+873         hash\_count = diary->\hyperlink{structh2__push__diary_a9bc1418c2ec0e8ab5cfc58decd178087}{entries}->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts};
+874         hashes = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(encoder.\hyperlink{structgset__encoder_a9b16366f9a92961fe86e32fb2963acde}{pool}, hash\_count);
+875         \textcolor{keywordflow}{for} (i = 0; i < hash\_count; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+876             hashes[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] = ((&\hyperlink{group__apr__tables_ga84066caaa4c7632671af18c229809fc4}{APR\_ARRAY\_IDX}(diary->\hyperlink{structh2__push__diary_a9bc1418c2ec0e8ab5cfc58decd178087}{entries}, i, 
+      \hyperlink{structh2__push__diary__entry}{h2\_push\_diary\_entry}))->\hyperlink{apr__random_8c_a1961406c0af51085f634defe740cbf52}{hash} 
+877                          >> encoder.\hyperlink{structgset__encoder_ad68c57103a8791f5d098852574f5adc0}{delta\_bits});
+878         \}
+879         
+880         qsort(hashes, hash\_count, \textcolor{keyword}{sizeof}(\hyperlink{group__apr__platform_ga722b277a42230f3fd41cb5be7a76cfb4}{apr\_uint64\_t}), cmp\_puint64);
+881         \textcolor{keywordflow}{for} (i = 0; i < hash\_count; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+882             \textcolor{keywordflow}{if} (!i || (hashes[i] != hashes[i-1])) \{
+883                 gset\_encode\_next(&encoder, hashes[i]);
+884             \}
+885         \}
+886         \textcolor{comment}{/* Intentional no APLOGNO */}
+887         \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{GCSLOG\_LEVEL}, 0, pool,
+888                       \textcolor{stringliteral}{"h2\_push\_diary\_digest\_get: golomb compressed hashes, %d bytes"},
+889                       (\textcolor{keywordtype}{int})encoder.\hyperlink{structgset__encoder_ad8c4e1489f085caf097ad9fbe0d985dc}{offset} + 1);
+890     \}
+891     *pdata = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} *)encoder.\hyperlink{structgset__encoder_aa2deb9f7347ef6f50634bdfeabeb2144}{data};
+892     *plen = encoder.\hyperlink{structgset__encoder_ad8c4e1489f085caf097ad9fbe0d985dc}{offset} + 1;
+893     
+894     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+895 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=296pt]{h2__push_8c_a70f31f903396ce30f520df8e98e8af01_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+set@{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+set}}
+\index{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+set@{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+set}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+set(h2\+\_\+push\+\_\+diary $\ast$diary, const char $\ast$authority, const char $\ast$data, apr\+\_\+size\+\_\+t len)}{h2_push_diary_digest_set(h2_push_diary *diary, const char *authority, const char *data, apr_size_t len)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+push\+\_\+diary\+\_\+digest\+\_\+set (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+push\+\_\+diary} $\ast$}]{diary, }
+\item[{const char $\ast$}]{authority, }
+\item[{const char $\ast$}]{data, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__push_8c_adb420b979f0ee9a54f8a353b6b3aaeb0}{}\label{h2__push_8c_adb420b979f0ee9a54f8a353b6b3aaeb0}
+Initialize the push diary by a cache digest as described in \href{https://datatracker.ietf.org/doc/draft-kazuho-h2-cache-digest/}{\tt https\+://datatracker.\+ietf.\+org/doc/draft-\/kazuho-\/h2-\/cache-\/digest/}
+\begin{DoxyParams}{Parameters}
+{\em diary} & the diary to set the digest into \\
+\hline
+{\em data} & the binary cache digest \\
+\hline
+{\em len} & the length of the cache digest \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+E\+I\+N\+V\+AL if digest was not successfully parsed 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+971 \{
+972     \hyperlink{structgset__decoder}{gset\_decoder} decoder;
+973     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} log2n, log2p;
+974     \textcolor{keywordtype}{int} \hyperlink{pcregrep_8txt_ac57ff056e0ddc70c1a49ba17b6c9a69e}{N}, \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+975     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool} = diary->\hyperlink{structh2__push__diary_a9bc1418c2ec0e8ab5cfc58decd178087}{entries}->\hyperlink{structapr__array__header__t_a68f353ce65943172fcc9494aa9f6e424}{pool};
+976     \hyperlink{structh2__push__diary__entry}{h2\_push\_diary\_entry} \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+977     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+978     
+979     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} < 2) \{
+980         \textcolor{comment}{/* at least this should be there */}
+981         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL};
+982     \}
+983     log2n = \hyperlink{structdata}{data}[0];
+984     log2p = \hyperlink{structdata}{data}[1];
+985     diary->\hyperlink{structh2__push__diary_a3c7dfc74de2c5b21b4bfd6585e77469f}{mask\_bits} = log2n + log2p;
+986     \textcolor{keywordflow}{if} (diary->\hyperlink{structh2__push__diary_a3c7dfc74de2c5b21b4bfd6585e77469f}{mask\_bits} > 64) \{
+987         \textcolor{comment}{/* cannot handle */}
+988         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga939ddb834a30bc9a5a0a329b13000161}{APR\_ENOTIMPL};
+989     \}
+990     
+991     \textcolor{comment}{/* whatever is in the digest, it replaces the diary entries */}
+992     apr\_array\_clear(diary->\hyperlink{structh2__push__diary_a9bc1418c2ec0e8ab5cfc58decd178087}{entries});
+993     \textcolor{keywordflow}{if} (!authority || !strcmp(\textcolor{stringliteral}{"*"}, authority)) \{
+994         diary->\hyperlink{structh2__push__diary_ac593a2e68c7e68137e2ccf4dc82fc7f7}{authority} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+995     \}
+996     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!diary->\hyperlink{structh2__push__diary_ac593a2e68c7e68137e2ccf4dc82fc7f7}{authority} || strcmp(diary->\hyperlink{structh2__push__diary_ac593a2e68c7e68137e2ccf4dc82fc7f7}{authority}, authority)) \{
+997         diary->\hyperlink{structh2__push__diary_ac593a2e68c7e68137e2ccf4dc82fc7f7}{authority} = apr\_pstrdup(diary->\hyperlink{structh2__push__diary_a9bc1418c2ec0e8ab5cfc58decd178087}{entries}->\hyperlink{structapr__array__header__t_a68f353ce65943172fcc9494aa9f6e424}{pool}, authority);
+998     \}
+999 
+1000     N = h2\_log2inv(log2n + log2p);
+1001 
+1002     decoder.\hyperlink{structgset__decoder_a445958353c94039af63aaaaf3c72ed17}{diary}    = diary;
+1003     decoder.\hyperlink{structgset__decoder_a8d62181fe6fe1545ad65a96ee67ea6de}{pool}     = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+1004     decoder.\hyperlink{structgset__decoder_a97602621b04e6be2039e906fdda0fa2a}{log2p}    = log2p;
+1005     decoder.\hyperlink{structgset__decoder_ae4b82a39719806d09718e3671bf05cc9}{data}     = (\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)\hyperlink{structdata}{data};
+1006     decoder.\hyperlink{structgset__decoder_a3994f72f572380e1ff13079324f7bffe}{datalen}  = \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+1007     decoder.\hyperlink{structgset__decoder_a17fc838fc2564053065fd6f01fa82bcc}{offset}   = 1;
+1008     decoder.\hyperlink{structgset__decoder_ae9cc952b8f4b1ef29d6a927f208dba2e}{bit}      = 8;
+1009     decoder.\hyperlink{structgset__decoder_a872e9cc78692d01a45a2b21a13abe9c1}{last\_val} = 0;
+1010     
+1011     diary->\hyperlink{structh2__push__diary_a2e2734c51d3a9b23e2b01f509970ce80}{N} = \hyperlink{pcregrep_8txt_ac57ff056e0ddc70c1a49ba17b6c9a69e}{N};
+1012     \textcolor{comment}{/* Determine effective N we use for storage */}
+1013     \textcolor{keywordflow}{if} (!N) \{
+1014         \textcolor{comment}{/* a totally empty cache digest. someone tells us that she has no}
+1015 \textcolor{comment}{         * entries in the cache at all. Use our own preferences for N+mask }
+1016 \textcolor{comment}{         */}
+1017         diary->\hyperlink{structh2__push__diary_a2e2734c51d3a9b23e2b01f509970ce80}{N} = diary->\hyperlink{structh2__push__diary_a8c37e39d0dbd632c4767198974c5d20e}{NMax};
+1018         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1019     \}
+1020     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (N > diary->\hyperlink{structh2__push__diary_a8c37e39d0dbd632c4767198974c5d20e}{NMax}) \{
+1021         \textcolor{comment}{/* Store not more than diary is configured to hold. We open us up}
+1022 \textcolor{comment}{         * to DOS attacks otherwise. */}
+1023         diary->\hyperlink{structh2__push__diary_a2e2734c51d3a9b23e2b01f509970ce80}{N} = diary->\hyperlink{structh2__push__diary_a8c37e39d0dbd632c4767198974c5d20e}{NMax};
+1024     \}
+1025     
+1026     \textcolor{comment}{/* Intentional no APLOGNO */}
+1027     \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{GCSLOG\_LEVEL}, 0, pool,
+1028                   \textcolor{stringliteral}{"h2\_push\_diary\_digest\_set: N=%d, log2n=%d, "}
+1029                   \textcolor{stringliteral}{"diary->mask\_bits=%d, dec.log2p=%d"}, 
+1030                   (\textcolor{keywordtype}{int})diary->\hyperlink{structh2__push__diary_a2e2734c51d3a9b23e2b01f509970ce80}{N}, (\textcolor{keywordtype}{int})log2n, diary->\hyperlink{structh2__push__diary_a3c7dfc74de2c5b21b4bfd6585e77469f}{mask\_bits}, 
+1031                   (\textcolor{keywordtype}{int})decoder.\hyperlink{structgset__decoder_a97602621b04e6be2039e906fdda0fa2a}{log2p});
+1032                   
+1033     \textcolor{keywordflow}{for} (i = 0; i < diary->\hyperlink{structh2__push__diary_a2e2734c51d3a9b23e2b01f509970ce80}{N}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+1034         \textcolor{keywordflow}{if} (gset\_decode\_next(&decoder, &e.\hyperlink{structh2__push__diary__entry_a15a922d7c645ca9cd8ab590a8ac761e1}{hash}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1035             \textcolor{comment}{/* the data may have less than N values */}
+1036             \textcolor{keywordflow}{break};
+1037         \}
+1038         h2\_push\_diary\_append(diary, &e);
+1039     \}
+1040     
+1041     \textcolor{comment}{/* Intentional no APLOGNO */}
+1042     \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{GCSLOG\_LEVEL}, 0, pool,
+1043                   \textcolor{stringliteral}{"h2\_push\_diary\_digest\_set: diary now with %d entries, mask\_bits=%d"}, 
+1044                   (\textcolor{keywordtype}{int})diary->\hyperlink{structh2__push__diary_a9bc1418c2ec0e8ab5cfc58decd178087}{entries}->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}, diary->\hyperlink{structh2__push__diary_a3c7dfc74de2c5b21b4bfd6585e77469f}{mask\_bits});
+1045     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1046 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c_adb420b979f0ee9a54f8a353b6b3aaeb0_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+push.\+c@{h2\+\_\+push.\+c}!h2\+\_\+push\+\_\+diary\+\_\+update@{h2\+\_\+push\+\_\+diary\+\_\+update}}
+\index{h2\+\_\+push\+\_\+diary\+\_\+update@{h2\+\_\+push\+\_\+diary\+\_\+update}!h2\+\_\+push.\+c@{h2\+\_\+push.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+diary\+\_\+update(h2\+\_\+session $\ast$session, apr\+\_\+array\+\_\+header\+\_\+t $\ast$pushes)}{h2_push_diary_update(h2_session *session, apr_array_header_t *pushes)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+array\+\_\+header\+\_\+t}$\ast$ h2\+\_\+push\+\_\+diary\+\_\+update (
+\begin{DoxyParamCaption}
+\item[{struct {\bf h2\+\_\+session} $\ast$}]{session, }
+\item[{{\bf apr\+\_\+array\+\_\+header\+\_\+t} $\ast$}]{pushes}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__push_8c_a84db00b607fb6e1ef26ffa022282ee1f}{}\label{h2__push_8c_a84db00b607fb6e1ef26ffa022282ee1f}
+Filters the given pushes against the diary and returns only those pushes that were newly entered in the diary. 
+\begin{DoxyCode}
+654 \{
+655     \hyperlink{structapr__array__header__t}{apr\_array\_header\_t} *npushes = pushes;
+656     \hyperlink{structh2__push__diary__entry}{h2\_push\_diary\_entry} \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+657     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, idx;
+658     
+659     \textcolor{keywordflow}{if} (session->\hyperlink{structh2__session_a252ee2bfdfc80fd135875274855cdf2b}{push\_diary} && pushes) \{
+660         npushes = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+661         
+662         \textcolor{keywordflow}{for} (i = 0; i < pushes->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+663             \hyperlink{structh2__push}{h2\_push} *push;
+664             
+665             push = \hyperlink{group__apr__tables_ga84066caaa4c7632671af18c229809fc4}{APR\_ARRAY\_IDX}(pushes, i, \hyperlink{structh2__push}{h2\_push}*);
+666             session->\hyperlink{structh2__session_a252ee2bfdfc80fd135875274855cdf2b}{push\_diary}->\hyperlink{structh2__push__diary_a7275c978e03fca52dbe0077bbb55ed27}{dcalc}(session->\hyperlink{structh2__session_a252ee2bfdfc80fd135875274855cdf2b}{push\_diary}, &e.
+      \hyperlink{structh2__push__diary__entry_a15a922d7c645ca9cd8ab590a8ac761e1}{hash}, push);
+667             idx = h2\_push\_diary\_find(session->\hyperlink{structh2__session_a252ee2bfdfc80fd135875274855cdf2b}{push\_diary}, e.\hyperlink{structh2__push__diary__entry_a15a922d7c645ca9cd8ab590a8ac761e1}{hash});
+668             \textcolor{keywordflow}{if} (idx >= 0) \{
+669                 \textcolor{comment}{/* Intentional no APLOGNO */}
+670                 \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{GCSLOG\_LEVEL}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+671                               \textcolor{stringliteral}{"push\_diary\_update: already there PUSH %s"}, push->
+      \hyperlink{structh2__push_a4541bdab05a10c6a58a413b0493c1a80}{req}->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path});
+672                 move\_to\_last(session->\hyperlink{structh2__session_a252ee2bfdfc80fd135875274855cdf2b}{push\_diary}, idx);
+673             \}
+674             \textcolor{keywordflow}{else} \{
+675                 \textcolor{comment}{/* Intentional no APLOGNO */}
+676                 \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{h2__push_8c_ac9ecaf47fc2428bec70372d52f30df2d}{GCSLOG\_LEVEL}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+677                               \textcolor{stringliteral}{"push\_diary\_update: adding PUSH %s"}, push->\hyperlink{structh2__push_a4541bdab05a10c6a58a413b0493c1a80}{req}->
+      \hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path});
+678                 \textcolor{keywordflow}{if} (!npushes) \{
+679                     npushes = apr\_array\_make(pushes->\hyperlink{structapr__array__header__t_a68f353ce65943172fcc9494aa9f6e424}{pool}, 5, \textcolor{keyword}{sizeof}(
+      \hyperlink{structh2__push__diary__entry}{h2\_push\_diary\_entry}*));
+680                 \}
+681                 \hyperlink{group__apr__tables_ga1833b0f940ec03d0b95926812152e1ca}{APR\_ARRAY\_PUSH}(npushes, \hyperlink{structh2__push}{h2\_push}*) = push;
+682                 h2\_push\_diary\_append(session->\hyperlink{structh2__session_a252ee2bfdfc80fd135875274855cdf2b}{push\_diary}, &e);
+683             \}
+684         \}
+685     \}
+686     \textcolor{keywordflow}{return} npushes;
+687 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__push_8c_a84db00b607fb6e1ef26ffa022282ee1f_icgraph}
+\end{center}
+\end{figure}
+
+

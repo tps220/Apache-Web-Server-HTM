@@ -1,0 +1,620 @@
+\hypertarget{htcacheclean_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/htcacheclean.c File Reference}
+\label{htcacheclean_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/htcacheclean.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/htcacheclean.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+info.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+getopt.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+ring.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+date.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../modules/cache/cache\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../modules/cache/cache\+\_\+disk\+\_\+common.\+h\char`\"{}}\\*
+Include dependency graph for htcacheclean.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{htcacheclean_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__direntry}{\+\_\+direntry}
+\item 
+struct \hyperlink{struct__entry}{\+\_\+entry}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{htcacheclean_8c_a2dac15fe1fe1f07a48d31d130b8ffca4}{N\+I\+C\+E\+\_\+\+D\+E\+L\+AY}~10000     /$\ast$ usecs $\ast$/
+\item 
+\#define \hyperlink{htcacheclean_8c_a0999f6f5f82e98e409450b9ac997ceca}{D\+E\+L\+E\+T\+E\+\_\+\+N\+I\+CE}~10        /$\ast$ \hyperlink{NON-AUTOTOOLS-BUILD_8txt_ac08ce70cbd4f453457597ad15ecbebdd}{be} nice \hyperlink{group__MOD__PROXY_gabe5742ecd24263fc01da937ad820d3fa}{after} \hyperlink{pcregrep_8txt_a1d4586f0a85ecec85237e5fb0f611dd1}{this} amount \hyperlink{pcre_8txt_a9d5b55a535a7d176d14b62d664b47b4d}{of} delete ops $\ast$/
+\item 
+\#define \hyperlink{htcacheclean_8c_af1e8380106ce2a3b502f9c81614d778f}{S\+T\+A\+T\+\_\+\+A\+T\+T\+E\+M\+P\+TS}~10        /$\ast$ maximum stat attempts for \hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a} \hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file} $\ast$/
+\item 
+\#define \hyperlink{htcacheclean_8c_a1738696298a47f7ca9db52ecc39ad7a1}{S\+T\+A\+T\+\_\+\+D\+E\+L\+AY}~5000      /$\ast$ usecs $\ast$/
+\item 
+\#define \hyperlink{htcacheclean_8c_ab7770a7f0d95e67620ff6ed347a07a56}{H\+E\+A\+D\+ER}~1         /$\ast$ \hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers} \hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file} $\ast$/
+\item 
+\#define \hyperlink{htcacheclean_8c_aad9ae913bdfab20dd94ad04ee2d5b045}{D\+A\+TA}~2         /$\ast$ \hyperlink{group__MOD__DAV_gac4ba05af5940fc47e3b0aa0a79eb4bdc}{body} \hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file} $\ast$/
+\item 
+\#define \hyperlink{htcacheclean_8c_a10bed19ceedeb2c12c5aad6de1d3b1a1}{T\+E\+MP}~4         /$\ast$ temporary \hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file} $\ast$/
+\item 
+\#define \hyperlink{htcacheclean_8c_ac756edd1ec73e85b0d30ba533caead78}{H\+E\+A\+D\+E\+R\+D\+A\+TA}~(\hyperlink{htcacheclean_8c_ab7770a7f0d95e67620ff6ed347a07a56}{H\+E\+A\+D\+ER}$\vert$\hyperlink{htcacheclean_8c_aad9ae913bdfab20dd94ad04ee2d5b045}{D\+A\+TA})
+\item 
+\#define \hyperlink{htcacheclean_8c_ad830ecbab70cbb1952e55ade266a8997}{M\+A\+X\+D\+E\+V\+I\+A\+T\+I\+ON}~3600      /$\ast$ secs $\ast$/
+\item 
+\#define \hyperlink{htcacheclean_8c_a5e7d1008e5b26253223a67794b77a806}{S\+E\+C\+S\+\_\+\+P\+E\+R\+\_\+\+M\+IN}~60
+\item 
+\#define \hyperlink{htcacheclean_8c_a84cb64b99e9c62ac8d60ae91a8bc663f}{K\+B\+Y\+TE}~1024
+\item 
+\#define \hyperlink{htcacheclean_8c_a1401d91ed4cfc1f56efccf6eda6a5e40}{M\+B\+Y\+TE}~1048576
+\item 
+\#define \hyperlink{htcacheclean_8c_adf40634261dbea3b723e757475e12818}{G\+B\+Y\+TE}~1073741824
+\item 
+\#define \hyperlink{htcacheclean_8c_a9b18aaa9c44ed30a23fcf8811d4c2763}{D\+I\+R\+I\+N\+FO}~(\hyperlink{group__apr__file__stat_ga992ce1f4f75d519fd2a9d241c5a12515}{A\+P\+R\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+T\+I\+ME}$\vert$\hyperlink{group__apr__file__stat_gadf72493da450c0b1e3d279e98a973120}{A\+P\+R\+\_\+\+F\+I\+N\+F\+O\+\_\+\+S\+I\+ZE}$\vert$\hyperlink{group__apr__file__stat_gad5d25f25527ee77c08bb20aae141306c}{A\+P\+R\+\_\+\+F\+I\+N\+F\+O\+\_\+\+T\+Y\+PE}$\vert$\hyperlink{group__apr__file__stat_ga9b0c1d02401b845f928f836fdd3c6712}{A\+P\+R\+\_\+\+F\+I\+N\+F\+O\+\_\+\+L\+I\+NK})
+\item 
+\#define \hyperlink{htcacheclean_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{NL}~\hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{A\+P\+R\+\_\+\+E\+O\+L\+\_\+\+S\+TR}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__direntry}{\+\_\+direntry} \hyperlink{htcacheclean_8c_a5a387ce219afbebe5be85a9efb5e5d40}{D\+I\+R\+E\+N\+T\+RY}
+\item 
+typedef struct \hyperlink{struct__entry}{\+\_\+entry} \hyperlink{htcacheclean_8c_a407351613c419220959ccd686a054a5e}{E\+N\+T\+RY}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{htcacheclean_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!D\+A\+TA@{D\+A\+TA}}
+\index{D\+A\+TA@{D\+A\+TA}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+TA}{DATA}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+TA~2         /$\ast$ {\bf body} {\bf file} $\ast$/}\hypertarget{htcacheclean_8c_aad9ae913bdfab20dd94ad04ee2d5b045}{}\label{htcacheclean_8c_aad9ae913bdfab20dd94ad04ee2d5b045}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!D\+E\+L\+E\+T\+E\+\_\+\+N\+I\+CE@{D\+E\+L\+E\+T\+E\+\_\+\+N\+I\+CE}}
+\index{D\+E\+L\+E\+T\+E\+\_\+\+N\+I\+CE@{D\+E\+L\+E\+T\+E\+\_\+\+N\+I\+CE}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+L\+E\+T\+E\+\_\+\+N\+I\+CE}{DELETE_NICE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+L\+E\+T\+E\+\_\+\+N\+I\+CE~10        /$\ast$ {\bf be} nice {\bf after} {\bf this} amount {\bf of} delete ops $\ast$/}\hypertarget{htcacheclean_8c_a0999f6f5f82e98e409450b9ac997ceca}{}\label{htcacheclean_8c_a0999f6f5f82e98e409450b9ac997ceca}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!D\+I\+R\+I\+N\+FO@{D\+I\+R\+I\+N\+FO}}
+\index{D\+I\+R\+I\+N\+FO@{D\+I\+R\+I\+N\+FO}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{D\+I\+R\+I\+N\+FO}{DIRINFO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+I\+R\+I\+N\+FO~({\bf A\+P\+R\+\_\+\+F\+I\+N\+F\+O\+\_\+\+M\+T\+I\+ME}$\vert${\bf A\+P\+R\+\_\+\+F\+I\+N\+F\+O\+\_\+\+S\+I\+ZE}$\vert${\bf A\+P\+R\+\_\+\+F\+I\+N\+F\+O\+\_\+\+T\+Y\+PE}$\vert${\bf A\+P\+R\+\_\+\+F\+I\+N\+F\+O\+\_\+\+L\+I\+NK})}\hypertarget{htcacheclean_8c_a9b18aaa9c44ed30a23fcf8811d4c2763}{}\label{htcacheclean_8c_a9b18aaa9c44ed30a23fcf8811d4c2763}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!G\+B\+Y\+TE@{G\+B\+Y\+TE}}
+\index{G\+B\+Y\+TE@{G\+B\+Y\+TE}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{G\+B\+Y\+TE}{GBYTE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\+B\+Y\+TE~1073741824}\hypertarget{htcacheclean_8c_adf40634261dbea3b723e757475e12818}{}\label{htcacheclean_8c_adf40634261dbea3b723e757475e12818}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!H\+E\+A\+D\+ER@{H\+E\+A\+D\+ER}}
+\index{H\+E\+A\+D\+ER@{H\+E\+A\+D\+ER}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{H\+E\+A\+D\+ER}{HEADER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+E\+A\+D\+ER~1         /$\ast$ {\bf headers} {\bf file} $\ast$/}\hypertarget{htcacheclean_8c_ab7770a7f0d95e67620ff6ed347a07a56}{}\label{htcacheclean_8c_ab7770a7f0d95e67620ff6ed347a07a56}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!H\+E\+A\+D\+E\+R\+D\+A\+TA@{H\+E\+A\+D\+E\+R\+D\+A\+TA}}
+\index{H\+E\+A\+D\+E\+R\+D\+A\+TA@{H\+E\+A\+D\+E\+R\+D\+A\+TA}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{H\+E\+A\+D\+E\+R\+D\+A\+TA}{HEADERDATA}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+E\+A\+D\+E\+R\+D\+A\+TA~({\bf H\+E\+A\+D\+ER}$\vert${\bf D\+A\+TA})}\hypertarget{htcacheclean_8c_ac756edd1ec73e85b0d30ba533caead78}{}\label{htcacheclean_8c_ac756edd1ec73e85b0d30ba533caead78}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!K\+B\+Y\+TE@{K\+B\+Y\+TE}}
+\index{K\+B\+Y\+TE@{K\+B\+Y\+TE}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{K\+B\+Y\+TE}{KBYTE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define K\+B\+Y\+TE~1024}\hypertarget{htcacheclean_8c_a84cb64b99e9c62ac8d60ae91a8bc663f}{}\label{htcacheclean_8c_a84cb64b99e9c62ac8d60ae91a8bc663f}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!M\+A\+X\+D\+E\+V\+I\+A\+T\+I\+ON@{M\+A\+X\+D\+E\+V\+I\+A\+T\+I\+ON}}
+\index{M\+A\+X\+D\+E\+V\+I\+A\+T\+I\+ON@{M\+A\+X\+D\+E\+V\+I\+A\+T\+I\+ON}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+D\+E\+V\+I\+A\+T\+I\+ON}{MAXDEVIATION}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+D\+E\+V\+I\+A\+T\+I\+ON~3600      /$\ast$ secs $\ast$/}\hypertarget{htcacheclean_8c_ad830ecbab70cbb1952e55ade266a8997}{}\label{htcacheclean_8c_ad830ecbab70cbb1952e55ade266a8997}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!M\+B\+Y\+TE@{M\+B\+Y\+TE}}
+\index{M\+B\+Y\+TE@{M\+B\+Y\+TE}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{M\+B\+Y\+TE}{MBYTE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+B\+Y\+TE~1048576}\hypertarget{htcacheclean_8c_a1401d91ed4cfc1f56efccf6eda6a5e40}{}\label{htcacheclean_8c_a1401d91ed4cfc1f56efccf6eda6a5e40}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!N\+I\+C\+E\+\_\+\+D\+E\+L\+AY@{N\+I\+C\+E\+\_\+\+D\+E\+L\+AY}}
+\index{N\+I\+C\+E\+\_\+\+D\+E\+L\+AY@{N\+I\+C\+E\+\_\+\+D\+E\+L\+AY}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{N\+I\+C\+E\+\_\+\+D\+E\+L\+AY}{NICE_DELAY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+I\+C\+E\+\_\+\+D\+E\+L\+AY~10000     /$\ast$ usecs $\ast$/}\hypertarget{htcacheclean_8c_a2dac15fe1fe1f07a48d31d130b8ffca4}{}\label{htcacheclean_8c_a2dac15fe1fe1f07a48d31d130b8ffca4}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!NL@{NL}}
+\index{NL@{NL}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{NL}{NL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define NL~{\bf A\+P\+R\+\_\+\+E\+O\+L\+\_\+\+S\+TR}}\hypertarget{htcacheclean_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{}\label{htcacheclean_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!S\+E\+C\+S\+\_\+\+P\+E\+R\+\_\+\+M\+IN@{S\+E\+C\+S\+\_\+\+P\+E\+R\+\_\+\+M\+IN}}
+\index{S\+E\+C\+S\+\_\+\+P\+E\+R\+\_\+\+M\+IN@{S\+E\+C\+S\+\_\+\+P\+E\+R\+\_\+\+M\+IN}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{S\+E\+C\+S\+\_\+\+P\+E\+R\+\_\+\+M\+IN}{SECS_PER_MIN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+E\+C\+S\+\_\+\+P\+E\+R\+\_\+\+M\+IN~60}\hypertarget{htcacheclean_8c_a5e7d1008e5b26253223a67794b77a806}{}\label{htcacheclean_8c_a5e7d1008e5b26253223a67794b77a806}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!S\+T\+A\+T\+\_\+\+A\+T\+T\+E\+M\+P\+TS@{S\+T\+A\+T\+\_\+\+A\+T\+T\+E\+M\+P\+TS}}
+\index{S\+T\+A\+T\+\_\+\+A\+T\+T\+E\+M\+P\+TS@{S\+T\+A\+T\+\_\+\+A\+T\+T\+E\+M\+P\+TS}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{S\+T\+A\+T\+\_\+\+A\+T\+T\+E\+M\+P\+TS}{STAT_ATTEMPTS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+T\+A\+T\+\_\+\+A\+T\+T\+E\+M\+P\+TS~10        /$\ast$ maximum stat attempts for {\bf a} {\bf file} $\ast$/}\hypertarget{htcacheclean_8c_af1e8380106ce2a3b502f9c81614d778f}{}\label{htcacheclean_8c_af1e8380106ce2a3b502f9c81614d778f}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!S\+T\+A\+T\+\_\+\+D\+E\+L\+AY@{S\+T\+A\+T\+\_\+\+D\+E\+L\+AY}}
+\index{S\+T\+A\+T\+\_\+\+D\+E\+L\+AY@{S\+T\+A\+T\+\_\+\+D\+E\+L\+AY}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{S\+T\+A\+T\+\_\+\+D\+E\+L\+AY}{STAT_DELAY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+T\+A\+T\+\_\+\+D\+E\+L\+AY~5000      /$\ast$ usecs $\ast$/}\hypertarget{htcacheclean_8c_a1738696298a47f7ca9db52ecc39ad7a1}{}\label{htcacheclean_8c_a1738696298a47f7ca9db52ecc39ad7a1}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!T\+E\+MP@{T\+E\+MP}}
+\index{T\+E\+MP@{T\+E\+MP}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{T\+E\+MP}{TEMP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+MP~4         /$\ast$ temporary {\bf file} $\ast$/}\hypertarget{htcacheclean_8c_a10bed19ceedeb2c12c5aad6de1d3b1a1}{}\label{htcacheclean_8c_a10bed19ceedeb2c12c5aad6de1d3b1a1}
+
+
+\subsection{Typedef Documentation}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!D\+I\+R\+E\+N\+T\+RY@{D\+I\+R\+E\+N\+T\+RY}}
+\index{D\+I\+R\+E\+N\+T\+RY@{D\+I\+R\+E\+N\+T\+RY}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{D\+I\+R\+E\+N\+T\+RY}{DIRENTRY}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+direntry}  {\bf D\+I\+R\+E\+N\+T\+RY}}\hypertarget{htcacheclean_8c_a5a387ce219afbebe5be85a9efb5e5d40}{}\label{htcacheclean_8c_a5a387ce219afbebe5be85a9efb5e5d40}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!E\+N\+T\+RY@{E\+N\+T\+RY}}
+\index{E\+N\+T\+RY@{E\+N\+T\+RY}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{E\+N\+T\+RY}{ENTRY}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+entry}  {\bf E\+N\+T\+RY}}\hypertarget{htcacheclean_8c_a407351613c419220959ccd686a054a5e}{}\label{htcacheclean_8c_a407351613c419220959ccd686a054a5e}
+
+
+\subsection{Function Documentation}
+\index{htcacheclean.\+c@{htcacheclean.\+c}!main@{main}}
+\index{main@{main}!htcacheclean.\+c@{htcacheclean.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{htcacheclean_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{htcacheclean_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+1376 \{
+1377     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} \hyperlink{group__APACHE__CORE__DAEMON_gac1b9c6a7bfbd9ec2444735d634d4a557}{max}, inodes, round;
+1378     \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\_time\_t} \hyperlink{group__APACHE__CORE__CONFIG_ga4b3e87cb39cac2296c5083f27321f1f4}{current}, repeat, delay, previous;
+1379     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1380     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, *instance;
+1381     \hyperlink{structapr__getopt__t}{apr\_getopt\_t} *\hyperlink{pcregrep_8txt_a0f1f758594514cf4d93c83f0a3f92ec9}{o};
+1382     \hyperlink{structapr__finfo__t}{apr\_finfo\_t} \hyperlink{group__AP__EXPR_gae5e165b68fbb12afc88707b8e6eb2f08}{info};
+1383     \hyperlink{structapr__file__t}{apr\_file\_t} *pidfile;
+1384     \textcolor{keywordtype}{int} retries, isdaemon, limit\_found, inodes\_found, intelligent, dowork;
+1385     \textcolor{keywordtype}{char} \hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt};
+1386     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+1387     \textcolor{keywordtype}{char} *proxypath, *\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path}, *pidfilename;
+1388 
+1389     interrupted = 0;
+1390     repeat = 0;
+1391     isdaemon = 0;
+1392     dryrun = 0;
+1393     limit\_found = 0;
+1394     inodes\_found = 0;
+1395     max = 0;
+1396     inodes = 0;
+1397     round = 0;
+1398     \hyperlink{wintty_8c_ad023bbf13e60f8caee82c26f70e0f0a5}{verbose} = 0;
+1399     realclean = 0;
+1400     benice = 0;
+1401     deldirs = 0;
+1402     intelligent = 0;
+1403     previous = 0; \textcolor{comment}{/* avoid compiler warning */}
+1404     proxypath = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1405     pidfilename = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1406 
+1407     \textcolor{keywordflow}{if} (apr\_app\_initialize(&\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1408         \textcolor{keywordflow}{return} 1;
+1409     \}
+1410     atexit(apr\_terminate);
+1411 
+1412     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}) \{
+1413         shortname = apr\_filepath\_name\_get(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+1414     \}
+1415 
+1416     \textcolor{keywordflow}{if} (\hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pool, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1417         \textcolor{keywordflow}{return} 1;
+1418     \}
+1419     apr\_pool\_abort\_set(oom, pool);
+1420     apr\_file\_open\_stderr(&errfile, pool);
+1421     apr\_file\_open\_stdout(&outfile, pool);
+1422     apr\_signal(SIGINT, setterm);
+1423     apr\_signal(SIGTERM, setterm);
+1424 
+1425     apr\_getopt\_init(&o, pool, \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+1426 
+1427     \textcolor{keywordflow}{while} (1) \{
+1428         status = apr\_getopt(o, \textcolor{stringliteral}{"iDnvrtd:l:L:p:P:R:aA"}, &opt, &arg);
+1429         \textcolor{keywordflow}{if} (status == \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF}) \{
+1430             \textcolor{keywordflow}{break};
+1431         \}
+1432         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1433             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1434         \}
+1435         \textcolor{keywordflow}{else} \{
+1436             \textcolor{keywordtype}{char} *\hyperlink{group__apr__strings_ga87c7e3f3f70b6e7de10e3f56e3f4d7a4}{end};
+1437             \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+1438             \textcolor{keywordflow}{switch} (opt) \{
+1439             \textcolor{keywordflow}{case} \textcolor{charliteral}{'i'}:
+1440                 \textcolor{keywordflow}{if} (intelligent) \{
+1441                     usage\_repeated\_arg(pool, opt);
+1442                 \}
+1443                 intelligent = 1;
+1444                 \textcolor{keywordflow}{break};
+1445 
+1446             \textcolor{keywordflow}{case} \textcolor{charliteral}{'D'}:
+1447                 \textcolor{keywordflow}{if} (dryrun) \{
+1448                     usage\_repeated\_arg(pool, opt);
+1449                 \}
+1450                 dryrun = 1;
+1451                 \textcolor{keywordflow}{break};
+1452 
+1453             \textcolor{keywordflow}{case} \textcolor{charliteral}{'n'}:
+1454                 \textcolor{keywordflow}{if} (benice) \{
+1455                     usage\_repeated\_arg(pool, opt);
+1456                 \}
+1457                 benice = 1;
+1458                 \textcolor{keywordflow}{break};
+1459 
+1460             \textcolor{keywordflow}{case} \textcolor{charliteral}{'t'}:
+1461                 \textcolor{keywordflow}{if} (deldirs) \{
+1462                     usage\_repeated\_arg(pool, opt);
+1463                 \}
+1464                 deldirs = 1;
+1465                 \textcolor{keywordflow}{break};
+1466 
+1467             \textcolor{keywordflow}{case} \textcolor{charliteral}{'v'}:
+1468                 \textcolor{keywordflow}{if} (\hyperlink{wintty_8c_ad023bbf13e60f8caee82c26f70e0f0a5}{verbose}) \{
+1469                     usage\_repeated\_arg(pool, opt);
+1470                 \}
+1471                 \hyperlink{wintty_8c_ad023bbf13e60f8caee82c26f70e0f0a5}{verbose} = 1;
+1472                 \textcolor{keywordflow}{break};
+1473 
+1474             \textcolor{keywordflow}{case} \textcolor{charliteral}{'r'}:
+1475                 \textcolor{keywordflow}{if} (realclean) \{
+1476                     usage\_repeated\_arg(pool, opt);
+1477                 \}
+1478                 realclean = 1;
+1479                 deldirs = 1;
+1480                 \textcolor{keywordflow}{break};
+1481 
+1482             \textcolor{keywordflow}{case} \textcolor{charliteral}{'d'}:
+1483                 \textcolor{keywordflow}{if} (isdaemon) \{
+1484                     usage\_repeated\_arg(pool, opt);
+1485                 \}
+1486                 isdaemon = 1;
+1487                 repeat = apr\_atoi64(arg);
+1488                 repeat *= \hyperlink{htcacheclean_8c_a5e7d1008e5b26253223a67794b77a806}{SECS\_PER\_MIN};
+1489                 repeat *= \hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{APR\_USEC\_PER\_SEC};
+1490                 \textcolor{keywordflow}{break};
+1491 
+1492             \textcolor{keywordflow}{case} \textcolor{charliteral}{'l'}:
+1493                 \textcolor{keywordflow}{if} (limit\_found) \{
+1494                     usage\_repeated\_arg(pool, opt);
+1495                 \}
+1496                 limit\_found = 1;
+1497 
+1498                 \textcolor{keywordflow}{do} \{
+1499                     rv = apr\_strtoff(&max, arg, &end, 10);
+1500                     \textcolor{keywordflow}{if} (rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1501                         \textcolor{keywordflow}{if} ((*end == \textcolor{charliteral}{'K'} || *end == \textcolor{charliteral}{'k'}) && !end[1]) \{
+1502                             max *= \hyperlink{htcacheclean_8c_a84cb64b99e9c62ac8d60ae91a8bc663f}{KBYTE};
+1503                         \}
+1504                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((*end == \textcolor{charliteral}{'M'} || *end == \textcolor{charliteral}{'m'}) && !end[1]) \{
+1505                             max *= \hyperlink{htcacheclean_8c_a1401d91ed4cfc1f56efccf6eda6a5e40}{MBYTE};
+1506                         \}
+1507                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((*end == \textcolor{charliteral}{'G'} || *end == \textcolor{charliteral}{'g'}) && !end[1]) \{
+1508                             max *= \hyperlink{htcacheclean_8c_adf40634261dbea3b723e757475e12818}{GBYTE};
+1509                         \}
+1510                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (*end &&        \textcolor{comment}{/* neither empty nor [Bb] */}
+1511                                  ((*end != \textcolor{charliteral}{'B'} && *end != \textcolor{charliteral}{'b'}) || end[1])) \{
+1512                             rv = \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL};
+1513                         \}
+1514                     \}
+1515                     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1516                         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(apr\_psprintf(pool, \textcolor{stringliteral}{"Invalid limit: %s"}
+1517                                                  \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR} 
+      \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR}, arg));
+1518                     \}
+1519                 \} \textcolor{keywordflow}{while}(0);
+1520                 \textcolor{keywordflow}{break};
+1521 
+1522             \textcolor{keywordflow}{case} \textcolor{charliteral}{'L'}:
+1523                 \textcolor{keywordflow}{if} (inodes\_found) \{
+1524                     usage\_repeated\_arg(pool, opt);
+1525                 \}
+1526                 inodes\_found = 1;
+1527 
+1528                 \textcolor{keywordflow}{do} \{
+1529                     rv = apr\_strtoff(&inodes, arg, &end, 10);
+1530                     \textcolor{keywordflow}{if} (rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1531                         \textcolor{keywordflow}{if} ((*end == \textcolor{charliteral}{'K'} || *end == \textcolor{charliteral}{'k'}) && !end[1]) \{
+1532                             inodes *= \hyperlink{htcacheclean_8c_a84cb64b99e9c62ac8d60ae91a8bc663f}{KBYTE};
+1533                         \}
+1534                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((*end == \textcolor{charliteral}{'M'} || *end == \textcolor{charliteral}{'m'}) && !end[1]) \{
+1535                             inodes *= \hyperlink{htcacheclean_8c_a1401d91ed4cfc1f56efccf6eda6a5e40}{MBYTE};
+1536                         \}
+1537                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((*end == \textcolor{charliteral}{'G'} || *end == \textcolor{charliteral}{'g'}) && !end[1]) \{
+1538                             inodes *= \hyperlink{htcacheclean_8c_adf40634261dbea3b723e757475e12818}{GBYTE};
+1539                         \}
+1540                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (*end &&        \textcolor{comment}{/* neither empty nor [Bb] */}
+1541                                  ((*end != \textcolor{charliteral}{'B'} && *end != \textcolor{charliteral}{'b'}) || end[1])) \{
+1542                             rv = \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL};
+1543                         \}
+1544                     \}
+1545                     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1546                         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(apr\_psprintf(pool, \textcolor{stringliteral}{"Invalid limit: %s"}
+1547                                                  \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR} 
+      \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR}, arg));
+1548                     \}
+1549                 \} \textcolor{keywordflow}{while}(0);
+1550                 \textcolor{keywordflow}{break};
+1551 
+1552             \textcolor{keywordflow}{case} \textcolor{charliteral}{'a'}:
+1553                 \textcolor{keywordflow}{if} (listurls) \{
+1554                     usage\_repeated\_arg(pool, opt);
+1555                 \}
+1556                 listurls = 1;
+1557                 \textcolor{keywordflow}{break};
+1558 
+1559             \textcolor{keywordflow}{case} \textcolor{charliteral}{'A'}:
+1560                 \textcolor{keywordflow}{if} (listurls) \{
+1561                     usage\_repeated\_arg(pool, opt);
+1562                 \}
+1563                 listurls = 1;
+1564                 listextended = 1;
+1565                 \textcolor{keywordflow}{break};
+1566 
+1567             \textcolor{keywordflow}{case} \textcolor{charliteral}{'p'}:
+1568                 \textcolor{keywordflow}{if} (proxypath) \{
+1569                     usage\_repeated\_arg(pool, opt);
+1570                 \}
+1571                 proxypath = apr\_pstrdup(pool, arg);
+1572                 \textcolor{keywordflow}{if} ((status = apr\_filepath\_set(proxypath, pool)) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1573                     \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(apr\_psprintf(pool, \textcolor{stringliteral}{"Could not set filepath to '%s': %pm"},
+1574                                        proxypath, &status));
+1575                 \}
+1576                 \textcolor{keywordflow}{break};
+1577 
+1578             \textcolor{keywordflow}{case} \textcolor{charliteral}{'P'}:
+1579                 \textcolor{keywordflow}{if} (pidfilename) \{
+1580                     usage\_repeated\_arg(pool, opt);
+1581                 \}
+1582                 pidfilename = apr\_pstrdup(pool, arg);
+1583                 \textcolor{keywordflow}{break};
+1584 
+1585             \textcolor{keywordflow}{case} \textcolor{charliteral}{'R'}:
+1586                 \textcolor{keywordflow}{if} (round) \{
+1587                     usage\_repeated\_arg(pool, opt);
+1588                 \}
+1589                 rv = apr\_strtoff(&round, arg, &end, 10);
+1590                 \textcolor{keywordflow}{if} (rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1591                     \textcolor{keywordflow}{if} (*end) \{
+1592                         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(apr\_psprintf(pool, \textcolor{stringliteral}{"Invalid round value: %s"}
+1593                                                  \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR} 
+      \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR}, arg));
+1594                     \}
+1595                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (round < 0) \{
+1596                         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(apr\_psprintf(pool, \textcolor{stringliteral}{"Round value must be positive: %s"}
+1597                                                  \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR} 
+      \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR}, arg));
+1598                     \}
+1599                 \}
+1600                 \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1601                     \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(apr\_psprintf(pool, \textcolor{stringliteral}{"Invalid round value: %s"}
+1602                                              \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR} \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR}, arg));
+1603                 \}
+1604                 \textcolor{keywordflow}{break};
+1605 
+1606             \} \textcolor{comment}{/* switch */}
+1607         \} \textcolor{comment}{/* else */}
+1608     \} \textcolor{comment}{/* while */}
+1609 
+1610     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} <= 1) \{
+1611         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1612     \}
+1613 
+1614     \textcolor{keywordflow}{if} (!proxypath) \{
+1615          \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\textcolor{stringliteral}{"Option -p must be specified"});
+1616     \}
+1617 
+1618     \textcolor{keywordflow}{if} (o->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind} < \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}) \{
+1619         \textcolor{keywordtype}{int} deleted = 0;
+1620         \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_ga11614f44ef4d939bdd984953346a7572}{error} = 0;
+1621         \textcolor{keywordflow}{if} (isdaemon) \{
+1622             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\textcolor{stringliteral}{"Option -d cannot be used with URL arguments, aborting"});
+1623         \}
+1624         \textcolor{keywordflow}{if} (intelligent) \{
+1625             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\textcolor{stringliteral}{"Option -i cannot be used with URL arguments, aborting"});
+1626         \}
+1627         \textcolor{keywordflow}{if} (limit\_found) \{
+1628             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\textcolor{stringliteral}{"Option -l cannot be used with URL arguments, aborting"});
+1629         \}
+1630         \textcolor{keywordflow}{while} (o->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind} < \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}) \{
+1631             status = delete\_url(pool, proxypath, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[o->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}]);
+1632             \textcolor{keywordflow}{if} (\hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} == status) \{
+1633                 \textcolor{keywordflow}{if} (\hyperlink{wintty_8c_ad023bbf13e60f8caee82c26f70e0f0a5}{verbose}) \{
+1634                     apr\_file\_printf(errfile, \textcolor{stringliteral}{"Removed: %s"} \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR},
+1635                             \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[o->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}]);
+1636                 \}
+1637                 deleted = 1;
+1638             \}
+1639             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__Error_gacc26a4afe01b6cc141f839be71fddf1c}{APR\_ENOENT} == status) \{
+1640                 \textcolor{keywordflow}{if} (\hyperlink{wintty_8c_ad023bbf13e60f8caee82c26f70e0f0a5}{verbose}) \{
+1641                     apr\_file\_printf(errfile, \textcolor{stringliteral}{"Not cached: %s"} \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR},
+1642                             \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[o->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}]);
+1643                 \}
+1644             \}
+1645             \textcolor{keywordflow}{else} \{
+1646                 \textcolor{keywordflow}{if} (\hyperlink{wintty_8c_ad023bbf13e60f8caee82c26f70e0f0a5}{verbose}) \{
+1647                     apr\_file\_printf(errfile, \textcolor{stringliteral}{"Error while removed: %s"} 
+      \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR},
+1648                             \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[o->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}]);
+1649                 \}
+1650                 error = 1;
+1651             \}
+1652             o->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}++;
+1653         \}
+1654         \textcolor{keywordflow}{return} error ? 1 : deleted ? 0 : 2;
+1655     \}
+1656 
+1657     \textcolor{keywordflow}{if} (isdaemon && repeat <= 0) \{
+1658          \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\textcolor{stringliteral}{"Option -d must be greater than zero"});
+1659     \}
+1660 
+1661     \textcolor{keywordflow}{if} (isdaemon && (\hyperlink{wintty_8c_ad023bbf13e60f8caee82c26f70e0f0a5}{verbose} || realclean || dryrun || listurls)) \{
+1662          \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\textcolor{stringliteral}{"Option -d cannot be used with -v, -r, -L or -D"});
+1663     \}
+1664 
+1665     \textcolor{keywordflow}{if} (!isdaemon && intelligent) \{
+1666          \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\textcolor{stringliteral}{"Option -i cannot be used without -d"});
+1667     \}
+1668 
+1669     \textcolor{keywordflow}{if} (!listurls && max <= 0 && inodes <= 0) \{
+1670          \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\textcolor{stringliteral}{"At least one of option -l or -L must be greater than zero"});
+1671     \}
+1672 
+1673     \textcolor{keywordflow}{if} (apr\_filepath\_get(&path, 0, pool) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1674         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(apr\_psprintf(pool, \textcolor{stringliteral}{"Could not get the filepath: %pm"}, &status));
+1675     \}
+1676     baselen = strlen(path);
+1677 
+1678     \textcolor{keywordflow}{if} (pidfilename) \{
+1679         log\_pid(pool, pidfilename, &pidfile); \textcolor{comment}{/* before daemonizing, so we}
+1680 \textcolor{comment}{                                               * can report errors}
+1681 \textcolor{comment}{                                               */}
+1682     \}
+1683 
+1684     \textcolor{keywordflow}{if} (listurls) \{
+1685         list\_urls(path, pool, round);
+1686         \textcolor{keywordflow}{return} (interrupted != 0);
+1687     \}
+1688 
+1689 \textcolor{preprocessor}{#ifndef DEBUG}
+1690     \textcolor{keywordflow}{if} (isdaemon) \{
+1691         apr\_file\_close(errfile);
+1692         errfile = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1693         \textcolor{keywordflow}{if} (pidfilename) \{
+1694             apr\_file\_close(pidfile); \textcolor{comment}{/* delete original pidfile only in parent */}
+1695         \}
+1696         \hyperlink{netware_2procsup_8c_a56c2b005792752b63d804f2021596406}{apr\_proc\_detach}(\hyperlink{group__apr__thread__proc_gab4de7134fcc66c4127ae65b68631f846}{APR\_PROC\_DETACH\_DAEMONIZE});
+1697         \textcolor{keywordflow}{if} (pidfilename) \{
+1698             log\_pid(pool, pidfilename, &pidfile);
+1699         \}
+1700     \}
+1701 \textcolor{preprocessor}{#endif}
+1702 
+1703     \textcolor{keywordflow}{do} \{
+1704         \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&instance, pool);
+1705 
+1706         \hyperlink{group__MOD__CACHE_ga33504014e188d5d7506173cc14fb5801}{now} = apr\_time\_now();
+1707         \hyperlink{group__apr__ring_ga245e1a73b162a4a68ebd54c84683729d}{APR\_RING\_INIT}(&root, \hyperlink{struct__entry}{\_entry}, link);
+1708         delcount = 0;
+1709         unsolicited = 0;
+1710         dowork = 0;
+1711 
+1712         \textcolor{keywordflow}{switch} (intelligent) \{
+1713         \textcolor{keywordflow}{case} 0:
+1714             dowork = 1;
+1715             \textcolor{keywordflow}{break};
+1716 
+1717         \textcolor{keywordflow}{case} 1:
+1718             retries = \hyperlink{htcacheclean_8c_af1e8380106ce2a3b502f9c81614d778f}{STAT\_ATTEMPTS};
+1719             status = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1720 
+1721             \textcolor{keywordflow}{do} \{
+1722                 \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1723                     apr\_sleep(\hyperlink{htcacheclean_8c_a1738696298a47f7ca9db52ecc39ad7a1}{STAT\_DELAY});
+1724                 \}
+1725                 status = apr\_stat(&info, path, \hyperlink{group__apr__file__stat_ga992ce1f4f75d519fd2a9d241c5a12515}{APR\_FINFO\_MTIME}, instance);
+1726             \} \textcolor{keywordflow}{while} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && !interrupted && --retries);
+1727 
+1728             \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1729                 previous = info.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime};
+1730                 intelligent = 2;
+1731             \}
+1732             dowork = 1;
+1733             \textcolor{keywordflow}{break};
+1734 
+1735         \textcolor{keywordflow}{case} 2:
+1736             retries = \hyperlink{htcacheclean_8c_af1e8380106ce2a3b502f9c81614d778f}{STAT\_ATTEMPTS};
+1737             status = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1738 
+1739             \textcolor{keywordflow}{do} \{
+1740                 \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1741                     apr\_sleep(\hyperlink{htcacheclean_8c_a1738696298a47f7ca9db52ecc39ad7a1}{STAT\_DELAY});
+1742                 \}
+1743                 status = apr\_stat(&info, path, \hyperlink{group__apr__file__stat_ga992ce1f4f75d519fd2a9d241c5a12515}{APR\_FINFO\_MTIME}, instance);
+1744             \} \textcolor{keywordflow}{while} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && !interrupted && --retries);
+1745 
+1746             \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1747                 \textcolor{keywordflow}{if} (previous != info.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime}) \{
+1748                     dowork = 1;
+1749                 \}
+1750                 previous = info.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime};
+1751                 \textcolor{keywordflow}{break};
+1752             \}
+1753             intelligent = 1;
+1754             dowork = 1;
+1755             \textcolor{keywordflow}{break};
+1756         \}
+1757 
+1758         \textcolor{keywordflow}{if} (dowork && !interrupted) \{
+1759             \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} nodes = 0;
+1760             \textcolor{keywordflow}{if} (!process\_dir(path, instance, &nodes) && !interrupted) \{
+1761                 purge(path, instance, max, inodes, nodes, round);
+1762             \}
+1763             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!isdaemon && !interrupted) \{
+1764                 apr\_file\_printf(errfile, \textcolor{stringliteral}{"An error occurred, cache cleaning "}
+1765                                          \textcolor{stringliteral}{"aborted."} \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR});
+1766                 \textcolor{keywordflow}{return} 1;
+1767             \}
+1768 
+1769             \textcolor{keywordflow}{if} (intelligent && !interrupted) \{
+1770                 retries = \hyperlink{htcacheclean_8c_af1e8380106ce2a3b502f9c81614d778f}{STAT\_ATTEMPTS};
+1771                 status = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1772                 \textcolor{keywordflow}{do} \{
+1773                     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1774                         apr\_sleep(\hyperlink{htcacheclean_8c_a1738696298a47f7ca9db52ecc39ad7a1}{STAT\_DELAY});
+1775                     \}
+1776                     status = apr\_stat(&info, path, \hyperlink{group__apr__file__stat_ga992ce1f4f75d519fd2a9d241c5a12515}{APR\_FINFO\_MTIME}, instance);
+1777                 \} \textcolor{keywordflow}{while} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && !interrupted && --retries);
+1778 
+1779                 \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1780                     previous = info.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime};
+1781                     intelligent = 2;
+1782                 \}
+1783                 \textcolor{keywordflow}{else} \{
+1784                     intelligent = 1;
+1785                 \}
+1786             \}
+1787         \}
+1788 
+1789         apr\_pool\_destroy(instance);
+1790 
+1791         current = apr\_time\_now();
+1792         \textcolor{keywordflow}{if} (current < \hyperlink{group__MOD__CACHE_ga33504014e188d5d7506173cc14fb5801}{now}) \{
+1793             delay = repeat;
+1794         \}
+1795         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (current - \hyperlink{group__MOD__CACHE_ga33504014e188d5d7506173cc14fb5801}{now} >= repeat) \{
+1796             delay = repeat;
+1797         \}
+1798         \textcolor{keywordflow}{else} \{
+1799             delay = \hyperlink{group__MOD__CACHE_ga33504014e188d5d7506173cc14fb5801}{now} + repeat - \hyperlink{group__APACHE__CORE__CONFIG_ga4b3e87cb39cac2296c5083f27321f1f4}{current};
+1800         \}
+1801 
+1802         \textcolor{comment}{/* we can't sleep the whole delay time here apiece as this is racy}
+1803 \textcolor{comment}{         * with respect to interrupt delivery - think about what happens}
+1804 \textcolor{comment}{         * if we have tested for an interrupt, then get scheduled}
+1805 \textcolor{comment}{         * before the apr\_sleep() call and while waiting for the cpu}
+1806 \textcolor{comment}{         * we do get an interrupt}
+1807 \textcolor{comment}{         */}
+1808         \textcolor{keywordflow}{if} (isdaemon) \{
+1809             \textcolor{keywordflow}{while} (delay && !interrupted) \{
+1810                 \textcolor{keywordflow}{if} (delay > \hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{APR\_USEC\_PER\_SEC}) \{
+1811                     apr\_sleep(\hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{APR\_USEC\_PER\_SEC});
+1812                     delay -= \hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{APR\_USEC\_PER\_SEC};
+1813                 \}
+1814                 \textcolor{keywordflow}{else} \{
+1815                     apr\_sleep(delay);
+1816                     delay = 0;
+1817                 \}
+1818             \}
+1819         \}
+1820     \} \textcolor{keywordflow}{while} (isdaemon && !interrupted);
+1821 
+1822     \textcolor{keywordflow}{if} (!isdaemon && interrupted) \{
+1823         apr\_file\_printf(errfile, \textcolor{stringliteral}{"Cache cleaning aborted due to user "}
+1824                                  \textcolor{stringliteral}{"request."} \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR});
+1825         \textcolor{keywordflow}{return} 1;
+1826     \}
+1827 
+1828     \textcolor{keywordflow}{return} 0;
+1829 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{htcacheclean_8c_a814244b02f6701fd8ead246678bb3dae_cgraph}
+\end{center}
+\end{figure}
+
+

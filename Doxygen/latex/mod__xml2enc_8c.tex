@@ -1,0 +1,117 @@
+\hypertarget{mod__xml2enc_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/filters/mod\+\_\+xml2enc.c File Reference}
+\label{mod__xml2enc_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/mod\+\_\+xml2enc.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/mod\+\_\+xml2enc.\+c}}
+{\ttfamily \#include $<$ctype.\+h$>$}\\*
+{\ttfamily \#include $<$libxml/encoding.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+xlate.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+optional.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+xml2enc.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+xml2enc.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__xml2enc_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structxml2ctx}{xml2ctx}
+\item 
+struct \hyperlink{structxml2cfg}{xml2cfg}
+\item 
+struct \hyperlink{structtattr}{tattr}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__xml2enc_8c_ad974fe981249f5e84fbf1683b012c9f8}{B\+U\+F\+L\+EN}~8192
+\item 
+\#define \hyperlink{mod__xml2enc_8c_a4c4e05182d324c6eb77c1cacebf4541d}{B\+U\+F\+\_\+\+M\+IN}~4096
+\item 
+\#define \hyperlink{mod__xml2enc_8c_aeb02a952b066b5c871f06e4bc0349f22}{A\+P\+R\+\_\+\+B\+R\+I\+G\+A\+D\+E\+\_\+\+DO}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb})
+\item 
+\#define \hyperlink{mod__xml2enc_8c_a50eb24c8da29321abdde5057199ae719}{E\+N\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+S\+ED}~0x100
+\item 
+\#define \hyperlink{mod__xml2enc_8c_ac17816bd54e73d38b3da0ad037d28037}{E\+N\+C\+\_\+\+S\+E\+E\+N\+\_\+\+E\+OS}~0x200
+\item 
+\#define \hyperlink{mod__xml2enc_8c_ae3b5ae58822b960ca8aaa42d10c58446}{E\+N\+C\+\_\+\+S\+K\+I\+P\+TO}~\hyperlink{mod__xml2enc_8h_af12c107069a13e9a74accc361fb7a776}{E\+N\+C\+I\+O\+\_\+\+S\+K\+I\+P\+TO}
+\item 
+\#define \hyperlink{mod__xml2enc_8c_aacaf12ac6fa73fd9fd2e7b61dc9ffdcb}{H\+A\+V\+E\+\_\+\+E\+N\+C\+O\+D\+I\+NG}(enc)~(((enc)!=X\+M\+L\+\_\+\+C\+H\+A\+R\+\_\+\+E\+N\+C\+O\+D\+I\+N\+G\+\_\+\+N\+O\+NE)\&\&((enc)!=X\+M\+L\+\_\+\+C\+H\+A\+R\+\_\+\+E\+N\+C\+O\+D\+I\+N\+G\+\_\+\+E\+R\+R\+OR))
+\item 
+\#define \hyperlink{mod__xml2enc_8c_a48c6ff40fc2133d529852885ab12c26b}{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}~\hyperlink{group__APACHE__CORE__FILTER_ga1e0ebc72e7e221c1fa62e81e3a8b3e25}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}$\vert$\hyperlink{group__APACHE__CORE__FILTER_ga45a85db5961f6aa2975acb30a7ba020e}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__xml2enc_8c_a9c57a056a162cff44cd0126114575185}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (xml2enc)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__xml2enc_8c_ad61f56eaf9cd8a18782900b7e0e2f3cf}{xml2enc\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!A\+P\+R\+\_\+\+B\+R\+I\+G\+A\+D\+E\+\_\+\+DO@{A\+P\+R\+\_\+\+B\+R\+I\+G\+A\+D\+E\+\_\+\+DO}}
+\index{A\+P\+R\+\_\+\+B\+R\+I\+G\+A\+D\+E\+\_\+\+DO@{A\+P\+R\+\_\+\+B\+R\+I\+G\+A\+D\+E\+\_\+\+DO}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+B\+R\+I\+G\+A\+D\+E\+\_\+\+DO}{APR_BRIGADE_DO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+B\+R\+I\+G\+A\+D\+E\+\_\+\+DO(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf bb}}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__xml2enc_8c_aeb02a952b066b5c871f06e4bc0349f22}{}\label{mod__xml2enc_8c_aeb02a952b066b5c871f06e4bc0349f22}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{for} (\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b} = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}); \hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{                                  b} != 
+      \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}); \hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{                                  b} = 
+      \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}))
+\end{DoxyCode}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!B\+U\+F\+\_\+\+M\+IN@{B\+U\+F\+\_\+\+M\+IN}}
+\index{B\+U\+F\+\_\+\+M\+IN@{B\+U\+F\+\_\+\+M\+IN}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{B\+U\+F\+\_\+\+M\+IN}{BUF_MIN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+U\+F\+\_\+\+M\+IN~4096}\hypertarget{mod__xml2enc_8c_a4c4e05182d324c6eb77c1cacebf4541d}{}\label{mod__xml2enc_8c_a4c4e05182d324c6eb77c1cacebf4541d}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!B\+U\+F\+L\+EN@{B\+U\+F\+L\+EN}}
+\index{B\+U\+F\+L\+EN@{B\+U\+F\+L\+EN}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{B\+U\+F\+L\+EN}{BUFLEN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+U\+F\+L\+EN~8192}\hypertarget{mod__xml2enc_8c_ad974fe981249f5e84fbf1683b012c9f8}{}\label{mod__xml2enc_8c_ad974fe981249f5e84fbf1683b012c9f8}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!E\+N\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+S\+ED@{E\+N\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+S\+ED}}
+\index{E\+N\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+S\+ED@{E\+N\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+S\+ED}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{E\+N\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+S\+ED}{ENC_INITIALISED}}]{\setlength{\rightskip}{0pt plus 5cm}\#define E\+N\+C\+\_\+\+I\+N\+I\+T\+I\+A\+L\+I\+S\+ED~0x100}\hypertarget{mod__xml2enc_8c_a50eb24c8da29321abdde5057199ae719}{}\label{mod__xml2enc_8c_a50eb24c8da29321abdde5057199ae719}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!E\+N\+C\+\_\+\+S\+E\+E\+N\+\_\+\+E\+OS@{E\+N\+C\+\_\+\+S\+E\+E\+N\+\_\+\+E\+OS}}
+\index{E\+N\+C\+\_\+\+S\+E\+E\+N\+\_\+\+E\+OS@{E\+N\+C\+\_\+\+S\+E\+E\+N\+\_\+\+E\+OS}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{E\+N\+C\+\_\+\+S\+E\+E\+N\+\_\+\+E\+OS}{ENC_SEEN_EOS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define E\+N\+C\+\_\+\+S\+E\+E\+N\+\_\+\+E\+OS~0x200}\hypertarget{mod__xml2enc_8c_ac17816bd54e73d38b3da0ad037d28037}{}\label{mod__xml2enc_8c_ac17816bd54e73d38b3da0ad037d28037}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!E\+N\+C\+\_\+\+S\+K\+I\+P\+TO@{E\+N\+C\+\_\+\+S\+K\+I\+P\+TO}}
+\index{E\+N\+C\+\_\+\+S\+K\+I\+P\+TO@{E\+N\+C\+\_\+\+S\+K\+I\+P\+TO}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{E\+N\+C\+\_\+\+S\+K\+I\+P\+TO}{ENC_SKIPTO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define E\+N\+C\+\_\+\+S\+K\+I\+P\+TO~{\bf E\+N\+C\+I\+O\+\_\+\+S\+K\+I\+P\+TO}}\hypertarget{mod__xml2enc_8c_ae3b5ae58822b960ca8aaa42d10c58446}{}\label{mod__xml2enc_8c_ae3b5ae58822b960ca8aaa42d10c58446}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!H\+A\+V\+E\+\_\+\+E\+N\+C\+O\+D\+I\+NG@{H\+A\+V\+E\+\_\+\+E\+N\+C\+O\+D\+I\+NG}}
+\index{H\+A\+V\+E\+\_\+\+E\+N\+C\+O\+D\+I\+NG@{H\+A\+V\+E\+\_\+\+E\+N\+C\+O\+D\+I\+NG}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{H\+A\+V\+E\+\_\+\+E\+N\+C\+O\+D\+I\+NG}{HAVE_ENCODING}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+A\+V\+E\+\_\+\+E\+N\+C\+O\+D\+I\+NG(
+\begin{DoxyParamCaption}
+\item[{}]{enc}
+\end{DoxyParamCaption}
+)~(((enc)!=X\+M\+L\+\_\+\+C\+H\+A\+R\+\_\+\+E\+N\+C\+O\+D\+I\+N\+G\+\_\+\+N\+O\+NE)\&\&((enc)!=X\+M\+L\+\_\+\+C\+H\+A\+R\+\_\+\+E\+N\+C\+O\+D\+I\+N\+G\+\_\+\+E\+R\+R\+OR))}\hypertarget{mod__xml2enc_8c_aacaf12ac6fa73fd9fd2e7b61dc9ffdcb}{}\label{mod__xml2enc_8c_aacaf12ac6fa73fd9fd2e7b61dc9ffdcb}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS@{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}}
+\index{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS@{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS}{PROTO_FLAGS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+R\+O\+T\+O\+\_\+\+F\+L\+A\+GS~{\bf A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}$\vert${\bf A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}}\hypertarget{mod__xml2enc_8c_a48c6ff40fc2133d529852885ab12c26b}{}\label{mod__xml2enc_8c_a48c6ff40fc2133d529852885ab12c26b}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(xml2enc)}{AP_DECLARE_MODULE(xml2enc)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{xml2enc}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__xml2enc_8c_a9c57a056a162cff44cd0126114575185}{}\label{mod__xml2enc_8c_a9c57a056a162cff44cd0126114575185}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}!xml2enc\+\_\+module@{xml2enc\+\_\+module}}
+\index{xml2enc\+\_\+module@{xml2enc\+\_\+module}!mod\+\_\+xml2enc.\+c@{mod\+\_\+xml2enc.\+c}}
+\subsubsection[{\texorpdfstring{xml2enc\+\_\+module}{xml2enc_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} xml2enc\+\_\+module}\hypertarget{mod__xml2enc_8c_ad61f56eaf9cd8a18782900b7e0e2f3cf}{}\label{mod__xml2enc_8c_ad61f56eaf9cd8a18782900b7e0e2f3cf}

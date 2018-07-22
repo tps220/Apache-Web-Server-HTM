@@ -1,0 +1,407 @@
+\hypertarget{namespacegen-build}{}\section{gen-\/build Namespace Reference}
+\label{namespacegen-build}\index{gen-\/build@{gen-\/build}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacegen-build_a303de3964ffc3ff5955d16fd7ed6aa55}{main} ()
+\item 
+def \hyperlink{namespacegen-build_a72863c184bb8734b32f7480d89f664ce}{write\+\_\+objects} (\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f}, legal\+\_\+deps, h\+\_\+deps, \hyperlink{pcregrep_8txt_a5aaeef01bce395cfcb41dd64a3bf8607}{files})
+\item 
+def \hyperlink{namespacegen-build_ae04145837dc1f16d63faf1c2853fef79}{extract\+\_\+deps} (\hyperlink{group__apr__proc__mutex_ga6a2fc0c236288b07ce5bd1335ca89fa2}{fname}, legal\+\_\+deps)
+\item 
+def \hyperlink{namespacegen-build_ad10a7a9d086bd1923df405f9d928e6bd}{resolve\+\_\+deps} (header\+\_\+deps)
+\item 
+def \hyperlink{namespacegen-build_af6d7251642e30bfe9bd19cec915968fb}{clean\+\_\+path} (\hyperlink{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{path})
+\item 
+def \hyperlink{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278}{get\+\_\+files} (\hyperlink{pcregrep_8txt_aca23d6bf5b793a5e2a75a714f962e664}{patterns})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list} \hyperlink{namespacegen-build_a6482e6bb2675ffd159f402ddc5582e9e}{P\+L\+A\+T\+F\+O\+R\+MS} = \mbox{[} \textquotesingle{}aix\textquotesingle{}, \textquotesingle{}beos\textquotesingle{}, \textquotesingle{}netware\textquotesingle{}, \textquotesingle{}os2\textquotesingle{}, \textquotesingle{}os390\textquotesingle{}, \textquotesingle{}unix\textquotesingle{}, \textquotesingle{}win32\textquotesingle{} \mbox{]}
+\item 
+\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list} \hyperlink{namespacegen-build_a5f35a11490cb7a34729806229e259267}{M\+A\+K\+E\+\_\+\+P\+L\+A\+T\+F\+O\+R\+MS}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{gen-\/build@{gen-\/build}!clean\+\_\+path@{clean\+\_\+path}}
+\index{clean\+\_\+path@{clean\+\_\+path}!gen-\/build@{gen-\/build}}
+\subsubsection[{\texorpdfstring{clean\+\_\+path(path)}{clean_path(path)}}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf gen}-\/build.\+clean\+\_\+path (
+\begin{DoxyParamCaption}
+\item[{}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacegen-build_af6d7251642e30bfe9bd19cec915968fb}{}\label{namespacegen-build_af6d7251642e30bfe9bd19cec915968fb}
+
+\begin{DoxyCode}
+218 \textcolor{keyword}{def }\hyperlink{namespacegen-build_af6d7251642e30bfe9bd19cec915968fb}{clean\_path}(path):
+219     \textcolor{keywordflow}{return} path.replace(\textcolor{stringliteral}{"\(\backslash\)\(\backslash\)"}, \textcolor{stringliteral}{"/"})
+220 
+\end{DoxyCode}
+\index{gen-\/build@{gen-\/build}!extract\+\_\+deps@{extract\+\_\+deps}}
+\index{extract\+\_\+deps@{extract\+\_\+deps}!gen-\/build@{gen-\/build}}
+\subsubsection[{\texorpdfstring{extract\+\_\+deps(fname, legal\+\_\+deps)}{extract_deps(fname, legal_deps)}}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf gen}-\/build.\+extract\+\_\+deps (
+\begin{DoxyParamCaption}
+\item[{}]{fname, }
+\item[{}]{legal\+\_\+deps}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacegen-build_ae04145837dc1f16d63faf1c2853fef79}{}\label{namespacegen-build_ae04145837dc1f16d63faf1c2853fef79}
+
+\begin{DoxyCode}
+192 \textcolor{keyword}{def }\hyperlink{namespacegen-build_ae04145837dc1f16d63faf1c2853fef79}{extract\_deps}(fname, legal\_deps):
+193   \textcolor{stringliteral}{"Extract the headers this file includes."}
+194   deps = \{ \}
+195   \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} \hyperlink{tcpdumpscii_8txt_ad449568b4dd17e38bd893db222d79724}{open}(fname).readlines():
+196     \textcolor{keywordflow}{if} line[:8] != \textcolor{stringliteral}{'#include'}:
+197       \textcolor{keywordflow}{continue}
+198     inc = \_re\_include.match(line).\hyperlink{group__MOD__DAV_gadc3add9d56a1a732c371606682db4c4e}{group}(1)
+199     \textcolor{keywordflow}{if} inc \textcolor{keywordflow}{in} legal\_deps.keys():
+200       deps[inc] = legal\_deps[inc]
+201   \textcolor{keywordflow}{return} deps
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=269pt]{namespacegen-build_ae04145837dc1f16d63faf1c2853fef79_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacegen-build_ae04145837dc1f16d63faf1c2853fef79_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{gen-\/build@{gen-\/build}!get\+\_\+files@{get\+\_\+files}}
+\index{get\+\_\+files@{get\+\_\+files}!gen-\/build@{gen-\/build}}
+\subsubsection[{\texorpdfstring{get\+\_\+files(patterns)}{get_files(patterns)}}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf gen}-\/build.\+get\+\_\+files (
+\begin{DoxyParamCaption}
+\item[{}]{patterns}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278}{}\label{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278}
+
+\begin{DoxyCode}
+221 \textcolor{keyword}{def }\hyperlink{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278}{get\_files}(patterns):
+222   files = [ ]
+223   \textcolor{keywordflow}{for} pat \textcolor{keywordflow}{in} string.split(patterns):
+224     files.extend(map(clean\_path, glob.glob(pat)))
+225   files.sort()
+226   \textcolor{keywordflow}{return} files
+227 
+228 
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=291pt]{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{gen-\/build@{gen-\/build}!main@{main}}
+\index{main@{main}!gen-\/build@{gen-\/build}}
+\subsubsection[{\texorpdfstring{main()}{main()}}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf gen}-\/build.\+main (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacegen-build_a303de3964ffc3ff5955d16fd7ed6aa55}{}\label{namespacegen-build_a303de3964ffc3ff5955d16fd7ed6aa55}
+
+\begin{DoxyCode}
+38 \textcolor{keyword}{def }\hyperlink{namespacegen-build_a303de3964ffc3ff5955d16fd7ed6aa55}{main}():
+39   parser = ConfigParser.ConfigParser()
+40   parser.read(\textcolor{stringliteral}{'build.conf'})
+41 
+42   \textcolor{keywordflow}{if} parser.has\_option(\textcolor{stringliteral}{'options'}, \textcolor{stringliteral}{'dsp'}):
+43     dsp\_file = parser.get(\textcolor{stringliteral}{'options'}, \textcolor{stringliteral}{'dsp'})
+44   \textcolor{keywordflow}{else}:
+45     dsp\_file = \textcolor{keywordtype}{None}
+46 
+47   headers = \hyperlink{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278}{get\_files}(parser.get(\textcolor{stringliteral}{'options'}, \textcolor{stringliteral}{'headers'}))
+48 
+49   \textcolor{comment}{# compute the relevant headers, along with the implied includes}
+50   legal\_deps = \{ \}
+51   \textcolor{keywordflow}{for} fname \textcolor{keywordflow}{in} headers:
+52     legal\_deps[os.path.basename(fname)] = fname
+53 
+54   h\_deps = \{ \}
+55   \textcolor{keywordflow}{for} fname \textcolor{keywordflow}{in} headers:
+56     h\_deps[os.path.basename(fname)] = \hyperlink{namespacegen-build_ae04145837dc1f16d63faf1c2853fef79}{extract\_deps}(fname, legal\_deps)
+57   \hyperlink{namespacegen-build_ad10a7a9d086bd1923df405f9d928e6bd}{resolve\_deps}(h\_deps)
+58 
+59   f = \hyperlink{tcpdumpscii_8txt_ad449568b4dd17e38bd893db222d79724}{open}(\textcolor{stringliteral}{'build-outputs.mk'}, \textcolor{stringliteral}{'w'})
+60   f.write(\textcolor{stringliteral}{'# DO NOT EDIT. AUTOMATICALLY GENERATED.\(\backslash\)n\(\backslash\)n'})
+61 
+62   \textcolor{comment}{# write out the platform-independent files}
+63   files = \hyperlink{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278}{get\_files}(parser.get(\textcolor{stringliteral}{'options'}, \textcolor{stringliteral}{'paths'}))
+64   objects, dirs = \hyperlink{namespacegen-build_a72863c184bb8734b32f7480d89f664ce}{write\_objects}(f, legal\_deps, h\_deps, files)
+65   f.write(\textcolor{stringliteral}{'\(\backslash\)nOBJECTS\_all = %s\(\backslash\)n\(\backslash\)n'} % string.join(objects))
+66 
+67   \textcolor{comment}{# for each platform and each subdirectory holding platform-specific files,}
+68   \textcolor{comment}{# write out their compilation rules, and an OBJECT\_<subdir>\_<plat> symbol.}
+69   \textcolor{keywordflow}{for} platform, parent \textcolor{keywordflow}{in} MAKE\_PLATFORMS:
+70 
+71     \textcolor{comment}{# record the object symbols to build for each platform}
+72     group = [ \textcolor{stringliteral}{'$(OBJECTS\_all)'} ]
+73 
+74     \textcolor{comment}{# If we're doing win32, we're going to look in the libapr.dsp file}
+75     \textcolor{comment}{# for those files that we have to manually add to our list.}
+76     inherit\_parent = \{ \}
+77     \textcolor{keywordflow}{if} platform == \textcolor{stringliteral}{'win32'} \textcolor{keywordflow}{and} dsp\_file:
+78       \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} \hyperlink{tcpdumpscii_8txt_ad449568b4dd17e38bd893db222d79724}{open}(dsp\_file).readlines():
+79         \textcolor{keywordflow}{if} line[:7] != \textcolor{stringliteral}{'SOURCE='}:
+80           \textcolor{keywordflow}{continue}
+81         \textcolor{keywordflow}{if} line[7:].find(\textcolor{stringliteral}{'unix'}) != -1:
+82           \textcolor{comment}{# skip the leading .\(\backslash\) and split it out}
+83           inherit\_files = line[9:].strip().split(\textcolor{stringliteral}{'\(\backslash\)\(\backslash\)'})
+84           \textcolor{comment}{# change the .c to .lo}
+85           \textcolor{keyword}{assert} inherit\_files[-1][-2:] == \textcolor{stringliteral}{'.c'}
+86           inherit\_files[-1] = inherit\_files[-1][:-2] + \textcolor{stringliteral}{'.lo'}
+87           \textcolor{comment}{# replace the \(\backslash\)\(\backslash\)'s with /'s}
+88           inherit\_line = \textcolor{stringliteral}{'/'}.\hyperlink{group__apr__mcast_ga2d95afe63c78661afb200a75da9ae794}{join}(inherit\_files)
+89           \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} inherit\_parent.has\_key(inherit\_files[0]):
+90             inherit\_parent[inherit\_files[0]] = []
+91           inherit\_parent[inherit\_files[0]].\hyperlink{group__APACHE__CORE__VARBUF_ga999afdbb8f118076679df856cc264ab1}{append}(inherit\_line)
+92 
+93     \textcolor{keywordflow}{for} subdir \textcolor{keywordflow}{in} string.split(parser.get(\textcolor{stringliteral}{'options'}, \textcolor{stringliteral}{'platform\_dirs'})):
+94       path = \textcolor{stringliteral}{'%s/%s'} % (subdir, platform)
+95       \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(path):
+96         \textcolor{comment}{# this subdir doesn't have a subdir for this platform, so we'll}
+97         \textcolor{comment}{# use the parent-platform's set of symbols}
+98         \textcolor{keywordflow}{if} parent:
+99           group.append(\textcolor{stringliteral}{'$(OBJECTS\_%s\_%s)'} % (subdir, parent))
+100         \textcolor{keywordflow}{continue}
+101 
+102       \textcolor{comment}{# remember that this directory has files/objects}
+103       dirs[path] = \textcolor{keywordtype}{None}
+104 
+105       \textcolor{comment}{# write out the compilation lines for this subdir}
+106       files = \hyperlink{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278}{get\_files}(path + \textcolor{stringliteral}{'/*.c'})
+107       objects, \_unused = \hyperlink{namespacegen-build_a72863c184bb8734b32f7480d89f664ce}{write\_objects}(f, legal\_deps, h\_deps, files)
+108 
+109       \textcolor{keywordflow}{if} inherit\_parent.has\_key(subdir):
+110         objects = objects + inherit\_parent[subdir]
+111 
+112       symname = \textcolor{stringliteral}{'OBJECTS\_%s\_%s'} % (subdir, platform)
+113 
+114       objects.sort()
+115 
+116       \textcolor{comment}{# and write the symbol for the whole group}
+117       f.write(\textcolor{stringliteral}{'\(\backslash\)n%s = %s\(\backslash\)n\(\backslash\)n'} % (symname, string.join(objects)))
+118 
+119       \textcolor{comment}{# and include that symbol in the group}
+120       group.append(\textcolor{stringliteral}{'$(%s)'} % symname)
+121 
+122     group.sort()
+123 
+124     \textcolor{comment}{# write out a symbol which contains the necessary files}
+125     f.write(\textcolor{stringliteral}{'OBJECTS\_%s = %s\(\backslash\)n\(\backslash\)n'} % (platform, string.join(group)))
+126 
+127   f.write(\textcolor{stringliteral}{'HEADERS = $(top\_srcdir)/%s\(\backslash\)n\(\backslash\)n'} % string.join(headers, \textcolor{stringliteral}{' $(top\_srcdir)/'}))
+128   f.write(\textcolor{stringliteral}{'SOURCE\_DIRS = %s $(EXTRA\_SOURCE\_DIRS)\(\backslash\)n\(\backslash\)n'} % string.join(dirs.keys()))
+129 
+130   \textcolor{keywordflow}{if} parser.has\_option(\textcolor{stringliteral}{'options'}, \textcolor{stringliteral}{'modules'}):
+131     modules = parser.get(\textcolor{stringliteral}{'options'}, \textcolor{stringliteral}{'modules'})
+132 
+133     \textcolor{keywordflow}{for} mod \textcolor{keywordflow}{in} string.split(modules):
+134       files = \hyperlink{namespacegen-build_ae60d7eb60e53d27cf693a1efb8b3c278}{get\_files}(parser.get(mod, \textcolor{stringliteral}{'paths'}))
+135       objects, \_unused = \hyperlink{namespacegen-build_a72863c184bb8734b32f7480d89f664ce}{write\_objects}(f, legal\_deps, h\_deps, files)
+136       flat\_objects = string.join(objects)
+137       f.write(\textcolor{stringliteral}{'OBJECTS\_%s = %s\(\backslash\)n'} % (mod, flat\_objects))
+138 
+139       \textcolor{keywordflow}{if} parser.has\_option(mod, \textcolor{stringliteral}{'target'}):
+140         target = parser.get(mod, \textcolor{stringliteral}{'target'})
+141         f.write(\textcolor{stringliteral}{'MODULE\_%s = %s\(\backslash\)n'} % (mod, target))
+142         f.write(\textcolor{stringliteral}{'%s: %s\(\backslash\)n'} % (target, flat\_objects))
+143         f.write(\textcolor{stringliteral}{'\(\backslash\)t$(LINK\_MODULE) -o $@ $(OBJECTS\_%s) $(LDADD\_%s)\(\backslash\)n'} % (mod, mod))
+144 
+145       f.write(\textcolor{stringliteral}{'\(\backslash\)n'})
+146 
+147   \textcolor{comment}{# Build a list of all necessary directories in build tree}
+148   alldirs = \{ \}
+149   \textcolor{keywordflow}{for} dir \textcolor{keywordflow}{in} dirs.keys():
+150     d = dir
+151     \textcolor{keywordflow}{while} d:
+152       alldirs[d] = \textcolor{keywordtype}{None}
+153       d = os.path.dirname(d)
+154 
+155   \textcolor{comment}{# Sort so 'foo' is before 'foo/bar'}
+156   keys = alldirs.keys()
+157   keys.sort()
+158   f.write(\textcolor{stringliteral}{'BUILD\_DIRS = %s\(\backslash\)n\(\backslash\)n'} % string.join(keys))
+159 
+160   f.write(\textcolor{stringliteral}{'.make.dirs: $(srcdir)/build-outputs.mk\(\backslash\)n'} \(\backslash\)
+161           \textcolor{stringliteral}{'\(\backslash\)t@for d in $(BUILD\_DIRS); do test -d $$d || mkdir $$d; done\(\backslash\)n'} \(\backslash\)
+162           \textcolor{stringliteral}{'\(\backslash\)t@echo timestamp > $@\(\backslash\)n'})
+163 
+164 
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacegen-build_a303de3964ffc3ff5955d16fd7ed6aa55_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=291pt]{namespacegen-build_a303de3964ffc3ff5955d16fd7ed6aa55_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{gen-\/build@{gen-\/build}!resolve\+\_\+deps@{resolve\+\_\+deps}}
+\index{resolve\+\_\+deps@{resolve\+\_\+deps}!gen-\/build@{gen-\/build}}
+\subsubsection[{\texorpdfstring{resolve\+\_\+deps(header\+\_\+deps)}{resolve_deps(header_deps)}}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf gen}-\/build.\+resolve\+\_\+deps (
+\begin{DoxyParamCaption}
+\item[{}]{header\+\_\+deps}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacegen-build_ad10a7a9d086bd1923df405f9d928e6bd}{}\label{namespacegen-build_ad10a7a9d086bd1923df405f9d928e6bd}
+
+\begin{DoxyCode}
+205 \textcolor{keyword}{def }\hyperlink{namespacegen-build_ad10a7a9d086bd1923df405f9d928e6bd}{resolve\_deps}(header\_deps):
+206   \textcolor{stringliteral}{"Alter the provided dictionary to flatten includes-of-includes."}
+207   altered = 1
+208   \textcolor{keywordflow}{while} altered:
+209     altered = 0
+210     \textcolor{keywordflow}{for} hdr, deps \textcolor{keywordflow}{in} header\_deps.items():
+211       \textcolor{comment}{# print hdr, deps}
+212       start = \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}(deps)
+213       \textcolor{keywordflow}{for} dep \textcolor{keywordflow}{in} deps.keys():
+214         deps.update(header\_deps.get(dep, \{\}))
+215       \textcolor{keywordflow}{if} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}(deps) != start:
+216         altered = 1
+217 
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacegen-build_ad10a7a9d086bd1923df405f9d928e6bd_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{gen-\/build@{gen-\/build}!write\+\_\+objects@{write\+\_\+objects}}
+\index{write\+\_\+objects@{write\+\_\+objects}!gen-\/build@{gen-\/build}}
+\subsubsection[{\texorpdfstring{write\+\_\+objects(f, legal\+\_\+deps, h\+\_\+deps, files)}{write_objects(f, legal_deps, h_deps, files)}}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf gen}-\/build.\+write\+\_\+objects (
+\begin{DoxyParamCaption}
+\item[{}]{f, }
+\item[{}]{legal\+\_\+deps, }
+\item[{}]{h\+\_\+deps, }
+\item[{}]{files}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacegen-build_a72863c184bb8734b32f7480d89f664ce}{}\label{namespacegen-build_a72863c184bb8734b32f7480d89f664ce}
+
+\begin{DoxyCode}
+165 \textcolor{keyword}{def }\hyperlink{namespacegen-build_a72863c184bb8734b32f7480d89f664ce}{write\_objects}(f, legal\_deps, h\_deps, files):
+166   dirs = \{ \}
+167   objects = [ ]
+168 
+169   \textcolor{keywordflow}{for} file \textcolor{keywordflow}{in} files:
+170     \textcolor{keywordflow}{if} file[-10:] == \textcolor{stringliteral}{'/apr\_app.c'}:
+171       \textcolor{keywordflow}{continue}
+172     \textcolor{keyword}{assert} file[-2:] == \textcolor{stringliteral}{'.c'}
+173     obj = file[:-2] + \textcolor{stringliteral}{'.lo'}
+174     objects.append(obj)
+175 
+176     dirs[os.path.dirname(file)] = \textcolor{keywordtype}{None}
+177 
+178     \textcolor{comment}{# what headers does this file include, along with the implied headers}
+179     deps = \hyperlink{namespacegen-build_ae04145837dc1f16d63faf1c2853fef79}{extract\_deps}(file, legal\_deps)
+180     \textcolor{keywordflow}{for} hdr \textcolor{keywordflow}{in} deps.keys():
+181       deps.update(h\_deps.get(hdr, \{\}))
+182 
+183     vals = deps.values()
+184     vals.sort()
+185     f.write(\textcolor{stringliteral}{'%s: %s .make.dirs %s\(\backslash\)n'} % (obj, file, string.join(vals)))
+186 
+187   objects.sort()
+188 
+189   \textcolor{keywordflow}{return} objects, dirs
+190 
+191 
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacegen-build_a72863c184bb8734b32f7480d89f664ce_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacegen-build_a72863c184bb8734b32f7480d89f664ce_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{gen-\/build@{gen-\/build}!M\+A\+K\+E\+\_\+\+P\+L\+A\+T\+F\+O\+R\+MS@{M\+A\+K\+E\+\_\+\+P\+L\+A\+T\+F\+O\+R\+MS}}
+\index{M\+A\+K\+E\+\_\+\+P\+L\+A\+T\+F\+O\+R\+MS@{M\+A\+K\+E\+\_\+\+P\+L\+A\+T\+F\+O\+R\+MS}!gen-\/build@{gen-\/build}}
+\subsubsection[{\texorpdfstring{M\+A\+K\+E\+\_\+\+P\+L\+A\+T\+F\+O\+R\+MS}{MAKE_PLATFORMS}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf list} {\bf gen}-\/build.\+M\+A\+K\+E\+\_\+\+P\+L\+A\+T\+F\+O\+R\+MS}\hypertarget{namespacegen-build_a5f35a11490cb7a34729806229e259267}{}\label{namespacegen-build_a5f35a11490cb7a34729806229e259267}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = [
+2   (\textcolor{stringliteral}{'unix'}, \textcolor{keywordtype}{None}),
+3   (\textcolor{stringliteral}{'aix'}, \textcolor{stringliteral}{'unix'}),
+4   (\textcolor{stringliteral}{'beos'}, \textcolor{stringliteral}{'unix'}),
+5   (\textcolor{stringliteral}{'os2'}, \textcolor{stringliteral}{'unix'}),
+6   (\textcolor{stringliteral}{'os390'}, \textcolor{stringliteral}{'unix'}),
+7   (\textcolor{stringliteral}{'win32'}, \textcolor{stringliteral}{'unix'}),
+8   ]
+\end{DoxyCode}
+\index{gen-\/build@{gen-\/build}!P\+L\+A\+T\+F\+O\+R\+MS@{P\+L\+A\+T\+F\+O\+R\+MS}}
+\index{P\+L\+A\+T\+F\+O\+R\+MS@{P\+L\+A\+T\+F\+O\+R\+MS}!gen-\/build@{gen-\/build}}
+\subsubsection[{\texorpdfstring{P\+L\+A\+T\+F\+O\+R\+MS}{PLATFORMS}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf list} {\bf gen}-\/build.\+P\+L\+A\+T\+F\+O\+R\+MS = \mbox{[} \textquotesingle{}aix\textquotesingle{}, \textquotesingle{}beos\textquotesingle{}, \textquotesingle{}netware\textquotesingle{}, \textquotesingle{}os2\textquotesingle{}, \textquotesingle{}os390\textquotesingle{}, \textquotesingle{}unix\textquotesingle{}, \textquotesingle{}win32\textquotesingle{} \mbox{]}}\hypertarget{namespacegen-build_a6482e6bb2675ffd159f402ddc5582e9e}{}\label{namespacegen-build_a6482e6bb2675ffd159f402ddc5582e9e}

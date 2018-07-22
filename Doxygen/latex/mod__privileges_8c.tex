@@ -1,0 +1,145 @@
+\hypertarget{mod__privileges_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/arch/unix/mod\+\_\+privileges.c File Reference}
+\label{mod__privileges_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/arch/unix/mod\+\_\+privileges.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/arch/unix/mod\+\_\+privileges.\+c}}
+{\ttfamily \#include $<$priv.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}unixd.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+privileges.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__privileges_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structpriv__cfg}{priv\+\_\+cfg}
+\item 
+struct \hyperlink{structpriv__dir__cfg}{priv\+\_\+dir\+\_\+cfg}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__privileges_8c_a6bb3534b2ccf2ebb82e05ee6527cc9ca}{C\+F\+G\+\_\+\+C\+H\+E\+CK}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})
+\item 
+\#define \hyperlink{mod__privileges_8c_a0be792f90c6b3fa032b2c5d5038a7bc7}{C\+R\+\_\+\+C\+H\+E\+CK}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y})
+\item 
+\#define \hyperlink{mod__privileges_8c_a73af87ed46d0938131a65dadd52aec54}{P\+D\+R\+O\+P\+\_\+\+C\+H\+E\+CK}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596}{priv\+\_\+mode} \{ \hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a4a9496b20394dab7bd2c301f59587969}{P\+R\+I\+V\+\_\+\+U\+N\+S\+ET}, 
+\hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a3bc68a81f38cc42837b8315e71884f1f}{P\+R\+I\+V\+\_\+\+F\+A\+ST}, 
+\hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596abf6c126cc024a17adf6a1387dc693f2b}{P\+R\+I\+V\+\_\+\+S\+E\+C\+U\+RE}, 
+\hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a1eed724c98bb6aaa6d9d08abc6cb0add}{P\+R\+I\+V\+\_\+\+S\+E\+L\+E\+C\+T\+I\+VE}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__privileges_8c_a5145f14df3695832073734463ed211be}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (privileges)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__privileges_8c_a92e49985e2c6a0cb459187ad4ace460c}{privileges\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!C\+F\+G\+\_\+\+C\+H\+E\+CK@{C\+F\+G\+\_\+\+C\+H\+E\+CK}}
+\index{C\+F\+G\+\_\+\+C\+H\+E\+CK@{C\+F\+G\+\_\+\+C\+H\+E\+CK}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}
+\subsubsection[{\texorpdfstring{C\+F\+G\+\_\+\+C\+H\+E\+CK}{CFG_CHECK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+F\+G\+\_\+\+C\+H\+E\+CK(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__privileges_8c_a6bb3534b2ccf2ebb82e05ee6527cc9ca}{}\label{mod__privileges_8c_a6bb3534b2ccf2ebb82e05ee6527cc9ca}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{if} ((\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}) == -1) \{ \(\backslash\)
+    char msgbuf[128]; \(\backslash\)
+    apr\_strerror(errno, msgbuf, \textcolor{keyword}{sizeof}(msgbuf)); \(\backslash\)
+    return apr\_pstrdup(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->pool, msgbuf); \(\backslash\)
+\}
+\end{DoxyCode}
+\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!C\+R\+\_\+\+C\+H\+E\+CK@{C\+R\+\_\+\+C\+H\+E\+CK}}
+\index{C\+R\+\_\+\+C\+H\+E\+CK@{C\+R\+\_\+\+C\+H\+E\+CK}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}
+\subsubsection[{\texorpdfstring{C\+R\+\_\+\+C\+H\+E\+CK}{CR_CHECK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+R\+\_\+\+C\+H\+E\+CK(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__privileges_8c_a0be792f90c6b3fa032b2c5d5038a7bc7}{}\label{mod__privileges_8c_a0be792f90c6b3fa032b2c5d5038a7bc7}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{if} (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x} == -1) \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{    ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{APLOG\_CRIT}, errno, 0, 
+      \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y} \(\backslash\)
+                 \textcolor{stringliteral}{"Failed to initialise privileges"})
+\end{DoxyCode}
+\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!P\+D\+R\+O\+P\+\_\+\+C\+H\+E\+CK@{P\+D\+R\+O\+P\+\_\+\+C\+H\+E\+CK}}
+\index{P\+D\+R\+O\+P\+\_\+\+C\+H\+E\+CK@{P\+D\+R\+O\+P\+\_\+\+C\+H\+E\+CK}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}
+\subsubsection[{\texorpdfstring{P\+D\+R\+O\+P\+\_\+\+C\+H\+E\+CK}{PDROP_CHECK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+D\+R\+O\+P\+\_\+\+C\+H\+E\+CK(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__privileges_8c_a73af87ed46d0938131a65dadd52aec54}{}\label{mod__privileges_8c_a73af87ed46d0938131a65dadd52aec54}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{if} (\hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x} == -1) \{ \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{\(\backslash\)}
+\hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{        ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{APLOG\_CRIT}, errno, 
+      \hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02151) \(\backslash\)
+                     \textcolor{stringliteral}{"Error dropping privileges"}); \(\backslash\)
+        return !\hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}; \(\backslash\)
+    \}
+\end{DoxyCode}
+
+
+\subsection{Enumeration Type Documentation}
+\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!priv\+\_\+mode@{priv\+\_\+mode}}
+\index{priv\+\_\+mode@{priv\+\_\+mode}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}
+\subsubsection[{\texorpdfstring{priv\+\_\+mode}{priv_mode}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf priv\+\_\+mode}}\hypertarget{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596}{}\label{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{P\+R\+I\+V\+\_\+\+U\+N\+S\+ET@{P\+R\+I\+V\+\_\+\+U\+N\+S\+ET}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!P\+R\+I\+V\+\_\+\+U\+N\+S\+ET@{P\+R\+I\+V\+\_\+\+U\+N\+S\+ET}}\item[{\em 
+P\+R\+I\+V\+\_\+\+U\+N\+S\+ET\hypertarget{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a4a9496b20394dab7bd2c301f59587969}{}\label{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a4a9496b20394dab7bd2c301f59587969}
+}]\index{P\+R\+I\+V\+\_\+\+F\+A\+ST@{P\+R\+I\+V\+\_\+\+F\+A\+ST}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!P\+R\+I\+V\+\_\+\+F\+A\+ST@{P\+R\+I\+V\+\_\+\+F\+A\+ST}}\item[{\em 
+P\+R\+I\+V\+\_\+\+F\+A\+ST\hypertarget{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a3bc68a81f38cc42837b8315e71884f1f}{}\label{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a3bc68a81f38cc42837b8315e71884f1f}
+}]\index{P\+R\+I\+V\+\_\+\+S\+E\+C\+U\+RE@{P\+R\+I\+V\+\_\+\+S\+E\+C\+U\+RE}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!P\+R\+I\+V\+\_\+\+S\+E\+C\+U\+RE@{P\+R\+I\+V\+\_\+\+S\+E\+C\+U\+RE}}\item[{\em 
+P\+R\+I\+V\+\_\+\+S\+E\+C\+U\+RE\hypertarget{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596abf6c126cc024a17adf6a1387dc693f2b}{}\label{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596abf6c126cc024a17adf6a1387dc693f2b}
+}]\index{P\+R\+I\+V\+\_\+\+S\+E\+L\+E\+C\+T\+I\+VE@{P\+R\+I\+V\+\_\+\+S\+E\+L\+E\+C\+T\+I\+VE}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!P\+R\+I\+V\+\_\+\+S\+E\+L\+E\+C\+T\+I\+VE@{P\+R\+I\+V\+\_\+\+S\+E\+L\+E\+C\+T\+I\+VE}}\item[{\em 
+P\+R\+I\+V\+\_\+\+S\+E\+L\+E\+C\+T\+I\+VE\hypertarget{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a1eed724c98bb6aaa6d9d08abc6cb0add}{}\label{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a1eed724c98bb6aaa6d9d08abc6cb0add}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+45 \{ \hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a4a9496b20394dab7bd2c301f59587969}{PRIV\_UNSET}, \hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a3bc68a81f38cc42837b8315e71884f1f}{PRIV\_FAST}, \hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596abf6c126cc024a17adf6a1387dc693f2b}{PRIV\_SECURE}, 
+      \hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596a1eed724c98bb6aaa6d9d08abc6cb0add}{PRIV\_SELECTIVE} \} \hyperlink{mod__privileges_8c_a8d87ee50f52a9b97e8822a782e862596}{priv\_mode};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(privileges)}{AP_DECLARE_MODULE(privileges)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{privileges}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__privileges_8c_a5145f14df3695832073734463ed211be}{}\label{mod__privileges_8c_a5145f14df3695832073734463ed211be}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}!privileges\+\_\+module@{privileges\+\_\+module}}
+\index{privileges\+\_\+module@{privileges\+\_\+module}!mod\+\_\+privileges.\+c@{mod\+\_\+privileges.\+c}}
+\subsubsection[{\texorpdfstring{privileges\+\_\+module}{privileges_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} privileges\+\_\+module}\hypertarget{mod__privileges_8c_a92e49985e2c6a0cb459187ad4ace460c}{}\label{mod__privileges_8c_a92e49985e2c6a0cb459187ad4ace460c}

@@ -1,0 +1,235 @@
+\hypertarget{pcre__valid__utf8_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/pcre/pcre\+\_\+valid\+\_\+utf8.c File Reference}
+\label{pcre__valid__utf8_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+valid\+\_\+utf8.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+valid\+\_\+utf8.\+c}}
+{\ttfamily \#include \char`\"{}pcre\+\_\+internal.\+h\char`\"{}}\\*
+Include dependency graph for pcre\+\_\+valid\+\_\+utf8.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__valid__utf8_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre__ucd_8c_af5471be21445e049e6c27568e5e0a8cd}{P\+R\+IV}() \hyperlink{pcre__valid__utf8_8c_acaecf2e310395e9000f8c5b328b0f37d}{valid\+\_\+utf} (\hyperlink{pcre__internal_8h_a142c7c692c1f94083b0ad52e0520e900}{P\+C\+R\+E\+\_\+\+P\+U\+C\+H\+AR} \hyperlink{pcre_8txt_ad52baeed02a03dda73cbe504945c9c35}{string}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcregrep_8txt_ac76ee5ca1111cbb38887e0d698e8ea08}{length}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$erroroffset)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{pcre\+\_\+valid\+\_\+utf8.\+c@{pcre\+\_\+valid\+\_\+utf8.\+c}!valid\+\_\+utf@{valid\+\_\+utf}}
+\index{valid\+\_\+utf@{valid\+\_\+utf}!pcre\+\_\+valid\+\_\+utf8.\+c@{pcre\+\_\+valid\+\_\+utf8.\+c}}
+\subsubsection[{\texorpdfstring{valid\+\_\+utf(\+P\+C\+R\+E\+\_\+\+P\+U\+C\+H\+A\+R string, int length, int $\ast$erroroffset)}{valid_utf(PCRE_PUCHAR string, int length, int *erroroffset)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} {\bf P\+R\+IV}() valid\+\_\+utf (
+\begin{DoxyParamCaption}
+\item[{{\bf P\+C\+R\+E\+\_\+\+P\+U\+C\+H\+AR}}]{string, }
+\item[{{\bf int}}]{length, }
+\item[{{\bf int} $\ast$}]{erroroffset}
+\end{DoxyParamCaption}
+)}\hypertarget{pcre__valid__utf8_8c_acaecf2e310395e9000f8c5b328b0f37d}{}\label{pcre__valid__utf8_8c_acaecf2e310395e9000f8c5b328b0f37d}
+
+\begin{DoxyCode}
+108 \{
+109 \textcolor{preprocessor}{#ifdef SUPPORT\_UTF}
+110 \textcolor{keyword}{register} \hyperlink{pcre__internal_8h_a142c7c692c1f94083b0ad52e0520e900}{PCRE\_PUCHAR} \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+111 
+112 \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length} < 0)
+113   \{
+114   \textcolor{keywordflow}{for} (p = \textcolor{keywordtype}{string}; *p != 0; p++);
+115   \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length} = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string});
+116   \}
+117 
+118 \textcolor{keywordflow}{for} (p = \textcolor{keywordtype}{string}; \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length}-- > 0; p++)
+119   \{
+120   \textcolor{keyword}{register} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} ab, \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}, \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+121 
+122   c = *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+123   \textcolor{keywordflow}{if} (c < 128) \textcolor{keywordflow}{continue};                \textcolor{comment}{/* ASCII character */}
+124 
+125   \textcolor{keywordflow}{if} (c < 0xc0)                         \textcolor{comment}{/* Isolated 10xx xxxx byte */}
+126     \{
+127     *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string});
+128     \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a2b5e99da165a7bd46ce5e16058964867}{PCRE\_UTF8\_ERR20};
+129     \}
+130 
+131   \textcolor{keywordflow}{if} (c >= 0xfe)                        \textcolor{comment}{/* Invalid 0xfe or 0xff bytes */}
+132     \{
+133     *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string});
+134     \textcolor{keywordflow}{return} \hyperlink{pcre_8h_af159778c5069fc63f6770406f929b4e1}{PCRE\_UTF8\_ERR21};
+135     \}
+136 
+137   ab = \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(\hyperlink{pcregrep_8c_a179bdde96fcca050fdf22f70fb84416d}{utf8\_table4})[c & 0x3f];     \textcolor{comment}{/* Number of additional bytes */}
+138   \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length} < ab)
+139     \{
+140     *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string});          \textcolor{comment}{/* Missing bytes */}
+141     \textcolor{keywordflow}{return} ab - \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length};                 \textcolor{comment}{/* Codes ERR1 to ERR5 */}
+142     \}
+143   \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length} -= ab;                         \textcolor{comment}{/* Length remaining */}
+144 
+145   \textcolor{comment}{/* Check top bits in the second byte */}
+146 
+147   \textcolor{keywordflow}{if} (((d = *(++p)) & 0xc0) != 0x80)
+148     \{
+149     *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 1;
+150     \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a432805a5957c5522e8f22c878d95a926}{PCRE\_UTF8\_ERR6};
+151     \}
+152 
+153   \textcolor{comment}{/* For each length, check that the remaining bytes start with the 0x80 bit}
+154 \textcolor{comment}{  set and not the 0x40 bit. Then check for an overlong sequence, and for the}
+155 \textcolor{comment}{  excluded range 0xd800 to 0xdfff. */}
+156 
+157   \textcolor{keywordflow}{switch} (ab)
+158     \{
+159     \textcolor{comment}{/* 2-byte character. No further bytes to check for 0x80. Check first byte}
+160 \textcolor{comment}{    for for xx00 000x (overlong sequence). */}
+161 
+162     \textcolor{keywordflow}{case} 1: \textcolor{keywordflow}{if} ((c & 0x3e) == 0)
+163       \{
+164       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 1;
+165       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_aaa2f6566cac81e0da515d13719f5528b}{PCRE\_UTF8\_ERR15};
+166       \}
+167     \textcolor{keywordflow}{break};
+168 
+169     \textcolor{comment}{/* 3-byte character. Check third byte for 0x80. Then check first 2 bytes}
+170 \textcolor{comment}{      for 1110 0000, xx0x xxxx (overlong sequence) or}
+171 \textcolor{comment}{          1110 1101, 1010 xxxx (0xd800 - 0xdfff) */}
+172 
+173     \textcolor{keywordflow}{case} 2:
+174     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Third byte */}
+175       \{
+176       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 2;
+177       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_ac4f8ebc762be4ab8654ec8ddd71f8ae0}{PCRE\_UTF8\_ERR7};
+178       \}
+179     \textcolor{keywordflow}{if} (c == 0xe0 && (d & 0x20) == 0)
+180       \{
+181       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 2;
+182       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a8274d0844af758fd91e55239877094f5}{PCRE\_UTF8\_ERR16};
+183       \}
+184     \textcolor{keywordflow}{if} (c == 0xed && d >= 0xa0)
+185       \{
+186       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 2;
+187       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_afe8765f57b427225c574a289e460bc09}{PCRE\_UTF8\_ERR14};
+188       \}
+189     \textcolor{keywordflow}{break};
+190 
+191     \textcolor{comment}{/* 4-byte character. Check 3rd and 4th bytes for 0x80. Then check first 2}
+192 \textcolor{comment}{       bytes for for 1111 0000, xx00 xxxx (overlong sequence), then check for a}
+193 \textcolor{comment}{       character greater than 0x0010ffff (f4 8f bf bf) */}
+194 
+195     \textcolor{keywordflow}{case} 3:
+196     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Third byte */}
+197       \{
+198       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 2;
+199       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_ac4f8ebc762be4ab8654ec8ddd71f8ae0}{PCRE\_UTF8\_ERR7};
+200       \}
+201     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Fourth byte */}
+202       \{
+203       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 3;
+204       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a8b17ce1b890683cf8194e9793a4d7051}{PCRE\_UTF8\_ERR8};
+205       \}
+206     \textcolor{keywordflow}{if} (c == 0xf0 && (d & 0x30) == 0)
+207       \{
+208       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 3;
+209       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a0f27df607d7c651a2a939d49dd088f24}{PCRE\_UTF8\_ERR17};
+210       \}
+211     \textcolor{keywordflow}{if} (c > 0xf4 || (c == 0xf4 && d > 0x8f))
+212       \{
+213       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 3;
+214       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_aae68cca6426e712a7a27700c785cfc2f}{PCRE\_UTF8\_ERR13};
+215       \}
+216     \textcolor{keywordflow}{break};
+217 
+218     \textcolor{comment}{/* 5-byte and 6-byte characters are not allowed by RFC 3629, and will be}
+219 \textcolor{comment}{    rejected by the length test below. However, we do the appropriate tests}
+220 \textcolor{comment}{    here so that overlong sequences get diagnosed, and also in case there is}
+221 \textcolor{comment}{    ever an option for handling these larger code points. */}
+222 
+223     \textcolor{comment}{/* 5-byte character. Check 3rd, 4th, and 5th bytes for 0x80. Then check for}
+224 \textcolor{comment}{    1111 1000, xx00 0xxx */}
+225 
+226     \textcolor{keywordflow}{case} 4:
+227     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Third byte */}
+228       \{
+229       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 2;
+230       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_ac4f8ebc762be4ab8654ec8ddd71f8ae0}{PCRE\_UTF8\_ERR7};
+231       \}
+232     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Fourth byte */}
+233       \{
+234       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 3;
+235       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a8b17ce1b890683cf8194e9793a4d7051}{PCRE\_UTF8\_ERR8};
+236       \}
+237     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Fifth byte */}
+238       \{
+239       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 4;
+240       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a8445f4760b87e8ad5a195b022672e981}{PCRE\_UTF8\_ERR9};
+241       \}
+242     \textcolor{keywordflow}{if} (c == 0xf8 && (d & 0x38) == 0)
+243       \{
+244       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 4;
+245       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a2a44737f9351396be891b5e8ccb51544}{PCRE\_UTF8\_ERR18};
+246       \}
+247     \textcolor{keywordflow}{break};
+248 
+249     \textcolor{comment}{/* 6-byte character. Check 3rd-6th bytes for 0x80. Then check for}
+250 \textcolor{comment}{    1111 1100, xx00 00xx. */}
+251 
+252     \textcolor{keywordflow}{case} 5:
+253     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Third byte */}
+254       \{
+255       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 2;
+256       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_ac4f8ebc762be4ab8654ec8ddd71f8ae0}{PCRE\_UTF8\_ERR7};
+257       \}
+258     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Fourth byte */}
+259       \{
+260       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 3;
+261       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a8b17ce1b890683cf8194e9793a4d7051}{PCRE\_UTF8\_ERR8};
+262       \}
+263     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Fifth byte */}
+264       \{
+265       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 4;
+266       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a8445f4760b87e8ad5a195b022672e981}{PCRE\_UTF8\_ERR9};
+267       \}
+268     \textcolor{keywordflow}{if} ((*(++p) & 0xc0) != 0x80)     \textcolor{comment}{/* Sixth byte */}
+269       \{
+270       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 5;
+271       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_ab0876f7ae08c3d093fdd07c61d5b30af}{PCRE\_UTF8\_ERR10};
+272       \}
+273     \textcolor{keywordflow}{if} (c == 0xfc && (d & 0x3c) == 0)
+274       \{
+275       *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - 5;
+276       \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a9d79320410395329ac4de241e7d5118e}{PCRE\_UTF8\_ERR19};
+277       \}
+278     \textcolor{keywordflow}{break};
+279     \}
+280 
+281   \textcolor{comment}{/* Character is valid under RFC 2279, but 4-byte and 5-byte characters are}
+282 \textcolor{comment}{  excluded by RFC 3629. The pointer p is currently at the last byte of the}
+283 \textcolor{comment}{  character. */}
+284 
+285   \textcolor{keywordflow}{if} (ab > 3)
+286     \{
+287     *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(p - \textcolor{keywordtype}{string}) - ab;
+288     \textcolor{keywordflow}{return} (ab == 4)? \hyperlink{pcre_8h_a325cc588a3bf48039cc5271eb5ebf329}{PCRE\_UTF8\_ERR11} : \hyperlink{pcre_8h_a6d250ada1b4d7a5f8fcf4e4d4cabfcc6}{PCRE\_UTF8\_ERR12};
+289     \}
+290   \}
+291 
+292 \textcolor{preprocessor}{#else  }\textcolor{comment}{/* Not SUPPORT\_UTF */}\textcolor{preprocessor}{}
+293 (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})(\textcolor{keywordtype}{string});  \textcolor{comment}{/* Keep picky compilers happy */}
+294 (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})(\hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length});
+295 (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})(erroroffset);
+296 \textcolor{preprocessor}{#endif}
+297 
+298 \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a38c142268674d31f691a0c29717a4b65}{PCRE\_UTF8\_ERR0};   \textcolor{comment}{/* This indicates success */}
+299 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{pcre__valid__utf8_8c_acaecf2e310395e9000f8c5b328b0f37d_cgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,144 @@
+\hypertarget{unix_2fileacc_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/file\+\_\+io/unix/fileacc.c File Reference}
+\label{unix_2fileacc_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/unix/fileacc.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/unix/fileacc.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+Include dependency graph for fileacc.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{unix_2fileacc_8c__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{unix_2fileacc_8c__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__allocator_ga9cb19a118179bbd8625eacfec66a9ab8}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{aplibtool_8c_a18c6d44ab22b2cd0d38a2dd0ef13ed1c}{mode\+\_\+t} \hyperlink{unix_2fileacc_8c_a6ff1e968d4350cb1184ec6ed57ac3902}{apr\+\_\+unix\+\_\+perms2mode} (\hyperlink{group__apr__file__info_ga3af19c4c47007169064a70f9351bc7d8}{apr\+\_\+fileperms\+\_\+t} \hyperlink{group__APR__Util__DBM__SDBM_ga4644cd2c8097d1b754ec32f7c5ea6d5b}{perms})
+\item 
+\hyperlink{group__apr__file__info_ga3af19c4c47007169064a70f9351bc7d8}{apr\+\_\+fileperms\+\_\+t} \hyperlink{unix_2fileacc_8c_ad6c7b28200ab73ef333f94c436c7ab65}{apr\+\_\+unix\+\_\+mode2perms} (\hyperlink{aplibtool_8c_a18c6d44ab22b2cd0d38a2dd0ef13ed1c}{mode\+\_\+t} \hyperlink{pcregrep_8txt_ad194431669b7d1f96d2dacfb7be21261}{mode})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{unix/fileacc.\+c@{unix/fileacc.\+c}!apr\+\_\+unix\+\_\+mode2perms@{apr\+\_\+unix\+\_\+mode2perms}}
+\index{apr\+\_\+unix\+\_\+mode2perms@{apr\+\_\+unix\+\_\+mode2perms}!unix/fileacc.\+c@{unix/fileacc.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+unix\+\_\+mode2perms(mode\+\_\+t mode)}{apr_unix_mode2perms(mode_t mode)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+fileperms\+\_\+t} apr\+\_\+unix\+\_\+mode2perms (
+\begin{DoxyParamCaption}
+\item[{{\bf mode\+\_\+t}}]{mode}
+\end{DoxyParamCaption}
+)}\hypertarget{unix_2fileacc_8c_ad6c7b28200ab73ef333f94c436c7ab65}{}\label{unix_2fileacc_8c_ad6c7b28200ab73ef333f94c436c7ab65}
+
+\begin{DoxyCode}
+72 \{
+73     \hyperlink{group__apr__file__info_ga3af19c4c47007169064a70f9351bc7d8}{apr\_fileperms\_t} \hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} = 0;
+74 
+75     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_ISUID)
+76         perms |= \hyperlink{group__apr__file__permissions_gafae6b531c08999345536cae5654d0d03}{APR\_USETID};
+77     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IRUSR)
+78         perms |= \hyperlink{group__apr__file__permissions_ga51dc87ecd94c98e97694e68d5d9620a0}{APR\_UREAD};
+79     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IWUSR)
+80         perms |= \hyperlink{group__apr__file__permissions_ga4faa7fdfa3bcda569dd1e23ae002c5e5}{APR\_UWRITE};
+81     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IXUSR)
+82         perms |= \hyperlink{group__apr__file__permissions_ga4c08d7e798ab4022e31ed70f06f202b5}{APR\_UEXECUTE};
+83 
+84     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_ISGID)
+85         perms |= \hyperlink{group__apr__file__permissions_ga4e4e9bb05f2bb156b174461551c9c329}{APR\_GSETID};
+86     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IRGRP)
+87         perms |= \hyperlink{group__apr__file__permissions_ga1bd0305f31cb3bb20a8f9db898b96eb1}{APR\_GREAD};
+88     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IWGRP)
+89         perms |= \hyperlink{group__apr__file__permissions_ga794c425b459aa46939f6febabbe9daef}{APR\_GWRITE};
+90     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IXGRP)
+91         perms |= \hyperlink{group__apr__file__permissions_ga79ce615a96a407d6c53325a2f8cdee3d}{APR\_GEXECUTE};
+92 
+93 \textcolor{preprocessor}{#ifdef S\_ISVTX}
+94     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_ISVTX)
+95         perms |= \hyperlink{group__apr__file__permissions_ga824d6685d59e3efddb6ee7fdbee69c13}{APR\_WSTICKY};
+96 \textcolor{preprocessor}{#endif}
+97     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IROTH)
+98         perms |= \hyperlink{group__apr__file__permissions_ga5c987d2b1ace95b4ffa7c5a322721aad}{APR\_WREAD};
+99     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IWOTH)
+100         perms |= \hyperlink{group__apr__file__permissions_ga7aac61689e9aaa93176bdb4911f56863}{APR\_WWRITE};
+101     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} & S\_IXOTH)
+102         perms |= \hyperlink{group__apr__file__permissions_ga7bf4afea195c62f41aad1d3e94dcdac6}{APR\_WEXECUTE};
+103 
+104     \textcolor{keywordflow}{return} \hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms};
+105 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=322pt]{unix_2fileacc_8c_ad6c7b28200ab73ef333f94c436c7ab65_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{unix/fileacc.\+c@{unix/fileacc.\+c}!apr\+\_\+unix\+\_\+perms2mode@{apr\+\_\+unix\+\_\+perms2mode}}
+\index{apr\+\_\+unix\+\_\+perms2mode@{apr\+\_\+unix\+\_\+perms2mode}!unix/fileacc.\+c@{unix/fileacc.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+unix\+\_\+perms2mode(apr\+\_\+fileperms\+\_\+t perms)}{apr_unix_perms2mode(apr_fileperms_t perms)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf mode\+\_\+t} apr\+\_\+unix\+\_\+perms2mode (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+fileperms\+\_\+t}}]{perms}
+\end{DoxyParamCaption}
+)}\hypertarget{unix_2fileacc_8c_a6ff1e968d4350cb1184ec6ed57ac3902}{}\label{unix_2fileacc_8c_a6ff1e968d4350cb1184ec6ed57ac3902}
+
+\begin{DoxyCode}
+36 \{
+37     \hyperlink{aplibtool_8c_a18c6d44ab22b2cd0d38a2dd0ef13ed1c}{mode\_t} \hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode} = 0;
+38 
+39     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_gafae6b531c08999345536cae5654d0d03}{APR\_USETID})
+40         mode |= S\_ISUID;
+41     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga51dc87ecd94c98e97694e68d5d9620a0}{APR\_UREAD})
+42         mode |= S\_IRUSR;
+43     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga4faa7fdfa3bcda569dd1e23ae002c5e5}{APR\_UWRITE})
+44         mode |= S\_IWUSR;
+45     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga4c08d7e798ab4022e31ed70f06f202b5}{APR\_UEXECUTE})
+46         mode |= S\_IXUSR;
+47 
+48     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga4e4e9bb05f2bb156b174461551c9c329}{APR\_GSETID})
+49         mode |= S\_ISGID;
+50     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga1bd0305f31cb3bb20a8f9db898b96eb1}{APR\_GREAD})
+51         mode |= S\_IRGRP;
+52     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga794c425b459aa46939f6febabbe9daef}{APR\_GWRITE})
+53         mode |= S\_IWGRP;
+54     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga79ce615a96a407d6c53325a2f8cdee3d}{APR\_GEXECUTE})
+55         mode |= S\_IXGRP;
+56 
+57 \textcolor{preprocessor}{#ifdef S\_ISVTX}
+58     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga824d6685d59e3efddb6ee7fdbee69c13}{APR\_WSTICKY})
+59         mode |= S\_ISVTX;
+60 \textcolor{preprocessor}{#endif}
+61     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga5c987d2b1ace95b4ffa7c5a322721aad}{APR\_WREAD})
+62         mode |= S\_IROTH;
+63     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga7aac61689e9aaa93176bdb4911f56863}{APR\_WWRITE})
+64         mode |= S\_IWOTH;
+65     \textcolor{keywordflow}{if} (\hyperlink{group__apr__file__io_ga1a04dd4c8d58f3a54ba16d47d78ba04c}{perms} & \hyperlink{group__apr__file__permissions_ga7bf4afea195c62f41aad1d3e94dcdac6}{APR\_WEXECUTE})
+66         mode |= S\_IXOTH;
+67 
+68     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode};
+69 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{unix_2fileacc_8c_a6ff1e968d4350cb1184ec6ed57ac3902_icgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,98 @@
+\hypertarget{dbm_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/dav/fs/dbm.c File Reference}
+\label{dbm_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/fs/dbm.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/fs/dbm.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+dbm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+dav.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}repos.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+Include dependency graph for dbm.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dbm_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdav__db}{dav\+\_\+db}
+\item 
+struct \hyperlink{structdav__propdb__metadata}{dav\+\_\+propdb\+\_\+metadata}
+\item 
+struct \hyperlink{structdav__deadprop__rollback}{dav\+\_\+deadprop\+\_\+rollback}
+\item 
+struct \hyperlink{structdav__namespace__map}{dav\+\_\+namespace\+\_\+map}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{dbm_8c_a8190f5b47166b4efe3f7377915210250}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}
+\item 
+\#define \hyperlink{dbm_8c_adbfb941a409766fd6c2fda229edcd842}{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+EY}~\char`\"{}M\+E\+T\+A\+D\+A\+TA\char`\"{}
+\item 
+\#define \hyperlink{dbm_8c_ad8f2218e25ffd02719f1bf53ababb42d}{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+E\+Y\+\_\+\+L\+EN}~8
+\item 
+\#define \hyperlink{dbm_8c_a839676bd032fc6f2305386997a9cd9f7}{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+A\+J\+OR}~4
+\item 
+\#define \hyperlink{dbm_8c_aa4161140901d341b17662fcdca2bc725}{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+I\+N\+OR}~0
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{dbm_8c_a02302360e97bbf337bb38f096974f4a6}{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE} (dav\+\_\+fs)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__DAV_ga6764405869465bde970668a8241be736}{dav\+\_\+dbm\+\_\+get\+\_\+statefiles} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, const char $\ast$\hyperlink{group__apr__proc__mutex_ga6a2fc0c236288b07ce5bd1335ca89fa2}{fname}, const char $\ast$$\ast$state1, const char $\ast$$\ast$state2)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__DAV_ga043b66a8072e057f9aa2cc06549beccd}{dav\+\_\+fs\+\_\+ensure\+\_\+state\+\_\+dir} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, const char $\ast$\hyperlink{group__apr__dir_gab8a2fd169b20f0b9d33959f7b17d35aa}{dirname})
+\item 
+\hyperlink{structdav__error}{dav\+\_\+error} $\ast$ \hyperlink{group__MOD__DAV_gad4cb194ad9a9407ec27942bd56c82638}{dav\+\_\+dbm\+\_\+open\+\_\+direct} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, const char $\ast$\hyperlink{group__APR__Util__DBM_gaf694cab4f4f6cd4b594af3c43cef1d0a}{pathname}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga82a842d0e207f481db3ebda5e61c7135}{ro}, \hyperlink{structdav__db}{dav\+\_\+db} $\ast$$\ast$pdb)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__DAV_ga5a735d0758df1e7049551eb8c5825f2b}{dav\+\_\+dbm\+\_\+close} (\hyperlink{structdav__db}{dav\+\_\+db} $\ast$db)
+\item 
+\hyperlink{structdav__error}{dav\+\_\+error} $\ast$ \hyperlink{group__MOD__DAV_ga32c4f468f51cce584d4d0729ad67bf8c}{dav\+\_\+dbm\+\_\+fetch} (\hyperlink{structdav__db}{dav\+\_\+db} $\ast$db, \hyperlink{structapr__datum__t}{apr\+\_\+datum\+\_\+t} \hyperlink{apr__siphash_8h_adac0b6a30345ea1d0daa8a692b0b7ad9}{key}, \hyperlink{structapr__datum__t}{apr\+\_\+datum\+\_\+t} $\ast$\hyperlink{group__APR__Util__DBM_ga28a8123792275d5480b92912a9e85b0e}{pvalue})
+\item 
+\hyperlink{structdav__error}{dav\+\_\+error} $\ast$ \hyperlink{group__MOD__DAV_ga2fdf92687cab9723096fc77798161385}{dav\+\_\+dbm\+\_\+store} (\hyperlink{structdav__db}{dav\+\_\+db} $\ast$db, \hyperlink{structapr__datum__t}{apr\+\_\+datum\+\_\+t} \hyperlink{apr__siphash_8h_adac0b6a30345ea1d0daa8a692b0b7ad9}{key}, \hyperlink{structapr__datum__t}{apr\+\_\+datum\+\_\+t} \hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value})
+\item 
+\hyperlink{structdav__error}{dav\+\_\+error} $\ast$ \hyperlink{group__MOD__DAV_ga62397e50f3717509858a09498ff8e687}{dav\+\_\+dbm\+\_\+delete} (\hyperlink{structdav__db}{dav\+\_\+db} $\ast$db, \hyperlink{structapr__datum__t}{apr\+\_\+datum\+\_\+t} \hyperlink{apr__siphash_8h_adac0b6a30345ea1d0daa8a692b0b7ad9}{key})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga4a3651277b0e56ecf86d0fd89b9deeeb}{dav\+\_\+dbm\+\_\+exists} (\hyperlink{structdav__db}{dav\+\_\+db} $\ast$db, \hyperlink{structapr__datum__t}{apr\+\_\+datum\+\_\+t} \hyperlink{apr__siphash_8h_adac0b6a30345ea1d0daa8a692b0b7ad9}{key})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__MOD__DAV_ga2dde2cfa3824d7f937a05ca04859d7cd}{dav\+\_\+dbm\+\_\+freedatum} (\hyperlink{structdav__db}{dav\+\_\+db} $\ast$db, \hyperlink{structapr__datum__t}{apr\+\_\+datum\+\_\+t} \hyperlink{structdata}{data})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{group__MOD__DAV_gafb40434fe70df3d6b814d00757680507}{dav\+\_\+hooks\+\_\+db} \hyperlink{group__MOD__DAV_ga1bfcaf2d006fd752eca3dc211b22647b}{dav\+\_\+hooks\+\_\+db\+\_\+dbm}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{dbm.\+c@{dbm.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}!dbm.\+c@{dbm.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}{APR_WANT_BYTEFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}\hypertarget{dbm_8c_a8190f5b47166b4efe3f7377915210250}{}\label{dbm_8c_a8190f5b47166b4efe3f7377915210250}
+\index{dbm.\+c@{dbm.\+c}!D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+A\+J\+OR@{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+A\+J\+OR}}
+\index{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+A\+J\+OR@{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+A\+J\+OR}!dbm.\+c@{dbm.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+A\+J\+OR}{DAV_DBVSN_MAJOR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+A\+J\+OR~4}\hypertarget{dbm_8c_a839676bd032fc6f2305386997a9cd9f7}{}\label{dbm_8c_a839676bd032fc6f2305386997a9cd9f7}
+\index{dbm.\+c@{dbm.\+c}!D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+I\+N\+OR@{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+I\+N\+OR}}
+\index{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+I\+N\+OR@{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+I\+N\+OR}!dbm.\+c@{dbm.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+I\+N\+OR}{DAV_DBVSN_MINOR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+D\+B\+V\+S\+N\+\_\+\+M\+I\+N\+OR~0}\hypertarget{dbm_8c_aa4161140901d341b17662fcdca2bc725}{}\label{dbm_8c_aa4161140901d341b17662fcdca2bc725}
+\index{dbm.\+c@{dbm.\+c}!D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+EY@{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+EY}}
+\index{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+EY@{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+EY}!dbm.\+c@{dbm.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+EY}{DAV_GDBM_NS_KEY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+EY~\char`\"{}M\+E\+T\+A\+D\+A\+TA\char`\"{}}\hypertarget{dbm_8c_adbfb941a409766fd6c2fda229edcd842}{}\label{dbm_8c_adbfb941a409766fd6c2fda229edcd842}
+\index{dbm.\+c@{dbm.\+c}!D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+E\+Y\+\_\+\+L\+EN@{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+E\+Y\+\_\+\+L\+EN}}
+\index{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+E\+Y\+\_\+\+L\+EN@{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+E\+Y\+\_\+\+L\+EN}!dbm.\+c@{dbm.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+E\+Y\+\_\+\+L\+EN}{DAV_GDBM_NS_KEY_LEN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+G\+D\+B\+M\+\_\+\+N\+S\+\_\+\+K\+E\+Y\+\_\+\+L\+EN~8}\hypertarget{dbm_8c_ad8f2218e25ffd02719f1bf53ababb42d}{}\label{dbm_8c_ad8f2218e25ffd02719f1bf53ababb42d}
+
+
+\subsection{Function Documentation}
+\index{dbm.\+c@{dbm.\+c}!A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}!dbm.\+c@{dbm.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+L\+E(dav\+\_\+fs)}{APLOG_USE_MODULE(dav_fs)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{dav\+\_\+fs}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{dbm_8c_a02302360e97bbf337bb38f096974f4a6}{}\label{dbm_8c_a02302360e97bbf337bb38f096974f4a6}

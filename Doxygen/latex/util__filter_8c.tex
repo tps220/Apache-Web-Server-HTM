@@ -1,0 +1,184 @@
+\hypertarget{util__filter_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/util\+\_\+filter.c File Reference}
+\label{util__filter_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/util\+\_\+filter.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/util\+\_\+filter.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+hooks.\+h\char`\"{}}\\*
+Include dependency graph for util\+\_\+filter.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{util__filter_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structfilter__trie__child__ptr}{filter\+\_\+trie\+\_\+child\+\_\+ptr}
+\item 
+struct \hyperlink{structfilter__trie__node}{filter\+\_\+trie\+\_\+node}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{util__filter_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{util__filter_8c_ab442d0166497c6ba70cdd48f772e55fe}{F\+I\+L\+T\+E\+R\+\_\+\+P\+O\+OL}~\hyperlink{group__APR__Util__Hook_gabef8cf5f8a4528192b0aa66200b09ccc}{apr\+\_\+hook\+\_\+global\+\_\+pool}
+\item 
+\#define \hyperlink{util__filter_8c_a19601baba9bdb5a2590d092d15e6e9ea}{I\+N\+S\+E\+R\+T\+\_\+\+B\+E\+F\+O\+RE}(\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f},  before\+\_\+this)
+\item 
+\#define \hyperlink{util__filter_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~\hyperlink{group__APACHE__CORE__HTTPD_gaf1cdaac5f4562d9d20bae417471ad422}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\item 
+\#define \hyperlink{util__filter_8c_ac6f38fa0ad87366dabf701aae1b80397}{T\+R\+I\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+S\+I\+ZE}~4
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structfilter__trie__node}{filter\+\_\+trie\+\_\+node} \hyperlink{util__filter_8c_af861eeca9fde683766cbbae9c3ee43e5}{filter\+\_\+trie\+\_\+node}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{util__filter_8c_af2fde3cd71a70ba0a2d38b8bd584f9ed}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__filter__rec__t}{ap\+\_\+filter\+\_\+rec\+\_\+t} $\ast$)
+\item 
+\hyperlink{util__filter_8c_a336f37280afcc6b7a81276e9863b4909}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} $\ast$)
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{util__filter_8c_ad4e49a371518f348d13b2d4e83b79b9e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{group__AP__EXPR_ga1ac0588c7c2ca64ea23710360d5f6f85}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}
+\index{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}{APLOG_MODULE_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX~{\bf A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}\hypertarget{util__filter_8c_ae75325996d1b2cf6120dded4cb153a22}{}\label{util__filter_8c_ae75325996d1b2cf6120dded4cb153a22}
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{util__filter_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{util__filter_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!F\+I\+L\+T\+E\+R\+\_\+\+P\+O\+OL@{F\+I\+L\+T\+E\+R\+\_\+\+P\+O\+OL}}
+\index{F\+I\+L\+T\+E\+R\+\_\+\+P\+O\+OL@{F\+I\+L\+T\+E\+R\+\_\+\+P\+O\+OL}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{F\+I\+L\+T\+E\+R\+\_\+\+P\+O\+OL}{FILTER_POOL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\+I\+L\+T\+E\+R\+\_\+\+P\+O\+OL~{\bf apr\+\_\+hook\+\_\+global\+\_\+pool}}\hypertarget{util__filter_8c_ab442d0166497c6ba70cdd48f772e55fe}{}\label{util__filter_8c_ab442d0166497c6ba70cdd48f772e55fe}
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!I\+N\+S\+E\+R\+T\+\_\+\+B\+E\+F\+O\+RE@{I\+N\+S\+E\+R\+T\+\_\+\+B\+E\+F\+O\+RE}}
+\index{I\+N\+S\+E\+R\+T\+\_\+\+B\+E\+F\+O\+RE@{I\+N\+S\+E\+R\+T\+\_\+\+B\+E\+F\+O\+RE}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{I\+N\+S\+E\+R\+T\+\_\+\+B\+E\+F\+O\+RE}{INSERT_BEFORE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+N\+S\+E\+R\+T\+\_\+\+B\+E\+F\+O\+RE(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf f}, }
+\item[{}]{before\+\_\+this}
+\end{DoxyParamCaption}
+)}\hypertarget{util__filter_8c_a19601baba9bdb5a2590d092d15e6e9ea}{}\label{util__filter_8c_a19601baba9bdb5a2590d092d15e6e9ea}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+((before\_this) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} \(\backslash\)
+                           || (before\_this)->frec->ftype > (\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f})->frec->ftype \(\backslash\)
+                           || (before\_this)->r != (\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f})->\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r})
+\end{DoxyCode}
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!T\+R\+I\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+S\+I\+ZE@{T\+R\+I\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+S\+I\+ZE}}
+\index{T\+R\+I\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+S\+I\+ZE@{T\+R\+I\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+S\+I\+ZE}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{T\+R\+I\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+S\+I\+ZE}{TRIE_INITIAL_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+R\+I\+E\+\_\+\+I\+N\+I\+T\+I\+A\+L\+\_\+\+S\+I\+ZE~4}\hypertarget{util__filter_8c_ac6f38fa0ad87366dabf701aae1b80397}{}\label{util__filter_8c_ac6f38fa0ad87366dabf701aae1b80397}
+
+
+\subsection{Typedef Documentation}
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!filter\+\_\+trie\+\_\+node@{filter\+\_\+trie\+\_\+node}}
+\index{filter\+\_\+trie\+\_\+node@{filter\+\_\+trie\+\_\+node}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{filter\+\_\+trie\+\_\+node}{filter_trie_node}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf filter\+\_\+trie\+\_\+node} {\bf filter\+\_\+trie\+\_\+node}}\hypertarget{util__filter_8c_af861eeca9fde683766cbbae9c3ee43e5}{}\label{util__filter_8c_af861eeca9fde683766cbbae9c3ee43e5}
+
+
+\subsection{Function Documentation}
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(ap\+\_\+filter\+\_\+rec\+\_\+t $\ast$)}{AP_DECLARE(ap_filter_rec_t *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+filter\+\_\+rec\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__filter_8c_af2fde3cd71a70ba0a2d38b8bd584f9ed}{}\label{util__filter_8c_af2fde3cd71a70ba0a2d38b8bd584f9ed}
+
+\begin{DoxyCode}
+194 \{
+195     \textcolor{keywordflow}{return} get\_filter\_handle(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, registered\_output\_filters);
+196 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{util__filter_8c_af2fde3cd71a70ba0a2d38b8bd584f9ed_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(ap\+\_\+filter\+\_\+t $\ast$)}{AP_DECLARE(ap_filter_t *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+filter\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__filter_8c_a336f37280afcc6b7a81276e9863b4909}{}\label{util__filter_8c_a336f37280afcc6b7a81276e9863b4909}
+
+\begin{DoxyCode}
+411 \{
+412     \textcolor{keywordflow}{return} add\_any\_filter(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}, registered\_input\_filters,
+413                           \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r} ? &\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_ab07868ed8240b6236a51aa1e7b198d3e}{input\_filters} : \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+414                           \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r} ? &\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_af1d131cbf9a8564874b4196bff89121c}{proto\_input\_filters} : NULL, &
+      \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_a27bcfa99aac415734fedbb540ab7a3e7}{input\_filters});
+415 \}
+\end{DoxyCode}
+\index{util\+\_\+filter.\+c@{util\+\_\+filter.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+filter.\+c@{util\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t)}{AP_DECLARE(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__filter_8c_ad4e49a371518f348d13b2d4e83b79b9e}{}\label{util__filter_8c_ad4e49a371518f348d13b2d4e83b79b9e}
+
+\begin{DoxyCode}
+484 \{
+485     \hyperlink{structap__filter__t}{ap\_filter\_t} *\hyperlink{pcregrep_8txt_a1fdac88190c7a3aca2735f0bf49094dd}{found} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+486     \hyperlink{structap__filter__rec__t}{ap\_filter\_rec\_t} *filter;
+487 
+488     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__FILTER_ga68ba22c11aa974c2d027851747c98822}{handle}) \{
+489         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL};
+490     \}
+491     filter = ap\_get\_input\_filter\_handle(\hyperlink{group__APACHE__CORE__FILTER_ga68ba22c11aa974c2d027851747c98822}{handle});
+492     \textcolor{keywordflow}{if} (!filter) \{
+493         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga9bd83273ff02f31f71fb4dc6f29df4a9}{APR\_NOTFOUND};
+494     \}
+495 
+496     \textcolor{keywordflow}{while} (next) \{
+497         \textcolor{keywordflow}{if} (next->frec == filter) \{
+498             found = next;
+499             \textcolor{keywordflow}{break};
+500         \}
+501         next = next->\hyperlink{structap__filter__t_af4835ed2c41734061dc374d92ba401a2}{next};
+502     \}
+503     \textcolor{keywordflow}{if} (found) \{
+504         ap\_remove\_input\_filter(found);
+505         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+506     \}
+507     \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga9bd83273ff02f31f71fb4dc6f29df4a9}{APR\_NOTFOUND};
+508 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{util__filter_8c_ad4e49a371518f348d13b2d4e83b79b9e_cgraph}
+\end{center}
+\end{figure}
+
+

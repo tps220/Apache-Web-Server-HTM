@@ -1,0 +1,74 @@
+\hypertarget{testglobalmutex_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/test/testglobalmutex.c File Reference}
+\label{testglobalmutex_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/testglobalmutex.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/testglobalmutex.\+c}}
+{\ttfamily \#include \char`\"{}testglobalmutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+global\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+errno.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}testutil.\+h\char`\"{}}\\*
+Include dependency graph for testglobalmutex.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{testglobalmutex_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structabts__suite}{abts\+\_\+suite} $\ast$ \hyperlink{testglobalmutex_8c_a19c4abee0a399dab193d2fa0a42b509d}{testglobalmutex} (\hyperlink{structabts__suite}{abts\+\_\+suite} $\ast$suite)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{testglobalmutex.\+c@{testglobalmutex.\+c}!testglobalmutex@{testglobalmutex}}
+\index{testglobalmutex@{testglobalmutex}!testglobalmutex.\+c@{testglobalmutex.\+c}}
+\subsubsection[{\texorpdfstring{testglobalmutex(abts\+\_\+suite $\ast$suite)}{testglobalmutex(abts_suite *suite)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf abts\+\_\+suite}$\ast$ testglobalmutex (
+\begin{DoxyParamCaption}
+\item[{{\bf abts\+\_\+suite} $\ast$}]{suite}
+\end{DoxyParamCaption}
+)}\hypertarget{testglobalmutex_8c_a19c4abee0a399dab193d2fa0a42b509d}{}\label{testglobalmutex_8c_a19c4abee0a399dab193d2fa0a42b509d}
+
+\begin{DoxyCode}
+107 \{
+108     \hyperlink{group__apr__proc__mutex_ga75dd95a48a1e855a87b509b522746ed4}{apr\_lockmech\_e} \hyperlink{group__APR__GlobalMutex_ga1e2bd4bf5e9584b52b5fc7d60cc52cb3}{mech} = \hyperlink{group__apr__proc__mutex_gga75dd95a48a1e855a87b509b522746ed4ae91fb435c45216bcf84f506db99d0f19}{APR\_LOCK\_DEFAULT};
+109 
+110     suite = \hyperlink{test_2abts_8h_a2b3bdf4b9586c8a74b26a78a3ac555d6}{ADD\_SUITE}(suite)
+111     \hyperlink{test_2abts_8c_a354ac4a7f2f65961efaf25406b39820c}{abts\_run\_test}(suite, test\_exclusive, &mech);
+112 \textcolor{preprocessor}{#if APR\_HAS\_POSIXSEM\_SERIALIZE}
+113     mech = \hyperlink{group__apr__proc__mutex_gga75dd95a48a1e855a87b509b522746ed4a6d65d9d745e13d8759bd8f1057f27041}{APR\_LOCK\_POSIXSEM};
+114     \hyperlink{test_2abts_8c_a354ac4a7f2f65961efaf25406b39820c}{abts\_run\_test}(suite, test\_exclusive, &mech);
+115 \textcolor{preprocessor}{#endif}
+116 \textcolor{preprocessor}{#if APR\_HAS\_SYSVSEM\_SERIALIZE}
+117     mech = \hyperlink{group__apr__proc__mutex_gga75dd95a48a1e855a87b509b522746ed4a642536695bd4c233761a15d48b1d6487}{APR\_LOCK\_SYSVSEM};
+118     \hyperlink{test_2abts_8c_a354ac4a7f2f65961efaf25406b39820c}{abts\_run\_test}(suite, test\_exclusive, &mech);
+119 \textcolor{preprocessor}{#endif}
+120 \textcolor{preprocessor}{#if APR\_HAS\_PROC\_PTHREAD\_SERIALIZE}
+121     mech = \hyperlink{group__apr__proc__mutex_gga75dd95a48a1e855a87b509b522746ed4abd5e7cca2c9f6023b541131f3841057a}{APR\_LOCK\_PROC\_PTHREAD};
+122     \hyperlink{test_2abts_8c_a354ac4a7f2f65961efaf25406b39820c}{abts\_run\_test}(suite, test\_exclusive, &mech);
+123 \textcolor{preprocessor}{#endif}
+124 \textcolor{preprocessor}{#if APR\_HAS\_FCNTL\_SERIALIZE}
+125     mech = \hyperlink{group__apr__proc__mutex_gga75dd95a48a1e855a87b509b522746ed4ad9dad69d83d1e112054ad21a7e4e16b3}{APR\_LOCK\_FCNTL};
+126     \hyperlink{test_2abts_8c_a354ac4a7f2f65961efaf25406b39820c}{abts\_run\_test}(suite, test\_exclusive, &mech);
+127 \textcolor{preprocessor}{#endif}
+128 \textcolor{preprocessor}{#if APR\_HAS\_FLOCK\_SERIALIZE}
+129     mech = \hyperlink{group__apr__proc__mutex_gga75dd95a48a1e855a87b509b522746ed4a1d06f73a37dae31233299401c9594b41}{APR\_LOCK\_FLOCK};
+130     \hyperlink{test_2abts_8c_a354ac4a7f2f65961efaf25406b39820c}{abts\_run\_test}(suite, test\_exclusive, &mech);
+131 \textcolor{preprocessor}{#endif}
+132 
+133     \textcolor{keywordflow}{return} suite;
+134 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=278pt]{testglobalmutex_8c_a19c4abee0a399dab193d2fa0a42b509d_cgraph}
+\end{center}
+\end{figure}
+
+

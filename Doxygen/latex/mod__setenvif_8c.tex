@@ -1,0 +1,125 @@
+\hypertarget{mod__setenvif_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/metadata/mod\+\_\+setenvif.c File Reference}
+\label{mod__setenvif_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/metadata/mod\+\_\+setenvif.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/metadata/mod\+\_\+setenvif.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strmatch.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+setenvif.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__setenvif_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structsei__entry}{sei\+\_\+entry}
+\item 
+struct \hyperlink{structsei__cfg__rec}{sei\+\_\+cfg\+\_\+rec}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__setenvif_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__setenvif_8c_afbe422b14c84f4c66f446fd87090d50d}{I\+C\+A\+S\+E\+\_\+\+M\+A\+G\+IC}~((\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$)(\&\hyperlink{os_2netware_2modules_8c_adb38b0e269a642aae8ed0986094f3b1f}{setenvif\+\_\+module}))
+\item 
+\#define \hyperlink{mod__setenvif_8c_a0a2bb37969aa5c95a185625c67946b2e}{S\+E\+I\+\_\+\+M\+A\+G\+I\+C\+\_\+\+H\+E\+I\+R\+L\+O\+OM}~\char`\"{}setenvif-\/\hyperlink{pcretest_8txt_accef33224b2aee7c2350c396e2973890}{phase}-\/\hyperlink{group__apr__mmap_gac9ec9a6de38e93927dca656ab65d0087}{flag}\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294d}{special} \{ \\*
+\hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da668714232ad2455a0be9e4a5d7db7d2c}{S\+P\+E\+C\+I\+A\+L\+\_\+\+N\+OT}, 
+\hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da71c20d717bcdf41cb0c3c9d34ef51916}{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+A\+D\+DR}, 
+\hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dabc3ff4bc750f86e9f825791dd046fac9}{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+H\+O\+ST}, 
+\hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da574ab1ea03105306d5b820372713baef}{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+U\+RI}, 
+\\*
+\hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da0ccda79cc23d3a996be8ca6138bab83d}{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+M\+E\+T\+H\+OD}, 
+\hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dacba666e08091b163eaaab857931e133e}{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+P\+R\+O\+T\+O\+C\+OL}, 
+\hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dafa47323ea8d8445fd8d9bcd86bb00c7f}{S\+P\+E\+C\+I\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+A\+D\+DR}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__setenvif_8c_a4e36bfb2663d210559f4dd3ba5567f82}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (setenvif)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__setenvif_8c_a4ae541597706c8b584fa77eb6b3f1721}{setenvif\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__setenvif_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__setenvif_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!I\+C\+A\+S\+E\+\_\+\+M\+A\+G\+IC@{I\+C\+A\+S\+E\+\_\+\+M\+A\+G\+IC}}
+\index{I\+C\+A\+S\+E\+\_\+\+M\+A\+G\+IC@{I\+C\+A\+S\+E\+\_\+\+M\+A\+G\+IC}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}
+\subsubsection[{\texorpdfstring{I\+C\+A\+S\+E\+\_\+\+M\+A\+G\+IC}{ICASE_MAGIC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+C\+A\+S\+E\+\_\+\+M\+A\+G\+IC~(({\bf void} $\ast$)(\&{\bf setenvif\+\_\+module}))}\hypertarget{mod__setenvif_8c_afbe422b14c84f4c66f446fd87090d50d}{}\label{mod__setenvif_8c_afbe422b14c84f4c66f446fd87090d50d}
+\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!S\+E\+I\+\_\+\+M\+A\+G\+I\+C\+\_\+\+H\+E\+I\+R\+L\+O\+OM@{S\+E\+I\+\_\+\+M\+A\+G\+I\+C\+\_\+\+H\+E\+I\+R\+L\+O\+OM}}
+\index{S\+E\+I\+\_\+\+M\+A\+G\+I\+C\+\_\+\+H\+E\+I\+R\+L\+O\+OM@{S\+E\+I\+\_\+\+M\+A\+G\+I\+C\+\_\+\+H\+E\+I\+R\+L\+O\+OM}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}
+\subsubsection[{\texorpdfstring{S\+E\+I\+\_\+\+M\+A\+G\+I\+C\+\_\+\+H\+E\+I\+R\+L\+O\+OM}{SEI_MAGIC_HEIRLOOM}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+E\+I\+\_\+\+M\+A\+G\+I\+C\+\_\+\+H\+E\+I\+R\+L\+O\+OM~\char`\"{}setenvif-\/{\bf phase}-\/{\bf flag}\char`\"{}}\hypertarget{mod__setenvif_8c_a0a2bb37969aa5c95a185625c67946b2e}{}\label{mod__setenvif_8c_a0a2bb37969aa5c95a185625c67946b2e}
+
+
+\subsection{Enumeration Type Documentation}
+\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!special@{special}}
+\index{special@{special}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}
+\subsubsection[{\texorpdfstring{special}{special}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf special}}\hypertarget{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294d}{}\label{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294d}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{S\+P\+E\+C\+I\+A\+L\+\_\+\+N\+OT@{S\+P\+E\+C\+I\+A\+L\+\_\+\+N\+OT}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!S\+P\+E\+C\+I\+A\+L\+\_\+\+N\+OT@{S\+P\+E\+C\+I\+A\+L\+\_\+\+N\+OT}}\item[{\em 
+S\+P\+E\+C\+I\+A\+L\+\_\+\+N\+OT\hypertarget{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da668714232ad2455a0be9e4a5d7db7d2c}{}\label{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da668714232ad2455a0be9e4a5d7db7d2c}
+}]\index{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+A\+D\+DR@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+A\+D\+DR}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+A\+D\+DR@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+A\+D\+DR}}\item[{\em 
+S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+A\+D\+DR\hypertarget{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da71c20d717bcdf41cb0c3c9d34ef51916}{}\label{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da71c20d717bcdf41cb0c3c9d34ef51916}
+}]\index{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+H\+O\+ST@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+H\+O\+ST}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+H\+O\+ST@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+H\+O\+ST}}\item[{\em 
+S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+M\+O\+T\+E\+\_\+\+H\+O\+ST\hypertarget{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dabc3ff4bc750f86e9f825791dd046fac9}{}\label{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dabc3ff4bc750f86e9f825791dd046fac9}
+}]\index{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+U\+RI@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+U\+RI}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+U\+RI@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+U\+RI}}\item[{\em 
+S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+U\+RI\hypertarget{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da574ab1ea03105306d5b820372713baef}{}\label{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da574ab1ea03105306d5b820372713baef}
+}]\index{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+M\+E\+T\+H\+OD@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+M\+E\+T\+H\+OD}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+M\+E\+T\+H\+OD@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+M\+E\+T\+H\+OD}}\item[{\em 
+S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+M\+E\+T\+H\+OD\hypertarget{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da0ccda79cc23d3a996be8ca6138bab83d}{}\label{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da0ccda79cc23d3a996be8ca6138bab83d}
+}]\index{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+P\+R\+O\+T\+O\+C\+OL@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+P\+R\+O\+T\+O\+C\+OL}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+P\+R\+O\+T\+O\+C\+OL@{S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+P\+R\+O\+T\+O\+C\+OL}}\item[{\em 
+S\+P\+E\+C\+I\+A\+L\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+P\+R\+O\+T\+O\+C\+OL\hypertarget{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dacba666e08091b163eaaab857931e133e}{}\label{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dacba666e08091b163eaaab857931e133e}
+}]\index{S\+P\+E\+C\+I\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+A\+D\+DR@{S\+P\+E\+C\+I\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+A\+D\+DR}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!S\+P\+E\+C\+I\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+A\+D\+DR@{S\+P\+E\+C\+I\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+A\+D\+DR}}\item[{\em 
+S\+P\+E\+C\+I\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+A\+D\+DR\hypertarget{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dafa47323ea8d8445fd8d9bcd86bb00c7f}{}\label{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dafa47323ea8d8445fd8d9bcd86bb00c7f}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+97              \{
+98     \hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da668714232ad2455a0be9e4a5d7db7d2c}{SPECIAL\_NOT},
+99     \hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da71c20d717bcdf41cb0c3c9d34ef51916}{SPECIAL\_REMOTE\_ADDR},
+100     \hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dabc3ff4bc750f86e9f825791dd046fac9}{SPECIAL\_REMOTE\_HOST},
+101     \hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da574ab1ea03105306d5b820372713baef}{SPECIAL\_REQUEST\_URI},
+102     \hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294da0ccda79cc23d3a996be8ca6138bab83d}{SPECIAL\_REQUEST\_METHOD},
+103     \hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dacba666e08091b163eaaab857931e133e}{SPECIAL\_REQUEST\_PROTOCOL},
+104     \hyperlink{mod__setenvif_8c_a5b362f825d53bf06a2efba530bf5294dafa47323ea8d8445fd8d9bcd86bb00c7f}{SPECIAL\_SERVER\_ADDR}
+105 \};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(setenvif)}{AP_DECLARE_MODULE(setenvif)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{setenvif}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__setenvif_8c_a4e36bfb2663d210559f4dd3ba5567f82}{}\label{mod__setenvif_8c_a4e36bfb2663d210559f4dd3ba5567f82}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}!setenvif\+\_\+module@{setenvif\+\_\+module}}
+\index{setenvif\+\_\+module@{setenvif\+\_\+module}!mod\+\_\+setenvif.\+c@{mod\+\_\+setenvif.\+c}}
+\subsubsection[{\texorpdfstring{setenvif\+\_\+module}{setenvif_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} setenvif\+\_\+module}\hypertarget{mod__setenvif_8c_a4ae541597706c8b584fa77eb6b3f1721}{}\label{mod__setenvif_8c_a4ae541597706c8b584fa77eb6b3f1721}

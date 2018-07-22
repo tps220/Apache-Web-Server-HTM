@@ -1,0 +1,79 @@
+\hypertarget{structap__filter__rec__t}{}\section{ap\+\_\+filter\+\_\+rec\+\_\+t Struct Reference}
+\label{structap__filter__rec__t}\index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+
+
+This structure is used for recording information about the registered filters. It associates a name with the filter\textquotesingle{}s callback and filter type.  
+
+
+
+
+{\ttfamily \#include $<$util\+\_\+filter.\+h$>$}
+
+
+
+Collaboration diagram for ap\+\_\+filter\+\_\+rec\+\_\+t\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structap__filter__rec__t__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{structap__filter__rec__t_a85fe13ba0e1802986e19a56858d3198e}{name}
+\item 
+\hyperlink{unionap__filter__func}{ap\+\_\+filter\+\_\+func} \hyperlink{structap__filter__rec__t_a53fedc6d31f863c98fbe19fa5ae32bb0}{filter\+\_\+func}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga7ecd47b41aacab276198f6d1fc05a56c}{ap\+\_\+init\+\_\+filter\+\_\+func} \hyperlink{structap__filter__rec__t_a3bcc0263a11aa25b6050df5c62bfd2e0}{filter\+\_\+init\+\_\+func}
+\item 
+struct \hyperlink{structap__filter__rec__t}{ap\+\_\+filter\+\_\+rec\+\_\+t} $\ast$ \hyperlink{structap__filter__rec__t_a66a9bbdf6696798b2749bd98eb34badf}{next}
+\item 
+\hyperlink{structap__filter__provider__t}{ap\+\_\+filter\+\_\+provider\+\_\+t} $\ast$ \hyperlink{structap__filter__rec__t_a20f4b587f03697e977ff8df2247a463b}{providers}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga6dc4721ae075c103a3f3a93775d139fa}{ap\+\_\+filter\+\_\+type} \hyperlink{structap__filter__rec__t_a11dd49760277c33affdb52e9d6f099da}{ftype}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structap__filter__rec__t_a882b8c4c8f304e9e948baad79f46afa4}{debug}
+\item 
+unsigned \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structap__filter__rec__t_a5fbc2be1250c3f6084b358fdf59fa4ef}{proto\+\_\+flags}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This structure is used for recording information about the registered filters. It associates a name with the filter\textquotesingle{}s callback and filter type. 
+
+At the moment, these are simply linked in a chain, so a -\/$>$next pointer is available.
+
+It is used for any filter that can be inserted in the filter chain. This may be either a httpd-\/2.\+0 filter or a mod\+\_\+filter harness. In the latter case it contains dispatch, provider and protocol information. In the former case, the new fields (from dispatch) are ignored. 
+
+\subsection{Field Documentation}
+\index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!debug@{debug}}
+\index{debug@{debug}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\subsubsection[{\texorpdfstring{debug}{debug}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ap\+\_\+filter\+\_\+rec\+\_\+t\+::debug}\hypertarget{structap__filter__rec__t_a882b8c4c8f304e9e948baad79f46afa4}{}\label{structap__filter__rec__t_a882b8c4c8f304e9e948baad79f46afa4}
+Trace level for this filter \index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!filter\+\_\+func@{filter\+\_\+func}}
+\index{filter\+\_\+func@{filter\+\_\+func}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\subsubsection[{\texorpdfstring{filter\+\_\+func}{filter_func}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ap\+\_\+filter\+\_\+func} ap\+\_\+filter\+\_\+rec\+\_\+t\+::filter\+\_\+func}\hypertarget{structap__filter__rec__t_a53fedc6d31f863c98fbe19fa5ae32bb0}{}\label{structap__filter__rec__t_a53fedc6d31f863c98fbe19fa5ae32bb0}
+The function to call when this filter is invoked. \index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!filter\+\_\+init\+\_\+func@{filter\+\_\+init\+\_\+func}}
+\index{filter\+\_\+init\+\_\+func@{filter\+\_\+init\+\_\+func}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\subsubsection[{\texorpdfstring{filter\+\_\+init\+\_\+func}{filter_init_func}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ap\+\_\+init\+\_\+filter\+\_\+func} ap\+\_\+filter\+\_\+rec\+\_\+t\+::filter\+\_\+init\+\_\+func}\hypertarget{structap__filter__rec__t_a3bcc0263a11aa25b6050df5c62bfd2e0}{}\label{structap__filter__rec__t_a3bcc0263a11aa25b6050df5c62bfd2e0}
+The function to call directly before the handlers are invoked for a request. The init function is called once directly before running the handlers for a request or subrequest. The init function is never called for a connection filter (with ftype $>$= A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON). Any use of this function for filters for protocols other than H\+T\+TP is specified by the module supported that protocol. \index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!ftype@{ftype}}
+\index{ftype@{ftype}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\subsubsection[{\texorpdfstring{ftype}{ftype}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ap\+\_\+filter\+\_\+type} ap\+\_\+filter\+\_\+rec\+\_\+t\+::ftype}\hypertarget{structap__filter__rec__t_a11dd49760277c33affdb52e9d6f099da}{}\label{structap__filter__rec__t_a11dd49760277c33affdb52e9d6f099da}
+The type of filter, either A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+NT or A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON. An A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+NT filter modifies the data based on information found in the content. An A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON filter modifies the data based on the type of connection. \index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!name@{name}}
+\index{name@{name}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\subsubsection[{\texorpdfstring{name}{name}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ ap\+\_\+filter\+\_\+rec\+\_\+t\+::name}\hypertarget{structap__filter__rec__t_a85fe13ba0e1802986e19a56858d3198e}{}\label{structap__filter__rec__t_a85fe13ba0e1802986e19a56858d3198e}
+The registered name for this filter \index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!next@{next}}
+\index{next@{next}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\subsubsection[{\texorpdfstring{next}{next}}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf ap\+\_\+filter\+\_\+rec\+\_\+t}$\ast$ ap\+\_\+filter\+\_\+rec\+\_\+t\+::next}\hypertarget{structap__filter__rec__t_a66a9bbdf6696798b2749bd98eb34badf}{}\label{structap__filter__rec__t_a66a9bbdf6696798b2749bd98eb34badf}
+The next filter\+\_\+rec in the list \index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!proto\+\_\+flags@{proto\+\_\+flags}}
+\index{proto\+\_\+flags@{proto\+\_\+flags}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\subsubsection[{\texorpdfstring{proto\+\_\+flags}{proto_flags}}]{\setlength{\rightskip}{0pt plus 5cm}unsigned {\bf int} ap\+\_\+filter\+\_\+rec\+\_\+t\+::proto\+\_\+flags}\hypertarget{structap__filter__rec__t_a5fbc2be1250c3f6084b358fdf59fa4ef}{}\label{structap__filter__rec__t_a5fbc2be1250c3f6084b358fdf59fa4ef}
+Protocol flags for this filter \index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!providers@{providers}}
+\index{providers@{providers}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\subsubsection[{\texorpdfstring{providers}{providers}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ap\+\_\+filter\+\_\+provider\+\_\+t}$\ast$ ap\+\_\+filter\+\_\+rec\+\_\+t\+::providers}\hypertarget{structap__filter__rec__t_a20f4b587f03697e977ff8df2247a463b}{}\label{structap__filter__rec__t_a20f4b587f03697e977ff8df2247a463b}
+Providers for this filter 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/include/\hyperlink{util__filter_8h}{util\+\_\+filter.\+h}\end{DoxyCompactItemize}

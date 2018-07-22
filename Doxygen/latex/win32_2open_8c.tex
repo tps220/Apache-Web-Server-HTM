@@ -1,0 +1,218 @@
+\hypertarget{win32_2open_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/file\+\_\+io/win32/open.c File Reference}
+\label{win32_2open_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/win32/open.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/win32/open.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$winbase.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+misc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+inherit.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$io.\+h$>$}\\*
+{\ttfamily \#include $<$winioctl.\+h$>$}\\*
+Include dependency graph for open.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{win32_2open_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{win32_2open_8c_a117635e2839d112b34268a98c4690eb7}{res\+\_\+name\+\_\+from\+\_\+filename} (const char $\ast$\hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} global, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{win32_2open_8c_a0b79fa88bdd7159c399128f89748fb29}{file\+\_\+cleanup} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__apr__portabile_ga8dd020a355482f70199dcdcd65464a75}{thefile})
+\item 
+\hyperlink{group__apr__allocator_ga9cb19a118179bbd8625eacfec66a9ab8}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{win32_2open_8c_a56aefc7a232d09816efeb66433904824}{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+A\+C\+C\+E\+S\+S\+OR} (\hyperlink{pcregrep_8txt_ac062b5382a17ef4e936c49bdd74c5563}{file})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{win32/open.\+c@{win32/open.\+c}!A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+A\+C\+C\+E\+S\+S\+OR@{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+A\+C\+C\+E\+S\+S\+OR}}
+\index{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+A\+C\+C\+E\+S\+S\+OR@{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+A\+C\+C\+E\+S\+S\+OR}!win32/open.\+c@{win32/open.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+A\+C\+C\+E\+S\+S\+O\+R(file)}{APR_POOL_IMPLEMENT_ACCESSOR(file)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+A\+C\+C\+E\+S\+S\+OR (
+\begin{DoxyParamCaption}
+\item[{{\bf file}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{win32_2open_8c_a56aefc7a232d09816efeb66433904824}{}\label{win32_2open_8c_a56aefc7a232d09816efeb66433904824}
+\index{win32/open.\+c@{win32/open.\+c}!file\+\_\+cleanup@{file\+\_\+cleanup}}
+\index{file\+\_\+cleanup@{file\+\_\+cleanup}!win32/open.\+c@{win32/open.\+c}}
+\subsubsection[{\texorpdfstring{file\+\_\+cleanup(void $\ast$thefile)}{file_cleanup(void *thefile)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} file\+\_\+cleanup (
+\begin{DoxyParamCaption}
+\item[{{\bf void} $\ast$}]{thefile}
+\end{DoxyParamCaption}
+)}\hypertarget{win32_2open_8c_a0b79fa88bdd7159c399128f89748fb29}{}\label{win32_2open_8c_a0b79fa88bdd7159c399128f89748fb29}
+
+\begin{DoxyCode}
+278 \{
+279     \hyperlink{structapr__file__t}{apr\_file\_t} *\hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file} = \hyperlink{group__apr__file__io_ga78ca4b53249bdca0726c4ffec7132aa9}{thefile};
+280     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} flush\_rv = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+281 
+282     \textcolor{keywordflow}{if} (file->\hyperlink{structapr__file__t_acdb343a6f266295b6e63b288744074db}{filehand} != INVALID\_HANDLE\_VALUE) \{
+283 
+284         \textcolor{keywordflow}{if} (file->\hyperlink{structapr__file__t_ac3ae13f8071d5dd5a6a47c72e1b9dd3c}{buffered}) \{
+285             \textcolor{comment}{/* XXX: flush here is not mutex protected */}
+286             flush\_rv = apr\_file\_flush((\hyperlink{structapr__file__t}{apr\_file\_t} *)\hyperlink{group__apr__file__io_ga78ca4b53249bdca0726c4ffec7132aa9}{thefile});
+287         \}
+288 
+289         \textcolor{comment}{/* In order to avoid later segfaults with handle 'reuse',}
+290 \textcolor{comment}{         * we must protect against the case that a dup2'ed handle}
+291 \textcolor{comment}{         * is being closed, and invalidate the corresponding StdHandle }
+292 \textcolor{comment}{         * We also tell msvcrt when stdhandles are closed.}
+293 \textcolor{comment}{         */}
+294         \textcolor{keywordflow}{if} (file->\hyperlink{structapr__file__t_a18dc8a6eb2df404bdb940e66d905e396}{flags} & \hyperlink{win32_2apr__arch__file__io_8h_a20902c93c6c5e3bf1ca09e0cd3c3e263}{APR\_STD\_FLAGS})
+295         \{
+296             \textcolor{keywordflow}{if} ((file->\hyperlink{structapr__file__t_a18dc8a6eb2df404bdb940e66d905e396}{flags} & \hyperlink{win32_2apr__arch__file__io_8h_a20902c93c6c5e3bf1ca09e0cd3c3e263}{APR\_STD\_FLAGS}) == 
+      \hyperlink{win32_2apr__arch__file__io_8h_adaccad32c6d048372a6cecf72d16d25e}{APR\_STDERR\_FLAG}) \{
+297                 \_close(2);
+298                 \hyperlink{apr__dbg__win32__handles_8h_a70e7cd687bceed0405e08d402f47d889}{SetStdHandle}(STD\_ERROR\_HANDLE, INVALID\_HANDLE\_VALUE);
+299             \}
+300             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((file->\hyperlink{structapr__file__t_a18dc8a6eb2df404bdb940e66d905e396}{flags} & \hyperlink{win32_2apr__arch__file__io_8h_a20902c93c6c5e3bf1ca09e0cd3c3e263}{APR\_STD\_FLAGS}) == 
+      \hyperlink{win32_2apr__arch__file__io_8h_a6f54a356c07d2fa957ec75901411185c}{APR\_STDOUT\_FLAG}) \{
+301                 \_close(1);
+302                 \hyperlink{apr__dbg__win32__handles_8h_a70e7cd687bceed0405e08d402f47d889}{SetStdHandle}(STD\_OUTPUT\_HANDLE, INVALID\_HANDLE\_VALUE);
+303             \}
+304             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((file->\hyperlink{structapr__file__t_a18dc8a6eb2df404bdb940e66d905e396}{flags} & \hyperlink{win32_2apr__arch__file__io_8h_a20902c93c6c5e3bf1ca09e0cd3c3e263}{APR\_STD\_FLAGS}) == 
+      \hyperlink{win32_2apr__arch__file__io_8h_a09fe5f5bbb01922e8e837f0876e70d07}{APR\_STDIN\_FLAG}) \{
+305                 \_close(0);
+306                 \hyperlink{apr__dbg__win32__handles_8h_a70e7cd687bceed0405e08d402f47d889}{SetStdHandle}(STD\_INPUT\_HANDLE, INVALID\_HANDLE\_VALUE);
+307             \}
+308         \}
+309         \textcolor{keywordflow}{else}
+310             \hyperlink{apr__dbg__win32__handles_8h_af89311c05c734797c91f635e50bec804}{CloseHandle}(file->\hyperlink{structapr__file__t_acdb343a6f266295b6e63b288744074db}{filehand});
+311 
+312         file->\hyperlink{structapr__file__t_acdb343a6f266295b6e63b288744074db}{filehand} = INVALID\_HANDLE\_VALUE;
+313     \}
+314     \textcolor{keywordflow}{if} (file->\hyperlink{structapr__file__t_aa3f5d813a84becd92654f1a1103a6f21}{pOverlapped} && file->\hyperlink{structapr__file__t_aa3f5d813a84becd92654f1a1103a6f21}{pOverlapped}->hEvent) \{
+315         \hyperlink{apr__dbg__win32__handles_8h_af89311c05c734797c91f635e50bec804}{CloseHandle}(file->\hyperlink{structapr__file__t_aa3f5d813a84becd92654f1a1103a6f21}{pOverlapped}->hEvent);
+316         file->\hyperlink{structapr__file__t_aa3f5d813a84becd92654f1a1103a6f21}{pOverlapped} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+317     \}
+318     \textcolor{keywordflow}{return} flush\_rv;
+319 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{win32_2open_8c_a0b79fa88bdd7159c399128f89748fb29_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{win32/open.\+c@{win32/open.\+c}!res\+\_\+name\+\_\+from\+\_\+filename@{res\+\_\+name\+\_\+from\+\_\+filename}}
+\index{res\+\_\+name\+\_\+from\+\_\+filename@{res\+\_\+name\+\_\+from\+\_\+filename}!win32/open.\+c@{win32/open.\+c}}
+\subsubsection[{\texorpdfstring{res\+\_\+name\+\_\+from\+\_\+filename(const char $\ast$file, int global, apr\+\_\+pool\+\_\+t $\ast$pool)}{res_name_from_filename(const char *file, int global, apr_pool_t *pool)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void}$\ast$ res\+\_\+name\+\_\+from\+\_\+filename (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{file, }
+\item[{{\bf int}}]{global, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool}
+\end{DoxyParamCaption}
+)}\hypertarget{win32_2open_8c_a117635e2839d112b34268a98c4690eb7}{}\label{win32_2open_8c_a117635e2839d112b34268a98c4690eb7}
+
+\begin{DoxyCode}
+141 \{
+142 \textcolor{preprocessor}{#if APR\_HAS\_UNICODE\_FS}
+143     \hyperlink{win32_2apr__arch__misc_8h_a8c631486790f65bd87ed0623a25bdd3d}{IF\_WIN\_OS\_IS\_UNICODE}
+144     \{
+145         \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} *wpre, *wfile, *ch;
+146         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = strlen(\hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file}) + 1;
+147         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+148 
+149         \textcolor{keywordflow}{if} (\hyperlink{win32_2apr__arch__misc_8h_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} >= \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402aa671d1d921e5dd75518dfd6fba2ce5b5}{APR\_WIN\_2000}) \{
+150             \textcolor{keywordflow}{if} (global)
+151                 wpre = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}\textcolor{stringliteral}{"Global\(\backslash\)\(\backslash\)"};
+152             \textcolor{keywordflow}{else}
+153                 wpre = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}\textcolor{stringliteral}{"Local\(\backslash\)\(\backslash\)"};
+154         \}
+155         \textcolor{keywordflow}{else}
+156             wpre = \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}\textcolor{stringliteral}{""};
+157         r = wcslen(wpre);
+158 
+159         \textcolor{keywordflow}{if} (n > 256 - r) \{
+160             \hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file} += n - 256 - \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+161             n = 256;
+162             \textcolor{comment}{/* skip utf8 continuation bytes */}
+163             \textcolor{keywordflow}{while} ((*\hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file} & 0xC0) == 0x80) \{
+164                 ++\hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file};
+165                 --\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n};
+166             \}
+167         \}
+168         wfile = apr\_palloc(pool, (r + n) * \textcolor{keyword}{sizeof}(\hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t}));
+169         wcscpy(wfile, wpre);
+170         d = \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n};
+171         \textcolor{keywordflow}{if} (apr\_conv\_utf8\_to\_ucs2(\hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file}, &n, wfile + r, &d)) \{
+172             \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+173         \}
+174         \textcolor{keywordflow}{for} (ch = wfile + r; *ch; ++ch) \{
+175             \textcolor{keywordflow}{if} (*ch == \textcolor{charliteral}{':'} || *ch == \textcolor{charliteral}{'/'} || *ch == \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'})
+176                 *ch = \textcolor{charliteral}{'\_'};
+177         \}
+178         \textcolor{keywordflow}{return} wfile;
+179     \}
+180 \textcolor{preprocessor}{#endif}
+181 \textcolor{preprocessor}{#if APR\_HAS\_ANSI\_FS}
+182     \hyperlink{win32_2apr__arch__misc_8h_a2d1423da7a6a46da1276017c8140be22}{ELSE\_WIN\_OS\_IS\_ANSI}
+183     \{
+184         \textcolor{keywordtype}{char} *nfile, *ch;
+185         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} n = strlen(\hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file}) + 1;
+186 
+187 \textcolor{preprocessor}{#if !APR\_HAS\_UNICODE\_FS}
+188         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+189         \textcolor{keywordtype}{char} *pre;
+190 
+191         \textcolor{keywordflow}{if} (\hyperlink{win32_2apr__arch__misc_8h_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} >= \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402aa671d1d921e5dd75518dfd6fba2ce5b5}{APR\_WIN\_2000}) \{
+192             \textcolor{keywordflow}{if} (global)
+193                 pre = \textcolor{stringliteral}{"Global\(\backslash\)\(\backslash\)"};
+194             \textcolor{keywordflow}{else}
+195                 pre = \textcolor{stringliteral}{"Local\(\backslash\)\(\backslash\)"};
+196         \}
+197         \textcolor{keywordflow}{else}
+198             pre = \textcolor{stringliteral}{""};
+199         r = strlen(pre);
+200 
+201         \textcolor{keywordflow}{if} (n > 256 - r) \{
+202             \hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file} += n - 256 - \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+203             n = 256;
+204         \}
+205         nfile = apr\_palloc(pool, (r + n) * \textcolor{keyword}{sizeof}(\hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t}));
+206         memcpy(nfile, pre, r);
+207         memcpy(nfile + r, \hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file}, n);
+208 \textcolor{preprocessor}{#else}
+209         \textcolor{keyword}{const} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} r = 0;
+210         \textcolor{keywordflow}{if} (n > 256) \{
+211             \hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file} += n - 256;
+212             n = 256;
+213         \}
+214         nfile = apr\_pmemdup(pool, \hyperlink{group__APACHE__CORE__LOG_ga52f984475a42d9227fcbfd159db35676}{file}, n);
+215 \textcolor{preprocessor}{#endif}
+216         \textcolor{keywordflow}{for} (ch = nfile + r; *ch; ++ch) \{
+217             \textcolor{keywordflow}{if} (*ch == \textcolor{charliteral}{':'} || *ch == \textcolor{charliteral}{'/'} || *ch == \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'})
+218                 *ch = \textcolor{charliteral}{'\_'};
+219         \}
+220         \textcolor{keywordflow}{return} nfile;
+221     \}
+222 \textcolor{preprocessor}{#endif}
+223 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=333pt]{win32_2open_8c_a117635e2839d112b34268a98c4690eb7_icgraph}
+\end{center}
+\end{figure}
+
+

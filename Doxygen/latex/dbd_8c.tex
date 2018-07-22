@@ -1,0 +1,126 @@
+\hypertarget{dbd_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr-\/util/test/dbd.c File Reference}
+\label{dbd_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/test/dbd.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/test/dbd.\+c}}
+{\ttfamily \#include \char`\"{}apu.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+dbd.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+Include dependency graph for dbd.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dbd_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{T\+E\+ST}(msg,  \hyperlink{group__apr__thread__proc_ga40bf04c29bfb67c93dc7dc5075531285}{func})
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{dbd_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$$\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{dbd.\+c@{dbd.\+c}!T\+E\+ST@{T\+E\+ST}}
+\index{T\+E\+ST@{T\+E\+ST}!dbd.\+c@{dbd.\+c}}
+\subsubsection[{\texorpdfstring{T\+E\+ST}{TEST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+ST(
+\begin{DoxyParamCaption}
+\item[{}]{msg, }
+\item[{}]{{\bf func}}
+\end{DoxyParamCaption}
+)}\hypertarget{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{}\label{dbd_8c_a1798d3832a62aedbadf52fc583665af9}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+printf(\textcolor{stringliteral}{"======== %s ========\(\backslash\)n"}, msg);      \(\backslash\)
+    rv = \hyperlink{group__apr__poll_ga54230532a60ed2ae9f1e0b136b57cc42}{func}(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, sql, \hyperlink{group__APR__Util__DBD_ga13380de2c65258ceb1b4a477f536d0ce}{driver});         \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{\(\backslash\)}
+\hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{    if} (rv != 0) \{                    \(\backslash\)
+        printf(\textcolor{stringliteral}{"Error in %s: rc=%d\(\backslash\)n\(\backslash\)n"}, msg, rv);  \(\backslash\)
+    \}                           \(\backslash\)
+    else \{                      \(\backslash\)
+        printf(\textcolor{stringliteral}{"%s test successful\(\backslash\)n\(\backslash\)n"}, msg);      \(\backslash\)
+    \}                           \(\backslash\)
+    fflush(\hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout});
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{dbd.\+c@{dbd.\+c}!main@{main}}
+\index{main@{main}!dbd.\+c@{dbd.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{dbd_8c_a3c04138a5bfe5d72780bb7e82a18e627}{}\label{dbd_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+
+\begin{DoxyCode}
+343 \{
+344     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name};
+345     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APR__Util__DBD_ga9a8bda9fdcb1d8f1784e4eef621a0ae2}{params};
+346     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+347     \hyperlink{group__APR__Util__DBD_ga4738c1f6340184987fc7806522c18ab8}{apr\_dbd\_t} *sql = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+348     \textcolor{keyword}{const} \hyperlink{structapr__dbd__driver__t}{apr\_dbd\_driver\_t} *\hyperlink{group__APR__Util__DBD_ga13380de2c65258ceb1b4a477f536d0ce}{driver} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+349     \textcolor{keywordtype}{int} rv;
+350 
+351     apr\_initialize();
+352     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pool, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+353 
+354     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} >= 2 && \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} <= 3) \{
+355         name = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1];
+356         params = ( \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} == 3 ) ? \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2] : \textcolor{stringliteral}{""};
+357         apr\_dbd\_init(pool);
+358         setbuf(\hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout},\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+359         rv = apr\_dbd\_get\_driver(pool, name, &driver);
+360         \textcolor{keywordflow}{switch} (rv) \{
+361         \textcolor{keywordflow}{case} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}:
+362            printf(\textcolor{stringliteral}{"Loaded %s driver OK.\(\backslash\)n"}, name);
+363            \textcolor{keywordflow}{break};
+364         \textcolor{keywordflow}{case} \hyperlink{group__APR__Error_gac96fbde76282364e8c482d6f23bc61bb}{APR\_EDSOOPEN}:
+365            printf(\textcolor{stringliteral}{"Failed to load driver file apr\_dbd\_%s.so\(\backslash\)n"}, name);
+366            \textcolor{keywordflow}{goto} finish;
+367         \textcolor{keywordflow}{case} \hyperlink{group__APR__Error_ga8d96410fc32408160e1e85e2e96402fa}{APR\_ESYMNOTFOUND}:
+368            printf(\textcolor{stringliteral}{"Failed to load driver apr\_dbd\_%s\_driver.\(\backslash\)n"}, name);
+369            \textcolor{keywordflow}{goto} finish;
+370         \textcolor{keywordflow}{case} \hyperlink{group__APR__Error_ga939ddb834a30bc9a5a0a329b13000161}{APR\_ENOTIMPL}:
+371            printf(\textcolor{stringliteral}{"No driver available for %s.\(\backslash\)n"}, name);
+372            \textcolor{keywordflow}{goto} finish;
+373         \textcolor{keywordflow}{default}:        \textcolor{comment}{/* it's a bug if none of the above happen */}
+374            printf(\textcolor{stringliteral}{"Internal error loading %s.\(\backslash\)n"}, name);
+375            \textcolor{keywordflow}{goto} finish;
+376         \}
+377         rv = apr\_dbd\_open(driver, pool, params, &sql);
+378         \textcolor{keywordflow}{switch} (rv) \{
+379         \textcolor{keywordflow}{case} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}:
+380            printf(\textcolor{stringliteral}{"Opened %s[%s] OK\(\backslash\)n"}, name, params);
+381            \textcolor{keywordflow}{break};
+382         \textcolor{keywordflow}{case} \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL}:
+383            printf(\textcolor{stringliteral}{"Failed to open %s[%s]\(\backslash\)n"}, name, params);
+384            \textcolor{keywordflow}{goto} finish;
+385         \textcolor{keywordflow}{default}:        \textcolor{comment}{/* it's a bug if none of the above happen */}
+386            printf(\textcolor{stringliteral}{"Internal error opening %s[%s]\(\backslash\)n"}, name, params);
+387            \textcolor{keywordflow}{goto} finish;
+388         \}
+389         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"create table"}, create\_table);
+390         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"insert rows"}, insert\_rows);
+391         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"invalid op"}, invalid\_op);
+392         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"select random"}, select\_random);
+393         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"select sequential"}, select\_sequential);
+394         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"transactions"}, test\_transactions);
+395         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"prepared select"}, test\_pselect);
+396         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"prepared query"}, test\_pquery);
+397         \hyperlink{dbd_8c_a1798d3832a62aedbadf52fc583665af9}{TEST}(\textcolor{stringliteral}{"drop table"}, drop\_table);
+398         apr\_dbd\_close(driver, sql);
+399     \}
+400     \textcolor{keywordflow}{else} \{
+401         fprintf(stderr, \textcolor{stringliteral}{"Usage: %s driver-name [params]\(\backslash\)n"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+402     \}
+403 finish:
+404     apr\_pool\_destroy(pool);
+405     apr\_terminate();
+406     \textcolor{keywordflow}{return} 0;
+407 \}
+\end{DoxyCode}

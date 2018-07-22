@@ -1,0 +1,101 @@
+\hypertarget{test-writev_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/test/test-\/writev.c File Reference}
+\label{test-writev_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/test/test-\/writev.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/test/test-\/writev.\+c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$sys/socket.\+h$>$}\\*
+{\ttfamily \#include $<$netinet/in.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$arpa/inet.\+h$>$}\\*
+{\ttfamily \#include $<$sys/uio.\+h$>$}\\*
+{\ttfamily \#include $<$errno.\+h$>$}\\*
+Include dependency graph for test-\/writev.c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{test-writev_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{test-writev_8c_a3d2472d6cf31b73eeb829110dd0fffea}{I\+N\+A\+D\+D\+R\+\_\+\+N\+O\+NE}~(-\/1ul)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{test-writev_8c_a70db8bd1d499619f7ff9c1ca2ff3c8df}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$$\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{test-\/writev.\+c@{test-\/writev.\+c}!I\+N\+A\+D\+D\+R\+\_\+\+N\+O\+NE@{I\+N\+A\+D\+D\+R\+\_\+\+N\+O\+NE}}
+\index{I\+N\+A\+D\+D\+R\+\_\+\+N\+O\+NE@{I\+N\+A\+D\+D\+R\+\_\+\+N\+O\+NE}!test-\/writev.\+c@{test-\/writev.\+c}}
+\subsubsection[{\texorpdfstring{I\+N\+A\+D\+D\+R\+\_\+\+N\+O\+NE}{INADDR_NONE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+N\+A\+D\+D\+R\+\_\+\+N\+O\+NE~(-\/1ul)}\hypertarget{test-writev_8c_a3d2472d6cf31b73eeb829110dd0fffea}{}\label{test-writev_8c_a3d2472d6cf31b73eeb829110dd0fffea}
+
+
+\subsection{Function Documentation}
+\index{test-\/writev.\+c@{test-\/writev.\+c}!main@{main}}
+\index{main@{main}!test-\/writev.\+c@{test-\/writev.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{test-writev_8c_a70db8bd1d499619f7ff9c1ca2ff3c8df}{}\label{test-writev_8c_a70db8bd1d499619f7ff9c1ca2ff3c8df}
+
+\begin{DoxyCode}
+50 \{
+51     \textcolor{keyword}{struct }sockaddr\_in server\_addr;
+52     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+53     \textcolor{keyword}{struct }iovec vector[3];
+54     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}[100];
+55     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+56     \textcolor{keyword}{const} \textcolor{keywordtype}{int} just\_say\_no = 1;
+57 
+58     \textcolor{keywordflow}{if}( \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} != 3 ) \{
+59 \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}:
+60         fprintf( stderr, \textcolor{stringliteral}{"usage: test-writev a.b.c.d port#\(\backslash\)n"} );
+61         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}( 1 );
+62     \}
+63     server\_addr.sin\_family = AF\_INET;
+64     server\_addr.sin\_addr.s\_addr = inet\_addr( \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1] );
+65     \textcolor{keywordflow}{if}( server\_addr.sin\_addr.s\_addr == \hyperlink{test-writev_8c_a3d2472d6cf31b73eeb829110dd0fffea}{INADDR\_NONE} ) \{
+66         fprintf( stderr, \textcolor{stringliteral}{"bogus address\(\backslash\)n"} );
+67         \textcolor{keywordflow}{goto} \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage};
+68     \}
+69     server\_addr.sin\_port = htons( atoi( \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2] ) );
+70 
+71     s = \hyperlink{apr__arch__os2calls_8h_aa8318fbee111c5bde5952c63e894c962}{socket}( AF\_INET, SOCK\_STREAM, 0 );
+72     \textcolor{keywordflow}{if}( s < 0 ) \{
+73         perror(\textcolor{stringliteral}{"socket"});
+74         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+75     \}
+76     \textcolor{keywordflow}{if}( \hyperlink{apr__arch__os2calls_8h_adfd4ee688142ebda1142c1b0c7577e91}{connect}( s, (\textcolor{keyword}{struct} \hyperlink{group__apr__network__io_ga0b610ae0cdca368eefee514a7b12f632}{sockaddr} *)&server\_addr, \textcolor{keyword}{sizeof}( server\_addr ) )
+77         != 0 ) \{
+78         perror(\textcolor{stringliteral}{"connect"});
+79         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+80     \}
+81 
+82     \textcolor{keywordflow}{if}( \hyperlink{apr__arch__os2calls_8h_a2ebd12809845fab1c8fe85b1337de183}{setsockopt}(s, IPPROTO\_TCP, TCP\_NODELAY, (\textcolor{keywordtype}{char}*)&just\_say\_no,
+83         \textcolor{keyword}{sizeof}(just\_say\_no)) != 0 ) \{
+84         perror( \textcolor{stringliteral}{"TCP\_NODELAY"} );
+85         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+86     \}
+87     \textcolor{comment}{/* now build up a two part writev and write it out */}
+88     \textcolor{keywordflow}{for}( i = 0; i < \textcolor{keyword}{sizeof}( \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf} ); ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} ) \{
+89         buf[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] = \textcolor{charliteral}{'x'};
+90     \}
+91     vector[0].iov\_base = \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf};
+92     vector[0].iov\_len = \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf});
+93     vector[1].iov\_base = \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf};
+94     vector[1].iov\_len = \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf});
+95     vector[2].iov\_base = \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf};
+96     vector[2].iov\_len = \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf});
+97 
+98     i = \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev}( s, &vector[0], 3 );
+99     fprintf( \hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout}, \textcolor{stringliteral}{"i=%d, errno=%d\(\backslash\)n"}, i, errno );
+100     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(0);
+101 \}
+\end{DoxyCode}

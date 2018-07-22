@@ -1,0 +1,609 @@
+\hypertarget{lua__request_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/lua/lua\+\_\+request.c File Reference}
+\label{lua__request_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/lua/lua\+\_\+request.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/lua/lua\+\_\+request.\+c}}
+{\ttfamily \#include \char`\"{}mod\+\_\+lua.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}lua\+\_\+apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}lua\+\_\+dbd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}lua\+\_\+passwd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+script.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+varbuf.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+date.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+tables.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+cookies.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+Include dependency graph for lua\+\_\+request.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{lua__request_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{lua__request_8c_a8190f5b47166b4efe3f7377915210250}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}
+\item 
+\#define \hyperlink{lua__request_8c_ad61b812391e02ec2d01a902011c177f4}{P\+O\+S\+T\+\_\+\+M\+A\+X\+\_\+\+V\+A\+RS}~500
+\item 
+\#define \hyperlink{lua__request_8c_ab24c58507d689651faea2b82b7d3eb9c}{M\+O\+D\+L\+U\+A\+\_\+\+M\+A\+X\+\_\+\+R\+E\+G\+\_\+\+M\+A\+T\+CH}~25
+\item 
+\#define \hyperlink{lua__request_8c_af606252c7c65ce10038652e965017792}{A\+P\+L\+U\+A\+\_\+\+R\+E\+Q\+\_\+\+T\+R\+A\+CE}(lev)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef char $\ast$($\ast$ \hyperlink{lua__request_8c_abaf1816b651ae0608a2692f7a1ea73e9}{req\+\_\+field\+\_\+string\+\_\+f}) (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+typedef \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}($\ast$ \hyperlink{lua__request_8c_a05f03dbdc4bdde95ef1d4f90c4d606e4}{req\+\_\+field\+\_\+int\+\_\+f}) (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+typedef \hyperlink{structreq__table__t}{req\+\_\+table\+\_\+t} $\ast$($\ast$ \hyperlink{lua__request_8c_a6391c0f1e6b68536712339d5d0abd1ea}{req\+\_\+field\+\_\+apr\+\_\+table\+\_\+f}) (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{lua__request_8c_a8a924a2ae75955f480f27c800e6eca36}{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE} (lua)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{lua__request_8c_a58c9cac34d74732609ab2f4d579e9ff8}{ap\+\_\+lua\+\_\+rstack\+\_\+dump} (lua\+\_\+\+State $\ast$\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, const char $\ast$msg)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{lua__request_8c_afb96e7f7fe9a1bd92b4c8b9e263f2ccc}{ap\+\_\+lua\+\_\+load\+\_\+request\+\_\+lmodule} (lua\+\_\+\+State $\ast$\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{lua__request_8c_a4ff5811017cc87436f8a1968b23a2eac}{ap\+\_\+lua\+\_\+push\+\_\+connection} (lua\+\_\+\+State $\ast$\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{lua__request_8c_a82a2f3dc15d9f038b104d9fd29caf16b}{ap\+\_\+lua\+\_\+push\+\_\+server} (lua\+\_\+\+State $\ast$\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{lua__request_8c_a93c3bfc7e93d3bb2371cb066bb7fa36a}{ap\+\_\+lua\+\_\+push\+\_\+request} (lua\+\_\+\+State $\ast$\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__global__mutex__t}{apr\+\_\+global\+\_\+mutex\+\_\+t} $\ast$ \hyperlink{lua__request_8c_a1da5ec2434f85566057dab42de51edab}{lua\+\_\+ivm\+\_\+mutex}
+\item 
+\hyperlink{structapr__shm__t}{apr\+\_\+shm\+\_\+t} $\ast$ \hyperlink{lua__request_8c_aea31fa244d0c45f98d277fa34cc0218a}{lua\+\_\+ivm\+\_\+shm}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!A\+P\+L\+U\+A\+\_\+\+R\+E\+Q\+\_\+\+T\+R\+A\+CE@{A\+P\+L\+U\+A\+\_\+\+R\+E\+Q\+\_\+\+T\+R\+A\+CE}}
+\index{A\+P\+L\+U\+A\+\_\+\+R\+E\+Q\+\_\+\+T\+R\+A\+CE@{A\+P\+L\+U\+A\+\_\+\+R\+E\+Q\+\_\+\+T\+R\+A\+CE}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+U\+A\+\_\+\+R\+E\+Q\+\_\+\+T\+R\+A\+CE}{APLUA_REQ_TRACE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+U\+A\+\_\+\+R\+E\+Q\+\_\+\+T\+R\+A\+CE(
+\begin{DoxyParamCaption}
+\item[{}]{lev}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__request_8c_af606252c7c65ce10038652e965017792}{}\label{lua__request_8c_af606252c7c65ce10038652e965017792}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{static} \textcolor{keywordtype}{int} req\_trace##lev(lua\_State *\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L})  \(\backslash\)
+\{                                                               \(\backslash\)
+    return req\_log\_at(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, APLOG\_TRACE##lev);                     \(\backslash\)
+\}
+\end{DoxyCode}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}{APR_WANT_BYTEFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+B\+Y\+T\+E\+F\+U\+NC}\hypertarget{lua__request_8c_a8190f5b47166b4efe3f7377915210250}{}\label{lua__request_8c_a8190f5b47166b4efe3f7377915210250}
+Licensed to the \hyperlink{namespaceApache}{Apache} Software Foundation (A\+SF) under one or more contributor license agreements. See the N\+O\+T\+I\+CE file distributed with this work for additional information regarding copyright ownership. The A\+SF licenses this file to You under the \hyperlink{namespaceApache}{Apache} License, Version 2.\+0 (the \char`\"{}\+License\char`\"{}); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+\href{http://www.apache.org/licenses/LICENSE-2.0}{\tt http\+://www.\+apache.\+org/licenses/\+L\+I\+C\+E\+N\+S\+E-\/2.\+0}
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \char`\"{}\+A\+S I\+S\char`\"{} B\+A\+S\+IS, W\+I\+T\+H\+O\+UT W\+A\+R\+R\+A\+N\+T\+I\+ES OR C\+O\+N\+D\+I\+T\+I\+O\+NS OF A\+NY K\+I\+ND, either express or implied. See the License for the specific language governing permissions and limitations under the License. \index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!M\+O\+D\+L\+U\+A\+\_\+\+M\+A\+X\+\_\+\+R\+E\+G\+\_\+\+M\+A\+T\+CH@{M\+O\+D\+L\+U\+A\+\_\+\+M\+A\+X\+\_\+\+R\+E\+G\+\_\+\+M\+A\+T\+CH}}
+\index{M\+O\+D\+L\+U\+A\+\_\+\+M\+A\+X\+\_\+\+R\+E\+G\+\_\+\+M\+A\+T\+CH@{M\+O\+D\+L\+U\+A\+\_\+\+M\+A\+X\+\_\+\+R\+E\+G\+\_\+\+M\+A\+T\+CH}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{M\+O\+D\+L\+U\+A\+\_\+\+M\+A\+X\+\_\+\+R\+E\+G\+\_\+\+M\+A\+T\+CH}{MODLUA_MAX_REG_MATCH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+O\+D\+L\+U\+A\+\_\+\+M\+A\+X\+\_\+\+R\+E\+G\+\_\+\+M\+A\+T\+CH~25}\hypertarget{lua__request_8c_ab24c58507d689651faea2b82b7d3eb9c}{}\label{lua__request_8c_ab24c58507d689651faea2b82b7d3eb9c}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!P\+O\+S\+T\+\_\+\+M\+A\+X\+\_\+\+V\+A\+RS@{P\+O\+S\+T\+\_\+\+M\+A\+X\+\_\+\+V\+A\+RS}}
+\index{P\+O\+S\+T\+\_\+\+M\+A\+X\+\_\+\+V\+A\+RS@{P\+O\+S\+T\+\_\+\+M\+A\+X\+\_\+\+V\+A\+RS}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{P\+O\+S\+T\+\_\+\+M\+A\+X\+\_\+\+V\+A\+RS}{POST_MAX_VARS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+O\+S\+T\+\_\+\+M\+A\+X\+\_\+\+V\+A\+RS~500}\hypertarget{lua__request_8c_ad61b812391e02ec2d01a902011c177f4}{}\label{lua__request_8c_ad61b812391e02ec2d01a902011c177f4}
+
+
+\subsection{Typedef Documentation}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!req\+\_\+field\+\_\+apr\+\_\+table\+\_\+f@{req\+\_\+field\+\_\+apr\+\_\+table\+\_\+f}}
+\index{req\+\_\+field\+\_\+apr\+\_\+table\+\_\+f@{req\+\_\+field\+\_\+apr\+\_\+table\+\_\+f}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{req\+\_\+field\+\_\+apr\+\_\+table\+\_\+f}{req_field_apr_table_f}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf req\+\_\+table\+\_\+t}$\ast$($\ast$ req\+\_\+field\+\_\+apr\+\_\+table\+\_\+f) ({\bf request\+\_\+rec} $\ast${\bf r})}\hypertarget{lua__request_8c_a6391c0f1e6b68536712339d5d0abd1ea}{}\label{lua__request_8c_a6391c0f1e6b68536712339d5d0abd1ea}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!req\+\_\+field\+\_\+int\+\_\+f@{req\+\_\+field\+\_\+int\+\_\+f}}
+\index{req\+\_\+field\+\_\+int\+\_\+f@{req\+\_\+field\+\_\+int\+\_\+f}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{req\+\_\+field\+\_\+int\+\_\+f}{req_field_int_f}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf int}($\ast$ req\+\_\+field\+\_\+int\+\_\+f) ({\bf request\+\_\+rec} $\ast${\bf r})}\hypertarget{lua__request_8c_a05f03dbdc4bdde95ef1d4f90c4d606e4}{}\label{lua__request_8c_a05f03dbdc4bdde95ef1d4f90c4d606e4}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!req\+\_\+field\+\_\+string\+\_\+f@{req\+\_\+field\+\_\+string\+\_\+f}}
+\index{req\+\_\+field\+\_\+string\+\_\+f@{req\+\_\+field\+\_\+string\+\_\+f}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{req\+\_\+field\+\_\+string\+\_\+f}{req_field_string_f}}]{\setlength{\rightskip}{0pt plus 5cm}typedef char$\ast$($\ast$ req\+\_\+field\+\_\+string\+\_\+f) ({\bf request\+\_\+rec} $\ast${\bf r})}\hypertarget{lua__request_8c_abaf1816b651ae0608a2692f7a1ea73e9}{}\label{lua__request_8c_abaf1816b651ae0608a2692f7a1ea73e9}
+
+
+\subsection{Function Documentation}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!ap\+\_\+lua\+\_\+load\+\_\+request\+\_\+lmodule@{ap\+\_\+lua\+\_\+load\+\_\+request\+\_\+lmodule}}
+\index{ap\+\_\+lua\+\_\+load\+\_\+request\+\_\+lmodule@{ap\+\_\+lua\+\_\+load\+\_\+request\+\_\+lmodule}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+load\+\_\+request\+\_\+lmodule(lua\+\_\+\+State $\ast$\+L, apr\+\_\+pool\+\_\+t $\ast$p)}{ap_lua_load_request_lmodule(lua_State *L, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+lua\+\_\+load\+\_\+request\+\_\+lmodule (
+\begin{DoxyParamCaption}
+\item[{lua\+\_\+\+State $\ast$}]{L, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__request_8c_afb96e7f7fe9a1bd92b4c8b9e263f2ccc}{}\label{lua__request_8c_afb96e7f7fe9a1bd92b4c8b9e263f2ccc}
+Licensed to the \hyperlink{namespaceApache}{Apache} Software Foundation (A\+SF) under one or more contributor license agreements. See the N\+O\+T\+I\+CE file distributed with this work for additional information regarding copyright ownership. The A\+SF licenses this file to You under the \hyperlink{namespaceApache}{Apache} License, Version 2.\+0 (the \char`\"{}\+License\char`\"{}); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+\href{http://www.apache.org/licenses/LICENSE-2.0}{\tt http\+://www.\+apache.\+org/licenses/\+L\+I\+C\+E\+N\+S\+E-\/2.\+0}
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \char`\"{}\+A\+S I\+S\char`\"{} B\+A\+S\+IS, W\+I\+T\+H\+O\+UT W\+A\+R\+R\+A\+N\+T\+I\+ES OR C\+O\+N\+D\+I\+T\+I\+O\+NS OF A\+NY K\+I\+ND, either express or implied. See the License for the specific language governing permissions and limitations under the License. 
+\begin{DoxyCode}
+2707 \{
+2708 
+2709     \hyperlink{structapr__hash__t}{apr\_hash\_t} *dispatch = apr\_hash\_make(p);
+2710 
+2711     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"puts"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2712                  makefun(&req\_puts, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2713     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"write"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2714                  makefun(&req\_write, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2715     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"document\_root"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2716                  makefun(&req\_document\_root, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2717     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"context\_prefix"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2718                  makefun(&req\_context\_prefix, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2719     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"context\_document\_root"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2720                  makefun(&req\_context\_document\_root, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2721     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"parseargs"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2722                  makefun(&req\_parseargs, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2723     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"parsebody"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2724                  makefun(&req\_parsebody, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2725     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"debug"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2726                  makefun(&req\_debug, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2727     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"info"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2728                  makefun(&req\_info, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2729     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"notice"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2730                  makefun(&req\_notice, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2731     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"warn"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2732                  makefun(&req\_warn, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2733     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"err"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2734                  makefun(&req\_err, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2735     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"crit"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2736                  makefun(&req\_crit, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2737     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"alert"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2738                  makefun(&req\_alert, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2739     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"emerg"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2740                  makefun(&req\_emerg, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2741     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"trace1"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2742                  makefun(&req\_trace1, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2743     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"trace2"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2744                  makefun(&req\_trace2, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2745     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"trace3"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2746                  makefun(&req\_trace3, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2747     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"trace4"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2748                  makefun(&req\_trace4, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2749     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"trace5"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2750                  makefun(&req\_trace5, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2751     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"trace6"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2752                  makefun(&req\_trace6, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2753     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"trace7"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2754                  makefun(&req\_trace7, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2755     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"trace8"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2756                  makefun(&req\_trace8, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2757     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"add\_output\_filter"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2758                  makefun(&req\_add\_output\_filter, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2759     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"construct\_url"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2760                  makefun(&req\_construct\_url, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2761     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"escape\_html"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2762                  makefun(&req\_escape\_html, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2763     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"ssl\_var\_lookup"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2764                  makefun(&req\_ssl\_var\_lookup, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2765     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"is\_https"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2766                  makefun(&req\_ssl\_is\_https\_field, \hyperlink{lua__request_8h_a9cc711c0c492be24c78abfce5046bf3a}{APL\_REQ\_FUNTYPE\_BOOLEAN}, p));
+2767     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"assbackwards"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2768                  makefun(&req\_assbackwards\_field, \hyperlink{lua__request_8h_a9cc711c0c492be24c78abfce5046bf3a}{APL\_REQ\_FUNTYPE\_BOOLEAN}, p));
+2769     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"status"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2770                  makefun(&req\_status\_field, \hyperlink{lua__request_8h_ad48b09936d0790dbeffcf765c551c8f3}{APL\_REQ\_FUNTYPE\_INT}, p));
+2771     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"protocol"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2772                  makefun(&req\_protocol\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2773     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"range"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2774                  makefun(&req\_range\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2775     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"content\_type"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2776                  makefun(&req\_content\_type\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2777     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"content\_encoding"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2778                  makefun(&req\_content\_encoding\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING},
+2779                          p));
+2780     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"ap\_auth\_type"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2781                  makefun(&req\_ap\_auth\_type\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2782     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"unparsed\_uri"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2783                  makefun(&req\_unparsed\_uri\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2784     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"user"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2785                  makefun(&req\_user\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2786     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"filename"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2787                  makefun(&req\_filename\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2788     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"canonical\_filename"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2789                  makefun(&req\_canonical\_filename\_field,
+2790                          \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2791     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"path\_info"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2792                  makefun(&req\_path\_info\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2793     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"args"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2794                  makefun(&req\_args\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2795     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"handler"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2796                  makefun(&req\_handler\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2797     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"hostname"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2798                  makefun(&req\_hostname\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2799     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"uri"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2800                  makefun(&req\_uri\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2801     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"the\_request"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2802                  makefun(&req\_the\_request\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2803     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"log\_id"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2804                  makefun(&req\_log\_id\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2805     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"useragent\_ip"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2806                  makefun(&req\_useragent\_ip\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2807     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"method"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2808                  makefun(&req\_method\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2809     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"proxyreq"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2810                  makefun(&req\_proxyreq\_field, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2811     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"headers\_in"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2812                  makefun(&req\_headers\_in, \hyperlink{lua__request_8h_a75e289e6a3d02b655121a18fb0a9de68}{APL\_REQ\_FUNTYPE\_TABLE}, p));
+2813     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"headers\_out"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2814                  makefun(&req\_headers\_out, \hyperlink{lua__request_8h_a75e289e6a3d02b655121a18fb0a9de68}{APL\_REQ\_FUNTYPE\_TABLE}, p));
+2815     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"err\_headers\_out"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2816                  makefun(&req\_err\_headers\_out, \hyperlink{lua__request_8h_a75e289e6a3d02b655121a18fb0a9de68}{APL\_REQ\_FUNTYPE\_TABLE}, p));
+2817     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"notes"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2818                  makefun(&req\_notes, \hyperlink{lua__request_8h_a75e289e6a3d02b655121a18fb0a9de68}{APL\_REQ\_FUNTYPE\_TABLE}, p));
+2819     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"subprocess\_env"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2820                  makefun(&req\_subprocess\_env, \hyperlink{lua__request_8h_a75e289e6a3d02b655121a18fb0a9de68}{APL\_REQ\_FUNTYPE\_TABLE}, p));
+2821     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"flush"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2822                  makefun(&lua\_ap\_rflush, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2823     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"port"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2824                  makefun(&req\_ap\_get\_server\_port, \hyperlink{lua__request_8h_ad48b09936d0790dbeffcf765c551c8f3}{APL\_REQ\_FUNTYPE\_INT}, p));
+2825     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"banner"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2826                  makefun(&ap\_get\_server\_banner, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2827     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"options"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2828                  makefun(&lua\_ap\_options, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2829     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"allowoverrides"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2830                  makefun(&lua\_ap\_allowoverrides, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2831     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"started"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2832                  makefun(&lua\_ap\_started, \hyperlink{lua__request_8h_ad48b09936d0790dbeffcf765c551c8f3}{APL\_REQ\_FUNTYPE\_INT}, p));
+2833     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"basic\_auth\_pw"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2834                  makefun(&lua\_ap\_basic\_auth\_pw, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2835     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"limit\_req\_body"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2836                  makefun(&lua\_ap\_limit\_req\_body, \hyperlink{lua__request_8h_ad48b09936d0790dbeffcf765c551c8f3}{APL\_REQ\_FUNTYPE\_INT}, p));
+2837     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"server\_built"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2838                  makefun(&ap\_get\_server\_built, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2839     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"is\_initial\_req"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2840                  makefun(&lua\_ap\_is\_initial\_req, \hyperlink{lua__request_8h_a9cc711c0c492be24c78abfce5046bf3a}{APL\_REQ\_FUNTYPE\_BOOLEAN}, p));
+2841     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"remaining"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2842                  makefun(&req\_remaining\_field, \hyperlink{lua__request_8h_ad48b09936d0790dbeffcf765c551c8f3}{APL\_REQ\_FUNTYPE\_INT}, p));
+2843     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"some\_auth\_required"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2844                  makefun(&lua\_ap\_some\_auth\_required, \hyperlink{lua__request_8h_a9cc711c0c492be24c78abfce5046bf3a}{APL\_REQ\_FUNTYPE\_BOOLEAN}, p));
+2845     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"server\_name"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2846                  makefun(&lua\_ap\_get\_server\_name, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2847     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"auth\_name"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2848                  makefun(&lua\_ap\_auth\_name, \hyperlink{lua__request_8h_a04c12df53d63b53fc27f7bb016f19a00}{APL\_REQ\_FUNTYPE\_STRING}, p));
+2849     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"sendfile"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2850                  makefun(&lua\_ap\_sendfile, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2851     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"dbacquire"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2852                  makefun(&\hyperlink{lua__dbd_8c_aa9e1b942d64e0cb3ce05ba6c8715661f}{lua\_db\_acquire}, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p))
+      ;
+2853     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"stat"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2854                  makefun(&lua\_ap\_stat, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2855     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"get\_direntries"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2856                  makefun(&lua\_ap\_getdir, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2857     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"regex"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2858                  makefun(&lua\_ap\_regex, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2859     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"usleep"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2860                  makefun(&lua\_ap\_usleep, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2861     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"base64\_encode"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2862                  makefun(&lua\_apr\_b64encode, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2863     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"base64\_decode"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2864                  makefun(&lua\_apr\_b64decode, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2865     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"md5"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2866                  makefun(&lua\_apr\_md5, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2867     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"sha1"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2868                  makefun(&lua\_apr\_sha1, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2869     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"htpassword"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2870                  makefun(&lua\_apr\_htpassword, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2871     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"touch"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2872                  makefun(&lua\_apr\_touch, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2873     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"mkdir"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2874                  makefun(&lua\_apr\_mkdir, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2875     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"mkrdir"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2876                  makefun(&lua\_apr\_mkrdir, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2877     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"rmdir"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2878                  makefun(&lua\_apr\_rmdir, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2879     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"date\_parse\_rfc"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2880                  makefun(&lua\_apr\_date\_parse\_rfc, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2881     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"escape"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2882                  makefun(&lua\_ap\_escape, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2883     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"unescape"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2884                  makefun(&lua\_ap\_unescape, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2885     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"mpm\_query"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2886                  makefun(&lua\_ap\_mpm\_query, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2887     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"expr"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2888                  makefun(&lua\_ap\_expr, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2889     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"scoreboard\_process"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2890                  makefun(&lua\_ap\_scoreboard\_process, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2891     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"scoreboard\_worker"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2892                  makefun(&lua\_ap\_scoreboard\_worker, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2893     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"clock"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2894                  makefun(&lua\_ap\_clock, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2895     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"requestbody"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2896                  makefun(&lua\_ap\_requestbody, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2897     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"add\_input\_filter"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2898                  makefun(&lua\_ap\_add\_input\_filter, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2899     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"module\_info"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2900                  makefun(&lua\_ap\_module\_info, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2901     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"loaded\_modules"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2902                  makefun(&lua\_ap\_loaded\_modules, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2903     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"runtime\_dir\_relative"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2904                  makefun(&lua\_ap\_runtime\_dir\_relative, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2905     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"server\_info"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2906                  makefun(&lua\_ap\_server\_info, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2907     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"set\_document\_root"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2908                  makefun(&lua\_ap\_set\_document\_root, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2909     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"set\_context\_info"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2910                  makefun(&lua\_ap\_set\_context\_info, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2911     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"os\_escape\_path"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2912                  makefun(&lua\_ap\_os\_escape\_path, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2913     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"escape\_logitem"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2914                  makefun(&lua\_ap\_escape\_logitem, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2915     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"strcmp\_match"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2916                  makefun(&lua\_ap\_strcmp\_match, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2917     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"set\_keepalive"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2918                  makefun(&lua\_ap\_set\_keepalive, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2919     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"make\_etag"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2920                  makefun(&lua\_ap\_make\_etag, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2921     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"send\_interim\_response"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2922                  makefun(&lua\_ap\_send\_interim\_response, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p))
+      ;
+2923     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"custom\_response"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2924                  makefun(&lua\_ap\_custom\_response, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2925     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"exists\_config\_define"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2926                  makefun(&lua\_ap\_exists\_config\_define, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2927     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"state\_query"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2928                  makefun(&lua\_ap\_state\_query, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2929     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"get\_server\_name\_for\_url"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2930                  makefun(&lua\_ap\_get\_server\_name\_for\_url, 
+      \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2931     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"ivm\_get"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2932                  makefun(&lua\_ivm\_get, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2933     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"ivm\_set"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2934                  makefun(&lua\_ivm\_set, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2935     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"getcookie"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2936                  makefun(&lua\_get\_cookie, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2937     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"setcookie"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2938                  makefun(&lua\_set\_cookie, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2939     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"wsupgrade"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2940                  makefun(&lua\_websocket\_greet, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2941     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"wsread"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2942                  makefun(&lua\_websocket\_read, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2943     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"wspeek"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2944                  makefun(&lua\_websocket\_peek, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2945     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"wswrite"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2946                  makefun(&lua\_websocket\_write, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2947     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"wsclose"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2948                  makefun(&lua\_websocket\_close, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2949     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"wsping"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2950                  makefun(&lua\_websocket\_ping, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2951     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"config"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2952                  makefun(&lua\_ap\_get\_config, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2953     apr\_hash\_set(dispatch, \textcolor{stringliteral}{"activeconfig"}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING},
+2954                  makefun(&lua\_ap\_get\_active\_config, \hyperlink{lua__request_8h_a69ab3ac3b7225b484d622d0d01449e79}{APL\_REQ\_FUNTYPE\_LUACFUN}, p));
+2955     lua\_pushlightuserdata(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, dispatch);
+2956     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, LUA\_REGISTRYINDEX, \textcolor{stringliteral}{"Apache2.Request.dispatch"});
+2957 
+2958     luaL\_newmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"Apache2.Request"});     \textcolor{comment}{/* [metatable] */}
+2959     lua\_pushvalue(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -1);
+2960 
+2961     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2, \textcolor{stringliteral}{"\_\_index"});
+2962     \hyperlink{mod__lua_8h_a05ba5676064b16b65fa17317280b8768}{luaL\_setfuncs\_compat}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, request\_methods);    \textcolor{comment}{/* [metatable] */}
+2963 
+2964     lua\_pop(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 2);
+2965 
+2966     luaL\_newmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"Apache2.Connection"});  \textcolor{comment}{/* [metatable] */}
+2967     lua\_pushvalue(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -1);
+2968 
+2969     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2, \textcolor{stringliteral}{"\_\_index"});
+2970     \hyperlink{mod__lua_8h_a05ba5676064b16b65fa17317280b8768}{luaL\_setfuncs\_compat}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, connection\_methods); \textcolor{comment}{/* [metatable] */}
+2971 
+2972     lua\_pop(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 2);
+2973 
+2974     luaL\_newmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"Apache2.Server"});      \textcolor{comment}{/* [metatable] */}
+2975     lua\_pushvalue(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -1);
+2976 
+2977     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2, \textcolor{stringliteral}{"\_\_index"});
+2978     \hyperlink{mod__lua_8h_a05ba5676064b16b65fa17317280b8768}{luaL\_setfuncs\_compat}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, server\_methods);     \textcolor{comment}{/* [metatable] */}
+2979 
+2980     lua\_pop(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 2);
+2981 
+2982 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{lua__request_8c_afb96e7f7fe9a1bd92b4c8b9e263f2ccc_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!ap\+\_\+lua\+\_\+push\+\_\+connection@{ap\+\_\+lua\+\_\+push\+\_\+connection}}
+\index{ap\+\_\+lua\+\_\+push\+\_\+connection@{ap\+\_\+lua\+\_\+push\+\_\+connection}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+push\+\_\+connection(lua\+\_\+\+State $\ast$\+L, conn\+\_\+rec $\ast$c)}{ap_lua_push_connection(lua_State *L, conn_rec *c)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+lua\+\_\+push\+\_\+connection (
+\begin{DoxyParamCaption}
+\item[{lua\+\_\+\+State $\ast$}]{L, }
+\item[{{\bf conn\+\_\+rec} $\ast$}]{c}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__request_8c_a4ff5811017cc87436f8a1968b23a2eac}{}\label{lua__request_8c_a4ff5811017cc87436f8a1968b23a2eac}
+
+\begin{DoxyCode}
+2985 \{
+2986     \hyperlink{structreq__table__t}{req\_table\_t}* \hyperlink{group__APACHE__CORE__DAEMON_gabfa74bb4f05f3b2de1a89160025e5400}{t};
+2987     lua\_boxpointer(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, c);
+2988     luaL\_getmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"Apache2.Connection"});
+2989     lua\_setmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2);
+2990     luaL\_getmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"Apache2.Connection"});
+2991 
+2992     t = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(c->\hyperlink{structconn__rec_a1dc5f31c7afc4a6f9c4ede0daea8cd1d}{pool}, \textcolor{keyword}{sizeof}(\hyperlink{structreq__table__t}{req\_table\_t}));
+2993     t->\hyperlink{structreq__table__t_a7a4d025a7e0edc9fb3c11fe64ad05817}{t} = c->\hyperlink{structconn__rec_a7ca7fb2d3bb81f91764bc960686a4fcf}{notes};
+2994     t->\hyperlink{structreq__table__t_a6e3dbb50859ac07a590b0b0ccc9a6e91}{r} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+2995     t->\hyperlink{structreq__table__t_a0e23b1ff47dd10e67523eed26ddde26d}{n} = \textcolor{stringliteral}{"notes"};
+2996     \hyperlink{lua__apr_8c_ac32161938f04bf59bc15b6b40dc54c0a}{ap\_lua\_push\_apr\_table}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, t);
+2997     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2, \textcolor{stringliteral}{"notes"});
+2998 
+2999     lua\_pushstring(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, c->\hyperlink{structconn__rec_a792faf741c8f0f87587089e194360fba}{client\_ip});
+3000     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2, \textcolor{stringliteral}{"client\_ip"});
+3001 
+3002     lua\_pop(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 1);
+3003 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{lua__request_8c_a4ff5811017cc87436f8a1968b23a2eac_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!ap\+\_\+lua\+\_\+push\+\_\+request@{ap\+\_\+lua\+\_\+push\+\_\+request}}
+\index{ap\+\_\+lua\+\_\+push\+\_\+request@{ap\+\_\+lua\+\_\+push\+\_\+request}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+push\+\_\+request(lua\+\_\+\+State $\ast$\+L, request\+\_\+rec $\ast$r)}{ap_lua_push_request(lua_State *L, request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+lua\+\_\+push\+\_\+request (
+\begin{DoxyParamCaption}
+\item[{lua\+\_\+\+State $\ast$}]{L, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__request_8c_a93c3bfc7e93d3bb2371cb066bb7fa36a}{}\label{lua__request_8c_a93c3bfc7e93d3bb2371cb066bb7fa36a}
+
+\begin{DoxyCode}
+3020 \{
+3021     lua\_boxpointer(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, r);
+3022     luaL\_getmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"Apache2.Request"});
+3023     lua\_setmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2);
+3024 \}
+\end{DoxyCode}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!ap\+\_\+lua\+\_\+push\+\_\+server@{ap\+\_\+lua\+\_\+push\+\_\+server}}
+\index{ap\+\_\+lua\+\_\+push\+\_\+server@{ap\+\_\+lua\+\_\+push\+\_\+server}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+push\+\_\+server(lua\+\_\+\+State $\ast$\+L, server\+\_\+rec $\ast$s)}{ap_lua_push_server(lua_State *L, server_rec *s)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+lua\+\_\+push\+\_\+server (
+\begin{DoxyParamCaption}
+\item[{lua\+\_\+\+State $\ast$}]{L, }
+\item[{{\bf server\+\_\+rec} $\ast$}]{s}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__request_8c_a82a2f3dc15d9f038b104d9fd29caf16b}{}\label{lua__request_8c_a82a2f3dc15d9f038b104d9fd29caf16b}
+
+\begin{DoxyCode}
+3007 \{
+3008     lua\_boxpointer(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, s);
+3009     luaL\_getmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"Apache2.Server"});
+3010     lua\_setmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2);
+3011     luaL\_getmetatable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"Apache2.Server"});
+3012 
+3013     lua\_pushstring(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, s->\hyperlink{structserver__rec_aa4841163cff5e708d1e125ccbbd5fe35}{server\_hostname});
+3014     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2, \textcolor{stringliteral}{"server\_hostname"});
+3015 
+3016     lua\_pop(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 1);
+3017 \}
+\end{DoxyCode}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!ap\+\_\+lua\+\_\+rstack\+\_\+dump@{ap\+\_\+lua\+\_\+rstack\+\_\+dump}}
+\index{ap\+\_\+lua\+\_\+rstack\+\_\+dump@{ap\+\_\+lua\+\_\+rstack\+\_\+dump}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+rstack\+\_\+dump(lua\+\_\+\+State $\ast$\+L, request\+\_\+rec $\ast$r, const char $\ast$msg)}{ap_lua_rstack_dump(lua_State *L, request_rec *r, const char *msg)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+lua\+\_\+rstack\+\_\+dump (
+\begin{DoxyParamCaption}
+\item[{lua\+\_\+\+State $\ast$}]{L, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r, }
+\item[{const char $\ast$}]{msg}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__request_8c_a58c9cac34d74732609ab2f4d579e9ff8}{}\label{lua__request_8c_a58c9cac34d74732609ab2f4d579e9ff8}
+make a userdata out of a C pointer, and vice versa instead of using lightuserdata 
+\begin{DoxyCode}
+51 \{
+52     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+53     \textcolor{keywordtype}{int} top = lua\_gettop(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L});
+54     \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(01484) \textcolor{stringliteral}{"Lua Stack Dump: [%s]"}, msg);
+55     \textcolor{keywordflow}{for} (i = 1; i <= top; i++) \{
+56         \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__DAEMON_gabfa74bb4f05f3b2de1a89160025e5400}{t} = lua\_type(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, i);
+57         \textcolor{keywordflow}{switch} (t) \{
+58         \textcolor{keywordflow}{case} LUA\_TSTRING:\{
+59                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03001)
+60                               \textcolor{stringliteral}{"%d:  '%s'"}, i, lua\_tostring(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, i));
+61                 \textcolor{keywordflow}{break};
+62             \}
+63         \textcolor{keywordflow}{case} LUA\_TUSERDATA:\{
+64                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03002)
+65                               \textcolor{stringliteral}{"%d:  userdata"}, i);
+66                 \textcolor{keywordflow}{break};
+67             \}
+68         \textcolor{keywordflow}{case} LUA\_TLIGHTUSERDATA:\{
+69                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03003)
+70                               \textcolor{stringliteral}{"%d:  lightuserdata"}, i);
+71                 \textcolor{keywordflow}{break};
+72             \}
+73         \textcolor{keywordflow}{case} LUA\_TNIL:\{
+74                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03004)
+75                               \textcolor{stringliteral}{"%d:  NIL"}, i);
+76                 \textcolor{keywordflow}{break};
+77             \}
+78         \textcolor{keywordflow}{case} LUA\_TNONE:\{
+79                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03005)
+80                               \textcolor{stringliteral}{"%d:  None"}, i);
+81                 \textcolor{keywordflow}{break};
+82             \}
+83         \textcolor{keywordflow}{case} LUA\_TBOOLEAN:\{
+84                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03006)
+85                               \textcolor{stringliteral}{"%d:  %s"}, i,
+86                               lua\_toboolean(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, i) ? \textcolor{stringliteral}{"true"} : \textcolor{stringliteral}{"false"});
+87                 \textcolor{keywordflow}{break};
+88             \}
+89         \textcolor{keywordflow}{case} LUA\_TNUMBER:\{
+90                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03007)
+91                               \textcolor{stringliteral}{"%d:  %g"}, i, lua\_tonumber(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, i));
+92                 \textcolor{keywordflow}{break};
+93             \}
+94         \textcolor{keywordflow}{case} LUA\_TTABLE:\{
+95                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03008)
+96                               \textcolor{stringliteral}{"%d:  <table>"}, i);
+97                 \textcolor{keywordflow}{break};
+98             \}
+99         \textcolor{keywordflow}{case} LUA\_TFUNCTION:\{
+100                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03009)
+101                               \textcolor{stringliteral}{"%d:  <function>"}, i);
+102                 \textcolor{keywordflow}{break};
+103             \}
+104         \textcolor{keywordflow}{default}:\{
+105                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}, 0, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03010)
+106                               \textcolor{stringliteral}{"%d:  unknown: -[%s]-"}, i, lua\_typename(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, i));
+107                 \textcolor{keywordflow}{break};
+108             \}
+109         \}
+110     \}
+111 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{lua__request_8c_a58c9cac34d74732609ab2f4d579e9ff8_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+L\+E(lua)}{APLOG_USE_MODULE(lua)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{lua}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__request_8c_a8a924a2ae75955f480f27c800e6eca36}{}\label{lua__request_8c_a8a924a2ae75955f480f27c800e6eca36}
+
+
+\subsection{Variable Documentation}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!lua\+\_\+ivm\+\_\+mutex@{lua\+\_\+ivm\+\_\+mutex}}
+\index{lua\+\_\+ivm\+\_\+mutex@{lua\+\_\+ivm\+\_\+mutex}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+ivm\+\_\+mutex}{lua_ivm_mutex}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+global\+\_\+mutex\+\_\+t}$\ast$ lua\+\_\+ivm\+\_\+mutex}\hypertarget{lua__request_8c_a1da5ec2434f85566057dab42de51edab}{}\label{lua__request_8c_a1da5ec2434f85566057dab42de51edab}
+\index{lua\+\_\+request.\+c@{lua\+\_\+request.\+c}!lua\+\_\+ivm\+\_\+shm@{lua\+\_\+ivm\+\_\+shm}}
+\index{lua\+\_\+ivm\+\_\+shm@{lua\+\_\+ivm\+\_\+shm}!lua\+\_\+request.\+c@{lua\+\_\+request.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+ivm\+\_\+shm}{lua_ivm_shm}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+shm\+\_\+t}$\ast$ lua\+\_\+ivm\+\_\+shm}\hypertarget{lua__request_8c_aea31fa244d0c45f98d277fa34cc0218a}{}\label{lua__request_8c_aea31fa244d0c45f98d277fa34cc0218a}

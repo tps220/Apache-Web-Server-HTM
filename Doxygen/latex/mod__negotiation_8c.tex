@@ -1,0 +1,181 @@
+\hypertarget{mod__negotiation_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/mappers/mod\+\_\+negotiation.c File Reference}
+\label{mod__negotiation_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/mappers/mod\+\_\+negotiation.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/mappers/mod\+\_\+negotiation.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+script.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+negotiation.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__negotiation_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structneg__dir__config}{neg\+\_\+dir\+\_\+config}
+\item 
+struct \hyperlink{structaccept__rec}{accept\+\_\+rec}
+\item 
+struct \hyperlink{structvar__rec}{var\+\_\+rec}
+\item 
+struct \hyperlink{structnegotiation__state}{negotiation\+\_\+state}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__negotiation_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__negotiation_8c_a607f2f03a77340134013549aeb339d42}{M\+A\+P\+\_\+\+F\+I\+L\+E\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE}~\char`\"{}application/\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}-\/\hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type}-\/map\char`\"{}
+\item 
+\#define \hyperlink{mod__negotiation_8c_a304b34a93781f240e99e8e4198e7cb7d}{F\+L\+P\+\_\+\+U\+N\+D\+EF}~0    /$\ast$ Same \hyperlink{pcretest_8txt_a7681723cb91eaa99771ee87f8465c1aa}{as} \hyperlink{mod__negotiation_8c_a723845427df390b2ae580dd90129cc9e}{F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT}, but \hyperlink{group__apr__tables_ga74964146831939c658b798439fc32f6d}{base} overrides $\ast$/
+\item 
+\#define \hyperlink{mod__negotiation_8c_a316c18377c8d43c4dcd58d22688d582c}{F\+L\+P\+\_\+\+N\+O\+NE}~1    /$\ast$ Return 406, \hyperlink{group__HTTP__Status_gacb89221da09275b64daddfb415644055}{H\+T\+T\+P\+\_\+\+N\+O\+T\+\_\+\+A\+C\+C\+E\+P\+T\+A\+B\+LE} $\ast$/
+\item 
+\#define \hyperlink{mod__negotiation_8c_a38ea90b717b32f3831a3e28139b70174}{F\+L\+P\+\_\+\+P\+R\+E\+F\+ER}~2    /$\ast$ Use language\+\_\+priority rather \hyperlink{pcre_8txt_af2fdb07d3097b68fca970a5c282c7680}{than} MC $\ast$/
+\item 
+\#define \hyperlink{mod__negotiation_8c_a2141465c7e8478db04b02697493d2547}{F\+L\+P\+\_\+\+F\+A\+L\+L\+B\+A\+CK}~4    /$\ast$ Use language\+\_\+priority rather \hyperlink{pcre_8txt_af2fdb07d3097b68fca970a5c282c7680}{than} NA $\ast$/
+\item 
+\#define \hyperlink{mod__negotiation_8c_a723845427df390b2ae580dd90129cc9e}{F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT}~\hyperlink{mod__negotiation_8c_a38ea90b717b32f3831a3e28139b70174}{F\+L\+P\+\_\+\+P\+R\+E\+F\+ER}
+\item 
+\#define \hyperlink{mod__negotiation_8c_a0d3d2ab390169b5d75c39c18b064a38c}{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+E\+N\+C\+O\+D\+I\+N\+GS}~1  /$\ast$ no-\/gzip $\ast$/
+\item 
+\#define \hyperlink{mod__negotiation_8c_a61f8685ed166532070697320d2903b39}{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+B\+U\+T\+\_\+\+H\+T\+ML}~2  /$\ast$ gzip-\/only-\/\hyperlink{pcretest_8txt_ad4baa4bf79e72e8b68dcaf4f273f8d7f}{text}/html $\ast$/
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structaccept__rec}{accept\+\_\+rec} \hyperlink{mod__negotiation_8c_a985385916bb35fe0bce9d86b580098d5}{accept\+\_\+rec}
+\item 
+typedef struct \hyperlink{structvar__rec}{var\+\_\+rec} \hyperlink{mod__negotiation_8c_a3124d4063877e97a43efed6507f6c47b}{var\+\_\+rec}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5}{header\+\_\+state} \{ \hyperlink{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5abb4396e2c12f854dc708c169b0477db9}{header\+\_\+eof}, 
+\hyperlink{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5aa54f2076069d528ca561513a0263931b}{header\+\_\+seen}, 
+\hyperlink{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5a590fc7d6d8571c6681afc3ff508a7181}{header\+\_\+sep}
+ \}
+\item 
+enum \hyperlink{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14}{algorithm\+\_\+results} \{ \hyperlink{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14a94ee60bd57276c75343cf253fed582f2}{alg\+\_\+choice} = 1, 
+\hyperlink{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14a7abc24e4b2260e7da9cbb73f65944982}{alg\+\_\+list}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__negotiation_8c_a053f83de23a1c87b0fdf8cdfdf2eff4f}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (negotiation)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__negotiation_8c_a57a92f6a5ee12d126d71ea705195d283}{negotiation\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__negotiation_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__negotiation_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+B\+U\+T\+\_\+\+H\+T\+ML@{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+B\+U\+T\+\_\+\+H\+T\+ML}}
+\index{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+B\+U\+T\+\_\+\+H\+T\+ML@{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+B\+U\+T\+\_\+\+H\+T\+ML}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+B\+U\+T\+\_\+\+H\+T\+ML}{DISCARD_ALL_BUT_HTML}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+B\+U\+T\+\_\+\+H\+T\+ML~2  /$\ast$ gzip-\/only-\/{\bf text}/html $\ast$/}\hypertarget{mod__negotiation_8c_a61f8685ed166532070697320d2903b39}{}\label{mod__negotiation_8c_a61f8685ed166532070697320d2903b39}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+E\+N\+C\+O\+D\+I\+N\+GS@{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+E\+N\+C\+O\+D\+I\+N\+GS}}
+\index{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+E\+N\+C\+O\+D\+I\+N\+GS@{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+E\+N\+C\+O\+D\+I\+N\+GS}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+E\+N\+C\+O\+D\+I\+N\+GS}{DISCARD_ALL_ENCODINGS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+I\+S\+C\+A\+R\+D\+\_\+\+A\+L\+L\+\_\+\+E\+N\+C\+O\+D\+I\+N\+GS~1  /$\ast$ no-\/gzip $\ast$/}\hypertarget{mod__negotiation_8c_a0d3d2ab390169b5d75c39c18b064a38c}{}\label{mod__negotiation_8c_a0d3d2ab390169b5d75c39c18b064a38c}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT@{F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT}}
+\index{F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT@{F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT}{FLP_DEFAULT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT~{\bf F\+L\+P\+\_\+\+P\+R\+E\+F\+ER}}\hypertarget{mod__negotiation_8c_a723845427df390b2ae580dd90129cc9e}{}\label{mod__negotiation_8c_a723845427df390b2ae580dd90129cc9e}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!F\+L\+P\+\_\+\+F\+A\+L\+L\+B\+A\+CK@{F\+L\+P\+\_\+\+F\+A\+L\+L\+B\+A\+CK}}
+\index{F\+L\+P\+\_\+\+F\+A\+L\+L\+B\+A\+CK@{F\+L\+P\+\_\+\+F\+A\+L\+L\+B\+A\+CK}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{F\+L\+P\+\_\+\+F\+A\+L\+L\+B\+A\+CK}{FLP_FALLBACK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\+L\+P\+\_\+\+F\+A\+L\+L\+B\+A\+CK~4    /$\ast$ Use language\+\_\+priority rather {\bf than} NA $\ast$/}\hypertarget{mod__negotiation_8c_a2141465c7e8478db04b02697493d2547}{}\label{mod__negotiation_8c_a2141465c7e8478db04b02697493d2547}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!F\+L\+P\+\_\+\+N\+O\+NE@{F\+L\+P\+\_\+\+N\+O\+NE}}
+\index{F\+L\+P\+\_\+\+N\+O\+NE@{F\+L\+P\+\_\+\+N\+O\+NE}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{F\+L\+P\+\_\+\+N\+O\+NE}{FLP_NONE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\+L\+P\+\_\+\+N\+O\+NE~1    /$\ast$ Return 406, {\bf H\+T\+T\+P\+\_\+\+N\+O\+T\+\_\+\+A\+C\+C\+E\+P\+T\+A\+B\+LE} $\ast$/}\hypertarget{mod__negotiation_8c_a316c18377c8d43c4dcd58d22688d582c}{}\label{mod__negotiation_8c_a316c18377c8d43c4dcd58d22688d582c}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!F\+L\+P\+\_\+\+P\+R\+E\+F\+ER@{F\+L\+P\+\_\+\+P\+R\+E\+F\+ER}}
+\index{F\+L\+P\+\_\+\+P\+R\+E\+F\+ER@{F\+L\+P\+\_\+\+P\+R\+E\+F\+ER}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{F\+L\+P\+\_\+\+P\+R\+E\+F\+ER}{FLP_PREFER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\+L\+P\+\_\+\+P\+R\+E\+F\+ER~2    /$\ast$ Use language\+\_\+priority rather {\bf than} MC $\ast$/}\hypertarget{mod__negotiation_8c_a38ea90b717b32f3831a3e28139b70174}{}\label{mod__negotiation_8c_a38ea90b717b32f3831a3e28139b70174}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!F\+L\+P\+\_\+\+U\+N\+D\+EF@{F\+L\+P\+\_\+\+U\+N\+D\+EF}}
+\index{F\+L\+P\+\_\+\+U\+N\+D\+EF@{F\+L\+P\+\_\+\+U\+N\+D\+EF}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{F\+L\+P\+\_\+\+U\+N\+D\+EF}{FLP_UNDEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\+L\+P\+\_\+\+U\+N\+D\+EF~0    /$\ast$ Same {\bf as} {\bf F\+L\+P\+\_\+\+D\+E\+F\+A\+U\+LT}, but {\bf base} overrides $\ast$/}\hypertarget{mod__negotiation_8c_a304b34a93781f240e99e8e4198e7cb7d}{}\label{mod__negotiation_8c_a304b34a93781f240e99e8e4198e7cb7d}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!M\+A\+P\+\_\+\+F\+I\+L\+E\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE@{M\+A\+P\+\_\+\+F\+I\+L\+E\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE}}
+\index{M\+A\+P\+\_\+\+F\+I\+L\+E\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE@{M\+A\+P\+\_\+\+F\+I\+L\+E\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+P\+\_\+\+F\+I\+L\+E\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE}{MAP_FILE_MAGIC_TYPE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+P\+\_\+\+F\+I\+L\+E\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE~\char`\"{}application/{\bf x}-\/{\bf type}-\/map\char`\"{}}\hypertarget{mod__negotiation_8c_a607f2f03a77340134013549aeb339d42}{}\label{mod__negotiation_8c_a607f2f03a77340134013549aeb339d42}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!accept\+\_\+rec@{accept\+\_\+rec}}
+\index{accept\+\_\+rec@{accept\+\_\+rec}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{accept\+\_\+rec}{accept_rec}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf accept\+\_\+rec}  {\bf accept\+\_\+rec}}\hypertarget{mod__negotiation_8c_a985385916bb35fe0bce9d86b580098d5}{}\label{mod__negotiation_8c_a985385916bb35fe0bce9d86b580098d5}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!var\+\_\+rec@{var\+\_\+rec}}
+\index{var\+\_\+rec@{var\+\_\+rec}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{var\+\_\+rec}{var_rec}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf var\+\_\+rec}  {\bf var\+\_\+rec}}\hypertarget{mod__negotiation_8c_a3124d4063877e97a43efed6507f6c47b}{}\label{mod__negotiation_8c_a3124d4063877e97a43efed6507f6c47b}
+
+
+\subsection{Enumeration Type Documentation}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!algorithm\+\_\+results@{algorithm\+\_\+results}}
+\index{algorithm\+\_\+results@{algorithm\+\_\+results}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{algorithm\+\_\+results}{algorithm_results}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf algorithm\+\_\+results}}\hypertarget{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14}{}\label{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{alg\+\_\+choice@{alg\+\_\+choice}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!alg\+\_\+choice@{alg\+\_\+choice}}\item[{\em 
+alg\+\_\+choice\hypertarget{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14a94ee60bd57276c75343cf253fed582f2}{}\label{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14a94ee60bd57276c75343cf253fed582f2}
+}]\index{alg\+\_\+list@{alg\+\_\+list}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!alg\+\_\+list@{alg\+\_\+list}}\item[{\em 
+alg\+\_\+list\hypertarget{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14a7abc24e4b2260e7da9cbb73f65944982}{}\label{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14a7abc24e4b2260e7da9cbb73f65944982}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+2010                        \{
+2011     \hyperlink{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14a94ee60bd57276c75343cf253fed582f2}{alg\_choice} = 1,              \textcolor{comment}{/* choose variant */}
+2012     \hyperlink{mod__negotiation_8c_a285257b1657c9b130bad96876a5bdb14a7abc24e4b2260e7da9cbb73f65944982}{alg\_list}                     \textcolor{comment}{/* list variants */}
+2013 \};
+\end{DoxyCode}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!header\+\_\+state@{header\+\_\+state}}
+\index{header\+\_\+state@{header\+\_\+state}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{header\+\_\+state}{header_state}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf header\+\_\+state}}\hypertarget{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5}{}\label{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{header\+\_\+eof@{header\+\_\+eof}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!header\+\_\+eof@{header\+\_\+eof}}\item[{\em 
+header\+\_\+eof\hypertarget{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5abb4396e2c12f854dc708c169b0477db9}{}\label{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5abb4396e2c12f854dc708c169b0477db9}
+}]\index{header\+\_\+seen@{header\+\_\+seen}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!header\+\_\+seen@{header\+\_\+seen}}\item[{\em 
+header\+\_\+seen\hypertarget{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5aa54f2076069d528ca561513a0263931b}{}\label{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5aa54f2076069d528ca561513a0263931b}
+}]\index{header\+\_\+sep@{header\+\_\+sep}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!header\+\_\+sep@{header\+\_\+sep}}\item[{\em 
+header\+\_\+sep\hypertarget{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5a590fc7d6d8571c6681afc3ff508a7181}{}\label{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5a590fc7d6d8571c6681afc3ff508a7181}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+740                   \{
+741     \hyperlink{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5abb4396e2c12f854dc708c169b0477db9}{header\_eof}, \hyperlink{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5aa54f2076069d528ca561513a0263931b}{header\_seen}, \hyperlink{mod__negotiation_8c_aa8ef60fba5e305881afbb8b370ea21b5a590fc7d6d8571c6681afc3ff508a7181}{header\_sep}
+742 \};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(negotiation)}{AP_DECLARE_MODULE(negotiation)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{negotiation}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__negotiation_8c_a053f83de23a1c87b0fdf8cdfdf2eff4f}{}\label{mod__negotiation_8c_a053f83de23a1c87b0fdf8cdfdf2eff4f}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}!negotiation\+\_\+module@{negotiation\+\_\+module}}
+\index{negotiation\+\_\+module@{negotiation\+\_\+module}!mod\+\_\+negotiation.\+c@{mod\+\_\+negotiation.\+c}}
+\subsubsection[{\texorpdfstring{negotiation\+\_\+module}{negotiation_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} negotiation\+\_\+module}\hypertarget{mod__negotiation_8c_a57a92f6a5ee12d126d71ea705195d283}{}\label{mod__negotiation_8c_a57a92f6a5ee12d126d71ea705195d283}

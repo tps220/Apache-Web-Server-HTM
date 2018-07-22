@@ -1,0 +1,58 @@
+\hypertarget{errorcodes_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/misc/unix/errorcodes.c File Reference}
+\label{errorcodes_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/misc/unix/errorcodes.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/misc/unix/errorcodes.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+misc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+dso.\+h\char`\"{}}\\*
+Include dependency graph for errorcodes.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{errorcodes_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{errorcodes_8c_a7e0c911ec7c386c6dfa32610acee40e1}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (char $\ast$)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{errorcodes.\+c@{errorcodes.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}!errorcodes.\+c@{errorcodes.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E(char $\ast$)}{APR_DECLARE(char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{errorcodes_8c_a7e0c911ec7c386c6dfa32610acee40e1}{}\label{errorcodes_8c_a7e0c911ec7c386c6dfa32610acee40e1}
+
+\begin{DoxyCode}
+418 \{
+419     \textcolor{keywordflow}{if} (statcode < \hyperlink{group__apr__errno_ga191894048b7bd0cca3cf0bdff1eb695b}{APR\_OS\_START\_ERROR}) \{
+420         \textcolor{keywordflow}{return} native\_strerror(statcode, \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}, \hyperlink{group__APACHE__CORE__CONFIG_ga251f5b82593ed6f6b369185c5b220f82}{bufsize});
+421     \}
+422     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (statcode < \hyperlink{group__apr__errno_gacd35b2de1e38a1fa4717e38d5e153571}{APR\_OS\_START\_USERERR}) \{
+423         \textcolor{keywordflow}{return} stuffbuffer(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}, \hyperlink{group__APACHE__CORE__CONFIG_ga251f5b82593ed6f6b369185c5b220f82}{bufsize}, apr\_error\_string(statcode));
+424     \}
+425     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (statcode < \hyperlink{group__apr__errno_ga2d04991cb57c67a896e22125a1f22b49}{APR\_OS\_START\_EAIERR}) \{
+426         \textcolor{keywordflow}{return} stuffbuffer(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}, \hyperlink{group__APACHE__CORE__CONFIG_ga251f5b82593ed6f6b369185c5b220f82}{bufsize}, \textcolor{stringliteral}{"APR does not understand this error code"});
+427     \}
+428     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (statcode < \hyperlink{group__apr__errno_gad70a5cad6862a9abcc254d35e827ac8b}{APR\_OS\_START\_SYSERR}) \{
+429 \textcolor{preprocessor}{#if defined(HAVE\_GAI\_STRERROR)}
+430         statcode -= \hyperlink{group__apr__errno_ga2d04991cb57c67a896e22125a1f22b49}{APR\_OS\_START\_EAIERR};
+431 \textcolor{preprocessor}{#if defined(NEGATIVE\_EAI)}
+432         statcode = -statcode;
+433 \textcolor{preprocessor}{#endif}
+434         \textcolor{keywordflow}{return} stuffbuffer(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}, \hyperlink{group__APACHE__CORE__CONFIG_ga251f5b82593ed6f6b369185c5b220f82}{bufsize}, gai\_strerror(statcode));
+435 \textcolor{preprocessor}{#else}
+436         \textcolor{keywordflow}{return} stuffbuffer(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}, \hyperlink{group__APACHE__CORE__CONFIG_ga251f5b82593ed6f6b369185c5b220f82}{bufsize}, \textcolor{stringliteral}{"APR does not understand this error code"});
+437 \textcolor{preprocessor}{#endif}
+438     \}
+439     \textcolor{keywordflow}{else} \{
+440         \textcolor{keywordflow}{return} apr\_os\_strerror(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}, \hyperlink{group__APACHE__CORE__CONFIG_ga251f5b82593ed6f6b369185c5b220f82}{bufsize}, statcode - 
+      \hyperlink{group__apr__errno_gad70a5cad6862a9abcc254d35e827ac8b}{APR\_OS\_START\_SYSERR});
+441     \}
+442 \}
+\end{DoxyCode}

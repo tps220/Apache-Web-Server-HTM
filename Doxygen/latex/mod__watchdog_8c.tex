@@ -1,0 +1,77 @@
+\hypertarget{mod__watchdog_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/core/mod\+\_\+watchdog.c File Reference}
+\label{mod__watchdog_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/core/mod\+\_\+watchdog.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/core/mod\+\_\+watchdog.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+watchdog.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+mutex.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+watchdog.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__watchdog_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structwatchdog__list__t}{watchdog\+\_\+list\+\_\+t}
+\item 
+struct \hyperlink{structap__watchdog__t}{ap\+\_\+watchdog\+\_\+t}
+\item 
+struct \hyperlink{structwd__server__conf__t}{wd\+\_\+server\+\_\+conf\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__watchdog_8c_af05b68681de340dc2088755d70b4fa6d}{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+G\+R\+O\+UP}~\char`\"{}watchdog\char`\"{}
+\item 
+\#define \hyperlink{mod__watchdog_8c_af9ddf7dddb2330f7cdbcf5e63e50aea7}{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+V\+E\+R\+S\+I\+ON}~\char`\"{}parent\char`\"{}
+\item 
+\#define \hyperlink{mod__watchdog_8c_aae9c79cc43a99018ab29f1cc343663d5}{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+C\+V\+E\+R\+S\+I\+ON}~\char`\"{}child\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structwatchdog__list__t}{watchdog\+\_\+list\+\_\+t} \hyperlink{mod__watchdog_8c_ad9aa7bd0ec031e50de74be54a68400c8}{watchdog\+\_\+list\+\_\+t}
+\item 
+typedef struct \hyperlink{structwd__server__conf__t}{wd\+\_\+server\+\_\+conf\+\_\+t} \hyperlink{mod__watchdog_8c_a14079d0801f3a8c160c7442c8ba4f186}{wd\+\_\+server\+\_\+conf\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__watchdog_8c_a6dd37be8e34d6e86bc427293804150fd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (watchdog)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}!A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+C\+V\+E\+R\+S\+I\+ON@{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+C\+V\+E\+R\+S\+I\+ON}}
+\index{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+C\+V\+E\+R\+S\+I\+ON@{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+C\+V\+E\+R\+S\+I\+ON}!mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+C\+V\+E\+R\+S\+I\+ON}{AP_WATCHDOG_CVERSION}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+C\+V\+E\+R\+S\+I\+ON~\char`\"{}child\char`\"{}}\hypertarget{mod__watchdog_8c_aae9c79cc43a99018ab29f1cc343663d5}{}\label{mod__watchdog_8c_aae9c79cc43a99018ab29f1cc343663d5}
+\index{mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}!A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+G\+R\+O\+UP@{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+G\+R\+O\+UP}}
+\index{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+G\+R\+O\+UP@{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+G\+R\+O\+UP}!mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+G\+R\+O\+UP}{AP_WATCHDOG_PGROUP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+G\+R\+O\+UP~\char`\"{}watchdog\char`\"{}}\hypertarget{mod__watchdog_8c_af05b68681de340dc2088755d70b4fa6d}{}\label{mod__watchdog_8c_af05b68681de340dc2088755d70b4fa6d}
+\index{mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}!A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+V\+E\+R\+S\+I\+ON@{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+V\+E\+R\+S\+I\+ON}}
+\index{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+V\+E\+R\+S\+I\+ON@{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+V\+E\+R\+S\+I\+ON}!mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+V\+E\+R\+S\+I\+ON}{AP_WATCHDOG_PVERSION}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+W\+A\+T\+C\+H\+D\+O\+G\+\_\+\+P\+V\+E\+R\+S\+I\+ON~\char`\"{}parent\char`\"{}}\hypertarget{mod__watchdog_8c_af9ddf7dddb2330f7cdbcf5e63e50aea7}{}\label{mod__watchdog_8c_af9ddf7dddb2330f7cdbcf5e63e50aea7}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}!watchdog\+\_\+list\+\_\+t@{watchdog\+\_\+list\+\_\+t}}
+\index{watchdog\+\_\+list\+\_\+t@{watchdog\+\_\+list\+\_\+t}!mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}}
+\subsubsection[{\texorpdfstring{watchdog\+\_\+list\+\_\+t}{watchdog_list_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf watchdog\+\_\+list\+\_\+t} {\bf watchdog\+\_\+list\+\_\+t}}\hypertarget{mod__watchdog_8c_ad9aa7bd0ec031e50de74be54a68400c8}{}\label{mod__watchdog_8c_ad9aa7bd0ec031e50de74be54a68400c8}
+\index{mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}!wd\+\_\+server\+\_\+conf\+\_\+t@{wd\+\_\+server\+\_\+conf\+\_\+t}}
+\index{wd\+\_\+server\+\_\+conf\+\_\+t@{wd\+\_\+server\+\_\+conf\+\_\+t}!mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}}
+\subsubsection[{\texorpdfstring{wd\+\_\+server\+\_\+conf\+\_\+t}{wd_server_conf_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf wd\+\_\+server\+\_\+conf\+\_\+t} {\bf wd\+\_\+server\+\_\+conf\+\_\+t}}\hypertarget{mod__watchdog_8c_a14079d0801f3a8c160c7442c8ba4f186}{}\label{mod__watchdog_8c_a14079d0801f3a8c160c7442c8ba4f186}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+watchdog.\+c@{mod\+\_\+watchdog.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(watchdog)}{AP_DECLARE_MODULE(watchdog)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{watchdog}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__watchdog_8c_a6dd37be8e34d6e86bc427293804150fd}{}\label{mod__watchdog_8c_a6dd37be8e34d6e86bc427293804150fd}

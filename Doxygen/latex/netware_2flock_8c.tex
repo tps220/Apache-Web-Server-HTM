@@ -1,0 +1,83 @@
+\hypertarget{netware_2flock_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/file\+\_\+io/netware/flock.c File Reference}
+\label{netware_2flock_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/netware/flock.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/netware/flock.\+c}}
+{\ttfamily \#include $<$nks/fsio.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+Include dependency graph for flock.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=250pt]{netware_2flock_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{netware_2flock_8c_a2d337e66c1fa0cd433164079bf542484}{apr\+\_\+file\+\_\+lock} (\hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$\hyperlink{group__apr__portabile_ga8dd020a355482f70199dcdcd65464a75}{thefile}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{netware_2flock_8c_a3a255996fb439b6d66ed7cd65319525b}{apr\+\_\+file\+\_\+unlock} (\hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$\hyperlink{group__apr__portabile_ga8dd020a355482f70199dcdcd65464a75}{thefile})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{netware/flock.\+c@{netware/flock.\+c}!apr\+\_\+file\+\_\+lock@{apr\+\_\+file\+\_\+lock}}
+\index{apr\+\_\+file\+\_\+lock@{apr\+\_\+file\+\_\+lock}!netware/flock.\+c@{netware/flock.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+file\+\_\+lock(apr\+\_\+file\+\_\+t $\ast$thefile, int type)}{apr_file_lock(apr_file_t *thefile, int type)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} apr\+\_\+file\+\_\+lock (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+file\+\_\+t} $\ast$}]{thefile, }
+\item[{{\bf int}}]{type}
+\end{DoxyParamCaption}
+)}\hypertarget{netware_2flock_8c_a2d337e66c1fa0cd433164079bf542484}{}\label{netware_2flock_8c_a2d337e66c1fa0cd433164079bf542484}
+
+\begin{DoxyCode}
+22 \{
+23     \textcolor{keywordtype}{int} \hyperlink{pcre__exec_8c_aba5145bd796f257f2f10e79df76abd4b}{fc};
+24 
+25     fc = (\hyperlink{group__APACHE__CORE__HTTPD_gaafc7089562892428c4fcae486f171f5a}{type} & \hyperlink{group__apr__file__lock__types_gab327fa0250e19006f20d5ec65fe7f22a}{APR\_FLOCK\_NONBLOCK}) ? NX\_RANGE\_LOCK\_TRYLOCK : NX\_RANGE\_LOCK\_CHECK;
+26 
+27     \textcolor{keywordflow}{if}(NXFileRangeLock(thefile->\hyperlink{structapr__file__t_a45e64f29f9c319ecd8e54708de2677b5}{filedes},fc, 0, 0) == -1)
+28         \textcolor{keywordflow}{return} errno;
+29             
+30     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+31 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=278pt]{netware_2flock_8c_a2d337e66c1fa0cd433164079bf542484_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{netware/flock.\+c@{netware/flock.\+c}!apr\+\_\+file\+\_\+unlock@{apr\+\_\+file\+\_\+unlock}}
+\index{apr\+\_\+file\+\_\+unlock@{apr\+\_\+file\+\_\+unlock}!netware/flock.\+c@{netware/flock.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+file\+\_\+unlock(apr\+\_\+file\+\_\+t $\ast$thefile)}{apr_file_unlock(apr_file_t *thefile)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} apr\+\_\+file\+\_\+unlock (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+file\+\_\+t} $\ast$}]{thefile}
+\end{DoxyParamCaption}
+)}\hypertarget{netware_2flock_8c_a3a255996fb439b6d66ed7cd65319525b}{}\label{netware_2flock_8c_a3a255996fb439b6d66ed7cd65319525b}
+
+\begin{DoxyCode}
+34 \{
+35     \textcolor{keywordflow}{if}(NXFileRangeUnlock(thefile->\hyperlink{structapr__file__t_a45e64f29f9c319ecd8e54708de2677b5}{filedes},NX\_RANGE\_LOCK\_CANCEL,0 , 0) == -1)
+36         \textcolor{keywordflow}{return} errno;
+37    
+38     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+39 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=289pt]{netware_2flock_8c_a3a255996fb439b6d66ed7cd65319525b_icgraph}
+\end{center}
+\end{figure}
+
+

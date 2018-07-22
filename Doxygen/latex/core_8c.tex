@@ -1,0 +1,806 @@
+\hypertarget{core_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/core.c File Reference}
+\label{core_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/core.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/core.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+fnmatch.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+random.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+vhost.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+connection.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+ebcdic.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+proxy.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+listen.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+so.\+h\char`\"{}}\\*
+Include dependency graph for core.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structreorder__sort__rec}{reorder\+\_\+sort\+\_\+rec}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{core_8c_a79e8fc75167d0e530c6afb5172e2a32b}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}
+\item 
+\#define \hyperlink{core_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{core_8c_a26faf43e3f61783d8b7aa928c0a41a11}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}
+\item 
+\#define \hyperlink{core_8c_a081db98f7b02cfc6a657c2b01fffd168}{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+D\+Y\+\_\+\+U\+N\+S\+ET}~((\hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t}) -\/1)
+\item 
+\#define \hyperlink{core_8c_ab8fb88d2aa59df36bd1d1e662a8d5eb0}{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+DY}~((\hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t}) 0)
+\item 
+\#define \hyperlink{core_8c_a8f907b514e1af2004406ee8c3b64ee7f}{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+U\+N\+S\+ET}~((long) -\/1)
+\item 
+\#define \hyperlink{core_8c_a62c21747a42647f8faaebd987a8fa934}{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+X\+M\+L\+\_\+\+B\+O\+DY}~((\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t})1000000)
+\item 
+\#define \hyperlink{core_8c_ac501858bdd26a3240332e202560c341c}{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES}~(256)
+\item 
+\#define \hyperlink{core_8c_ae9a2111b95072187b90f7dd5c4b16adb}{A\+P\+\_\+\+M\+A\+X\+\_\+\+I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+E\+P\+TH}~(128)
+\item 
+\#define \hyperlink{core_8c_ac08696fd3df3cacf489ea2e7d4f48901}{A\+P\+\_\+\+A\+C\+C\+E\+P\+T\+\_\+\+P\+A\+T\+H\+I\+N\+F\+O\+\_\+\+U\+N\+S\+ET}~3
+\item 
+\#define \hyperlink{core_8c_a82cf74c121ac24688294d9181c751594}{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+O\+FF}~0
+\item 
+\#define \hyperlink{core_8c_a8542733dcb145a17060ed9fc43cba8ee}{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+ON}~1
+\item 
+\#define \hyperlink{core_8c_ab0592d0493345ed34472d9a5124de973}{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+U\+N\+S\+ET}~2
+\item 
+\#define \hyperlink{core_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~\hyperlink{group__APACHE__CORE__HTTPD_gaf1cdaac5f4562d9d20bae417471ad422}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\item 
+\#define \hyperlink{core_8c_a63d9d5a9ce941e5010606238d6e02552}{S\+M\+A\+L\+L\+\_\+\+E\+X\+P\+A\+N\+S\+I\+ON}~5
+\item 
+\#define \hyperlink{core_8c_a9f7fd3522a1f3018e78755089286cebe}{U\+S\+E\+\_\+\+I\+C\+A\+SE}~0
+\item 
+\#define \hyperlink{core_8c_a73bcfe7c60d642c02e0fac16e706043d}{C\+O\+N\+D\+\_\+\+IF}~((\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$)1)
+\item 
+\#define \hyperlink{core_8c_aa2bd9bbfd4de3a42e31f2cc526b42a66}{C\+O\+N\+D\+\_\+\+E\+L\+SE}~((\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$)2)
+\item 
+\#define \hyperlink{core_8c_ac7c49605d432109eaa844e879a9a3663}{C\+O\+N\+D\+\_\+\+E\+L\+S\+E\+IF}~((\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$)3)
+\item 
+\#define \hyperlink{core_8c_acf92777a0a48f8255f7f4368de6cfcca}{R\+A\+N\+D\+\_\+\+R\+A\+N\+GE}(\+\_\+\+\_\+n,  \+\_\+\+\_\+min,  \+\_\+\+\_\+max,  \+\_\+\+\_\+tmax)~(\+\_\+\+\_\+n) = (\+\_\+\+\_\+min) + (long) ((double) ((\+\_\+\+\_\+max) -\/ (\+\_\+\+\_\+min) + 1.\+0) $\ast$ ((\+\_\+\+\_\+n) / ((\+\_\+\+\_\+tmax) + 1.\+0)))
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47}{server\+\_\+token\+\_\+type} \{ \\*
+\hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a206c296ae7d5c11442dbe821636a866a}{Srv\+Tk\+\_\+\+M\+A\+J\+OR}, 
+\hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a85eda36d3fd409d9eb07470da2106218}{Srv\+Tk\+\_\+\+M\+I\+N\+OR}, 
+\hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a85f0769d570586f0a8cbc1f01b5cb167}{Srv\+Tk\+\_\+\+M\+I\+N\+I\+M\+AL}, 
+\hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a11d0c1843b0aed6132bb01180cfac8b7}{Srv\+Tk\+\_\+\+OS}, 
+\\*
+\hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a4c1bad90eee83e7fa93552d28bdd175a}{Srv\+Tk\+\_\+\+F\+U\+LL}, 
+\hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a8839c493ed4cb65aeae2a63f9911b61c}{Srv\+Tk\+\_\+\+P\+R\+O\+D\+U\+C\+T\+\_\+\+O\+N\+LY}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{core_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT} ()
+\item 
+\hyperlink{group__MOD__CORE_ga67c82c46d8e12b9b3ccf7c96c288f207}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{core_8c_a75c74c703ff37456a8b4568fd1e94cbb}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__APACHE__CORE__HTTPD_gac5142771a693b025760ed4048352b73c}{ap\+\_\+core\+\_\+reorder\+\_\+directories} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\hyperlink{core_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{core_8c_aba7dd4312f41eb2eb750f6377c89e4c0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$)
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+char $\ast$ \hyperlink{group__MOD__CORE_gab66afd11fec3fb71fbfed031405c85ab}{ap\+\_\+response\+\_\+code\+\_\+string} (\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} error\+\_\+index)
+\item 
+\hyperlink{core_8c_af55844797ae2cee650c852479de30e6f}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t})
+\item 
+\hyperlink{core_8c_a06b3fd33a5a08e9247c55ecf018e8e67}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (char $\ast$)
+\item 
+\hyperlink{core_8c_a372c4e66c2de77dd8ffe308e4ca8a321}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t})
+\item 
+\hyperlink{core_8c_a20a418af97dbe83761a8b99e41e6a4f6}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (const char $\ast$)
+\item 
+\hyperlink{core_8c_add88d80dec77346ec9ac22640de4d95f}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t})
+\item 
+\hyperlink{group__AP__EXPR_ga1ac0588c7c2ca64ea23710360d5f6f85}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{core_8c_a78b9309a2319e29751a1a5a8af88c4ba}{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE} (\hyperlink{group__APACHE__CORE__HTTPD_gad1d337086972f0a3acedbf68359fef78}{ap\+\_\+logio\+\_\+add\+\_\+bytes\+\_\+out})
+\item 
+\hyperlink{core_8c_a755ea7c8e718d5c3d2ded101f4dffa4a}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$$\ast$)
+\item 
+\hyperlink{group__APACHE__CORE__HTTPD_gad5a5d3d05dabc4cb4273749dd68e3b4c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__socket__t}{apr\+\_\+socket\+\_\+t} $\ast$)
+\item 
+\hyperlink{core_8c_ad38a188b21e0ba904fd70354bd942415}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t})
+\item 
+\hyperlink{core_8c_a97fe657728cdac8f342dc0b0ef87c96a}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (core)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+A\+C\+C\+E\+P\+T\+\_\+\+P\+A\+T\+H\+I\+N\+F\+O\+\_\+\+U\+N\+S\+ET@{A\+P\+\_\+\+A\+C\+C\+E\+P\+T\+\_\+\+P\+A\+T\+H\+I\+N\+F\+O\+\_\+\+U\+N\+S\+ET}}
+\index{A\+P\+\_\+\+A\+C\+C\+E\+P\+T\+\_\+\+P\+A\+T\+H\+I\+N\+F\+O\+\_\+\+U\+N\+S\+ET@{A\+P\+\_\+\+A\+C\+C\+E\+P\+T\+\_\+\+P\+A\+T\+H\+I\+N\+F\+O\+\_\+\+U\+N\+S\+ET}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+A\+C\+C\+E\+P\+T\+\_\+\+P\+A\+T\+H\+I\+N\+F\+O\+\_\+\+U\+N\+S\+ET}{AP_ACCEPT_PATHINFO_UNSET}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+A\+C\+C\+E\+P\+T\+\_\+\+P\+A\+T\+H\+I\+N\+F\+O\+\_\+\+U\+N\+S\+ET~3}\hypertarget{core_8c_ac08696fd3df3cacf489ea2e7d4f48901}{}\label{core_8c_ac08696fd3df3cacf489ea2e7d4f48901}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+O\+FF@{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+O\+FF}}
+\index{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+O\+FF@{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+O\+FF}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+O\+FF}{AP_CONTENT_MD5_OFF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+O\+FF~0}\hypertarget{core_8c_a82cf74c121ac24688294d9181c751594}{}\label{core_8c_a82cf74c121ac24688294d9181c751594}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+ON@{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+ON}}
+\index{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+ON@{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+ON}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+ON}{AP_CONTENT_MD5_ON}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+ON~1}\hypertarget{core_8c_a8542733dcb145a17060ed9fc43cba8ee}{}\label{core_8c_a8542733dcb145a17060ed9fc43cba8ee}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+U\+N\+S\+ET@{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+U\+N\+S\+ET}}
+\index{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+U\+N\+S\+ET@{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+U\+N\+S\+ET}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+U\+N\+S\+ET}{AP_CONTENT_MD5_UNSET}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+M\+D5\+\_\+\+U\+N\+S\+ET~2}\hypertarget{core_8c_ab0592d0493345ed34472d9a5124de973}{}\label{core_8c_ab0592d0493345ed34472d9a5124de973}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+DY@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+DY}}
+\index{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+DY@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+DY}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+DY}{AP_DEFAULT_LIMIT_REQ_BODY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+DY~(({\bf apr\+\_\+off\+\_\+t}) 0)}\hypertarget{core_8c_ab8fb88d2aa59df36bd1d1e662a8d5eb0}{}\label{core_8c_ab8fb88d2aa59df36bd1d1e662a8d5eb0}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+X\+M\+L\+\_\+\+B\+O\+DY@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+X\+M\+L\+\_\+\+B\+O\+DY}}
+\index{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+X\+M\+L\+\_\+\+B\+O\+DY@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+X\+M\+L\+\_\+\+B\+O\+DY}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+X\+M\+L\+\_\+\+B\+O\+DY}{AP_DEFAULT_LIMIT_XML_BODY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+X\+M\+L\+\_\+\+B\+O\+DY~(({\bf apr\+\_\+size\+\_\+t})1000000)}\hypertarget{core_8c_a62c21747a42647f8faaebd987a8fa934}{}\label{core_8c_a62c21747a42647f8faaebd987a8fa934}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+D\+Y\+\_\+\+U\+N\+S\+ET@{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+D\+Y\+\_\+\+U\+N\+S\+ET}}
+\index{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+D\+Y\+\_\+\+U\+N\+S\+ET@{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+D\+Y\+\_\+\+U\+N\+S\+ET}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+D\+Y\+\_\+\+U\+N\+S\+ET}{AP_LIMIT_REQ_BODY_UNSET}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+\_\+\+B\+O\+D\+Y\+\_\+\+U\+N\+S\+ET~(({\bf apr\+\_\+off\+\_\+t}) -\/1)}\hypertarget{core_8c_a081db98f7b02cfc6a657c2b01fffd168}{}\label{core_8c_a081db98f7b02cfc6a657c2b01fffd168}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+U\+N\+S\+ET@{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+U\+N\+S\+ET}}
+\index{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+U\+N\+S\+ET@{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+U\+N\+S\+ET}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+U\+N\+S\+ET}{AP_LIMIT_UNSET}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+L\+I\+M\+I\+T\+\_\+\+U\+N\+S\+ET~((long) -\/1)}\hypertarget{core_8c_a8f907b514e1af2004406ee8c3b64ee7f}{}\label{core_8c_a8f907b514e1af2004406ee8c3b64ee7f}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+M\+A\+X\+\_\+\+I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+E\+P\+TH@{A\+P\+\_\+\+M\+A\+X\+\_\+\+I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+E\+P\+TH}}
+\index{A\+P\+\_\+\+M\+A\+X\+\_\+\+I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+E\+P\+TH@{A\+P\+\_\+\+M\+A\+X\+\_\+\+I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+E\+P\+TH}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+M\+A\+X\+\_\+\+I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+E\+P\+TH}{AP_MAX_INCLUDE_DEPTH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+M\+A\+X\+\_\+\+I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+E\+P\+TH~(128)}\hypertarget{core_8c_ae9a2111b95072187b90f7dd5c4b16adb}{}\label{core_8c_ae9a2111b95072187b90f7dd5c4b16adb}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES@{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES}}
+\index{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES@{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES}{AP_MIN_SENDFILE_BYTES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES~(256)}\hypertarget{core_8c_ac501858bdd26a3240332e202560c341c}{}\label{core_8c_ac501858bdd26a3240332e202560c341c}
+\index{core.\+c@{core.\+c}!A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}
+\index{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}{APLOG_MODULE_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX~{\bf A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}\hypertarget{core_8c_ae75325996d1b2cf6120dded4cb153a22}{}\label{core_8c_ae75325996d1b2cf6120dded4cb153a22}
+\index{core.\+c@{core.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}{APR_WANT_IOVEC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}\hypertarget{core_8c_a79e8fc75167d0e530c6afb5172e2a32b}{}\label{core_8c_a79e8fc75167d0e530c6afb5172e2a32b}
+\index{core.\+c@{core.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}{APR_WANT_MEMFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}\hypertarget{core_8c_a26faf43e3f61783d8b7aa928c0a41a11}{}\label{core_8c_a26faf43e3f61783d8b7aa928c0a41a11}
+\index{core.\+c@{core.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{core_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{core_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{core.\+c@{core.\+c}!C\+O\+N\+D\+\_\+\+E\+L\+SE@{C\+O\+N\+D\+\_\+\+E\+L\+SE}}
+\index{C\+O\+N\+D\+\_\+\+E\+L\+SE@{C\+O\+N\+D\+\_\+\+E\+L\+SE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+D\+\_\+\+E\+L\+SE}{COND_ELSE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+D\+\_\+\+E\+L\+SE~(({\bf void} $\ast$)2)}\hypertarget{core_8c_aa2bd9bbfd4de3a42e31f2cc526b42a66}{}\label{core_8c_aa2bd9bbfd4de3a42e31f2cc526b42a66}
+\index{core.\+c@{core.\+c}!C\+O\+N\+D\+\_\+\+E\+L\+S\+E\+IF@{C\+O\+N\+D\+\_\+\+E\+L\+S\+E\+IF}}
+\index{C\+O\+N\+D\+\_\+\+E\+L\+S\+E\+IF@{C\+O\+N\+D\+\_\+\+E\+L\+S\+E\+IF}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+D\+\_\+\+E\+L\+S\+E\+IF}{COND_ELSEIF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+D\+\_\+\+E\+L\+S\+E\+IF~(({\bf void} $\ast$)3)}\hypertarget{core_8c_ac7c49605d432109eaa844e879a9a3663}{}\label{core_8c_ac7c49605d432109eaa844e879a9a3663}
+\index{core.\+c@{core.\+c}!C\+O\+N\+D\+\_\+\+IF@{C\+O\+N\+D\+\_\+\+IF}}
+\index{C\+O\+N\+D\+\_\+\+IF@{C\+O\+N\+D\+\_\+\+IF}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+N\+D\+\_\+\+IF}{COND_IF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+N\+D\+\_\+\+IF~(({\bf void} $\ast$)1)}\hypertarget{core_8c_a73bcfe7c60d642c02e0fac16e706043d}{}\label{core_8c_a73bcfe7c60d642c02e0fac16e706043d}
+\index{core.\+c@{core.\+c}!R\+A\+N\+D\+\_\+\+R\+A\+N\+GE@{R\+A\+N\+D\+\_\+\+R\+A\+N\+GE}}
+\index{R\+A\+N\+D\+\_\+\+R\+A\+N\+GE@{R\+A\+N\+D\+\_\+\+R\+A\+N\+GE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{R\+A\+N\+D\+\_\+\+R\+A\+N\+GE}{RAND_RANGE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+A\+N\+D\+\_\+\+R\+A\+N\+GE(
+\begin{DoxyParamCaption}
+\item[{}]{\+\_\+\+\_\+n, }
+\item[{}]{\+\_\+\+\_\+min, }
+\item[{}]{\+\_\+\+\_\+max, }
+\item[{}]{\+\_\+\+\_\+tmax}
+\end{DoxyParamCaption}
+)~(\+\_\+\+\_\+n) = (\+\_\+\+\_\+min) + (long) ((double) ((\+\_\+\+\_\+max) -\/ (\+\_\+\+\_\+min) + 1.\+0) $\ast$ ((\+\_\+\+\_\+n) / ((\+\_\+\+\_\+tmax) + 1.\+0)))}\hypertarget{core_8c_acf92777a0a48f8255f7f4368de6cfcca}{}\label{core_8c_acf92777a0a48f8255f7f4368de6cfcca}
+\index{core.\+c@{core.\+c}!S\+M\+A\+L\+L\+\_\+\+E\+X\+P\+A\+N\+S\+I\+ON@{S\+M\+A\+L\+L\+\_\+\+E\+X\+P\+A\+N\+S\+I\+ON}}
+\index{S\+M\+A\+L\+L\+\_\+\+E\+X\+P\+A\+N\+S\+I\+ON@{S\+M\+A\+L\+L\+\_\+\+E\+X\+P\+A\+N\+S\+I\+ON}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{S\+M\+A\+L\+L\+\_\+\+E\+X\+P\+A\+N\+S\+I\+ON}{SMALL_EXPANSION}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+M\+A\+L\+L\+\_\+\+E\+X\+P\+A\+N\+S\+I\+ON~5}\hypertarget{core_8c_a63d9d5a9ce941e5010606238d6e02552}{}\label{core_8c_a63d9d5a9ce941e5010606238d6e02552}
+\index{core.\+c@{core.\+c}!U\+S\+E\+\_\+\+I\+C\+A\+SE@{U\+S\+E\+\_\+\+I\+C\+A\+SE}}
+\index{U\+S\+E\+\_\+\+I\+C\+A\+SE@{U\+S\+E\+\_\+\+I\+C\+A\+SE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{U\+S\+E\+\_\+\+I\+C\+A\+SE}{USE_ICASE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\+S\+E\+\_\+\+I\+C\+A\+SE~0}\hypertarget{core_8c_a9f7fd3522a1f3018e78755089286cebe}{}\label{core_8c_a9f7fd3522a1f3018e78755089286cebe}
+
+
+\subsection{Enumeration Type Documentation}
+\index{core.\+c@{core.\+c}!server\+\_\+token\+\_\+type@{server\+\_\+token\+\_\+type}}
+\index{server\+\_\+token\+\_\+type@{server\+\_\+token\+\_\+type}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{server\+\_\+token\+\_\+type}{server_token_type}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf server\+\_\+token\+\_\+type}}\hypertarget{core_8c_aca40061e84ce9a214c84da68932e5b47}{}\label{core_8c_aca40061e84ce9a214c84da68932e5b47}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{Srv\+Tk\+\_\+\+M\+A\+J\+OR@{Srv\+Tk\+\_\+\+M\+A\+J\+OR}!core.\+c@{core.\+c}}\index{core.\+c@{core.\+c}!Srv\+Tk\+\_\+\+M\+A\+J\+OR@{Srv\+Tk\+\_\+\+M\+A\+J\+OR}}\item[{\em 
+Srv\+Tk\+\_\+\+M\+A\+J\+OR\hypertarget{core_8c_aca40061e84ce9a214c84da68932e5b47a206c296ae7d5c11442dbe821636a866a}{}\label{core_8c_aca40061e84ce9a214c84da68932e5b47a206c296ae7d5c11442dbe821636a866a}
+}]\index{Srv\+Tk\+\_\+\+M\+I\+N\+OR@{Srv\+Tk\+\_\+\+M\+I\+N\+OR}!core.\+c@{core.\+c}}\index{core.\+c@{core.\+c}!Srv\+Tk\+\_\+\+M\+I\+N\+OR@{Srv\+Tk\+\_\+\+M\+I\+N\+OR}}\item[{\em 
+Srv\+Tk\+\_\+\+M\+I\+N\+OR\hypertarget{core_8c_aca40061e84ce9a214c84da68932e5b47a85eda36d3fd409d9eb07470da2106218}{}\label{core_8c_aca40061e84ce9a214c84da68932e5b47a85eda36d3fd409d9eb07470da2106218}
+}]\index{Srv\+Tk\+\_\+\+M\+I\+N\+I\+M\+AL@{Srv\+Tk\+\_\+\+M\+I\+N\+I\+M\+AL}!core.\+c@{core.\+c}}\index{core.\+c@{core.\+c}!Srv\+Tk\+\_\+\+M\+I\+N\+I\+M\+AL@{Srv\+Tk\+\_\+\+M\+I\+N\+I\+M\+AL}}\item[{\em 
+Srv\+Tk\+\_\+\+M\+I\+N\+I\+M\+AL\hypertarget{core_8c_aca40061e84ce9a214c84da68932e5b47a85f0769d570586f0a8cbc1f01b5cb167}{}\label{core_8c_aca40061e84ce9a214c84da68932e5b47a85f0769d570586f0a8cbc1f01b5cb167}
+}]\index{Srv\+Tk\+\_\+\+OS@{Srv\+Tk\+\_\+\+OS}!core.\+c@{core.\+c}}\index{core.\+c@{core.\+c}!Srv\+Tk\+\_\+\+OS@{Srv\+Tk\+\_\+\+OS}}\item[{\em 
+Srv\+Tk\+\_\+\+OS\hypertarget{core_8c_aca40061e84ce9a214c84da68932e5b47a11d0c1843b0aed6132bb01180cfac8b7}{}\label{core_8c_aca40061e84ce9a214c84da68932e5b47a11d0c1843b0aed6132bb01180cfac8b7}
+}]\index{Srv\+Tk\+\_\+\+F\+U\+LL@{Srv\+Tk\+\_\+\+F\+U\+LL}!core.\+c@{core.\+c}}\index{core.\+c@{core.\+c}!Srv\+Tk\+\_\+\+F\+U\+LL@{Srv\+Tk\+\_\+\+F\+U\+LL}}\item[{\em 
+Srv\+Tk\+\_\+\+F\+U\+LL\hypertarget{core_8c_aca40061e84ce9a214c84da68932e5b47a4c1bad90eee83e7fa93552d28bdd175a}{}\label{core_8c_aca40061e84ce9a214c84da68932e5b47a4c1bad90eee83e7fa93552d28bdd175a}
+}]\index{Srv\+Tk\+\_\+\+P\+R\+O\+D\+U\+C\+T\+\_\+\+O\+N\+LY@{Srv\+Tk\+\_\+\+P\+R\+O\+D\+U\+C\+T\+\_\+\+O\+N\+LY}!core.\+c@{core.\+c}}\index{core.\+c@{core.\+c}!Srv\+Tk\+\_\+\+P\+R\+O\+D\+U\+C\+T\+\_\+\+O\+N\+LY@{Srv\+Tk\+\_\+\+P\+R\+O\+D\+U\+C\+T\+\_\+\+O\+N\+LY}}\item[{\em 
+Srv\+Tk\+\_\+\+P\+R\+O\+D\+U\+C\+T\+\_\+\+O\+N\+LY\hypertarget{core_8c_aca40061e84ce9a214c84da68932e5b47a8839c493ed4cb65aeae2a63f9911b61c}{}\label{core_8c_aca40061e84ce9a214c84da68932e5b47a8839c493ed4cb65aeae2a63f9911b61c}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+3370                        \{
+3371     \hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a206c296ae7d5c11442dbe821636a866a}{SrvTk\_MAJOR},         \textcolor{comment}{/* eg: Apache/2 */}
+3372     \hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a85eda36d3fd409d9eb07470da2106218}{SrvTk\_MINOR},         \textcolor{comment}{/* eg. Apache/2.0 */}
+3373     \hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a85f0769d570586f0a8cbc1f01b5cb167}{SrvTk\_MINIMAL},       \textcolor{comment}{/* eg: Apache/2.0.41 */}
+3374     \hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a11d0c1843b0aed6132bb01180cfac8b7}{SrvTk\_OS},            \textcolor{comment}{/* eg: Apache/2.0.41 (UNIX) */}
+3375     \hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a4c1bad90eee83e7fa93552d28bdd175a}{SrvTk\_FULL},          \textcolor{comment}{/* eg: Apache/2.0.41 (UNIX) PHP/4.2.2 FooBar/1.2b */}
+3376     \hyperlink{core_8c_aca40061e84ce9a214c84da68932e5b47a8839c493ed4cb65aeae2a63f9911b61c}{SrvTk\_PRODUCT\_ONLY}   \textcolor{comment}{/* eg: Apache */}
+3377 \};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E(const char $\ast$)}{AP_CORE_DECLARE(const char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_a75c74c703ff37456a8b4568fd1e94cbb}{}\label{core_8c_a75c74c703ff37456a8b4568fd1e94cbb}
+
+\begin{DoxyCode}
+596 \{
+597     \textcolor{keywordtype}{void} **new\_space;
+598     \hyperlink{structcore__dir__config}{core\_dir\_config} *\textcolor{keyword}{new} = \hyperlink{group__APACHE__CORE__CONFIG_ga1093a5908a384eacc929b028c79f2a02}{ap\_get\_module\_config}(if\_config, &
+      \hyperlink{group__APACHE__CORE__HTTPD_gafebd5dacd393edc6b65481d68544c59a}{core\_module});
+599 
+600     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf}->\hyperlink{structcore__dir__config_a88cbe7b1cb0518c8ebd3a96acf5b7335}{sec\_if}) \{
+601         \hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf}->\hyperlink{structcore__dir__config_a88cbe7b1cb0518c8ebd3a96acf5b7335}{sec\_if} = apr\_array\_make(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, 2, \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__CONFIG_ga614684670dbf748a70ac6bad272da59c}{ap\_conf\_vector\_t} *));
+602     \}
+603     \textcolor{keywordflow}{if} (new->condition\_ifelse & \hyperlink{http__core_8h_a8560149bf4c44d8ccd14cfb63dcb61d9}{AP\_CONDITION\_ELSE}) \{
+604         \textcolor{keywordtype}{int} have\_if = 0;
+605         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf}->\hyperlink{structcore__dir__config_a88cbe7b1cb0518c8ebd3a96acf5b7335}{sec\_if}->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts} > 0) \{
+606             \hyperlink{structcore__dir__config}{core\_dir\_config} *\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+607             \hyperlink{group__APACHE__CORE__CONFIG_ga614684670dbf748a70ac6bad272da59c}{ap\_conf\_vector\_t} *lastelt = \hyperlink{group__apr__tables_ga84066caaa4c7632671af18c229809fc4}{APR\_ARRAY\_IDX}(
+      \hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf}->\hyperlink{structcore__dir__config_a88cbe7b1cb0518c8ebd3a96acf5b7335}{sec\_if},
+608                                                       \hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf}->\hyperlink{structcore__dir__config_a88cbe7b1cb0518c8ebd3a96acf5b7335}{sec\_if}->
+      \hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts} - 1,
+609                                                       \hyperlink{group__APACHE__CORE__CONFIG_ga614684670dbf748a70ac6bad272da59c}{ap\_conf\_vector\_t} *);
+610             last = \hyperlink{group__APACHE__CORE__CONFIG_ga1093a5908a384eacc929b028c79f2a02}{ap\_get\_module\_config}(lastelt, &
+      \hyperlink{group__APACHE__CORE__HTTPD_gafebd5dacd393edc6b65481d68544c59a}{core\_module});
+611             \textcolor{keywordflow}{if} (last->\hyperlink{structcore__dir__config_a95bb630225637a0ba17aa53755f7ac6b}{condition\_ifelse} & \hyperlink{http__core_8h_a3c8239d84856290853ec9efc4d6476c5}{AP\_CONDITION\_IF})
+612                 have\_if = 1;
+613         \}
+614         \textcolor{keywordflow}{if} (!have\_if)
+615             \textcolor{keywordflow}{return} \textcolor{stringliteral}{"<Else> or <ElseIf> section without previous <If> or "}
+616                    \textcolor{stringliteral}{"<ElseIf> section in same scope"};
+617     \}
+618 
+619     new\_space = (\textcolor{keywordtype}{void} **)apr\_array\_push(\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf}->\hyperlink{structcore__dir__config_a88cbe7b1cb0518c8ebd3a96acf5b7335}{sec\_if});
+620     *new\_space = if\_config;
+621     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+622 \}
+\end{DoxyCode}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(const char $\ast$)}{AP_CORE_DECLARE_NONSTD(const char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_a20a418af97dbe83761a8b99e41e6a4f6}{}\label{core_8c_a20a418af97dbe83761a8b99e41e6a4f6}
+
+\begin{DoxyCode}
+2237 \{
+2238     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *endp = \hyperlink{group__APACHE__CORE__DAEMON_ga469c14311b354f1b7e3013adbde2b50b}{ap\_strrchr\_c}(\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, \textcolor{charliteral}{'>'});
+2239     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *limited\_methods;
+2240     \textcolor{keywordtype}{void} *tog = \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->cmd->cmd\_data;
+2241     \hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\_int64\_t} limited = 0;
+2242     \hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\_int64\_t} old\_limited = \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->limited;
+2243     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *errmsg;
+2244 
+2245     \textcolor{keywordflow}{if} (endp == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+2246         \textcolor{keywordflow}{return} unclosed\_directive(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd});
+2247     \}
+2248 
+2249     limited\_methods = apr\_pstrmemdup(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->temp\_pool, \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}, endp - \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg});
+2250 
+2251     \textcolor{keywordflow}{if} (!limited\_methods[0]) \{
+2252         \textcolor{keywordflow}{return} missing\_container\_arg(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd});
+2253     \}
+2254 
+2255     \textcolor{keywordflow}{while} (limited\_methods[0]) \{
+2256         \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga6c1b16298acdfc2ca3cba871da0daa17}{method} = ap\_getword\_conf(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->temp\_pool, &limited\_methods);
+2257         \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_ga3f3e2e6463dfe34ca20b33c43326f4c3}{methnum};
+2258 
+2259         \textcolor{comment}{/* check for builtin or module registered method number */}
+2260         methnum = ap\_method\_number\_of(method);
+2261 
+2262         \textcolor{keywordflow}{if} (methnum == \hyperlink{group__Methods_ga7b43164abfdf24a3ef4cbcee7622551d}{M\_TRACE} && !tog) \{
+2263             \textcolor{keywordflow}{return} \textcolor{stringliteral}{"TRACE cannot be controlled by <Limit>, see TraceEnable"};
+2264         \}
+2265         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (methnum == \hyperlink{group__Methods_gacc2a55b9810a0a140a6cfb53ab0baa36}{M\_INVALID}) \{
+2266             \textcolor{comment}{/* method has not been registered yet, but resource restriction}
+2267 \textcolor{comment}{             * is always checked before method handling, so register it.}
+2268 \textcolor{comment}{             */}
+2269             \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->pool == \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->temp\_pool) \{
+2270                 \textcolor{comment}{/* In .htaccess, we can't globally register new methods. */}
+2271                 \textcolor{keywordflow}{return} apr\_psprintf(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->pool, \textcolor{stringliteral}{"Could not register method '%s' "}
+2272                                    \textcolor{stringliteral}{"for %s from .htaccess configuration"},
+2273                                     method, \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->cmd->name);
+2274             \}
+2275             methnum = ap\_method\_register(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->pool,
+2276                                          apr\_pstrdup(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->pool, method));
+2277         \}
+2278 
+2279         limited |= (\hyperlink{group__Methods_ga2c2414cfae1856a90350b3fba8a6dde9}{AP\_METHOD\_BIT} << \hyperlink{group__APACHE__CORE__PROTO_ga3f3e2e6463dfe34ca20b33c43326f4c3}{methnum});
+2280     \}
+2281 
+2282     \textcolor{comment}{/* Killing two features with one function,}
+2283 \textcolor{comment}{     * if (tog == NULL) <Limit>, else <LimitExcept>}
+2284 \textcolor{comment}{     */}
+2285     limited = tog ? ~limited : limited;
+2286 
+2287     \textcolor{keywordflow}{if} (!(old\_limited & limited)) \{
+2288         \textcolor{keywordflow}{return} apr\_pstrcat(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->pool, \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->cmd->name,
+2289                            \textcolor{stringliteral}{"> directive excludes all methods"}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2290     \}
+2291     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((old\_limited & limited) == old\_limited) \{
+2292         \textcolor{keywordflow}{return} apr\_pstrcat(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->pool, \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->cmd->name,
+2293                            \textcolor{stringliteral}{"> directive specifies methods already excluded"},
+2294                            \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+2295     \}
+2296 
+2297     \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->limited &= limited;
+2298 
+2299     errmsg = ap\_walk\_config(\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->directive->first\_child, \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}, \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->context);
+2300 
+2301     \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}->limited = old\_limited;
+2302 
+2303     \textcolor{keywordflow}{return} errmsg;
+2304 \}
+\end{DoxyCode}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{AP_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{}\label{core_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}
+
+\begin{DoxyCode}
+720 \{
+721     \hyperlink{structcore__dir__config}{core\_dir\_config} *\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf} =
+722       (\hyperlink{structcore__dir__config}{core\_dir\_config} *)\hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0935ac19a61c462c8986898b4c30547d}{per\_dir\_config});
+723 
+724     \textcolor{keywordflow}{return} conf->\hyperlink{structcore__dir__config_a040a02db82f60403e572e0b42f67ed4a}{opts};
+725 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_ace56382e8c8bdfffe9ffc8dbab06d36c_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_ace56382e8c8bdfffe9ffc8dbab06d36c_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(const char $\ast$)}{AP_DECLARE(const char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_aba7dd4312f41eb2eb750f6377c89e4c0}{}\label{core_8c_aba7dd4312f41eb2eb750f6377c89e4c0}
+
+\begin{DoxyCode}
+778 \{
+779     \hyperlink{structcore__server__config}{core\_server\_config} *sconf;
+780     \hyperlink{structcore__request__config}{core\_request\_config} *rconf = \hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a64ddc7e883db1473c43254766c0c0c07}{request\_config});
+781     \textcolor{keywordflow}{if} (rconf->\hyperlink{structcore__request__config_a74d54071e954680a7559b33a79fc7b51}{document\_root})
+782         \textcolor{keywordflow}{return} rconf->\hyperlink{structcore__request__config_a74d54071e954680a7559b33a79fc7b51}{document\_root};
+783     sconf = \hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->module\_config);
+784     \textcolor{keywordflow}{return} sconf->\hyperlink{structcore__server__config_a1114bd381f2cf151e412ed1af7f6c19e}{ap\_document\_root};
+785 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_aba7dd4312f41eb2eb750f6377c89e4c0_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+port\+\_\+t)}{AP_DECLARE(apr_port_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+port\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_af55844797ae2cee650c852479de30e6f}{}\label{core_8c_af55844797ae2cee650c852479de30e6f}
+
+\begin{DoxyCode}
+1148 \{
+1149     \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\_port\_t} \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port};
+1150     \hyperlink{structcore__dir__config}{core\_dir\_config} *\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d} =
+1151       (\hyperlink{structcore__dir__config}{core\_dir\_config} *)\hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0935ac19a61c462c8986898b4c30547d}{per\_dir\_config});
+1152 
+1153     \textcolor{keywordflow}{switch} (d->\hyperlink{structcore__dir__config_ab1d3f64a79944395fb93b056d42db39c}{use\_canonical\_name}) \{
+1154         \textcolor{keywordflow}{case} \hyperlink{http__core_8h_abcd26d87afcab320c510179bc90edd10}{USE\_CANONICAL\_NAME\_OFF}:
+1155         \textcolor{keywordflow}{case} \hyperlink{http__core_8h_a49310d6ade477fb2d88f9172eac8a386}{USE\_CANONICAL\_NAME\_DNS}:
+1156         \textcolor{keywordflow}{case} \hyperlink{http__core_8h_a998c2260426e0e41c6037e312c49aa94}{USE\_CANONICAL\_NAME\_UNSET}:
+1157             \textcolor{keywordflow}{if} (d->\hyperlink{structcore__dir__config_ae6ec6649adc3fd8686be3b7306a1765f}{use\_canonical\_phys\_port} == 
+      \hyperlink{http__core_8h_a973a9ca0df30ddee823d60d42952fd54}{USE\_CANONICAL\_PHYS\_PORT\_ON})
+1158                 port = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}.\hyperlink{structapr__uri__t_ad9d69051e1fb3f3709260c3c3c014012}{port\_str} ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->
+      \hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}.\hyperlink{structapr__uri__t_a6e6e858ce56b5d58389287c1cc1134fa}{port} :
+1159                        \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->local\_addr->port ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->
+      \hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->local\_addr->port :
+1160                        \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port :
+1161                        \hyperlink{group__APACHE__CORE__DAEMON_ga40a8e6df164cf715f55dcddd384d0c26}{ap\_default\_port}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+1162             \textcolor{keywordflow}{else} \textcolor{comment}{/* USE\_CANONICAL\_PHYS\_PORT\_OFF or USE\_CANONICAL\_PHYS\_PORT\_UNSET */}
+1163                 port = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}.\hyperlink{structapr__uri__t_ad9d69051e1fb3f3709260c3c3c014012}{port\_str} ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->
+      \hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}.\hyperlink{structapr__uri__t_a6e6e858ce56b5d58389287c1cc1134fa}{port} :
+1164                        \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port :
+1165                        \hyperlink{group__APACHE__CORE__DAEMON_ga40a8e6df164cf715f55dcddd384d0c26}{ap\_default\_port}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+1166             \textcolor{keywordflow}{break};
+1167         \textcolor{keywordflow}{case} \hyperlink{http__core_8h_a434ca4aecadd29ae45fc58a56794dc58}{USE\_CANONICAL\_NAME\_ON}:
+1168             \textcolor{comment}{/* With UseCanonicalName on (and in all versions prior to 1.3)}
+1169 \textcolor{comment}{             * Apache will use the hostname and port specified in the}
+1170 \textcolor{comment}{             * ServerName directive to construct a canonical name for the}
+1171 \textcolor{comment}{             * server. (If no port was specified in the ServerName}
+1172 \textcolor{comment}{             * directive, Apache uses the port supplied by the client if}
+1173 \textcolor{comment}{             * any is supplied, and finally the default port for the protocol}
+1174 \textcolor{comment}{             * used.}
+1175 \textcolor{comment}{             */}
+1176             \textcolor{keywordflow}{if} (d->\hyperlink{structcore__dir__config_ae6ec6649adc3fd8686be3b7306a1765f}{use\_canonical\_phys\_port} == 
+      \hyperlink{http__core_8h_a973a9ca0df30ddee823d60d42952fd54}{USE\_CANONICAL\_PHYS\_PORT\_ON})
+1177                 port = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port :
+1178                        \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->local\_addr->port ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->
+      \hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->local\_addr->port :
+1179                        \hyperlink{group__APACHE__CORE__DAEMON_ga40a8e6df164cf715f55dcddd384d0c26}{ap\_default\_port}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+1180             \textcolor{keywordflow}{else} \textcolor{comment}{/* USE\_CANONICAL\_PHYS\_PORT\_OFF or USE\_CANONICAL\_PHYS\_PORT\_UNSET */}
+1181                 port = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->port :
+1182                        \hyperlink{group__APACHE__CORE__DAEMON_ga40a8e6df164cf715f55dcddd384d0c26}{ap\_default\_port}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+1183             \textcolor{keywordflow}{break};
+1184         \textcolor{keywordflow}{default}:
+1185             \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00110)
+1186                          \textcolor{stringliteral}{"ap\_get\_server\_port: Invalid UCN Option somehow"});
+1187             port = \hyperlink{group__APACHE__CORE__DAEMON_ga40a8e6df164cf715f55dcddd384d0c26}{ap\_default\_port}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+1188             \textcolor{keywordflow}{break};
+1189     \}
+1190 
+1191     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port};
+1192 \}
+\end{DoxyCode}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(char $\ast$)}{AP_DECLARE(char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_a06b3fd33a5a08e9247c55ecf018e8e67}{}\label{core_8c_a06b3fd33a5a08e9247c55ecf018e8e67}
+
+\begin{DoxyCode}
+1196 \{
+1197     \textcolor{keywordtype}{unsigned} \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port} = ap\_get\_server\_port(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+1198     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__VHOST_ga8c8ad0616f1a1fed66e67a90a116a76c}{host} = ap\_get\_server\_name\_for\_url(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+1199 
+1200     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_gae5bc38a44a7c51bef163b8208559f3a1}{ap\_is\_default\_port}(port, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r})) \{
+1201         \textcolor{keywordflow}{return} apr\_pstrcat(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__APACHE__CORE__DAEMON_ga486f75485b725c5c3baaa577409d36f3}{ap\_http\_scheme}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}), \textcolor{stringliteral}{"://"}, host, 
+      \hyperlink{group__APACHE__CORE__HTTPD_gaaf802cf1817bf45bcf1a5f266ef18bbd}{uri}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1202     \}
+1203 
+1204     \textcolor{keywordflow}{return} apr\_psprintf(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \textcolor{stringliteral}{"%s://%s:%u%s"}, \hyperlink{group__APACHE__CORE__DAEMON_ga486f75485b725c5c3baaa577409d36f3}{ap\_http\_scheme}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}), host, port, 
+      \hyperlink{group__APACHE__CORE__HTTPD_gaaf802cf1817bf45bcf1a5f266ef18bbd}{uri});
+1205 \}
+\end{DoxyCode}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+off\+\_\+t)}{AP_DECLARE(apr_off_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+off\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_a372c4e66c2de77dd8ffe308e4ca8a321}{}\label{core_8c_a372c4e66c2de77dd8ffe308e4ca8a321}
+
+\begin{DoxyCode}
+1208 \{
+1209     \hyperlink{structcore__dir__config}{core\_dir\_config} *\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d} =
+1210       (\hyperlink{structcore__dir__config}{core\_dir\_config} *)\hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0935ac19a61c462c8986898b4c30547d}{per\_dir\_config});
+1211 
+1212     \textcolor{keywordflow}{if} (d->\hyperlink{structcore__dir__config_a57dd3118c6d214cb40efe78e4a0bd790}{limit\_req\_body} == \hyperlink{core_8c_a081db98f7b02cfc6a657c2b01fffd168}{AP\_LIMIT\_REQ\_BODY\_UNSET}) \{
+1213         \textcolor{keywordflow}{return} \hyperlink{core_8c_ab8fb88d2aa59df36bd1d1e662a8d5eb0}{AP\_DEFAULT\_LIMIT\_REQ\_BODY};
+1214     \}
+1215 
+1216     \textcolor{keywordflow}{return} d->\hyperlink{structcore__dir__config_a57dd3118c6d214cb40efe78e4a0bd790}{limit\_req\_body};
+1217 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_a372c4e66c2de77dd8ffe308e4ca8a321_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+size\+\_\+t)}{AP_DECLARE(apr_size_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_add88d80dec77346ec9ac22640de4d95f}{}\label{core_8c_add88d80dec77346ec9ac22640de4d95f}
+
+\begin{DoxyCode}
+3669 \{
+3670     \hyperlink{structcore__dir__config}{core\_dir\_config} *\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf};
+3671 
+3672     conf = \hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0935ac19a61c462c8986898b4c30547d}{per\_dir\_config});
+3673     \textcolor{keywordflow}{if} (conf->\hyperlink{structcore__dir__config_ac7766eaf2b23d23c48a0cff4ae531110}{limit\_xml\_body} == \hyperlink{core_8c_a8f907b514e1af2004406ee8c3b64ee7f}{AP\_LIMIT\_UNSET})
+3674         \textcolor{keywordflow}{return} \hyperlink{core_8c_a62c21747a42647f8faaebd987a8fa934}{AP\_DEFAULT\_LIMIT\_XML\_BODY};
+3675 
+3676     \textcolor{keywordflow}{return} (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})conf->\hyperlink{structcore__dir__config_ac7766eaf2b23d23c48a0cff4ae531110}{limit\_xml\_body};
+3677 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_add88d80dec77346ec9ac22640de4d95f_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(void $\ast$$\ast$)}{AP_DECLARE(void **)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void} $\ast$$\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_a755ea7c8e718d5c3d2ded101f4dffa4a}{}\label{core_8c_a755ea7c8e718d5c3d2ded101f4dffa4a}
+
+\begin{DoxyCode}
+4924 \{
+4925     \hyperlink{structcore__request__config}{core\_request\_config} *req\_cfg;
+4926 
+4927     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__HTTPD_gacddfca39f0faac5c30095a9ffbaf9a86}{note\_num} >= num\_request\_notes) \{
+4928         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+4929     \}
+4930 
+4931     req\_cfg = (\hyperlink{structcore__request__config}{core\_request\_config} *)
+4932         \hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a64ddc7e883db1473c43254766c0c0c07}{request\_config});
+4933 
+4934     \textcolor{keywordflow}{if} (!req\_cfg) \{
+4935         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+4936     \}
+4937 
+4938     \textcolor{keywordflow}{return} &(req\_cfg->\hyperlink{structcore__request__config_a696e5fbd2cf5a9384e5d92b0877575fd}{notes}[\hyperlink{group__APACHE__CORE__HTTPD_gacddfca39f0faac5c30095a9ffbaf9a86}{note\_num}]);
+4939 \}
+\end{DoxyCode}
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+uint32\+\_\+t)}{AP_DECLARE(apr_uint32_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+uint32\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_ad38a188b21e0ba904fd70354bd942415}{}\label{core_8c_ad38a188b21e0ba904fd70354bd942415}
+
+\begin{DoxyCode}
+5177 \{
+5178     \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\_uint32\_t} \hyperlink{pcre_8txt_adc6b34282f003848b6aa3219677b1481}{number};
+5179 \textcolor{preprocessor}{#if (!\_\_GNUC\_\_ || \_\_GNUC\_\_ >= 5 || (\_\_GNUC\_\_ == 4 && \_\_GNUC\_MINOR\_\_ >= 8) || \(\backslash\)}
+5180 \textcolor{preprocessor}{     !\_\_sparc\_\_ || APR\_SIZEOF\_VOIDP != 8)}
+5181     \textcolor{comment}{/* This triggers a gcc bug on sparc/64bit with gcc < 4.8, PR 52900 */}
+5182     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__DAEMON_gac1b9c6a7bfbd9ec2444735d634d4a557}{max} < 16384) \{
+5183         \hyperlink{group__apr__platform_ga3fb87c977e28a526d872d1081411b129}{apr\_uint16\_t} num16;
+5184         ap\_random\_insecure\_bytes(&num16, \textcolor{keyword}{sizeof}(num16));
+5185         \hyperlink{core_8c_acf92777a0a48f8255f7f4368de6cfcca}{RAND\_RANGE}(num16, \hyperlink{apr__random_8c_ac6afabdc09a49a433ee19d8a9486056d}{min}, \hyperlink{group__APACHE__CORE__DAEMON_gac1b9c6a7bfbd9ec2444735d634d4a557}{max}, \hyperlink{group__apr__platform_ga2b7a0eb7506ac0bfc4d711929f9a3a48}{APR\_UINT16\_MAX});
+5186         number = num16;
+5187     \}
+5188     \textcolor{keywordflow}{else}
+5189 \textcolor{preprocessor}{#endif}
+5190     \{
+5191         ap\_random\_insecure\_bytes(&number, \textcolor{keyword}{sizeof}(number));
+5192         \hyperlink{core_8c_acf92777a0a48f8255f7f4368de6cfcca}{RAND\_RANGE}(number, \hyperlink{apr__random_8c_ac6afabdc09a49a433ee19d8a9486056d}{min}, \hyperlink{group__APACHE__CORE__DAEMON_gac1b9c6a7bfbd9ec2444735d634d4a557}{max}, \hyperlink{group__apr__platform_ga239c26656c361f627f7db619997abaac}{APR\_UINT32\_MAX});
+5193     \}
+5194     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_adc6b34282f003848b6aa3219677b1481}{number};
+5195 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_ad38a188b21e0ba904fd70354bd942415_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{core.\+c@{core.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(core)}{AP_DECLARE_MODULE(core)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{core}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_a97fe657728cdac8f342dc0b0ef87c96a}{}\label{core_8c_a97fe657728cdac8f342dc0b0ef87c96a}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{core_8c_a97fe657728cdac8f342dc0b0ef87c96a_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{core.\+c@{core.\+c}!A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}}
+\index{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+C\+T()}{APR_HOOK_STRUCT()}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{}\label{core_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}
+
+\begin{DoxyCode}
+132 \{
+133     \hyperlink{structcore__dir__config}{core\_dir\_config} *\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf};
+134 
+135     conf = (\hyperlink{structcore__dir__config}{core\_dir\_config} *)\hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a}, \textcolor{keyword}{sizeof}(
+      \hyperlink{structcore__dir__config}{core\_dir\_config}));
+136 
+137     \textcolor{comment}{/* conf->r and conf->d[\_*] are initialized by dirsection() or left NULL */}
+138 
+139     conf->\hyperlink{structcore__dir__config_a040a02db82f60403e572e0b42f67ed4a}{opts} = \hyperlink{group__APACHE__CORE__DAEMON_ga6d902c83b02c43071b972ed0416729bc}{dir} ? \hyperlink{group__APACHE__CORE__HTTPD__ACESSORS_ga5c62c4311a0c60c9fa36d109f4bf9004}{OPT\_UNSET} : \hyperlink{group__APACHE__CORE__HTTPD__ACESSORS_ga5c62c4311a0c60c9fa36d109f4bf9004}{OPT\_UNSET}|
+      \hyperlink{group__APACHE__CORE__HTTPD__ACESSORS_ga33b66321dd597ece719badc8bb7b6035}{OPT\_SYM\_LINKS};
+140     conf->\hyperlink{structcore__dir__config_a7b6c01d92223dd4e009baded4e6cd4cb}{opts\_add} = conf->\hyperlink{structcore__dir__config_af04c3013704ea3938b340c6cff39c35c}{opts\_remove} = \hyperlink{group__APACHE__CORE__HTTPD__ACESSORS_ga05e4e8cdcd42d55b8d22289188be3fbf}{OPT\_NONE};
+141     conf->\hyperlink{structcore__dir__config_aedb0318a344bed233d122bd5d4126a88}{override} = \hyperlink{group__ConfigDirectives_ga45fe697d7e968bc74055405fa88cad13}{OR\_UNSET}|\hyperlink{group__ConfigDirectives_ga823d55afe09c8ed42a0563408bcabb28}{OR\_NONE};
+142     conf->\hyperlink{structcore__dir__config_a51fd85f667c0192b876007417b4461f1}{override\_opts} = \hyperlink{group__APACHE__CORE__HTTPD__ACESSORS_ga5c62c4311a0c60c9fa36d109f4bf9004}{OPT\_UNSET} | \hyperlink{group__APACHE__CORE__HTTPD__ACESSORS_ga2981c5f50d55930a31b22cc2d44a7989}{OPT\_ALL} | 
+      \hyperlink{group__APACHE__CORE__HTTPD__ACESSORS_ga168575af5f7cf32e2d69a9d51701adff}{OPT\_SYM\_OWNER} | \hyperlink{group__APACHE__CORE__HTTPD__ACESSORS_gadf94c74beaf0faad5783cacc773375f4}{OPT\_MULTI};
+143 
+144     conf->\hyperlink{structcore__dir__config_add9c6a23997042094ae448da0520cdc1}{content\_md5} = \hyperlink{core_8c_ab0592d0493345ed34472d9a5124de973}{AP\_CONTENT\_MD5\_UNSET};
+145     conf->\hyperlink{structcore__dir__config_ac776685dac54886d6af8e6a0652fad75}{accept\_path\_info} = \hyperlink{core_8c_ac08696fd3df3cacf489ea2e7d4f48901}{AP\_ACCEPT\_PATHINFO\_UNSET};
+146 
+147     conf->\hyperlink{structcore__dir__config_ab1d3f64a79944395fb93b056d42db39c}{use\_canonical\_name} = \hyperlink{http__core_8h_a998c2260426e0e41c6037e312c49aa94}{USE\_CANONICAL\_NAME\_UNSET};
+148     conf->\hyperlink{structcore__dir__config_ae6ec6649adc3fd8686be3b7306a1765f}{use\_canonical\_phys\_port} = 
+      \hyperlink{http__core_8h_ae60cc34c8f7a6476a30c839bb170b824}{USE\_CANONICAL\_PHYS\_PORT\_UNSET};
+149 
+150     conf->\hyperlink{structcore__dir__config_a718a855c9e5027746ae5508508a65a03}{hostname\_lookups} = \hyperlink{http__core_8h_ac7782766782826edadc656ed70df6711}{HOSTNAME\_LOOKUP\_UNSET};
+151 
+152     \textcolor{comment}{/*}
+153 \textcolor{comment}{     * left as NULL (we use apr\_pcalloc):}
+154 \textcolor{comment}{     * conf->limit\_cpu = NULL;}
+155 \textcolor{comment}{     * conf->limit\_mem = NULL;}
+156 \textcolor{comment}{     * conf->limit\_nproc = NULL;}
+157 \textcolor{comment}{     * conf->sec\_file = NULL;}
+158 \textcolor{comment}{     * conf->sec\_if   = NULL;}
+159 \textcolor{comment}{     */}
+160 
+161     conf->\hyperlink{structcore__dir__config_a57dd3118c6d214cb40efe78e4a0bd790}{limit\_req\_body} = \hyperlink{core_8c_a081db98f7b02cfc6a657c2b01fffd168}{AP\_LIMIT\_REQ\_BODY\_UNSET};
+162     conf->\hyperlink{structcore__dir__config_ac7766eaf2b23d23c48a0cff4ae531110}{limit\_xml\_body} = \hyperlink{core_8c_a8f907b514e1af2004406ee8c3b64ee7f}{AP\_LIMIT\_UNSET};
+163 
+164     conf->\hyperlink{structcore__dir__config_a578eacfd0d967392892e8278d7cbe698}{server\_signature} = \hyperlink{group__APACHE__CORE__HTTPD_gga3d3075ad369a3acb6892c3e3c3aab522abba0ee02f0562e1450d93d82b43a8dda}{srv\_sig\_unset};
+165 
+166     conf->\hyperlink{structcore__dir__config_a180dfc7ebc169bcae56cfbea38589738}{add\_default\_charset} = \hyperlink{http__core_8h_a43776708fc39337ed04e2d3c12cd8bdd}{ADD\_DEFAULT\_CHARSET\_UNSET};
+167     conf->\hyperlink{structcore__dir__config_a54b05b39cc4e102bb541b20a90bdc559}{add\_default\_charset\_name} = 
+      \hyperlink{group__APACHE__CORE__DAEMON_gaf5ce507d0fcb36e6129cc2aec6cac122}{DEFAULT\_ADD\_DEFAULT\_CHARSET\_NAME};
+168 
+169     \textcolor{comment}{/* Overriding all negotiation}
+170 \textcolor{comment}{     * Set NULL by apr\_pcalloc:}
+171 \textcolor{comment}{     * conf->mime\_type = NULL;}
+172 \textcolor{comment}{     * conf->handler = NULL;}
+173 \textcolor{comment}{     * conf->output\_filters = NULL;}
+174 \textcolor{comment}{     * conf->input\_filters = NULL;}
+175 \textcolor{comment}{     */}
+176 
+177     \textcolor{comment}{/*}
+178 \textcolor{comment}{     * Flag for use of inodes in ETags.}
+179 \textcolor{comment}{     */}
+180     conf->\hyperlink{structcore__dir__config_afc392d0fba65e414d4c8f2383a6060d1}{etag\_bits} = \hyperlink{group__APACHE__CORE__HTTPD_gab2d67fe1c40ee439106b3b4b364e56bf}{ETAG\_UNSET};
+181     conf->\hyperlink{structcore__dir__config_a3e6d4f7380cd0576da2661ddf359b876}{etag\_add} = \hyperlink{group__APACHE__CORE__HTTPD_gab2d67fe1c40ee439106b3b4b364e56bf}{ETAG\_UNSET};
+182     conf->\hyperlink{structcore__dir__config_aabf822198f6c55255842728374b734f5}{etag\_remove} = \hyperlink{group__APACHE__CORE__HTTPD_gab2d67fe1c40ee439106b3b4b364e56bf}{ETAG\_UNSET};
+183 
+184     conf->\hyperlink{structcore__dir__config_a48defbbaf034adae27f1e629497c2aed}{enable\_mmap} = \hyperlink{http__core_8h_a37beed53080d9ba8c7e59c9b3666c8c1}{ENABLE\_MMAP\_UNSET};
+185     conf->\hyperlink{structcore__dir__config_adf91eebb1b77b7cc74ed8910b9006b20}{enable\_sendfile} = \hyperlink{http__core_8h_a0f546a5c37c9e2158d057bc6f42f1ba2}{ENABLE\_SENDFILE\_UNSET};
+186     conf->\hyperlink{structcore__dir__config_aea246f1072ed8a770cefdac75afab0ae}{allow\_encoded\_slashes} = 0;
+187     conf->\hyperlink{structcore__dir__config_af26e55bab3033457c8a29bdfbb678ab2}{decode\_encoded\_slashes} = 0;
+188 
+189     conf->\hyperlink{structcore__dir__config_a3f48f0b0411dec35773f9125404aaad1}{max\_ranges} = \hyperlink{http__core_8h_aff18faa3a545b8c6452374f933a8d66c}{AP\_MAXRANGES\_UNSET};
+190     conf->\hyperlink{structcore__dir__config_a10485efc86e22fcdf83c8b5e697bb4cb}{max\_overlaps} = \hyperlink{http__core_8h_aff18faa3a545b8c6452374f933a8d66c}{AP\_MAXRANGES\_UNSET};
+191     conf->\hyperlink{structcore__dir__config_a3eb005ca5a1025254338c72fcd2c55a0}{max\_reversals} = \hyperlink{http__core_8h_aff18faa3a545b8c6452374f933a8d66c}{AP\_MAXRANGES\_UNSET};
+192 
+193     conf->\hyperlink{structcore__dir__config_aef534deb0cc47b1ee8a030a5a3a07a6a}{cgi\_pass\_auth} = \hyperlink{http__core_8h_ab38bba3b865abdb1cfc944b490e1c51c}{AP\_CGI\_PASS\_AUTH\_UNSET};
+194     conf->\hyperlink{structcore__dir__config_ae218c213744e0e3cb057ec2478db9ce2}{qualify\_redirect\_url} = \hyperlink{group__APACHE__CORE__HTTPD_ga6e5e0b618d74592d06257c8cac13c3e0}{AP\_CORE\_CONFIG\_UNSET}; 
+195 
+196     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{void} *)\hyperlink{group__APACHE__CORE__HTTPD_ga7be6dfd9155648f64d6e9abcd78c38cd}{conf};
+197 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_a7be86665d9cf471d2cc24c9f6a4b63fc_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{core.\+c@{core.\+c}!A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE@{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE}}
+\index{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE@{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE}!core.\+c@{core.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+P\+E(ap\+\_\+logio\+\_\+add\+\_\+bytes\+\_\+out)}{APR_OPTIONAL_FN_TYPE(ap_logio_add_bytes_out)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+logio\+\_\+add\+\_\+bytes\+\_\+out}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8c_a78b9309a2319e29751a1a5a8af88c4ba}{}\label{core_8c_a78b9309a2319e29751a1a5a8af88c4ba}
+
+\begin{DoxyCode}
+4806 \{
+4807     sys\_privileges += \hyperlink{group__APR__Util__RC_ga3032890ab2e5d12bfb3b92c280a84216}{inc};
+4808     \textcolor{keywordflow}{return} sys\_privileges;
+4809 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_a78b9309a2319e29751a1a5a8af88c4ba_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core_8c_a78b9309a2319e29751a1a5a8af88c4ba_icgraph}
+\end{center}
+\end{figure}
+
+

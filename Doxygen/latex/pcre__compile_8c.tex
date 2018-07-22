@@ -1,0 +1,1193 @@
+\hypertarget{pcre__compile_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/pcre/pcre\+\_\+compile.c File Reference}
+\label{pcre__compile_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+compile.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+compile.\+c}}
+{\ttfamily \#include \char`\"{}pcre\+\_\+internal.\+h\char`\"{}}\\*
+Include dependency graph for pcre\+\_\+compile.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__compile_8c__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__compile_8c__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structverbitem}{verbitem}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{pcre__compile_8c_a95a3c07f6f5cdb6c70ce239175f163d0}{N\+L\+B\+L\+O\+CK}~cd             /$\ast$ Block containing \hyperlink{pcregrep_8txt_a9f48ea6b13757e0a4c5b5a6dfd7f178e}{newline} information $\ast$/
+\item 
+\#define \hyperlink{pcre__compile_8c_a24a8ab0a4c94d7ad2ea58b502f552136}{P\+S\+S\+T\+A\+RT}~start\+\_\+pattern  /$\ast$ Field containing \hyperlink{pcretest_8txt_a14415789461ee2ace28e34eea786cc6c}{pattern} \hyperlink{ab_8c_af9b96980fc724ad325115184a485da5f}{start} $\ast$/
+\item 
+\#define \hyperlink{pcre__compile_8c_af7e8ae41e062a5935164c1e0c4c2b1f0}{P\+S\+E\+ND}~end\+\_\+pattern    /$\ast$ Field containing \hyperlink{pcretest_8txt_a14415789461ee2ace28e34eea786cc6c}{pattern} \hyperlink{group__apr__strings_ga87c7e3f3f70b6e7de10e3f56e3f4d7a4}{end} $\ast$/
+\item 
+\#define \hyperlink{pcre__compile_8c_ac47a41bc402846743c4490200f23ed2c}{S\+E\+T\+B\+IT}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a},  \hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}\mbox{[}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})/8\mbox{]} $\vert$= (1 $<$$<$ ((\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})\&7))
+\item 
+\#define \hyperlink{pcre__compile_8c_aadb8b9f58ce39150beab75aa4003816a}{O\+F\+L\+O\+W\+\_\+\+M\+AX}~(I\+N\+T\+\_\+\+M\+AX -\/ 20)
+\item 
+\#define \hyperlink{pcre__compile_8c_ae6ca9bdec2edc32d0268bd41de2f9b18}{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE}~(2048$\ast$\hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{L\+I\+N\+K\+\_\+\+S\+I\+ZE})
+\item 
+\#define \hyperlink{pcre__compile_8c_a364e96ca5a0d673fd581b1cf9691e0f9}{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+M\+AX}~(100$\ast$\hyperlink{pcre__compile_8c_ae6ca9bdec2edc32d0268bd41de2f9b18}{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE})
+\item 
+\#define \hyperlink{pcre__compile_8c_aedc6cfc9c20af0538cf911c2ee9ee2fc}{N\+A\+M\+E\+D\+\_\+\+G\+R\+O\+U\+P\+\_\+\+L\+I\+S\+T\+\_\+\+S\+I\+ZE}~20
+\item 
+\#define \hyperlink{pcre__compile_8c_aa70d8a14bafc62792e054c1487ac3760}{W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+S\+A\+F\+E\+T\+Y\+\_\+\+M\+A\+R\+G\+IN}~(100)
+\item 
+\#define \hyperlink{pcre__compile_8c_ae4f4c02878c10584696c22c5e4425215}{R\+E\+Q\+\_\+\+C\+A\+S\+E\+L\+E\+SS}~(1 $<$$<$ 0)        /$\ast$ Indicates caselessness $\ast$/
+\item 
+\#define \hyperlink{pcre__compile_8c_a1a5a2f42aaea27efaa2abc899f29703c}{R\+E\+Q\+\_\+\+V\+A\+RY}~(1 $<$$<$ 1)        /$\ast$ Reqchar followed non-\/\hyperlink{structliteral}{literal} \hyperlink{structitem}{item} $\ast$/
+\item 
+\#define \hyperlink{pcre__compile_8c_a9ec509dea3821287522b780beb9b5d8e}{R\+E\+Q\+\_\+\+U\+N\+S\+ET}~(-\/2)
+\item 
+\#define \hyperlink{pcre__compile_8c_a185b688e6437c1e1e58d35953efa79d5}{R\+E\+Q\+\_\+\+N\+O\+NE}~(-\/1)
+\item 
+\#define \hyperlink{pcre__compile_8c_a0fdf8cd36b257ed95b24ec6ff0f6fe7e}{U\+T\+F\+\_\+\+L\+E\+N\+G\+TH}~0x10000000l      /$\ast$ The char contains its length. $\ast$/
+\item 
+\#define \hyperlink{pcre__compile_8c_ad67a2911a7e5d3e4201e3e677ab28e0c}{P\+C\+\_\+\+G\+R\+A\+PH}~8
+\item 
+\#define \hyperlink{pcre__compile_8c_af8f75e3ed411e1145b7963f26eba0139}{P\+C\+\_\+\+P\+R\+I\+NT}~9
+\item 
+\#define \hyperlink{pcre__compile_8c_a2b5017b430348a837e591233451d6323}{P\+C\+\_\+\+P\+U\+N\+CT}~10
+\item 
+\#define \hyperlink{pcre__compile_8c_ac44504206ba5e7edf67f453407103815}{S\+T\+R\+I\+NG}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})~\# \hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}
+\item 
+\#define \hyperlink{pcre__compile_8c_aca706bf8dd2234d7d20c5284a653d73b}{X\+S\+T\+R\+I\+NG}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~\hyperlink{pcre__version_8c_ac44504206ba5e7edf67f453407103815}{S\+T\+R\+I\+NG}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\#define \hyperlink{pcre__compile_8c_a4300e50732f2afc145ffee1fe391d899}{I\+S\+\_\+\+D\+I\+G\+IT}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= \hyperlink{pcre__internal_8h_a4d8afe85a98a6ca9064effbc809fbf32}{C\+H\+A\+R\+\_\+0} \&\& (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$= \hyperlink{pcre__internal_8h_a33f45bac79ff2e66844c105f771f280a}{C\+H\+A\+R\+\_\+9})
+\item 
+\#define \hyperlink{pcre__compile_8c_a7c65a809b586d379acaadb22adccca30}{A\+P\+T\+R\+O\+WS}~(\hyperlink{pcre__internal_8h_a9a3400f3434415d01a222f788cecd200}{L\+A\+S\+T\+\_\+\+A\+U\+T\+O\+T\+A\+B\+\_\+\+L\+E\+F\+T\+\_\+\+OP} -\/ \hyperlink{pcre__internal_8h_a2dd68174226d86dbf4a052a8cd4b4fd5}{F\+I\+R\+S\+T\+\_\+\+A\+U\+T\+O\+T\+A\+B\+\_\+\+OP} + 1)
+\item 
+\#define \hyperlink{pcre__compile_8c_af2575e6bcf1087bfb0d98b7765b1b720}{A\+P\+T\+C\+O\+LS}~(\hyperlink{pcre__internal_8h_aa0f978660db10b2978d88ada5408c196}{L\+A\+S\+T\+\_\+\+A\+U\+T\+O\+T\+A\+B\+\_\+\+R\+I\+G\+H\+T\+\_\+\+OP} -\/ \hyperlink{pcre__internal_8h_a2dd68174226d86dbf4a052a8cd4b4fd5}{F\+I\+R\+S\+T\+\_\+\+A\+U\+T\+O\+T\+A\+B\+\_\+\+OP} + 1)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structverbitem}{verbitem} \hyperlink{pcre__compile_8c_a13cd3e999fdd31a4bdac5da1e0b7c11c}{verbitem}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\+\_\+uchar} $\ast$\hyperlink{pcre__ucd_8c_af5471be21445e049e6c27568e5e0a8cd}{P\+R\+IV}() \hyperlink{pcre__compile_8c_a8597f2e71aa9caf8f5c72407d820585b}{find\+\_\+bracket} (const \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\+\_\+uchar} $\ast$\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}, \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{B\+O\+OL} utf, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcretest_8txt_a7965c027cf47c0c0e2396d2f8e6b40c3}{number})
+\item 
+\hyperlink{pcre__internal_8h_a43f7c191f7b3645a85b184183534a961}{P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+FN} \hyperlink{pcre_8h_a2bc1b88cfd3d453b96bdc5411a22484f}{pcre} $\ast$\hyperlink{pcre__internal_8h_a8696d535a0f4ad7b9fef8b2acc558ca0}{P\+C\+R\+E\+\_\+\+C\+A\+L\+L\+\_\+\+C\+O\+N\+V\+E\+N\+T\+I\+ON} \hyperlink{pcre__compile_8c_a73bc1d517e53ae9e6e8c51075f9ac72a}{pcre\+\_\+compile} (const char $\ast$\hyperlink{pcretest_8txt_a14415789461ee2ace28e34eea786cc6c}{pattern}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_aefb1fa742c21909e746b978f6e1d7e17}{options}, const char $\ast$$\ast$errorptr, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$erroroffset, const unsigned char $\ast$\hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables})
+\item 
+\hyperlink{pcre__internal_8h_a43f7c191f7b3645a85b184183534a961}{P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+FN} \hyperlink{pcre_8h_a2bc1b88cfd3d453b96bdc5411a22484f}{pcre} $\ast$\hyperlink{pcre__internal_8h_a8696d535a0f4ad7b9fef8b2acc558ca0}{P\+C\+R\+E\+\_\+\+C\+A\+L\+L\+\_\+\+C\+O\+N\+V\+E\+N\+T\+I\+ON} \hyperlink{pcre__compile_8c_aec1a7d477013a867fc7a0ea760087a3a}{pcre\+\_\+compile2} (const char $\ast$\hyperlink{pcretest_8txt_a14415789461ee2ace28e34eea786cc6c}{pattern}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_aefb1fa742c21909e746b978f6e1d7e17}{options}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr}, const char $\ast$$\ast$errorptr, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$erroroffset, const unsigned char $\ast$\hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!A\+P\+T\+C\+O\+LS@{A\+P\+T\+C\+O\+LS}}
+\index{A\+P\+T\+C\+O\+LS@{A\+P\+T\+C\+O\+LS}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+T\+C\+O\+LS}{APTCOLS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+T\+C\+O\+LS~({\bf L\+A\+S\+T\+\_\+\+A\+U\+T\+O\+T\+A\+B\+\_\+\+R\+I\+G\+H\+T\+\_\+\+OP} -\/ {\bf F\+I\+R\+S\+T\+\_\+\+A\+U\+T\+O\+T\+A\+B\+\_\+\+OP} + 1)}\hypertarget{pcre__compile_8c_af2575e6bcf1087bfb0d98b7765b1b720}{}\label{pcre__compile_8c_af2575e6bcf1087bfb0d98b7765b1b720}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!A\+P\+T\+R\+O\+WS@{A\+P\+T\+R\+O\+WS}}
+\index{A\+P\+T\+R\+O\+WS@{A\+P\+T\+R\+O\+WS}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+T\+R\+O\+WS}{APTROWS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+T\+R\+O\+WS~({\bf L\+A\+S\+T\+\_\+\+A\+U\+T\+O\+T\+A\+B\+\_\+\+L\+E\+F\+T\+\_\+\+OP} -\/ {\bf F\+I\+R\+S\+T\+\_\+\+A\+U\+T\+O\+T\+A\+B\+\_\+\+OP} + 1)}\hypertarget{pcre__compile_8c_a7c65a809b586d379acaadb22adccca30}{}\label{pcre__compile_8c_a7c65a809b586d379acaadb22adccca30}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE@{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE}}
+\index{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE@{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE}{COMPILE_WORK_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE~(2048$\ast${\bf L\+I\+N\+K\+\_\+\+S\+I\+ZE})}\hypertarget{pcre__compile_8c_ae6ca9bdec2edc32d0268bd41de2f9b18}{}\label{pcre__compile_8c_ae6ca9bdec2edc32d0268bd41de2f9b18}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+M\+AX@{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+M\+AX}}
+\index{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+M\+AX@{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+M\+AX}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+M\+AX}{COMPILE_WORK_SIZE_MAX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+M\+AX~(100$\ast${\bf C\+O\+M\+P\+I\+L\+E\+\_\+\+W\+O\+R\+K\+\_\+\+S\+I\+ZE})}\hypertarget{pcre__compile_8c_a364e96ca5a0d673fd581b1cf9691e0f9}{}\label{pcre__compile_8c_a364e96ca5a0d673fd581b1cf9691e0f9}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!I\+S\+\_\+\+D\+I\+G\+IT@{I\+S\+\_\+\+D\+I\+G\+IT}}
+\index{I\+S\+\_\+\+D\+I\+G\+IT@{I\+S\+\_\+\+D\+I\+G\+IT}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{I\+S\+\_\+\+D\+I\+G\+IT}{IS_DIGIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+S\+\_\+\+D\+I\+G\+IT(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~(({\bf x}) $>$= {\bf C\+H\+A\+R\+\_\+0} \&\& ({\bf x}) $<$= {\bf C\+H\+A\+R\+\_\+9})}\hypertarget{pcre__compile_8c_a4300e50732f2afc145ffee1fe391d899}{}\label{pcre__compile_8c_a4300e50732f2afc145ffee1fe391d899}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!N\+A\+M\+E\+D\+\_\+\+G\+R\+O\+U\+P\+\_\+\+L\+I\+S\+T\+\_\+\+S\+I\+ZE@{N\+A\+M\+E\+D\+\_\+\+G\+R\+O\+U\+P\+\_\+\+L\+I\+S\+T\+\_\+\+S\+I\+ZE}}
+\index{N\+A\+M\+E\+D\+\_\+\+G\+R\+O\+U\+P\+\_\+\+L\+I\+S\+T\+\_\+\+S\+I\+ZE@{N\+A\+M\+E\+D\+\_\+\+G\+R\+O\+U\+P\+\_\+\+L\+I\+S\+T\+\_\+\+S\+I\+ZE}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{N\+A\+M\+E\+D\+\_\+\+G\+R\+O\+U\+P\+\_\+\+L\+I\+S\+T\+\_\+\+S\+I\+ZE}{NAMED_GROUP_LIST_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+A\+M\+E\+D\+\_\+\+G\+R\+O\+U\+P\+\_\+\+L\+I\+S\+T\+\_\+\+S\+I\+ZE~20}\hypertarget{pcre__compile_8c_aedc6cfc9c20af0538cf911c2ee9ee2fc}{}\label{pcre__compile_8c_aedc6cfc9c20af0538cf911c2ee9ee2fc}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!N\+L\+B\+L\+O\+CK@{N\+L\+B\+L\+O\+CK}}
+\index{N\+L\+B\+L\+O\+CK@{N\+L\+B\+L\+O\+CK}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{N\+L\+B\+L\+O\+CK}{NLBLOCK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+L\+B\+L\+O\+CK~cd             /$\ast$ Block containing {\bf newline} information $\ast$/}\hypertarget{pcre__compile_8c_a95a3c07f6f5cdb6c70ce239175f163d0}{}\label{pcre__compile_8c_a95a3c07f6f5cdb6c70ce239175f163d0}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!O\+F\+L\+O\+W\+\_\+\+M\+AX@{O\+F\+L\+O\+W\+\_\+\+M\+AX}}
+\index{O\+F\+L\+O\+W\+\_\+\+M\+AX@{O\+F\+L\+O\+W\+\_\+\+M\+AX}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{O\+F\+L\+O\+W\+\_\+\+M\+AX}{OFLOW_MAX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\+F\+L\+O\+W\+\_\+\+M\+AX~(I\+N\+T\+\_\+\+M\+AX -\/ 20)}\hypertarget{pcre__compile_8c_aadb8b9f58ce39150beab75aa4003816a}{}\label{pcre__compile_8c_aadb8b9f58ce39150beab75aa4003816a}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!P\+C\+\_\+\+G\+R\+A\+PH@{P\+C\+\_\+\+G\+R\+A\+PH}}
+\index{P\+C\+\_\+\+G\+R\+A\+PH@{P\+C\+\_\+\+G\+R\+A\+PH}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{P\+C\+\_\+\+G\+R\+A\+PH}{PC_GRAPH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+C\+\_\+\+G\+R\+A\+PH~8}\hypertarget{pcre__compile_8c_ad67a2911a7e5d3e4201e3e677ab28e0c}{}\label{pcre__compile_8c_ad67a2911a7e5d3e4201e3e677ab28e0c}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!P\+C\+\_\+\+P\+R\+I\+NT@{P\+C\+\_\+\+P\+R\+I\+NT}}
+\index{P\+C\+\_\+\+P\+R\+I\+NT@{P\+C\+\_\+\+P\+R\+I\+NT}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{P\+C\+\_\+\+P\+R\+I\+NT}{PC_PRINT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+C\+\_\+\+P\+R\+I\+NT~9}\hypertarget{pcre__compile_8c_af8f75e3ed411e1145b7963f26eba0139}{}\label{pcre__compile_8c_af8f75e3ed411e1145b7963f26eba0139}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!P\+C\+\_\+\+P\+U\+N\+CT@{P\+C\+\_\+\+P\+U\+N\+CT}}
+\index{P\+C\+\_\+\+P\+U\+N\+CT@{P\+C\+\_\+\+P\+U\+N\+CT}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{P\+C\+\_\+\+P\+U\+N\+CT}{PC_PUNCT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+C\+\_\+\+P\+U\+N\+CT~10}\hypertarget{pcre__compile_8c_a2b5017b430348a837e591233451d6323}{}\label{pcre__compile_8c_a2b5017b430348a837e591233451d6323}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!P\+S\+E\+ND@{P\+S\+E\+ND}}
+\index{P\+S\+E\+ND@{P\+S\+E\+ND}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{P\+S\+E\+ND}{PSEND}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+S\+E\+ND~end\+\_\+pattern    /$\ast$ Field containing {\bf pattern} {\bf end} $\ast$/}\hypertarget{pcre__compile_8c_af7e8ae41e062a5935164c1e0c4c2b1f0}{}\label{pcre__compile_8c_af7e8ae41e062a5935164c1e0c4c2b1f0}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!P\+S\+S\+T\+A\+RT@{P\+S\+S\+T\+A\+RT}}
+\index{P\+S\+S\+T\+A\+RT@{P\+S\+S\+T\+A\+RT}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{P\+S\+S\+T\+A\+RT}{PSSTART}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+S\+S\+T\+A\+RT~start\+\_\+pattern  /$\ast$ Field containing {\bf pattern} {\bf start} $\ast$/}\hypertarget{pcre__compile_8c_a24a8ab0a4c94d7ad2ea58b502f552136}{}\label{pcre__compile_8c_a24a8ab0a4c94d7ad2ea58b502f552136}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!R\+E\+Q\+\_\+\+C\+A\+S\+E\+L\+E\+SS@{R\+E\+Q\+\_\+\+C\+A\+S\+E\+L\+E\+SS}}
+\index{R\+E\+Q\+\_\+\+C\+A\+S\+E\+L\+E\+SS@{R\+E\+Q\+\_\+\+C\+A\+S\+E\+L\+E\+SS}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+Q\+\_\+\+C\+A\+S\+E\+L\+E\+SS}{REQ_CASELESS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+Q\+\_\+\+C\+A\+S\+E\+L\+E\+SS~(1 $<$$<$ 0)        /$\ast$ Indicates caselessness $\ast$/}\hypertarget{pcre__compile_8c_ae4f4c02878c10584696c22c5e4425215}{}\label{pcre__compile_8c_ae4f4c02878c10584696c22c5e4425215}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!R\+E\+Q\+\_\+\+N\+O\+NE@{R\+E\+Q\+\_\+\+N\+O\+NE}}
+\index{R\+E\+Q\+\_\+\+N\+O\+NE@{R\+E\+Q\+\_\+\+N\+O\+NE}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+Q\+\_\+\+N\+O\+NE}{REQ_NONE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+Q\+\_\+\+N\+O\+NE~(-\/1)}\hypertarget{pcre__compile_8c_a185b688e6437c1e1e58d35953efa79d5}{}\label{pcre__compile_8c_a185b688e6437c1e1e58d35953efa79d5}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!R\+E\+Q\+\_\+\+U\+N\+S\+ET@{R\+E\+Q\+\_\+\+U\+N\+S\+ET}}
+\index{R\+E\+Q\+\_\+\+U\+N\+S\+ET@{R\+E\+Q\+\_\+\+U\+N\+S\+ET}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+Q\+\_\+\+U\+N\+S\+ET}{REQ_UNSET}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+Q\+\_\+\+U\+N\+S\+ET~(-\/2)}\hypertarget{pcre__compile_8c_a9ec509dea3821287522b780beb9b5d8e}{}\label{pcre__compile_8c_a9ec509dea3821287522b780beb9b5d8e}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!R\+E\+Q\+\_\+\+V\+A\+RY@{R\+E\+Q\+\_\+\+V\+A\+RY}}
+\index{R\+E\+Q\+\_\+\+V\+A\+RY@{R\+E\+Q\+\_\+\+V\+A\+RY}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{R\+E\+Q\+\_\+\+V\+A\+RY}{REQ_VARY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+E\+Q\+\_\+\+V\+A\+RY~(1 $<$$<$ 1)        /$\ast$ Reqchar followed non-\/{\bf literal} {\bf item} $\ast$/}\hypertarget{pcre__compile_8c_a1a5a2f42aaea27efaa2abc899f29703c}{}\label{pcre__compile_8c_a1a5a2f42aaea27efaa2abc899f29703c}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!S\+E\+T\+B\+IT@{S\+E\+T\+B\+IT}}
+\index{S\+E\+T\+B\+IT@{S\+E\+T\+B\+IT}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{S\+E\+T\+B\+IT}{SETBIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+E\+T\+B\+IT(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}, }
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf a}\mbox{[}({\bf b})/8\mbox{]} $\vert$= (1 $<$$<$ (({\bf b})\&7))}\hypertarget{pcre__compile_8c_ac47a41bc402846743c4490200f23ed2c}{}\label{pcre__compile_8c_ac47a41bc402846743c4490200f23ed2c}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!S\+T\+R\+I\+NG@{S\+T\+R\+I\+NG}}
+\index{S\+T\+R\+I\+NG@{S\+T\+R\+I\+NG}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{S\+T\+R\+I\+NG}{STRING}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+T\+R\+I\+NG(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}}
+\end{DoxyParamCaption}
+)~\# {\bf a}}\hypertarget{pcre__compile_8c_ac44504206ba5e7edf67f453407103815}{}\label{pcre__compile_8c_ac44504206ba5e7edf67f453407103815}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!U\+T\+F\+\_\+\+L\+E\+N\+G\+TH@{U\+T\+F\+\_\+\+L\+E\+N\+G\+TH}}
+\index{U\+T\+F\+\_\+\+L\+E\+N\+G\+TH@{U\+T\+F\+\_\+\+L\+E\+N\+G\+TH}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{U\+T\+F\+\_\+\+L\+E\+N\+G\+TH}{UTF_LENGTH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\+T\+F\+\_\+\+L\+E\+N\+G\+TH~0x10000000l      /$\ast$ The char contains its length. $\ast$/}\hypertarget{pcre__compile_8c_a0fdf8cd36b257ed95b24ec6ff0f6fe7e}{}\label{pcre__compile_8c_a0fdf8cd36b257ed95b24ec6ff0f6fe7e}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+S\+A\+F\+E\+T\+Y\+\_\+\+M\+A\+R\+G\+IN@{W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+S\+A\+F\+E\+T\+Y\+\_\+\+M\+A\+R\+G\+IN}}
+\index{W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+S\+A\+F\+E\+T\+Y\+\_\+\+M\+A\+R\+G\+IN@{W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+S\+A\+F\+E\+T\+Y\+\_\+\+M\+A\+R\+G\+IN}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+S\+A\+F\+E\+T\+Y\+\_\+\+M\+A\+R\+G\+IN}{WORK_SIZE_SAFETY_MARGIN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+O\+R\+K\+\_\+\+S\+I\+Z\+E\+\_\+\+S\+A\+F\+E\+T\+Y\+\_\+\+M\+A\+R\+G\+IN~(100)}\hypertarget{pcre__compile_8c_aa70d8a14bafc62792e054c1487ac3760}{}\label{pcre__compile_8c_aa70d8a14bafc62792e054c1487ac3760}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!X\+S\+T\+R\+I\+NG@{X\+S\+T\+R\+I\+NG}}
+\index{X\+S\+T\+R\+I\+NG@{X\+S\+T\+R\+I\+NG}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{X\+S\+T\+R\+I\+NG}{XSTRING}}]{\setlength{\rightskip}{0pt plus 5cm}\#define X\+S\+T\+R\+I\+NG(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf s}}
+\end{DoxyParamCaption}
+)~{\bf S\+T\+R\+I\+NG}({\bf s})}\hypertarget{pcre__compile_8c_aca706bf8dd2234d7d20c5284a653d73b}{}\label{pcre__compile_8c_aca706bf8dd2234d7d20c5284a653d73b}
+
+
+\subsection{Typedef Documentation}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!verbitem@{verbitem}}
+\index{verbitem@{verbitem}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{verbitem}{verbitem}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf verbitem}  {\bf verbitem}}\hypertarget{pcre__compile_8c_a13cd3e999fdd31a4bdac5da1e0b7c11c}{}\label{pcre__compile_8c_a13cd3e999fdd31a4bdac5da1e0b7c11c}
+
+
+\subsection{Function Documentation}
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!find\+\_\+bracket@{find\+\_\+bracket}}
+\index{find\+\_\+bracket@{find\+\_\+bracket}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{find\+\_\+bracket(const pcre\+\_\+uchar $\ast$code, B\+O\+O\+L utf, int number)}{find_bracket(const pcre_uchar *code, BOOL utf, int number)}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf pcre\+\_\+uchar}$\ast$ {\bf P\+R\+IV}() find\+\_\+bracket (
+\begin{DoxyParamCaption}
+\item[{const {\bf pcre\+\_\+uchar} $\ast$}]{code, }
+\item[{{\bf B\+O\+OL}}]{utf, }
+\item[{{\bf int}}]{number}
+\end{DoxyParamCaption}
+)}\hypertarget{pcre__compile_8c_a8597f2e71aa9caf8f5c72407d820585b}{}\label{pcre__compile_8c_a8597f2e71aa9caf8f5c72407d820585b}
+
+\begin{DoxyCode}
+2082 \{
+2083 \textcolor{keywordflow}{for} (;;)
+2084   \{
+2085   \textcolor{keyword}{register} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c} = *\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code};
+2086 
+2087   \textcolor{keywordflow}{if} (c == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da010acee11f1e0ca0026e20c2f36bfdb7}{OP\_END}) \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+2088 
+2089   \textcolor{comment}{/* XCLASS is used for classes that cannot be represented just by a bit}
+2090 \textcolor{comment}{  map. This includes negated single high-valued characters. The length in}
+2091 \textcolor{comment}{  the table is zero; the actual length is stored in the compiled code. */}
+2092 
+2093   \textcolor{keywordflow}{if} (c == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dacd62821c239c3917560a909bb19bceb3}{OP\_XCLASS}) \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code} += \hyperlink{group__MOD__PROXY_gga4e8622ade6bde29385df7b89c9b94e71a12a8dcf59c16b5aadfda3a08ba67d529}{GET}(\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}, 1);
+2094 
+2095   \textcolor{comment}{/* Handle recursion */}
+2096 
+2097   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (c == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da71a96996291adee64ecab873b24408b5}{OP\_REVERSE})
+2098     \{
+2099     \textcolor{keywordflow}{if} (\hyperlink{pcre_8txt_adc6b34282f003848b6aa3219677b1481}{number} < 0) \textcolor{keywordflow}{return} (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code};
+2100     \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code} += \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(OP\_lengths)[\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}];
+2101     \}
+2102 
+2103   \textcolor{comment}{/* Handle capturing bracket */}
+2104 
+2105   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (c == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dae4c4aa9b53947e30a7c06a618126a75b}{OP\_CBRA} || c == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa9aaca0d2623c1345d4af3f9a1fba55e}{OP\_SCBRA} ||
+2106            c == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da98986b8428debf264a64d8050128d903}{OP\_CBRAPOS} || c == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da9f3febe1b755421e4d3ba643b30e06f3}{OP\_SCBRAPOS})
+2107     \{
+2108     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})\hyperlink{pcre__internal_8h_af1a0f1797db309553f1392c04a7fd8d7}{GET2}(\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}, 1+\hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{LINK\_SIZE});
+2109     \textcolor{keywordflow}{if} (n == \hyperlink{pcre_8txt_adc6b34282f003848b6aa3219677b1481}{number}) \textcolor{keywordflow}{return} (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code};
+2110     \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code} += \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(OP\_lengths)[\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}];
+2111     \}
+2112 
+2113   \textcolor{comment}{/* Otherwise, we can get the item's length from the table, except that for}
+2114 \textcolor{comment}{  repeated character types, we have to test for \(\backslash\)p and \(\backslash\)P, which have an extra}
+2115 \textcolor{comment}{  two bytes of parameters, and for MARK/PRUNE/SKIP/THEN with an argument, we}
+2116 \textcolor{comment}{  must add in its length. */}
+2117 
+2118   \textcolor{keywordflow}{else}
+2119     \{
+2120     \textcolor{keywordflow}{switch}(c)
+2121       \{
+2122       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da3ee72aa1c7fd2ea63f991115375d457b}{OP\_TYPESTAR}:
+2123       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac269a8eb882e03f517293d156c4ca7ee}{OP\_TYPEMINSTAR}:
+2124       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da22c4991eef1371652cde137ae2bd218e}{OP\_TYPEPLUS}:
+2125       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da14b55a6ebf5d9b6ce22082d701a01959}{OP\_TYPEMINPLUS}:
+2126       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da17536428c3af7314bbf2640e508ca33b}{OP\_TYPEQUERY}:
+2127       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa23453b3105f120bcbe1a02f163082fd}{OP\_TYPEMINQUERY}:
+2128       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da3a43f7619c2b5f68ab6fcb1e46aadfb4}{OP\_TYPEPOSSTAR}:
+2129       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da3d6bc3632971622542cbe167f7c170e3}{OP\_TYPEPOSPLUS}:
+2130       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac492dc1f53782d42def24d2b923f18c4}{OP\_TYPEPOSQUERY}:
+2131       \textcolor{keywordflow}{if} (\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}[1] == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da9401977b66a8b590fdc4c769cab73868}{OP\_PROP} || \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}[1] == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da1357d93ff70849561f64cfc072a685d1}{OP\_NOTPROP}) 
+      \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code} += 2;
+2132       \textcolor{keywordflow}{break};
+2133 
+2134       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dacb10e8776178fe6d76db8258f428c9b8}{OP\_TYPEUPTO}:
+2135       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da3c3c4557f2af900243692be9334cd913}{OP\_TYPEMINUPTO}:
+2136       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da59bed76d4deeb1a60c32f36b30e8eb13}{OP\_TYPEEXACT}:
+2137       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da7a2e8e9d3619df87610f1da24d4de5a0}{OP\_TYPEPOSUPTO}:
+2138       \textcolor{keywordflow}{if} (\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}[1 + \hyperlink{pcre__internal_8h_ad3241efcb308c0a0a70de5016711cd01}{IMM2\_SIZE}] == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da9401977b66a8b590fdc4c769cab73868}{OP\_PROP} || \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}[1 + 
+      \hyperlink{pcre__internal_8h_ad3241efcb308c0a0a70de5016711cd01}{IMM2\_SIZE}] == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da1357d93ff70849561f64cfc072a685d1}{OP\_NOTPROP})
+2139         \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code} += 2;
+2140       \textcolor{keywordflow}{break};
+2141 
+2142       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa220f521f7362c69943d1de035d5a735}{OP\_MARK}:
+2143       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da43cb2016ed7e721a5e2f33e06515d0d3}{OP\_PRUNE\_ARG}:
+2144       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da276e3bdd8c91b9038b2a5bda1b3caf64}{OP\_SKIP\_ARG}:
+2145       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da4dba5623decfe2701903b69d6c8f81c9}{OP\_THEN\_ARG}:
+2146       \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code} += \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}[1];
+2147       \textcolor{keywordflow}{break};
+2148       \}
+2149 
+2150     \textcolor{comment}{/* Add in the fixed length from the table */}
+2151 
+2152     \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code} += \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(OP\_lengths)[\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}];
+2153 
+2154   \textcolor{comment}{/* In UTF-8 mode, opcodes that are followed by a character may be followed by}
+2155 \textcolor{comment}{  a multi-byte character. The length in the table is a minimum, so we have to}
+2156 \textcolor{comment}{  arrange to skip the extra bytes. */}
+2157 
+2158 \textcolor{preprocessor}{#if defined SUPPORT\_UTF && !defined COMPILE\_PCRE32}
+2159     \textcolor{keywordflow}{if} (utf) \textcolor{keywordflow}{switch}(c)
+2160       \{
+2161       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da050d16bc0c6a222898d6a0b390d941cf}{OP\_CHAR}:
+2162       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa16d54c663eb7f03322bd85396b1d58c}{OP\_CHARI}:
+2163       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da36a6b73cc4823f54891a013e2cc760d1}{OP\_NOT}:
+2164       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dae116d6789268c64c977712b1db7a1b9f}{OP\_NOTI}:
+2165       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da55af8032fdb0011108d358184d065090}{OP\_EXACT}:
+2166       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da42b04477ebf653b70bee3eb7156bd79f}{OP\_EXACTI}:
+2167       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daf86dda71ee43c5bffffeb5334bffbeed}{OP\_NOTEXACT}:
+2168       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daf4f5261271274ffd2d7f98e42c60860d}{OP\_NOTEXACTI}:
+2169       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da901fa38b2789592c62864196546c1f40}{OP\_UPTO}:
+2170       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da86bff34f7a6765d3ea8030bb1420efd9}{OP\_UPTOI}:
+2171       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da3ebb928e44fd590059c04b9eba983365}{OP\_NOTUPTO}:
+2172       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daedeafdde2b142ceb2761173ac159156f}{OP\_NOTUPTOI}:
+2173       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daaedd676e6d3581adbcde869c050bc25b}{OP\_MINUPTO}:
+2174       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da6fd6615bd9ce5f08bc09c2deafa977d2}{OP\_MINUPTOI}:
+2175       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac28146c312bd1249029404d473f6be4e}{OP\_NOTMINUPTO}:
+2176       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dadff7b0574f9292d26474a6bf3a0aadde}{OP\_NOTMINUPTOI}:
+2177       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da6f80145741d9621bc3d7051cebb42fd2}{OP\_POSUPTO}:
+2178       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dae30ee55ec9d5363df315f3b8a6ea3136}{OP\_POSUPTOI}:
+2179       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da716c014b118ca6c3bec583b22958166d}{OP\_NOTPOSUPTO}:
+2180       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da07f4e3cf4a1d7556ee3ef2a41220723b}{OP\_NOTPOSUPTOI}:
+2181       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dabbac82509d3e6ec4e48888a58a65fea0}{OP\_STAR}:
+2182       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da00bda83cdaf008748c3dbd3f4e7181ca}{OP\_STARI}:
+2183       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa6487aefb16e0f5dcad93fdce1e3f373}{OP\_NOTSTAR}:
+2184       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da364728d2cc19d7c8c64ccf09871e73e4}{OP\_NOTSTARI}:
+2185       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dab76952c741418e37c7cca2fd5143e0fc}{OP\_MINSTAR}:
+2186       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da27b252a29c94e5370cda1978dd1b0cbc}{OP\_MINSTARI}:
+2187       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa5ec71555d5ac4042a95ac280f75e394}{OP\_NOTMINSTAR}:
+2188       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da03cdefc542a325bde004db23bd813c19}{OP\_NOTMINSTARI}:
+2189       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da3d707075c9fc986dd75283dcf43602b5}{OP\_POSSTAR}:
+2190       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dacf23e475dbce0c00d9fdcdfbff7fbd74}{OP\_POSSTARI}:
+2191       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da94581d3d5b2bebc9b85e718026b8e335}{OP\_NOTPOSSTAR}:
+2192       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da92337fcc24275bdf6fa49e7438d0baa1}{OP\_NOTPOSSTARI}:
+2193       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da5a7e60a084df9c5e6530038757b412e7}{OP\_PLUS}:
+2194       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da95237beb80b204de16c5a18cb6e78a3f}{OP\_PLUSI}:
+2195       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da13cdebdbc084ee1dd01425be339effda}{OP\_NOTPLUS}:
+2196       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da44f4b6786e3c80320ec8637aefbce1c0}{OP\_NOTPLUSI}:
+2197       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da79fa28dc4f1c9a45d3a0bb8372f5b70a}{OP\_MINPLUS}:
+2198       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dadc44abf0d72ae3c07f4ba8191501a9fa}{OP\_MINPLUSI}:
+2199       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da977ac204fe430a34ad51f9207cd12838}{OP\_NOTMINPLUS}:
+2200       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da39f568548a1554851fc0f3a98be95fb3}{OP\_NOTMINPLUSI}:
+2201       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac5477f48e04e5742645a010f1f0a0bb6}{OP\_POSPLUS}:
+2202       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da9dd90e620292fb9c58b24e76bfee9b41}{OP\_POSPLUSI}:
+2203       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dafbcfa09fe11e6b50626ea47a3609488a}{OP\_NOTPOSPLUS}:
+2204       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da620621bee3c0d2bebd44c28142f75dec}{OP\_NOTPOSPLUSI}:
+2205       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da9026f8e43659827c81499cb779f2a580}{OP\_QUERY}:
+2206       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da99a53895e8df236a4fad7fd70a9612bc}{OP\_QUERYI}:
+2207       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dae1e18938521bff596d493a927571e23c}{OP\_NOTQUERY}:
+2208       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da4ace46fbde497ecf6ada4065952fc2f0}{OP\_NOTQUERYI}:
+2209       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da7c0e7b19d7f9e002a1d916c7a0381c4d}{OP\_MINQUERY}:
+2210       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dadbd4a67d0ab6ce6c143a700ec81e8361}{OP\_MINQUERYI}:
+2211       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac2c9b3a8f17d9bc060872b9279d23da0}{OP\_NOTMINQUERY}:
+2212       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa1ab303e42d4cbc5d22f21d63df1db09}{OP\_NOTMINQUERYI}:
+2213       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dab2bd21819f67d9a8de41a9fff9c29aad}{OP\_POSQUERY}:
+2214       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da91db9c86b93ec3b481538b477499a036}{OP\_POSQUERYI}:
+2215       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac9bd027ba175584ea72bd033160de8e7}{OP\_NOTPOSQUERY}:
+2216       \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daafd7d720917d833b533c50c6ee03c79b}{OP\_NOTPOSQUERYI}:
+2217       \textcolor{keywordflow}{if} (HAS\_EXTRALEN(\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}[-1])) \hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code} += GET\_EXTRALEN(\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code}[-1]);
+2218       \textcolor{keywordflow}{break};
+2219       \}
+2220 \textcolor{preprocessor}{#else}
+2221     (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})(utf);  \textcolor{comment}{/* Keep compiler happy by referencing function argument */}
+2222 \textcolor{preprocessor}{#endif}
+2223     \}
+2224   \}
+2225 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__compile_8c_a8597f2e71aa9caf8f5c72407d820585b_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__compile_8c_a8597f2e71aa9caf8f5c72407d820585b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!pcre\+\_\+compile@{pcre\+\_\+compile}}
+\index{pcre\+\_\+compile@{pcre\+\_\+compile}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{pcre\+\_\+compile(const char $\ast$pattern, int options, const char $\ast$$\ast$errorptr, int $\ast$erroroffset, const unsigned char $\ast$tables)}{pcre_compile(const char *pattern, int options, const char **errorptr, int *erroroffset, const unsigned char *tables)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+FN} {\bf pcre}$\ast$ {\bf P\+C\+R\+E\+\_\+\+C\+A\+L\+L\+\_\+\+C\+O\+N\+V\+E\+N\+T\+I\+ON} pcre\+\_\+compile (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{pattern, }
+\item[{{\bf int}}]{options, }
+\item[{const char $\ast$$\ast$}]{errorptr, }
+\item[{{\bf int} $\ast$}]{erroroffset, }
+\item[{const unsigned char $\ast$}]{tables}
+\end{DoxyParamCaption}
+)}\hypertarget{pcre__compile_8c_a73bc1d517e53ae9e6e8c51075f9ac72a}{}\label{pcre__compile_8c_a73bc1d517e53ae9e6e8c51075f9ac72a}
+
+\begin{DoxyCode}
+9034 \{
+9035 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8}
+9036 \textcolor{keywordflow}{return} \hyperlink{pcre__compile_8c_aec1a7d477013a867fc7a0ea760087a3a}{pcre\_compile2}(\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}, \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, errorptr, erroroffset, 
+      \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables});
+9037 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE16}
+9038 \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_a3b5d97d976c7a9d5d8193fb64972283d}{pcre16\_compile2}(\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}, \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, errorptr, erroroffset, 
+      \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables});
+9039 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+9040 \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_a9505eb0c7e470b7a1c1e903aaa0bd002}{pcre32\_compile2}(\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}, \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, errorptr, erroroffset, 
+      \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables});
+9041 \textcolor{preprocessor}{#endif}
+9042 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__compile_8c_a73bc1d517e53ae9e6e8c51075f9ac72a_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}!pcre\+\_\+compile2@{pcre\+\_\+compile2}}
+\index{pcre\+\_\+compile2@{pcre\+\_\+compile2}!pcre\+\_\+compile.\+c@{pcre\+\_\+compile.\+c}}
+\subsubsection[{\texorpdfstring{pcre\+\_\+compile2(const char $\ast$pattern, int options, int $\ast$errorcodeptr, const char $\ast$$\ast$errorptr, int $\ast$erroroffset, const unsigned char $\ast$tables)}{pcre_compile2(const char *pattern, int options, int *errorcodeptr, const char **errorptr, int *erroroffset, const unsigned char *tables)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+FN} {\bf pcre}$\ast$ {\bf P\+C\+R\+E\+\_\+\+C\+A\+L\+L\+\_\+\+C\+O\+N\+V\+E\+N\+T\+I\+ON} pcre\+\_\+compile2 (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{pattern, }
+\item[{{\bf int}}]{options, }
+\item[{{\bf int} $\ast$}]{errorcodeptr, }
+\item[{const char $\ast$$\ast$}]{errorptr, }
+\item[{{\bf int} $\ast$}]{erroroffset, }
+\item[{const unsigned char $\ast$}]{tables}
+\end{DoxyParamCaption}
+)}\hypertarget{pcre__compile_8c_aec1a7d477013a867fc7a0ea760087a3a}{}\label{pcre__compile_8c_aec1a7d477013a867fc7a0ea760087a3a}
+
+\begin{DoxyCode}
+9058 \{
+9059 \hyperlink{pcre__internal_8h_a2984f4df28d081d53978318a28d0c665}{REAL\_PCRE} *\hyperlink{pcre_8txt_abd134207f74532a8b094676c4a2ca9ed}{re};
+9060 \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length} = 1;  \textcolor{comment}{/* For final END opcode */}
+9061 pcre\_int32 firstcharflags, reqcharflags;
+9062 pcre\_uint32 firstchar, reqchar;
+9063 pcre\_uint32 limit\_match = PCRE\_UINT32\_MAX;
+9064 pcre\_uint32 limit\_recursion = PCRE\_UINT32\_MAX;
+9065 \textcolor{keywordtype}{int} \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a9f48ea6b13757e0a4c5b5a6dfd7f178e}{newline};
+9066 \textcolor{keywordtype}{int} errorcode = 0;
+9067 \textcolor{keywordtype}{int} skipatstart = 0;
+9068 \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{BOOL} utf;
+9069 \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{BOOL} never\_utf = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+9070 \textcolor{keywordtype}{size\_t} \hyperlink{group__APACHE__CORE__CONFIG_ga2bd3edb50f631a96f1b729fde236ff43}{size};
+9071 \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *\hyperlink{README_8txt_aef5b02fe2e73c9ebbe67d741d711f85c}{code};
+9072 \textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *codestart;
+9073 \textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr};
+9074 \hyperlink{structcompile__data}{compile\_data} compile\_block;
+9075 \hyperlink{structcompile__data}{compile\_data} *cd = &compile\_block;
+9076 
+9077 \textcolor{comment}{/* This space is used for "compiling" into during the first phase, when we are}
+9078 \textcolor{comment}{computing the amount of memory that is needed. Compiled items are thrown away}
+9079 \textcolor{comment}{as soon as possible, so that a fairly large buffer should be sufficient for}
+9080 \textcolor{comment}{this purpose. The same space is used in the second phase for remembering where}
+9081 \textcolor{comment}{to fill in forward references to subpatterns. That may overflow, in which case}
+9082 \textcolor{comment}{new memory is obtained from malloc(). */}
+9083 
+9084 \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} cworkspace[\hyperlink{pcre__compile_8c_ae6ca9bdec2edc32d0268bd41de2f9b18}{COMPILE\_WORK\_SIZE}];
+9085 
+9086 \textcolor{comment}{/* This vector is used for remembering name groups during the pre-compile. In a}
+9087 \textcolor{comment}{similar way to cworkspace, it can be expanded using malloc() if necessary. */}
+9088 
+9089 \hyperlink{structnamed__group}{named\_group} named\_groups[\hyperlink{pcre__compile_8c_aedc6cfc9c20af0538cf911c2ee9ee2fc}{NAMED\_GROUP\_LIST\_SIZE}];
+9090 
+9091 \textcolor{comment}{/* Set this early so that early errors get offset 0. */}
+9092 
+9093 ptr = (\textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern};
+9094 
+9095 \textcolor{comment}{/* We can't pass back an error message if errorptr is NULL; I guess the best we}
+9096 \textcolor{comment}{can do is just return NULL, but we can set a code value if there is a code}
+9097 \textcolor{comment}{pointer. */}
+9098 
+9099 \textcolor{keywordflow}{if} (errorptr == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+9100   \{
+9101   \textcolor{keywordflow}{if} (\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) *\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr} = 99;
+9102   \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9103   \}
+9104 
+9105 *errorptr = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9106 \textcolor{keywordflow}{if} (\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) *\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr} = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122aee68ca14bd42b83c1d796f49bf4ad203}{ERR0};
+9107 
+9108 \textcolor{comment}{/* However, we can give a message for this error */}
+9109 
+9110 \textcolor{keywordflow}{if} (erroroffset == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+9111   \{
+9112   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122ac3bbebb332e0707064a55c4a0d628107}{ERR16};
+9113   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN2;
+9114   \}
+9115 
+9116 *erroroffset = 0;
+9117 
+9118 \textcolor{comment}{/* Set up pointers to the individual character tables */}
+9119 
+9120 \textcolor{keywordflow}{if} (\hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables} = \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(default\_tables);
+9121 cd->\hyperlink{structcompile__data_a612f2b5160e1bbfcbcff8aaf96f14e09}{lcc} = \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables} + \hyperlink{pcre__internal_8h_ade4efb6fb5feb928550e72974967f1d0}{lcc\_offset};
+9122 cd->\hyperlink{structcompile__data_acbef42e411ed9f99e1aa524c1eb9e429}{fcc} = \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables} + \hyperlink{pcre__internal_8h_ac8621d471e516521d225bc2dc7705782}{fcc\_offset};
+9123 cd->\hyperlink{structcompile__data_a65e8af2519e1043f264029a4129ca9b5}{cbits} = \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables} + \hyperlink{pcre__internal_8h_a1af2fa016e5f6954ced7f2600b2c105e}{cbits\_offset};
+9124 cd->\hyperlink{structcompile__data_a352c4e0b00f520e5ba3f2259000bf33c}{ctypes} = \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables} + \hyperlink{pcre__internal_8h_ae658ea05e098e65933f3d7e062495de4}{ctypes\_offset};
+9125 
+9126 \textcolor{comment}{/* Check that all undefined public option bits are zero */}
+9127 
+9128 \textcolor{keywordflow}{if} ((\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & ~\hyperlink{pcre__internal_8h_a5a65edca151cea37f77df829c87b003d}{PUBLIC\_COMPILE\_OPTIONS}) != 0)
+9129   \{
+9130   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a07cdeb5345bd444858da59baf7045d0c}{ERR17};
+9131   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN;
+9132   \}
+9133 
+9134 \textcolor{comment}{/* If PCRE\_NEVER\_UTF is set, remember it. */}
+9135 
+9136 \textcolor{keywordflow}{if} ((\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & \hyperlink{pcretest_8txt_af7acf96473f289539cac56c4c84c10f1}{PCRE\_NEVER\_UTF}) != 0) never\_utf = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+9137 
+9138 \textcolor{comment}{/* Check for global one-time settings at the start of the pattern, and remember}
+9139 \textcolor{comment}{the offset for later. */}
+9140 
+9141 cd->\hyperlink{structcompile__data_ab10020d1b58e0861c1be5917d20d5438}{external\_flags} = 0;   \textcolor{comment}{/* Initialize here for LIMIT\_MATCH/RECURSION */}
+9142 
+9143 \textcolor{keywordflow}{while} (ptr[skipatstart] == \hyperlink{pcre__internal_8h_aa22ff25693f3ad5b3507295f9c31048a}{CHAR\_LEFT\_PARENTHESIS} &&
+9144        ptr[skipatstart+1] == \hyperlink{pcre__internal_8h_adcea73e03fc5311440a211a70db4f809}{CHAR\_ASTERISK})
+9145   \{
+9146   \textcolor{keywordtype}{int} newnl = 0;
+9147   \textcolor{keywordtype}{int} newbsr = 0;
+9148 
+9149 \textcolor{comment}{/* For completeness and backward compatibility, (*UTFn) is supported in the}
+9150 \textcolor{comment}{relevant libraries, but (*UTF) is generic and always supported. Note that}
+9151 \textcolor{comment}{PCRE\_UTF8 == PCRE\_UTF16 == PCRE\_UTF32. */}
+9152 
+9153 \textcolor{preprocessor}{#ifdef COMPILE\_PCRE8}
+9154   \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_a0cfac5c33fcabcbfc43ed44bc6f6d6e8}{STRING\_UTF8\_RIGHTPAR}, 5) == 0)
+9155     \{ skipatstart += 7; \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} |= \hyperlink{pcre_8h_a177ec66f9b06aab7b37965b77b2cf1b8}{PCRE\_UTF8}; \textcolor{keywordflow}{continue}; \}
+9156 \textcolor{preprocessor}{#endif}
+9157 \textcolor{preprocessor}{#ifdef COMPILE\_PCRE16}
+9158   \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_afcc854897258c2de5a91f72ee892e9cd}{STRING\_UTF16\_RIGHTPAR}, 6) == 0)
+9159     \{ skipatstart += 8; \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} |= \hyperlink{pcre_8h_a272d3113af637a7be28ee27695da49fa}{PCRE\_UTF16}; \textcolor{keywordflow}{continue}; \}
+9160 \textcolor{preprocessor}{#endif}
+9161 \textcolor{preprocessor}{#ifdef COMPILE\_PCRE32}
+9162   \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_a275c7de44e48a1af917dde3fd9cc38cd}{STRING\_UTF32\_RIGHTPAR}, 6) == 0)
+9163     \{ skipatstart += 8; \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} |= \hyperlink{pcre_8h_a1e21d4d3b39559da9313ca1d4908001b}{PCRE\_UTF32}; \textcolor{keywordflow}{continue}; \}
+9164 \textcolor{preprocessor}{#endif}
+9165 
+9166   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_abf2170a3ab532fe20759222fd3393a46}{STRING\_UTF\_RIGHTPAR}, 4) == 0)
+9167     \{ skipatstart += 6; \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} |= \hyperlink{pcre_8h_a177ec66f9b06aab7b37965b77b2cf1b8}{PCRE\_UTF8}; \textcolor{keywordflow}{continue}; \}
+9168   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_ac175ad6a03eb0300e9fc07925e6a4c94}{STRING\_UCP\_RIGHTPAR}, 4) == 0)
+9169     \{ skipatstart += 6; \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} |= \hyperlink{pcre_8h_aa5e5c6edd5e61d07f9bc9127a6868402}{PCRE\_UCP}; \textcolor{keywordflow}{continue}; \}
+9170   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, 
+      \hyperlink{pcre__internal_8h_a23a344089940e3f9e848cb4dbffc6c0b}{STRING\_NO\_AUTO\_POSSESS\_RIGHTPAR}, 16) == 0)
+9171     \{ skipatstart += 18; \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} |= \hyperlink{pcre_8h_afa6c9234aa7d3ee12748375fe4204c56}{PCRE\_NO\_AUTO\_POSSESS}; \textcolor{keywordflow}{continue}; \}
+9172   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, 
+      \hyperlink{pcre__internal_8h_a522c8f4334652210ffbca6d00ca681c8}{STRING\_NO\_START\_OPT\_RIGHTPAR}, 13) == 0)
+9173     \{ skipatstart += 15; \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} |= \hyperlink{pcre_8h_ab07c8c2c3a7fc070d2da0ec9bdf8a873}{PCRE\_NO\_START\_OPTIMIZE}; \textcolor{keywordflow}{continue}; \}
+9174 
+9175   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_ab13c0a1e7d3fe5d66b5b9929d1400b14}{STRING\_LIMIT\_MATCH\_EQ}, 12) ==
+       0)
+9176     \{
+9177     pcre\_uint32 \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c} = 0;
+9178     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p} = skipatstart + 14;
+9179     \textcolor{keywordflow}{while} (isdigit(ptr[p]))
+9180       \{
+9181       \textcolor{keywordflow}{if} (c > PCRE\_UINT32\_MAX / 10 - 1) \textcolor{keywordflow}{break};   \textcolor{comment}{/* Integer overflow */}
+9182       c = c*10 + ptr[p++] - \hyperlink{pcre__internal_8h_a4d8afe85a98a6ca9064effbc809fbf32}{CHAR\_0};
+9183       \}
+9184     \textcolor{keywordflow}{if} (ptr[p++] != \hyperlink{pcre__internal_8h_a890df49777a84fa012dd3e06f7d04d78}{CHAR\_RIGHT\_PARENTHESIS}) \textcolor{keywordflow}{break};
+9185     \textcolor{keywordflow}{if} (c < limit\_match)
+9186       \{
+9187       limit\_match = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+9188       cd->\hyperlink{structcompile__data_ab10020d1b58e0861c1be5917d20d5438}{external\_flags} |= \hyperlink{pcre__internal_8h_a85a4393e4eddb7154917361690ca2b3a}{PCRE\_MLSET};
+9189       \}
+9190     skipatstart = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+9191     \textcolor{keywordflow}{continue};
+9192     \}
+9193 
+9194   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, 
+      \hyperlink{pcre__internal_8h_af2c0ff146d78e41ae8afef98a8cc6589}{STRING\_LIMIT\_RECURSION\_EQ}, 16) == 0)
+9195     \{
+9196     pcre\_uint32 c = 0;
+9197     \textcolor{keywordtype}{int} p = skipatstart + 18;
+9198     \textcolor{keywordflow}{while} (isdigit(ptr[p]))
+9199       \{
+9200       \textcolor{keywordflow}{if} (c > PCRE\_UINT32\_MAX / 10 - 1) \textcolor{keywordflow}{break};   \textcolor{comment}{/* Integer overflow check */}
+9201       c = c*10 + ptr[p++] - \hyperlink{pcre__internal_8h_a4d8afe85a98a6ca9064effbc809fbf32}{CHAR\_0};
+9202       \}
+9203     \textcolor{keywordflow}{if} (ptr[p++] != \hyperlink{pcre__internal_8h_a890df49777a84fa012dd3e06f7d04d78}{CHAR\_RIGHT\_PARENTHESIS}) \textcolor{keywordflow}{break};
+9204     \textcolor{keywordflow}{if} (c < limit\_recursion)
+9205       \{
+9206       limit\_recursion = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+9207       cd->\hyperlink{structcompile__data_ab10020d1b58e0861c1be5917d20d5438}{external\_flags} |= \hyperlink{pcre__internal_8h_aacff484a2b4e62921bb7c6a9464cd94e}{PCRE\_RLSET};
+9208       \}
+9209     skipatstart = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+9210     \textcolor{keywordflow}{continue};
+9211     \}
+9212 
+9213   \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_a8e254db45322e53275bc616b9ac84087}{STRING\_CR\_RIGHTPAR}, 3) == 0)
+9214     \{ skipatstart += 5; newnl = \hyperlink{pcre_8h_ab55198e91574a143392a8dced9d5cf85}{PCRE\_NEWLINE\_CR}; \}
+9215   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_afd6c499e5bcb0e7018073cbc81b7ed6b}{STRING\_LF\_RIGHTPAR}, 3)  == 0)
+9216     \{ skipatstart += 5; newnl = \hyperlink{pcre_8h_a9d3e03ae881322fe05e72e7ad111bf4f}{PCRE\_NEWLINE\_LF}; \}
+9217   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_a0b652726f9af2bd885ccf67a995c70cd}{STRING\_CRLF\_RIGHTPAR}, 5)  == 0
+      )
+9218     \{ skipatstart += 7; newnl = \hyperlink{pcre_8h_ab55198e91574a143392a8dced9d5cf85}{PCRE\_NEWLINE\_CR} + \hyperlink{pcre_8h_a9d3e03ae881322fe05e72e7ad111bf4f}{PCRE\_NEWLINE\_LF}; \}
+9219   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_ae6f3a579e997945f37b004992286af5f}{STRING\_ANY\_RIGHTPAR}, 4) == 0)
+9220     \{ skipatstart += 6; newnl = \hyperlink{pcre_8h_a1c379cd4b51ea037dce7e8c79f9ee57d}{PCRE\_NEWLINE\_ANY}; \}
+9221   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, \hyperlink{pcre__internal_8h_a8a60fd72ae4ec0a374c8656e4a7c5b6f}{STRING\_ANYCRLF\_RIGHTPAR}, 8)
+       == 0)
+9222     \{ skipatstart += 10; newnl = \hyperlink{pcre_8h_af25f19586bec4187ca77e617ddc9b98b}{PCRE\_NEWLINE\_ANYCRLF}; \}
+9223 
+9224   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, 
+      \hyperlink{pcre__internal_8h_a18e56235fcec266f95f452252769fe9c}{STRING\_BSR\_ANYCRLF\_RIGHTPAR}, 12) == 0)
+9225     \{ skipatstart += 14; newbsr = \hyperlink{pcre_8h_ac4743871720886cdb063a9102f18bf0a}{PCRE\_BSR\_ANYCRLF}; \}
+9226   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_adcf2f145a020087b0ad1506bf6dc2f44}{STRNCMP\_UC\_C8}(ptr+skipatstart+2, 
+      \hyperlink{pcre__internal_8h_afb205b30f20dbcaca1a4f7a17c478643}{STRING\_BSR\_UNICODE\_RIGHTPAR}, 12) == 0)
+9227     \{ skipatstart += 14; newbsr = \hyperlink{pcre_8h_ac26454ae13931ee0bb369dff27b7c1e2}{PCRE\_BSR\_UNICODE}; \}
+9228 
+9229   \textcolor{keywordflow}{if} (newnl != 0)
+9230     \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} = (\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & ~\hyperlink{pcre__internal_8h_a3ee8247993b3ece18a68631e54007555}{PCRE\_NEWLINE\_BITS}) | newnl;
+9231   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (newbsr != 0)
+9232     \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} = (\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & ~(\hyperlink{pcre_8h_ac4743871720886cdb063a9102f18bf0a}{PCRE\_BSR\_ANYCRLF}|
+      \hyperlink{pcre_8h_ac26454ae13931ee0bb369dff27b7c1e2}{PCRE\_BSR\_UNICODE})) | newbsr;
+9233   \textcolor{keywordflow}{else} \textcolor{keywordflow}{break};
+9234   \}
+9235 
+9236 \textcolor{comment}{/* PCRE\_UTF(16|32) have the same value as PCRE\_UTF8. */}
+9237 utf = (\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & \hyperlink{pcre_8h_a177ec66f9b06aab7b37965b77b2cf1b8}{PCRE\_UTF8}) != 0;
+9238 \textcolor{keywordflow}{if} (utf && never\_utf)
+9239   \{
+9240   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a9d1b48e271b0cf989868791323de39a9}{ERR78};
+9241   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN2;
+9242   \}
+9243 
+9244 \textcolor{comment}{/* Can't support UTF unless PCRE has been compiled to include the code. The}
+9245 \textcolor{comment}{return of an error code from PRIV(valid\_utf)() is a new feature, introduced in}
+9246 \textcolor{comment}{release 8.13. It is passed back from pcre\_[dfa\_]exec(), but at the moment is}
+9247 \textcolor{comment}{not used here. */}
+9248 
+9249 \textcolor{preprocessor}{#ifdef SUPPORT\_UTF}
+9250 \textcolor{keywordflow}{if} (utf && (\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & \hyperlink{pcre_8txt_af9448f2501d79b862273e02c0c326f7d}{PCRE\_NO\_UTF8\_CHECK}) == 0 &&
+9251      (errorcode = \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(\hyperlink{pcre16__valid__utf16_8c_acaecf2e310395e9000f8c5b328b0f37d}{valid\_utf})((\hyperlink{pcre__internal_8h_a142c7c692c1f94083b0ad52e0520e900}{PCRE\_PUCHAR})\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}, -1, erroroffset)) !=
+       0)
+9252   \{
+9253 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8}
+9254   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122ac7e6dbe4b8421fa8a6a97d517b2b777b}{ERR44};
+9255 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE16}
+9256   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a472cf92fcb0fc9f06053b77128427019}{ERR74};
+9257 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+9258   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a5b08d57d7ca662398bf7036d779c9dcd}{ERR77};
+9259 \textcolor{preprocessor}{#endif}
+9260   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN2;
+9261   \}
+9262 \textcolor{preprocessor}{#else}
+9263 \textcolor{keywordflow}{if} (utf)
+9264   \{
+9265   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122aba78a716868b2db96e08d88cf7a26f60}{ERR32};
+9266   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN;
+9267   \}
+9268 \textcolor{preprocessor}{#endif}
+9269 
+9270 \textcolor{comment}{/* Can't support UCP unless PCRE has been compiled to include the code. */}
+9271 
+9272 \textcolor{preprocessor}{#ifndef SUPPORT\_UCP}
+9273 \textcolor{keywordflow}{if} ((\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & \hyperlink{pcre_8h_aa5e5c6edd5e61d07f9bc9127a6868402}{PCRE\_UCP}) != 0)
+9274   \{
+9275   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a7567b4b154bf6a5af4333acdfa21717f}{ERR67};
+9276   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN;
+9277   \}
+9278 \textcolor{preprocessor}{#endif}
+9279 
+9280 \textcolor{comment}{/* Check validity of \(\backslash\)R options. */}
+9281 
+9282 \textcolor{keywordflow}{if} ((\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & (\hyperlink{pcre_8h_ac4743871720886cdb063a9102f18bf0a}{PCRE\_BSR\_ANYCRLF}|\hyperlink{pcre_8h_ac26454ae13931ee0bb369dff27b7c1e2}{PCRE\_BSR\_UNICODE})) ==
+9283      (\hyperlink{pcre_8h_ac4743871720886cdb063a9102f18bf0a}{PCRE\_BSR\_ANYCRLF}|\hyperlink{pcre_8h_ac26454ae13931ee0bb369dff27b7c1e2}{PCRE\_BSR\_UNICODE}))
+9284   \{
+9285   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a76f0de90fbd33e67d06955a6c5b9c2e1}{ERR56};
+9286   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN;
+9287   \}
+9288 
+9289 \textcolor{comment}{/* Handle different types of newline. The three bits give seven cases. The}
+9290 \textcolor{comment}{current code allows for fixed one- or two-byte sequences, plus "any" and}
+9291 \textcolor{comment}{"anycrlf". */}
+9292 
+9293 \textcolor{keywordflow}{switch} (\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & \hyperlink{pcre__internal_8h_a3ee8247993b3ece18a68631e54007555}{PCRE\_NEWLINE\_BITS})
+9294   \{
+9295   \textcolor{keywordflow}{case} 0: newline = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_ab26dfb3784697f4ae91f356713845063}{NEWLINE}; \textcolor{keywordflow}{break};   \textcolor{comment}{/* Build-time default */}
+9296   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_ab55198e91574a143392a8dced9d5cf85}{PCRE\_NEWLINE\_CR}: newline = \hyperlink{pcre__internal_8h_a96f70aecaff003e01fc8bcf2f070c5ef}{CHAR\_CR}; \textcolor{keywordflow}{break};
+9297   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a9d3e03ae881322fe05e72e7ad111bf4f}{PCRE\_NEWLINE\_LF}: newline = \hyperlink{pcre__internal_8h_a8edcdaf0b586f0ad461b6e7aced9ba09}{CHAR\_NL}; \textcolor{keywordflow}{break};
+9298   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_ab55198e91574a143392a8dced9d5cf85}{PCRE\_NEWLINE\_CR}+
+9299        \hyperlink{pcre_8h_a9d3e03ae881322fe05e72e7ad111bf4f}{PCRE\_NEWLINE\_LF}: newline = (\hyperlink{pcre__internal_8h_a96f70aecaff003e01fc8bcf2f070c5ef}{CHAR\_CR} << 8) | \hyperlink{pcre__internal_8h_a8edcdaf0b586f0ad461b6e7aced9ba09}{CHAR\_NL}; \textcolor{keywordflow}{break};
+9300   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_a1c379cd4b51ea037dce7e8c79f9ee57d}{PCRE\_NEWLINE\_ANY}: newline = -1; \textcolor{keywordflow}{break};
+9301   \textcolor{keywordflow}{case} \hyperlink{pcre_8h_af25f19586bec4187ca77e617ddc9b98b}{PCRE\_NEWLINE\_ANYCRLF}: newline = -2; \textcolor{keywordflow}{break};
+9302   \textcolor{keywordflow}{default}: errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a76f0de90fbd33e67d06955a6c5b9c2e1}{ERR56}; \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN;
+9303   \}
+9304 
+9305 \textcolor{keywordflow}{if} (newline == -2)
+9306   \{
+9307   cd->\hyperlink{structcompile__data_aacd1282193574f239ea481833837a230}{nltype} = \hyperlink{pcre__internal_8h_a27a269d5670306a753a98413273ea9be}{NLTYPE\_ANYCRLF};
+9308   \}
+9309 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (newline < 0)
+9310   \{
+9311   cd->\hyperlink{structcompile__data_aacd1282193574f239ea481833837a230}{nltype} = \hyperlink{pcre__internal_8h_acf7dfdf7c85c3d4a4db4d2d3547611d2}{NLTYPE\_ANY};
+9312   \}
+9313 \textcolor{keywordflow}{else}
+9314   \{
+9315   cd->\hyperlink{structcompile__data_aacd1282193574f239ea481833837a230}{nltype} = \hyperlink{pcre__internal_8h_a479214957206efe3295aba2dbfb35a9c}{NLTYPE\_FIXED};
+9316   \textcolor{keywordflow}{if} (newline > 255)
+9317     \{
+9318     cd->\hyperlink{structcompile__data_afffec692f99b0882a2f360f07a8e9a60}{nllen} = 2;
+9319     cd->\hyperlink{structcompile__data_a655990757cd6b0018610713f3429d7b5}{nl}[0] = (newline >> 8) & 255;
+9320     cd->\hyperlink{structcompile__data_a655990757cd6b0018610713f3429d7b5}{nl}[1] = newline & 255;
+9321     \}
+9322   \textcolor{keywordflow}{else}
+9323     \{
+9324     cd->\hyperlink{structcompile__data_afffec692f99b0882a2f360f07a8e9a60}{nllen} = 1;
+9325     cd->\hyperlink{structcompile__data_a655990757cd6b0018610713f3429d7b5}{nl}[0] = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a9f48ea6b13757e0a4c5b5a6dfd7f178e}{newline};
+9326     \}
+9327   \}
+9328 
+9329 \textcolor{comment}{/* Maximum back reference and backref bitmap. The bitmap records up to 31 back}
+9330 \textcolor{comment}{references to help in deciding whether (.*) can be treated as anchored or not.}
+9331 \textcolor{comment}{*/}
+9332 
+9333 cd->\hyperlink{structcompile__data_a13384c0fe520de7e485444824e410305}{top\_backref} = 0;
+9334 cd->\hyperlink{structcompile__data_add03843bc9b81fa0b63b9d8ee730cf5c}{backref\_map} = 0;
+9335 
+9336 \textcolor{comment}{/* Reflect pattern for debugging output */}
+9337 
+9338 \hyperlink{pcre__internal_8h_a927243fe3d588e31de3f3badd5c47d47}{DPRINTF}((\textcolor{stringliteral}{"------------------------------------------------------------------\(\backslash\)n"}));
+9339 \textcolor{preprocessor}{#ifdef PCRE\_DEBUG}
+9340 print\_puchar(\hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout}, (\hyperlink{pcre__internal_8h_a142c7c692c1f94083b0ad52e0520e900}{PCRE\_PUCHAR})\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern});
+9341 \textcolor{preprocessor}{#endif}
+9342 \hyperlink{pcre__internal_8h_a927243fe3d588e31de3f3badd5c47d47}{DPRINTF}((\textcolor{stringliteral}{"\(\backslash\)n"}));
+9343 
+9344 \textcolor{comment}{/* Pretend to compile the pattern while actually just accumulating the length}
+9345 \textcolor{comment}{of memory required. This behaviour is triggered by passing a non-NULL final}
+9346 \textcolor{comment}{argument to compile\_regex(). We pass a block of workspace (cworkspace) for it}
+9347 \textcolor{comment}{to compile parts of the pattern into; the compiled code is discarded when it is}
+9348 \textcolor{comment}{no longer needed, so hopefully this workspace will never overflow, though there}
+9349 \textcolor{comment}{is a test for its doing so. */}
+9350 
+9351 cd->\hyperlink{structcompile__data_ac0208aa4e0d59f8d16a55930bd7d19a9}{bracount} = cd->\hyperlink{structcompile__data_a6d164ca6626dcd16f4e0550fa05acfc3}{final\_bracount} = 0;
+9352 cd->\hyperlink{structcompile__data_a1500a48dd2b716de73de4eec23646141}{names\_found} = 0;
+9353 cd->\hyperlink{structcompile__data_af5b14a0163ddb0ad1b120e9383c0dc6e}{name\_entry\_size} = 0;
+9354 cd->\hyperlink{structcompile__data_a81577d4886b02876373f009b7f2b44e8}{name\_table} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9355 cd->\hyperlink{structcompile__data_ab6466924a95b13907bb9cf92eab9d2c5}{dupnames} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+9356 cd->\hyperlink{structcompile__data_af06fc86ab37386fa55025c5f8585a7c4}{dupgroups} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+9357 cd->\hyperlink{structcompile__data_aea6d1d4b198b2d9e9119bed59031147c}{namedrefcount} = 0;
+9358 cd->\hyperlink{structcompile__data_a4b783863acd7691e06a48663c5ecd6f6}{start\_code} = cworkspace;
+9359 cd->\hyperlink{structcompile__data_ad7b414eba889034a23c9d162b74e247e}{hwm} = cworkspace;
+9360 cd->\hyperlink{structcompile__data_a8f769a7e12713194068444a9fb68026b}{iscondassert} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+9361 cd->\hyperlink{structcompile__data_a5ece64e93e6cdb0fdc1f76dce25d6284}{start\_workspace} = cworkspace;
+9362 cd->\hyperlink{structcompile__data_a750c8953276fc2c3ce0aa73de571cae7}{workspace\_size} = \hyperlink{pcre__compile_8c_ae6ca9bdec2edc32d0268bd41de2f9b18}{COMPILE\_WORK\_SIZE};
+9363 cd->\hyperlink{structcompile__data_a74515a73c037ab368004309ea64c8980}{named\_groups} = named\_groups;
+9364 cd->\hyperlink{structcompile__data_a0a96857b27b412d6c2cc738b09c0a698}{named\_group\_list\_size} = \hyperlink{pcre__compile_8c_aedc6cfc9c20af0538cf911c2ee9ee2fc}{NAMED\_GROUP\_LIST\_SIZE};
+9365 cd->\hyperlink{structcompile__data_a76acc9face4905939e25dd0b20ff9bec}{start\_pattern} = (\textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern};
+9366 cd->\hyperlink{structcompile__data_aca1238de6da2589b5c41189023da979d}{end\_pattern} = (\textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)(\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern} + 
+      \hyperlink{pcre__internal_8h_ac5c3eb52ae2e83b71e413a0e8bbcf665}{STRLEN\_UC}((\textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern}));
+9367 cd->\hyperlink{structcompile__data_a049a932bfddc5a06805071e9ca08a3cc}{req\_varyopt} = 0;
+9368 cd->\hyperlink{structcompile__data_a724d30cafc0a759f5b34f93c9fa3b746}{parens\_depth} = 0;
+9369 cd->\hyperlink{structcompile__data_a1cbf6fa01f331ff44333be8613f93f41}{assert\_depth} = 0;
+9370 cd->\hyperlink{structcompile__data_a25aaa7fd3589c7521021436ac3cb8b67}{max\_lookbehind} = 0;
+9371 cd->\hyperlink{structcompile__data_a4daf435bcef65135e445c0b2cb833050}{external\_options} = \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options};
+9372 cd->\hyperlink{structcompile__data_a2b9fe32c9c0c3edd45dea13a5793f5c0}{open\_caps} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9373 
+9374 \textcolor{comment}{/* Now do the pre-compile. On error, errorcode will be set non-zero, so we}
+9375 \textcolor{comment}{don't need to look at the result of the function here. The initial options have}
+9376 \textcolor{comment}{been put into the cd block so that they can be changed if an option setting is}
+9377 \textcolor{comment}{found within the regex right at the beginning. Bringing initial option settings}
+9378 \textcolor{comment}{outside can help speed up starting point checks. */}
+9379 
+9380 ptr += skipatstart;
+9381 code = cworkspace;
+9382 *code = \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da6d32e2ba0b0d6bacec1c74b83b69cf14}{OP\_BRA};
+9383 
+9384 (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})compile\_regex(cd->\hyperlink{structcompile__data_a4daf435bcef65135e445c0b2cb833050}{external\_options}, &code, &ptr, &errorcode, 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE},
+9385   \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, 0, 0, &firstchar, &firstcharflags, &reqchar, &reqcharflags, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+9386   cd, &length);
+9387 \textcolor{keywordflow}{if} (errorcode != 0) \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN;
+9388 
+9389 \hyperlink{pcre__internal_8h_a927243fe3d588e31de3f3badd5c47d47}{DPRINTF}((\textcolor{stringliteral}{"end pre-compile: length=%d workspace=%d\(\backslash\)n"}, length,
+9390   (\textcolor{keywordtype}{int})(cd->\hyperlink{structcompile__data_ad7b414eba889034a23c9d162b74e247e}{hwm} - cworkspace)));
+9391 
+9392 \textcolor{keywordflow}{if} (length > MAX\_PATTERN\_SIZE)
+9393   \{
+9394   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122ade25ec278d821419d07c9ca70edcf607}{ERR20};
+9395   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN;
+9396   \}
+9397 
+9398 \textcolor{comment}{/* Compute the size of the data block for storing the compiled pattern. Integer}
+9399 \textcolor{comment}{overflow should no longer be possible because nowadays we limit the maximum}
+9400 \textcolor{comment}{value of cd->names\_found and cd->name\_entry\_size. */}
+9401 
+9402 size = \textcolor{keyword}{sizeof}(\hyperlink{pcre__internal_8h_a2984f4df28d081d53978318a28d0c665}{REAL\_PCRE}) +
+9403   (length + cd->\hyperlink{structcompile__data_a1500a48dd2b716de73de4eec23646141}{names\_found} * cd->\hyperlink{structcompile__data_af5b14a0163ddb0ad1b120e9383c0dc6e}{name\_entry\_size}) * \textcolor{keyword}{sizeof}(
+      \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar});
+9404 
+9405 \textcolor{comment}{/* Get the memory. */}
+9406 
+9407 re = (\hyperlink{pcre__internal_8h_a2984f4df28d081d53978318a28d0c665}{REAL\_PCRE} *)(\hyperlink{pcre__globals_8c_af69d8e852882cfd50b98c0481ba3b98a}{PUBL}(\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}))(size);
+9408 \textcolor{keywordflow}{if} (re == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+9409   \{
+9410   errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122afa12a737c7c386136bc6bbd54c5af1d6}{ERR21};
+9411   \textcolor{keywordflow}{goto} PCRE\_EARLY\_ERROR\_RETURN;
+9412   \}
+9413 
+9414 \textcolor{comment}{/* Put in the magic number, and save the sizes, initial options, internal}
+9415 \textcolor{comment}{flags, and character table pointer. NULL is used for the default character}
+9416 \textcolor{comment}{tables. The nullpad field is at the end; it's there to help in the case when a}
+9417 \textcolor{comment}{regex compiled on a system with 4-byte pointers is run on another with 8-byte}
+9418 \textcolor{comment}{pointers. */}
+9419 
+9420 re->magic\_number = \hyperlink{pcre__internal_8h_a54061e5993a5517320d425f44408cc86}{MAGIC\_NUMBER};
+9421 re->size = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})size;
+9422 re->options = cd->\hyperlink{structcompile__data_a4daf435bcef65135e445c0b2cb833050}{external\_options};
+9423 re->flags = cd->\hyperlink{structcompile__data_ab10020d1b58e0861c1be5917d20d5438}{external\_flags};
+9424 re->limit\_match = limit\_match;
+9425 re->limit\_recursion = limit\_recursion;
+9426 re->first\_char = 0;
+9427 re->req\_char = 0;
+9428 re->name\_table\_offset = \textcolor{keyword}{sizeof}(\hyperlink{pcre__internal_8h_a2984f4df28d081d53978318a28d0c665}{REAL\_PCRE}) / \textcolor{keyword}{sizeof}(\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar});
+9429 re->name\_entry\_size = cd->\hyperlink{structcompile__data_af5b14a0163ddb0ad1b120e9383c0dc6e}{name\_entry\_size};
+9430 re->name\_count = cd->\hyperlink{structcompile__data_a1500a48dd2b716de73de4eec23646141}{names\_found};
+9431 re->ref\_count = 0;
+9432 re->tables = (\hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables} == \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(default\_tables))? \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} : \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables};
+9433 re->nullpad = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9434 \textcolor{preprocessor}{#ifdef COMPILE\_PCRE32}
+9435 re->dummy = 0;
+9436 \textcolor{preprocessor}{#else}
+9437 re->\hyperlink{structreal__pcre8__or__16_a64619216634de06ee8d09327668e9b77}{dummy1} = re->dummy2 = re->dummy3 = 0;
+9438 \textcolor{preprocessor}{#endif}
+9439 
+9440 \textcolor{comment}{/* The starting points of the name/number translation table and of the code are}
+9441 \textcolor{comment}{passed around in the compile data block. The start/end pattern and initial}
+9442 \textcolor{comment}{options are already set from the pre-compile phase, as is the name\_entry\_size}
+9443 \textcolor{comment}{field. Reset the bracket count and the names\_found field. Also reset the hwm}
+9444 \textcolor{comment}{field; this time it's used for remembering forward references to subpatterns.}
+9445 \textcolor{comment}{*/}
+9446 
+9447 cd->\hyperlink{structcompile__data_a6d164ca6626dcd16f4e0550fa05acfc3}{final\_bracount} = cd->\hyperlink{structcompile__data_ac0208aa4e0d59f8d16a55930bd7d19a9}{bracount};  \textcolor{comment}{/* Save for checking forward references */}
+9448 cd->\hyperlink{structcompile__data_a724d30cafc0a759f5b34f93c9fa3b746}{parens\_depth} = 0;
+9449 cd->\hyperlink{structcompile__data_a1cbf6fa01f331ff44333be8613f93f41}{assert\_depth} = 0;
+9450 cd->\hyperlink{structcompile__data_ac0208aa4e0d59f8d16a55930bd7d19a9}{bracount} = 0;
+9451 cd->\hyperlink{structcompile__data_a25aaa7fd3589c7521021436ac3cb8b67}{max\_lookbehind} = 0;
+9452 cd->\hyperlink{structcompile__data_a81577d4886b02876373f009b7f2b44e8}{name\_table} = (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)re + re->name\_table\_offset;
+9453 codestart = cd->\hyperlink{structcompile__data_a81577d4886b02876373f009b7f2b44e8}{name\_table} + re->name\_entry\_size * re->name\_count;
+9454 cd->\hyperlink{structcompile__data_a4b783863acd7691e06a48663c5ecd6f6}{start\_code} = codestart;
+9455 cd->\hyperlink{structcompile__data_ad7b414eba889034a23c9d162b74e247e}{hwm} = (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)(cd->\hyperlink{structcompile__data_a5ece64e93e6cdb0fdc1f76dce25d6284}{start\_workspace});
+9456 cd->\hyperlink{structcompile__data_a8f769a7e12713194068444a9fb68026b}{iscondassert} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+9457 cd->\hyperlink{structcompile__data_a049a932bfddc5a06805071e9ca08a3cc}{req\_varyopt} = 0;
+9458 cd->\hyperlink{structcompile__data_a7e66e09e50e8110573a3132af307f983}{had\_accept} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+9459 cd->\hyperlink{structcompile__data_a2862f095c57a72f1e4b93d9ed10c222c}{had\_pruneorskip} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+9460 cd->\hyperlink{structcompile__data_a995d75ad4a9071f73c05d323daff52c3}{check\_lookbehind} = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+9461 cd->\hyperlink{structcompile__data_a2b9fe32c9c0c3edd45dea13a5793f5c0}{open\_caps} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9462 
+9463 \textcolor{comment}{/* If any named groups were found, create the name/number table from the list}
+9464 \textcolor{comment}{created in the first pass. */}
+9465 
+9466 \textcolor{keywordflow}{if} (cd->\hyperlink{structcompile__data_a1500a48dd2b716de73de4eec23646141}{names\_found} > 0)
+9467   \{
+9468   \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = cd->\hyperlink{structcompile__data_a1500a48dd2b716de73de4eec23646141}{names\_found};
+9469   \hyperlink{structnamed__group}{named\_group} *ng = cd->\hyperlink{structcompile__data_a74515a73c037ab368004309ea64c8980}{named\_groups};
+9470   cd->\hyperlink{structcompile__data_a1500a48dd2b716de73de4eec23646141}{names\_found} = 0;
+9471   \textcolor{keywordflow}{for} (; i > 0; i--, ng++)
+9472     add\_name(cd, ng->\hyperlink{structnamed__group_ac5ed274a3d3679fece026efa17218163}{name}, ng->\hyperlink{structnamed__group_a1aa1208b3c81a320c85ab8cd3da21d50}{length}, ng->\hyperlink{structnamed__group_a08e3aa8190d8914811fcbfc6b3b7670f}{number});
+9473   \textcolor{keywordflow}{if} (cd->\hyperlink{structcompile__data_a0a96857b27b412d6c2cc738b09c0a698}{named\_group\_list\_size} > \hyperlink{pcre__compile_8c_aedc6cfc9c20af0538cf911c2ee9ee2fc}{NAMED\_GROUP\_LIST\_SIZE})
+9474     (\hyperlink{pcre__globals_8c_af69d8e852882cfd50b98c0481ba3b98a}{PUBL}(\hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}))((\textcolor{keywordtype}{void} *)cd->\hyperlink{structcompile__data_a74515a73c037ab368004309ea64c8980}{named\_groups});
+9475   \}
+9476 
+9477 \textcolor{comment}{/* Set up a starting, non-extracting bracket, then compile the expression. On}
+9478 \textcolor{comment}{error, errorcode will be set non-zero, so we don't need to look at the result}
+9479 \textcolor{comment}{of the function here. */}
+9480 
+9481 ptr = (\textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern} + skipatstart;
+9482 code = (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)codestart;
+9483 *code = \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da6d32e2ba0b0d6bacec1c74b83b69cf14}{OP\_BRA};
+9484 (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})compile\_regex(re->options, &code, &ptr, &errorcode, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE}, 0, 0,
+9485   &firstchar, &firstcharflags, &reqchar, &reqcharflags, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, cd, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+9486 re->top\_bracket = cd->\hyperlink{structcompile__data_ac0208aa4e0d59f8d16a55930bd7d19a9}{bracount};
+9487 re->top\_backref = cd->\hyperlink{structcompile__data_a13384c0fe520de7e485444824e410305}{top\_backref};
+9488 re->max\_lookbehind = cd->\hyperlink{structcompile__data_a25aaa7fd3589c7521021436ac3cb8b67}{max\_lookbehind};
+9489 re->flags = cd->\hyperlink{structcompile__data_ab10020d1b58e0861c1be5917d20d5438}{external\_flags} | \hyperlink{pcre__internal_8h_a0c980b9bdb3361277209921d22db216e}{PCRE\_MODE};
+9490 
+9491 \textcolor{keywordflow}{if} (cd->\hyperlink{structcompile__data_a7e66e09e50e8110573a3132af307f983}{had\_accept})
+9492   \{
+9493   reqchar = 0;              \textcolor{comment}{/* Must disable after (*ACCEPT) */}
+9494   reqcharflags = \hyperlink{pcre__compile_8c_a185b688e6437c1e1e58d35953efa79d5}{REQ\_NONE};
+9495   \}
+9496 
+9497 \textcolor{comment}{/* If not reached end of pattern on success, there's an excess bracket. */}
+9498 
+9499 \textcolor{keywordflow}{if} (errorcode == 0 && *ptr != \hyperlink{pcre__internal_8h_a79b68ef42b6b6d005d88bcd7efa78898}{CHAR\_NULL}) errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122accd495b797442fe0cd3c23c6419e8ead}{ERR22};
+9500 
+9501 \textcolor{comment}{/* Fill in the terminating state and check for disastrous overflow, but}
+9502 \textcolor{comment}{if debugging, leave the test till after things are printed out. */}
+9503 
+9504 *code++ = \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da010acee11f1e0ca0026e20c2f36bfdb7}{OP\_END};
+9505 
+9506 \textcolor{preprocessor}{#ifndef PCRE\_DEBUG}
+9507 \textcolor{keywordflow}{if} (code - codestart > length) errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a003036dc05b30af7ccb51f33a6ce7f4e}{ERR23};
+9508 \textcolor{preprocessor}{#endif}
+9509 
+9510 \textcolor{preprocessor}{#ifdef SUPPORT\_VALGRIND}
+9511 \textcolor{comment}{/* If the estimated length exceeds the really used length, mark the extra}
+9512 \textcolor{comment}{allocated memory as unaddressable, so that any out-of-bound reads can be}
+9513 \textcolor{comment}{detected. */}
+9514 VALGRIND\_MAKE\_MEM\_NOACCESS(code, (length - (code - codestart)) * \textcolor{keyword}{sizeof}(
+      \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar}));
+9515 \textcolor{preprocessor}{#endif}
+9516 
+9517 \textcolor{comment}{/* Fill in any forward references that are required. There may be repeated}
+9518 \textcolor{comment}{references; optimize for them, as searching a large regex takes time. */}
+9519 
+9520 \textcolor{keywordflow}{if} (cd->\hyperlink{structcompile__data_ad7b414eba889034a23c9d162b74e247e}{hwm} > cd->\hyperlink{structcompile__data_a5ece64e93e6cdb0fdc1f76dce25d6284}{start\_workspace})
+9521   \{
+9522   \textcolor{keywordtype}{int} prev\_recno = -1;
+9523   \textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *groupptr = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9524   \textcolor{keywordflow}{while} (errorcode == 0 && cd->\hyperlink{structcompile__data_ad7b414eba889034a23c9d162b74e247e}{hwm} > cd->\hyperlink{structcompile__data_a5ece64e93e6cdb0fdc1f76dce25d6284}{start\_workspace})
+9525     \{
+9526     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}, recno;
+9527     cd->\hyperlink{structcompile__data_ad7b414eba889034a23c9d162b74e247e}{hwm} -= \hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{LINK\_SIZE};
+9528     offset = \hyperlink{group__MOD__PROXY_gga4e8622ade6bde29385df7b89c9b94e71a12a8dcf59c16b5aadfda3a08ba67d529}{GET}(cd->\hyperlink{structcompile__data_ad7b414eba889034a23c9d162b74e247e}{hwm}, 0);
+9529 
+9530     \textcolor{comment}{/* Check that the hwm handling hasn't gone wrong. This whole area is}
+9531 \textcolor{comment}{    rewritten in PCRE2 because there are some obscure cases. */}
+9532 
+9533     \textcolor{keywordflow}{if} (offset == 0 || codestart[offset-1] != \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da6c9584ec1f81cb6747db96dd11243a25}{OP\_RECURSE})
+9534       \{
+9535       errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122af20c6caf88a5fbf32e916aabfdaf8a07}{ERR10};
+9536       \textcolor{keywordflow}{break};
+9537       \}
+9538 
+9539     recno = \hyperlink{group__MOD__PROXY_gga4e8622ade6bde29385df7b89c9b94e71a12a8dcf59c16b5aadfda3a08ba67d529}{GET}(codestart, offset);
+9540     \textcolor{keywordflow}{if} (recno != prev\_recno)
+9541       \{
+9542       groupptr = \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(\hyperlink{pcre__compile_8c_a8597f2e71aa9caf8f5c72407d820585b}{find\_bracket})(codestart, utf, recno);
+9543       prev\_recno = recno;
+9544       \}
+9545     \textcolor{keywordflow}{if} (groupptr == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122aa7f55a7df03b701a26723e94aec4c95e}{ERR53};
+9546       \textcolor{keywordflow}{else} \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260afec39d40e8bc9e12afa614df5ddb9fa9}{PUT}(((\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)codestart), offset, (\textcolor{keywordtype}{int})(groupptr - codestart));
+9547     \}
+9548   \}
+9549 
+9550 \textcolor{comment}{/* If the workspace had to be expanded, free the new memory. Set the pointer to}
+9551 \textcolor{comment}{NULL to indicate that forward references have been filled in. */}
+9552 
+9553 \textcolor{keywordflow}{if} (cd->\hyperlink{structcompile__data_a750c8953276fc2c3ce0aa73de571cae7}{workspace\_size} > \hyperlink{pcre__compile_8c_ae6ca9bdec2edc32d0268bd41de2f9b18}{COMPILE\_WORK\_SIZE})
+9554   (\hyperlink{pcre__globals_8c_af69d8e852882cfd50b98c0481ba3b98a}{PUBL}(\hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}))((\textcolor{keywordtype}{void} *)cd->\hyperlink{structcompile__data_a5ece64e93e6cdb0fdc1f76dce25d6284}{start\_workspace});
+9555 cd->\hyperlink{structcompile__data_a5ece64e93e6cdb0fdc1f76dce25d6284}{start\_workspace} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9556 
+9557 \textcolor{comment}{/* Give an error if there's back reference to a non-existent capturing}
+9558 \textcolor{comment}{subpattern. */}
+9559 
+9560 \textcolor{keywordflow}{if} (errorcode == 0 && re->top\_backref > re->top\_bracket) errorcode = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a68876403c2ae6e262f98cee27a1be698}{ERR15};
+9561 
+9562 \textcolor{comment}{/* Unless disabled, check whether any single character iterators can be}
+9563 \textcolor{comment}{auto-possessified. The function overwrites the appropriate opcode values, so}
+9564 \textcolor{comment}{the type of the pointer must be cast. NOTE: the intermediate variable "temp" is}
+9565 \textcolor{comment}{used in this code because at least one compiler gives a warning about loss of}
+9566 \textcolor{comment}{"const" attribute if the cast (pcre\_uchar *)codestart is used directly in the}
+9567 \textcolor{comment}{function call. */}
+9568 
+9569 \textcolor{keywordflow}{if} (errorcode == 0 && (\hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} & \hyperlink{pcre_8h_afa6c9234aa7d3ee12748375fe4204c56}{PCRE\_NO\_AUTO\_POSSESS}) == 0)
+9570   \{
+9571   \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *temp = (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)codestart;
+9572   auto\_possessify(temp, utf, cd);
+9573   \}
+9574 
+9575 \textcolor{comment}{/* If there were any lookbehind assertions that contained OP\_RECURSE}
+9576 \textcolor{comment}{(recursions or subroutine calls), a flag is set for them to be checked here,}
+9577 \textcolor{comment}{because they may contain forward references. Actual recursions cannot be fixed}
+9578 \textcolor{comment}{length, but subroutine calls can. It is done like this so that those without}
+9579 \textcolor{comment}{OP\_RECURSE that are not fixed length get a diagnosic with a useful offset. The}
+9580 \textcolor{comment}{exceptional ones forgo this. We scan the pattern to check that they are fixed}
+9581 \textcolor{comment}{length, and set their lengths. */}
+9582 
+9583 \textcolor{keywordflow}{if} (errorcode == 0 && cd->\hyperlink{structcompile__data_a995d75ad4a9071f73c05d323daff52c3}{check\_lookbehind})
+9584   \{
+9585   \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *cc = (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)codestart;
+9586 
+9587   \textcolor{comment}{/* Loop, searching for OP\_REVERSE items, and process those that do not have}
+9588 \textcolor{comment}{  their length set. (Actually, it will also re-process any that have a length}
+9589 \textcolor{comment}{  of zero, but that is a pathological case, and it does no harm.) When we find}
+9590 \textcolor{comment}{  one, we temporarily terminate the branch it is in while we scan it. */}
+9591 
+9592   \textcolor{keywordflow}{for} (cc = (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(\hyperlink{pcre__compile_8c_a8597f2e71aa9caf8f5c72407d820585b}{find\_bracket})(codestart, utf, -1);
+9593        cc != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9594        cc = (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(\hyperlink{pcre__compile_8c_a8597f2e71aa9caf8f5c72407d820585b}{find\_bracket})(cc, utf, -1))
+9595     \{
+9596     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__PROXY_gga4e8622ade6bde29385df7b89c9b94e71a12a8dcf59c16b5aadfda3a08ba67d529}{GET}(cc, 1) == 0)
+9597       \{
+9598       \textcolor{keywordtype}{int} fixed\_length;
+9599       \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *\hyperlink{pcre_8txt_a0f371a71e23776f0a08338302f581327}{be} = cc - 1 - \hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{LINK\_SIZE} + \hyperlink{group__MOD__PROXY_gga4e8622ade6bde29385df7b89c9b94e71a12a8dcf59c16b5aadfda3a08ba67d529}{GET}(cc, -
+      \hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{LINK\_SIZE});
+9600       \textcolor{keywordtype}{int} end\_op = *\hyperlink{pcre_8txt_a0f371a71e23776f0a08338302f581327}{be};
+9601       *be = \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da010acee11f1e0ca0026e20c2f36bfdb7}{OP\_END};
+9602       fixed\_length = find\_fixedlength(cc, (re->options & \hyperlink{pcre_8h_a177ec66f9b06aab7b37965b77b2cf1b8}{PCRE\_UTF8}) != 0, 
+      \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE},
+9603         cd, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+9604       *be = end\_op;
+9605       \hyperlink{pcre__internal_8h_a927243fe3d588e31de3f3badd5c47d47}{DPRINTF}((\textcolor{stringliteral}{"fixed length = %d\(\backslash\)n"}, fixed\_length));
+9606       \textcolor{keywordflow}{if} (fixed\_length < 0)
+9607         \{
+9608         errorcode = (fixed\_length == -2)? \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a70ba06bc1cd0627b777a9fe55ffd0bfb}{ERR36} :
+9609                     (fixed\_length == -4)? \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a27475b91694501328acba2a0d3fd1d8f}{ERR70} : \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122af06467f4726430aaba25a11fe26e630b}{ERR25};
+9610         \textcolor{keywordflow}{break};
+9611         \}
+9612       \textcolor{keywordflow}{if} (fixed\_length > cd->\hyperlink{structcompile__data_a25aaa7fd3589c7521021436ac3cb8b67}{max\_lookbehind}) cd->\hyperlink{structcompile__data_a25aaa7fd3589c7521021436ac3cb8b67}{max\_lookbehind} = fixed\_length;
+9613       \hyperlink{ab_8c_ade9ca5088d171ad20b4c237f1c2d6260afec39d40e8bc9e12afa614df5ddb9fa9}{PUT}(cc, 1, fixed\_length);
+9614       \}
+9615     cc += 1 + \hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{LINK\_SIZE};
+9616     \}
+9617   \}
+9618 
+9619 \textcolor{comment}{/* Failed to compile, or error while post-processing */}
+9620 
+9621 \textcolor{keywordflow}{if} (errorcode != 0)
+9622   \{
+9623   (\hyperlink{pcre__globals_8c_af69d8e852882cfd50b98c0481ba3b98a}{PUBL}(\hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}))(re);
+9624   PCRE\_EARLY\_ERROR\_RETURN:
+9625   *erroroffset = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})(ptr - (\textcolor{keyword}{const} \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern});
+9626   PCRE\_EARLY\_ERROR\_RETURN2:
+9627   *errorptr = find\_error\_text(errorcode);
+9628   \textcolor{keywordflow}{if} (\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) *\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr} = errorcode;
+9629   \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9630   \}
+9631 
+9632 \textcolor{comment}{/* If the anchored option was not passed, set the flag if we can determine that}
+9633 \textcolor{comment}{the pattern is anchored by virtue of ^ characters or \(\backslash\)A or anything else, such}
+9634 \textcolor{comment}{as starting with non-atomic .* when DOTALL is set and there are no occurrences}
+9635 \textcolor{comment}{of *PRUNE or *SKIP.}
+9636 \textcolor{comment}{}
+9637 \textcolor{comment}{Otherwise, if we know what the first byte has to be, save it, because that}
+9638 \textcolor{comment}{speeds up unanchored matches no end. If not, see if we can set the}
+9639 \textcolor{comment}{PCRE\_STARTLINE flag. This is helpful for multiline matches when all branches}
+9640 \textcolor{comment}{start with ^. and also when all branches start with non-atomic .* for}
+9641 \textcolor{comment}{non-DOTALL matches when *PRUNE and SKIP are not present. */}
+9642 
+9643 \textcolor{keywordflow}{if} ((re->options & \hyperlink{pcre_8txt_a1a82c471ce7b7648a6bd5345a8514998}{PCRE\_ANCHORED}) == 0)
+9644   \{
+9645   \textcolor{keywordflow}{if} (is\_anchored(codestart, 0, cd, 0)) re->\hyperlink{structreal__pcre8__or__16_acbfe3eba58c74e3eee9a78bce8ba79f9}{options} |= \hyperlink{pcre_8txt_a1a82c471ce7b7648a6bd5345a8514998}{PCRE\_ANCHORED};
+9646   \textcolor{keywordflow}{else}
+9647     \{
+9648     \textcolor{keywordflow}{if} (firstcharflags < 0)
+9649       firstchar = find\_firstassertedchar(codestart, &firstcharflags, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+9650     \textcolor{keywordflow}{if} (firstcharflags >= 0)   \textcolor{comment}{/* Remove caseless flag for non-caseable chars */}
+9651       \{
+9652 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8}
+9653       re->first\_char = firstchar & 0xff;
+9654 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE16}
+9655       re->first\_char = firstchar & 0xffff;
+9656 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+9657       re->first\_char = firstchar;
+9658 \textcolor{preprocessor}{#endif}
+9659       \textcolor{keywordflow}{if} ((firstcharflags & \hyperlink{pcre__compile_8c_ae4f4c02878c10584696c22c5e4425215}{REQ\_CASELESS}) != 0)
+9660         \{
+9661 \textcolor{preprocessor}{#if defined SUPPORT\_UCP && !(defined COMPILE\_PCRE8)}
+9662         \textcolor{comment}{/* We ignore non-ASCII first chars in 8 bit mode. */}
+9663         \textcolor{keywordflow}{if} (utf)
+9664           \{
+9665           \textcolor{keywordflow}{if} (re->first\_char < 128)
+9666             \{
+9667             \textcolor{keywordflow}{if} (cd->\hyperlink{structcompile__data_acbef42e411ed9f99e1aa524c1eb9e429}{fcc}[re->first\_char] != re->first\_char)
+9668               re->flags |= \hyperlink{pcre__internal_8h_a91834d023916ad826da8eb6bbb316863}{PCRE\_FCH\_CASELESS};
+9669             \}
+9670           \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (UCD\_OTHERCASE(re->first\_char) != re->first\_char)
+9671             re->flags |= \hyperlink{pcre__internal_8h_a91834d023916ad826da8eb6bbb316863}{PCRE\_FCH\_CASELESS};
+9672           \}
+9673         \textcolor{keywordflow}{else}
+9674 \textcolor{preprocessor}{#endif}
+9675         \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_a8f3490583e3d6e28e6ce34fbf8638a0a}{MAX\_255}(re->first\_char)
+9676             && cd->\hyperlink{structcompile__data_acbef42e411ed9f99e1aa524c1eb9e429}{fcc}[re->first\_char] != re->first\_char)
+9677           re->flags |= \hyperlink{pcre__internal_8h_a91834d023916ad826da8eb6bbb316863}{PCRE\_FCH\_CASELESS};
+9678         \}
+9679 
+9680       re->flags |= \hyperlink{pcre__internal_8h_aa3860b4c31ee4275eaa19df78bc73590}{PCRE\_FIRSTSET};
+9681       \}
+9682 
+9683     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (is\_startline(codestart, 0, cd, 0, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE})) re->flags |= 
+      \hyperlink{pcre__internal_8h_af24422b85f1b3c788a4703b61f18fe11}{PCRE\_STARTLINE};
+9684     \}
+9685   \}
+9686 
+9687 \textcolor{comment}{/* For an anchored pattern, we use the "required byte" only if it follows a}
+9688 \textcolor{comment}{variable length item in the regex. Remove the caseless flag for non-caseable}
+9689 \textcolor{comment}{bytes. */}
+9690 
+9691 \textcolor{keywordflow}{if} (reqcharflags >= 0 &&
+9692      ((re->options & \hyperlink{pcre_8txt_a1a82c471ce7b7648a6bd5345a8514998}{PCRE\_ANCHORED}) == 0 || (reqcharflags & 
+      \hyperlink{pcre__compile_8c_a1a5a2f42aaea27efaa2abc899f29703c}{REQ\_VARY}) != 0))
+9693   \{
+9694 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8}
+9695   re->req\_char = reqchar & 0xff;
+9696 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE16}
+9697   re->req\_char = reqchar & 0xffff;
+9698 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+9699   re->req\_char = reqchar;
+9700 \textcolor{preprocessor}{#endif}
+9701   \textcolor{keywordflow}{if} ((reqcharflags & REQ\_CASELESS) != 0)
+9702     \{
+9703 \textcolor{preprocessor}{#if defined SUPPORT\_UCP && !(defined COMPILE\_PCRE8)}
+9704     \textcolor{comment}{/* We ignore non-ASCII first chars in 8 bit mode. */}
+9705     \textcolor{keywordflow}{if} (utf)
+9706       \{
+9707       \textcolor{keywordflow}{if} (re->req\_char < 128)
+9708         \{
+9709         \textcolor{keywordflow}{if} (cd->\hyperlink{structcompile__data_acbef42e411ed9f99e1aa524c1eb9e429}{fcc}[re->req\_char] != re->req\_char)
+9710           re->flags |= \hyperlink{pcre__internal_8h_aabd065c48c6bc64165e21d664e17f27f}{PCRE\_RCH\_CASELESS};
+9711         \}
+9712       \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (UCD\_OTHERCASE(re->req\_char) != re->req\_char)
+9713         re->flags |= \hyperlink{pcre__internal_8h_aabd065c48c6bc64165e21d664e17f27f}{PCRE\_RCH\_CASELESS};
+9714       \}
+9715     \textcolor{keywordflow}{else}
+9716 \textcolor{preprocessor}{#endif}
+9717     \textcolor{keywordflow}{if} (\hyperlink{pcre__internal_8h_a8f3490583e3d6e28e6ce34fbf8638a0a}{MAX\_255}(re->req\_char) && cd->\hyperlink{structcompile__data_acbef42e411ed9f99e1aa524c1eb9e429}{fcc}[re->req\_char] != re->req\_char)
+9718       re->flags |= \hyperlink{pcre__internal_8h_aabd065c48c6bc64165e21d664e17f27f}{PCRE\_RCH\_CASELESS};
+9719     \}
+9720 
+9721   re->flags |= \hyperlink{pcre__internal_8h_a6c85b22f5b731db51da6177b20aa0ebd}{PCRE\_REQCHSET};
+9722   \}
+9723 
+9724 \textcolor{comment}{/* Print out the compiled data if debugging is enabled. This is never the}
+9725 \textcolor{comment}{case when building a production library. */}
+9726 
+9727 \textcolor{preprocessor}{#ifdef PCRE\_DEBUG}
+9728 printf(\textcolor{stringliteral}{"Length = %d top\_bracket = %d top\_backref = %d\(\backslash\)n"},
+9729   length, re->top\_bracket, re->top\_backref);
+9730 
+9731 printf(\textcolor{stringliteral}{"Options=%08x\(\backslash\)n"}, re->options);
+9732 
+9733 \textcolor{keywordflow}{if} ((re->flags & \hyperlink{pcre__internal_8h_aa3860b4c31ee4275eaa19df78bc73590}{PCRE\_FIRSTSET}) != 0)
+9734   \{
+9735   \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} ch = re->first\_char;
+9736   \textcolor{keyword}{const} \textcolor{keywordtype}{char} *caseless =
+9737     ((re->flags & \hyperlink{pcre__internal_8h_a91834d023916ad826da8eb6bbb316863}{PCRE\_FCH\_CASELESS}) == 0)? \textcolor{stringliteral}{""} : \textcolor{stringliteral}{" (caseless)"};
+9738   \textcolor{keywordflow}{if} (\hyperlink{pcre__printint_8c_a8af07763825a8f9c88693b61e56cbee5}{PRINTABLE}(ch)) printf(\textcolor{stringliteral}{"First char = %c%s\(\backslash\)n"}, ch, caseless);
+9739     \textcolor{keywordflow}{else} printf(\textcolor{stringliteral}{"First char = \(\backslash\)\(\backslash\)x%02x%s\(\backslash\)n"}, ch, caseless);
+9740   \}
+9741 
+9742 \textcolor{keywordflow}{if} ((re->flags & \hyperlink{pcre__internal_8h_a6c85b22f5b731db51da6177b20aa0ebd}{PCRE\_REQCHSET}) != 0)
+9743   \{
+9744   \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} ch = re->req\_char;
+9745   \textcolor{keyword}{const} \textcolor{keywordtype}{char} *caseless =
+9746     ((re->flags & \hyperlink{pcre__internal_8h_aabd065c48c6bc64165e21d664e17f27f}{PCRE\_RCH\_CASELESS}) == 0)? \textcolor{stringliteral}{""} : \textcolor{stringliteral}{" (caseless)"};
+9747   \textcolor{keywordflow}{if} (\hyperlink{pcre__printint_8c_a8af07763825a8f9c88693b61e56cbee5}{PRINTABLE}(ch)) printf(\textcolor{stringliteral}{"Req char = %c%s\(\backslash\)n"}, ch, caseless);
+9748     \textcolor{keywordflow}{else} printf(\textcolor{stringliteral}{"Req char = \(\backslash\)\(\backslash\)x%02x%s\(\backslash\)n"}, ch, caseless);
+9749   \}
+9750 
+9751 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8}
+9752 \hyperlink{pcre__printint_8c_a3debc4eb72b772550ba9c922f2caaf81}{pcre\_printint}((\hyperlink{structreal__pcre8__or__16}{pcre} *)re, \hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout}, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+9753 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE16}
+9754 pcre16\_printint((\hyperlink{structreal__pcre8__or__16}{pcre} *)re, \hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout}, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+9755 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+9756 pcre32\_printint((\hyperlink{structreal__pcre8__or__16}{pcre} *)re, \hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout}, \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE});
+9757 \textcolor{preprocessor}{#endif}
+9758 
+9759 \textcolor{comment}{/* This check is done here in the debugging case so that the code that}
+9760 \textcolor{comment}{was compiled can be seen. */}
+9761 
+9762 \textcolor{keywordflow}{if} (code - codestart > length)
+9763   \{
+9764   (\hyperlink{pcre__globals_8c_af69d8e852882cfd50b98c0481ba3b98a}{PUBL}(\hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}))(re);
+9765   *errorptr = find\_error\_text(\hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a003036dc05b30af7ccb51f33a6ce7f4e}{ERR23});
+9766   *erroroffset = ptr - (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern};
+9767   \textcolor{keywordflow}{if} (\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) *\hyperlink{pcre_8txt_aaf9fdf8b805dc9775184700375f6a819}{errorcodeptr} = \hyperlink{pcre__internal_8h_a1fb9092bcdeada2d206bdc74afbbe122a003036dc05b30af7ccb51f33a6ce7f4e}{ERR23};
+9768   \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+9769   \}
+9770 \textcolor{preprocessor}{#endif   }\textcolor{comment}{/* PCRE\_DEBUG */}\textcolor{preprocessor}{}
+9771 
+9772 \textcolor{comment}{/* Check for a pattern than can match an empty string, so that this information}
+9773 \textcolor{comment}{can be provided to applications. */}
+9774 
+9775 \textcolor{keywordflow}{do}
+9776   \{
+9777   \textcolor{keywordflow}{if} (could\_be\_empty\_branch(codestart, code, utf, cd, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}))
+9778     \{
+9779     re->\hyperlink{structreal__pcre8__or__16_a0bf7aa55541c5e54ce2164660343ae6d}{flags} |= \hyperlink{pcre__internal_8h_ae9ae545c976e44bbbc2a269162c67608}{PCRE\_MATCH\_EMPTY};
+9780     \textcolor{keywordflow}{break};
+9781     \}
+9782   codestart += \hyperlink{group__MOD__PROXY_gga4e8622ade6bde29385df7b89c9b94e71a12a8dcf59c16b5aadfda3a08ba67d529}{GET}(codestart, 1);
+9783   \}
+9784 \textcolor{keywordflow}{while} (*codestart == \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da8af1b533027d398ede1d4786b5d7e7d6}{OP\_ALT});
+9785 
+9786 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8}
+9787 \textcolor{keywordflow}{return} (\hyperlink{structreal__pcre8__or__16}{pcre} *)\hyperlink{pcre_8txt_abd134207f74532a8b094676c4a2ca9ed}{re};
+9788 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE16}
+9789 \textcolor{keywordflow}{return} (\hyperlink{structreal__pcre8__or__16}{pcre16} *)\hyperlink{pcre_8txt_abd134207f74532a8b094676c4a2ca9ed}{re};
+9790 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+9791 \textcolor{keywordflow}{return} (\hyperlink{structreal__pcre32}{pcre32} *)\hyperlink{pcre_8txt_abd134207f74532a8b094676c4a2ca9ed}{re};
+9792 \textcolor{preprocessor}{#endif}
+9793 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__compile_8c_aec1a7d477013a867fc7a0ea760087a3a_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__compile_8c_aec1a7d477013a867fc7a0ea760087a3a_icgraph}
+\end{center}
+\end{figure}
+
+

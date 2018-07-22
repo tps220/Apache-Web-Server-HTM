@@ -1,0 +1,137 @@
+\hypertarget{pcre__maketables_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/pcre/pcre\+\_\+maketables.c File Reference}
+\label{pcre__maketables_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+maketables.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+maketables.\+c}}
+{\ttfamily \#include \char`\"{}pcre\+\_\+internal.\+h\char`\"{}}\\*
+Include dependency graph for pcre\+\_\+maketables.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__maketables_8c__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__maketables_8c__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const unsigned char $\ast$ \hyperlink{pcre__maketables_8c_a8a33ce35ab2e6f9cb4f24697966c9a5e}{pcre\+\_\+maketables} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{pcre\+\_\+maketables.\+c@{pcre\+\_\+maketables.\+c}!pcre\+\_\+maketables@{pcre\+\_\+maketables}}
+\index{pcre\+\_\+maketables@{pcre\+\_\+maketables}!pcre\+\_\+maketables.\+c@{pcre\+\_\+maketables.\+c}}
+\subsubsection[{\texorpdfstring{pcre\+\_\+maketables(void)}{pcre_maketables(void)}}]{\setlength{\rightskip}{0pt plus 5cm}const unsigned char$\ast$ pcre\+\_\+maketables (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{pcre__maketables_8c_a8a33ce35ab2e6f9cb4f24697966c9a5e}{}\label{pcre__maketables_8c_a8a33ce35ab2e6f9cb4f24697966c9a5e}
+
+\begin{DoxyCode}
+79 \{
+80 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *yield, *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+81 \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+82 
+83 \textcolor{preprocessor}{#ifndef DFTABLES}
+84 yield = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)(\hyperlink{pcre__globals_8c_af69d8e852882cfd50b98c0481ba3b98a}{PUBL}(\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}))(\hyperlink{pcre__internal_8h_ac214b54f9ab6a0efdc63d666ddf0287e}{tables\_length});
+85 \textcolor{preprocessor}{#else}
+86 yield = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\hyperlink{pcre__internal_8h_ac214b54f9ab6a0efdc63d666ddf0287e}{tables\_length});
+87 \textcolor{preprocessor}{#endif}
+88 
+89 \textcolor{keywordflow}{if} (yield == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+90 p = yield;
+91 
+92 \textcolor{comment}{/* First comes the lower casing table */}
+93 
+94 \textcolor{keywordflow}{for} (i = 0; i < 256; i++) *p++ = tolower(i);
+95 
+96 \textcolor{comment}{/* Next the case-flipping table */}
+97 
+98 \textcolor{keywordflow}{for} (i = 0; i < 256; i++) *p++ = \hyperlink{README_8txt_ad71ae719aeb3f56d11fec83b8bdd7bf5}{islower}(i)? toupper(i) : tolower(i);
+99 
+100 \textcolor{comment}{/* Then the character class tables. Don't try to be clever and save effort on}
+101 \textcolor{comment}{exclusive ones - in some locales things may be different.}
+102 \textcolor{comment}{}
+103 \textcolor{comment}{Note that the table for "space" includes everything "isspace" gives, including}
+104 \textcolor{comment}{VT in the default locale. This makes it work for the POSIX class [:space:].}
+105 \textcolor{comment}{From release 8.34 is is also correct for Perl space, because Perl added VT at}
+106 \textcolor{comment}{release 5.18.}
+107 \textcolor{comment}{}
+108 \textcolor{comment}{Note also that it is possible for a character to be alnum or alpha without}
+109 \textcolor{comment}{being lower or upper, such as "male and female ordinals" (\(\backslash\)xAA and \(\backslash\)xBA) in the}
+110 \textcolor{comment}{fr\_FR locale (at least under Debian Linux's locales as of 12/2005). So we must}
+111 \textcolor{comment}{test for alnum specially. */}
+112 
+113 memset(p, 0, \hyperlink{pcre__internal_8h_aeca26eaa37dfd8f5f652365b2427f6c8}{cbit\_length});
+114 \textcolor{keywordflow}{for} (i = 0; i < 256; i++)
+115   \{
+116   \textcolor{keywordflow}{if} (isdigit(i)) p[\hyperlink{pcre__internal_8h_a435151c0c1724be9024d8c70ffdf017b}{cbit\_digit}  + i/8] |= 1 << (i&7);
+117   \textcolor{keywordflow}{if} (\hyperlink{README_8txt_a1cdfcfba9c94d5bdf211d83eafbc618a}{isupper}(i)) p[\hyperlink{pcre__internal_8h_ac1f4d1cc73f839880a87f93c4ac5fde0}{cbit\_upper}  + i/8] |= 1 << (i&7);
+118   \textcolor{keywordflow}{if} (\hyperlink{README_8txt_ad71ae719aeb3f56d11fec83b8bdd7bf5}{islower}(i)) p[\hyperlink{pcre__internal_8h_a59f70a6ab2726c7cefe65d09918427e6}{cbit\_lower}  + i/8] |= 1 << (i&7);
+119   \textcolor{keywordflow}{if} (\hyperlink{README_8txt_a25d7dd05239df8ce57a8921c43397d07}{isalnum}(i)) p[\hyperlink{pcre__internal_8h_aa674bbdc6d619279dc1687e380874e7e}{cbit\_word}   + i/8] |= 1 << (i&7);
+120   \textcolor{keywordflow}{if} (i == \textcolor{charliteral}{'\_'})   p[\hyperlink{pcre__internal_8h_aa674bbdc6d619279dc1687e380874e7e}{cbit\_word}   + i/8] |= 1 << (i&7);
+121   \textcolor{keywordflow}{if} (isspace(i)) p[\hyperlink{pcre__internal_8h_a39d8c4a79369ab41b5387859520a0bb7}{cbit\_space}  + i/8] |= 1 << (i&7);
+122   \textcolor{keywordflow}{if} (isxdigit(i))p[\hyperlink{pcre__internal_8h_ab33f4ee0d0dad2e338bdc0a629a38e38}{cbit\_xdigit} + i/8] |= 1 << (i&7);
+123   \textcolor{keywordflow}{if} (isgraph(i)) p[\hyperlink{pcre__internal_8h_af5641612b9cd173a5f9d4c03df44a62d}{cbit\_graph}  + i/8] |= 1 << (i&7);
+124   \textcolor{keywordflow}{if} (isprint(i)) p[\hyperlink{pcre__internal_8h_aeba4f3faf9967c0d5a182a3a526036c9}{cbit\_print}  + i/8] |= 1 << (i&7);
+125   \textcolor{keywordflow}{if} (ispunct(i)) p[\hyperlink{pcre__internal_8h_a2c877ee4100da3f593c190c60dfa2a44}{cbit\_punct}  + i/8] |= 1 << (i&7);
+126   \textcolor{keywordflow}{if} (iscntrl(i)) p[\hyperlink{pcre__internal_8h_a5bcd2cd4ec962e8dc973a627abdd634a}{cbit\_cntrl}  + i/8] |= 1 << (i&7);
+127   \}
+128 p += \hyperlink{pcre__internal_8h_aeca26eaa37dfd8f5f652365b2427f6c8}{cbit\_length};
+129 
+130 \textcolor{comment}{/* Finally, the character type table. In this, we used to exclude VT from the}
+131 \textcolor{comment}{white space chars, because Perl didn't recognize it as such for \(\backslash\)s and for}
+132 \textcolor{comment}{comments within regexes. However, Perl changed at release 5.18, so PCRE changed}
+133 \textcolor{comment}{at release 8.34. */}
+134 
+135 \textcolor{keywordflow}{for} (i = 0; i < 256; i++)
+136   \{
+137   \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x} = 0;
+138   \textcolor{keywordflow}{if} (isspace(i)) x += \hyperlink{pcre__internal_8h_a65dc078d774490ba90c0d33d3fdece35}{ctype\_space};
+139   \textcolor{keywordflow}{if} (\hyperlink{README_8txt_a1a9982a5b5761e5270bf12839e8b1b35}{isalpha}(i)) x += \hyperlink{pcre__internal_8h_a2dd2a83bdb0c180d49a1f14f9fda9c1e}{ctype\_letter};
+140   \textcolor{keywordflow}{if} (isdigit(i)) x += \hyperlink{pcre__internal_8h_a3d4364a50c8029c795b0e0a0e7ca7fbd}{ctype\_digit};
+141   \textcolor{keywordflow}{if} (isxdigit(i)) x += \hyperlink{pcre__internal_8h_a3664754fb10bf65932bf8f0c8ed543ce}{ctype\_xdigit};
+142   \textcolor{keywordflow}{if} (\hyperlink{README_8txt_a25d7dd05239df8ce57a8921c43397d07}{isalnum}(i) || i == \textcolor{charliteral}{'\_'}) x += \hyperlink{pcre__internal_8h_a442a60d2ab94f56f28e04ab175faf43f}{ctype\_word};
+143 
+144   \textcolor{comment}{/* Note: strchr includes the terminating zero in the characters it considers.}
+145 \textcolor{comment}{  In this instance, that is ok because we want binary zero to be flagged as a}
+146 \textcolor{comment}{  meta-character, which in this sense is any character that terminates a run}
+147 \textcolor{comment}{  of data characters. */}
+148 
+149   \textcolor{keywordflow}{if} (strchr(\textcolor{stringliteral}{"\(\backslash\)\(\backslash\)*+?\{^.$|()["}, i) != 0) x += \hyperlink{pcre__internal_8h_af254c479da59731eb98c178ba2db0430}{ctype\_meta};
+150   *p++ = \hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x};
+151   \}
+152 
+153 \textcolor{keywordflow}{return} yield;
+154 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=257pt]{pcre__maketables_8c_a8a33ce35ab2e6f9cb4f24697966c9a5e_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=245pt]{pcre__maketables_8c_a8a33ce35ab2e6f9cb4f24697966c9a5e_icgraph}
+\end{center}
+\end{figure}
+
+

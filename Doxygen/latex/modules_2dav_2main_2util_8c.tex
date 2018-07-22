@@ -1,0 +1,386 @@
+\hypertarget{modules_2dav_2main_2util_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/dav/main/util.c File Reference}
+\label{modules_2dav_2main_2util_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/util.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/util.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+dav.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+vhost.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+Include dependency graph for util.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{modules_2dav_2main_2util_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{modules_2dav_2main_2util_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{modules_2dav_2main_2util_8c_afe5447ff5a6703cd890a4ff00aa5a8eb}{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+H\+DR}~\char`\"{}Label\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{modules_2dav_2main_2util_8c_a6cf889c691920d48451a89dc46fef863}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__error}{dav\+\_\+error} $\ast$)
+\item 
+\hyperlink{modules_2dav_2main_2util_8c_ab414dd1559a5a3e2d27c1120b55c2853}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{modules_2dav_2main_2util_8c_a83b62e0bd6e64b4c47b4b98cea11a096}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__lookup__result}{dav\+\_\+lookup\+\_\+result})
+\item 
+\hyperlink{modules_2dav_2main_2util_8c_afe2f14122c74bb061f2f1f6545627af0}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{modules_2dav_2main_2util_8c_a3a381f43597c9219ca6f466f1b0128f7}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__xml__elem}{apr\+\_\+xml\+\_\+elem} $\ast$)
+\item 
+\hyperlink{modules_2dav_2main_2util_8c_a814f27f5b49e60ccbab42f6d7e9ec83b}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$)
+\item 
+\hyperlink{group__MOD__DAV_ga6a529d0d3d774f021627664aed68a07d}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__xmlns__info}{dav\+\_\+xmlns\+\_\+info} $\ast$)
+\item 
+\hyperlink{group__MOD__DAV_ga623d098178ceab8f86c45aac15312f6d}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (time\+\_\+t)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{modules/dav/main/util.\+c@{modules/dav/main/util.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!modules/dav/main/util.\+c@{modules/dav/main/util.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{modules_2dav_2main_2util_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{modules_2dav_2main_2util_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{modules/dav/main/util.\+c@{modules/dav/main/util.\+c}!D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+H\+DR@{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+H\+DR}}
+\index{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+H\+DR@{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+H\+DR}!modules/dav/main/util.\+c@{modules/dav/main/util.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+H\+DR}{DAV_LABEL_HDR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+H\+DR~\char`\"{}Label\char`\"{}}\hypertarget{modules_2dav_2main_2util_8c_afe5447ff5a6703cd890a4ff00aa5a8eb}{}\label{modules_2dav_2main_2util_8c_afe5447ff5a6703cd890a4ff00aa5a8eb}
+
+
+\subsection{Function Documentation}
+\index{modules/dav/main/util.\+c@{modules/dav/main/util.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!modules/dav/main/util.\+c@{modules/dav/main/util.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(dav\+\_\+error $\ast$)}{DAV_DECLARE(dav_error *)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf dav\+\_\+error} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{modules_2dav_2main_2util_8c_a6cf889c691920d48451a89dc46fef863}{}\label{modules_2dav_2main_2util_8c_a6cf889c691920d48451a89dc46fef863}
+
+\begin{DoxyCode}
+38 \{
+39     \hyperlink{structdav__error}{dav\_error} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err} = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \textcolor{keyword}{sizeof}(*err));
+40 
+41     \textcolor{comment}{/* DBG3("dav\_new\_error: %d %d %s", status, error\_id, desc ? desc : "(no desc)"); */}
+42 
+43     err->\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status} = \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+44     err->\hyperlink{structdav__error_ac9cebd6187180bee43f17827c4acdd48}{error\_id} = \hyperlink{group__MOD__DAV_ga5e2420d462bed5cf0127a1ebe06ca4d1}{error\_id};
+45     err->\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc} = \hyperlink{group__MOD__DAV_ga21c7b5d68e8da2320aba56644b2a5447}{desc};
+46     err->\hyperlink{structdav__error_ad95d9a9ce9089ec9707954a62b114d96}{aprerr} = \hyperlink{group__MOD__DAV_gad6ab505736bdeb22c744ff1560e6504a}{aprerr};
+47 
+48     \textcolor{keywordflow}{return} \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+49 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{modules_2dav_2main_2util_8c_a6cf889c691920d48451a89dc46fef863_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{modules/dav/main/util.\+c@{modules/dav/main/util.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!modules/dav/main/util.\+c@{modules/dav/main/util.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(void)}{DAV_DECLARE(void)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{modules_2dav_2main_2util_8c_ab414dd1559a5a3e2d27c1120b55c2853}{}\label{modules_2dav_2main_2util_8c_ab414dd1559a5a3e2d27c1120b55c2853}
+
+\begin{DoxyCode}
+106 \{
+107     \textcolor{comment}{/* grow the buffer if necessary */}
+108     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->\hyperlink{structdav__buffer_a8d43337c127b3e07aada116e7f3cb2a9}{cur\_len} + \hyperlink{group__MOD__DAV_ga3e7b13c5862c47c96b564314fe11d41d}{extra\_needed} > \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->
+      \hyperlink{structdav__buffer_a08afb816368f6e602d8e0b9ffeebaaae}{alloc\_len}) \{
+109         \textcolor{keywordtype}{char} *newbuf;
+110 
+111         \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->\hyperlink{structdav__buffer_a08afb816368f6e602d8e0b9ffeebaaae}{alloc\_len} += \hyperlink{group__MOD__DAV_ga3e7b13c5862c47c96b564314fe11d41d}{extra\_needed} + 
+      \hyperlink{group__MOD__DAV_ga8af74674e7bc2f56c3dcaeecbe09fe32}{DAV\_BUFFER\_PAD};
+112         newbuf = apr\_palloc(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->\hyperlink{structdav__buffer_a08afb816368f6e602d8e0b9ffeebaaae}{alloc\_len});
+113         memcpy(newbuf, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->\hyperlink{structdav__buffer_ab55f9f7e74cadc2abbc7f4fc99090f01}{buf}, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->\hyperlink{structdav__buffer_a8d43337c127b3e07aada116e7f3cb2a9}{cur\_len});
+114         \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->\hyperlink{structdav__buffer_ab55f9f7e74cadc2abbc7f4fc99090f01}{buf} = newbuf;
+115     \}
+116 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{modules_2dav_2main_2util_8c_ab414dd1559a5a3e2d27c1120b55c2853_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{modules/dav/main/util.\+c@{modules/dav/main/util.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!modules/dav/main/util.\+c@{modules/dav/main/util.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(dav\+\_\+lookup\+\_\+result)}{DAV_DECLARE(dav_lookup_result)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf dav\+\_\+lookup\+\_\+result}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{modules_2dav_2main_2util_8c_a83b62e0bd6e64b4c47b4b98cea11a096}{}\label{modules_2dav_2main_2util_8c_a83b62e0bd6e64b4c47b4b98cea11a096}
+
+\begin{DoxyCode}
+189 \{
+190     \hyperlink{structdav__lookup__result}{dav\_lookup\_result} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result} = \{ 0 \};
+191     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *scheme;
+192     \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\_port\_t} \hyperlink{group__APACHE__CORE__VHOST_ga225c76c246a5cc263c5a2628eb99353e}{port};
+193     \hyperlink{structapr__uri__t}{apr\_uri\_t} \hyperlink{group__apr__skiplist_ga4c81b1eebdb8efeefcadd27cb3fe1c31}{comp};
+194     \textcolor{keywordtype}{char} *new\_file;
+195     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *domain;
+196 
+197     \textcolor{comment}{/* first thing to do is parse the URI into various components */}
+198     \textcolor{keywordflow}{if} (apr\_uri\_parse(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \hyperlink{group__APACHE__CORE__HTTPD_gaaf802cf1817bf45bcf1a5f266ef18bbd}{uri}, &comp) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+199         result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status} = \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST};
+200         result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc} = \textcolor{stringliteral}{"Invalid syntax in Destination URI."};
+201         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+202     \}
+203 
+204     \textcolor{comment}{/* the URI must be an absoluteURI (WEBDAV S9.3) */}
+205     \textcolor{keywordflow}{if} (comp.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} && \hyperlink{group__MOD__DAV_ga3ef31f51e842b1a8129709ce7c811c8d}{must\_be\_absolute}) \{
+206         result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status} = \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST};
+207         result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc} = \textcolor{stringliteral}{"Destination URI must be an absolute URI."};
+208         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+209     \}
+210 
+211     \textcolor{comment}{/* the URI must not have a query (args) or a fragment */}
+212     \textcolor{keywordflow}{if} (comp.\hyperlink{structapr__uri__t_a88d889bcda9e95696022f04ffb470678}{query} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} || comp.\hyperlink{structapr__uri__t_a0e4abeaa1379c79dcc6fdac01d76715a}{fragment} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+213         result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status} = \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST};
+214         result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc} =
+215             \textcolor{stringliteral}{"Destination URI contains invalid components "}
+216             \textcolor{stringliteral}{"(a query or a fragment)."};
+217         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+218     \}
+219 
+220     \textcolor{comment}{/* If the scheme or port was provided, then make sure that it matches}
+221 \textcolor{comment}{       the scheme/port of this request. If the request must be absolute,}
+222 \textcolor{comment}{       then require the (explicit/implicit) scheme/port be matching.}
+223 \textcolor{comment}{}
+224 \textcolor{comment}{       ### hmm. if a port wasn't provided (does the parse return port==0?),}
+225 \textcolor{comment}{       ### but we're on a non-standard port, then we won't detect that the}
+226 \textcolor{comment}{       ### URI's port implies the wrong one.}
+227 \textcolor{comment}{    */}
+228     \textcolor{keywordflow}{if} (comp.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} || comp.\hyperlink{structapr__uri__t_a6e6e858ce56b5d58389287c1cc1134fa}{port} != 0 || \hyperlink{group__MOD__DAV_ga3ef31f51e842b1a8129709ce7c811c8d}{must\_be\_absolute})
+229     \{
+230         \textcolor{comment}{/* ### not sure this works if the current request came in via https: */}
+231         scheme = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a778f7883e201095a1d914ab7422635eb}{parsed\_uri}.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme};
+232         \textcolor{keywordflow}{if} (scheme == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+233             scheme = \hyperlink{group__APACHE__CORE__DAEMON_ga486f75485b725c5c3baaa577409d36f3}{ap\_http\_scheme}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+234 
+235         \textcolor{comment}{/* insert a port if the URI did not contain one */}
+236         \textcolor{keywordflow}{if} (comp.\hyperlink{structapr__uri__t_a6e6e858ce56b5d58389287c1cc1134fa}{port} == 0)
+237             comp.\hyperlink{structapr__uri__t_a6e6e858ce56b5d58389287c1cc1134fa}{port} = apr\_uri\_port\_of\_scheme(comp.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme});
+238 
+239         \textcolor{comment}{/* now, verify that the URI uses the same scheme as the current.}
+240 \textcolor{comment}{           request. the port must match our port.}
+241 \textcolor{comment}{        */}
+242         port = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->local\_addr->port;
+243         \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(comp.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme}, scheme) != 0
+244 #ifdef APACHE\_PORT\_HANDLING\_IS\_BUSTED
+245             || comp.\hyperlink{structapr__uri__t_a6e6e858ce56b5d58389287c1cc1134fa}{port} != port
+246 #endif
+247             ) \{
+248             result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status} = \hyperlink{group__HTTP__Status_ga57ddfb82346d6efc864c3e164e574b10}{HTTP\_BAD\_GATEWAY};
+249             result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc} = apr\_psprintf(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool},
+250                                            \textcolor{stringliteral}{"Destination URI refers to "}
+251                                            \textcolor{stringliteral}{"different scheme or port "}
+252                                            \textcolor{stringliteral}{"(%s://hostname:%d)"} \hyperlink{group__apr__platform_ga20953ff75ca59692aac949acfdaa25f6}{APR\_EOL\_STR}
+253                                            \textcolor{stringliteral}{"(want: %s://hostname:%d)"},
+254                                            comp.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme} ? comp.\hyperlink{structapr__uri__t_a5d62fa370265b6bc956aa86d36024a5d}{scheme} : scheme,
+255                                            comp.\hyperlink{structapr__uri__t_a6e6e858ce56b5d58389287c1cc1134fa}{port} ? comp.\hyperlink{structapr__uri__t_a6e6e858ce56b5d58389287c1cc1134fa}{port} : port,
+256                                            scheme, port);
+257             \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+258         \}
+259     \}
+260 
+261     \textcolor{comment}{/* we have verified the scheme, port, and general structure */}
+262 
+263     \textcolor{comment}{/*}
+264 \textcolor{comment}{    ** Hrm.  IE5 will pass unqualified hostnames for both the}
+265 \textcolor{comment}{    ** Host: and Destination: headers.  This breaks the}
+266 \textcolor{comment}{    ** http\_vhost.c::matches\_aliases function.}
+267 \textcolor{comment}{    **}
+268 \textcolor{comment}{    ** For now, qualify unqualified comp.hostnames with}
+269 \textcolor{comment}{    ** r->server->server\_hostname.}
+270 \textcolor{comment}{    **}
+271 \textcolor{comment}{    ** ### this is a big hack. Apache should provide a better way.}
+272 \textcolor{comment}{    ** ### maybe the admin should list the unqualified hosts in a}
+273 \textcolor{comment}{    ** ### <ServerAlias> block?}
+274 \textcolor{comment}{    */}
+275     \textcolor{keywordflow}{if} (comp.\hyperlink{structapr__uri__t_a8c6bf3dfca3d159f091377d9f7228aec}{hostname} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}
+276         && strrchr(comp.\hyperlink{structapr__uri__t_a8c6bf3dfca3d159f091377d9f7228aec}{hostname}, \textcolor{charliteral}{'.'}) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}
+277         && (domain = strchr(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->server\_hostname, \textcolor{charliteral}{'.'})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+278         comp.\hyperlink{structapr__uri__t_a8c6bf3dfca3d159f091377d9f7228aec}{hostname} = apr\_pstrcat(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, comp.\hyperlink{structapr__uri__t_a8c6bf3dfca3d159f091377d9f7228aec}{hostname}, domain, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+279     \}
+280 
+281     \textcolor{comment}{/* now, if a hostname was provided, then verify that it represents the}
+282 \textcolor{comment}{       same server as the current connection. note that we just use our}
+283 \textcolor{comment}{       port, since we've verified the URI matches ours */}
+284 \textcolor{preprocessor}{#ifdef APACHE\_PORT\_HANDLING\_IS\_BUSTED}
+285     \textcolor{keywordflow}{if} (comp.\hyperlink{structapr__uri__t_a8c6bf3dfca3d159f091377d9f7228aec}{hostname} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} &&
+286         !ap\_matches\_request\_vhost(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, comp.\hyperlink{structapr__uri__t_a8c6bf3dfca3d159f091377d9f7228aec}{hostname}, port)) \{
+287         result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status} = \hyperlink{group__HTTP__Status_ga57ddfb82346d6efc864c3e164e574b10}{HTTP\_BAD\_GATEWAY};
+288         result.\hyperlink{structdav__lookup__result_a28f31e5bff1099045dba379393d931a1}{err}.\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc} = \textcolor{stringliteral}{"Destination URI refers to a different server."};
+289         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+290     \}
+291 \textcolor{preprocessor}{#endif}
+292 
+293     \textcolor{comment}{/* we have verified that the requested URI denotes the same server as}
+294 \textcolor{comment}{       the current request. Therefore, we can use ap\_sub\_req\_lookup\_uri() */}
+295 
+296     \textcolor{comment}{/* reconstruct a URI as just the path */}
+297     new\_file = apr\_uri\_unparse(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, &comp, \hyperlink{group__APR__Util__URI_gaef80da6212c6838ac15bbcafa1e9745b}{APR\_URI\_UNP\_OMITSITEPART});
+298 
+299     \textcolor{comment}{/*}
+300 \textcolor{comment}{     * Lookup the URI and return the sub-request. Note that we use the}
+301 \textcolor{comment}{     * same HTTP method on the destination. This allows the destination}
+302 \textcolor{comment}{     * to apply appropriate restrictions (e.g. readonly).}
+303 \textcolor{comment}{     */}
+304     result.\hyperlink{structdav__lookup__result_a227eca16f8f08e0ce7c49e3706e70160}{rnew} = ap\_sub\_req\_method\_uri(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a54de55544c4c4c25d67a08980184c653}{method}, new\_file, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+305 
+306     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+307 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=275pt]{modules_2dav_2main_2util_8c_a83b62e0bd6e64b4c47b4b98cea11a096_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{modules/dav/main/util.\+c@{modules/dav/main/util.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!modules/dav/main/util.\+c@{modules/dav/main/util.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{DAV_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{modules_2dav_2main_2util_8c_afe2f14122c74bb061f2f1f6545627af0}{}\label{modules_2dav_2main_2util_8c_afe2f14122c74bb061f2f1f6545627af0}
+
+\begin{DoxyCode}
+317 \{
+318     \textcolor{keywordflow}{return} \hyperlink{group__MOD__DAV_gab79aad8aa27988a0e86b9397d43541e8}{doc}->root &&
+319         \hyperlink{group__MOD__DAV_gab79aad8aa27988a0e86b9397d43541e8}{doc}->root->ns == \hyperlink{group__APR__Util__XML_gad856851edabebf42e4150597c6f9d2c2}{APR\_XML\_NS\_DAV\_ID} &&
+320         strcmp(\hyperlink{group__MOD__DAV_gab79aad8aa27988a0e86b9397d43541e8}{doc}->root->name, \hyperlink{group__MOD__DAV_gad88f0e2b448f8637fffbb0e4fc4fec45}{tagname}) == 0;
+321 \}
+\end{DoxyCode}
+\index{modules/dav/main/util.\+c@{modules/dav/main/util.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!modules/dav/main/util.\+c@{modules/dav/main/util.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+xml\+\_\+elem $\ast$)}{DAV_DECLARE(apr_xml_elem *)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+xml\+\_\+elem} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{modules_2dav_2main_2util_8c_a3a381f43597c9219ca6f466f1b0128f7}{}\label{modules_2dav_2main_2util_8c_a3a381f43597c9219ca6f466f1b0128f7}
+
+\begin{DoxyCode}
+326 \{
+327     \hyperlink{structapr__xml__elem}{apr\_xml\_elem} *child = \hyperlink{structelem}{elem}->first\_child;
+328 
+329     \textcolor{keywordflow}{for} (; child; child = child->\hyperlink{structapr__xml__elem_a8687253d504b1c1363c47117611042ac}{next})
+330         \textcolor{keywordflow}{if} (child->\hyperlink{structapr__xml__elem_a613ea31964572df7b41f5a9da8d0982e}{ns} == \hyperlink{group__APR__Util__XML_gad856851edabebf42e4150597c6f9d2c2}{APR\_XML\_NS\_DAV\_ID} && !strcmp(child->
+      \hyperlink{structapr__xml__elem_a5b2fb684a9cfb244f88ad88f539fe3d6}{name}, \hyperlink{group__MOD__DAV_gad88f0e2b448f8637fffbb0e4fc4fec45}{tagname}))
+331             \textcolor{keywordflow}{return} child;
+332     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+333 \}
+\end{DoxyCode}
+\index{modules/dav/main/util.\+c@{modules/dav/main/util.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!modules/dav/main/util.\+c@{modules/dav/main/util.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(const char $\ast$)}{DAV_DECLARE(const char *)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{modules_2dav_2main_2util_8c_a814f27f5b49e60ccbab42f6d7e9ec83b}{}\label{modules_2dav_2main_2util_8c_a814f27f5b49e60ccbab42f6d7e9ec83b}
+
+\begin{DoxyCode}
+338 \{
+339     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} = 0;
+340     \hyperlink{structapr__text}{apr\_text} *scan;
+341     \textcolor{keyword}{const} \hyperlink{structapr__xml__elem}{apr\_xml\_elem} *child;
+342     \textcolor{keywordtype}{char} *cdata;
+343     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+344     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} tlen;
+345     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *found\_text = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; \textcolor{comment}{/* initialize to avoid gcc warning */}
+346     \textcolor{keywordtype}{int} found\_count = 0;
+347 
+348     \textcolor{keywordflow}{for} (scan = \hyperlink{structelem}{elem}->first\_cdata.first; scan != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; scan = scan->\hyperlink{structapr__text_aaf1b48e3f3085522fe7355e7d8893111}{next}) \{
+349         found\_text = scan->\hyperlink{structapr__text_a37a262695c36f740a7777ea9dd0b699d}{text};
+350         ++found\_count;
+351         len += strlen(found\_text);
+352     \}
+353 
+354     \textcolor{keywordflow}{for} (child = \hyperlink{structelem}{elem}->first\_child; child != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; child = child->\hyperlink{structapr__xml__elem_a8687253d504b1c1363c47117611042ac}{next}) \{
+355         \textcolor{keywordflow}{for} (scan = child->\hyperlink{structapr__xml__elem_a8d64c5343354e34c1cc7ac67f51cc89a}{following\_cdata}.\hyperlink{structapr__text__header_a6db03d272f5e56058c84e10e49624c0b}{first};
+356              scan != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+357              scan = scan->\hyperlink{structapr__text_aaf1b48e3f3085522fe7355e7d8893111}{next}) \{
+358             found\_text = scan->\hyperlink{structapr__text_a37a262695c36f740a7777ea9dd0b699d}{text};
+359             ++found\_count;
+360             len += strlen(found\_text);
+361         \}
+362     \}
+363 
+364     \textcolor{comment}{/* some fast-path cases:}
+365 \textcolor{comment}{     * 1) zero-length cdata}
+366 \textcolor{comment}{     * 2) a single piece of cdata with no whitespace to strip}
+367 \textcolor{comment}{     */}
+368     \textcolor{keywordflow}{if} (len == 0)
+369         \textcolor{keywordflow}{return} \textcolor{stringliteral}{""};
+370     \textcolor{keywordflow}{if} (found\_count == 1) \{
+371         \textcolor{keywordflow}{if} (!\hyperlink{group__MOD__DAV_gadde0088b83bfa79d60a5603dd8f1c6c1}{strip\_white}
+372             || (!\hyperlink{group__apr__ctype_ga23f4c7721923a0f0f444fd7fb196047a}{apr\_isspace}(*found\_text)
+373                 && !\hyperlink{group__apr__ctype_ga23f4c7721923a0f0f444fd7fb196047a}{apr\_isspace}(found\_text[len - 1])))
+374             \textcolor{keywordflow}{return} found\_text;
+375     \}
+376 
+377     cdata = s = apr\_palloc(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, len + 1);
+378 
+379     \textcolor{keywordflow}{for} (scan = \hyperlink{structelem}{elem}->first\_cdata.first; scan != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; scan = scan->\hyperlink{structapr__text_aaf1b48e3f3085522fe7355e7d8893111}{next}) \{
+380         tlen = strlen(scan->\hyperlink{structapr__text_a37a262695c36f740a7777ea9dd0b699d}{text});
+381         memcpy(s, scan->\hyperlink{structapr__text_a37a262695c36f740a7777ea9dd0b699d}{text}, tlen);
+382         s += tlen;
+383     \}
+384 
+385     \textcolor{keywordflow}{for} (child = \hyperlink{structelem}{elem}->first\_child; child != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; child = child->\hyperlink{structapr__xml__elem_a8687253d504b1c1363c47117611042ac}{next}) \{
+386         \textcolor{keywordflow}{for} (scan = child->\hyperlink{structapr__xml__elem_a8d64c5343354e34c1cc7ac67f51cc89a}{following\_cdata}.\hyperlink{structapr__text__header_a6db03d272f5e56058c84e10e49624c0b}{first};
+387              scan != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+388              scan = scan->\hyperlink{structapr__text_aaf1b48e3f3085522fe7355e7d8893111}{next}) \{
+389             tlen = strlen(scan->\hyperlink{structapr__text_a37a262695c36f740a7777ea9dd0b699d}{text});
+390             memcpy(s, scan->\hyperlink{structapr__text_a37a262695c36f740a7777ea9dd0b699d}{text}, tlen);
+391             s += tlen;
+392         \}
+393     \}
+394 
+395     *s = \textcolor{charliteral}{'\(\backslash\)0'};
+396 
+397     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gadde0088b83bfa79d60a5603dd8f1c6c1}{strip\_white}) \{
+398         \textcolor{comment}{/* trim leading whitespace */}
+399         \textcolor{keywordflow}{while} (\hyperlink{group__apr__ctype_ga23f4c7721923a0f0f444fd7fb196047a}{apr\_isspace}(*cdata)) \{     \textcolor{comment}{/* assume: return false for '\(\backslash\)0' */}
+400             ++cdata;
+401             --\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+402         \}
+403 
+404         \textcolor{comment}{/* trim trailing whitespace */}
+405         \textcolor{keywordflow}{while} (len-- > 0 && \hyperlink{group__apr__ctype_ga23f4c7721923a0f0f444fd7fb196047a}{apr\_isspace}(cdata[len]))
+406             \textcolor{keywordflow}{continue};
+407         cdata[len + 1] = \textcolor{charliteral}{'\(\backslash\)0'};
+408     \}
+409 
+410     \textcolor{keywordflow}{return} cdata;
+411 \}
+\end{DoxyCode}

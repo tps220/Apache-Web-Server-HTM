@@ -1,0 +1,192 @@
+\hypertarget{modules_2cache_2mod__cache__socache_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/cache/mod\+\_\+cache\+\_\+socache.c File Reference}
+\label{modules_2cache_2mod__cache__socache_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+socache.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+script.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+charset.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+cache.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+status.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}cache\+\_\+socache\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$immintrin.\+h$>$}\\*
+{\ttfamily \#include $<$pthread.\+h$>$}\\*
+{\ttfamily \#include $<$x86intrin.\+h$>$}\\*
+{\ttfamily \#include $<$cpuid.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}transactions.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+cache\+\_\+socache.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{modules_2cache_2mod__cache__socache_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcache__socache__object__t}{cache\+\_\+socache\+\_\+object\+\_\+t}
+\item 
+struct \hyperlink{structcache__socache__provider__conf}{cache\+\_\+socache\+\_\+provider\+\_\+conf}
+\item 
+struct \hyperlink{structcache__socache__conf}{cache\+\_\+socache\+\_\+conf}
+\item 
+struct \hyperlink{structcache__socache__dir__conf}{cache\+\_\+socache\+\_\+dir\+\_\+conf}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{modules_2cache_2mod__cache__socache_8c_ae5343bcb5e838d7cf932d13238fd1794}{bit\+\_\+\+R\+TM}~(1 $<$$<$ 11)
+\item 
+\#define \hyperlink{modules_2cache_2mod__cache__socache_8c_a1f8c83892aab3a36d81d183367295c78}{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+I\+L\+E\+\_\+\+S\+I\+ZE}~100$\ast$1024
+\item 
+\#define \hyperlink{modules_2cache_2mod__cache__socache_8c_ad3d38bd6ac444d5277aa5f8cd5f680d4}{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+T\+I\+ME}~86400
+\item 
+\#define \hyperlink{modules_2cache_2mod__cache__socache_8c_ac100852b49be49ac0079840fabca64c4}{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+T\+I\+ME}~600
+\item 
+\#define \hyperlink{modules_2cache_2mod__cache__socache_8c_a1fca79c4d7ed64c92fdd40ac7432e4eb}{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+S\+I\+ZE}~0
+\item 
+\#define \hyperlink{modules_2cache_2mod__cache__socache_8c_ae9cd71304ccc39523064205cf6facc18}{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+T\+I\+ME}~0
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structcache__socache__object__t}{cache\+\_\+socache\+\_\+object\+\_\+t} \hyperlink{modules_2cache_2mod__cache__socache_8c_a7ce1a99ab0b4f26550bf8c606a67b608}{cache\+\_\+socache\+\_\+object\+\_\+t}
+\item 
+typedef struct \hyperlink{structcache__socache__provider__conf}{cache\+\_\+socache\+\_\+provider\+\_\+conf} \hyperlink{modules_2cache_2mod__cache__socache_8c_a9ff137156dfcc2cb5bcdf1d7b84103db}{cache\+\_\+socache\+\_\+provider\+\_\+conf}
+\item 
+typedef struct \hyperlink{structcache__socache__conf}{cache\+\_\+socache\+\_\+conf} \hyperlink{modules_2cache_2mod__cache__socache_8c_a84cc6507017ebcdd4be651cbdca8f6db}{cache\+\_\+socache\+\_\+conf}
+\item 
+typedef struct \hyperlink{structcache__socache__dir__conf}{cache\+\_\+socache\+\_\+dir\+\_\+conf} \hyperlink{modules_2cache_2mod__cache__socache_8c_a126c88a7ec628dc90439e6e2613153b4}{cache\+\_\+socache\+\_\+dir\+\_\+conf}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{modules_2cache_2mod__cache__socache_8c_a948579c0590192057018201c8292cd10}{check\+\_\+rtm\+\_\+support} ()
+\item 
+\hyperlink{modules_2cache_2mod__cache__socache_8c_a5cc80f9d9dc07dfe79dc64cb84817a1e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (cache\+\_\+socache)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{modules_2cache_2mod__cache__socache_8c_ac6c98b52c91a5d7efa421660e6a8cd41}{cache\+\_\+socache\+\_\+module}
+\item 
+\hyperlink{transactions_8h_afd4c45a86f1dfadb867aa1ee4049c76c}{T\+H\+R\+E\+A\+D\+\_\+\+M\+U\+T\+E\+X\+\_\+T} \hyperlink{modules_2cache_2mod__cache__socache_8c_af19066337b2ec2ac82407118f122548e}{plock}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{modules_2cache_2mod__cache__socache_8c_a8d68983215cef87d76daa2e99b6812f0}{capacity\+\_\+abort}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{modules_2cache_2mod__cache__socache_8c_a91c7ced92c76a271a36873de50037669}{conflict\+\_\+abort}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{modules_2cache_2mod__cache__socache_8c_aea9f1acd38b1f906b9593245287212b8}{other\+\_\+abort}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{modules_2cache_2mod__cache__socache_8c_aa9ec6846d47794438cd364ba0e5273a7}{gl\+\_\+abort}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{modules_2cache_2mod__cache__socache_8c_aad979d03d5746cb3daed59e9a06ac5af}{gl\+\_\+count}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{modules_2cache_2mod__cache__socache_8c_ac1c38d6ff621c33e427cd4fad720a624}{htm\+\_\+count}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{modules_2cache_2mod__cache__socache_8c_a7c1d654b7b6114d7a0abc8d351dd1bcd}{dummy} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!bit\+\_\+\+R\+TM@{bit\+\_\+\+R\+TM}}
+\index{bit\+\_\+\+R\+TM@{bit\+\_\+\+R\+TM}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{bit\+\_\+\+R\+TM}{bit_RTM}}]{\setlength{\rightskip}{0pt plus 5cm}\#define bit\+\_\+\+R\+TM~(1 $<$$<$ 11)}\hypertarget{modules_2cache_2mod__cache__socache_8c_ae5343bcb5e838d7cf932d13238fd1794}{}\label{modules_2cache_2mod__cache__socache_8c_ae5343bcb5e838d7cf932d13238fd1794}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+I\+L\+E\+\_\+\+S\+I\+ZE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+I\+L\+E\+\_\+\+S\+I\+ZE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+I\+L\+E\+\_\+\+S\+I\+ZE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+I\+L\+E\+\_\+\+S\+I\+ZE}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+I\+L\+E\+\_\+\+S\+I\+ZE}{DEFAULT_MAX_FILE_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+F\+I\+L\+E\+\_\+\+S\+I\+ZE~100$\ast$1024}\hypertarget{modules_2cache_2mod__cache__socache_8c_a1f8c83892aab3a36d81d183367295c78}{}\label{modules_2cache_2mod__cache__socache_8c_a1f8c83892aab3a36d81d183367295c78}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+T\+I\+ME@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+T\+I\+ME}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+T\+I\+ME@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+T\+I\+ME}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+T\+I\+ME}{DEFAULT_MAXTIME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+T\+I\+ME~86400}\hypertarget{modules_2cache_2mod__cache__socache_8c_ad3d38bd6ac444d5277aa5f8cd5f680d4}{}\label{modules_2cache_2mod__cache__socache_8c_ad3d38bd6ac444d5277aa5f8cd5f680d4}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+T\+I\+ME@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+T\+I\+ME}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+T\+I\+ME@{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+T\+I\+ME}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+T\+I\+ME}{DEFAULT_MINTIME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+I\+N\+T\+I\+ME~600}\hypertarget{modules_2cache_2mod__cache__socache_8c_ac100852b49be49ac0079840fabca64c4}{}\label{modules_2cache_2mod__cache__socache_8c_ac100852b49be49ac0079840fabca64c4}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+S\+I\+ZE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+S\+I\+ZE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+S\+I\+ZE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+S\+I\+ZE}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+S\+I\+ZE}{DEFAULT_READSIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+S\+I\+ZE~0}\hypertarget{modules_2cache_2mod__cache__socache_8c_a1fca79c4d7ed64c92fdd40ac7432e4eb}{}\label{modules_2cache_2mod__cache__socache_8c_a1fca79c4d7ed64c92fdd40ac7432e4eb}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+T\+I\+ME@{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+T\+I\+ME}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+T\+I\+ME@{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+T\+I\+ME}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+T\+I\+ME}{DEFAULT_READTIME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+R\+E\+A\+D\+T\+I\+ME~0}\hypertarget{modules_2cache_2mod__cache__socache_8c_ae9cd71304ccc39523064205cf6facc18}{}\label{modules_2cache_2mod__cache__socache_8c_ae9cd71304ccc39523064205cf6facc18}
+
+
+\subsection{Typedef Documentation}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!cache\+\_\+socache\+\_\+conf@{cache\+\_\+socache\+\_\+conf}}
+\index{cache\+\_\+socache\+\_\+conf@{cache\+\_\+socache\+\_\+conf}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{cache\+\_\+socache\+\_\+conf}{cache_socache_conf}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf cache\+\_\+socache\+\_\+conf}  {\bf cache\+\_\+socache\+\_\+conf}}\hypertarget{modules_2cache_2mod__cache__socache_8c_a84cc6507017ebcdd4be651cbdca8f6db}{}\label{modules_2cache_2mod__cache__socache_8c_a84cc6507017ebcdd4be651cbdca8f6db}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!cache\+\_\+socache\+\_\+dir\+\_\+conf@{cache\+\_\+socache\+\_\+dir\+\_\+conf}}
+\index{cache\+\_\+socache\+\_\+dir\+\_\+conf@{cache\+\_\+socache\+\_\+dir\+\_\+conf}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{cache\+\_\+socache\+\_\+dir\+\_\+conf}{cache_socache_dir_conf}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf cache\+\_\+socache\+\_\+dir\+\_\+conf}  {\bf cache\+\_\+socache\+\_\+dir\+\_\+conf}}\hypertarget{modules_2cache_2mod__cache__socache_8c_a126c88a7ec628dc90439e6e2613153b4}{}\label{modules_2cache_2mod__cache__socache_8c_a126c88a7ec628dc90439e6e2613153b4}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!cache\+\_\+socache\+\_\+object\+\_\+t@{cache\+\_\+socache\+\_\+object\+\_\+t}}
+\index{cache\+\_\+socache\+\_\+object\+\_\+t@{cache\+\_\+socache\+\_\+object\+\_\+t}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{cache\+\_\+socache\+\_\+object\+\_\+t}{cache_socache_object_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf cache\+\_\+socache\+\_\+object\+\_\+t}  {\bf cache\+\_\+socache\+\_\+object\+\_\+t}}\hypertarget{modules_2cache_2mod__cache__socache_8c_a7ce1a99ab0b4f26550bf8c606a67b608}{}\label{modules_2cache_2mod__cache__socache_8c_a7ce1a99ab0b4f26550bf8c606a67b608}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!cache\+\_\+socache\+\_\+provider\+\_\+conf@{cache\+\_\+socache\+\_\+provider\+\_\+conf}}
+\index{cache\+\_\+socache\+\_\+provider\+\_\+conf@{cache\+\_\+socache\+\_\+provider\+\_\+conf}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{cache\+\_\+socache\+\_\+provider\+\_\+conf}{cache_socache_provider_conf}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf cache\+\_\+socache\+\_\+provider\+\_\+conf}  {\bf cache\+\_\+socache\+\_\+provider\+\_\+conf}}\hypertarget{modules_2cache_2mod__cache__socache_8c_a9ff137156dfcc2cb5bcdf1d7b84103db}{}\label{modules_2cache_2mod__cache__socache_8c_a9ff137156dfcc2cb5bcdf1d7b84103db}
+
+
+\subsection{Function Documentation}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(cache\+\_\+socache)}{AP_DECLARE_MODULE(cache_socache)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{cache\+\_\+socache}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{modules_2cache_2mod__cache__socache_8c_a5cc80f9d9dc07dfe79dc64cb84817a1e}{}\label{modules_2cache_2mod__cache__socache_8c_a5cc80f9d9dc07dfe79dc64cb84817a1e}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!check\+\_\+rtm\+\_\+support@{check\+\_\+rtm\+\_\+support}}
+\index{check\+\_\+rtm\+\_\+support@{check\+\_\+rtm\+\_\+support}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{check\+\_\+rtm\+\_\+support()}{check_rtm_support()}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} check\+\_\+rtm\+\_\+support (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{modules_2cache_2mod__cache__socache_8c_a948579c0590192057018201c8292cd10}{}\label{modules_2cache_2mod__cache__socache_8c_a948579c0590192057018201c8292cd10}
+
+\begin{DoxyCode}
+88                         \{
+89     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} eax, ebx, ecx, edx;
+90     \textcolor{keywordflow}{if} (\_\_get\_cpuid\_max(0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) >= 7) \{
+91         \_\_cpuid\_count(7, 0, eax, ebx, ecx, edx);
+92         \textcolor{keywordflow}{if} (ebx & \hyperlink{modules_2cache_2mod__cache__socache_8c_ae5343bcb5e838d7cf932d13238fd1794}{bit\_RTM}) \textcolor{keywordflow}{return} 1;
+93     \}
+94     \textcolor{keywordflow}{return} 0;
+95 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!cache\+\_\+socache\+\_\+module@{cache\+\_\+socache\+\_\+module}}
+\index{cache\+\_\+socache\+\_\+module@{cache\+\_\+socache\+\_\+module}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{cache\+\_\+socache\+\_\+module}{cache_socache_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} cache\+\_\+socache\+\_\+module}\hypertarget{modules_2cache_2mod__cache__socache_8c_ac6c98b52c91a5d7efa421660e6a8cd41}{}\label{modules_2cache_2mod__cache__socache_8c_ac6c98b52c91a5d7efa421660e6a8cd41}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!capacity\+\_\+abort@{capacity\+\_\+abort}}
+\index{capacity\+\_\+abort@{capacity\+\_\+abort}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{capacity\+\_\+abort}{capacity_abort}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} capacity\+\_\+abort}\hypertarget{modules_2cache_2mod__cache__socache_8c_a8d68983215cef87d76daa2e99b6812f0}{}\label{modules_2cache_2mod__cache__socache_8c_a8d68983215cef87d76daa2e99b6812f0}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!conflict\+\_\+abort@{conflict\+\_\+abort}}
+\index{conflict\+\_\+abort@{conflict\+\_\+abort}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{conflict\+\_\+abort}{conflict_abort}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} conflict\+\_\+abort}\hypertarget{modules_2cache_2mod__cache__socache_8c_a91c7ced92c76a271a36873de50037669}{}\label{modules_2cache_2mod__cache__socache_8c_a91c7ced92c76a271a36873de50037669}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!dummy@{dummy}}
+\index{dummy@{dummy}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{dummy}{dummy}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} dummy = 0}\hypertarget{modules_2cache_2mod__cache__socache_8c_a7c1d654b7b6114d7a0abc8d351dd1bcd}{}\label{modules_2cache_2mod__cache__socache_8c_a7c1d654b7b6114d7a0abc8d351dd1bcd}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!gl\+\_\+abort@{gl\+\_\+abort}}
+\index{gl\+\_\+abort@{gl\+\_\+abort}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{gl\+\_\+abort}{gl_abort}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} gl\+\_\+abort}\hypertarget{modules_2cache_2mod__cache__socache_8c_aa9ec6846d47794438cd364ba0e5273a7}{}\label{modules_2cache_2mod__cache__socache_8c_aa9ec6846d47794438cd364ba0e5273a7}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!gl\+\_\+count@{gl\+\_\+count}}
+\index{gl\+\_\+count@{gl\+\_\+count}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{gl\+\_\+count}{gl_count}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} gl\+\_\+count}\hypertarget{modules_2cache_2mod__cache__socache_8c_aad979d03d5746cb3daed59e9a06ac5af}{}\label{modules_2cache_2mod__cache__socache_8c_aad979d03d5746cb3daed59e9a06ac5af}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!htm\+\_\+count@{htm\+\_\+count}}
+\index{htm\+\_\+count@{htm\+\_\+count}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{htm\+\_\+count}{htm_count}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} htm\+\_\+count}\hypertarget{modules_2cache_2mod__cache__socache_8c_ac1c38d6ff621c33e427cd4fad720a624}{}\label{modules_2cache_2mod__cache__socache_8c_ac1c38d6ff621c33e427cd4fad720a624}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!other\+\_\+abort@{other\+\_\+abort}}
+\index{other\+\_\+abort@{other\+\_\+abort}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{other\+\_\+abort}{other_abort}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} other\+\_\+abort}\hypertarget{modules_2cache_2mod__cache__socache_8c_aea9f1acd38b1f906b9593245287212b8}{}\label{modules_2cache_2mod__cache__socache_8c_aea9f1acd38b1f906b9593245287212b8}
+\index{modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}!plock@{plock}}
+\index{plock@{plock}!modules/cache/mod\+\_\+cache\+\_\+socache.\+c@{modules/cache/mod\+\_\+cache\+\_\+socache.\+c}}
+\subsubsection[{\texorpdfstring{plock}{plock}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf T\+H\+R\+E\+A\+D\+\_\+\+M\+U\+T\+E\+X\+\_\+T} plock}\hypertarget{modules_2cache_2mod__cache__socache_8c_af19066337b2ec2ac82407118f122548e}{}\label{modules_2cache_2mod__cache__socache_8c_af19066337b2ec2ac82407118f122548e}

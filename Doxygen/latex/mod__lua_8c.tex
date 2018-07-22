@@ -1,0 +1,228 @@
+\hypertarget{mod__lua_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/lua/mod\+\_\+lua.c File Reference}
+\label{mod__lua_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/lua/mod\+\_\+lua.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/lua/mod\+\_\+lua.\+c}}
+{\ttfamily \#include \char`\"{}mod\+\_\+lua.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$ctype.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+mutex.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+pools.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}lua\+\_\+apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}lua\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+optional.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+ssl.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+auth.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+mutex.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+lua.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__lua_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structlua__authz__provider__func}{lua\+\_\+authz\+\_\+provider\+\_\+func}
+\item 
+struct \hyperlink{structlua__filter__ctx}{lua\+\_\+filter\+\_\+ctx}
+\item 
+struct \hyperlink{structcr__ctx}{cr\+\_\+ctx}
+\item 
+struct \hyperlink{structhack__section__baton}{hack\+\_\+section\+\_\+baton}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__lua_8c_a73a978bfc7b4a067743165f3dc1def76}{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST}~(\hyperlink{group__APR__Util__Hook_ga564dea4803813674cb6b742f65a3d2b2}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST} -\/ 1)
+\item 
+\#define \hyperlink{mod__lua_8c_a8c9faef91047d02298a490f9d19f9d76}{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST}~(\hyperlink{group__APR__Util__Hook_gaa610a95f03d7b4aee922c28b0919f028}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST}  + 1)
+\item 
+\#define \hyperlink{mod__lua_8c_aec69e246fdb9c16624df73e450432d2f}{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+U\+A\+\_\+\+S\+H\+M\+F\+I\+LE}~\char`\"{}lua\+\_\+ivm\+\_\+shm\char`\"{}
+\item 
+\#define \hyperlink{mod__lua_8c_a2d5a6a6cb7ed51579c4eebf54b684c33}{N\+\_\+\+LF}~32
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structcr__ctx}{cr\+\_\+ctx} \hyperlink{mod__lua_8c_a0faf0b67de424d3a663c69160df6396d}{cr\+\_\+ctx}
+\item 
+typedef struct \hyperlink{structhack__section__baton}{hack\+\_\+section\+\_\+baton} \hyperlink{mod__lua_8c_ae4c51e71802fdc0dc69b82efdb7f7dd3}{hack\+\_\+section\+\_\+baton}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__lua_8c_a3a031ac8adaa04899693fa372219cb34}{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL} (A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL(ap\+\_\+lua, A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL(\hyperlink{mod__lua_8h_a363fdb9e27d016e325286eecae49b65d}{A\+P\+\_\+\+L\+UA}, A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL(\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, lua\+\_\+open,(lua\+\_\+\+State $\ast$\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}),(\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}), A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL(\hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}, \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{D\+E\+C\+L\+I\+N\+ED})
+\item 
+const char $\ast$ \hyperlink{mod__lua_8c_a6ebda3af9267764ef4096bc88da3a9fa}{ap\+\_\+lua\+\_\+ssl\+\_\+val} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, const char $\ast$\hyperlink{group__MOD__PROXY_ga81bb7fed3eaa4dd24455759f1cb26176}{var})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{mod__lua_8c_a21531dc42a7a12159c0e8cc04fefb761}{ap\+\_\+lua\+\_\+ssl\+\_\+is\+\_\+https} (\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\hyperlink{mod__lua_8c_a39ecc73363343c9534a17e38d5e69de8}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (lua)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__lua_8c_aa88b3bc80669ed5c89fe25304539de23}{lua\+\_\+authz\+\_\+provider\+\_\+spec}
+\item 
+\hyperlink{structapr__hash__t}{apr\+\_\+hash\+\_\+t} $\ast$ \hyperlink{mod__lua_8c_acbd26fc236a7617c22d333a241dd3ad1}{lua\+\_\+authz\+\_\+providers}
+\item 
+\hyperlink{structapr__global__mutex__t}{apr\+\_\+global\+\_\+mutex\+\_\+t} $\ast$ \hyperlink{mod__lua_8c_a1da5ec2434f85566057dab42de51edab}{lua\+\_\+ivm\+\_\+mutex}
+\item 
+\hyperlink{structapr__shm__t}{apr\+\_\+shm\+\_\+t} $\ast$ \hyperlink{mod__lua_8c_aea31fa244d0c45f98d277fa34cc0218a}{lua\+\_\+ivm\+\_\+shm}
+\item 
+char $\ast$ \hyperlink{mod__lua_8c_afe6136afb05ee3cad83e7da6d7e4f718}{lua\+\_\+ivm\+\_\+shmfile}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga79f84e70f072880482a3fd004ae48710}{command\+\_\+rec} \hyperlink{mod__lua_8c_ac5f38eb48a90d2c2832e1d07c2e7e1b4}{lua\+\_\+commands} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST@{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST}}
+\index{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST@{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST}{AP_LUA_HOOK_FIRST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST~({\bf A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+F\+I\+R\+ST} -\/ 1)}\hypertarget{mod__lua_8c_a73a978bfc7b4a067743165f3dc1def76}{}\label{mod__lua_8c_a73a978bfc7b4a067743165f3dc1def76}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST@{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST}}
+\index{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST@{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST}{AP_LUA_HOOK_LAST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+L\+U\+A\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST~({\bf A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+L\+A\+ST}  + 1)}\hypertarget{mod__lua_8c_a8c9faef91047d02298a490f9d19f9d76}{}\label{mod__lua_8c_a8c9faef91047d02298a490f9d19f9d76}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+U\+A\+\_\+\+S\+H\+M\+F\+I\+LE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+U\+A\+\_\+\+S\+H\+M\+F\+I\+LE}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+U\+A\+\_\+\+S\+H\+M\+F\+I\+LE@{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+U\+A\+\_\+\+S\+H\+M\+F\+I\+LE}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+U\+A\+\_\+\+S\+H\+M\+F\+I\+LE}{DEFAULT_LUA_SHMFILE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+U\+A\+\_\+\+S\+H\+M\+F\+I\+LE~\char`\"{}lua\+\_\+ivm\+\_\+shm\char`\"{}}\hypertarget{mod__lua_8c_aec69e246fdb9c16624df73e450432d2f}{}\label{mod__lua_8c_aec69e246fdb9c16624df73e450432d2f}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!N\+\_\+\+LF@{N\+\_\+\+LF}}
+\index{N\+\_\+\+LF@{N\+\_\+\+LF}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{N\+\_\+\+LF}{N_LF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+\_\+\+LF~32}\hypertarget{mod__lua_8c_a2d5a6a6cb7ed51579c4eebf54b684c33}{}\label{mod__lua_8c_a2d5a6a6cb7ed51579c4eebf54b684c33}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!cr\+\_\+ctx@{cr\+\_\+ctx}}
+\index{cr\+\_\+ctx@{cr\+\_\+ctx}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{cr\+\_\+ctx}{cr_ctx}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf cr\+\_\+ctx}  {\bf cr\+\_\+ctx}}\hypertarget{mod__lua_8c_a0faf0b67de424d3a663c69160df6396d}{}\label{mod__lua_8c_a0faf0b67de424d3a663c69160df6396d}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!hack\+\_\+section\+\_\+baton@{hack\+\_\+section\+\_\+baton}}
+\index{hack\+\_\+section\+\_\+baton@{hack\+\_\+section\+\_\+baton}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{hack\+\_\+section\+\_\+baton}{hack_section_baton}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf hack\+\_\+section\+\_\+baton}  {\bf hack\+\_\+section\+\_\+baton}}\hypertarget{mod__lua_8c_ae4c51e71802fdc0dc69b82efdb7f7dd3}{}\label{mod__lua_8c_ae4c51e71802fdc0dc69b82efdb7f7dd3}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(lua)}{AP_DECLARE_MODULE(lua)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{lua}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__lua_8c_a39ecc73363343c9534a17e38d5e69de8}{}\label{mod__lua_8c_a39ecc73363343c9534a17e38d5e69de8}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!ap\+\_\+lua\+\_\+ssl\+\_\+is\+\_\+https@{ap\+\_\+lua\+\_\+ssl\+\_\+is\+\_\+https}}
+\index{ap\+\_\+lua\+\_\+ssl\+\_\+is\+\_\+https@{ap\+\_\+lua\+\_\+ssl\+\_\+is\+\_\+https}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+ssl\+\_\+is\+\_\+https(conn\+\_\+rec $\ast$c)}{ap_lua_ssl_is_https(conn_rec *c)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ap\+\_\+lua\+\_\+ssl\+\_\+is\+\_\+https (
+\begin{DoxyParamCaption}
+\item[{{\bf conn\+\_\+rec} $\ast$}]{c}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__lua_8c_a21531dc42a7a12159c0e8cc04fefb761}{}\label{mod__lua_8c_a21531dc42a7a12159c0e8cc04fefb761}
+
+\begin{DoxyCode}
+1697 \{
+1698     \textcolor{keywordflow}{return} lua\_ssl\_is\_https ? lua\_ssl\_is\_https(c) : 0;
+1699 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=328pt]{mod__lua_8c_a21531dc42a7a12159c0e8cc04fefb761_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{mod__lua_8c_a21531dc42a7a12159c0e8cc04fefb761_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!ap\+\_\+lua\+\_\+ssl\+\_\+val@{ap\+\_\+lua\+\_\+ssl\+\_\+val}}
+\index{ap\+\_\+lua\+\_\+ssl\+\_\+val@{ap\+\_\+lua\+\_\+ssl\+\_\+val}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+ssl\+\_\+val(apr\+\_\+pool\+\_\+t $\ast$p, server\+\_\+rec $\ast$s, conn\+\_\+rec $\ast$c, request\+\_\+rec $\ast$r, const char $\ast$var)}{ap_lua_ssl_val(apr_pool_t *p, server_rec *s, conn_rec *c, request_rec *r, const char *var)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ ap\+\_\+lua\+\_\+ssl\+\_\+val (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{{\bf server\+\_\+rec} $\ast$}]{s, }
+\item[{{\bf conn\+\_\+rec} $\ast$}]{c, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r, }
+\item[{const char $\ast$}]{var}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__lua_8c_a6ebda3af9267764ef4096bc88da3a9fa}{}\label{mod__lua_8c_a6ebda3af9267764ef4096bc88da3a9fa}
+
+\begin{DoxyCode}
+1689 \{
+1690     \textcolor{keywordflow}{if} (lua\_ssl\_val) \{ 
+1691         \textcolor{keywordflow}{return} (\textcolor{keyword}{const} \textcolor{keywordtype}{char} *)lua\_ssl\_val(p, s, c, r, (\textcolor{keywordtype}{char} *)\hyperlink{group__MOD__PROXY_ga81bb7fed3eaa4dd24455759f1cb26176}{var});
+1692     \}
+1693     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1694 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{mod__lua_8c_a6ebda3af9267764ef4096bc88da3a9fa_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL@{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL}}
+\index{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL@{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+L\+L(\+A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+L\+L(ap\+\_\+lua, A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+L\+L(\+A\+P\+\_\+\+L\+U\+A, A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+L\+L(int, lua\+\_\+open,(lua\+\_\+\+State $\ast$\+L, apr\+\_\+pool\+\_\+t $\ast$p),(\+L, p), A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+L\+L(\+O\+K, D\+E\+C\+L\+I\+N\+E\+D)}{APR_IMPLEMENT_OPTIONAL_HOOK_RUN_ALL(APR_IMPLEMENT_OPTIONAL_HOOK_RUN_ALL(ap_lua, APR_IMPLEMENT_OPTIONAL_HOOK_RUN_ALL(AP_LUA, APR_IMPLEMENT_OPTIONAL_HOOK_RUN_ALL(int, lua_open,(lua_State *L, apr_pool_t *p),(L, p), APR_IMPLEMENT_OPTIONAL_HOOK_RUN_ALL(OK, DECLINED)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL (
+\begin{DoxyParamCaption}
+\item[{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL(}]{ap\+\_\+lua, }
+\item[{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL(}]{A\+P\+\_\+\+L\+UA, }
+\item[{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL(}]{int, }
+\item[{lua\+\_\+open}]{, }
+\item[{(lua\+\_\+\+State $\ast${\bf L}, {\bf apr\+\_\+pool\+\_\+t} $\ast${\bf p})}]{, }
+\item[{({\bf L}, {\bf p})}]{, }
+\item[{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL(}]{OK, }
+\item[{{\bf D\+E\+C\+L\+I\+N\+ED}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__lua_8c_a3a031ac8adaa04899693fa372219cb34}{}\label{mod__lua_8c_a3a031ac8adaa04899693fa372219cb34}
+Licensed to the \hyperlink{namespaceApache}{Apache} Software Foundation (A\+SF) under one or more contributor license agreements. See the N\+O\+T\+I\+CE file distributed with this work for additional information regarding copyright ownership. The A\+SF licenses this file to You under the \hyperlink{namespaceApache}{Apache} License, Version 2.\+0 (the \char`\"{}\+License\char`\"{}); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+\href{http://www.apache.org/licenses/LICENSE-2.0}{\tt http\+://www.\+apache.\+org/licenses/\+L\+I\+C\+E\+N\+S\+E-\/2.\+0}
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \char`\"{}\+A\+S I\+S\char`\"{} B\+A\+S\+IS, W\+I\+T\+H\+O\+UT W\+A\+R\+R\+A\+N\+T\+I\+ES OR C\+O\+N\+D\+I\+T\+I\+O\+NS OF A\+NY K\+I\+ND, either express or implied. See the License for the specific language governing permissions and limitations under the License. 
+\begin{DoxyCode}
+64                \{
+65     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name};
+66     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *file\_name;
+67     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *function\_name;
+68     \hyperlink{structap__lua__vm__spec}{ap\_lua\_vm\_spec} *spec;
+69 \} \hyperlink{mod__lua_8c_aa88b3bc80669ed5c89fe25304539de23}{lua\_authz\_provider\_spec};
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!lua\+\_\+authz\+\_\+provider\+\_\+spec@{lua\+\_\+authz\+\_\+provider\+\_\+spec}}
+\index{lua\+\_\+authz\+\_\+provider\+\_\+spec@{lua\+\_\+authz\+\_\+provider\+\_\+spec}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+authz\+\_\+provider\+\_\+spec}{lua_authz_provider_spec}}]{\setlength{\rightskip}{0pt plus 5cm}lua\+\_\+authz\+\_\+provider\+\_\+spec}\hypertarget{mod__lua_8c_aa88b3bc80669ed5c89fe25304539de23}{}\label{mod__lua_8c_aa88b3bc80669ed5c89fe25304539de23}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!lua\+\_\+authz\+\_\+providers@{lua\+\_\+authz\+\_\+providers}}
+\index{lua\+\_\+authz\+\_\+providers@{lua\+\_\+authz\+\_\+providers}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+authz\+\_\+providers}{lua_authz_providers}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+hash\+\_\+t}$\ast$ lua\+\_\+authz\+\_\+providers}\hypertarget{mod__lua_8c_acbd26fc236a7617c22d333a241dd3ad1}{}\label{mod__lua_8c_acbd26fc236a7617c22d333a241dd3ad1}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!lua\+\_\+commands@{lua\+\_\+commands}}
+\index{lua\+\_\+commands@{lua\+\_\+commands}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+commands}{lua_commands}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf command\+\_\+rec} lua\+\_\+commands\mbox{[}$\,$\mbox{]}}\hypertarget{mod__lua_8c_ac5f38eb48a90d2c2832e1d07c2e7e1b4}{}\label{mod__lua_8c_ac5f38eb48a90d2c2832e1d07c2e7e1b4}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!lua\+\_\+ivm\+\_\+mutex@{lua\+\_\+ivm\+\_\+mutex}}
+\index{lua\+\_\+ivm\+\_\+mutex@{lua\+\_\+ivm\+\_\+mutex}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+ivm\+\_\+mutex}{lua_ivm_mutex}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+global\+\_\+mutex\+\_\+t}$\ast$ lua\+\_\+ivm\+\_\+mutex}\hypertarget{mod__lua_8c_a1da5ec2434f85566057dab42de51edab}{}\label{mod__lua_8c_a1da5ec2434f85566057dab42de51edab}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!lua\+\_\+ivm\+\_\+shm@{lua\+\_\+ivm\+\_\+shm}}
+\index{lua\+\_\+ivm\+\_\+shm@{lua\+\_\+ivm\+\_\+shm}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+ivm\+\_\+shm}{lua_ivm_shm}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+shm\+\_\+t}$\ast$ lua\+\_\+ivm\+\_\+shm}\hypertarget{mod__lua_8c_aea31fa244d0c45f98d277fa34cc0218a}{}\label{mod__lua_8c_aea31fa244d0c45f98d277fa34cc0218a}
+\index{mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}!lua\+\_\+ivm\+\_\+shmfile@{lua\+\_\+ivm\+\_\+shmfile}}
+\index{lua\+\_\+ivm\+\_\+shmfile@{lua\+\_\+ivm\+\_\+shmfile}!mod\+\_\+lua.\+c@{mod\+\_\+lua.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+ivm\+\_\+shmfile}{lua_ivm_shmfile}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ lua\+\_\+ivm\+\_\+shmfile}\hypertarget{mod__lua_8c_afe6136afb05ee3cad83e7da6d7e4f718}{}\label{mod__lua_8c_afe6136afb05ee3cad83e7da6d7e4f718}

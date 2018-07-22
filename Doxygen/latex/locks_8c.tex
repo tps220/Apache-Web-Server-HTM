@@ -1,0 +1,181 @@
+\hypertarget{locks_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/dav/lock/locks.c File Reference}
+\label{locks_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/lock/locks.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/lock/locks.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+uuid.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+dav.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}locks.\+h\char`\"{}}\\*
+Include dependency graph for locks.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{locks_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdav__locktoken}{dav\+\_\+locktoken}
+\item 
+struct \hyperlink{structdav__lock__discovery__fixed}{dav\+\_\+lock\+\_\+discovery\+\_\+fixed}
+\item 
+struct \hyperlink{structdav__lock__discovery}{dav\+\_\+lock\+\_\+discovery}
+\item 
+struct \hyperlink{structdav__lock__indirect}{dav\+\_\+lock\+\_\+indirect}
+\item 
+struct \hyperlink{structdav__lockdb__private}{dav\+\_\+lockdb\+\_\+private}
+\item 
+struct \hyperlink{structdav__lockdb__combined}{dav\+\_\+lockdb\+\_\+combined}
+\item 
+struct \hyperlink{structdav__lock__private}{dav\+\_\+lock\+\_\+private}
+\item 
+struct \hyperlink{structdav__lock__combined}{dav\+\_\+lock\+\_\+combined}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{locks_8c_a26faf43e3f61783d8b7aa928c0a41a11}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}
+\item 
+\#define \hyperlink{locks_8c_abf722a4c41b27f4bcbe37c04ac4a182e}{D\+A\+V\+\_\+\+T\+R\+UE}~1
+\item 
+\#define \hyperlink{locks_8c_a7d2c99afd78bffe4f535d2c56ea668ee}{D\+A\+V\+\_\+\+F\+A\+L\+SE}~0
+\item 
+\#define \hyperlink{locks_8c_a97b13e8d9156ae0853d1d7e2b7dcf241}{D\+A\+V\+\_\+\+C\+R\+E\+A\+T\+E\+\_\+\+L\+I\+ST}~23
+\item 
+\#define \hyperlink{locks_8c_a741ca2414c002c882cf13445c263b384}{D\+A\+V\+\_\+\+A\+P\+P\+E\+N\+D\+\_\+\+L\+I\+ST}~24
+\item 
+\#define \hyperlink{locks_8c_a7ffb0a0200ff474ded488522b3bb8330}{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+D\+I\+R\+E\+CT}~1
+\item 
+\#define \hyperlink{locks_8c_af468a3dd6b3b7e8561550e0438a548a6}{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+I\+N\+D\+I\+R\+E\+CT}~2
+\item 
+\#define \hyperlink{locks_8c_aca2c09d9c026f43f53119279010ea595}{D\+A\+V\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+N\+A\+ME}~11
+\item 
+\#define \hyperlink{locks_8c_af07f2072c4f42940a28868dbea1aca5d}{dav\+\_\+compare\+\_\+locktoken}(plt1,  plt2)~memcmp(\&(plt1)-\/$>$\hyperlink{group__APR__UUID_ga9b3f6ae7758c034f843487ac8ed248c2}{uuid}, \&(plt2)-\/$>$\hyperlink{group__APR__UUID_ga9b3f6ae7758c034f843487ac8ed248c2}{uuid}, sizeof((plt1)-\/$>$\hyperlink{group__APR__UUID_ga9b3f6ae7758c034f843487ac8ed248c2}{uuid}))
+\item 
+\#define \hyperlink{locks_8c_ad824189861301dd476d1cfcfd2e9c7ca}{dav\+\_\+size\+\_\+direct}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})
+\item 
+\#define \hyperlink{locks_8c_ab7df822f76540c8c4055e0c9af778642}{dav\+\_\+size\+\_\+indirect}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structdav__lock__discovery__fixed}{dav\+\_\+lock\+\_\+discovery\+\_\+fixed} \hyperlink{locks_8c_accf678848a79079e0344dc6529da6756}{dav\+\_\+lock\+\_\+discovery\+\_\+fixed}
+\item 
+typedef struct \hyperlink{structdav__lock__discovery}{dav\+\_\+lock\+\_\+discovery} \hyperlink{locks_8c_a34df59f216ae93de1875a7747d8b2494}{dav\+\_\+lock\+\_\+discovery}
+\item 
+typedef struct \hyperlink{structdav__lock__indirect}{dav\+\_\+lock\+\_\+indirect} \hyperlink{locks_8c_aa7d9706e34bfcfaf84dab7c373cc3138}{dav\+\_\+lock\+\_\+indirect}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{structdav__hooks__locks}{dav\+\_\+hooks\+\_\+locks} \hyperlink{locks_8c_a9f5bbc79e2feb6451aaae57a4be480f2}{dav\+\_\+hooks\+\_\+locks\+\_\+generic}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{locks.\+c@{locks.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}{APR_WANT_MEMFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}\hypertarget{locks_8c_a26faf43e3f61783d8b7aa928c0a41a11}{}\label{locks_8c_a26faf43e3f61783d8b7aa928c0a41a11}
+\index{locks.\+c@{locks.\+c}!D\+A\+V\+\_\+\+A\+P\+P\+E\+N\+D\+\_\+\+L\+I\+ST@{D\+A\+V\+\_\+\+A\+P\+P\+E\+N\+D\+\_\+\+L\+I\+ST}}
+\index{D\+A\+V\+\_\+\+A\+P\+P\+E\+N\+D\+\_\+\+L\+I\+ST@{D\+A\+V\+\_\+\+A\+P\+P\+E\+N\+D\+\_\+\+L\+I\+ST}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+A\+P\+P\+E\+N\+D\+\_\+\+L\+I\+ST}{DAV_APPEND_LIST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+A\+P\+P\+E\+N\+D\+\_\+\+L\+I\+ST~24}\hypertarget{locks_8c_a741ca2414c002c882cf13445c263b384}{}\label{locks_8c_a741ca2414c002c882cf13445c263b384}
+\index{locks.\+c@{locks.\+c}!dav\+\_\+compare\+\_\+locktoken@{dav\+\_\+compare\+\_\+locktoken}}
+\index{dav\+\_\+compare\+\_\+locktoken@{dav\+\_\+compare\+\_\+locktoken}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+compare\+\_\+locktoken}{dav_compare_locktoken}}]{\setlength{\rightskip}{0pt plus 5cm}\#define dav\+\_\+compare\+\_\+locktoken(
+\begin{DoxyParamCaption}
+\item[{}]{plt1, }
+\item[{}]{plt2}
+\end{DoxyParamCaption}
+)~memcmp(\&(plt1)-\/$>${\bf uuid}, \&(plt2)-\/$>${\bf uuid}, sizeof((plt1)-\/$>${\bf uuid}))}\hypertarget{locks_8c_af07f2072c4f42940a28868dbea1aca5d}{}\label{locks_8c_af07f2072c4f42940a28868dbea1aca5d}
+\index{locks.\+c@{locks.\+c}!D\+A\+V\+\_\+\+C\+R\+E\+A\+T\+E\+\_\+\+L\+I\+ST@{D\+A\+V\+\_\+\+C\+R\+E\+A\+T\+E\+\_\+\+L\+I\+ST}}
+\index{D\+A\+V\+\_\+\+C\+R\+E\+A\+T\+E\+\_\+\+L\+I\+ST@{D\+A\+V\+\_\+\+C\+R\+E\+A\+T\+E\+\_\+\+L\+I\+ST}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+C\+R\+E\+A\+T\+E\+\_\+\+L\+I\+ST}{DAV_CREATE_LIST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+C\+R\+E\+A\+T\+E\+\_\+\+L\+I\+ST~23}\hypertarget{locks_8c_a97b13e8d9156ae0853d1d7e2b7dcf241}{}\label{locks_8c_a97b13e8d9156ae0853d1d7e2b7dcf241}
+\index{locks.\+c@{locks.\+c}!D\+A\+V\+\_\+\+F\+A\+L\+SE@{D\+A\+V\+\_\+\+F\+A\+L\+SE}}
+\index{D\+A\+V\+\_\+\+F\+A\+L\+SE@{D\+A\+V\+\_\+\+F\+A\+L\+SE}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+F\+A\+L\+SE}{DAV_FALSE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+F\+A\+L\+SE~0}\hypertarget{locks_8c_a7d2c99afd78bffe4f535d2c56ea668ee}{}\label{locks_8c_a7d2c99afd78bffe4f535d2c56ea668ee}
+\index{locks.\+c@{locks.\+c}!D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+D\+I\+R\+E\+CT@{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+D\+I\+R\+E\+CT}}
+\index{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+D\+I\+R\+E\+CT@{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+D\+I\+R\+E\+CT}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+D\+I\+R\+E\+CT}{DAV_LOCK_DIRECT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+D\+I\+R\+E\+CT~1}\hypertarget{locks_8c_a7ffb0a0200ff474ded488522b3bb8330}{}\label{locks_8c_a7ffb0a0200ff474ded488522b3bb8330}
+\index{locks.\+c@{locks.\+c}!D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+I\+N\+D\+I\+R\+E\+CT@{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+I\+N\+D\+I\+R\+E\+CT}}
+\index{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+I\+N\+D\+I\+R\+E\+CT@{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+I\+N\+D\+I\+R\+E\+CT}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+I\+N\+D\+I\+R\+E\+CT}{DAV_LOCK_INDIRECT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+L\+O\+C\+K\+\_\+\+I\+N\+D\+I\+R\+E\+CT~2}\hypertarget{locks_8c_af468a3dd6b3b7e8561550e0438a548a6}{}\label{locks_8c_af468a3dd6b3b7e8561550e0438a548a6}
+\index{locks.\+c@{locks.\+c}!dav\+\_\+size\+\_\+direct@{dav\+\_\+size\+\_\+direct}}
+\index{dav\+\_\+size\+\_\+direct@{dav\+\_\+size\+\_\+direct}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+size\+\_\+direct}{dav_size_direct}}]{\setlength{\rightskip}{0pt plus 5cm}\#define dav\+\_\+size\+\_\+direct(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}}
+\end{DoxyParamCaption}
+)}\hypertarget{locks_8c_ad824189861301dd476d1cfcfd2e9c7ca}{}\label{locks_8c_ad824189861301dd476d1cfcfd2e9c7ca}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+(1 + \textcolor{keyword}{sizeof}(\hyperlink{locks_8c_accf678848a79079e0344dc6529da6756}{dav\_lock\_discovery\_fixed}) \(\backslash\)
+                               + \textcolor{keyword}{sizeof}(\hyperlink{structapr__uuid__t}{apr\_uuid\_t}) \(\backslash\)
+                               + ((\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a})->owner ? strlen((\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a})->owner) : 0) \(\backslash\)
+                               + ((\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a})->auth\_user ? strlen((\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a})->auth\_user) : 0) \(\backslash\)
+                               + 2)
+\end{DoxyCode}
+\index{locks.\+c@{locks.\+c}!dav\+\_\+size\+\_\+indirect@{dav\+\_\+size\+\_\+indirect}}
+\index{dav\+\_\+size\+\_\+indirect@{dav\+\_\+size\+\_\+indirect}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+size\+\_\+indirect}{dav_size_indirect}}]{\setlength{\rightskip}{0pt plus 5cm}\#define dav\+\_\+size\+\_\+indirect(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}}
+\end{DoxyParamCaption}
+)}\hypertarget{locks_8c_ab7df822f76540c8c4055e0c9af778642}{}\label{locks_8c_ab7df822f76540c8c4055e0c9af778642}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+(1 + \textcolor{keyword}{sizeof}(\hyperlink{structapr__uuid__t}{apr\_uuid\_t}) \(\backslash\)
+                                + \textcolor{keyword}{sizeof}(time\_t) \(\backslash\)
+                                + \textcolor{keyword}{sizeof}(\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int}) + (\hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a})->key.dsize)
+\end{DoxyCode}
+\index{locks.\+c@{locks.\+c}!D\+A\+V\+\_\+\+T\+R\+UE@{D\+A\+V\+\_\+\+T\+R\+UE}}
+\index{D\+A\+V\+\_\+\+T\+R\+UE@{D\+A\+V\+\_\+\+T\+R\+UE}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+T\+R\+UE}{DAV_TRUE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+T\+R\+UE~1}\hypertarget{locks_8c_abf722a4c41b27f4bcbe37c04ac4a182e}{}\label{locks_8c_abf722a4c41b27f4bcbe37c04ac4a182e}
+\index{locks.\+c@{locks.\+c}!D\+A\+V\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+N\+A\+ME@{D\+A\+V\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+N\+A\+ME}}
+\index{D\+A\+V\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+N\+A\+ME@{D\+A\+V\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+N\+A\+ME}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+N\+A\+ME}{DAV_TYPE_FNAME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+T\+Y\+P\+E\+\_\+\+F\+N\+A\+ME~11}\hypertarget{locks_8c_aca2c09d9c026f43f53119279010ea595}{}\label{locks_8c_aca2c09d9c026f43f53119279010ea595}
+
+
+\subsection{Typedef Documentation}
+\index{locks.\+c@{locks.\+c}!dav\+\_\+lock\+\_\+discovery@{dav\+\_\+lock\+\_\+discovery}}
+\index{dav\+\_\+lock\+\_\+discovery@{dav\+\_\+lock\+\_\+discovery}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+lock\+\_\+discovery}{dav_lock_discovery}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf dav\+\_\+lock\+\_\+discovery}  {\bf dav\+\_\+lock\+\_\+discovery}}\hypertarget{locks_8c_a34df59f216ae93de1875a7747d8b2494}{}\label{locks_8c_a34df59f216ae93de1875a7747d8b2494}
+\index{locks.\+c@{locks.\+c}!dav\+\_\+lock\+\_\+discovery\+\_\+fixed@{dav\+\_\+lock\+\_\+discovery\+\_\+fixed}}
+\index{dav\+\_\+lock\+\_\+discovery\+\_\+fixed@{dav\+\_\+lock\+\_\+discovery\+\_\+fixed}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+lock\+\_\+discovery\+\_\+fixed}{dav_lock_discovery_fixed}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf dav\+\_\+lock\+\_\+discovery\+\_\+fixed}  {\bf dav\+\_\+lock\+\_\+discovery\+\_\+fixed}}\hypertarget{locks_8c_accf678848a79079e0344dc6529da6756}{}\label{locks_8c_accf678848a79079e0344dc6529da6756}
+\index{locks.\+c@{locks.\+c}!dav\+\_\+lock\+\_\+indirect@{dav\+\_\+lock\+\_\+indirect}}
+\index{dav\+\_\+lock\+\_\+indirect@{dav\+\_\+lock\+\_\+indirect}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+lock\+\_\+indirect}{dav_lock_indirect}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf dav\+\_\+lock\+\_\+indirect}  {\bf dav\+\_\+lock\+\_\+indirect}}\hypertarget{locks_8c_aa7d9706e34bfcfaf84dab7c373cc3138}{}\label{locks_8c_aa7d9706e34bfcfaf84dab7c373cc3138}
+
+
+\subsection{Variable Documentation}
+\index{locks.\+c@{locks.\+c}!dav\+\_\+hooks\+\_\+locks\+\_\+generic@{dav\+\_\+hooks\+\_\+locks\+\_\+generic}}
+\index{dav\+\_\+hooks\+\_\+locks\+\_\+generic@{dav\+\_\+hooks\+\_\+locks\+\_\+generic}!locks.\+c@{locks.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+hooks\+\_\+locks\+\_\+generic}{dav_hooks_locks_generic}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf dav\+\_\+hooks\+\_\+locks} dav\+\_\+hooks\+\_\+locks\+\_\+generic}\hypertarget{locks_8c_a9f5bbc79e2feb6451aaae57a4be480f2}{}\label{locks_8c_a9f5bbc79e2feb6451aaae57a4be480f2}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=
+\{
+    dav\_generic\_get\_supportedlock,
+    dav\_generic\_parse\_locktoken,
+    dav\_generic\_format\_locktoken,
+    dav\_generic\_compare\_locktoken,
+    dav\_generic\_open\_lockdb,
+    dav\_generic\_close\_lockdb,
+    dav\_generic\_remove\_locknull\_state,
+    dav\_generic\_create\_lock,
+    dav\_generic\_get\_locks,
+    dav\_generic\_find\_lock,
+    dav\_generic\_has\_locks,
+    dav\_generic\_append\_locks,
+    dav\_generic\_remove\_lock,
+    dav\_generic\_refresh\_locks,
+    \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 
+
+    NULL 
+\}
+\end{DoxyCode}

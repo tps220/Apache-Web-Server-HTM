@@ -1,0 +1,781 @@
+\hypertarget{group__APACHE__CORE__FILTER}{}\section{Filter Chain}
+\label{group__APACHE__CORE__FILTER}\index{Filter Chain@{Filter Chain}}
+Collaboration diagram for Filter Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{group__APACHE__CORE__FILTER}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+union \hyperlink{unionap__filter__func}{ap\+\_\+filter\+\_\+func}
+\item 
+struct \hyperlink{structap__filter__rec__t}{ap\+\_\+filter\+\_\+rec\+\_\+t}
+\begin{DoxyCompactList}\small\item\em This structure is used for recording information about the registered filters. It associates a name with the filter\textquotesingle{}s callback and filter type. \end{DoxyCompactList}\item 
+struct \hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t}
+\begin{DoxyCompactList}\small\item\em The representation of a filter chain. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_ga05d620ebb0185c487e48d3e35df79bcd}{ap\+\_\+fwrite}(\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f},  \hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb},  \hyperlink{structdata}{data},  \hyperlink{group__APR__Util__Bucket__Brigades_ga19a56d6f9dcf813c74420f84a3d1c062}{nbyte})~apr\+\_\+brigade\+\_\+write(\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}, ap\+\_\+filter\+\_\+flush, \hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f}, \hyperlink{structdata}{data}, \hyperlink{group__APR__Util__Bucket__Brigades_ga19a56d6f9dcf813c74420f84a3d1c062}{nbyte})
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}{ap\+\_\+fputs}(\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f},  \hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb},  \hyperlink{group__APR__Util__Bucket__Brigades_ga6a62b60443be1d042194af15ce934193}{str})~apr\+\_\+brigade\+\_\+write(\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}, ap\+\_\+filter\+\_\+flush, \hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f}, \hyperlink{group__APR__Util__Bucket__Brigades_ga6a62b60443be1d042194af15ce934193}{str}, strlen(\hyperlink{group__APR__Util__Bucket__Brigades_ga6a62b60443be1d042194af15ce934193}{str}))
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_ga75f41a49d4cc41263df38502abdce03b}{ap\+\_\+fputc}(\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f},  \hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~apr\+\_\+brigade\+\_\+putc(\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}, ap\+\_\+filter\+\_\+flush, \hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f}, \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_ga1e0ebc72e7e221c1fa62e81e3a8b3e25}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}~0x1
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_ga45a85db5961f6aa2975acb30a7ba020e}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}~0x2
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_ga21e47774862ea91cc5cb17ed07909f9f}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+B\+Y\+T\+E\+R\+A\+N\+GE}~0x4
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_gadb919dc2c3c2d9b76b4f61acd6d55139}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+P\+R\+O\+XY}~0x8
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_ga9778027866735946cf9fae4791ce3580}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+C\+A\+C\+HE}~0x10
+\item 
+\#define \hyperlink{group__APACHE__CORE__FILTER_gab2a7a45e9e5e4a2c6bade7072639e6ca}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+T\+R\+A\+N\+S\+F\+O\+RM}~0x20
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} \hyperlink{group__APACHE__CORE__FILTER_gad543721589f525abb9b0fbd5cb8363e6}{ap\+\_\+filter\+\_\+t}
+\item 
+typedef struct \hyperlink{structap__filter__rec__t}{ap\+\_\+filter\+\_\+rec\+\_\+t} \hyperlink{group__APACHE__CORE__FILTER_ga3b4690a21db5ddea3704c3aba182eef0}{ap\+\_\+filter\+\_\+rec\+\_\+t}
+\item 
+typedef struct \hyperlink{structap__filter__provider__t}{ap\+\_\+filter\+\_\+provider\+\_\+t} \hyperlink{group__APACHE__CORE__FILTER_gaa3e9953031f05244ee1ddd40b048de69}{ap\+\_\+filter\+\_\+provider\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{group__APACHE__CORE__FILTER_ga6dc4721ae075c103a3f3a93775d139fa}{ap\+\_\+filter\+\_\+type} \{ \\*
+\hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaac592192246ceec25733c9a957cac878}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE} = 10, 
+\hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa5dc0affea9b884673dd747fa345e5213}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET} = 20, 
+\hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaa1ec0f20f33ca0651f3435d8ae970bdd}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+P\+R\+O\+T\+O\+C\+OL} = 30, 
+\hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa41e2154d17fc1aa44f7b3b088db8c390}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+T\+R\+A\+N\+S\+C\+O\+DE} = 40, 
+\\*
+\hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa7ae402ebd5ae1d7453806499e9e06d6a}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON} = 50, 
+\hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa75f03b263da1cc0421ffbde1fb74a909}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+N\+E\+T\+W\+O\+RK} = 60
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_gacd341cc6652b99c7728a5bda1778427a}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) ap\+\_\+get\+\_\+brigade(\hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} $\ast$filter
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} const char \hyperlink{group__APACHE__CORE__FILTER_gaffff87e9d47c8713314a3ca674d67f87}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((\hyperlink{group__apr__time_ga6427c3237144d9709aa13825289f0b78}{format}(printf, 3, 4)))
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_gadf783c020ebfc7202aed1fd6baf321cc}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__filter__rec__t}{ap\+\_\+filter\+\_\+rec\+\_\+t} $\ast$) ap\+\_\+register\+\_\+input\+\_\+filter(const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga67fb16c1dc6ea7e40ea2649001d60e57}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} $\ast$) ap\+\_\+add\+\_\+input\+\_\+filter(const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga03dbab8794744bff16b72b6244a083e2}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) ap\+\_\+remove\+\_\+input\+\_\+filter(\hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f})
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga393e9d5c3f568bbe2455b02688753030}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) ap\+\_\+filter\+\_\+flush(\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga6550e0bd0ee31e160be60d67874dbcbc}{bucket}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} \hyperlink{util__filter_8h_ab570898d09fbbe5b6d838e28b90134e0}{ap\+\_\+input\+\_\+mode\+\_\+t} \hyperlink{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{mode}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} \hyperlink{util__filter_8h_ab570898d09fbbe5b6d838e28b90134e0}{ap\+\_\+input\+\_\+mode\+\_\+t} \hyperlink{group__APR__Util__Bucket__Brigades_ga756973fb6392bd1026c3d96b4519776d}{apr\+\_\+read\+\_\+type\+\_\+e} \hyperlink{group__APACHE__CORE__FILTER_gafe0ebf200b97a61a45c0513334da9ab6}{block}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} \hyperlink{util__filter_8h_ab570898d09fbbe5b6d838e28b90134e0}{ap\+\_\+input\+\_\+mode\+\_\+t} \hyperlink{group__APR__Util__Bucket__Brigades_ga756973fb6392bd1026c3d96b4519776d}{apr\+\_\+read\+\_\+type\+\_\+e} \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{readbytes}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} const char $\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga65068f17c9b43943b73a93544b9a7b35}{fmt}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga8e6e76deedf9ef3e3a4aa33419663875}{ap\+\_\+in\+\_\+filter\+\_\+func} \hyperlink{group__APACHE__CORE__FILTER_ga9b7e5ba838d06e9f7abc6195061b8ab1}{filter\+\_\+func}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga8e6e76deedf9ef3e3a4aa33419663875}{ap\+\_\+in\+\_\+filter\+\_\+func} \hyperlink{group__APACHE__CORE__FILTER_ga7ecd47b41aacab276198f6d1fc05a56c}{ap\+\_\+init\+\_\+filter\+\_\+func} \hyperlink{group__APACHE__CORE__FILTER_ga0f8d986fdc54b998955d7e7ffe33ca9b}{filter\+\_\+init}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga8e6e76deedf9ef3e3a4aa33419663875}{ap\+\_\+in\+\_\+filter\+\_\+func} \hyperlink{group__APACHE__CORE__FILTER_ga7ecd47b41aacab276198f6d1fc05a56c}{ap\+\_\+init\+\_\+filter\+\_\+func} \hyperlink{group__APACHE__CORE__FILTER_ga6dc4721ae075c103a3f3a93775d139fa}{ap\+\_\+filter\+\_\+type} \hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype}
+\item 
+\hyperlink{group__APACHE__CORE__FILTER_ga5c80541a5a1dcc9a383e90aa82be59b3}{ap\+\_\+out\+\_\+filter\+\_\+func} \hyperlink{group__APACHE__CORE__FILTER_ga7ecd47b41aacab276198f6d1fc05a56c}{ap\+\_\+init\+\_\+filter\+\_\+func} \hyperlink{group__APACHE__CORE__FILTER_ga6dc4721ae075c103a3f3a93775d139fa}{ap\+\_\+filter\+\_\+type} unsigned \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__FILTER_gaf29b539a8cdc699955f96de76499f780}{proto\+\_\+flags}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__FILTER_gaedf2e57576fb94c7e1bbe1ba20df39d4}{r}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga29f4e128d2074866812e22a8ccb6b649}{c}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga68ba22c11aa974c2d027851747c98822}{handle}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$$\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga723cf02e42fc5bf4de0a3e2518407fc1}{save\+\_\+to}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$$\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga8369628ef49e785ad390b376207cfb5e}{b}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga0a6f92a0aa5e88fe32512197f94440aa}{p}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga0b0eadb381dbe958da483f3d9fc9521a}{bb}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} \hyperlink{group__APACHE__CORE__FILTER_ga69055c906cec93f4dfe7338d2f916217}{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}
+\end{DoxyCompactItemize}
+\subsection*{Filter callbacks}
+\label{_amgrp777bf418b46f9d0d34815f61b54b31e1}%
+This function type is used for filter callbacks. It will be passed a pointer to \char`\"{}this\char`\"{} filter, and a \char`\"{}bucket brigade\char`\"{} containing the content to be filtered.
+
+In filter-\/$>$ctx, the callback will find its context. This context is provided here, so that a filter may be installed multiple times, each receiving its own per-\/install context pointer.
+
+Callbacks are associated with a filter definition, which is specified by name. See ap\+\_\+register\+\_\+input\+\_\+filter() and ap\+\_\+register\+\_\+output\+\_\+filter() for setting the association between a name for a filter and its associated callback (and other information).
+
+If the initialization function argument passed to the registration functions is non-\/\+N\+U\+LL, it will be called iff the filter is in the input or output filter chains and before any data is generated to allow the filter to prepare for processing.
+
+The bucket brigade always belongs to the caller, but the filter is free to use the buckets within it as it sees fit. Normally, the brigade will be returned empty. Buckets {\itshape may not} be retained between successive calls to the filter unless they have been \char`\"{}set aside\char`\"{} with a call apr\+\_\+bucket\+\_\+setaside. Typically this will be done with ap\+\_\+save\+\_\+brigade(). Buckets removed from the brigade become the responsibility of the filter, which must arrange for them to be deleted, either by doing so directly or by inserting them in a brigade which will subsequently be destroyed.
+
+For the input and output filters, the return value of a filter should be an A\+PR status value. For the init function, the return value should be an H\+T\+TP error code or OK if it was successful. \begin{DoxyCompactItemize}
+\item 
+typedef \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}($\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga5c80541a5a1dcc9a383e90aa82be59b3}{ap\+\_\+out\+\_\+filter\+\_\+func}) (\hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f}, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})
+\item 
+typedef \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}($\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga8e6e76deedf9ef3e3a4aa33419663875}{ap\+\_\+in\+\_\+filter\+\_\+func}) (\hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f}, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}, \hyperlink{util__filter_8h_ab570898d09fbbe5b6d838e28b90134e0}{ap\+\_\+input\+\_\+mode\+\_\+t} \hyperlink{pcregrep_8txt_ad194431669b7d1f96d2dacfb7be21261}{mode}, \hyperlink{group__APR__Util__Bucket__Brigades_ga756973fb6392bd1026c3d96b4519776d}{apr\+\_\+read\+\_\+type\+\_\+e} \hyperlink{pcretest_8txt_aebde0006968e3c574305c604c927277a}{block}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{readbytes})
+\item 
+typedef \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}($\ast$ \hyperlink{group__APACHE__CORE__FILTER_ga7ecd47b41aacab276198f6d1fc05a56c}{ap\+\_\+init\+\_\+filter\+\_\+func}) (\hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f})
+\item 
+typedef union \hyperlink{unionap__filter__func}{ap\+\_\+filter\+\_\+func} \hyperlink{group__APACHE__CORE__FILTER_gae311727bef0a44e37d84a7c85ff67818}{ap\+\_\+filter\+\_\+func}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Filters operate using a \char`\"{}chaining\char`\"{} mechanism. The filters are chained together into a sequence. When output is generated, it is passed through each of the filters on this chain, until it reaches the end (or \char`\"{}bottom\char`\"{}) and is placed onto the network.
+
+The top of the chain, the code generating the output, is typically called a \char`\"{}content generator.\char`\"{} The content generator\textquotesingle{}s output is fed into the filter chain using the standard \hyperlink{namespaceApache}{Apache} output mechanisms\+: ap\+\_\+rputs(), ap\+\_\+rprintf(), ap\+\_\+rwrite(), etc.
+
+Each filter is defined by a callback. This callback takes the output from the previous filter (or the content generator if there is no previous filter), operates on it, and passes the result to the next filter in the chain. This pass-\/off is performed using the ap\+\_\+fc\+\_\+$\ast$ functions, such as ap\+\_\+fc\+\_\+puts(), ap\+\_\+fc\+\_\+printf(), ap\+\_\+fc\+\_\+write(), etc.
+
+When content generation is complete, the system will pass an \char`\"{}end of
+stream\char`\"{} marker into the filter chain. The filters will use this to flush out any internal state and to detect incomplete syntax (for example, an unterminated S\+SI directive). 
+
+\subsection{Macro Definition Documentation}
+\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}}
+\index{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE}{AP_FILTER_PROTO_CHANGE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+GE~0x1}\hypertarget{group__APACHE__CORE__FILTER_ga1e0ebc72e7e221c1fa62e81e3a8b3e25}{}\label{group__APACHE__CORE__FILTER_ga1e0ebc72e7e221c1fa62e81e3a8b3e25}
+Filter changes contents (so invalidating checksums/etc) \index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}}
+\index{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH}{AP_FILTER_PROTO_CHANGE_LENGTH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+C\+H\+A\+N\+G\+E\+\_\+\+L\+E\+N\+G\+TH~0x2}\hypertarget{group__APACHE__CORE__FILTER_ga45a85db5961f6aa2975acb30a7ba020e}{}\label{group__APACHE__CORE__FILTER_ga45a85db5961f6aa2975acb30a7ba020e}
+Filter changes length of contents (so invalidating content-\/length/etc) \index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+B\+Y\+T\+E\+R\+A\+N\+GE@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+B\+Y\+T\+E\+R\+A\+N\+GE}}
+\index{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+B\+Y\+T\+E\+R\+A\+N\+GE@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+B\+Y\+T\+E\+R\+A\+N\+GE}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+B\+Y\+T\+E\+R\+A\+N\+GE}{AP_FILTER_PROTO_NO_BYTERANGE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+B\+Y\+T\+E\+R\+A\+N\+GE~0x4}\hypertarget{group__APACHE__CORE__FILTER_ga21e47774862ea91cc5cb17ed07909f9f}{}\label{group__APACHE__CORE__FILTER_ga21e47774862ea91cc5cb17ed07909f9f}
+Filter requires complete input and can\textquotesingle{}t work on byteranges \index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+C\+A\+C\+HE@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+C\+A\+C\+HE}}
+\index{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+C\+A\+C\+HE@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+C\+A\+C\+HE}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+C\+A\+C\+HE}{AP_FILTER_PROTO_NO_CACHE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+C\+A\+C\+HE~0x10}\hypertarget{group__APACHE__CORE__FILTER_ga9778027866735946cf9fae4791ce3580}{}\label{group__APACHE__CORE__FILTER_ga9778027866735946cf9fae4791ce3580}
+Filter makes output non-\/cacheable \index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+P\+R\+O\+XY@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+P\+R\+O\+XY}}
+\index{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+P\+R\+O\+XY@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+P\+R\+O\+XY}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+P\+R\+O\+XY}{AP_FILTER_PROTO_NO_PROXY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+N\+O\+\_\+\+P\+R\+O\+XY~0x8}\hypertarget{group__APACHE__CORE__FILTER_gadb919dc2c3c2d9b76b4f61acd6d55139}{}\label{group__APACHE__CORE__FILTER_gadb919dc2c3c2d9b76b4f61acd6d55139}
+Filter should not run in a proxy \index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+T\+R\+A\+N\+S\+F\+O\+RM@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+T\+R\+A\+N\+S\+F\+O\+RM}}
+\index{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+T\+R\+A\+N\+S\+F\+O\+RM@{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+T\+R\+A\+N\+S\+F\+O\+RM}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+T\+R\+A\+N\+S\+F\+O\+RM}{AP_FILTER_PROTO_TRANSFORM}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+\+T\+R\+A\+N\+S\+F\+O\+RM~0x20}\hypertarget{group__APACHE__CORE__FILTER_gab2a7a45e9e5e4a2c6bade7072639e6ca}{}\label{group__APACHE__CORE__FILTER_gab2a7a45e9e5e4a2c6bade7072639e6ca}
+Filter is incompatible with \char`\"{}\+Cache-\/\+Control\+: no-\/transform\char`\"{} \index{Filter Chain@{Filter Chain}!ap\+\_\+fputc@{ap\+\_\+fputc}}
+\index{ap\+\_\+fputc@{ap\+\_\+fputc}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+fputc}{ap_fputc}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+fputc(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf f}, }
+\item[{}]{{\bf bb}, }
+\item[{}]{{\bf c}}
+\end{DoxyParamCaption}
+)~apr\+\_\+brigade\+\_\+putc({\bf bb}, ap\+\_\+filter\+\_\+flush, {\bf f}, {\bf c})}\hypertarget{group__APACHE__CORE__FILTER_ga75f41a49d4cc41263df38502abdce03b}{}\label{group__APACHE__CORE__FILTER_ga75f41a49d4cc41263df38502abdce03b}
+Write a character for the current filter, buffering if possible. 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em c} & The character to write \\
+\hline
+\end{DoxyParams}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+fputs@{ap\+\_\+fputs}}
+\index{ap\+\_\+fputs@{ap\+\_\+fputs}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+fputs}{ap_fputs}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+fputs(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf f}, }
+\item[{}]{{\bf bb}, }
+\item[{}]{{\bf str}}
+\end{DoxyParamCaption}
+)~apr\+\_\+brigade\+\_\+write({\bf bb}, ap\+\_\+filter\+\_\+flush, {\bf f}, {\bf str}, strlen({\bf str}))}\hypertarget{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}{}\label{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}
+Write a buffer for the current filter, buffering if possible. 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em str} & The string to write \\
+\hline
+\end{DoxyParams}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+fwrite@{ap\+\_\+fwrite}}
+\index{ap\+\_\+fwrite@{ap\+\_\+fwrite}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+fwrite}{ap_fwrite}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ap\+\_\+fwrite(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf f}, }
+\item[{}]{{\bf bb}, }
+\item[{}]{{\bf data}, }
+\item[{}]{{\bf nbyte}}
+\end{DoxyParamCaption}
+)~apr\+\_\+brigade\+\_\+write({\bf bb}, ap\+\_\+filter\+\_\+flush, {\bf f}, {\bf data}, {\bf nbyte})}\hypertarget{group__APACHE__CORE__FILTER_ga05d620ebb0185c487e48d3e35df79bcd}{}\label{group__APACHE__CORE__FILTER_ga05d620ebb0185c487e48d3e35df79bcd}
+Write a buffer for the current filter, buffering if possible. 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em data} & The data to write \\
+\hline
+{\em nbyte} & The number of bytes in the data \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Typedef Documentation}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+filter\+\_\+func@{ap\+\_\+filter\+\_\+func}}
+\index{ap\+\_\+filter\+\_\+func@{ap\+\_\+filter\+\_\+func}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+filter\+\_\+func}{ap_filter_func}}]{\setlength{\rightskip}{0pt plus 5cm}typedef union {\bf ap\+\_\+filter\+\_\+func}  {\bf ap\+\_\+filter\+\_\+func}}\hypertarget{group__APACHE__CORE__FILTER_gae311727bef0a44e37d84a7c85ff67818}{}\label{group__APACHE__CORE__FILTER_gae311727bef0a44e37d84a7c85ff67818}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+filter\+\_\+provider\+\_\+t@{ap\+\_\+filter\+\_\+provider\+\_\+t}}
+\index{ap\+\_\+filter\+\_\+provider\+\_\+t@{ap\+\_\+filter\+\_\+provider\+\_\+t}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+filter\+\_\+provider\+\_\+t}{ap_filter_provider_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf ap\+\_\+filter\+\_\+provider\+\_\+t} {\bf ap\+\_\+filter\+\_\+provider\+\_\+t}}\hypertarget{group__APACHE__CORE__FILTER_gaa3e9953031f05244ee1ddd40b048de69}{}\label{group__APACHE__CORE__FILTER_gaa3e9953031f05244ee1ddd40b048de69}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}}
+\index{ap\+\_\+filter\+\_\+rec\+\_\+t@{ap\+\_\+filter\+\_\+rec\+\_\+t}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+filter\+\_\+rec\+\_\+t}{ap_filter_rec_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf ap\+\_\+filter\+\_\+rec\+\_\+t} {\bf ap\+\_\+filter\+\_\+rec\+\_\+t}}\hypertarget{group__APACHE__CORE__FILTER_ga3b4690a21db5ddea3704c3aba182eef0}{}\label{group__APACHE__CORE__FILTER_ga3b4690a21db5ddea3704c3aba182eef0}
+This is the request-\/time context structure for an installed filter (in the output filter chain). It provides the callback to use for filtering, the request this filter is associated with (which is important when an output chain also includes sub-\/request filters), the context for this installed filter, and the filter ordering/chaining fields.
+
+Filter callbacks are free to use -\/$>$ctx as they please, to store context during the filter process. Generally, this is superior over associating the state directly with the request. A callback should not change any of the other fields. \index{Filter Chain@{Filter Chain}!ap\+\_\+filter\+\_\+t@{ap\+\_\+filter\+\_\+t}}
+\index{ap\+\_\+filter\+\_\+t@{ap\+\_\+filter\+\_\+t}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+filter\+\_\+t}{ap_filter_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf ap\+\_\+filter\+\_\+t} {\bf ap\+\_\+filter\+\_\+t}}\hypertarget{group__APACHE__CORE__FILTER_gad543721589f525abb9b0fbd5cb8363e6}{}\label{group__APACHE__CORE__FILTER_gad543721589f525abb9b0fbd5cb8363e6}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+in\+\_\+filter\+\_\+func@{ap\+\_\+in\+\_\+filter\+\_\+func}}
+\index{ap\+\_\+in\+\_\+filter\+\_\+func@{ap\+\_\+in\+\_\+filter\+\_\+func}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+in\+\_\+filter\+\_\+func}{ap_in_filter_func}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+status\+\_\+t}($\ast$ ap\+\_\+in\+\_\+filter\+\_\+func) ({\bf ap\+\_\+filter\+\_\+t} $\ast${\bf f}, {\bf apr\+\_\+bucket\+\_\+brigade} $\ast${\bf b}, {\bf ap\+\_\+input\+\_\+mode\+\_\+t} {\bf mode}, {\bf apr\+\_\+read\+\_\+type\+\_\+e} {\bf block}, {\bf apr\+\_\+off\+\_\+t} {\bf readbytes})}\hypertarget{group__APACHE__CORE__FILTER_ga8e6e76deedf9ef3e3a4aa33419663875}{}\label{group__APACHE__CORE__FILTER_ga8e6e76deedf9ef3e3a4aa33419663875}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+init\+\_\+filter\+\_\+func@{ap\+\_\+init\+\_\+filter\+\_\+func}}
+\index{ap\+\_\+init\+\_\+filter\+\_\+func@{ap\+\_\+init\+\_\+filter\+\_\+func}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+init\+\_\+filter\+\_\+func}{ap_init_filter_func}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf int}($\ast$ ap\+\_\+init\+\_\+filter\+\_\+func) ({\bf ap\+\_\+filter\+\_\+t} $\ast${\bf f})}\hypertarget{group__APACHE__CORE__FILTER_ga7ecd47b41aacab276198f6d1fc05a56c}{}\label{group__APACHE__CORE__FILTER_ga7ecd47b41aacab276198f6d1fc05a56c}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+out\+\_\+filter\+\_\+func@{ap\+\_\+out\+\_\+filter\+\_\+func}}
+\index{ap\+\_\+out\+\_\+filter\+\_\+func@{ap\+\_\+out\+\_\+filter\+\_\+func}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+out\+\_\+filter\+\_\+func}{ap_out_filter_func}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+status\+\_\+t}($\ast$ ap\+\_\+out\+\_\+filter\+\_\+func) ({\bf ap\+\_\+filter\+\_\+t} $\ast${\bf f}, {\bf apr\+\_\+bucket\+\_\+brigade} $\ast${\bf b})}\hypertarget{group__APACHE__CORE__FILTER_ga5c80541a5a1dcc9a383e90aa82be59b3}{}\label{group__APACHE__CORE__FILTER_ga5c80541a5a1dcc9a383e90aa82be59b3}
+
+
+\subsection{Enumeration Type Documentation}
+\index{Filter Chain@{Filter Chain}!ap\+\_\+filter\+\_\+type@{ap\+\_\+filter\+\_\+type}}
+\index{ap\+\_\+filter\+\_\+type@{ap\+\_\+filter\+\_\+type}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ap\+\_\+filter\+\_\+type}{ap_filter_type}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf ap\+\_\+filter\+\_\+type}}\hypertarget{group__APACHE__CORE__FILTER_ga6dc4721ae075c103a3f3a93775d139fa}{}\label{group__APACHE__CORE__FILTER_ga6dc4721ae075c103a3f3a93775d139fa}
+Filters have different types/classifications. These are used to group and sort the filters to properly sequence their operation.
+
+The types have a particular sort order, which allows us to insert them into the filter chain in a determistic order. Within a particular grouping, the ordering is equivalent to the order of calls to ap\+\_\+add\+\_\+$\ast$\+\_\+filter(). \begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE}!Filter Chain@{Filter Chain}}\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE}}\item[{\em 
+A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE\hypertarget{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaac592192246ceec25733c9a957cac878}{}\label{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaac592192246ceec25733c9a957cac878}
+}]These filters are used to alter the content that is passed through them. Examples are S\+SI or P\+HP. \index{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET}!Filter Chain@{Filter Chain}}\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET}}\item[{\em 
+A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET\hypertarget{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa5dc0affea9b884673dd747fa345e5213}{}\label{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa5dc0affea9b884673dd747fa345e5213}
+}]These filters are used to alter the content as a whole, but after all A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE filters are executed. These filters should not change the content-\/type. An example is deflate. \index{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+P\+R\+O\+T\+O\+C\+OL@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+P\+R\+O\+T\+O\+C\+OL}!Filter Chain@{Filter Chain}}\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+P\+R\+O\+T\+O\+C\+OL@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+P\+R\+O\+T\+O\+C\+OL}}\item[{\em 
+A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+P\+R\+O\+T\+O\+C\+OL\hypertarget{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaa1ec0f20f33ca0651f3435d8ae970bdd}{}\label{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaa1ec0f20f33ca0651f3435d8ae970bdd}
+}]These filters are used to handle the protocol between server and client. Examples are H\+T\+TP and P\+OP. \index{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+T\+R\+A\+N\+S\+C\+O\+DE@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+T\+R\+A\+N\+S\+C\+O\+DE}!Filter Chain@{Filter Chain}}\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+T\+R\+A\+N\+S\+C\+O\+DE@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+T\+R\+A\+N\+S\+C\+O\+DE}}\item[{\em 
+A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+T\+R\+A\+N\+S\+C\+O\+DE\hypertarget{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa41e2154d17fc1aa44f7b3b088db8c390}{}\label{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa41e2154d17fc1aa44f7b3b088db8c390}
+}]These filters implement transport encodings (e.\+g., chunking). \index{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON}!Filter Chain@{Filter Chain}}\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON}}\item[{\em 
+A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON\hypertarget{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa7ae402ebd5ae1d7453806499e9e06d6a}{}\label{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa7ae402ebd5ae1d7453806499e9e06d6a}
+}]These filters will alter the content, but in ways that are more strongly associated with the connection. Examples are splitting an H\+T\+TP connection into multiple requests and buffering H\+T\+TP responses across multiple requests.
+
+It is important to note that these types of filters are not allowed in a sub-\/request. A sub-\/request\textquotesingle{}s output can certainly be filtered by \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaac592192246ceec25733c9a957cac878}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE} filters, but all of the \char`\"{}final
+    processing\char`\"{} is determined by the main request. \index{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+N\+E\+T\+W\+O\+RK@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+N\+E\+T\+W\+O\+RK}!Filter Chain@{Filter Chain}}\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+N\+E\+T\+W\+O\+RK@{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+N\+E\+T\+W\+O\+RK}}\item[{\em 
+A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+N\+E\+T\+W\+O\+RK\hypertarget{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa75f03b263da1cc0421ffbde1fb74a909}{}\label{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa75f03b263da1cc0421ffbde1fb74a909}
+}]These filters don\textquotesingle{}t alter the content. They are responsible for sending/receiving data to/from the client. \end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+158              \{
+161     \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaac592192246ceec25733c9a957cac878}{AP\_FTYPE\_RESOURCE}     = 10,
+165     \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa5dc0affea9b884673dd747fa345e5213}{AP\_FTYPE\_CONTENT\_SET}  = 20,
+168     \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faaa1ec0f20f33ca0651f3435d8ae970bdd}{AP\_FTYPE\_PROTOCOL}     = 30,
+170     \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa41e2154d17fc1aa44f7b3b088db8c390}{AP\_FTYPE\_TRANSCODE}    = 40,
+180     \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa7ae402ebd5ae1d7453806499e9e06d6a}{AP\_FTYPE\_CONNECTION}  = 50,
+183     \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa75f03b263da1cc0421ffbde1fb74a909}{AP\_FTYPE\_NETWORK}     = 60
+184 \} \hyperlink{group__APACHE__CORE__FILTER_ga6dc4721ae075c103a3f3a93775d139fa}{ap\_filter\_type};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{Filter Chain@{Filter Chain}!\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+attribute\+\_\+\+\_\+((format(printf, 3, 4)))}{__attribute__((format(printf, 3, 4)))}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} const char \+\_\+\+\_\+attribute\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{({\bf format}(printf, 3, 4))}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__FILTER_gaffff87e9d47c8713314a3ca674d67f87}{}\label{group__APACHE__CORE__FILTER_gaffff87e9d47c8713314a3ca674d67f87}
+\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t) ap\+\_\+get\+\_\+brigade(ap\+\_\+filter\+\_\+t $\ast$filter}{AP_DECLARE(apr_status_t) ap_get_brigade(ap_filter_t *filter}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__FILTER_gacd341cc6652b99c7728a5bda1778427a}{}\label{group__APACHE__CORE__FILTER_gacd341cc6652b99c7728a5bda1778427a}
+Get the current bucket brigade from the next filter on the filter stack. The filter returns an apr\+\_\+status\+\_\+t value. If the bottom-\/most filter doesn\textquotesingle{}t read from the network, then \hyperlink{group__APACHE__CORE__DAEMON_gafafcc328b1e4659b888a331e302c7d43}{A\+P\+\_\+\+N\+O\+B\+O\+D\+Y\+\_\+\+R\+E\+AD} is returned. The bucket brigade will be empty when there is nothing left to get. 
+\begin{DoxyParams}{Parameters}
+{\em filter} & The next filter in the chain \\
+\hline
+{\em bucket} & The current bucket brigade. The original brigade passed to ap\+\_\+get\+\_\+brigade() must be empty. \\
+\hline
+{\em mode} & The way in which the data should be read \\
+\hline
+{\em block} & How the operations should be performed \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{A\+P\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+\+R\+E\+AD}, \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da42b97663ca71fbbf2e2af7c8192e5dd8}{A\+P\+R\+\_\+\+N\+O\+N\+B\+L\+O\+C\+K\+\_\+\+R\+E\+AD} \\
+\hline
+{\em readbytes} & How many bytes to read from the next filter.\\
+\hline
+\end{DoxyParams}
+Pass the current bucket brigade down to the next filter on the filter stack. The filter returns an apr\+\_\+status\+\_\+t value. If the bottom-\/most filter doesn\textquotesingle{}t write to the network, then \hyperlink{group__APACHE__CORE__DAEMON_gab6541339293a2dc16d92208f9656ba02}{A\+P\+\_\+\+N\+O\+B\+O\+D\+Y\+\_\+\+W\+R\+O\+TE} is returned. 
+\begin{DoxyParams}{Parameters}
+{\em filter} & The next filter in the chain \\
+\hline
+{\em bucket} & The current bucket brigade\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Ownership of the brigade is retained by the caller. On return, the contents of the brigade are U\+N\+D\+E\+F\+I\+N\+ED, and the caller must either call apr\+\_\+brigade\+\_\+cleanup or apr\+\_\+brigade\+\_\+destroy on the brigade.
+\end{DoxyRemark}
+Pass the current bucket brigade down to the next filter on the filter stack checking for filter errors. The filter returns an apr\+\_\+status\+\_\+t value. Returns \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK} if the brigade is successfully passed \hyperlink{group__APACHE__CORE__DAEMON_ga571664f1af74affc2b898a892f335b82}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+E\+R\+R\+OR} on a filter error \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{H\+T\+T\+P\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+E\+R\+R\+OR} on all other errors 
+\begin{DoxyParams}{Parameters}
+{\em r} & The request rec \\
+\hline
+{\em bucket} & The current bucket brigade \\
+\hline
+{\em fmt} & The format string. If N\+U\+LL defaults to \char`\"{}ap\+\_\+pass\+\_\+brigade returned\char`\"{} \\
+\hline
+{\em ...} & The arguments to use to fill out the format string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Ownership of the brigade is retained by the caller. On return, the contents of the brigade are U\+N\+D\+E\+F\+I\+N\+ED, and the caller must either call apr\+\_\+brigade\+\_\+cleanup or apr\+\_\+brigade\+\_\+destroy on the brigade.
+\end{DoxyRemark}
+Remove an input filter from either the request or connection stack it is associated with. 
+\begin{DoxyParams}{Parameters}
+{\em next} & The filter stack to search \\
+\hline
+{\em handle} & The filter handle (name) to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS on removal or error
+\end{DoxyReturn}
+Remove an output filter from either the request or connection stack it is associated with. 
+\begin{DoxyParams}{Parameters}
+{\em next} & The filter stack to search \\
+\hline
+{\em handle} & The filter handle (name) to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS on removal or error
+\end{DoxyReturn}
+prepare a bucket brigade to be setaside. If a different brigade was set-\/aside earlier, then the two brigades are concatenated together. 
+\begin{DoxyParams}{Parameters}
+{\em f} & The current filter \\
+\hline
+{\em save\+\_\+to} & The brigade that was previously set-\/aside. Regardless, the new bucket brigade is returned in this location. \\
+\hline
+{\em b} & The bucket brigade to save aside. This brigade is always empty on return \\
+\hline
+{\em p} & Ensure that all data in the brigade lives as long as this pool\\
+\hline
+\end{DoxyParams}
+Flush the current brigade down the filter stack. 
+\begin{DoxyParams}{Parameters}
+{\em f} & The filter we are passing to \\
+\hline
+{\em bb} & The brigade to flush \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1593 \{
+1594     \hyperlink{structapr__bucket__brigade}{apr\_bucket\_brigade} *\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb};
+1595     \textcolor{keywordtype}{int} seen\_eos;
+1596     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+1597 
+1598     \textcolor{comment}{/* Sometimes we'll get in a state where the input handling has}
+1599 \textcolor{comment}{     * detected an error where we want to drop the connection, so if}
+1600 \textcolor{comment}{     * that's the case, don't read the data as that is what we're trying}
+1601 \textcolor{comment}{     * to avoid.}
+1602 \textcolor{comment}{     *}
+1603 \textcolor{comment}{     * This function is also a no-op on a subrequest.}
+1604 \textcolor{comment}{     */}
+1605     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa15c110738953554b82619d8d2ee25b3}{main} || \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->keepalive == \hyperlink{group__APACHE__CORE__DAEMON_gga0fc39bb8f47f9c1f418f28354416db79ac991e8ec951fe03c8c2f36495859034d}{AP\_CONN\_CLOSE} ||
+1606         \hyperlink{group__HTTP__Status_gaf6029c20b468032acad1f82c4806ac6f}{ap\_status\_drops\_connection}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a09b59ad2fa51be73efea7369b5484eb0}{status})) \{
+1607         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+1608     \}
+1609 
+1610     bb = apr\_brigade\_create(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->bucket\_alloc);
+1611     seen\_eos = 0;
+1612     \textcolor{keywordflow}{do} \{
+1613         \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__FILTER_ga6550e0bd0ee31e160be60d67874dbcbc}{bucket};
+1614 
+1615         rv = ap\_get\_brigade(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_ab07868ed8240b6236a51aa1e7b198d3e}{input\_filters}, bb, 
+      \hyperlink{util__filter_8h_ab570898d09fbbe5b6d838e28b90134e0a2d8e63e1da380c3909ac0a1325339de4}{AP\_MODE\_READBYTES},
+1616                             \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ}, \hyperlink{group__APACHE__CORE__DAEMON_ga0c9dd98f46b90b5bcd4cbf75e252d0da}{HUGE\_STRING\_LEN});
+1617 
+1618         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1619             apr\_brigade\_destroy(bb);
+1620             \textcolor{keywordflow}{return} ap\_map\_http\_request\_error(rv, \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST});
+1621         \}
+1622 
+1623         \textcolor{keywordflow}{for} (bucket = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb);
+1624              bucket != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb);
+1625              bucket = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(bucket))
+1626         \{
+1627             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LOG_gae4950db1dbfff8459a712737063b61aa}{data};
+1628             \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+1629 
+1630             \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(bucket)) \{
+1631                 seen\_eos = 1;
+1632                 \textcolor{keywordflow}{break};
+1633             \}
+1634 
+1635             \textcolor{comment}{/* These are metadata buckets. */}
+1636             \textcolor{keywordflow}{if} (bucket->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == 0) \{
+1637                 \textcolor{keywordflow}{continue};
+1638             \}
+1639 
+1640             \textcolor{comment}{/* We MUST read because in case we have an unknown-length}
+1641 \textcolor{comment}{             * bucket or one that morphs, we want to exhaust it.}
+1642 \textcolor{comment}{             */}
+1643             rv = \hyperlink{group__APR__Util__Bucket__Brigades_gae44ae938c6c60e148430fdb098dcf28f}{apr\_bucket\_read}(bucket, &data, &len, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ});
+1644             \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1645                 apr\_brigade\_destroy(bb);
+1646                 \textcolor{keywordflow}{return} \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST};
+1647             \}
+1648         \}
+1649         apr\_brigade\_cleanup(bb);
+1650     \} \textcolor{keywordflow}{while} (!seen\_eos);
+1651 
+1652     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+1653 \}
+\end{DoxyCode}
+\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(ap\+\_\+filter\+\_\+rec\+\_\+t $\ast$) ap\+\_\+register\+\_\+input\+\_\+filter(const char $\ast$name}{AP_DECLARE(ap_filter_rec_t *) ap_register_input_filter(const char *name}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+filter\+\_\+rec\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+) const}\hypertarget{group__APACHE__CORE__FILTER_gadf783c020ebfc7202aed1fd6baf321cc}{}\label{group__APACHE__CORE__FILTER_gadf783c020ebfc7202aed1fd6baf321cc}
+This function is used to register an input filter with the system. After this registration is performed, then a filter may be added into the filter chain by using ap\+\_\+add\+\_\+input\+\_\+filter() and simply specifying the name.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name to attach to the filter function \\
+\hline
+{\em filter\+\_\+func} & The filter function to name \\
+\hline
+{\em filter\+\_\+init} & The function to call before the filter handlers are invoked \\
+\hline
+{\em ftype} & The type of filter function, either \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa5dc0affea9b884673dd747fa345e5213}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET} or \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa7ae402ebd5ae1d7453806499e9e06d6a}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON} \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+add\+\_\+input\+\_\+filter()
+\end{DoxySeeAlso}
+\begin{DoxyRefDesc}{Deprecated}
+\item[\hyperlink{deprecated__deprecated000007}{Deprecated}]\end{DoxyRefDesc}
+\begin{DoxySeeAlso}{See also}
+ap\+\_\+register\+\_\+output\+\_\+filter\+\_\+protocol
+\end{DoxySeeAlso}
+This function is used to register an output filter with the system. After this registration is performed, then a filter may be added directly to the filter chain by using ap\+\_\+add\+\_\+output\+\_\+filter() and simply specifying the name, or as a provider under mod\+\_\+filter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name to attach to the filter function \\
+\hline
+{\em filter\+\_\+func} & The filter function to name \\
+\hline
+{\em filter\+\_\+init} & The function to call before the filter handlers are invoked \\
+\hline
+{\em ftype} & The type of filter function, either \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa5dc0affea9b884673dd747fa345e5213}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET} or \hyperlink{group__APACHE__CORE__FILTER_gga6dc4721ae075c103a3f3a93775d139faa7ae402ebd5ae1d7453806499e9e06d6a}{A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON} \\
+\hline
+{\em proto\+\_\+flags} & Protocol flags\+: logical OR of A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+$\ast$ bits \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the filter rec 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+ap\+\_\+add\+\_\+output\+\_\+filter()
+\end{DoxySeeAlso}
+Returns the filter handle for use with ap\+\_\+add\+\_\+input\+\_\+filter\+\_\+handle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The filter name to look up\\
+\hline
+\end{DoxyParams}
+Returns the filter handle for use with ap\+\_\+add\+\_\+output\+\_\+filter\+\_\+handle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The filter name to look up \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+199 \{
+200     \textcolor{keywordflow}{return} get\_filter\_handle(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, registered\_input\_filters);
+201 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{group__APACHE__CORE__FILTER_gadf783c020ebfc7202aed1fd6baf321cc_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(ap\+\_\+filter\+\_\+t $\ast$) ap\+\_\+add\+\_\+input\+\_\+filter(const char $\ast$name}{AP_DECLARE(ap_filter_t *) ap_add_input_filter(const char *name}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+filter\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+) const}\hypertarget{group__APACHE__CORE__FILTER_ga67fb16c1dc6ea7e40ea2649001d60e57}{}\label{group__APACHE__CORE__FILTER_ga67fb16c1dc6ea7e40ea2649001d60e57}
+Adds a named filter into the filter chain on the specified request record. The filter will be installed with the specified context pointer.
+
+Filters added in this way will always be placed at the end of the filters that have the same type (thus, the filters have the same order as the calls to ap\+\_\+add\+\_\+filter). If the current filter chain contains filters from another request, then this filter will be added before those other filters.
+
+To re-\/iterate that last comment. This function is building a F\+I\+FO list of filters. Take note of that when adding your filter to the chain.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the filter to add \\
+\hline
+{\em ctx} & Context data to provide to the filter \\
+\hline
+{\em r} & The request to add this filter for (or N\+U\+LL if it isn\textquotesingle{}t associated with a request) \\
+\hline
+{\em c} & The connection to add the fillter for\\
+\hline
+\end{DoxyParams}
+Variant of ap\+\_\+add\+\_\+input\+\_\+filter() that accepts a registered filter handle (as returned by ap\+\_\+register\+\_\+input\+\_\+filter()) rather than a filter name
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & The filter handle to add \\
+\hline
+{\em ctx} & Context data to provide to the filter \\
+\hline
+{\em r} & The request to add this filter for (or N\+U\+LL if it isn\textquotesingle{}t associated with a request) \\
+\hline
+{\em c} & The connection to add the fillter for\\
+\hline
+\end{DoxyParams}
+Add a filter to the current request. Filters are added in a F\+I\+FO manner. The first filter added will be the first filter called. 
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the filter to add \\
+\hline
+{\em ctx} & Context data to set in the filter \\
+\hline
+{\em r} & The request to add this filter for (or N\+U\+LL if it isn\textquotesingle{}t associated with a request) \\
+\hline
+{\em c} & The connection to add this filter for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+If adding a connection-\/level output filter (i.\+e. where the type is $>$= A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON) during processing of a request, the request object r must be passed in to ensure the filter chains are modified correctly. f-\/$>$r will still be initialized as N\+U\+LL in the new filter.
+\end{DoxyNote}
+Variant of ap\+\_\+add\+\_\+output\+\_\+filter() that accepts a registered filter handle (as returned by ap\+\_\+register\+\_\+output\+\_\+filter()) rather than a filter name
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & The filter handle to add \\
+\hline
+{\em ctx} & Context data to set in the filter \\
+\hline
+{\em r} & The request to add this filter for (or N\+U\+LL if it isn\textquotesingle{}t associated with a request) \\
+\hline
+{\em c} & The connection to add the filter for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+If adding a connection-\/level output filter (i.\+e. where the type is $>$= A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+N\+E\+C\+T\+I\+ON) during processing of a request, the request object r must be passed in to ensure the filter chains are modified correctly. f-\/$>$r will still be initialized as N\+U\+LL in the new filter. 
+\end{DoxyNote}
+
+\begin{DoxyCode}
+421 \{
+422     \textcolor{keywordflow}{return} add\_any\_filter\_handle(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r} ? &\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_ab07868ed8240b6236a51aa1e7b198d3e}{input\_filters} : 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+423                                  \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r} ? &\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_af1d131cbf9a8564874b4196bff89121c}{proto\_input\_filters} : NULL,
+424                                  &\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_a27bcfa99aac415734fedbb540ab7a3e7}{input\_filters});
+425 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{group__APACHE__CORE__FILTER_ga67fb16c1dc6ea7e40ea2649001d60e57_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(void) ap\+\_\+remove\+\_\+input\+\_\+filter(ap\+\_\+filter\+\_\+t $\ast$f)}{AP_DECLARE(void) ap_remove_input_filter(ap_filter_t *f)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__FILTER_ga03dbab8794744bff16b72b6244a083e2}{}\label{group__APACHE__CORE__FILTER_ga03dbab8794744bff16b72b6244a083e2}
+Remove an input filter from either the request or connection stack it is associated with. 
+\begin{DoxyParams}{Parameters}
+{\em f} & The filter to remove\\
+\hline
+\end{DoxyParams}
+Remove an output filter from either the request or connection stack it is associated with. 
+\begin{DoxyParams}{Parameters}
+{\em f} & The filter to remove\\
+\hline
+\end{DoxyParams}
+set protocol requirements for an output content filter (only works with A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE and A\+P\+\_\+\+F\+T\+Y\+P\+E\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+S\+ET) 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter in question \\
+\hline
+{\em proto\+\_\+flags} & Logical OR of A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+P\+R\+O\+T\+O\+\_\+$\ast$ bits \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1075 \{
+1076     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}{ct}) \{
+1077         \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1078     \}
+1079     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type} || strcmp(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type}, 
+      \hyperlink{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}{ct})) \{
+1080         \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type} = \hyperlink{group__APACHE__CORE__PROTO_ga7e93f988a62cb0584f3f8eeebdd32e4b}{ct};
+1081     \}
+1082 \}
+\end{DoxyCode}
+\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(apr\+\_\+status\+\_\+t) ap\+\_\+filter\+\_\+flush(apr\+\_\+bucket\+\_\+brigade $\ast$bb}{AP_DECLARE_NONSTD(apr_status_t) ap_filter_flush(apr_bucket_brigade *bb}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APACHE__CORE__FILTER_ga393e9d5c3f568bbe2455b02688753030}{}\label{group__APACHE__CORE__FILTER_ga393e9d5c3f568bbe2455b02688753030}
+Flush function for apr\+\_\+brigade\+\_\+$\ast$ calls. This calls ap\+\_\+pass\+\_\+brigade to flush the brigade if the brigade buffer overflows. 
+\begin{DoxyParams}{Parameters}
+{\em bb} & The brigade to flush \\
+\hline
+{\em ctx} & The filter to pass the brigade to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+this function has nothing to do with F\+L\+U\+SH buckets. It is simply a way to flush content out of a brigade and down a filter stack.
+\end{DoxyNote}
+Write an unspecified number of strings to the current filter 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em ...} & The strings to write\\
+\hline
+\end{DoxyParams}
+Output data to the filter in printf format 
+\begin{DoxyParams}{Parameters}
+{\em f} & the filter we are writing to \\
+\hline
+{\em bb} & The brigade to buffer into \\
+\hline
+{\em fmt} & The format string \\
+\hline
+{\em ...} & The arguments to use to fill out the format string \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+2017 \{
+2018     va\_list \hyperlink{group__APR__Util__Bucket__Brigades_gafa1ac2f9aa9e56e3f87cbc5324a3114f}{va};
+2019     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+2020     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+2021     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} written = 0;
+2022 
+2023     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->aborted)
+2024         \textcolor{keywordflow}{return} -1;
+2025 
+2026     \textcolor{comment}{/* ### TODO: if the total output is large, put all the strings}
+2027 \textcolor{comment}{     * ### into a single brigade, rather than flushing each time we}
+2028 \textcolor{comment}{     * ### fill the buffer}
+2029 \textcolor{comment}{     */}
+2030     va\_start(va, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+2031     \textcolor{keywordflow}{while} (1) \{
+2032         s = va\_arg(va, \textcolor{keyword}{const} \textcolor{keywordtype}{char} *);
+2033         \textcolor{keywordflow}{if} (s == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+2034             \textcolor{keywordflow}{break};
+2035 
+2036         len = strlen(s);
+2037         \textcolor{keywordflow}{if} (buffer\_output(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, s, len) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+2038             \textcolor{keywordflow}{return} -1;
+2039         \}
+2040 
+2041         written += \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+2042     \}
+2043     va\_end(va);
+2044 
+2045     \textcolor{keywordflow}{return} written;
+2046 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{Filter Chain@{Filter Chain}!A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL@{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}}
+\index{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL@{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}{AP_FN_ATTR_SENTINEL}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+S\+E\+N\+T\+I\+N\+EL}\hypertarget{group__APACHE__CORE__FILTER_ga69055c906cec93f4dfe7338d2f916217}{}\label{group__APACHE__CORE__FILTER_ga69055c906cec93f4dfe7338d2f916217}
+\index{Filter Chain@{Filter Chain}!b@{b}}
+\index{b@{b}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{b}{b}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} {\bf apr\+\_\+bucket\+\_\+brigade}$\ast$$\ast$ b}\hypertarget{group__APACHE__CORE__FILTER_ga8369628ef49e785ad390b376207cfb5e}{}\label{group__APACHE__CORE__FILTER_ga8369628ef49e785ad390b376207cfb5e}
+\index{Filter Chain@{Filter Chain}!bb@{bb}}
+\index{bb@{bb}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{bb}{bb}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade}$\ast$ bb}\hypertarget{group__APACHE__CORE__FILTER_ga0b0eadb381dbe958da483f3d9fc9521a}{}\label{group__APACHE__CORE__FILTER_ga0b0eadb381dbe958da483f3d9fc9521a}
+\index{Filter Chain@{Filter Chain}!block@{block}}
+\index{block@{block}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{block}{block}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} {\bf ap\+\_\+input\+\_\+mode\+\_\+t} {\bf apr\+\_\+read\+\_\+type\+\_\+e} block}\hypertarget{group__APACHE__CORE__FILTER_gafe0ebf200b97a61a45c0513334da9ab6}{}\label{group__APACHE__CORE__FILTER_gafe0ebf200b97a61a45c0513334da9ab6}
+\index{Filter Chain@{Filter Chain}!bucket@{bucket}}
+\index{bucket@{bucket}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{bucket}{bucket}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$ bucket}\hypertarget{group__APACHE__CORE__FILTER_ga6550e0bd0ee31e160be60d67874dbcbc}{}\label{group__APACHE__CORE__FILTER_ga6550e0bd0ee31e160be60d67874dbcbc}
+\index{Filter Chain@{Filter Chain}!c@{c}}
+\index{c@{c}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{c}{c}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} {\bf request\+\_\+rec} {\bf conn\+\_\+rec}$\ast$ c}\hypertarget{group__APACHE__CORE__FILTER_ga29f4e128d2074866812e22a8ccb6b649}{}\label{group__APACHE__CORE__FILTER_ga29f4e128d2074866812e22a8ccb6b649}
+\index{Filter Chain@{Filter Chain}!ctx@{ctx}}
+\index{ctx@{ctx}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ctx}{ctx}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+brigade\+\_\+flush} {\bf void} $\ast$ ctx}\hypertarget{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{}\label{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}
+\index{Filter Chain@{Filter Chain}!filter\+\_\+func@{filter\+\_\+func}}
+\index{filter\+\_\+func@{filter\+\_\+func}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{filter\+\_\+func}{filter_func}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ap\+\_\+out\+\_\+filter\+\_\+func} filter\+\_\+func}\hypertarget{group__APACHE__CORE__FILTER_ga9b7e5ba838d06e9f7abc6195061b8ab1}{}\label{group__APACHE__CORE__FILTER_ga9b7e5ba838d06e9f7abc6195061b8ab1}
+\index{Filter Chain@{Filter Chain}!filter\+\_\+init@{filter\+\_\+init}}
+\index{filter\+\_\+init@{filter\+\_\+init}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{filter\+\_\+init}{filter_init}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ap\+\_\+out\+\_\+filter\+\_\+func} {\bf ap\+\_\+init\+\_\+filter\+\_\+func} filter\+\_\+init}\hypertarget{group__APACHE__CORE__FILTER_ga0f8d986fdc54b998955d7e7ffe33ca9b}{}\label{group__APACHE__CORE__FILTER_ga0f8d986fdc54b998955d7e7ffe33ca9b}
+\index{Filter Chain@{Filter Chain}!fmt@{fmt}}
+\index{fmt@{fmt}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{fmt}{fmt}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} const char$\ast$ fmt}\hypertarget{group__APACHE__CORE__FILTER_ga65068f17c9b43943b73a93544b9a7b35}{}\label{group__APACHE__CORE__FILTER_ga65068f17c9b43943b73a93544b9a7b35}
+\index{Filter Chain@{Filter Chain}!ftype@{ftype}}
+\index{ftype@{ftype}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{ftype}{ftype}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ap\+\_\+out\+\_\+filter\+\_\+func} {\bf ap\+\_\+init\+\_\+filter\+\_\+func} {\bf ap\+\_\+filter\+\_\+type} ftype}\hypertarget{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{}\label{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}
+\index{Filter Chain@{Filter Chain}!handle@{handle}}
+\index{handle@{handle}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{handle}{handle}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+dbd\+\_\+t} {\bf int} {\bf apr\+\_\+dbd\+\_\+prepared\+\_\+t} {\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+dbd\+\_\+t} $\ast$ handle}\hypertarget{group__APACHE__CORE__FILTER_ga68ba22c11aa974c2d027851747c98822}{}\label{group__APACHE__CORE__FILTER_ga68ba22c11aa974c2d027851747c98822}
+\index{Filter Chain@{Filter Chain}!mode@{mode}}
+\index{mode@{mode}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{mode}{mode}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf all} the {\bf files} {\bf are} {\bf read} {\bf include} the only direc tories that {\bf are} processed {\bf are} those that {\bf match} one {\bf of} the whether listed {\bf on} the {\bf command} obtained {\bf from} {\bf file} {\bf or} by {\bf scanning} {\bf a} {\bf parent} {\bf directory} The {\bf pattern} {\bf is} {\bf a} {\bf P\+C\+RE} regular and {\bf is} {\bf matched} against the final {\bf component} {\bf of} the {\bf directory} {\bf not} the entire {\bf path} The and {\bf x} {\bf options} {\bf do} {\bf not} apply {\bf to} {\bf this} {\bf pattern} The {\bf option} may {\bf be} {\bf given} {\bf any} {\bf number} {\bf of} {\bf times} If {\bf a} {\bf directory} {\bf matches} both {\bf include} {\bf dir} and {\bf exclude} {\bf it} {\bf is} {\bf excluded} There {\bf is} no short form for {\bf this} {\bf option} {\bf files} without {\bf match} {\bf Instead} {\bf of} outputting {\bf lines} {\bf from} the just {\bf output} the {\bf names} {\bf of} the {\bf files} that {\bf do} {\bf not} contain {\bf any} {\bf lines} that would have been {\bf output} Each {\bf file} {\bf name} {\bf is} {\bf output} {\bf on} {\bf a} sepa rate {\bf line} {\bf files} {\bf with} {\bf matches} {\bf Instead} {\bf of} outputting {\bf lines} {\bf from} the just {\bf output} the {\bf names} {\bf of} the {\bf files} containing {\bf lines} that would have been {\bf out} put Each {\bf file} {\bf name} {\bf is} {\bf output} {\bf on} {\bf a} separate {\bf line} Searching {\bf normally} stops {\bf as} soon {\bf as} {\bf a} {\bf matching} {\bf line} {\bf is} {\bf found} {\bf in} {\bf a} {\bf file} {\bf if} the {\bf matching} continues {\bf in} {\bf order} {\bf to} obtain the correct and those {\bf files} that have at least one {\bf match} {\bf are} listed along {\bf with} their {\bf counts} Using {\bf this} {\bf option} {\bf with} {\bf c} {\bf is} {\bf a} {\bf way} {\bf of} sup pressing the listing {\bf of} {\bf files} {\bf with} no {\bf matches} standard {\bf input} {\bf is} {\bf used} There {\bf is} no short form for {\bf this} {\bf option} {\bf line} buffered When {\bf this} {\bf option} {\bf is} {\bf input} {\bf is} {\bf read} and processed {\bf line} by and the {\bf output} {\bf is} flushed {\bf after} each write By {\bf input} {\bf is} {\bf read} {\bf in} large unless pcregrep {\bf can} determine that {\bf it} {\bf is} reading {\bf from} {\bf a} its use will affect perfor and the show each {\bf match} {\bf as} {\bf a} {\bf line} the {\bf offset} {\bf from} the {\bf start} {\bf of} the and {\bf a} {\bf length} The {\bf line} {\bf number} {\bf is} terminated by {\bf a} and the {\bf offset} and {\bf length} {\bf are} separated by {\bf a} comma In {\bf this} no {\bf context} {\bf is} shown That the and {\bf C} {\bf options} {\bf are} {\bf ignored} If there {\bf is} more {\bf than} one {\bf match} {\bf in} {\bf a} each {\bf of} {\bf them} {\bf is} shown sepa rately This {\bf option} {\bf is} mutually exclusive {\bf with} {\bf file} {\bf offsets} and only {\bf matching} the {\bf P\+C\+RE} {\bf library} {\bf s} leading {\bf in} some {\bf cases} {\bf to} {\bf a} pro gram crash {\bf if} {\bf not} enough {\bf is} {\bf available} Other {\bf patterns} may take {\bf a} very long {\bf time} {\bf to} search for {\bf all} {\bf possible} {\bf matching} {\bf strings} The but {\bf which} have {\bf a} very large {\bf number} {\bf of} possibilities {\bf in} their search trees The classic {\bf example} {\bf is} {\bf a} {\bf pattern} that uses nested unlimited repeats {\bf P\+C\+RE} uses {\bf a} {\bf func} tion called {\bf which} has the effect {\bf of} limiting the amount {\bf of} backtracking that {\bf can} take place The {\bf recursion} {\bf limit} {\bf option} {\bf is} similar {\bf to} {\bf match} but instead {\bf of} limiting the total {\bf number} {\bf of} {\bf times} that {\bf it} limits the {\bf depth} {\bf of} recursive {\bf which} {\bf in} turn limits the amount {\bf of} {\bf memory} that {\bf can} {\bf be} {\bf used} The {\bf recursion} {\bf depth} {\bf is} {\bf a} smaller {\bf number} {\bf than} the total {\bf number} {\bf of} because {\bf not} {\bf all} {\bf calls} {\bf to} {\bf with} the {\bf default} {\bf default} being {\bf million} {\bf multiline} Allow {\bf patterns} {\bf to} {\bf match} more {\bf than} one {\bf line} When {\bf this} {\bf option} {\bf is} {\bf patterns} may usefully contain {\bf literal} {\bf newline} char acters and internal occurrences {\bf of} and {\bf characters} The {\bf output} for {\bf a} {\bf successful} {\bf match} may consist {\bf of} more {\bf than} one the {\bf last} {\bf of} {\bf which} {\bf is} the one {\bf in} {\bf which} the {\bf match} ended If the {\bf matched} {\bf string} ends {\bf with} {\bf a} {\bf newline} {\bf sequence} the {\bf output} ends at the {\bf end} {\bf of} that {\bf line} When {\bf this} {\bf option} {\bf is} the {\bf P\+C\+RE} {\bf library} {\bf is} called {\bf in} mul tiline mode There {\bf is} {\bf a} {\bf limit} {\bf to} the {\bf number} {\bf of} {\bf lines} that {\bf can} {\bf be} imposed by the {\bf way} that pcregrep buffers the {\bf input} {\bf file} {\bf as} {\bf it} scans {\bf it} pcregrep ensures that at least {\bf characters} {\bf or} the rest {\bf of} the and simi larly the previous the two {\bf character} {\bf sequence} an anycrlf {\bf which} {\bf rec} ognizes {\bf any} {\bf of} the {\bf preceding} three and an {\bf any} {\bf con} {\bf in} {\bf which} {\bf any} {\bf Unicode} {\bf line} ending {\bf sequence} {\bf is} assumed {\bf to} {\bf end} {\bf a} {\bf line} The {\bf Unicode} sequences {\bf are} the three just men {\bf plus} and {\bf a} {\bf default} {\bf line} ending {\bf sequence} {\bf is} {\bf specified} This {\bf is} {\bf normally} the standard {\bf sequence} for the operating {\bf system} Unless otherwise {\bf specified} by {\bf this} pcregrep uses the {\bf library} {\bf s} {\bf default} The {\bf possible} {\bf values} for {\bf this} {\bf option} {\bf are} {\bf or} A\+NY This makes {\bf it} {\bf possible} {\bf to} use pcregrep {\bf to} scan {\bf files} that have come {\bf from} other {\bf environments} without having {\bf to} {\bf mod} ify their {\bf line} {\bf endings} If the {\bf data} that {\bf is} being {\bf scanned} does {\bf not} agree {\bf with} the {\bf convention} {\bf set} by {\bf this} {\bf pcre} {\bf grep} may behave {\bf in} strange ways Note that {\bf this} {\bf option} does {\bf not} apply {\bf to} {\bf files} {\bf specified} by the {\bf exclude} {\bf or} {\bf include} {\bf from} {\bf which} {\bf are} {\bf expected} {\bf to} use the operat {\bf ing} {\bf system} {\bf s} standard {\bf newline} {\bf sequence} {\bf line} {\bf number} Precede each {\bf output} {\bf line} by its {\bf line} {\bf number} {\bf in} the fol lowed by {\bf a} {\bf colon} for {\bf matching} {\bf lines} {\bf or} {\bf a} hyphen for {\bf context} {\bf lines} If the {\bf filename} {\bf is} also being {\bf it} precedes the {\bf line} {\bf number} This {\bf option} {\bf is} forced {\bf if} {\bf line} {\bf offsets} {\bf is} {\bf used} no jit If the {\bf P\+C\+RE} {\bf library} {\bf is} {\bf built} {\bf with} {\bf support} for just {\bf in} {\bf time} pcregrep automatically makes use {\bf of} unless {\bf it} was explicitly disabled at build {\bf time} This {\bf option} {\bf can} {\bf be} {\bf used} {\bf to} disable the use {\bf of} J\+IT at {\bf run} {\bf time} It {\bf is} provided for testing and working round prob lems It should never {\bf be} needed {\bf in} normal use only {\bf matching} Show only the part {\bf of} the {\bf line} that {\bf matched} {\bf a} {\bf pattern} instead {\bf of} the whole {\bf line} In {\bf this} mode}\hypertarget{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}{}\label{group__APACHE__CORE__FILTER_gad194431669b7d1f96d2dacfb7be21261}
+\index{Filter Chain@{Filter Chain}!p@{p}}
+\index{p@{p}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{p}{p}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} {\bf apr\+\_\+bucket\+\_\+brigade} {\bf apr\+\_\+pool\+\_\+t}$\ast$ p}\hypertarget{group__APACHE__CORE__FILTER_ga0a6f92a0aa5e88fe32512197f94440aa}{}\label{group__APACHE__CORE__FILTER_ga0a6f92a0aa5e88fe32512197f94440aa}
+\index{Filter Chain@{Filter Chain}!proto\+\_\+flags@{proto\+\_\+flags}}
+\index{proto\+\_\+flags@{proto\+\_\+flags}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{proto\+\_\+flags}{proto_flags}}]{\setlength{\rightskip}{0pt plus 5cm}unsigned {\bf int} proto\+\_\+flags}\hypertarget{group__APACHE__CORE__FILTER_gaf29b539a8cdc699955f96de76499f780}{}\label{group__APACHE__CORE__FILTER_gaf29b539a8cdc699955f96de76499f780}
+\index{Filter Chain@{Filter Chain}!r@{r}}
+\index{r@{r}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{r}{r}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} {\bf request\+\_\+rec}$\ast$ r}\hypertarget{group__APACHE__CORE__FILTER_gaedf2e57576fb94c7e1bbe1ba20df39d4}{}\label{group__APACHE__CORE__FILTER_gaedf2e57576fb94c7e1bbe1ba20df39d4}
+\index{Filter Chain@{Filter Chain}!readbytes@{readbytes}}
+\index{readbytes@{readbytes}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{readbytes}{readbytes}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade} {\bf ap\+\_\+input\+\_\+mode\+\_\+t} {\bf apr\+\_\+read\+\_\+type\+\_\+e} {\bf apr\+\_\+off\+\_\+t} readbytes}\hypertarget{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{}\label{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}
+\index{Filter Chain@{Filter Chain}!save\+\_\+to@{save\+\_\+to}}
+\index{save\+\_\+to@{save\+\_\+to}!Filter Chain@{Filter Chain}}
+\subsubsection[{\texorpdfstring{save\+\_\+to}{save_to}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+brigade}$\ast$$\ast$ save\+\_\+to}\hypertarget{group__APACHE__CORE__FILTER_ga723cf02e42fc5bf4de0a3e2518407fc1}{}\label{group__APACHE__CORE__FILTER_ga723cf02e42fc5bf4de0a3e2518407fc1}

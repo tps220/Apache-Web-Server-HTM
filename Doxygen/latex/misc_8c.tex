@@ -1,0 +1,318 @@
+\hypertarget{misc_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/misc/win32/misc.c File Reference}
+\label{misc_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/misc/win32/misc.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/misc/win32/misc.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+misc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}assert.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}tchar.\+h\char`\"{}}\\*
+Include dependency graph for misc.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{misc_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{misc_8c_ad15c256680846bbf31e6068e19ccac4c}{apr\+\_\+get\+\_\+oslevel} (\hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402}{apr\+\_\+oslevel\+\_\+e} $\ast$\hyperlink{group__APACHE__CORE__LOG_ga46c1c4bc138aad1e20504bbee34f35a7}{level})
+\item 
+F\+A\+R\+P\+R\+OC \hyperlink{misc_8c_ab5d57e1629c8ddf938f46576cb28561b}{apr\+\_\+load\+\_\+dll\+\_\+func} (\hyperlink{win32_2apr__arch__misc_8h_a5639f9e3b3a90c0b8f7c6077a9197c74}{apr\+\_\+dlltoken\+\_\+e} fn\+Lib, char $\ast$fn\+Name, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} ordinal)
+\item 
+\hyperlink{misc_8c_abe9bc052ab3272df0464009f22c45ffd}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (H\+A\+N\+D\+LE)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__platform_ga16a1a3d65c57ce052fffb63190b1cadc}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402}{apr\+\_\+oslevel\+\_\+e} \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\+\_\+os\+\_\+level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a969aaf85daea66177d728274c9d9f550}{A\+P\+R\+\_\+\+W\+I\+N\+\_\+\+U\+NK}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{misc.\+c@{misc.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!misc.\+c@{misc.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(\+H\+A\+N\+D\+L\+E)}{APR_DECLARE_NONSTD(HANDLE)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{H\+A\+N\+D\+LE}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{misc_8c_abe9bc052ab3272df0464009f22c45ffd}{}\label{misc_8c_abe9bc052ab3272df0464009f22c45ffd}
+
+\begin{DoxyCode}
+197 \{
+198     \textcolor{keyword}{static} DWORD tlsid = 0xFFFFFFFF;
+199     \textcolor{keyword}{static} HANDLE fh = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+200     \textcolor{keyword}{static} \textcolor{keywordtype}{long} ctr = 0;
+201     \textcolor{keyword}{static} CRITICAL\_SECTION cs;
+202     \textcolor{keywordtype}{long} seq;
+203     DWORD wrote;
+204     \textcolor{keywordtype}{char} *sbuf;
+205     
+206     seq = (InterlockedIncrement)(&ctr);
+207 
+208     \textcolor{keywordflow}{if} (tlsid == 0xFFFFFFFF) \{
+209         tlsid = (TlsAlloc)();
+210     \}
+211 
+212     sbuf = (TlsGetValue)(tlsid);
+213     \textcolor{keywordflow}{if} (!fh || !sbuf) \{
+214         sbuf = (\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc})(1024);
+215         (TlsSetValue)(tlsid, sbuf);
+216         sbuf[1023] = \textcolor{charliteral}{'\(\backslash\)0'};
+217         \textcolor{keywordflow}{if} (!fh) \{
+218             (GetModuleFileNameA)(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, sbuf, 250);
+219             sprintf(strchr(sbuf, \textcolor{charliteral}{'\(\backslash\)0'}), \textcolor{stringliteral}{".%u"},
+220                     (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})(GetCurrentProcessId)());
+221             fh = (\hyperlink{apr__dbg__win32__handles_8h_ad8a2c1a31beb9b483b15e73fe8ac51b7}{CreateFileA})(sbuf, GENERIC\_WRITE, 0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 
+222                             CREATE\_ALWAYS, 0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+223             (InitializeCriticalSection)(&cs);
+224         \}
+225     \}
+226 
+227     \textcolor{keywordflow}{if} (!\hyperlink{apr__dbg__win32__handles_8h_a36f434693823bb78a1567831fcabffae}{nh}) \{
+228         (sprintf)(sbuf, \textcolor{stringliteral}{"%p %08x %08x %s() %s:%d\(\backslash\)n"},
+229                   \hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})seq, (\textcolor{keywordtype}{unsigned} \hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})GetCurrentThreadId(),
+230                   fn, \hyperlink{apr__dbg__win32__handles_8h_aeb3aaebd1fbb23caf1bd5a2cf4200800}{fl}, \hyperlink{apr__dbg__win32__handles_8h_a1dfd2ced0b859c8830a9f7a77651840d}{ln});
+231         (EnterCriticalSection)(&cs);
+232         (WriteFile)(fh, sbuf, (DWORD)strlen(sbuf), &wrote, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+233         (LeaveCriticalSection)(&cs);
+234     \} 
+235     \textcolor{keywordflow}{else} \{
+236         va\_list \hyperlink{group__APACHE__CORE__FASTCGI_ga72a200675828d2c2550eb6c686b9db49}{a};
+237         va\_start(a,\hyperlink{apr__dbg__win32__handles_8h_a36f434693823bb78a1567831fcabffae}{nh});
+238         (EnterCriticalSection)(&cs);
+239         \textcolor{keywordflow}{do} \{
+240             HANDLE *hv = va\_arg(a, HANDLE*);
+241             \textcolor{keywordtype}{char} *dsc = va\_arg(a, \textcolor{keywordtype}{char}*);
+242             \textcolor{keywordflow}{if} (strcmp(dsc, \textcolor{stringliteral}{"Signaled"}) == 0) \{
+243                 \textcolor{keywordflow}{if} ((\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})\hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha} >= STATUS\_WAIT\_0 
+244                        && (\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})\hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha} < STATUS\_ABANDONED\_WAIT\_0) \{
+245                     hv += (\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})\hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha};
+246                 \}
+247                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})\hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha} >= STATUS\_ABANDONED\_WAIT\_0
+248                             && (\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})\hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha} < STATUS\_USER\_APC) \{
+249                     hv += (\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})\hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha} - STATUS\_ABANDONED\_WAIT\_0;
+250                     dsc = \textcolor{stringliteral}{"Abandoned"};
+251                 \}
+252                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})\hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha} == WAIT\_TIMEOUT) \{
+253                     dsc = \textcolor{stringliteral}{"Timed Out"};
+254                 \}
+255             \}
+256             (sprintf)(sbuf, \textcolor{stringliteral}{"%p %08x %08x %s(%s) %s:%d\(\backslash\)n"},
+257                       *hv, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})seq,
+258                       (\textcolor{keywordtype}{unsigned} \hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})GetCurrentThreadId(), 
+259                       fn, dsc, \hyperlink{apr__dbg__win32__handles_8h_aeb3aaebd1fbb23caf1bd5a2cf4200800}{fl}, \hyperlink{apr__dbg__win32__handles_8h_a1dfd2ced0b859c8830a9f7a77651840d}{ln});
+260             (WriteFile)(fh, sbuf, (DWORD)strlen(sbuf), &wrote, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+261         \} \textcolor{keywordflow}{while} (--\hyperlink{apr__dbg__win32__handles_8h_a36f434693823bb78a1567831fcabffae}{nh});
+262         (LeaveCriticalSection)(&cs);
+263         va\_end(a);
+264     \}
+265     \textcolor{keywordflow}{return} \hyperlink{apr__dbg__win32__handles_8h_ada5be4d470b3abb3bf4fe34fb00236ca}{ha};
+266 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=300pt]{misc_8c_abe9bc052ab3272df0464009f22c45ffd_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{misc.\+c@{misc.\+c}!apr\+\_\+get\+\_\+oslevel@{apr\+\_\+get\+\_\+oslevel}}
+\index{apr\+\_\+get\+\_\+oslevel@{apr\+\_\+get\+\_\+oslevel}!misc.\+c@{misc.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+get\+\_\+oslevel(apr\+\_\+oslevel\+\_\+e $\ast$level)}{apr_get_oslevel(apr_oslevel_e *level)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} apr\+\_\+get\+\_\+oslevel (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+oslevel\+\_\+e} $\ast$}]{level}
+\end{DoxyParamCaption}
+)}\hypertarget{misc_8c_ad15c256680846bbf31e6068e19ccac4c}{}\label{misc_8c_ad15c256680846bbf31e6068e19ccac4c}
+
+\begin{DoxyCode}
+27 \{
+28     \textcolor{keywordflow}{if} (\hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} == \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a969aaf85daea66177d728274c9d9f550}{APR\_WIN\_UNK}) 
+29     \{
+30         \textcolor{keyword}{static} OSVERSIONINFO oslev;
+31         oslev.dwOSVersionInfoSize = \textcolor{keyword}{sizeof}(OSVERSIONINFO);
+32         GetVersionEx(&oslev);
+33 
+34         \textcolor{keywordflow}{if} (oslev.dwPlatformId == VER\_PLATFORM\_WIN32\_NT) 
+35         \{
+36             \textcolor{keyword}{static} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} servpack = 0;
+37             TCHAR *pservpack;
+38             \textcolor{keywordflow}{if} ((pservpack = oslev.szCSDVersion)) \{
+39                 \textcolor{keywordflow}{while} (*pservpack && !\hyperlink{group__apr__ctype_ga8c453b1d66015b357c3d3a3ddb7d97d7}{apr\_isdigit}(*pservpack)) \{
+40                     pservpack++;
+41                 \}
+42                 \textcolor{keywordflow}{if} (*pservpack)
+43 \textcolor{preprocessor}{#ifdef \_UNICODE}
+44                     servpack = \_wtoi(pservpack);
+45 \textcolor{preprocessor}{#else}
+46                     servpack = atoi(pservpack);
+47 \textcolor{preprocessor}{#endif}
+48             \}
+49 
+50             \textcolor{keywordflow}{if} (oslev.dwMajorVersion < 3) \{
+51                 \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402ac41c00a50c5e0805e0ef130b02469195}{APR\_WIN\_UNSUP};
+52             \}
+53             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwMajorVersion == 3) \{
+54                 \textcolor{keywordflow}{if} (oslev.dwMajorVersion < 50) \{
+55                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402ac41c00a50c5e0805e0ef130b02469195}{APR\_WIN\_UNSUP};
+56                 \}
+57                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwMajorVersion == 50) \{
+58                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a3f03acc49c4f8a77cd53b11323a47248}{APR\_WIN\_NT\_3\_5};
+59                 \}
+60                 \textcolor{keywordflow}{else} \{
+61                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402ae44dbfe66cb3cfc0ea44fbdabd553f50}{APR\_WIN\_NT\_3\_51};
+62                 \}
+63             \}
+64             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwMajorVersion == 4) \{
+65                 \textcolor{keywordflow}{if} (servpack < 2)
+66                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a3d97389d5accddc24d9708c4542b9937}{APR\_WIN\_NT\_4};
+67                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (servpack <= 2)
+68                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a5b2d8b8f2305d98d91e1b2240a1db3cb}{APR\_WIN\_NT\_4\_SP2};
+69                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (servpack <= 3)
+70                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a71b0b80ac7685dec671e00c9106e2009}{APR\_WIN\_NT\_4\_SP3};
+71                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (servpack <= 4)
+72                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a0ab04d31fca4eb91d72a4608819d82c4}{APR\_WIN\_NT\_4\_SP4};
+73                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (servpack <= 5)
+74                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a33709ed943e33b9aa1cc2c4609e090ec}{APR\_WIN\_NT\_4\_SP5};
+75                 \textcolor{keywordflow}{else} 
+76                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402ab9c253f84b65ce480398ca1421443aa7}{APR\_WIN\_NT\_4\_SP6};
+77             \}
+78             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwMajorVersion == 5) \{
+79                 \textcolor{keywordflow}{if} (oslev.dwMinorVersion == 0) \{
+80                     \textcolor{keywordflow}{if} (servpack == 0)
+81                         \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402aa671d1d921e5dd75518dfd6fba2ce5b5}{APR\_WIN\_2000};
+82                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (servpack == 1)
+83                         \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a8dd9801dbb56513f36a31aec863d696b}{APR\_WIN\_2000\_SP1};
+84                     \textcolor{keywordflow}{else}
+85                         \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a1da843bd57c03a7ca5b84eaba6b35934}{APR\_WIN\_2000\_SP2};
+86                 \}
+87                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwMinorVersion == 2) \{
+88                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a79d9fc2bd1a06ecf5350f6c9a3a7abb6}{APR\_WIN\_2003};
+89                 \}
+90                 \textcolor{keywordflow}{else} \{
+91                     \textcolor{keywordflow}{if} (servpack < 1)
+92                         \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402acd66b7fb2c102ba4cebf9753df2905c6}{APR\_WIN\_XP};
+93                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (servpack == 1)
+94                         \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a9ee9ab59eda37ef166892986b55effde}{APR\_WIN\_XP\_SP1};
+95                     \textcolor{keywordflow}{else}
+96                         \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402aec8e55b20def37e63c86a0f812d77cc8}{APR\_WIN\_XP\_SP2};
+97                 \}
+98             \}
+99             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwMajorVersion == 6) \{
+100                 \textcolor{keywordflow}{if} (oslev.dwMinorVersion == 0)
+101                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a19310f41ef9f4d9db1febc83725b6dfd}{APR\_WIN\_VISTA};
+102                 \textcolor{keywordflow}{else}
+103                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a946af3bf19db4b800f4a9c34e42e528c}{APR\_WIN\_7};
+104             \}
+105             \textcolor{keywordflow}{else} \{
+106                 \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402acd66b7fb2c102ba4cebf9753df2905c6}{APR\_WIN\_XP};
+107             \}
+108         \}
+109 \textcolor{preprocessor}{#ifndef WINNT}
+110         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwPlatformId == VER\_PLATFORM\_WIN32\_WINDOWS) \{
+111             TCHAR *prevision;
+112             \textcolor{keywordflow}{if} (prevision = oslev.szCSDVersion) \{
+113                 \textcolor{keywordflow}{while} (*prevision && !\hyperlink{group__apr__ctype_ga362f53cc44aab662aaf04fa87e36035b}{apr\_isupper}(*prevision)) \{
+114                      prevision++;
+115                 \}
+116             \}
+117             \textcolor{keywordflow}{else} prevision = \_T(\textcolor{stringliteral}{""});
+118 
+119             \textcolor{keywordflow}{if} (oslev.dwMinorVersion < 10) \{
+120                 \textcolor{keywordflow}{if} (*prevision < \_T(\textcolor{charliteral}{'C'}))
+121                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a0abd71c580bb20f2e063b6e99ac78d02}{APR\_WIN\_95};
+122                 \textcolor{keywordflow}{else}
+123                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a21deb35dd193d8a6c46214cccb73c967}{APR\_WIN\_95\_OSR2};
+124             \}
+125             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwMinorVersion < 90) \{
+126                 \textcolor{keywordflow}{if} (*prevision < \_T(\textcolor{charliteral}{'A'}))
+127                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a38d4810e198694ed7c898f7dc805d25c}{APR\_WIN\_98};
+128                 \textcolor{keywordflow}{else}
+129                     \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a86c7c25a7a5d3df066094d9b677edc77}{APR\_WIN\_98\_SE};
+130             \}
+131             \textcolor{keywordflow}{else} \{
+132                 \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a009c330c0dc866178fc4b49f4b6f2f70}{APR\_WIN\_ME};
+133             \}
+134         \}
+135 \textcolor{preprocessor}{#endif}
+136 \textcolor{preprocessor}{#ifdef \_WIN32\_WCE}
+137         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (oslev.dwPlatformId == VER\_PLATFORM\_WIN32\_CE) 
+138         \{
+139             \textcolor{keywordflow}{if} (oslev.dwMajorVersion < 3) \{
+140                 \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402ac41c00a50c5e0805e0ef130b02469195}{APR\_WIN\_UNSUP};
+141             \}
+142             \textcolor{keywordflow}{else} \{
+143                 \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a3ece2c392ba13467e7b4c9eb788bbbde}{APR\_WIN\_CE\_3};
+144             \}
+145         \}
+146 \textcolor{preprocessor}{#endif}
+147         \textcolor{keywordflow}{else} \{
+148             \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} = \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402ac41c00a50c5e0805e0ef130b02469195}{APR\_WIN\_UNSUP};
+149         \}
+150     \}
+151 
+152     *\hyperlink{group__APACHE__CORE__CONFIG_ga46c1c4bc138aad1e20504bbee34f35a7}{level} = \hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level};
+153 
+154     \textcolor{keywordflow}{if} (\hyperlink{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} < \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402ac41c00a50c5e0805e0ef130b02469195}{APR\_WIN\_UNSUP}) \{
+155         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga18f5678bea0c2c704a2b6a186c9e158b}{APR\_EGENERAL};
+156     \}
+157 
+158     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+159 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=292pt]{misc_8c_ad15c256680846bbf31e6068e19ccac4c_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{misc.\+c@{misc.\+c}!apr\+\_\+load\+\_\+dll\+\_\+func@{apr\+\_\+load\+\_\+dll\+\_\+func}}
+\index{apr\+\_\+load\+\_\+dll\+\_\+func@{apr\+\_\+load\+\_\+dll\+\_\+func}!misc.\+c@{misc.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+load\+\_\+dll\+\_\+func(apr\+\_\+dlltoken\+\_\+e fn\+Lib, char $\ast$fn\+Name, int ordinal)}{apr_load_dll_func(apr_dlltoken_e fnLib, char *fnName, int ordinal)}}]{\setlength{\rightskip}{0pt plus 5cm}F\+A\+R\+P\+R\+OC apr\+\_\+load\+\_\+dll\+\_\+func (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+dlltoken\+\_\+e}}]{fn\+Lib, }
+\item[{char $\ast$}]{fn\+Name, }
+\item[{{\bf int}}]{ordinal}
+\end{DoxyParamCaption}
+)}\hypertarget{misc_8c_ab5d57e1629c8ddf938f46576cb28561b}{}\label{misc_8c_ab5d57e1629c8ddf938f46576cb28561b}
+
+\begin{DoxyCode}
+172 \{
+173     \textcolor{keywordflow}{if} (!lateDllHandle[fnLib]) \{ 
+174         lateDllHandle[fnLib] = \hyperlink{apr__dbg__win32__handles_8h_a1bc97088a05b568f3b507275e218831c}{LoadLibraryA}(lateDllName[fnLib]);
+175         \textcolor{keywordflow}{if} (!lateDllHandle[fnLib])
+176             \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+177     \}
+178 \textcolor{preprocessor}{#if defined(\_WIN32\_WCE)}
+179     \textcolor{keywordflow}{if} (ordinal)
+180         \textcolor{keywordflow}{return} GetProcAddressA(lateDllHandle[fnLib], (\textcolor{keyword}{const} \textcolor{keywordtype}{char} *)
+181                                                      (\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})ordinal);
+182     \textcolor{keywordflow}{else}
+183         \textcolor{keywordflow}{return} GetProcAddressA(lateDllHandle[fnLib], fnName);
+184 \textcolor{preprocessor}{#else}
+185     \textcolor{keywordflow}{if} (ordinal)
+186         \textcolor{keywordflow}{return} GetProcAddress(lateDllHandle[fnLib], (\textcolor{keyword}{const} \textcolor{keywordtype}{char} *)
+187                                                     (\hyperlink{group__apr__platform_ga215ebb88932bee220b766263ebbfe6fa}{apr\_ssize\_t})ordinal);
+188     \textcolor{keywordflow}{else}
+189         \textcolor{keywordflow}{return} GetProcAddress(lateDllHandle[fnLib], fnName);
+190 \textcolor{preprocessor}{#endif}
+191 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{misc.\+c@{misc.\+c}!apr\+\_\+os\+\_\+level@{apr\+\_\+os\+\_\+level}}
+\index{apr\+\_\+os\+\_\+level@{apr\+\_\+os\+\_\+level}!misc.\+c@{misc.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+os\+\_\+level}{apr_os_level}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} {\bf apr\+\_\+oslevel\+\_\+e} apr\+\_\+os\+\_\+level = {\bf A\+P\+R\+\_\+\+W\+I\+N\+\_\+\+U\+NK}}\hypertarget{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}{}\label{misc_8c_a6f3751edc39de5f80b87c6ec5ebe0a07}

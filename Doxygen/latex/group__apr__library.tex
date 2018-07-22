@@ -1,0 +1,616 @@
+\hypertarget{group__apr__library}{}\section{Library initialization and termination}
+\label{group__apr__library}\index{Library initialization and termination@{Library initialization and termination}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__library_ga8f566b11a5d9ff6ba8ca300735c37a4e}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) apr\+\_\+initialize(\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{group__apr__library_gac8b5703810f2f9398da0ee2ef448aced}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) apr\+\_\+terminate(\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{group__apr__library_ga5bce35b8cafc88f9fbc9abfa1490265b}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) apr\+\_\+terminate2(\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char const $\ast$const $\ast$$\ast$ \hyperlink{group__apr__library_ga3f1a46fc4a1c2094aab2cb6bcff1b502}{argv}
+\item 
+char const $\ast$const char const $\ast$const $\ast$$\ast$ \hyperlink{group__apr__library_ga308c47150e0bdc75827dc1c2e2965066}{env}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+String and memory functions 
+
+\subsection{Function Documentation}
+\index{Library initialization and termination@{Library initialization and termination}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}!Library initialization and termination@{Library initialization and termination}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t) apr\+\_\+initialize(void)}{APR_DECLARE(apr_status_t) apr_initialize(void)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__library_ga8f566b11a5d9ff6ba8ca300735c37a4e}{}\label{group__apr__library_ga8f566b11a5d9ff6ba8ca300735c37a4e}
+Setup any A\+PR internal data structures. This M\+U\+ST be the first function called for any A\+PR library. It is safe to call apr\+\_\+initialize several times as long as apr\+\_\+terminate is called the same number of times. \begin{DoxyRemark}{Remarks}
+See apr\+\_\+app\+\_\+initialize if this is an application, rather than a library consumer of apr.
+\end{DoxyRemark}
+Set up an application with normalized argc, argv (and optionally env) in order to deal with platform-\/specific oddities, such as Win32 services, code pages and signals. This must be the first function called for any A\+PR program. 
+\begin{DoxyParams}{Parameters}
+{\em argc} & Pointer to the argc that may be corrected \\
+\hline
+{\em argv} & Pointer to the argv that may be corrected \\
+\hline
+{\em env} & Pointer to the env that may be corrected, may be N\+U\+LL \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+See apr\+\_\+initialize if this is a library consumer of apr. Otherwise, this call is identical to apr\+\_\+initialize, and must be closed with a call to apr\+\_\+terminate at the end of program execution.
+\end{DoxyRemark}
+Generate random bytes. 
+\begin{DoxyParams}{Parameters}
+{\em buf} & Buffer to fill with random bytes \\
+\hline
+{\em length} & Length of buffer in bytes \\
+\hline
+\end{DoxyParams}
+The problem with trying to output the entire iovec is that we cannot maintain the behaviour that a real writev would have. If we iterate over the iovec one at a time, we lose the atomic properties of \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}. The other option is to combine the entire iovec into one buffer that we could then send in one call to write(). This is not reasonable since we do not know how much data an iovec could contain.
+
+The only reasonable option, that maintains the semantics of a real \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}, is to only write the first iovec. Callers of file\+\_\+writev() must deal with partial writes as they normally would. If you want to ensure an entire iovec is written, use apr\+\_\+file\+\_\+writev\+\_\+full().
+\begin{DoxyCode}
+23 \{
+24     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+25 \}
+\end{DoxyCode}
+\index{Library initialization and termination@{Library initialization and termination}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}!Library initialization and termination@{Library initialization and termination}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E(void) apr\+\_\+terminate2(void)}{APR_DECLARE(void) apr_terminate2(void)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__library_ga5bce35b8cafc88f9fbc9abfa1490265b}{}\label{group__apr__library_ga5bce35b8cafc88f9fbc9abfa1490265b}
+Tear down any A\+PR internal data structures which aren\textquotesingle{}t torn down automatically, same as apr\+\_\+terminate \begin{DoxyRemark}{Remarks}
+An A\+PR program must call either the apr\+\_\+terminate or apr\+\_\+terminate2 function once it it has finished using A\+PR services. The A\+PR developers suggest using atexit(apr\+\_\+terminate) to ensure this is done. apr\+\_\+terminate2 exists to allow non-\/c language apps to tear down apr, while apr\+\_\+terminate is recommended from c language applications.
+\end{DoxyRemark}
+Destroy an allocator 
+\begin{DoxyParams}{Parameters}
+{\em allocator} & The allocator to be destroyed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Any memnodes not given back to the allocator prior to destroying will {\itshape not} be \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free()}d.
+\end{DoxyRemark}
+Free a list of blocks of mem, giving them back to the allocator. The list is typically terminated by a memnode with its next field set to N\+U\+LL. 
+\begin{DoxyParams}{Parameters}
+{\em allocator} & The allocator to give the mem back to \\
+\hline
+{\em memnode} & The memory node to return\\
+\hline
+\end{DoxyParams}
+Set the owner of the allocator 
+\begin{DoxyParams}{Parameters}
+{\em allocator} & The allocator to set the owner for \\
+\hline
+{\em pool} & The pool that is to own the allocator \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Typically pool is the highest level pool using the allocator
+\end{DoxyRemark}
+Set the current threshold at which the allocator should start giving blocks back to the system. 
+\begin{DoxyParams}{Parameters}
+{\em allocator} & The allocator to set the threshold on \\
+\hline
+{\em size} & The threshold. 0 == unlimited.\\
+\hline
+\end{DoxyParams}
+Set a mutex for the allocator to use 
+\begin{DoxyParams}{Parameters}
+{\em allocator} & The allocator to set the mutex for \\
+\hline
+{\em mutex} & The mutex\\
+\hline
+\end{DoxyParams}
+Like apr\+\_\+cstr\+\_\+split(), but append to existing {\itshape array} instead of creating a new one. Allocate the copied substrings in {\itshape pool} (i.\+e., caller decides whether or not to pass {\itshape array-\/$>$pool} as {\itshape pool}).
+
+\begin{DoxySince}{Since}
+New in 1.\+6
+\end{DoxySince}
+Associate a value with a key in a hash table. 
+\begin{DoxyParams}{Parameters}
+{\em ht} & The hash table \\
+\hline
+{\em key} & Pointer to the key \\
+\hline
+{\em klen} & Length of the key. Can be A\+P\+R\+\_\+\+H\+A\+S\+H\+\_\+\+K\+E\+Y\+\_\+\+S\+T\+R\+I\+NG to use the string length. \\
+\hline
+{\em val} & Value to associate with the key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If the value is N\+U\+LL the hash entry is deleted. The key is stored as is, and so must have a lifetime at least as long as the hash table\textquotesingle{}s pool.
+\end{DoxyRemark}
+Get the current entry\textquotesingle{}s details from the iteration state. 
+\begin{DoxyParams}{Parameters}
+{\em hi} & The iteration state \\
+\hline
+{\em key} & Return pointer for the pointer to the key. \\
+\hline
+{\em klen} & Return pointer for the key length. \\
+\hline
+{\em val} & Return pointer for the associated value. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+The return pointers should point to a variable that will be set to the corresponding data, or they may be N\+U\+LL if the data isn\textquotesingle{}t interesting.
+\end{DoxyRemark}
+Clear any key/value pairs in the hash table. 
+\begin{DoxyParams}{Parameters}
+{\em ht} & The hash table\\
+\hline
+\end{DoxyParams}
+Tear down all of the internal structures required to use pools \begin{DoxyRemark}{Remarks}
+Programs do N\+OT need to call this directly. A\+PR will call this automatically from apr\+\_\+terminate.
+\end{DoxyRemark}
+Clear all memory in the pool and run all the cleanups. This also destroys all subpools. 
+\begin{DoxyParams}{Parameters}
+{\em p} & The pool to clear \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+This does not actually free the memory, it just allows the pool to re-\/use this memory for the next allocation. 
+\end{DoxyRemark}
+\begin{DoxySeeAlso}{See also}
+apr\+\_\+pool\+\_\+destroy()
+\end{DoxySeeAlso}
+Debug version of apr\+\_\+pool\+\_\+clear. 
+\begin{DoxyParams}{Parameters}
+{\em p} & See\+: apr\+\_\+pool\+\_\+clear. \\
+\hline
+{\em file\+\_\+line} & Where the function is called from. This is usually A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+L\+I\+N\+E\+\_\+\+\_\+. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Only available when A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+B\+UG is defined. Call this directly if you have your apr\+\_\+pool\+\_\+clear calls in a wrapper function and wish to override the file\+\_\+line argument to reflect the caller of your wrapper function. If you do not have apr\+\_\+pool\+\_\+clear in a wrapper, trust the macro and don\textquotesingle{}t call apr\+\_\+pool\+\_\+destroy\+\_\+clear directly.
+\end{DoxyRemark}
+Destroy the pool. This takes similar action as apr\+\_\+pool\+\_\+clear() and then frees all the memory. 
+\begin{DoxyParams}{Parameters}
+{\em p} & The pool to destroy \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+This will actually free the memory
+\end{DoxyRemark}
+Debug version of apr\+\_\+pool\+\_\+destroy. 
+\begin{DoxyParams}{Parameters}
+{\em p} & See\+: apr\+\_\+pool\+\_\+destroy. \\
+\hline
+{\em file\+\_\+line} & Where the function is called from. This is usually A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+L\+I\+N\+E\+\_\+\+\_\+. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Only available when A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+B\+UG is defined. Call this directly if you have your apr\+\_\+pool\+\_\+destroy calls in a wrapper function and wish to override the file\+\_\+line argument to reflect the caller of your wrapper function. If you do not have apr\+\_\+pool\+\_\+destroy in a wrapper, trust the macro and don\textquotesingle{}t call apr\+\_\+pool\+\_\+destroy\+\_\+debug directly.
+\end{DoxyRemark}
+Set the function to be called when an allocation failure occurs. \begin{DoxyRemark}{Remarks}
+If the program wants A\+PR to exit on a memory allocation error, then this function can be called to set the callback to use (for performing cleanup and then exiting). If this function is not called, then A\+PR will return an error and expect the calling program to deal with the error accordingly.
+\end{DoxyRemark}
+Tag a pool (give it a name) 
+\begin{DoxyParams}{Parameters}
+{\em pool} & The pool to tag \\
+\hline
+{\em tag} & The tag\\
+\hline
+\end{DoxyParams}
+Register a function to be called when a pool is cleared or destroyed 
+\begin{DoxyParams}{Parameters}
+{\em p} & The pool to register the cleanup with \\
+\hline
+{\em data} & The data to pass to the cleanup function. \\
+\hline
+{\em plain\+\_\+cleanup} & The function to call when the pool is cleared or destroyed \\
+\hline
+{\em child\+\_\+cleanup} & The function to call when a child process is about to exec -\/ this function is called in the child, obviously!\\
+\hline
+\end{DoxyParams}
+Remove a previously registered cleanup function.
+
+The cleanup most recently registered with {\itshape p} having the same values of {\itshape data} and {\itshape cleanup} will be removed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & The pool to remove the cleanup from \\
+\hline
+{\em data} & The data of the registered cleanup \\
+\hline
+{\em cleanup} & The function to remove from cleanup \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+For some strange reason only the plain\+\_\+cleanup is handled by this function
+\end{DoxyRemark}
+Replace the child cleanup function of a previously registered cleanup.
+
+The cleanup most recently registered with {\itshape p} having the same values of {\itshape data} and {\itshape plain\+\_\+cleanup} will have the registered child cleanup function replaced with {\itshape child\+\_\+cleanup}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & The pool of the registered cleanup \\
+\hline
+{\em data} & The data of the registered cleanup \\
+\hline
+{\em plain\+\_\+cleanup} & The plain cleanup function of the registered cleanup \\
+\hline
+{\em child\+\_\+cleanup} & The function to register as the child cleanup\\
+\hline
+\end{DoxyParams}
+Run all registered child cleanups, in preparation for an exec() call in a forked child -- close files, etc., but {\itshape don\textquotesingle{}t} flush I/O buffers, {\itshape don\textquotesingle{}t} wait for subprocesses, and {\itshape don\textquotesingle{}t} free any memory.
+
+Initialize a P\+R\+NG state 
+\begin{DoxyParams}{Parameters}
+{\em g} & The P\+R\+NG state \\
+\hline
+{\em p} & The pool to allocate from \\
+\hline
+{\em pool\+\_\+hash} & Pool hash functions \\
+\hline
+{\em key\+\_\+hash} & Key hash functions \\
+\hline
+{\em prng\+\_\+hash} & P\+R\+NG hash functions\\
+\hline
+\end{DoxyParams}
+Mix the randomness pools. 
+\begin{DoxyParams}{Parameters}
+{\em g} & The P\+R\+NG state \\
+\hline
+{\em entropy\+\_\+} & Entropy buffer \\
+\hline
+{\em bytes} & Length of entropy\+\_\+ in bytes\\
+\hline
+\end{DoxyParams}
+Ensures that E bits of conditional entropy are mixed into the P\+R\+NG before any further randomness is extracted. 
+\begin{DoxyParams}{Parameters}
+{\em g} & The R\+NG state\\
+\hline
+\end{DoxyParams}
+Mix the randomness pools after forking. 
+\begin{DoxyParams}{Parameters}
+{\em proc} & The resulting process handle from apr\+\_\+proc\+\_\+fork() \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Call this in the child after forking to mix the randomness pools. Note that its generally a bad idea to fork a process with a real P\+R\+NG in it -\/ better to have the P\+R\+NG externally and get the randomness from there. However, if you really must do it, then you should supply all your entropy to all the P\+R\+N\+Gs -\/ don\textquotesingle{}t worry, they won\textquotesingle{}t produce the same output. 
+
+Note that apr\+\_\+proc\+\_\+fork() calls this for you, so only weird applications need ever call it themselves.
+\end{DoxyRemark}
+Free memory using the same mechanism as the skip list. 
+\begin{DoxyParams}{Parameters}
+{\em sl} & The skip list \\
+\hline
+{\em mem} & The object to free \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If a pool was provided to apr\+\_\+skiplist\+\_\+init(), memory will be added to a free list maintained with the skip list and be available to operations on the skip list or to other calls to apr\+\_\+skiplist\+\_\+alloc(). Otherwise, memory will be freed using the C standard library heap functions.
+\end{DoxyRemark}
+Set the comparison functions to be used for searching the skip list. 
+\begin{DoxyParams}{Parameters}
+{\em sl} & The skip list \\
+\hline
+{\em X\+X\+X1} & F\+I\+X\+ME \\
+\hline
+{\em X\+X\+X2} & F\+I\+X\+ME\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If existing comparison functions are being replaced, the index will be replaced during this call. That is a potentially expensive operation.
+\end{DoxyRemark}
+Set the indexing functions to the specified comparison functions and rebuild the index. 
+\begin{DoxyParams}{Parameters}
+{\em sl} & The skip list \\
+\hline
+{\em X\+X\+X1} & F\+I\+X\+ME \\
+\hline
+{\em X\+X\+X2} & F\+I\+X\+ME\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If an index already exists, it will not be replaced and the comparison functions will not be changed.
+\end{DoxyRemark}
+Remove all elements from the skip list. 
+\begin{DoxyParams}{Parameters}
+{\em sl} & The skip list \\
+\hline
+{\em myfree} & A function to be called for each removed element\\
+\hline
+\end{DoxyParams}
+Remove each element from the skip list. 
+\begin{DoxyParams}{Parameters}
+{\em sl} & The skip list \\
+\hline
+{\em myfree} & A function to be called for each removed element\\
+\hline
+\end{DoxyParams}
+Set a predefined maximum height for the skip list. 
+\begin{DoxyParams}{Parameters}
+{\em sl} & The skip list \\
+\hline
+{\em to} & The preheight to set, or a nul/negative value to disable. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+When a preheight is used, the height of each inserted element is computed randomly up to this preheight instead of the current skip list\textquotesingle{}s height plus one used by the default implementation. Using a preheight can probably ensure more fairness with long living elements (since with an adaptative height, former elements may have been created with a low height, hence a longest path to reach them while the skip list grows). On the other hand, the default behaviour (preheight $<$= 0) with a growing and decreasing maximum height is more adaptative/suitable for short living values. 
+\end{DoxyRemark}
+\begin{DoxyNote}{Note}
+Should be called before any insertion/add.
+\end{DoxyNote}
+Remove all elements from an array. 
+\begin{DoxyParams}{Parameters}
+{\em arr} & The array to remove all elements from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+As the underlying storage is allocated from a pool, no memory is freed by this operation, but is available for reuse.
+\end{DoxyRemark}
+Concatenate two arrays together. 
+\begin{DoxyParams}{Parameters}
+{\em dst} & The destination array, and the one to go first in the combined array \\
+\hline
+{\em src} & The source array to add to the destination array\\
+\hline
+\end{DoxyParams}
+Delete all of the elements from a table. 
+\begin{DoxyParams}{Parameters}
+{\em t} & The table to clear\\
+\hline
+\end{DoxyParams}
+Add a key/value pair to a table. If another element already exists with the same key, this will overwrite the old data. 
+\begin{DoxyParams}{Parameters}
+{\em t} & The table to add the data to. \\
+\hline
+{\em key} & The key to use (case does not matter) \\
+\hline
+{\em val} & The value to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+When adding data, this function makes a copy of both the key and the value.
+\end{DoxyRemark}
+Add a key/value pair to a table. If another element already exists with the same key, this will overwrite the old data. 
+\begin{DoxyParams}{Parameters}
+{\em t} & The table to add the data to. \\
+\hline
+{\em key} & The key to use (case does not matter) \\
+\hline
+{\em val} & The value to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+When adding data, this function does not make a copy of the key or the value, so care should be taken to ensure that the values will not change after they have been added..
+\end{DoxyWarning}
+Remove data from the table. 
+\begin{DoxyParams}{Parameters}
+{\em t} & The table to remove data from \\
+\hline
+{\em key} & The key of the data being removed (case does not matter)\\
+\hline
+\end{DoxyParams}
+Add data to a table by merging the value with data that has already been stored. The merging is done by concatenating the two values, separated by the string \char`\"{}, \char`\"{}. 
+\begin{DoxyParams}{Parameters}
+{\em t} & The table to search for the data \\
+\hline
+{\em key} & The key to merge data for (case does not matter) \\
+\hline
+{\em val} & The data to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If the key is not found, then this function acts like apr\+\_\+table\+\_\+add
+\end{DoxyRemark}
+Add data to a table by merging the value with data that has already been stored. The merging is done by concatenating the two values, separated by the string \char`\"{}, \char`\"{}. 
+\begin{DoxyParams}{Parameters}
+{\em t} & The table to search for the data \\
+\hline
+{\em key} & The key to merge data for (case does not matter) \\
+\hline
+{\em val} & The data to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If the key is not found, then this function acts like apr\+\_\+table\+\_\+addn
+\end{DoxyRemark}
+Add data to a table, regardless of whether there is another element with the same key. 
+\begin{DoxyParams}{Parameters}
+{\em t} & The table to add to \\
+\hline
+{\em key} & The key to use \\
+\hline
+{\em val} & The value to add. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+When adding data, this function makes a copy of both the key and the value.
+\end{DoxyRemark}
+Add data to a table, regardless of whether there is another element with the same key. 
+\begin{DoxyParams}{Parameters}
+{\em t} & The table to add to \\
+\hline
+{\em key} & The key to use \\
+\hline
+{\em val} & The value to add. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+When adding data, this function does not make a copy of the key or the value, so care should be taken to ensure that the values will not change after they have been added.
+\end{DoxyRemark}
+For each element in table b, either use setn or mergen to add the data to table a. Which method is used is determined by the flags passed in. 
+\begin{DoxyParams}{Parameters}
+{\em a} & The table to add the data to. \\
+\hline
+{\em b} & The table to iterate over, adding its data to table a \\
+\hline
+{\em flags} & How to add the table to table a. One of\+: A\+P\+R\+\_\+\+O\+V\+E\+R\+L\+A\+P\+\_\+\+T\+A\+B\+L\+E\+S\+\_\+\+S\+ET Use apr\+\_\+table\+\_\+setn A\+P\+R\+\_\+\+O\+V\+E\+R\+L\+A\+P\+\_\+\+T\+A\+B\+L\+E\+S\+\_\+\+M\+E\+R\+GE Use apr\+\_\+table\+\_\+mergen A\+P\+R\+\_\+\+O\+V\+E\+R\+L\+A\+P\+\_\+\+T\+A\+B\+L\+E\+S\+\_\+\+A\+DD Use apr\+\_\+table\+\_\+addn \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+When merging duplicates, the two values are concatenated, separated by the string \char`\"{}, \char`\"{}. 
+
+This function is highly optimized, and uses less memory and C\+PU cycles than a function that just loops through table b calling other functions. Conceptually, apr\+\_\+table\+\_\+overlap does this\+:
+\end{DoxyRemark}
+
+\begin{DoxyPre}
+ \hyperlink{structapr__array__header__t}{apr\_array\_header\_t} *barr = apr\_table\_elts(b);
+ \hyperlink{structapr__table__entry__t}{apr\_table\_entry\_t} *belt = (\hyperlink{structapr__table__entry__t}{apr\_table\_entry\_t} *)barr->elts;
+ int i;\end{DoxyPre}
+
+
+
+\begin{DoxyPre} for (i = 0; i < barr->nelts; ++i) \{
+     if (flags \& APR\_OVERLAP\_TABLES\_MERGE) \{
+         apr\_table\_mergen(a, belt[i].key, belt[i].val);
+     \}
+     else if (flags \& APR\_OVERLAP\_TABLES\_ADD) \{
+         apr\_table\_addn(a, belt[i].key, belt[i].val);
+     \}
+     else \{
+         apr\_table\_setn(a, belt[i].key, belt[i].val);
+     \}
+ \}
+\end{DoxyPre}
+
+
+Except that it is more efficient (less space and cpu-\/time) especially when b has many elements.
+
+Notice the assumptions on the keys and values in b -- they must be in an ancestor of a\textquotesingle{}s pool. In practice b and a are usually from the same pool.
+
+Eliminate redundant entries in a table by either overwriting or merging duplicates.
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & Table. \\
+\hline
+{\em flags} & A\+P\+R\+\_\+\+O\+V\+E\+R\+L\+A\+P\+\_\+\+T\+A\+B\+L\+E\+S\+\_\+\+M\+E\+R\+GE to merge, or A\+P\+R\+\_\+\+O\+V\+E\+R\+L\+A\+P\+\_\+\+T\+A\+B\+L\+E\+S\+\_\+\+S\+ET to overwrite, or A\+P\+R\+\_\+\+O\+V\+E\+R\+L\+A\+P\+\_\+\+T\+A\+B\+L\+E\+S\+\_\+\+A\+DD to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+When merging duplicates, the two values are concatenated, separated by the string \char`\"{}, \char`\"{}.
+\end{DoxyRemark}
+force the current thread to yield the processor
+
+Register an other\+\_\+child -- a child associated to its registered maintence callback. This callback is invoked when the process dies, is disconnected or disappears. 
+\begin{DoxyParams}{Parameters}
+{\em proc} & The child process to register. \\
+\hline
+{\em maintenance} & maintenance is a function that is invoked with a reason and the data pointer passed here. \\
+\hline
+{\em data} & Opaque context data passed to the maintenance function. \\
+\hline
+{\em write\+\_\+fd} & An fd that is probed for writing. If it is ever unwritable then the maintenance is invoked with reason O\+C\+\_\+\+R\+E\+A\+S\+O\+N\+\_\+\+U\+N\+W\+R\+I\+T\+A\+B\+LE. \\
+\hline
+{\em p} & The pool to use for allocating memory. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Bug}
+\item[\hyperlink{bug__bug000018}{Bug}]write\+\_\+fd duplicates the proc-\/$>$out stream, it\textquotesingle{}s really redundant and should be replaced in the A\+PR 1.\+0 A\+PI with a bitflag of which proc-\/$>$in/out/err handles should be health checked. 
+
+no platform currently tests the pipes health. \end{DoxyRefDesc}
+
+
+Stop watching the specified other child. 
+\begin{DoxyParams}{Parameters}
+{\em data} & The data to pass to the maintenance function. This is used to find the process to unregister. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Since this can be called by a maintenance function while we\textquotesingle{}re scanning the other\+\_\+children list, all scanners should protect themself by loading ocr-\/$>$next before calling any maintenance function.
+\end{DoxyWarning}
+Test one specific other child processes and invoke the maintenance callback with the appropriate reason code, if still running, or the appropriate reason code if the process is no longer healthy. 
+\begin{DoxyParams}{Parameters}
+{\em ocr} & The registered other child \\
+\hline
+{\em reason} & The reason code (e.\+g. A\+P\+R\+\_\+\+O\+C\+\_\+\+R\+E\+A\+S\+O\+N\+\_\+\+R\+E\+S\+T\+A\+RT) if still running\\
+\hline
+\end{DoxyParams}
+Test all registered other child processes and invoke the maintenance callback with the appropriate reason code, if still running, or the appropriate reason code if the process is no longer healthy. 
+\begin{DoxyParams}{Parameters}
+{\em reason} & The reason code (e.\+g. A\+P\+R\+\_\+\+O\+C\+\_\+\+R\+E\+A\+S\+O\+N\+\_\+\+R\+E\+S\+T\+A\+RT) to running processes\\
+\hline
+\end{DoxyParams}
+Register a process to be killed when a pool dies. 
+\begin{DoxyParams}{Parameters}
+{\em a} & The pool to use to define the processes lifetime \\
+\hline
+{\em proc} & The process to register \\
+\hline
+{\em how} & How to kill the process, one of\+: 
+\begin{DoxyPre}
+        APR\_KILL\_NEVER         -- process is never sent any signals
+        APR\_KILL\_ALWAYS        -- process is sent SIGKILL on \hyperlink{structapr__pool__t}{apr\_pool\_t} cleanup
+        APR\_KILL\_AFTER\_TIMEOUT -- SIGTERM, wait 3 seconds, SIGKILL
+        APR\_JUST\_WAIT          -- wait forever for the process to complete
+        APR\_KILL\_ONLY\_ONCE     -- send SIGTERM and then wait
+\end{DoxyPre}
+ \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+33 \{
+34     atomic\_sub((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} *)\hyperlink{group__MOD__DAV_gac8d0feaae3f1c6b0eac72aaa9af557c1}{mem},(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})\hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val});
+35 \}
+\end{DoxyCode}
+\index{Library initialization and termination@{Library initialization and termination}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!Library initialization and termination@{Library initialization and termination}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(void) apr\+\_\+terminate(void)}{APR_DECLARE_NONSTD(void) apr_terminate(void)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__library_gac8b5703810f2f9398da0ee2ef448aced}{}\label{group__apr__library_gac8b5703810f2f9398da0ee2ef448aced}
+Tear down any A\+PR internal data structures which aren\textquotesingle{}t torn down automatically. apr\+\_\+terminate must be called once for every call to apr\+\_\+initialize() or apr\+\_\+app\+\_\+initialize(). \begin{DoxyRemark}{Remarks}
+An A\+PR program must call this function at termination once it has stopped using A\+PR services. The A\+PR developers suggest using atexit to ensure this is called. When using A\+PR from a language other than C that has problems with the calling convention, use apr\+\_\+terminate2() instead. 
+\end{DoxyRemark}
+
+\begin{DoxyCode}
+174 \{
+175     APP\_DATA *app\_data;
+176 
+177     \textcolor{comment}{/* Get our instance data for shutting down. */}
+178     \textcolor{keywordflow}{if} (!(app\_data = (APP\_DATA*) get\_app\_data(\hyperlink{srclib_2apr_2misc_2netware_2libprews_8c_a46b9eb87e97061bade6fd03e5004ebda}{gLibId})))
+179         \textcolor{keywordflow}{return};
+180 
+181     \textcolor{comment}{/* Unregister the NLM. If it is not registered}
+182 \textcolor{comment}{        then just return. */}
+183     \textcolor{keywordflow}{if} (\hyperlink{srclib_2apr_2misc_2netware_2libprews_8c_a95d95c17e812246ac381d1e59010d0b7}{unregister\_NLM}(app\_data->gs\_nlmhandle) != 0) \{
+184         \textcolor{keywordflow}{return};
+185     \}
+186 
+187     \textcolor{comment}{/* apr\_pool\_terminate() is being called from the }
+188 \textcolor{comment}{        library shutdown code since the memory resources}
+189 \textcolor{comment}{        belong to the library rather than the application */}
+190 
+191     \textcolor{comment}{/* Just clean up the memory for the app that is going}
+192 \textcolor{comment}{        away. */}
+193     netware\_pool\_proc\_cleanup ();
+194 
+195 \textcolor{preprocessor}{#ifdef USE\_WINSOCK}
+196     UnregisterAppWithWinSock (app\_data->gs\_nlmhandle);
+197 \textcolor{preprocessor}{#endif}
+198 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=341pt]{group__apr__library_gac8b5703810f2f9398da0ee2ef448aced_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{Library initialization and termination@{Library initialization and termination}!argv@{argv}}
+\index{argv@{argv}!Library initialization and termination@{Library initialization and termination}}
+\subsubsection[{\texorpdfstring{argv}{argv}}]{\setlength{\rightskip}{0pt plus 5cm}char const$\ast$ const$\ast$ $\ast$ argv}\hypertarget{group__apr__library_ga3f1a46fc4a1c2094aab2cb6bcff1b502}{}\label{group__apr__library_ga3f1a46fc4a1c2094aab2cb6bcff1b502}
+\index{Library initialization and termination@{Library initialization and termination}!env@{env}}
+\index{env@{env}!Library initialization and termination@{Library initialization and termination}}
+\subsubsection[{\texorpdfstring{env}{env}}]{\setlength{\rightskip}{0pt plus 5cm}char const$\ast$ const char const$\ast$ const$\ast$ $\ast$ env}\hypertarget{group__apr__library_ga308c47150e0bdc75827dc1c2e2965066}{}\label{group__apr__library_ga308c47150e0bdc75827dc1c2e2965066}

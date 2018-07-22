@@ -1,0 +1,54 @@
+\hypertarget{util__md5_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/util\+\_\+md5.c File Reference}
+\label{util__md5_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/util\+\_\+md5.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/util\+\_\+md5.\+c}}
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+ebcdic.\+h\char`\"{}}\\*
+Include dependency graph for util\+\_\+md5.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{util__md5_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{util__md5_8c_a06b3fd33a5a08e9247c55ecf018e8e67}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (char $\ast$)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{util\+\_\+md5.\+c@{util\+\_\+md5.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+md5.\+c@{util\+\_\+md5.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(char $\ast$)}{AP_DECLARE(char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__md5_8c_a06b3fd33a5a08e9247c55ecf018e8e67}{}\label{util__md5_8c_a06b3fd33a5a08e9247c55ecf018e8e67}
+
+\begin{DoxyCode}
+54 \{
+55     \hyperlink{structapr__md5__ctx__t}{apr\_md5\_ctx\_t} my\_md5;
+56     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} \hyperlink{apr__random_8c_a1961406c0af51085f634defe740cbf52}{hash}[\hyperlink{group__APR__MD5_ga0bb65e74ccdddca6ef75e886084e52dc}{APR\_MD5\_DIGESTSIZE}];
+57     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result}[2 * \hyperlink{group__APR__MD5_ga0bb65e74ccdddca6ef75e886084e52dc}{APR\_MD5\_DIGESTSIZE} + 1];
+58 
+59     \textcolor{comment}{/*}
+60 \textcolor{comment}{     * Take the MD5 hash of the string argument.}
+61 \textcolor{comment}{     */}
+62 
+63     apr\_md5\_init(&my\_md5);
+64 \textcolor{preprocessor}{#if APR\_CHARSET\_EBCDIC}
+65     apr\_md5\_set\_xlate(&my\_md5, ap\_hdrs\_to\_ascii);
+66 \textcolor{preprocessor}{#endif}
+67     apr\_md5\_update(&my\_md5, \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})\hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length});
+68     apr\_md5\_final(hash, &my\_md5);
+69 
+70     ap\_bin2hex(hash, \hyperlink{group__APR__MD5_ga0bb65e74ccdddca6ef75e886084e52dc}{APR\_MD5\_DIGESTSIZE}, result);
+71 
+72     \textcolor{keywordflow}{return} apr\_pstrndup(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, result, \hyperlink{group__APR__MD5_ga0bb65e74ccdddca6ef75e886084e52dc}{APR\_MD5\_DIGESTSIZE}*2);
+73 \}
+\end{DoxyCode}

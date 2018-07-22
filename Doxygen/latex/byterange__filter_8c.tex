@@ -1,0 +1,310 @@
+\hypertarget{byterange__filter_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http/byterange\+\_\+filter.c File Reference}
+\label{byterange__filter_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http/byterange\+\_\+filter.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http/byterange\+\_\+filter.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+vhost.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+date.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+charset.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+ebcdic.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+core.\+h\char`\"{}}\\*
+Include dependency graph for byterange\+\_\+filter.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{byterange__filter_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structindexes__t}{indexes\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{byterange__filter_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}~/$\ast$ for sscanf $\ast$/
+\item 
+\#define \hyperlink{byterange__filter_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{byterange__filter_8c_a26faf43e3f61783d8b7aa928c0a41a11}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}
+\item 
+\#define \hyperlink{byterange__filter_8c_aa102062bdf2891a2646949953625b095}{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+A\+N\+G\+ES}~200
+\item 
+\#define \hyperlink{byterange__filter_8c_a512f1f7aacd13bd1c2dcfedfb89ed832}{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+O\+V\+E\+R\+L\+A\+PS}~20
+\item 
+\#define \hyperlink{byterange__filter_8c_afed751504c728ac461351d15ea2f82e8}{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+E\+V\+E\+R\+S\+A\+LS}~20
+\item 
+\#define \hyperlink{byterange__filter_8c_a0d9f76c64a3ef9a1b3408578b69bad3e}{M\+A\+X\+\_\+\+P\+R\+E\+A\+L\+L\+O\+C\+\_\+\+R\+A\+N\+G\+ES}~100
+\item 
+\#define \hyperlink{byterange__filter_8c_a4d11f2be926e031bad5eb04cec821df4}{B\+Y\+T\+E\+R\+A\+N\+G\+E\+\_\+\+F\+MT}~\char`\"{}\%\char`\"{} \hyperlink{group__apr__platform_gad71d0d5a325d1aedeb6328d6bdacac76}{A\+P\+R\+\_\+\+O\+F\+F\+\_\+\+T\+\_\+\+F\+MT} \char`\"{}-\/\%\char`\"{} \hyperlink{group__apr__platform_gad71d0d5a325d1aedeb6328d6bdacac76}{A\+P\+R\+\_\+\+O\+F\+F\+\_\+\+T\+\_\+\+F\+MT} \char`\"{}/\%\char`\"{} \hyperlink{group__apr__platform_gad71d0d5a325d1aedeb6328d6bdacac76}{A\+P\+R\+\_\+\+O\+F\+F\+\_\+\+T\+\_\+\+F\+MT}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structindexes__t}{indexes\+\_\+t} \hyperlink{byterange__filter_8c_adf49729845d20911988e37b300b83d7a}{indexes\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{byterange__filter_8c_a37ae841b95b3db4fe711e6d0009a891c}{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE} (\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a09b6b093e95da29ef33ae68c3a1dc9aa}{http})
+\item 
+\hyperlink{byterange__filter_8c_a1e18f4ca36424427873818ee2339f982}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+O\+V\+E\+R\+L\+A\+PS@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+O\+V\+E\+R\+L\+A\+PS}}
+\index{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+O\+V\+E\+R\+L\+A\+PS@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+O\+V\+E\+R\+L\+A\+PS}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+O\+V\+E\+R\+L\+A\+PS}{AP_DEFAULT_MAX_OVERLAPS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+O\+V\+E\+R\+L\+A\+PS~20}\hypertarget{byterange__filter_8c_a512f1f7aacd13bd1c2dcfedfb89ed832}{}\label{byterange__filter_8c_a512f1f7aacd13bd1c2dcfedfb89ed832}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+A\+N\+G\+ES@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+A\+N\+G\+ES}}
+\index{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+A\+N\+G\+ES@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+A\+N\+G\+ES}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+A\+N\+G\+ES}{AP_DEFAULT_MAX_RANGES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+A\+N\+G\+ES~200}\hypertarget{byterange__filter_8c_aa102062bdf2891a2646949953625b095}{}\label{byterange__filter_8c_aa102062bdf2891a2646949953625b095}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+E\+V\+E\+R\+S\+A\+LS@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+E\+V\+E\+R\+S\+A\+LS}}
+\index{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+E\+V\+E\+R\+S\+A\+LS@{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+E\+V\+E\+R\+S\+A\+LS}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+E\+V\+E\+R\+S\+A\+LS}{AP_DEFAULT_MAX_REVERSALS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+A\+X\+\_\+\+R\+E\+V\+E\+R\+S\+A\+LS~20}\hypertarget{byterange__filter_8c_afed751504c728ac461351d15ea2f82e8}{}\label{byterange__filter_8c_afed751504c728ac461351d15ea2f82e8}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}{APR_WANT_MEMFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}\hypertarget{byterange__filter_8c_a26faf43e3f61783d8b7aa928c0a41a11}{}\label{byterange__filter_8c_a26faf43e3f61783d8b7aa928c0a41a11}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}{APR_WANT_STDIO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO~/$\ast$ for sscanf $\ast$/}\hypertarget{byterange__filter_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{}\label{byterange__filter_8c_a4f3ace9204c571a34c0b2b9bd23b1133}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{byterange__filter_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{byterange__filter_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!B\+Y\+T\+E\+R\+A\+N\+G\+E\+\_\+\+F\+MT@{B\+Y\+T\+E\+R\+A\+N\+G\+E\+\_\+\+F\+MT}}
+\index{B\+Y\+T\+E\+R\+A\+N\+G\+E\+\_\+\+F\+MT@{B\+Y\+T\+E\+R\+A\+N\+G\+E\+\_\+\+F\+MT}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{B\+Y\+T\+E\+R\+A\+N\+G\+E\+\_\+\+F\+MT}{BYTERANGE_FMT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+Y\+T\+E\+R\+A\+N\+G\+E\+\_\+\+F\+MT~\char`\"{}\%\char`\"{} {\bf A\+P\+R\+\_\+\+O\+F\+F\+\_\+\+T\+\_\+\+F\+MT} \char`\"{}-\/\%\char`\"{} {\bf A\+P\+R\+\_\+\+O\+F\+F\+\_\+\+T\+\_\+\+F\+MT} \char`\"{}/\%\char`\"{} {\bf A\+P\+R\+\_\+\+O\+F\+F\+\_\+\+T\+\_\+\+F\+MT}}\hypertarget{byterange__filter_8c_a4d11f2be926e031bad5eb04cec821df4}{}\label{byterange__filter_8c_a4d11f2be926e031bad5eb04cec821df4}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!M\+A\+X\+\_\+\+P\+R\+E\+A\+L\+L\+O\+C\+\_\+\+R\+A\+N\+G\+ES@{M\+A\+X\+\_\+\+P\+R\+E\+A\+L\+L\+O\+C\+\_\+\+R\+A\+N\+G\+ES}}
+\index{M\+A\+X\+\_\+\+P\+R\+E\+A\+L\+L\+O\+C\+\_\+\+R\+A\+N\+G\+ES@{M\+A\+X\+\_\+\+P\+R\+E\+A\+L\+L\+O\+C\+\_\+\+R\+A\+N\+G\+ES}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+P\+R\+E\+A\+L\+L\+O\+C\+\_\+\+R\+A\+N\+G\+ES}{MAX_PREALLOC_RANGES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+P\+R\+E\+A\+L\+L\+O\+C\+\_\+\+R\+A\+N\+G\+ES~100}\hypertarget{byterange__filter_8c_a0d9f76c64a3ef9a1b3408578b69bad3e}{}\label{byterange__filter_8c_a0d9f76c64a3ef9a1b3408578b69bad3e}
+
+
+\subsection{Typedef Documentation}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!indexes\+\_\+t@{indexes\+\_\+t}}
+\index{indexes\+\_\+t@{indexes\+\_\+t}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{indexes\+\_\+t}{indexes_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf indexes\+\_\+t}  {\bf indexes\+\_\+t}}\hypertarget{byterange__filter_8c_adf49729845d20911988e37b300b83d7a}{}\label{byterange__filter_8c_adf49729845d20911988e37b300b83d7a}
+
+
+\subsection{Function Documentation}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}}
+\index{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD@{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+T\+D(apr\+\_\+status\+\_\+t)}{AP_CORE_DECLARE_NONSTD(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{byterange__filter_8c_a1e18f4ca36424427873818ee2339f982}{}\label{byterange__filter_8c_a1e18f4ca36424427873818ee2339f982}
+
+\begin{DoxyCode}
+432 \{
+433     \hyperlink{structrequest__rec}{request\_rec} *\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r} = \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}->r;
+434     \hyperlink{structconn__rec}{conn\_rec} *\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c} = r->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection};
+435     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+436     \hyperlink{structapr__bucket__brigade}{apr\_bucket\_brigade} *bsend;
+437     \hyperlink{structapr__bucket__brigade}{apr\_bucket\_brigade} *tmpbb;
+438     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} range\_start;
+439     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} range\_end;
+440     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} clength = 0;
+441     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+442     \textcolor{keywordtype}{int} \hyperlink{pcregrep_8txt_a1fdac88190c7a3aca2735f0bf49094dd}{found} = 0;
+443     \textcolor{keywordtype}{int} num\_ranges;
+444     \textcolor{keywordtype}{char} *bound\_head = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+445     \hyperlink{structapr__array__header__t}{apr\_array\_header\_t} *indexes;
+446     \hyperlink{structindexes__t}{indexes\_t} *idx;
+447     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+448     \textcolor{keywordtype}{int} original\_status;
+449     \textcolor{keywordtype}{int} max\_ranges, max\_overlaps, max\_reversals;
+450     \textcolor{keywordtype}{int} overlaps = 0, reversals = 0;
+451     \hyperlink{structcore__dir__config}{core\_dir\_config} *core\_conf = \hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(r->
+      \hyperlink{structrequest__rec_a0935ac19a61c462c8986898b4c30547d}{per\_dir\_config});
+452 
+453     max\_ranges = ( (core\_conf->\hyperlink{structcore__dir__config_a3f48f0b0411dec35773f9125404aaad1}{max\_ranges} >= 0 || core\_conf->
+      \hyperlink{structcore__dir__config_a3f48f0b0411dec35773f9125404aaad1}{max\_ranges} == \hyperlink{http__core_8h_a9f8235972c7f15565196d52894feff19}{AP\_MAXRANGES\_UNLIMITED})
+454                    ? core\_conf->\hyperlink{structcore__dir__config_a3f48f0b0411dec35773f9125404aaad1}{max\_ranges}
+455                    : \hyperlink{byterange__filter_8c_aa102062bdf2891a2646949953625b095}{AP\_DEFAULT\_MAX\_RANGES} );
+456     max\_overlaps = ( (core\_conf->\hyperlink{structcore__dir__config_a10485efc86e22fcdf83c8b5e697bb4cb}{max\_overlaps} >= 0 || core\_conf->
+      \hyperlink{structcore__dir__config_a10485efc86e22fcdf83c8b5e697bb4cb}{max\_overlaps} == \hyperlink{http__core_8h_a9f8235972c7f15565196d52894feff19}{AP\_MAXRANGES\_UNLIMITED})
+457                   ? core\_conf->\hyperlink{structcore__dir__config_a10485efc86e22fcdf83c8b5e697bb4cb}{max\_overlaps}
+458                   : \hyperlink{byterange__filter_8c_a512f1f7aacd13bd1c2dcfedfb89ed832}{AP\_DEFAULT\_MAX\_OVERLAPS} );
+459     max\_reversals = ( (core\_conf->\hyperlink{structcore__dir__config_a3eb005ca5a1025254338c72fcd2c55a0}{max\_reversals} >= 0 || core\_conf->
+      \hyperlink{structcore__dir__config_a3eb005ca5a1025254338c72fcd2c55a0}{max\_reversals} == \hyperlink{http__core_8h_a9f8235972c7f15565196d52894feff19}{AP\_MAXRANGES\_UNLIMITED})
+460                   ? core\_conf->\hyperlink{structcore__dir__config_a3eb005ca5a1025254338c72fcd2c55a0}{max\_reversals}
+461                   : \hyperlink{byterange__filter_8c_afed751504c728ac461351d15ea2f82e8}{AP\_DEFAULT\_MAX\_REVERSALS} );
+462     \textcolor{comment}{/*}
+463 \textcolor{comment}{     * Iterate through the brigade until reaching EOS or a bucket with}
+464 \textcolor{comment}{     * unknown length.}
+465 \textcolor{comment}{     */}
+466     \textcolor{keywordflow}{for} (e = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb});
+467          (e != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}) && !
+      \hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(e)
+468           && e->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} != (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})-1);
+469          e = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(e)) \{
+470         clength += e->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+471     \}
+472 
+473     \textcolor{comment}{/*}
+474 \textcolor{comment}{     * Don't attempt to do byte range work if this brigade doesn't}
+475 \textcolor{comment}{     * contain an EOS, or if any of the buckets has an unknown length;}
+476 \textcolor{comment}{     * this avoids the cases where it is expensive to perform}
+477 \textcolor{comment}{     * byteranging (i.e. may require arbitrary amounts of memory).}
+478 \textcolor{comment}{     */}
+479     \textcolor{keywordflow}{if} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(e) || clength <= 0) \{
+480         ap\_remove\_output\_filter(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f});
+481         \textcolor{keywordflow}{return} ap\_pass\_brigade(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}->next, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb});
+482     \}
+483 
+484     original\_status = r->\hyperlink{structrequest__rec_a09b59ad2fa51be73efea7369b5484eb0}{status};
+485     num\_ranges = ap\_set\_byterange(r, clength, &indexes, &overlaps, &reversals);
+486 
+487     \textcolor{comment}{/* No Ranges or we hit a limit? We have nothing to do, get out of the way. */}
+488     \textcolor{keywordflow}{if} (num\_ranges == 0 ||
+489         (max\_ranges >= 0 && num\_ranges > max\_ranges) ||
+490         (max\_overlaps >= 0 && overlaps > max\_overlaps) ||
+491         (max\_reversals >= 0 && reversals > max\_reversals)) \{
+492         r->\hyperlink{structrequest__rec_a09b59ad2fa51be73efea7369b5484eb0}{status} = original\_status;
+493         ap\_remove\_output\_filter(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f});
+494         \textcolor{keywordflow}{return} ap\_pass\_brigade(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}->next, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb});
+495     \}
+496 
+497     \textcolor{comment}{/* this brigade holds what we will be sending */}
+498     bsend = apr\_brigade\_create(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, c->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+499 
+500     \textcolor{keywordflow}{if} (num\_ranges < 0)
+501         \textcolor{keywordflow}{return} send\_416(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}, bsend);
+502 
+503     \textcolor{keywordflow}{if} (num\_ranges > 1) \{
+504         \textcolor{comment}{/* Is ap\_make\_content\_type required here? */}
+505         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *orig\_ct = ap\_make\_content\_type(r, r->\hyperlink{structrequest__rec_a539f8aba497328ed3e9c4628b0b7b4b0}{content\_type});
+506 
+507         ap\_set\_content\_type(r, apr\_pstrcat(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{stringliteral}{"multipart"},
+508                                            use\_range\_x(r) ? \textcolor{stringliteral}{"/x-"} : \textcolor{stringliteral}{"/"},
+509                                            \textcolor{stringliteral}{"byteranges; boundary="},
+510                                            \hyperlink{group__MOD__CORE_gab5961ea801f827be5ef4dd64da4bfbc3}{ap\_multipart\_boundary}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}));
+511 
+512         \textcolor{keywordflow}{if} (orig\_ct) \{
+513             bound\_head = apr\_pstrcat(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool},
+514                                      \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF} \textcolor{stringliteral}{"--"}, \hyperlink{group__MOD__CORE_gab5961ea801f827be5ef4dd64da4bfbc3}{ap\_multipart\_boundary},
+515                                      \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF} \textcolor{stringliteral}{"Content-type: "},
+516                                      orig\_ct,
+517                                      \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF} \textcolor{stringliteral}{"Content-range: bytes "},
+518                                      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+519         \}
+520         \textcolor{keywordflow}{else} \{
+521             \textcolor{comment}{/* if we have no type for the content, do our best */}
+522             bound\_head = apr\_pstrcat(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool},
+523                                      \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF} \textcolor{stringliteral}{"--"}, \hyperlink{group__MOD__CORE_gab5961ea801f827be5ef4dd64da4bfbc3}{ap\_multipart\_boundary},
+524                                      \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF} \textcolor{stringliteral}{"Content-range: bytes "},
+525                                      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+526         \}
+527         \hyperlink{group__APACHE__CORE__EBCDIC_gab64dbae9ff27269fd9e52c43cb142c16}{ap\_xlate\_proto\_to\_ascii}(bound\_head, strlen(bound\_head));
+528     \}
+529 
+530     tmpbb = apr\_brigade\_create(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, c->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+531 
+532     idx = (\hyperlink{structindexes__t}{indexes\_t} *)indexes->\hyperlink{structapr__array__header__t_af8462fa2a1ddf6406c66cd3dd441a269}{elts};
+533     for (i = 0; i < indexes->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}; i++, idx++) \{
+534         range\_start = idx->\hyperlink{structindexes__t_a9e2e2b96d05ea4854f9fb3884f6ea114}{start};
+535         range\_end = idx->\hyperlink{structindexes__t_aff00098b96f73eea80faa013145350db}{end};
+536 
+537         rv = copy\_brigade\_range(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, tmpbb, range\_start, range\_end);
+538         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} ) \{
+539             \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, rv, r, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(01584)
+540                           \textcolor{stringliteral}{"copy\_brigade\_range() failed [%"} \hyperlink{group__apr__platform_gad71d0d5a325d1aedeb6328d6bdacac76}{APR\_OFF\_T\_FMT}
+541                           \textcolor{stringliteral}{"-%"} \hyperlink{group__apr__platform_gad71d0d5a325d1aedeb6328d6bdacac76}{APR\_OFF\_T\_FMT} \textcolor{stringliteral}{",%"} \hyperlink{group__apr__platform_gad71d0d5a325d1aedeb6328d6bdacac76}{APR\_OFF\_T\_FMT} \textcolor{stringliteral}{"]"},
+542                           range\_start, range\_end, clength);
+543             \textcolor{keywordflow}{continue};
+544         \}
+545         found = 1;
+546 
+547         \textcolor{comment}{/*}
+548 \textcolor{comment}{         * For single range requests, we must produce Content-Range header.}
+549 \textcolor{comment}{         * Otherwise, we need to produce the multipart boundaries.}
+550 \textcolor{comment}{         */}
+551         \textcolor{keywordflow}{if} (num\_ranges == 1) \{
+552             apr\_table\_setn(r->\hyperlink{structrequest__rec_a0fd560d8d1118304dc33df8ee99efc04}{headers\_out}, \textcolor{stringliteral}{"Content-Range"},
+553                            apr\_psprintf(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{stringliteral}{"bytes "} \hyperlink{byterange__filter_8c_a4d11f2be926e031bad5eb04cec821df4}{BYTERANGE\_FMT},
+554                                         range\_start, range\_end, clength));
+555         \}
+556         \textcolor{keywordflow}{else} \{
+557             \textcolor{keywordtype}{char} *ts;
+558 
+559             e = apr\_bucket\_pool\_create(bound\_head, strlen(bound\_head),
+560                                        r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, c->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+561             \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bsend, e);
+562 
+563             ts = apr\_psprintf(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \hyperlink{byterange__filter_8c_a4d11f2be926e031bad5eb04cec821df4}{BYTERANGE\_FMT} \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF} 
+      \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF},
+564                               range\_start, range\_end, clength);
+565             \hyperlink{group__APACHE__CORE__EBCDIC_gab64dbae9ff27269fd9e52c43cb142c16}{ap\_xlate\_proto\_to\_ascii}(ts, strlen(ts));
+566             e = apr\_bucket\_pool\_create(ts, strlen(ts), r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool},
+567                                        c->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+568             \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bsend, e);
+569         \}
+570 
+571         \hyperlink{group__APR__Util__Bucket__Brigades_ga7cecbc89be912ce9ab24c889eb8f955b}{APR\_BRIGADE\_CONCAT}(bsend, tmpbb);
+572         \textcolor{keywordflow}{if} (i && !(i & 0x1F)) \{
+573             \textcolor{comment}{/*}
+574 \textcolor{comment}{             * Every now and then, pass what we have down the filter chain.}
+575 \textcolor{comment}{             * In this case, the content-length filter cannot calculate and}
+576 \textcolor{comment}{             * set the content length and we must remove any Content-Length}
+577 \textcolor{comment}{             * header already present.}
+578 \textcolor{comment}{             */}
+579             apr\_table\_unset(r->\hyperlink{structrequest__rec_a0fd560d8d1118304dc33df8ee99efc04}{headers\_out}, \textcolor{stringliteral}{"Content-Length"});
+580             \textcolor{keywordflow}{if} ((rv = ap\_pass\_brigade(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}->next, bsend)) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS})
+581                 \textcolor{keywordflow}{return} rv;
+582             apr\_brigade\_cleanup(bsend);
+583         \}
+584     \}
+585 
+586     \textcolor{keywordflow}{if} (found == 0) \{
+587         \textcolor{comment}{/* bsend is assumed to be empty if we get here. */}
+588         \textcolor{keywordflow}{return} send\_416(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}, bsend);
+589     \}
+590 
+591     \textcolor{keywordflow}{if} (num\_ranges > 1) \{
+592         \textcolor{keywordtype}{char} *\hyperlink{group__apr__strings_ga87c7e3f3f70b6e7de10e3f56e3f4d7a4}{end};
+593 
+594         \textcolor{comment}{/* add the final boundary */}
+595         end = apr\_pstrcat(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF} \textcolor{stringliteral}{"--"}, \hyperlink{group__MOD__CORE_gab5961ea801f827be5ef4dd64da4bfbc3}{ap\_multipart\_boundary}, \textcolor{stringliteral}{"--"} 
+      \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{CRLF},
+596                           \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+597         \hyperlink{group__APACHE__CORE__EBCDIC_gab64dbae9ff27269fd9e52c43cb142c16}{ap\_xlate\_proto\_to\_ascii}(end, strlen(end));
+598         e = apr\_bucket\_pool\_create(end, strlen(end), r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, c->
+      \hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+599         \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bsend, e);
+600     \}
+601 
+602     e = apr\_bucket\_eos\_create(c->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+603     \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bsend, e);
+604 
+605     \textcolor{comment}{/* we're done with the original content - all of our data is in bsend. */}
+606     apr\_brigade\_cleanup(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb});
+607     apr\_brigade\_destroy(tmpbb);
+608 
+609     \textcolor{comment}{/* send our multipart output */}
+610     \textcolor{keywordflow}{return} ap\_pass\_brigade(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}->next, bsend);
+611 \}
+\end{DoxyCode}
+\index{byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}!A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}!byterange\+\_\+filter.\+c@{byterange\+\_\+filter.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+L\+E(http)}{APLOG_USE_MODULE(http)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{{\bf http}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{byterange__filter_8c_a37ae841b95b3db4fe711e6d0009a891c}{}\label{byterange__filter_8c_a37ae841b95b3db4fe711e6d0009a891c}

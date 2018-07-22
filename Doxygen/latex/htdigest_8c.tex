@@ -1,0 +1,207 @@
+\hypertarget{htdigest_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/htdigest.c File Reference}
+\label{htdigest_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/htdigest.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/htdigest.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+Include dependency graph for htdigest.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{htdigest_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{htdigest_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}
+\item 
+\#define \hyperlink{htdigest_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{htdigest_8c_a350c9d6cb81908d59427ee96844d1a9c}{LF}~10
+\item 
+\#define \hyperlink{htdigest_8c_a876ce77f3c672c7162658151e648389e}{CR}~13
+\item 
+\#define \hyperlink{htdigest_8c_a4fa9aad0e9c7cc2e344b679cdbb2b67d}{M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}~256
+\item 
+\#define \hyperlink{htdigest_8c_a09a3b394b8602092d58347b791158062}{M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+EN}~768
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{htdigest_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$ \hyperlink{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}{tfp} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL}
+\item 
+\hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$ \hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{htdigest.\+c@{htdigest.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}{APR_WANT_STDIO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}\hypertarget{htdigest_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{}\label{htdigest_8c_a4f3ace9204c571a34c0b2b9bd23b1133}
+\index{htdigest.\+c@{htdigest.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{htdigest_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{htdigest_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{htdigest.\+c@{htdigest.\+c}!CR@{CR}}
+\index{CR@{CR}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{CR}{CR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define CR~13}\hypertarget{htdigest_8c_a876ce77f3c672c7162658151e648389e}{}\label{htdigest_8c_a876ce77f3c672c7162658151e648389e}
+\index{htdigest.\+c@{htdigest.\+c}!LF@{LF}}
+\index{LF@{LF}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{LF}{LF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define LF~10}\hypertarget{htdigest_8c_a350c9d6cb81908d59427ee96844d1a9c}{}\label{htdigest_8c_a350c9d6cb81908d59427ee96844d1a9c}
+\index{htdigest.\+c@{htdigest.\+c}!M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+EN@{M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+EN}}
+\index{M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+EN@{M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+EN}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+EN}{MAX_LINE_LEN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+L\+I\+N\+E\+\_\+\+L\+EN~768}\hypertarget{htdigest_8c_a09a3b394b8602092d58347b791158062}{}\label{htdigest_8c_a09a3b394b8602092d58347b791158062}
+\index{htdigest.\+c@{htdigest.\+c}!M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN@{M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}}
+\index{M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN@{M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}{MAX_STRING_LEN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN~256}\hypertarget{htdigest_8c_a4fa9aad0e9c7cc2e344b679cdbb2b67d}{}\label{htdigest_8c_a4fa9aad0e9c7cc2e344b679cdbb2b67d}
+
+
+\subsection{Function Documentation}
+\index{htdigest.\+c@{htdigest.\+c}!main@{main}}
+\index{main@{main}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{htdigest_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{htdigest_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+194 \{
+195     \hyperlink{structapr__file__t}{apr\_file\_t} *\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f};
+196     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+197     \textcolor{keywordtype}{char} tn[] = \textcolor{stringliteral}{"htdigest.tmp.XXXXXX"};
+198     \textcolor{keywordtype}{char} *\hyperlink{group__apr__dir_gab8a2fd169b20f0b9d33959f7b17d35aa}{dirname};
+199     \textcolor{keywordtype}{char} user[\hyperlink{htdigest_8c_a4fa9aad0e9c7cc2e344b679cdbb2b67d}{MAX\_STRING\_LEN}];
+200     \textcolor{keywordtype}{char} realm[\hyperlink{htdigest_8c_a4fa9aad0e9c7cc2e344b679cdbb2b67d}{MAX\_STRING\_LEN}];
+201     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__LOG_gaa843820216dea79b53a16310cb08e8dd}{line}[\hyperlink{htdigest_8c_a09a3b394b8602092d58347b791158062}{MAX\_LINE\_LEN}];
+202     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l}[\hyperlink{htdigest_8c_a09a3b394b8602092d58347b791158062}{MAX\_LINE\_LEN}];
+203     \textcolor{keywordtype}{char} \hyperlink{group__MOD__PROXY_gab9a0c51666082a4ca5dd995ee972f77e}{w}[\hyperlink{htdigest_8c_a4fa9aad0e9c7cc2e344b679cdbb2b67d}{MAX\_STRING\_LEN}];
+204     \textcolor{keywordtype}{char} \hyperlink{group__MOD__PROXY_gaa51afdb6d96b938b938dc9439be201be}{x}[\hyperlink{htdigest_8c_a4fa9aad0e9c7cc2e344b679cdbb2b67d}{MAX\_STRING\_LEN}];
+205     \textcolor{keywordtype}{int} \hyperlink{pcregrep_8txt_a1fdac88190c7a3aca2735f0bf49094dd}{found};
+206 
+207     apr\_app\_initialize(&\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+208     atexit(terminate);
+209     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&\hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+210     apr\_file\_open\_stderr(&\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt});
+211 
+212 \textcolor{preprocessor}{#if APR\_CHARSET\_EBCDIC}
+213     rv = apr\_xlate\_open(&\hyperlink{ab_8c_ac2b1e84470918e4c7d16449f4b4d5ddb}{to\_ascii}, \textcolor{stringliteral}{"ISO-8859-1"}, \hyperlink{group__APR__XLATE_ga3276c680eb0917ff51ff22c9b9959fa9}{APR\_DEFAULT\_CHARSET}, 
+      \hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt});
+214     \textcolor{keywordflow}{if} (rv) \{
+215         apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"apr\_xlate\_open(): %pm (%d)\(\backslash\)n"},
+216                 &rv, rv);
+217         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+218     \}
+219 \textcolor{preprocessor}{#endif}
+220 
+221     apr\_signal(SIGINT, (\textcolor{keywordtype}{void} (*)(\textcolor{keywordtype}{int})) interrupted);
+222     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} == 5) \{
+223         \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1], \textcolor{stringliteral}{"-c"}))
+224             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+225         rv = apr\_file\_open(&f, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2], \hyperlink{group__apr__file__open__flags_ga3e427e53aceb1ccdb078d9a03cd63d01}{APR\_WRITE} | \hyperlink{group__apr__file__open__flags_gac210e96bc821dbaa83c326e775dad028}{APR\_CREATE},
+226                            \hyperlink{group__apr__file__permissions_ga8552adb50d545d5fc7faeabb4f4a388f}{APR\_OS\_DEFAULT}, \hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt});
+227         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+228             apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"Could not open passwd file %s for writing: %pm\(\backslash\)n"},
+229                     \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2], &rv);
+230             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+231         \}
+232         apr\_cpystrn(user, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[4], \textcolor{keyword}{sizeof}(user));
+233         apr\_cpystrn(realm, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[3], \textcolor{keyword}{sizeof}(realm));
+234         apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"Adding password for %s in realm %s.\(\backslash\)n"},
+235                     user, realm);
+236         add\_password(user, realm, f);
+237         apr\_file\_close(f);
+238         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(0);
+239     \}
+240     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} != 4)
+241         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}();
+242 
+243     \textcolor{keywordflow}{if} (apr\_temp\_dir\_get((\textcolor{keyword}{const} \textcolor{keywordtype}{char}**)&dirname, \hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+244         apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"%s: could not determine temp dir\(\backslash\)n"},
+245                         \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0]);
+246         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+247     \}
+248     dirname = apr\_psprintf(\hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}, \textcolor{stringliteral}{"%s/%s"}, dirname, tn);
+249 
+250     \textcolor{keywordflow}{if} (apr\_file\_mktemp(&\hyperlink{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}{tfp}, dirname, 0, \hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+251         apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"Could not open temp file %s.\(\backslash\)n"}, dirname);
+252         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+253     \}
+254 
+255     \textcolor{keywordflow}{if} (apr\_file\_open(&f, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1], \hyperlink{group__apr__file__open__flags_ga0021db78d799d1c8825b701c7efee483}{APR\_READ}, \hyperlink{group__apr__file__permissions_ga8552adb50d545d5fc7faeabb4f4a388f}{APR\_OS\_DEFAULT}, 
+      \hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+256         apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile},
+257                 \textcolor{stringliteral}{"Could not open passwd file %s for reading.\(\backslash\)n"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1]);
+258         apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"Use -c option to create new one.\(\backslash\)n"});
+259         cleanup\_tempfile\_and\_exit(1);
+260     \}
+261     apr\_cpystrn(user, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[3], \textcolor{keyword}{sizeof}(user));
+262     apr\_cpystrn(realm, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2], \textcolor{keyword}{sizeof}(realm));
+263 
+264     found = 0;
+265     \textcolor{keywordflow}{while} (!(get\_line(line, \textcolor{keyword}{sizeof}(line), f))) \{
+266         \textcolor{keywordflow}{if} (found || (line[0] == \textcolor{charliteral}{'#'}) || (!line[0])) \{
+267             putline(\hyperlink{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}{tfp}, line);
+268             \textcolor{keywordflow}{continue};
+269         \}
+270         strcpy(l, line);
+271         \textcolor{keywordflow}{if} (getword(w, l, \textcolor{charliteral}{':'}) || getword(x, l, \textcolor{charliteral}{':'})) \{
+272             apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"The following line contains a string longer than the "}
+273                                      \textcolor{stringliteral}{"allowed maximum size (%i): %s\(\backslash\)n"}, 
+      \hyperlink{htdigest_8c_a4fa9aad0e9c7cc2e344b679cdbb2b67d}{MAX\_STRING\_LEN} - 1, line);
+274             cleanup\_tempfile\_and\_exit(1);
+275         \}
+276         \textcolor{keywordflow}{if} (strcmp(user, w) || strcmp(realm, x)) \{
+277             putline(\hyperlink{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}{tfp}, line);
+278             \textcolor{keywordflow}{continue};
+279         \}
+280         \textcolor{keywordflow}{else} \{
+281             apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"Changing password for user %s in realm %s\(\backslash\)n"},
+282                     user, realm);
+283             add\_password(user, realm, \hyperlink{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}{tfp});
+284             found = 1;
+285         \}
+286     \}
+287     \textcolor{keywordflow}{if} (!found) \{
+288         apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"Adding user %s in realm %s\(\backslash\)n"}, user, realm);
+289         add\_password(user, realm, \hyperlink{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}{tfp});
+290     \}
+291     apr\_file\_close(f);
+292 
+293     \textcolor{comment}{/* The temporary file has all the data, just copy it to the new location.}
+294 \textcolor{comment}{     */}
+295     \textcolor{keywordflow}{if} (apr\_file\_copy(dirname, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1], \hyperlink{group__apr__file__permissions_ga8552adb50d545d5fc7faeabb4f4a388f}{APR\_OS\_DEFAULT}, \hyperlink{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{cntxt}) !=
+296                 \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+297         apr\_file\_printf(\hyperlink{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"%s: unable to update file %s\(\backslash\)n"},
+298                         \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1]);
+299     \}
+300     apr\_file\_close(\hyperlink{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}{tfp});
+301 
+302     \textcolor{keywordflow}{return} 0;
+303 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{htdigest.\+c@{htdigest.\+c}!cntxt@{cntxt}}
+\index{cntxt@{cntxt}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{cntxt}{cntxt}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ cntxt}\hypertarget{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}{}\label{htdigest_8c_aed0a046e7ddddb7a81ac7dccc44d8cba}
+\index{htdigest.\+c@{htdigest.\+c}!errfile@{errfile}}
+\index{errfile@{errfile}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{errfile}{errfile}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+file\+\_\+t}$\ast$ errfile}\hypertarget{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}{}\label{htdigest_8c_a350c84888ec1b76543bdd36d5638f5e4}
+\index{htdigest.\+c@{htdigest.\+c}!tfp@{tfp}}
+\index{tfp@{tfp}!htdigest.\+c@{htdigest.\+c}}
+\subsubsection[{\texorpdfstring{tfp}{tfp}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+file\+\_\+t}$\ast$ tfp = {\bf N\+U\+LL}}\hypertarget{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}{}\label{htdigest_8c_a8789a1ba2d3f1b870bf82c64cc203861}

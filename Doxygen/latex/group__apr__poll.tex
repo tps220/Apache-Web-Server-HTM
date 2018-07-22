@@ -1,0 +1,760 @@
+\hypertarget{group__apr__poll}{}\section{Poll Routines}
+\label{group__apr__poll}\index{Poll Routines@{Poll Routines}}
+Collaboration diagram for Poll Routines\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{group__apr__poll}
+\end{center}
+\end{figure}
+\subsection*{Modules}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__pollopts}{Poll options}
+\item 
+\hyperlink{group__pollflags}{Pollset Flags}
+\end{DoxyCompactItemize}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+union \hyperlink{unionapr__descriptor}{apr\+\_\+descriptor}
+\item 
+struct \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} \hyperlink{group__apr__poll_ga0c89b184cbe2337e44207f1ad245129b}{apr\+\_\+pollfd\+\_\+t}
+\item 
+typedef struct \hyperlink{structapr__pollset__t}{apr\+\_\+pollset\+\_\+t} \hyperlink{group__apr__poll_ga680da1f10ac5ef75efc503a9d15b8906}{apr\+\_\+pollset\+\_\+t}
+\item 
+typedef struct \hyperlink{structapr__pollcb__t}{apr\+\_\+pollcb\+\_\+t} \hyperlink{group__apr__poll_gae382e39bdf0c5a02fca7da3944bece08}{apr\+\_\+pollcb\+\_\+t}
+\item 
+typedef \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}($\ast$ \hyperlink{group__apr__poll_ga1dcd8c87e233dbf105e83d50ef601f55}{apr\+\_\+pollcb\+\_\+cb\+\_\+t}) (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__RC_ga37840dc44e2b0b5a127a6828fffe2a8c}{baton}, \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} $\ast$\hyperlink{group__apr__poll_ga93f9312d40401caaec1865013fe2bf61}{descriptor})
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{group__apr__poll_gabe6f1238ea45e9425fa052e2788e4a29}{apr\+\_\+pollset\+\_\+method\+\_\+e} \{ \\*
+\hyperlink{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29ae68b155914b79d4a58519675dfc24d94}{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+D\+E\+F\+A\+U\+LT}, 
+\hyperlink{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aa6613bebee1abb348da2a153f91c738e}{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+S\+E\+L\+E\+CT}, 
+\hyperlink{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29a2722387d6523f8f02cec7c31a45966d4}{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+K\+Q\+U\+E\+UE}, 
+\hyperlink{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aec66f6da923595ff0a6fa20f4bc41e46}{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+RT}, 
+\\*
+\hyperlink{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29a142ebdcab58ccfabd5d964ff3ab476ab}{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+E\+P\+O\+LL}, 
+\hyperlink{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aa8c0b4c036644ea4518f8d7c2fd4fe8e}{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+LL}, 
+\hyperlink{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29ace0288893b2db65847536c41c0048e82}{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+A\+I\+O\+\_\+\+M\+S\+GQ}
+ \}
+\item 
+enum \hyperlink{group__apr__poll_ga0a8549d84c1721788b102a4cc8b4b0f0}{apr\+\_\+datatype\+\_\+e} \{ \hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0aeb85f43492052bf0788d31f6dd85a222}{A\+P\+R\+\_\+\+N\+O\+\_\+\+D\+E\+SC}, 
+\hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a3629c5b3166fde91792f2f913fbd72f0}{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+S\+O\+C\+K\+ET}, 
+\hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a8351d461bf66b706232962fd02e84202}{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+F\+I\+LE}, 
+\hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a413b387c7fe1ca7b096d46dfd9942fe5}{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+L\+A\+S\+T\+D\+E\+SC}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__poll_gad3f3d7d056f3af6d55a5a7385637c918}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) apr\+\_\+pollset\+\_\+create(\hyperlink{structapr__pollset__t}{apr\+\_\+pollset\+\_\+t} $\ast$$\ast$pollset
+\item 
+\hyperlink{group__apr__poll_gaef92b86069b7cf1da2ef15b186ec1552}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$) apr\+\_\+pollset\+\_\+method\+\_\+name(\hyperlink{structapr__pollset__t}{apr\+\_\+pollset\+\_\+t} $\ast$pollset)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__poll_ga7da682250c23eaa2193d58188e2cf96c}{size}
+\item 
+\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__apr__poll_ga28e6897534e326f77e900eb1453b4fea}{p}
+\item 
+\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__poll_gaf8cd8dfff060e0cd10e32063eef7d30c}{flags}
+\item 
+\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__poll_gabe6f1238ea45e9425fa052e2788e4a29}{apr\+\_\+pollset\+\_\+method\+\_\+e} \hyperlink{group__apr__poll_ga6c1b16298acdfc2ca3cba871da0daa17}{method}
+\item 
+const \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} $\ast$ \hyperlink{group__apr__poll_ga93f9312d40401caaec1865013fe2bf61}{descriptor}
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{group__apr__poll_ga9ceb71d3d9fcd18962d16e49bef6153a}{timeout}
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\+\_\+int32\+\_\+t} $\ast$ \hyperlink{group__apr__poll_ga8c10598f743ada9822ab203974a58304}{num}
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\+\_\+int32\+\_\+t} const \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} $\ast$$\ast$ \hyperlink{group__apr__poll_ga79b31f5f6b249ca41dcc8a49b8fd5aa9}{descriptors}
+\item 
+\hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\+\_\+int32\+\_\+t} \hyperlink{group__apr__poll_ga1408ed4d6e2f3c9a2ab17fea618c5a6d}{numsock}
+\item 
+\hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\+\_\+int32\+\_\+t} \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\+\_\+int32\+\_\+t} $\ast$ \hyperlink{group__apr__poll_ga4bc69a0e7bde2687820998e3ef6cb906}{nsds}
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{group__apr__poll_ga1dcd8c87e233dbf105e83d50ef601f55}{apr\+\_\+pollcb\+\_\+cb\+\_\+t} \hyperlink{group__apr__poll_ga54230532a60ed2ae9f1e0b136b57cc42}{func}
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} \hyperlink{group__apr__poll_ga1dcd8c87e233dbf105e83d50ef601f55}{apr\+\_\+pollcb\+\_\+cb\+\_\+t} \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{group__apr__poll_gafbe19e45631d6f40a439f57b08f7740c}{baton}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Typedef Documentation}
+\index{Poll Routines@{Poll Routines}!apr\+\_\+pollcb\+\_\+cb\+\_\+t@{apr\+\_\+pollcb\+\_\+cb\+\_\+t}}
+\index{apr\+\_\+pollcb\+\_\+cb\+\_\+t@{apr\+\_\+pollcb\+\_\+cb\+\_\+t}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+pollcb\+\_\+cb\+\_\+t}{apr_pollcb_cb_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+status\+\_\+t}($\ast$ apr\+\_\+pollcb\+\_\+cb\+\_\+t) ({\bf void} $\ast${\bf baton}, {\bf apr\+\_\+pollfd\+\_\+t} $\ast${\bf descriptor})}\hypertarget{group__apr__poll_ga1dcd8c87e233dbf105e83d50ef601f55}{}\label{group__apr__poll_ga1dcd8c87e233dbf105e83d50ef601f55}
+Function prototype for pollcb handlers 
+\begin{DoxyParams}{Parameters}
+{\em baton} & Opaque baton passed into apr\+\_\+pollcb\+\_\+poll() \\
+\hline
+{\em descriptor} & Contains the notification for an active descriptor. The {\itshape rtnevents} member describes which events were triggered for this descriptor. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If the pollcb handler does not return A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS, the apr\+\_\+pollcb\+\_\+poll() call returns with the handler\textquotesingle{}s return value. 
+\end{DoxyRemark}
+\index{Poll Routines@{Poll Routines}!apr\+\_\+pollcb\+\_\+t@{apr\+\_\+pollcb\+\_\+t}}
+\index{apr\+\_\+pollcb\+\_\+t@{apr\+\_\+pollcb\+\_\+t}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+pollcb\+\_\+t}{apr_pollcb_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+pollcb\+\_\+t} {\bf apr\+\_\+pollcb\+\_\+t}}\hypertarget{group__apr__poll_gae382e39bdf0c5a02fca7da3944bece08}{}\label{group__apr__poll_gae382e39bdf0c5a02fca7da3944bece08}
+Opaque structure used for pollcb A\+PI \index{Poll Routines@{Poll Routines}!apr\+\_\+pollfd\+\_\+t@{apr\+\_\+pollfd\+\_\+t}}
+\index{apr\+\_\+pollfd\+\_\+t@{apr\+\_\+pollfd\+\_\+t}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+pollfd\+\_\+t}{apr_pollfd_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+pollfd\+\_\+t} {\bf apr\+\_\+pollfd\+\_\+t}}\hypertarget{group__apr__poll_ga0c89b184cbe2337e44207f1ad245129b}{}\label{group__apr__poll_ga0c89b184cbe2337e44207f1ad245129b}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} 
+\end{DoxySeeAlso}
+\index{Poll Routines@{Poll Routines}!apr\+\_\+pollset\+\_\+t@{apr\+\_\+pollset\+\_\+t}}
+\index{apr\+\_\+pollset\+\_\+t@{apr\+\_\+pollset\+\_\+t}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+pollset\+\_\+t}{apr_pollset_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+pollset\+\_\+t} {\bf apr\+\_\+pollset\+\_\+t}}\hypertarget{group__apr__poll_ga680da1f10ac5ef75efc503a9d15b8906}{}\label{group__apr__poll_ga680da1f10ac5ef75efc503a9d15b8906}
+Opaque structure used for pollset A\+PI 
+
+\subsection{Enumeration Type Documentation}
+\index{Poll Routines@{Poll Routines}!apr\+\_\+datatype\+\_\+e@{apr\+\_\+datatype\+\_\+e}}
+\index{apr\+\_\+datatype\+\_\+e@{apr\+\_\+datatype\+\_\+e}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+datatype\+\_\+e}{apr_datatype_e}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf apr\+\_\+datatype\+\_\+e}}\hypertarget{group__apr__poll_ga0a8549d84c1721788b102a4cc8b4b0f0}{}\label{group__apr__poll_ga0a8549d84c1721788b102a4cc8b4b0f0}
+Used in \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} to determine what the \hyperlink{unionapr__descriptor}{apr\+\_\+descriptor} is \begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{A\+P\+R\+\_\+\+N\+O\+\_\+\+D\+E\+SC@{A\+P\+R\+\_\+\+N\+O\+\_\+\+D\+E\+SC}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+N\+O\+\_\+\+D\+E\+SC@{A\+P\+R\+\_\+\+N\+O\+\_\+\+D\+E\+SC}}\item[{\em 
+A\+P\+R\+\_\+\+N\+O\+\_\+\+D\+E\+SC\hypertarget{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0aeb85f43492052bf0788d31f6dd85a222}{}\label{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0aeb85f43492052bf0788d31f6dd85a222}
+}]nothing here \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+S\+O\+C\+K\+ET@{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+S\+O\+C\+K\+ET}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+S\+O\+C\+K\+ET@{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+S\+O\+C\+K\+ET}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+S\+O\+C\+K\+ET\hypertarget{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a3629c5b3166fde91792f2f913fbd72f0}{}\label{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a3629c5b3166fde91792f2f913fbd72f0}
+}]descriptor refers to a socket \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+F\+I\+LE@{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+F\+I\+LE}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+F\+I\+LE@{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+F\+I\+LE}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+F\+I\+LE\hypertarget{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a8351d461bf66b706232962fd02e84202}{}\label{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a8351d461bf66b706232962fd02e84202}
+}]descriptor refers to a file \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+L\+A\+S\+T\+D\+E\+SC@{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+L\+A\+S\+T\+D\+E\+SC}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+L\+A\+S\+T\+D\+E\+SC@{A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+L\+A\+S\+T\+D\+E\+SC}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+\_\+\+L\+A\+S\+T\+D\+E\+SC\hypertarget{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a413b387c7fe1ca7b096d46dfd9942fe5}{}\label{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a413b387c7fe1ca7b096d46dfd9942fe5}
+}]\begin{DoxyRefDesc}{Deprecated}
+\item[\hyperlink{deprecated__deprecated000040}{Deprecated}]descriptor is the last one in the list \end{DoxyRefDesc}
+\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+108                     \{
+\end{DoxyCode}
+\index{Poll Routines@{Poll Routines}!apr\+\_\+pollset\+\_\+method\+\_\+e@{apr\+\_\+pollset\+\_\+method\+\_\+e}}
+\index{apr\+\_\+pollset\+\_\+method\+\_\+e@{apr\+\_\+pollset\+\_\+method\+\_\+e}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+pollset\+\_\+method\+\_\+e}{apr_pollset_method_e}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf apr\+\_\+pollset\+\_\+method\+\_\+e}}\hypertarget{group__apr__poll_gabe6f1238ea45e9425fa052e2788e4a29}{}\label{group__apr__poll_gabe6f1238ea45e9425fa052e2788e4a29}
+Pollset Methods \begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+D\+E\+F\+A\+U\+LT@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+D\+E\+F\+A\+U\+LT}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+D\+E\+F\+A\+U\+LT@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+D\+E\+F\+A\+U\+LT}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+D\+E\+F\+A\+U\+LT\hypertarget{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29ae68b155914b79d4a58519675dfc24d94}{}\label{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29ae68b155914b79d4a58519675dfc24d94}
+}]Platform default poll method \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+S\+E\+L\+E\+CT@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+S\+E\+L\+E\+CT}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+S\+E\+L\+E\+CT@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+S\+E\+L\+E\+CT}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+S\+E\+L\+E\+CT\hypertarget{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aa6613bebee1abb348da2a153f91c738e}{}\label{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aa6613bebee1abb348da2a153f91c738e}
+}]Poll uses select method \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+K\+Q\+U\+E\+UE@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+K\+Q\+U\+E\+UE}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+K\+Q\+U\+E\+UE@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+K\+Q\+U\+E\+UE}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+K\+Q\+U\+E\+UE\hypertarget{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29a2722387d6523f8f02cec7c31a45966d4}{}\label{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29a2722387d6523f8f02cec7c31a45966d4}
+}]Poll uses kqueue method \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+RT@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+RT}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+RT@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+RT}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+RT\hypertarget{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aec66f6da923595ff0a6fa20f4bc41e46}{}\label{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aec66f6da923595ff0a6fa20f4bc41e46}
+}]Poll uses Solaris event port method \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+E\+P\+O\+LL@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+E\+P\+O\+LL}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+E\+P\+O\+LL@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+E\+P\+O\+LL}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+E\+P\+O\+LL\hypertarget{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29a142ebdcab58ccfabd5d964ff3ab476ab}{}\label{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29a142ebdcab58ccfabd5d964ff3ab476ab}
+}]Poll uses epoll method \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+LL@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+LL}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+LL@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+LL}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+LL\hypertarget{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aa8c0b4c036644ea4518f8d7c2fd4fe8e}{}\label{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29aa8c0b4c036644ea4518f8d7c2fd4fe8e}
+}]Poll uses poll method \index{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+A\+I\+O\+\_\+\+M\+S\+GQ@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+A\+I\+O\+\_\+\+M\+S\+GQ}!Poll Routines@{Poll Routines}}\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+A\+I\+O\+\_\+\+M\+S\+GQ@{A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+A\+I\+O\+\_\+\+M\+S\+GQ}}\item[{\em 
+A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+A\+I\+O\+\_\+\+M\+S\+GQ\hypertarget{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29ace0288893b2db65847536c41c0048e82}{}\label{group__apr__poll_ggabe6f1238ea45e9425fa052e2788e4a29ace0288893b2db65847536c41c0048e82}
+}]Poll uses z/\+OS asio method \end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+91              \{ 
+92     \hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0aeb85f43492052bf0788d31f6dd85a222}{APR\_NO\_DESC},                
+93     \hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a3629c5b3166fde91792f2f913fbd72f0}{APR\_POLL\_SOCKET},            
+94     \hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a8351d461bf66b706232962fd02e84202}{APR\_POLL\_FILE},              
+95     \hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a413b387c7fe1ca7b096d46dfd9942fe5}{APR\_POLL\_LASTDESC}           
+96 \} \hyperlink{group__apr__poll_ga0a8549d84c1721788b102a4cc8b4b0f0}{apr\_datatype\_e} ;
+97 
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t) apr\+\_\+pollset\+\_\+create(apr\+\_\+pollset\+\_\+t $\ast$$\ast$pollset}{APR_DECLARE(apr_status_t) apr_pollset_create(apr_pollset_t **pollset}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__poll_gad3f3d7d056f3af6d55a5a7385637c918}{}\label{group__apr__poll_gad3f3d7d056f3af6d55a5a7385637c918}
+Set up a pollset object 
+\begin{DoxyParams}{Parameters}
+{\em pollset} & The pointer in which to return the newly created object \\
+\hline
+{\em size} & The maximum number of descriptors that this pollset can hold \\
+\hline
+{\em p} & The pool from which to allocate the pollset \\
+\hline
+{\em flags} & Optional flags to modify the operation of the pollset.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If flags contains A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+A\+FE, then a pollset is created on which it is safe to make concurrent calls to apr\+\_\+pollset\+\_\+add(), apr\+\_\+pollset\+\_\+remove() and apr\+\_\+pollset\+\_\+poll() from separate threads. This feature is only supported on some platforms; the apr\+\_\+pollset\+\_\+create() call will fail with A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL on platforms where it is not supported. 
+
+If flags contains A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+W\+A\+K\+E\+A\+B\+LE, then a pollset is created with an additional internal pipe object used for the apr\+\_\+pollset\+\_\+wakeup() call. The actual size of pollset is in that case {\itshape size} + 1. This feature is only supported on some platforms; the apr\+\_\+pollset\+\_\+create() call will fail with A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL on platforms where it is not supported. 
+
+If flags contains A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+N\+O\+C\+O\+PY, then the \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} structures passed to apr\+\_\+pollset\+\_\+add() are not copied and must have a lifetime at least as long as the pollset. 
+
+Some poll methods (including A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+K\+Q\+U\+E\+UE, A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+RT, and A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+E\+P\+O\+LL) do not have a fixed limit on the size of the pollset. For these methods, the size parameter controls the maximum number of descriptors that will be returned by a single call to apr\+\_\+pollset\+\_\+poll().
+\end{DoxyRemark}
+Set up a pollset object 
+\begin{DoxyParams}{Parameters}
+{\em pollset} & The pointer in which to return the newly created object \\
+\hline
+{\em size} & The maximum number of descriptors that this pollset can hold \\
+\hline
+{\em p} & The pool from which to allocate the pollset \\
+\hline
+{\em flags} & Optional flags to modify the operation of the pollset. \\
+\hline
+{\em method} & Poll method to use. See \hyperlink{group__apr__poll_gabe6f1238ea45e9425fa052e2788e4a29}{apr\+\_\+pollset\+\_\+method\+\_\+e}. If this method cannot be used, the default method will be used unless the A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+N\+O\+D\+E\+F\+A\+U\+LT flag has been specified.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If flags contains A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+A\+FE, then a pollset is created on which it is safe to make concurrent calls to apr\+\_\+pollset\+\_\+add(), apr\+\_\+pollset\+\_\+remove() and apr\+\_\+pollset\+\_\+poll() from separate threads. This feature is only supported on some platforms; the apr\+\_\+pollset\+\_\+create\+\_\+ex() call will fail with A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL on platforms where it is not supported. 
+
+If flags contains A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+W\+A\+K\+E\+A\+B\+LE, then a pollset is created with additional internal pipe object used for the apr\+\_\+pollset\+\_\+wakeup() call. The actual size of pollset is in that case size + 1. This feature is only supported on some platforms; the apr\+\_\+pollset\+\_\+create\+\_\+ex() call will fail with A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL on platforms where it is not supported. 
+
+If flags contains A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+N\+O\+C\+O\+PY, then the \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} structures passed to apr\+\_\+pollset\+\_\+add() are not copied and must have a lifetime at least as long as the pollset. 
+
+Some poll methods (including A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+K\+Q\+U\+E\+UE, A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+P\+O\+RT, and A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+E\+P\+O\+LL) do not have a fixed limit on the size of the pollset. For these methods, the size parameter controls the maximum number of descriptors that will be returned by a single call to apr\+\_\+pollset\+\_\+poll().
+\end{DoxyRemark}
+Destroy a pollset object 
+\begin{DoxyParams}{Parameters}
+{\em pollset} & The pollset to destroy\\
+\hline
+\end{DoxyParams}
+Add a socket or file descriptor to a pollset 
+\begin{DoxyParams}{Parameters}
+{\em pollset} & The pollset to which to add the descriptor \\
+\hline
+{\em descriptor} & The descriptor to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If you set client\+\_\+data in the descriptor, that value will be returned in the client\+\_\+data field whenever this descriptor is signalled in apr\+\_\+pollset\+\_\+poll(). 
+
+If the pollset has been created with A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+A\+FE and thread T1 is blocked in a call to apr\+\_\+pollset\+\_\+poll() for this same pollset that is being modified via apr\+\_\+pollset\+\_\+add() in thread T2, the currently executing apr\+\_\+pollset\+\_\+poll() call in T1 will either\+: (1) automatically include the newly added descriptor in the set of descriptors it is watching or (2) return immediately with A\+P\+R\+\_\+\+E\+I\+N\+TR. Option (1) is recommended, but option (2) is allowed for implementations where option (1) is impossible or impractical. 
+
+If the pollset has been created with A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+N\+O\+C\+O\+PY, the \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} structure referenced by descriptor will not be copied and must have a lifetime at least as long as the pollset. 
+
+Do not add the same socket or file descriptor to the same pollset multiple times, even if the requested events differ for the different calls to apr\+\_\+pollset\+\_\+add(). If the events of interest for a descriptor change, you must first remove the descriptor from the pollset with apr\+\_\+pollset\+\_\+remove(), then add it again specifying all requested events.
+\end{DoxyRemark}
+Remove a descriptor from a pollset 
+\begin{DoxyParams}{Parameters}
+{\em pollset} & The pollset from which to remove the descriptor \\
+\hline
+{\em descriptor} & The descriptor to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If the descriptor is not found, A\+P\+R\+\_\+\+N\+O\+T\+F\+O\+U\+ND is returned. 
+
+If the pollset has been created with A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+T\+H\+R\+E\+A\+D\+S\+A\+FE and thread T1 is blocked in a call to apr\+\_\+pollset\+\_\+poll() for this same pollset that is being modified via apr\+\_\+pollset\+\_\+remove() in thread T2, the currently executing apr\+\_\+pollset\+\_\+poll() call in T1 will either\+: (1) automatically exclude the newly added descriptor in the set of descriptors it is watching or (2) return immediately with A\+P\+R\+\_\+\+E\+I\+N\+TR. Option (1) is recommended, but option (2) is allowed for implementations where option (1) is impossible or impractical. 
+
+apr\+\_\+pollset\+\_\+remove() cannot be used to remove a subset of requested events for a descriptor. The reqevents field in the \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} parameter must contain the same value when removing as when adding.
+\end{DoxyRemark}
+Block for activity on the descriptor(s) in a pollset 
+\begin{DoxyParams}{Parameters}
+{\em pollset} & The pollset to use \\
+\hline
+{\em timeout} & The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled or until apr\+\_\+pollset\+\_\+wakeup() has been called. \\
+\hline
+{\em num} & Number of signalled descriptors (output parameter) \\
+\hline
+{\em descriptors} & Array of signalled descriptors (output parameter) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+A\+P\+R\+\_\+\+E\+I\+N\+TR will be returned if the pollset has been created with A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+W\+A\+K\+E\+A\+B\+LE, apr\+\_\+pollset\+\_\+wakeup() has been called while waiting for activity, and there were no signalled descriptors at the time of the wakeup call. 
+
+Multiple signalled conditions for the same descriptor may be reported in one or more returned \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} structures, depending on the implementation.
+\end{DoxyRemark}
+Interrupt the blocked apr\+\_\+pollset\+\_\+poll() call. 
+\begin{DoxyParams}{Parameters}
+{\em pollset} & The pollset to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If the pollset was not created with A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+W\+A\+K\+E\+A\+B\+LE the return value is A\+P\+R\+\_\+\+E\+I\+N\+IT.
+\end{DoxyRemark}
+Poll the descriptors in the poll structure 
+\begin{DoxyParams}{Parameters}
+{\em aprset} & The poll structure we will be using. \\
+\hline
+{\em numsock} & The number of descriptors we are polling \\
+\hline
+{\em nsds} & The number of descriptors signalled (output parameter) \\
+\hline
+{\em timeout} & The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled or until apr\+\_\+pollset\+\_\+wakeup() has been called. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+The number of descriptors signalled is returned in the third argument. This is a blocking call, and it will not return until either a descriptor has been signalled or the timeout has expired. 
+
+The rtnevents field in the \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} array will only be filled-\/ in if the return value is A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS.
+\end{DoxyRemark}
+Set up a pollcb object 
+\begin{DoxyParams}{Parameters}
+{\em pollcb} & The pointer in which to return the newly created object \\
+\hline
+{\em size} & The maximum number of descriptors that a single \+\_\+poll can return. \\
+\hline
+{\em p} & The pool from which to allocate the pollcb \\
+\hline
+{\em flags} & Optional flags to modify the operation of the pollcb.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If flags contains A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+W\+A\+K\+E\+A\+B\+LE, then a pollcb is created with an additional internal pipe object used for the apr\+\_\+pollcb\+\_\+wakeup() call. The actual size of pollcb is in that case {\itshape size} + 1. 
+
+Pollcb is only supported on some platforms; the apr\+\_\+pollcb\+\_\+create() call will fail with A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL on platforms where it is not supported.
+\end{DoxyRemark}
+Set up a pollcb object 
+\begin{DoxyParams}{Parameters}
+{\em pollcb} & The pointer in which to return the newly created object \\
+\hline
+{\em size} & The maximum number of descriptors that a single \+\_\+poll can return. \\
+\hline
+{\em p} & The pool from which to allocate the pollcb \\
+\hline
+{\em flags} & Optional flags to modify the operation of the pollcb. \\
+\hline
+{\em method} & Poll method to use. See \hyperlink{group__apr__poll_gabe6f1238ea45e9425fa052e2788e4a29}{apr\+\_\+pollset\+\_\+method\+\_\+e}. If this method cannot be used, the default method will be used unless the A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+N\+O\+D\+E\+F\+A\+U\+LT flag has been specified.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If flags contains A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+W\+A\+K\+E\+A\+B\+LE, then a pollcb is created with an additional internal pipe object used for the apr\+\_\+pollcb\+\_\+wakeup() call. The actual size of pollcb is in that case {\itshape size} + 1. 
+
+Pollcb is only supported on some platforms; the apr\+\_\+pollcb\+\_\+create\+\_\+ex() call will fail with A\+P\+R\+\_\+\+E\+N\+O\+T\+I\+M\+PL on platforms where it is not supported.
+\end{DoxyRemark}
+Add a socket or file descriptor to a pollcb 
+\begin{DoxyParams}{Parameters}
+{\em pollcb} & The pollcb to which to add the descriptor \\
+\hline
+{\em descriptor} & The descriptor to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If you set client\+\_\+data in the descriptor, that value will be returned in the client\+\_\+data field whenever this descriptor is signalled in apr\+\_\+pollcb\+\_\+poll(). 
+
+Unlike the apr\+\_\+pollset A\+PI, the descriptor is not copied, and users must retain the memory used by descriptor, as the same pointer will be returned to them from apr\+\_\+pollcb\+\_\+poll. 
+
+Do not add the same socket or file descriptor to the same pollcb multiple times, even if the requested events differ for the different calls to apr\+\_\+pollcb\+\_\+add(). If the events of interest for a descriptor change, you must first remove the descriptor from the pollcb with apr\+\_\+pollcb\+\_\+remove(), then add it again specifying all requested events.
+\end{DoxyRemark}
+Remove a descriptor from a pollcb 
+\begin{DoxyParams}{Parameters}
+{\em pollcb} & The pollcb from which to remove the descriptor \\
+\hline
+{\em descriptor} & The descriptor to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If the descriptor is not found, A\+P\+R\+\_\+\+N\+O\+T\+F\+O\+U\+ND is returned. 
+
+apr\+\_\+pollcb\+\_\+remove() cannot be used to remove a subset of requested events for a descriptor. The reqevents field in the \hyperlink{structapr__pollfd__t}{apr\+\_\+pollfd\+\_\+t} parameter must contain the same value when removing as when adding.
+\end{DoxyRemark}
+Block for activity on the descriptor(s) in a pollcb 
+\begin{DoxyParams}{Parameters}
+{\em pollcb} & The pollcb to use \\
+\hline
+{\em timeout} & The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled or until apr\+\_\+pollcb\+\_\+wakeup() has been called. \\
+\hline
+{\em func} & Callback function to call for each active descriptor. \\
+\hline
+{\em baton} & Opaque baton passed to the callback function. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Multiple signalled conditions for the same descriptor may be reported in one or more calls to the callback function, depending on the implementation. 
+
+A\+P\+R\+\_\+\+E\+I\+N\+TR will be returned if the pollset has been created with A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+W\+A\+K\+E\+A\+B\+LE and apr\+\_\+pollcb\+\_\+wakeup() has been called while waiting for activity.
+\end{DoxyRemark}
+Interrupt the blocked apr\+\_\+pollcb\+\_\+poll() call. 
+\begin{DoxyParams}{Parameters}
+{\em pollcb} & The pollcb to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+If the pollcb was not created with A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+W\+A\+K\+E\+A\+B\+LE the return value is A\+P\+R\+\_\+\+E\+I\+N\+IT. 
+\end{DoxyRemark}
+The problem with trying to output the entire iovec is that we cannot maintain the behaviour that a real writev would have. If we iterate over the iovec one at a time, we lose the atomic properties of \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}. The other option is to combine the entire iovec into one buffer that we could then send in one call to write(). This is not reasonable since we do not know how much data an iovec could contain.
+
+The only reasonable option, that maintains the semantics of a real \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}, is to only write the first iovec. Callers of file\+\_\+writev() must deal with partial writes as they normally would. If you want to ensure an entire iovec is written, use apr\+\_\+file\+\_\+writev\+\_\+full().
+\begin{DoxyCode}
+23 \{
+24     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+25 \}
+\end{DoxyCode}
+\index{Poll Routines@{Poll Routines}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E(const char $\ast$) apr\+\_\+pollset\+\_\+method\+\_\+name(apr\+\_\+pollset\+\_\+t $\ast$pollset)}{APR_DECLARE(const char *) apr_pollset_method_name(apr_pollset_t *pollset)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__poll_gaef92b86069b7cf1da2ef15b186ec1552}{}\label{group__apr__poll_gaef92b86069b7cf1da2ef15b186ec1552}
+Return a printable representation of the pollset method. 
+\begin{DoxyParams}{Parameters}
+{\em pollset} & The pollset to use\\
+\hline
+\end{DoxyParams}
+Return a printable representation of the default pollset method (A\+P\+R\+\_\+\+P\+O\+L\+L\+S\+E\+T\+\_\+\+D\+E\+F\+A\+U\+LT).
+
+Return a printable representation of the pollcb method. 
+\begin{DoxyParams}{Parameters}
+{\em pollcb} & The pollcb to use\\
+\hline
+\end{DoxyParams}
+Return the name of the lockfile for the mutex, or N\+U\+LL if the mutex doesn\textquotesingle{}t use a lock file
+
+Get the mechanism\textquotesingle{}s name of the mutex, as it relates to the actual method used for the underlying \hyperlink{structapr__proc__mutex__t}{apr\+\_\+proc\+\_\+mutex\+\_\+t}. 
+\begin{DoxyParams}{Parameters}
+{\em mutex} & the mutex to get the mechanism\textquotesingle{}s name from.\\
+\hline
+\end{DoxyParams}
+Report more information when a D\+SO function fails. 
+\begin{DoxyParams}{Parameters}
+{\em dso} & The dso handle that has been opened \\
+\hline
+{\em buf} & Location to store the dso error \\
+\hline
+{\em bufsize} & The size of the provided buffer\\
+\hline
+\end{DoxyParams}
+Perform shell escaping on the provided string, returning the result from the pool.
+
+Shell escaping causes characters to be prefixed with a \textquotesingle{}\textbackslash{}\textquotesingle{} character.
+
+If no characters were escaped, the original string is returned. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the encoded string, allocated from the pool, or the original string if no escaping took place or the string was N\+U\+LL.
+\end{DoxyReturn}
+Unescapes a U\+RL, leaving reserved characters intact, returning the result from a pool. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em url} & String to be unescaped in place \\
+\hline
+{\em forbid} & Optional list of forbidden characters, in addition to 0x00 \\
+\hline
+{\em reserved} & Optional list of reserved characters that will be left unescaped \\
+\hline
+{\em plus} & If non zero, \textquotesingle{}+\textquotesingle{} is converted to \textquotesingle{} \textquotesingle{} as per application/x-\/www-\/form-\/urlencoded encoding \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are decoded, or N\+U\+LL if a bad escape sequence is found or if a character on the forbid list is found, or if the original string was N\+U\+LL.
+\end{DoxyReturn}
+Escape a path segment, as defined in R\+F\+C1808, returning the result from a pool. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & String to be escaped \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or the string is N\+U\+LL.
+\end{DoxyReturn}
+Converts an OS path to a U\+RL, in an OS dependent way, as defined in R\+F\+C1808, returning the result from a pool.
+
+In all cases if a \textquotesingle{}\+:\textquotesingle{} occurs before the first \textquotesingle{}/\textquotesingle{} in the U\+RL, the U\+RL should be prefixed with \char`\"{}./\char`\"{} (or the \textquotesingle{}\+:\textquotesingle{} escaped). In the case of Unix, this means leaving \textquotesingle{}/\textquotesingle{} alone, but otherwise doing what escape\+\_\+path\+\_\+segment() does. For efficiency reasons, we don\textquotesingle{}t use escape\+\_\+path\+\_\+segment(), which is provided for reference. Again, R\+FC 1808 is where this stuff is defined.
+
+If partial is set, os\+\_\+escape\+\_\+path() assumes that the path will be appended to something with a \textquotesingle{}/\textquotesingle{} in it (and thus does not prefix \char`\"{}./\char`\"{}). 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+{\em partial} & If non zero, suppresses the prepending of \char`\"{}./\char`\"{} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or if the string was N\+U\+LL.
+\end{DoxyReturn}
+Urlencode a string, as defined in \href{http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.1,}{\tt http\+://www.\+w3.\+org/\+T\+R/html401/interact/forms.\+html\#h-\/17.\+13.\+4.\+1,} returning the result from a pool. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & String to be escaped \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or if the string was N\+U\+LL.
+\end{DoxyReturn}
+Apply entity encoding to a string, returning the result from a pool. Characters are replaced as follows\+: \textquotesingle{}$<$\textquotesingle{} becomes \textquotesingle{}$<$\textquotesingle{}, \textquotesingle{}$>$\textquotesingle{} becomes \textquotesingle{}$>$\textquotesingle{}, \textquotesingle{}\&\textquotesingle{} becomes \textquotesingle{}\&\textquotesingle{}, the double quote becomes \textquotesingle{}"" and the single quote becomes \textquotesingle{}\textquotesingle{}\textquotesingle{}. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+{\em toasc} & If non zero, encode non ascii characters \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or the string is N\+U\+LL.
+\end{DoxyReturn}
+Decodes html entities or numeric character references in a string. If the string to be unescaped is syntactically incorrect, then the following fixups will be made\+: unknown entities will be left undecoded; references to unused numeric characters will be deleted. In particular, \&\#00; will not be decoded, but will be deleted. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or the string is N\+U\+LL.
+\end{DoxyReturn}
+Escape control characters in a string, as performed by the shell\textquotesingle{}s \textquotesingle{}echo\textquotesingle{} command, and return the results from a pool. Characters are replaced as follows\+: \textbackslash{}a alert (bell), \textbackslash{}b backspace, \textbackslash{}f form feed, \textbackslash{}n new line, \textbackslash{}r carriage return, \textbackslash{}t horizontal tab, \textbackslash{}v vertical tab, \textbackslash{} backslash.
+
+Any non ascii character will be encoded as \textquotesingle{}\textbackslash{}x\+HH\textquotesingle{}, where HH is the hex code of the character.
+
+If quote is not zero, the double quote character will also be escaped. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+{\em quote} & If non zero, encode double quotes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or the string is N\+U\+LL.
+\end{DoxyReturn}
+Convert binary data to a hex encoding, and return the results from a pool. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em src} & The original buffer \\
+\hline
+{\em slen} & The length of the original buffer \\
+\hline
+{\em colon} & If not zero, insert colon characters between hex digits. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A zero padded buffer allocated from the pool on success, or N\+U\+LL if src was N\+U\+LL.
+\end{DoxyReturn}
+Apply L\+D\+AP escaping to binary data, and return the results from a pool. Characters from R\+F\+C4514 and R\+F\+C4515 are escaped with their hex equivalents. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em src} & The original buffer \\
+\hline
+{\em slen} & The length of the original buffer \\
+\hline
+{\em flags} & A\+P\+R\+\_\+\+E\+S\+C\+A\+P\+E\+\_\+\+L\+D\+A\+P\+\_\+\+DN for R\+F\+C4514, A\+P\+R\+\_\+\+E\+S\+C\+A\+P\+E\+\_\+\+L\+D\+A\+P\+\_\+\+F\+I\+L\+T\+ER for R\+F\+C4515, A\+P\+R\+\_\+\+E\+S\+C\+A\+P\+E\+\_\+\+L\+D\+A\+P\+\_\+\+A\+LL for both \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A zero padded buffer allocated from the pool on success, or N\+U\+LL if src was N\+U\+LL.
+\end{DoxyReturn}
+Return the name of the lockfile for the mutex, or N\+U\+LL if the mutex doesn\textquotesingle{}t use a lock file
+
+Get the mechanism\textquotesingle{}s name of the mutex, as it relates to the actual method used for the underlying \hyperlink{structapr__proc__mutex__t}{apr\+\_\+proc\+\_\+mutex\+\_\+t}. 
+\begin{DoxyParams}{Parameters}
+{\em mutex} & the mutex to get the mechanism\textquotesingle{}s name from.\\
+\hline
+\end{DoxyParams}
+Report more information when a D\+SO function fails. 
+\begin{DoxyParams}{Parameters}
+{\em dso} & The dso handle that has been opened \\
+\hline
+{\em buf} & Location to store the dso error \\
+\hline
+{\em bufsize} & The size of the provided buffer\\
+\hline
+\end{DoxyParams}
+Perform shell escaping on the provided string, returning the result from the pool.
+
+Shell escaping causes characters to be prefixed with a \textquotesingle{}\textbackslash{}\textquotesingle{} character.
+
+If no characters were escaped, the original string is returned. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the encoded string, allocated from the pool, or the original string if no escaping took place or the string was N\+U\+LL.
+\end{DoxyReturn}
+Unescapes a U\+RL, leaving reserved characters intact, returning the result from a pool. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em url} & String to be unescaped in place \\
+\hline
+{\em forbid} & Optional list of forbidden characters, in addition to 0x00 \\
+\hline
+{\em reserved} & Optional list of reserved characters that will be left unescaped \\
+\hline
+{\em plus} & If non zero, \textquotesingle{}+\textquotesingle{} is converted to \textquotesingle{} \textquotesingle{} as per application/x-\/www-\/form-\/urlencoded encoding \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are decoded, or N\+U\+LL if a bad escape sequence is found or if a character on the forbid list is found, or if the original string was N\+U\+LL.
+\end{DoxyReturn}
+Escape a path segment, as defined in R\+F\+C1808, returning the result from a pool. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & String to be escaped \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or the string is N\+U\+LL.
+\end{DoxyReturn}
+Converts an OS path to a U\+RL, in an OS dependent way, as defined in R\+F\+C1808, returning the result from a pool.
+
+In all cases if a \textquotesingle{}\+:\textquotesingle{} occurs before the first \textquotesingle{}/\textquotesingle{} in the U\+RL, the U\+RL should be prefixed with \char`\"{}./\char`\"{} (or the \textquotesingle{}\+:\textquotesingle{} escaped). In the case of Unix, this means leaving \textquotesingle{}/\textquotesingle{} alone, but otherwise doing what escape\+\_\+path\+\_\+segment() does. For efficiency reasons, we don\textquotesingle{}t use escape\+\_\+path\+\_\+segment(), which is provided for reference. Again, R\+FC 1808 is where this stuff is defined.
+
+If partial is set, os\+\_\+escape\+\_\+path() assumes that the path will be appended to something with a \textquotesingle{}/\textquotesingle{} in it (and thus does not prefix \char`\"{}./\char`\"{}). 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+{\em partial} & If non zero, suppresses the prepending of \char`\"{}./\char`\"{} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or if the string was N\+U\+LL.
+\end{DoxyReturn}
+Urlencode a string, as defined in \href{http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.1,}{\tt http\+://www.\+w3.\+org/\+T\+R/html401/interact/forms.\+html\#h-\/17.\+13.\+4.\+1,} returning the result from a pool. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & String to be escaped \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or if the string was N\+U\+LL.
+\end{DoxyReturn}
+Apply entity encoding to a string, returning the result from a pool. Characters are replaced as follows\+: \textquotesingle{}$<$\textquotesingle{} becomes \textquotesingle{}$<$\textquotesingle{}, \textquotesingle{}$>$\textquotesingle{} becomes \textquotesingle{}$>$\textquotesingle{}, \textquotesingle{}\&\textquotesingle{} becomes \textquotesingle{}\&\textquotesingle{}, the double quote becomes \textquotesingle{}"" and the single quote becomes \textquotesingle{}\textquotesingle{}\textquotesingle{}. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+{\em toasc} & If non zero, encode non ascii characters \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or the string is N\+U\+LL.
+\end{DoxyReturn}
+Decodes html entities or numeric character references in a string. If the string to be unescaped is syntactically incorrect, then the following fixups will be made\+: unknown entities will be left undecoded; references to unused numeric characters will be deleted. In particular, \&\#00; will not be decoded, but will be deleted. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or the string is N\+U\+LL.
+\end{DoxyReturn}
+Escape control characters in a string, as performed by the shell\textquotesingle{}s \textquotesingle{}echo\textquotesingle{} command, and return the results from a pool. Characters are replaced as follows\+: \textbackslash{}a alert (bell), \textbackslash{}b backspace, \textbackslash{}f form feed, \textbackslash{}n new line, \textbackslash{}r carriage return, \textbackslash{}t horizontal tab, \textbackslash{}v vertical tab, \textbackslash{} backslash.
+
+Any non ascii character will be encoded as \textquotesingle{}\textbackslash{}x\+HH\textquotesingle{}, where HH is the hex code of the character.
+
+If quote is not zero, the double quote character will also be escaped. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em str} & The original string \\
+\hline
+{\em quote} & If non zero, encode double quotes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string allocated from the pool on success, the original string if no characters are encoded or the string is N\+U\+LL.
+\end{DoxyReturn}
+Convert binary data to a hex encoding, and return the results from a pool. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em src} & The original buffer \\
+\hline
+{\em slen} & The length of the original buffer \\
+\hline
+{\em colon} & If not zero, insert colon characters between hex digits. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A zero padded buffer allocated from the pool on success, or N\+U\+LL if src was N\+U\+LL.
+\end{DoxyReturn}
+Apply L\+D\+AP escaping to binary data, and return the results from a pool. Characters from R\+F\+C4514 and R\+F\+C4515 are escaped with their hex equivalents. 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to allocate from \\
+\hline
+{\em src} & The original buffer \\
+\hline
+{\em slen} & The length of the original buffer \\
+\hline
+{\em flags} & A\+P\+R\+\_\+\+E\+S\+C\+A\+P\+E\+\_\+\+L\+D\+A\+P\+\_\+\+DN for R\+F\+C4514, A\+P\+R\+\_\+\+E\+S\+C\+A\+P\+E\+\_\+\+L\+D\+A\+P\+\_\+\+F\+I\+L\+T\+ER for R\+F\+C4515, A\+P\+R\+\_\+\+E\+S\+C\+A\+P\+E\+\_\+\+L\+D\+A\+P\+\_\+\+A\+LL for both \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A zero padded buffer allocated from the pool on success, or N\+U\+LL if src was N\+U\+LL. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+130 \{
+131     \textcolor{keywordflow}{if} (dso->errormsg) \{
+132         apr\_cpystrn(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, dso->errormsg, \hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen});
+133         \textcolor{keywordflow}{return} dso->errormsg;
+134     \}
+135     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"No Error"};
+136 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{Poll Routines@{Poll Routines}!baton@{baton}}
+\index{baton@{baton}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{baton}{baton}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+interval\+\_\+time\+\_\+t} {\bf apr\+\_\+pollcb\+\_\+cb\+\_\+t} {\bf void}$\ast$ baton}\hypertarget{group__apr__poll_gafbe19e45631d6f40a439f57b08f7740c}{}\label{group__apr__poll_gafbe19e45631d6f40a439f57b08f7740c}
+\index{Poll Routines@{Poll Routines}!descriptor@{descriptor}}
+\index{descriptor@{descriptor}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{descriptor}{descriptor}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pollfd\+\_\+t} $\ast$ descriptor}\hypertarget{group__apr__poll_ga93f9312d40401caaec1865013fe2bf61}{}\label{group__apr__poll_ga93f9312d40401caaec1865013fe2bf61}
+\index{Poll Routines@{Poll Routines}!descriptors@{descriptors}}
+\index{descriptors@{descriptors}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{descriptors}{descriptors}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+interval\+\_\+time\+\_\+t} {\bf apr\+\_\+int32\+\_\+t} const {\bf apr\+\_\+pollfd\+\_\+t}$\ast$$\ast$ descriptors}\hypertarget{group__apr__poll_ga79b31f5f6b249ca41dcc8a49b8fd5aa9}{}\label{group__apr__poll_ga79b31f5f6b249ca41dcc8a49b8fd5aa9}
+\index{Poll Routines@{Poll Routines}!flags@{flags}}
+\index{flags@{flags}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{flags}{flags}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} flags}\hypertarget{group__apr__poll_gaf8cd8dfff060e0cd10e32063eef7d30c}{}\label{group__apr__poll_gaf8cd8dfff060e0cd10e32063eef7d30c}
+\index{Poll Routines@{Poll Routines}!func@{func}}
+\index{func@{func}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{func}{func}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void}($\ast$ func)({\bf void}))}\hypertarget{group__apr__poll_ga54230532a60ed2ae9f1e0b136b57cc42}{}\label{group__apr__poll_ga54230532a60ed2ae9f1e0b136b57cc42}
+\index{Poll Routines@{Poll Routines}!method@{method}}
+\index{method@{method}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{method}{method}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+pollset\+\_\+method\+\_\+e} method}\hypertarget{group__apr__poll_ga6c1b16298acdfc2ca3cba871da0daa17}{}\label{group__apr__poll_ga6c1b16298acdfc2ca3cba871da0daa17}
+\index{Poll Routines@{Poll Routines}!nsds@{nsds}}
+\index{nsds@{nsds}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{nsds}{nsds}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+int32\+\_\+t} {\bf apr\+\_\+int32\+\_\+t}$\ast$ nsds}\hypertarget{group__apr__poll_ga4bc69a0e7bde2687820998e3ef6cb906}{}\label{group__apr__poll_ga4bc69a0e7bde2687820998e3ef6cb906}
+\index{Poll Routines@{Poll Routines}!num@{num}}
+\index{num@{num}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{num}{num}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+interval\+\_\+time\+\_\+t} {\bf apr\+\_\+int32\+\_\+t}$\ast$ num}\hypertarget{group__apr__poll_ga8c10598f743ada9822ab203974a58304}{}\label{group__apr__poll_ga8c10598f743ada9822ab203974a58304}
+\index{Poll Routines@{Poll Routines}!numsock@{numsock}}
+\index{numsock@{numsock}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{numsock}{numsock}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+int32\+\_\+t} numsock}\hypertarget{group__apr__poll_ga1408ed4d6e2f3c9a2ab17fea618c5a6d}{}\label{group__apr__poll_ga1408ed4d6e2f3c9a2ab17fea618c5a6d}
+\index{Poll Routines@{Poll Routines}!p@{p}}
+\index{p@{p}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{p}{p}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+pool\+\_\+t}$\ast$ p}\hypertarget{group__apr__poll_ga28e6897534e326f77e900eb1453b4fea}{}\label{group__apr__poll_ga28e6897534e326f77e900eb1453b4fea}
+\index{Poll Routines@{Poll Routines}!size@{size}}
+\index{size@{size}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{size}{size}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+uint32\+\_\+t} size}\hypertarget{group__apr__poll_ga7da682250c23eaa2193d58188e2cf96c}{}\label{group__apr__poll_ga7da682250c23eaa2193d58188e2cf96c}
+\index{Poll Routines@{Poll Routines}!timeout@{timeout}}
+\index{timeout@{timeout}!Poll Routines@{Poll Routines}}
+\subsubsection[{\texorpdfstring{timeout}{timeout}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+interval\+\_\+time\+\_\+t} timeout}\hypertarget{group__apr__poll_ga9ceb71d3d9fcd18962d16e49bef6153a}{}\label{group__apr__poll_ga9ceb71d3d9fcd18962d16e49bef6153a}

@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['j',['J',['../sljitNativeMIPS__common_8c.html#ad59246fadffe0205c1ecfcd147c407f6',1,'sljitNativeMIPS_common.c']]],
+  ['j_5fx1',['J_X1',['../sljitNativeTILEGX__64_8c.html#ae041a9ae091c5e964c3960144217eaec',1,'sljitNativeTILEGX_64.c']]],
+  ['jal',['JAL',['../sljitNativeMIPS__common_8c.html#a9f8938c41dd93edd84b1e8319560cea7',1,'sljitNativeMIPS_common.c']]],
+  ['jal_5fx1',['JAL_X1',['../sljitNativeTILEGX__64_8c.html#a59c068b07487058f9234d6b32684ba02',1,'sljitNativeTILEGX_64.c']]],
+  ['jalr',['JALR',['../sljitNativeMIPS__common_8c.html#a0fa8374fa39b77297efc164c358c024a',1,'sljitNativeMIPS_common.c']]],
+  ['jalr_5fsolo',['JALR_SOLO',['../sljitNativeTILEGX__64_8c.html#aa7612869489b948dba1ab6fdf7c1d43f',1,'sljitNativeTILEGX_64.c']]],
+  ['jalr_5fx1',['JALR_X1',['../sljitNativeTILEGX__64_8c.html#a71e2e422e8298102f9dce3ff177c0312',1,'sljitNativeTILEGX_64.c']]],
+  ['je_5fi8',['JE_i8',['../sljitNativeX86__common_8c.html#a1414ba3ec3022a920f4cc4c6240c728b',1,'sljitNativeX86_common.c']]],
+  ['jmp_5fi32',['JMP_i32',['../sljitNativeX86__common_8c.html#ac1bd85f7e837e4aea4ceecbc8957c41c',1,'sljitNativeX86_common.c']]],
+  ['jmp_5fi8',['JMP_i8',['../sljitNativeX86__common_8c.html#a55ce78e2af99a08f533233ab03e04a2b',1,'sljitNativeX86_common.c']]],
+  ['jmp_5frm',['JMP_rm',['../sljitNativeX86__common_8c.html#aa8f96e6c831fe948e9847358496d40f2',1,'sljitNativeX86_common.c']]],
+  ['jmpl',['JMPL',['../sljitNativeSPARC__common_8c.html#ae8bdd46e7f9dd78058dea695640ad332',1,'sljitNativeSPARC_common.c']]],
+  ['jne_5fi8',['JNE_i8',['../sljitNativeX86__common_8c.html#a7e82ca61ef836d8677596bba61732081',1,'sljitNativeX86_common.c']]],
+  ['joff_5fx1',['JOFF_X1',['../sljitNativeTILEGX__64_8c.html#ae2c4eafa3a56b8c28ea3ba8adf52c8e9',1,'sljitNativeTILEGX_64.c']]],
+  ['jr',['JR',['../sljitNativeMIPS__common_8c.html#a2be408601f1de958fd6243bd97efe40f',1,'JR():&#160;sljitNativeMIPS_common.c'],['../sljitNativeTILEGX__64_8c.html#a626679de461e8fe90f2e04e9b153b663',1,'JR():&#160;sljitNativeTILEGX_64.c']]],
+  ['jr_5fsolo',['JR_SOLO',['../sljitNativeTILEGX__64_8c.html#aef88bb5eeeaaf8715cea4c2943ca2938',1,'sljitNativeTILEGX_64.c']]],
+  ['jr_5fx1',['JR_X1',['../sljitNativeTILEGX__64_8c.html#adc66a9f440e830de251ab28a4f721192',1,'sljitNativeTILEGX_64.c']]],
+  ['jump_5faddr',['JUMP_ADDR',['../sljitLir_8c.html#a6484d7a355bbc97df9cfab6ae86fbaa6',1,'sljitLir.c']]],
+  ['jump_5flabel',['JUMP_LABEL',['../sljitLir_8c.html#aaf36e186fa1ccdd533dbea1d9d047327',1,'sljitLir.c']]],
+  ['jump_5flength',['JUMP_LENGTH',['../sljitNativeMIPS__common_8c.html#a819f0458d76467dc0773b8df81607acc',1,'sljitNativeMIPS_common.c']]],
+  ['jump_5fpostfix',['JUMP_POSTFIX',['../sljitLir_8c.html#ac1dceee90eab138ce95b40d97b94438f',1,'sljitLir.c']]]
+];

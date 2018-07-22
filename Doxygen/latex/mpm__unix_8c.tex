@@ -1,0 +1,204 @@
+\hypertarget{mpm__unix_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/mpm\+\_\+unix.c File Reference}
+\label{mpm__unix_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/mpm\+\_\+unix.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/mpm\+\_\+unix.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+getopt.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+optional.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+allocator.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+listen.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+mutex.\+h\char`\"{}}\\*
+Include dependency graph for mpm\+\_\+unix.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mpm__unix_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structextra__process__t}{extra\+\_\+process\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mpm__unix_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mpm__unix_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~\hyperlink{group__APACHE__CORE__HTTPD_gaf1cdaac5f4562d9d20bae417471ad422}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structextra__process__t}{extra\+\_\+process\+\_\+t} \hyperlink{mpm__unix_8c_ac4190116bcff9185ed8169297d89aada}{extra\+\_\+process\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ec}{action\+\_\+t} \{ \\*
+\hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaa3c06bc7e4d652a970cab72026c6fed1}{D\+O\+\_\+\+N\+O\+T\+H\+I\+NG}, 
+\hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35eca81a3a4b490463b226668b0fd21b68738}{S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+RM}, 
+\hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaa7ca52f682a6f7315b45deb68c8b5881}{S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+R\+M\+\_\+\+N\+O\+L\+OG}, 
+\hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35eca4c7b764528fbfb0a36a60b077d773a40}{S\+E\+N\+D\+\_\+\+S\+I\+G\+K\+I\+LL}, 
+\\*
+\hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaab5fa49de658315add75170068b4d7f4}{G\+I\+V\+E\+UP}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{mpm__unix_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{mpm__unix_8c_a931f5924abeaf9b715351ea31b9694a3}{ap\+\_\+mpm\+\_\+pod\+\_\+killpg} (\hyperlink{structap__pod__t}{ap\+\_\+pod\+\_\+t} $\ast$\hyperlink{group__APACHE__MPM_gab7a2e318cb3c9cd07d5fd77ee676e10f}{pod}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__poll_ga8c10598f743ada9822ab203974a58304}{num})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__MPM_ga7d5ef13c9a1669642b422bcac870aac3}{ap\+\_\+signal\+\_\+server} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$exit\+\_\+status, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_gade454c9a3dc13ac389d15bf30f6c92b2}{pconf})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__APACHE__MPM_ga2d02d210669b87ebd911109155b51a1c}{ap\+\_\+mpm\+\_\+rewrite\+\_\+args} (\hyperlink{structprocess__rec}{process\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a8ec73ad58a04604170bd96796a2075a8}{process})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}
+\index{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}{APLOG_MODULE_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX~{\bf A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}\hypertarget{mpm__unix_8c_ae75325996d1b2cf6120dded4cb153a22}{}\label{mpm__unix_8c_ae75325996d1b2cf6120dded4cb153a22}
+\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mpm__unix_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mpm__unix_8c_a88a4bf7f483aad3f3945773f3383e713}
+
+
+\subsection{Typedef Documentation}
+\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!extra\+\_\+process\+\_\+t@{extra\+\_\+process\+\_\+t}}
+\index{extra\+\_\+process\+\_\+t@{extra\+\_\+process\+\_\+t}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}
+\subsubsection[{\texorpdfstring{extra\+\_\+process\+\_\+t}{extra_process_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf extra\+\_\+process\+\_\+t}  {\bf extra\+\_\+process\+\_\+t}}\hypertarget{mpm__unix_8c_ac4190116bcff9185ed8169297d89aada}{}\label{mpm__unix_8c_ac4190116bcff9185ed8169297d89aada}
+
+
+\subsection{Enumeration Type Documentation}
+\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!action\+\_\+t@{action\+\_\+t}}
+\index{action\+\_\+t@{action\+\_\+t}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}
+\subsubsection[{\texorpdfstring{action\+\_\+t}{action_t}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf action\+\_\+t}}\hypertarget{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ec}{}\label{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ec}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{D\+O\+\_\+\+N\+O\+T\+H\+I\+NG@{D\+O\+\_\+\+N\+O\+T\+H\+I\+NG}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!D\+O\+\_\+\+N\+O\+T\+H\+I\+NG@{D\+O\+\_\+\+N\+O\+T\+H\+I\+NG}}\item[{\em 
+D\+O\+\_\+\+N\+O\+T\+H\+I\+NG\hypertarget{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaa3c06bc7e4d652a970cab72026c6fed1}{}\label{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaa3c06bc7e4d652a970cab72026c6fed1}
+}]\index{S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+RM@{S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+RM}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+RM@{S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+RM}}\item[{\em 
+S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+RM\hypertarget{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35eca81a3a4b490463b226668b0fd21b68738}{}\label{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35eca81a3a4b490463b226668b0fd21b68738}
+}]\index{S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+R\+M\+\_\+\+N\+O\+L\+OG@{S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+R\+M\+\_\+\+N\+O\+L\+OG}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+R\+M\+\_\+\+N\+O\+L\+OG@{S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+R\+M\+\_\+\+N\+O\+L\+OG}}\item[{\em 
+S\+E\+N\+D\+\_\+\+S\+I\+G\+T\+E\+R\+M\+\_\+\+N\+O\+L\+OG\hypertarget{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaa7ca52f682a6f7315b45deb68c8b5881}{}\label{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaa7ca52f682a6f7315b45deb68c8b5881}
+}]\index{S\+E\+N\+D\+\_\+\+S\+I\+G\+K\+I\+LL@{S\+E\+N\+D\+\_\+\+S\+I\+G\+K\+I\+LL}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!S\+E\+N\+D\+\_\+\+S\+I\+G\+K\+I\+LL@{S\+E\+N\+D\+\_\+\+S\+I\+G\+K\+I\+LL}}\item[{\em 
+S\+E\+N\+D\+\_\+\+S\+I\+G\+K\+I\+LL\hypertarget{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35eca4c7b764528fbfb0a36a60b077d773a40}{}\label{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35eca4c7b764528fbfb0a36a60b077d773a40}
+}]\index{G\+I\+V\+E\+UP@{G\+I\+V\+E\+UP}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!G\+I\+V\+E\+UP@{G\+I\+V\+E\+UP}}\item[{\em 
+G\+I\+V\+E\+UP\hypertarget{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaab5fa49de658315add75170068b4d7f4}{}\label{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaab5fa49de658315add75170068b4d7f4}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+66              \{
+67     \hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaa3c06bc7e4d652a970cab72026c6fed1}{DO\_NOTHING},
+68     \hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35eca81a3a4b490463b226668b0fd21b68738}{SEND\_SIGTERM},
+69     \hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaa7ca52f682a6f7315b45deb68c8b5881}{SEND\_SIGTERM\_NOLOG},
+70     \hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35eca4c7b764528fbfb0a36a60b077d773a40}{SEND\_SIGKILL},
+71     \hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ecaab5fa49de658315add75170068b4d7f4}{GIVEUP}
+72 \} \hyperlink{mpm__unix_8c_aec2532b33d2d66f09e5b30ed3ded35ec}{action\_t};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{AP_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mpm__unix_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{}\label{mpm__unix_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}
+
+\begin{DoxyCode}
+93 \{
+94     \hyperlink{structextra__process__t}{extra\_process\_t} *cur = extras;
+95     \hyperlink{structextra__process__t}{extra\_process\_t} *\hyperlink{group__MOD__DAV_gacc5462e7a268b365a64468a6cf83b727}{prev} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+96 
+97     \textcolor{keywordflow}{while} (cur && cur->\hyperlink{structextra__process__t_a25f32fb330757ed1d127e7e5daa40169}{pid} != pid) \{
+98         prev = cur;
+99         cur = cur->\hyperlink{structextra__process__t_a9ab6ede07845f95dd38aed1046f26ae8}{next};
+100     \}
+101 
+102     \textcolor{keywordflow}{if} (cur) \{
+103         \textcolor{keywordflow}{if} (prev) \{
+104             prev->\hyperlink{structextra__process__t_a9ab6ede07845f95dd38aed1046f26ae8}{next} = cur->\hyperlink{structextra__process__t_a9ab6ede07845f95dd38aed1046f26ae8}{next};
+105         \}
+106         \textcolor{keywordflow}{else} \{
+107             extras = cur->\hyperlink{structextra__process__t_a9ab6ede07845f95dd38aed1046f26ae8}{next};
+108         \}
+109         *\hyperlink{group__APACHE__MPM_gae1fe83d6df293766f64ffd276c145e46}{old\_gen} = cur->\hyperlink{structextra__process__t_a763c426cb088b2a76937cc8c60440385}{gen};
+110         \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}(cur);
+111         \textcolor{keywordflow}{return} 1; \textcolor{comment}{/* found */}
+112     \}
+113     \textcolor{keywordflow}{else} \{
+114         \textcolor{comment}{/* we don't know about any such process */}
+115         \textcolor{keywordflow}{return} 0;
+116     \}
+117 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mpm__unix_8c_ace56382e8c8bdfffe9ffc8dbab06d36c_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}!ap\+\_\+mpm\+\_\+pod\+\_\+killpg@{ap\+\_\+mpm\+\_\+pod\+\_\+killpg}}
+\index{ap\+\_\+mpm\+\_\+pod\+\_\+killpg@{ap\+\_\+mpm\+\_\+pod\+\_\+killpg}!mpm\+\_\+unix.\+c@{mpm\+\_\+unix.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+mpm\+\_\+pod\+\_\+killpg(ap\+\_\+pod\+\_\+t $\ast$pod, int num)}{ap_mpm_pod_killpg(ap_pod_t *pod, int num)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+mpm\+\_\+pod\+\_\+killpg (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+pod\+\_\+t} $\ast$}]{pod, }
+\item[{{\bf int}}]{num}
+\end{DoxyParamCaption}
+)}\hypertarget{mpm__unix_8c_a931f5924abeaf9b715351ea31b9694a3}{}\label{mpm__unix_8c_a931f5924abeaf9b715351ea31b9694a3}
+
+\begin{DoxyCode}
+739 \{
+740     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+741     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+742 
+743     \textcolor{comment}{/* we don't write anything to the pod here...  we assume}
+744 \textcolor{comment}{     * that the would-be reader of the pod has another way to}
+745 \textcolor{comment}{     * see that it is time to die once we wake it up}
+746 \textcolor{comment}{     *}
+747 \textcolor{comment}{     * writing lots of things to the pod at once is very}
+748 \textcolor{comment}{     * problematic... we can fill the kernel pipe buffer and}
+749 \textcolor{comment}{     * be blocked until somebody consumes some bytes or}
+750 \textcolor{comment}{     * we hit a timeout...  if we hit a timeout we can't just}
+751 \textcolor{comment}{     * keep trying because maybe we'll never successfully}
+752 \textcolor{comment}{     * write again...  but then maybe we'll leave would-be}
+753 \textcolor{comment}{     * readers stranded (a number of them could be tied up for}
+754 \textcolor{comment}{     * a while serving time-consuming requests)}
+755 \textcolor{comment}{     */}
+756     \textcolor{comment}{/* Recall: we only worry about IDLE child processes here */}
+757     \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{group__APACHE__CORE__DAEMON_ga86cf672daa4e0ad11ad10efc894d19c8}{num} && rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}; i++) \{
+758         \textcolor{keywordflow}{if} (\hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[i][0].\hyperlink{structworker__score_a00d08351762a2d7d79cfde18a95956fa}{status} != 
+      \hyperlink{scoreboard_8h_af015ec3a4451080811d753fcda6c7b4c}{SERVER\_READY} ||
+759             \hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[i][0].\hyperlink{structworker__score_a1521c2d66e6fec93b7616e55bd101ce4}{pid} == 0) \{
+760             \textcolor{keywordflow}{continue};
+761         \}
+762         rv = dummy\_connection(pod);
+763     \}
+764 \}
+\end{DoxyCode}

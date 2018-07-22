@@ -1,0 +1,261 @@
+\hypertarget{htdbm_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/htdbm.c File Reference}
+\label{htdbm_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/htdbm.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/htdbm.\+c}}
+{\ttfamily \#include \char`\"{}passwd\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+info.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+sha1.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+dbm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+getopt.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+Include dependency graph for htdbm.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{htdbm_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structhtdbm__t}{htdbm\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{htdbm_8c_a15e3129b4f098f550ef6f5ed58287f07}{H\+T\+D\+B\+M\+\_\+\+M\+A\+KE}~0
+\item 
+\#define \hyperlink{htdbm_8c_a92c71346fc4628f4e709415dd65f585e}{H\+T\+D\+B\+M\+\_\+\+D\+E\+L\+E\+TE}~1
+\item 
+\#define \hyperlink{htdbm_8c_ad214ca478ca84b94650fa025eedc82c8}{H\+T\+D\+B\+M\+\_\+\+V\+E\+R\+I\+FY}~2
+\item 
+\#define \hyperlink{htdbm_8c_a68ebb42322bef6995ebfe2ff17dc2ebc}{H\+T\+D\+B\+M\+\_\+\+L\+I\+ST}~3
+\item 
+\#define \hyperlink{htdbm_8c_a095b1aed5e336763c73e86747822b48e}{H\+T\+D\+B\+M\+\_\+\+N\+O\+F\+I\+LE}~4
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structhtdbm__t}{htdbm\+\_\+t} \hyperlink{htdbm_8c_a0e39f79a621cbcba36339e502d2ea0e1}{htdbm\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{htdbm_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{htdbm.\+c@{htdbm.\+c}!H\+T\+D\+B\+M\+\_\+\+D\+E\+L\+E\+TE@{H\+T\+D\+B\+M\+\_\+\+D\+E\+L\+E\+TE}}
+\index{H\+T\+D\+B\+M\+\_\+\+D\+E\+L\+E\+TE@{H\+T\+D\+B\+M\+\_\+\+D\+E\+L\+E\+TE}!htdbm.\+c@{htdbm.\+c}}
+\subsubsection[{\texorpdfstring{H\+T\+D\+B\+M\+\_\+\+D\+E\+L\+E\+TE}{HTDBM_DELETE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+T\+D\+B\+M\+\_\+\+D\+E\+L\+E\+TE~1}\hypertarget{htdbm_8c_a92c71346fc4628f4e709415dd65f585e}{}\label{htdbm_8c_a92c71346fc4628f4e709415dd65f585e}
+\index{htdbm.\+c@{htdbm.\+c}!H\+T\+D\+B\+M\+\_\+\+L\+I\+ST@{H\+T\+D\+B\+M\+\_\+\+L\+I\+ST}}
+\index{H\+T\+D\+B\+M\+\_\+\+L\+I\+ST@{H\+T\+D\+B\+M\+\_\+\+L\+I\+ST}!htdbm.\+c@{htdbm.\+c}}
+\subsubsection[{\texorpdfstring{H\+T\+D\+B\+M\+\_\+\+L\+I\+ST}{HTDBM_LIST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+T\+D\+B\+M\+\_\+\+L\+I\+ST~3}\hypertarget{htdbm_8c_a68ebb42322bef6995ebfe2ff17dc2ebc}{}\label{htdbm_8c_a68ebb42322bef6995ebfe2ff17dc2ebc}
+\index{htdbm.\+c@{htdbm.\+c}!H\+T\+D\+B\+M\+\_\+\+M\+A\+KE@{H\+T\+D\+B\+M\+\_\+\+M\+A\+KE}}
+\index{H\+T\+D\+B\+M\+\_\+\+M\+A\+KE@{H\+T\+D\+B\+M\+\_\+\+M\+A\+KE}!htdbm.\+c@{htdbm.\+c}}
+\subsubsection[{\texorpdfstring{H\+T\+D\+B\+M\+\_\+\+M\+A\+KE}{HTDBM_MAKE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+T\+D\+B\+M\+\_\+\+M\+A\+KE~0}\hypertarget{htdbm_8c_a15e3129b4f098f550ef6f5ed58287f07}{}\label{htdbm_8c_a15e3129b4f098f550ef6f5ed58287f07}
+\index{htdbm.\+c@{htdbm.\+c}!H\+T\+D\+B\+M\+\_\+\+N\+O\+F\+I\+LE@{H\+T\+D\+B\+M\+\_\+\+N\+O\+F\+I\+LE}}
+\index{H\+T\+D\+B\+M\+\_\+\+N\+O\+F\+I\+LE@{H\+T\+D\+B\+M\+\_\+\+N\+O\+F\+I\+LE}!htdbm.\+c@{htdbm.\+c}}
+\subsubsection[{\texorpdfstring{H\+T\+D\+B\+M\+\_\+\+N\+O\+F\+I\+LE}{HTDBM_NOFILE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+T\+D\+B\+M\+\_\+\+N\+O\+F\+I\+LE~4}\hypertarget{htdbm_8c_a095b1aed5e336763c73e86747822b48e}{}\label{htdbm_8c_a095b1aed5e336763c73e86747822b48e}
+\index{htdbm.\+c@{htdbm.\+c}!H\+T\+D\+B\+M\+\_\+\+V\+E\+R\+I\+FY@{H\+T\+D\+B\+M\+\_\+\+V\+E\+R\+I\+FY}}
+\index{H\+T\+D\+B\+M\+\_\+\+V\+E\+R\+I\+FY@{H\+T\+D\+B\+M\+\_\+\+V\+E\+R\+I\+FY}!htdbm.\+c@{htdbm.\+c}}
+\subsubsection[{\texorpdfstring{H\+T\+D\+B\+M\+\_\+\+V\+E\+R\+I\+FY}{HTDBM_VERIFY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+T\+D\+B\+M\+\_\+\+V\+E\+R\+I\+FY~2}\hypertarget{htdbm_8c_ad214ca478ca84b94650fa025eedc82c8}{}\label{htdbm_8c_ad214ca478ca84b94650fa025eedc82c8}
+
+
+\subsection{Typedef Documentation}
+\index{htdbm.\+c@{htdbm.\+c}!htdbm\+\_\+t@{htdbm\+\_\+t}}
+\index{htdbm\+\_\+t@{htdbm\+\_\+t}!htdbm.\+c@{htdbm.\+c}}
+\subsubsection[{\texorpdfstring{htdbm\+\_\+t}{htdbm_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf htdbm\+\_\+t} {\bf htdbm\+\_\+t}}\hypertarget{htdbm_8c_a0e39f79a621cbcba36339e502d2ea0e1}{}\label{htdbm_8c_a0e39f79a621cbcba36339e502d2ea0e1}
+
+
+\subsection{Function Documentation}
+\index{htdbm.\+c@{htdbm.\+c}!main@{main}}
+\index{main@{main}!htdbm.\+c@{htdbm.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{htdbm_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{htdbm_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+312 \{
+313     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+314     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+315     \textcolor{keywordtype}{char} \hyperlink{ap__regex_8h_af77b5f4c5b211e29e7b9e265b1420aa7}{errbuf}[\hyperlink{group__APACHE__CORE__DAEMON_ga4fa9aad0e9c7cc2e344b679cdbb2b67d}{MAX\_STRING\_LEN}];
+316     \textcolor{keywordtype}{int}  need\_file = 1;
+317     \textcolor{keywordtype}{int}  need\_user = 1;
+318     \textcolor{keywordtype}{int}  need\_pwd  = 1;
+319     \textcolor{keywordtype}{int}  need\_cmnt = 0;
+320     \textcolor{keywordtype}{int}  changed = 0;
+321     \textcolor{keywordtype}{int}  \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd} = \hyperlink{htdbm_8c_a15e3129b4f098f550ef6f5ed58287f07}{HTDBM\_MAKE};
+322     \textcolor{keywordtype}{int}  \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret}, args\_left = 2;
+323     \hyperlink{structapr__getopt__t}{apr\_getopt\_t} *state;
+324     \textcolor{keywordtype}{char} \hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt};
+325     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *opt\_arg;
+326 
+327     apr\_app\_initialize(&\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+328     atexit(terminate);
+329 
+330     \textcolor{keywordflow}{if} ((rv = htdbm\_init(&pool, &h)) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+331         fprintf(stderr, \textcolor{stringliteral}{"Unable to initialize htdbm terminating!\(\backslash\)n"});
+332         apr\_strerror(rv, errbuf, \textcolor{keyword}{sizeof}(errbuf));
+333         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+334     \}
+335 
+336     rv = apr\_getopt\_init(&state, pool, \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+337     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS})
+338         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{lua__passwd_8h_a8cefbf9955ed0faf4a10cd8ea4947451}{ERR\_SYNTAX});
+339 
+340     \textcolor{keywordflow}{while} ((rv = apr\_getopt(state, \textcolor{stringliteral}{"cnmspdBbtivxlC:T:"}, &opt, &opt\_arg)) == 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+341         \textcolor{keywordflow}{switch} (opt) \{
+342         \textcolor{keywordflow}{case} \textcolor{charliteral}{'c'}:
+343             \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->create = 1;
+344             \textcolor{keywordflow}{break};
+345         \textcolor{keywordflow}{case} \textcolor{charliteral}{'n'}:
+346             need\_file = 0;
+347             cmd = \hyperlink{htdbm_8c_a095b1aed5e336763c73e86747822b48e}{HTDBM\_NOFILE};
+348             args\_left--;
+349             \textcolor{keywordflow}{break};
+350         \textcolor{keywordflow}{case} \textcolor{charliteral}{'l'}:
+351             need\_pwd = 0;
+352             need\_user = 0;
+353             cmd = \hyperlink{htdbm_8c_a68ebb42322bef6995ebfe2ff17dc2ebc}{HTDBM\_LIST};
+354             \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->rdonly = 1;
+355             args\_left--;
+356             \textcolor{keywordflow}{break};
+357         \textcolor{keywordflow}{case} \textcolor{charliteral}{'t'}:
+358             need\_cmnt = 1;
+359             args\_left++;
+360             \textcolor{keywordflow}{break};
+361         \textcolor{keywordflow}{case} \textcolor{charliteral}{'T'}:
+362             \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->type = apr\_pstrdup(\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.\hyperlink{structapr__hash__t_a3cf4d4547e37a14045a52c96721fa264}{pool}, opt\_arg);
+363             \textcolor{keywordflow}{break};
+364         \textcolor{keywordflow}{case} \textcolor{charliteral}{'v'}:
+365             \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->rdonly = 1;
+366             cmd = \hyperlink{htdbm_8c_ad214ca478ca84b94650fa025eedc82c8}{HTDBM\_VERIFY};
+367             \textcolor{keywordflow}{break};
+368         \textcolor{keywordflow}{case} \textcolor{charliteral}{'x'}:
+369             need\_pwd = 0;
+370             cmd = \hyperlink{htdbm_8c_a92c71346fc4628f4e709415dd65f585e}{HTDBM\_DELETE};
+371             \textcolor{keywordflow}{break};
+372         \textcolor{keywordflow}{default}:
+373             ret = \hyperlink{passwd__common_8c_aa4f65bebc9c808502a0173bfb5a3be83}{parse\_common\_options}(&\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx, opt, opt\_arg);
+374             \textcolor{keywordflow}{if} (ret) \{
+375                 fprintf(stderr, \textcolor{stringliteral}{"Error: %s\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.errstr);
+376                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(ret);
+377             \}
+378         \}
+379     \}
+380     \textcolor{keywordflow}{if} (\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.passwd\_src == PW\_ARG) \{
+381             need\_pwd = 0;
+382             args\_left++;
+383     \}
+384     \textcolor{comment}{/*}
+385 \textcolor{comment}{     * Make sure we still have exactly the right number of arguments left}
+386 \textcolor{comment}{     * (the filename, the username, and possibly the password if -b was}
+387 \textcolor{comment}{     * specified).}
+388 \textcolor{comment}{     */}
+389     i = state->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind};
+390     \textcolor{keywordflow}{if} (rv != \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF} || \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} - i != args\_left)
+391         htdbm\_usage();
+392 
+393     \textcolor{keywordflow}{if} (need\_file) \{
+394         \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->filename = apr\_pstrdup(\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.\hyperlink{structapr__hash__t_a3cf4d4547e37a14045a52c96721fa264}{pool}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[i++]);
+395         \textcolor{keywordflow}{if} ((rv = htdbm\_open(h)) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+396             fprintf(stderr, \textcolor{stringliteral}{"Error opening database %s\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->filename);
+397             apr\_strerror(rv, errbuf, \textcolor{keyword}{sizeof}(errbuf));
+398             fprintf(stderr,\textcolor{stringliteral}{"%s\(\backslash\)n"},errbuf);
+399             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{lua__passwd_8h_aca1e63696ddadb011dde9ae55a71a360}{ERR\_FILEPERM});
+400         \}
+401     \}
+402     \textcolor{keywordflow}{if} (need\_user) \{
+403         \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->username = apr\_pstrdup(pool, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[i++]);
+404         \textcolor{keywordflow}{if} (htdbm\_valid\_username(h) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS})
+405             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{lua__passwd_8h_adbecc3440a7ce0170b78f71187ca8d22}{ERR\_BADUSER});
+406     \}
+407     \textcolor{keywordflow}{if} (\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.passwd\_src == PW\_ARG)
+408         \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.passwd = apr\_pstrdup(pool, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[i++]);
+409 
+410     \textcolor{keywordflow}{if} (need\_pwd) \{
+411         ret = \hyperlink{passwd__common_8c_a115328175e2191b1fb1f48f8e66afa4a}{get\_password}(&\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx);
+412         \textcolor{keywordflow}{if} (ret) \{
+413             fprintf(stderr, \textcolor{stringliteral}{"Error: %s\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.errstr);
+414             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(ret);
+415         \}
+416     \}
+417     \textcolor{keywordflow}{if} (need\_cmnt)
+418         \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->comment = apr\_pstrdup(pool, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[i++]);
+419 
+420     \textcolor{keywordflow}{switch} (cmd) \{
+421         \textcolor{keywordflow}{case} \hyperlink{htdbm_8c_ad214ca478ca84b94650fa025eedc82c8}{HTDBM\_VERIFY}:
+422             \textcolor{keywordflow}{if} ((rv = htdbm\_verify(h)) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+423                 \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_gad15c3b9bda78a88c02466a0d405c6047}{APR\_STATUS\_IS\_ENOENT}(rv)) \{
+424                     fprintf(stderr, \textcolor{stringliteral}{"The user '%s' could not be found in database\(\backslash\)n"}, 
+      \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->username);
+425                     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{lua__passwd_8h_adbecc3440a7ce0170b78f71187ca8d22}{ERR\_BADUSER});
+426                 \}
+427                 \textcolor{keywordflow}{else} \{
+428                     fprintf(stderr, \textcolor{stringliteral}{"Password mismatch for user '%s'\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->username);
+429                     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{lua__passwd_8h_aa6b7701f200fc329d9e2cb8f869d4d5c}{ERR\_PWMISMATCH});
+430                 \}
+431             \}
+432             \textcolor{keywordflow}{else}
+433                 fprintf(stderr, \textcolor{stringliteral}{"Password validated for user '%s'\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->username);
+434             \textcolor{keywordflow}{break};
+435         \textcolor{keywordflow}{case} \hyperlink{htdbm_8c_a92c71346fc4628f4e709415dd65f585e}{HTDBM\_DELETE}:
+436             \textcolor{keywordflow}{if} (htdbm\_del(h) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+437                 fprintf(stderr, \textcolor{stringliteral}{"Cannot find user '%s' in database\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->username);
+438                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{lua__passwd_8h_adbecc3440a7ce0170b78f71187ca8d22}{ERR\_BADUSER});
+439             \}
+440             \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->username = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+441             changed = 1;
+442             \textcolor{keywordflow}{break};
+443         \textcolor{keywordflow}{case} \hyperlink{htdbm_8c_a68ebb42322bef6995ebfe2ff17dc2ebc}{HTDBM\_LIST}:
+444             htdbm\_list(h);
+445             \textcolor{keywordflow}{break};
+446         \textcolor{keywordflow}{default}:
+447             ret = htdbm\_make(h);
+448             \textcolor{keywordflow}{if} (ret)
+449                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(ret);
+450             \textcolor{keywordflow}{break};
+451     \}
+452     \textcolor{keywordflow}{if} (need\_file && !\hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->rdonly) \{
+453         \textcolor{keywordflow}{if} ((rv = htdbm\_save(h, &changed)) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+454             apr\_strerror(rv, errbuf, \textcolor{keyword}{sizeof}(errbuf));
+455             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{lua__passwd_8h_aca1e63696ddadb011dde9ae55a71a360}{ERR\_FILEPERM});
+456         \}
+457         fprintf(\hyperlink{pcretest_8txt_a23d7bb711442e83ff18e0effa4729bdf}{stdout}, \textcolor{stringliteral}{"Database %s %s.\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->filename,
+458                 \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->create ? \textcolor{stringliteral}{"created"} : (changed ? \textcolor{stringliteral}{"modified"} : \textcolor{stringliteral}{"updated"}));
+459     \}
+460     \textcolor{keywordflow}{if} (cmd == \hyperlink{htdbm_8c_a095b1aed5e336763c73e86747822b48e}{HTDBM\_NOFILE}) \{
+461         \textcolor{keywordflow}{if} (!need\_cmnt) \{
+462             fprintf(stderr, \textcolor{stringliteral}{"%s:%s\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->username, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.passwd);
+463         \}
+464         \textcolor{keywordflow}{else} \{
+465             fprintf(stderr, \textcolor{stringliteral}{"%s:%s:%s\(\backslash\)n"}, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->username, \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->ctx.passwd,
+466                     \hyperlink{group__apr__hash_ga0d6dcb41ca5e794b318df5f6fd273ee2}{h}->comment);
+467         \}
+468     \}
+469     htdbm\_terminate(h);
+470 
+471     \textcolor{keywordflow}{return} 0; \textcolor{comment}{/* Suppress compiler warning. */}
+472 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=274pt]{htdbm_8c_a814244b02f6701fd8ead246678bb3dae_cgraph}
+\end{center}
+\end{figure}
+
+

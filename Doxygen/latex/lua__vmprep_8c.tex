@@ -1,0 +1,348 @@
+\hypertarget{lua__vmprep_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/lua/lua\+\_\+vmprep.c File Reference}
+\label{lua__vmprep_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/lua/lua\+\_\+vmprep.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/lua/lua\+\_\+vmprep.\+c}}
+{\ttfamily \#include \char`\"{}mod\+\_\+lua.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+uuid.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}lua\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+info.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+auth.\+h\char`\"{}}\\*
+Include dependency graph for lua\+\_\+vmprep.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{lua__vmprep_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{lua__vmprep_8c_a426d9573f26f04781d16d188194df600}{A\+P\+\_\+\+L\+U\+A\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+E\+XT}~\char`\"{}.so\char`\"{}
+\item 
+\#define \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~lua\+\_\+pushinteger(\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}); lua\+\_\+setfield(\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L}, -\/2, \#\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{lua__vmprep_8c_a8a924a2ae75955f480f27c800e6eca36}{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE} (lua)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{lua__vmprep_8c_a247a1daa58f03a88b4365c919a241593}{ap\+\_\+lua\+\_\+init\+\_\+mutex} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{lua__vmprep_8c_a837cef186260da72d57dcde584ec7578}{ap\+\_\+lua\+\_\+load\+\_\+apache2\+\_\+lmodule} (lua\+\_\+\+State $\ast$\hyperlink{pcregrep_8txt_a680bac11554b63e0cc253f8e132350d4}{L})
+\item 
+lua\+\_\+\+State $\ast$ \hyperlink{lua__vmprep_8c_a1f909bf64e667c74fa4bf215f179d6d7}{ap\+\_\+lua\+\_\+get\+\_\+lua\+\_\+state} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$lifecycle\+\_\+pool, \hyperlink{structap__lua__vm__spec}{ap\+\_\+lua\+\_\+vm\+\_\+spec} $\ast$spec, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__global__mutex__t}{apr\+\_\+global\+\_\+mutex\+\_\+t} $\ast$ \hyperlink{lua__vmprep_8c_a1da5ec2434f85566057dab42de51edab}{lua\+\_\+ivm\+\_\+mutex}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}!A\+P\+\_\+\+L\+U\+A\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+E\+XT@{A\+P\+\_\+\+L\+U\+A\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+E\+XT}}
+\index{A\+P\+\_\+\+L\+U\+A\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+E\+XT@{A\+P\+\_\+\+L\+U\+A\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+E\+XT}!lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+L\+U\+A\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+E\+XT}{AP_LUA_MODULE_EXT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+L\+U\+A\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+E\+XT~\char`\"{}.so\char`\"{}}\hypertarget{lua__vmprep_8c_a426d9573f26f04781d16d188194df600}{}\label{lua__vmprep_8c_a426d9573f26f04781d16d188194df600}
+\index{lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}!makeintegerfield@{makeintegerfield}}
+\index{makeintegerfield@{makeintegerfield}!lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}}
+\subsubsection[{\texorpdfstring{makeintegerfield}{makeintegerfield}}]{\setlength{\rightskip}{0pt plus 5cm}\#define makeintegerfield(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf L}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~lua\+\_\+pushinteger({\bf L}, {\bf n}); lua\+\_\+setfield({\bf L}, -\/2, \#{\bf n})}\hypertarget{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{}\label{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}
+
+
+\subsection{Function Documentation}
+\index{lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}!ap\+\_\+lua\+\_\+get\+\_\+lua\+\_\+state@{ap\+\_\+lua\+\_\+get\+\_\+lua\+\_\+state}}
+\index{ap\+\_\+lua\+\_\+get\+\_\+lua\+\_\+state@{ap\+\_\+lua\+\_\+get\+\_\+lua\+\_\+state}!lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+get\+\_\+lua\+\_\+state(apr\+\_\+pool\+\_\+t $\ast$lifecycle\+\_\+pool, ap\+\_\+lua\+\_\+vm\+\_\+spec $\ast$spec, request\+\_\+rec $\ast$r)}{ap_lua_get_lua_state(apr_pool_t *lifecycle_pool, ap_lua_vm_spec *spec, request_rec *r)}}]{\setlength{\rightskip}{0pt plus 5cm}lua\+\_\+\+State$\ast$ ap\+\_\+lua\+\_\+get\+\_\+lua\+\_\+state (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{lifecycle\+\_\+pool, }
+\item[{{\bf ap\+\_\+lua\+\_\+vm\+\_\+spec} $\ast$}]{spec, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__vmprep_8c_a1f909bf64e667c74fa4bf215f179d6d7}{}\label{lua__vmprep_8c_a1f909bf64e667c74fa4bf215f179d6d7}
+Function used to create a lua\+\_\+\+State instance bound into the web server in the appropriate scope. 
+\begin{DoxyCode}
+437 \{
+438     lua\_State *\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+439     \hyperlink{structap__lua__finfo}{ap\_lua\_finfo} *\hyperlink{structcache__info}{cache\_info} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+440     \textcolor{keywordtype}{int} tryCache = 0;
+441     
+442     \textcolor{keywordflow}{if} (spec->\hyperlink{structap__lua__vm__spec_a3f48f62745598fabcf1715977f6e8d77}{scope} == \hyperlink{lua__vmprep_8h_a1ac121669cd2169c4038d0cf1e53dfb1}{AP\_LUA\_SCOPE\_SERVER}) \{
+443         \textcolor{keywordtype}{char} *\hyperlink{apr__random_8c_a1961406c0af51085f634defe740cbf52}{hash};
+444         \hyperlink{structapr__reslist__t}{apr\_reslist\_t}* reslist = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+445         \hyperlink{structap__lua__server__spec}{ap\_lua\_server\_spec}* sspec = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+446         hash = apr\_psprintf(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{stringliteral}{"reslist:%s"}, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file});
+447 \textcolor{preprocessor}{#if APR\_HAS\_THREADS}
+448         apr\_thread\_mutex\_lock(ap\_lua\_mutex);
+449 \textcolor{preprocessor}{#endif}
+450         \textcolor{keywordflow}{if} (apr\_pool\_userdata\_get((\textcolor{keywordtype}{void} **)&reslist, hash,
+451                                   r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->process->pool) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+452             \textcolor{keywordflow}{if} (reslist != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+453                 \textcolor{keywordflow}{if} (apr\_reslist\_acquire(reslist, (\textcolor{keywordtype}{void}**) &sspec) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+454                     L = sspec->\hyperlink{structap__lua__server__spec_aa154aeca7d8846f6093639b6e94075e6}{L};
+455                     cache\_info = sspec->\hyperlink{structap__lua__server__spec_a119c899d97887709311ec325875662ca}{finfo};
+456                 \}
+457             \}
+458         \}
+459         \textcolor{keywordflow}{if} (L == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+460             \hyperlink{structap__lua__vm__spec}{ap\_lua\_vm\_spec}* server\_spec = copy\_vm\_spec(r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->process->pool, spec);
+461             \textcolor{keywordflow}{if} (
+462                     apr\_reslist\_create(&reslist, spec->\hyperlink{structap__lua__vm__spec_aa7a5fba22158814ea6771904bf5db7ce}{vm\_min}, spec->
+      \hyperlink{structap__lua__vm__spec_a0a68e82b1a4d6d6917fa2f7be29fb27e}{vm\_max}, spec->\hyperlink{structap__lua__vm__spec_a0a68e82b1a4d6d6917fa2f7be29fb27e}{vm\_max}, 0, 
+463                                 (\hyperlink{group__APR__Util__RL_ga57065208a6925b61f5ca96ade452a3d6}{apr\_reslist\_constructor}) server\_vm\_construct, 
+464                                 (\hyperlink{group__APR__Util__RL_gab642eccd03379810b6beb1e7bf009dad}{apr\_reslist\_destructor}) server\_cleanup\_lua, 
+465                                 server\_spec, r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->process->pool)
+466                     == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && reslist != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+467                 apr\_pool\_userdata\_set(reslist, hash, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+468                                             r->\hyperlink{structrequest__rec_a4a8059930ce9409cb885fdeef6921b7b}{server}->process->pool);
+469                 \textcolor{keywordflow}{if} (apr\_reslist\_acquire(reslist, (\textcolor{keywordtype}{void}**) &sspec) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+470                     L = sspec->\hyperlink{structap__lua__server__spec_aa154aeca7d8846f6093639b6e94075e6}{L};
+471                     cache\_info = sspec->\hyperlink{structap__lua__server__spec_a119c899d97887709311ec325875662ca}{finfo};
+472                 \}
+473                 \textcolor{keywordflow}{else} \{
+474 \textcolor{preprocessor}{#if APR\_HAS\_THREADS}
+475                     apr\_thread\_mutex\_unlock(ap\_lua\_mutex);
+476 \textcolor{preprocessor}{#endif}
+477                     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+478                 \}
+479             \}
+480         \}
+481 \textcolor{preprocessor}{#if APR\_HAS\_THREADS}
+482         apr\_thread\_mutex\_unlock(ap\_lua\_mutex);
+483 \textcolor{preprocessor}{#endif}
+484     \}
+485     \textcolor{keywordflow}{else} \{
+486         \textcolor{keywordflow}{if} (apr\_pool\_userdata\_get((\textcolor{keywordtype}{void} **)&L, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file},
+487                               lifecycle\_pool) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+488             L = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+489         \}
+490     \}
+491     \textcolor{keywordflow}{if} (L == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+492         \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, lifecycle\_pool, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(01483)
+493                         \textcolor{stringliteral}{"creating lua\_State with file %s"}, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file});
+494         \textcolor{comment}{/* not available, so create */}
+495 
+496         \textcolor{keywordflow}{if} (!vm\_construct(&L, spec, lifecycle\_pool)) \{
+497             \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(L != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+498             apr\_pool\_userdata\_set(L, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file}, cleanup\_lua, lifecycle\_pool);
+499         \}
+500     \}
+501 
+502     \textcolor{keywordflow}{if} (spec->\hyperlink{structap__lua__vm__spec_a75c203f3dc753fa4d50c51d24f84c0f7}{codecache} == \hyperlink{lua__vmprep_8h_ab7cba5e0be076f8336c9d6d462086f02}{AP\_LUA\_CACHE\_FOREVER} || (spec->
+      \hyperlink{structap__lua__vm__spec_a3fee13bec9ac75a95f7bbd75e5ad197a}{bytecode} && spec->\hyperlink{structap__lua__vm__spec_abe73bf8917b08b2d8df6f8e1db71df1b}{bytecode\_len} > 0)) \{
+503         tryCache = 1;
+504     \}
+505     \textcolor{keywordflow}{else} \{
+506         \textcolor{keywordtype}{char}* mkey;
+507         \textcolor{keywordflow}{if} (spec->\hyperlink{structap__lua__vm__spec_a3f48f62745598fabcf1715977f6e8d77}{scope} != \hyperlink{lua__vmprep_8h_a1ac121669cd2169c4038d0cf1e53dfb1}{AP\_LUA\_SCOPE\_SERVER}) \{
+508             mkey = apr\_psprintf(r->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{stringliteral}{"ap\_lua\_modified:%s"}, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file});
+509             apr\_pool\_userdata\_get((\textcolor{keywordtype}{void} **)&cache\_info, mkey, lifecycle\_pool);
+510             \textcolor{keywordflow}{if} (cache\_info == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+511                 cache\_info = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(lifecycle\_pool, \textcolor{keyword}{sizeof}(
+      \hyperlink{structap__lua__finfo}{ap\_lua\_finfo}));
+512                 apr\_pool\_userdata\_set((\textcolor{keywordtype}{void}*) cache\_info, mkey, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, lifecycle\_pool);
+513             \}
+514         \}
+515         \textcolor{keywordflow}{if} (spec->\hyperlink{structap__lua__vm__spec_a75c203f3dc753fa4d50c51d24f84c0f7}{codecache} == \hyperlink{lua__vmprep_8h_afe6f6dbbefb4177c258ccbd00be4d59a}{AP\_LUA\_CACHE\_STAT}) \{
+516             \hyperlink{structapr__finfo__t}{apr\_finfo\_t} lua\_finfo;
+517             apr\_stat(&lua\_finfo, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file}, \hyperlink{group__apr__file__stat_ga992ce1f4f75d519fd2a9d241c5a12515}{APR\_FINFO\_MTIME}|
+      \hyperlink{group__apr__file__stat_gadf72493da450c0b1e3d279e98a973120}{APR\_FINFO\_SIZE}, lifecycle\_pool);
+518 
+519             \textcolor{comment}{/* On first visit, modified will be zero, but that's fine - The file is }
+520 \textcolor{comment}{            loaded in the vm\_construct function.}
+521 \textcolor{comment}{            */}
+522             \textcolor{keywordflow}{if} ((cache\_info->\hyperlink{structap__lua__finfo_a437d7d7c91addc2a66eb54b1a1799e41}{modified} == lua\_finfo.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime} && cache\_info->
+      \hyperlink{structap__lua__finfo_a6b961c0cc6d0b56637da657c03819457}{size} == lua\_finfo.\hyperlink{structapr__finfo__t_a3e47a673c5b82a25a783a732dee6f946}{size})
+523                     || cache\_info->\hyperlink{structap__lua__finfo_a437d7d7c91addc2a66eb54b1a1799e41}{modified} == 0) \{
+524                 tryCache = 1;
+525             \}
+526             cache\_info->\hyperlink{structap__lua__finfo_a437d7d7c91addc2a66eb54b1a1799e41}{modified} = lua\_finfo.\hyperlink{structapr__finfo__t_afc3bec0f6b3b10160428ba5602a41c60}{mtime};
+527             cache\_info->\hyperlink{structap__lua__finfo_a6b961c0cc6d0b56637da657c03819457}{size} = lua\_finfo.\hyperlink{structapr__finfo__t_a3e47a673c5b82a25a783a732dee6f946}{size};
+528         \}
+529         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (spec->\hyperlink{structap__lua__vm__spec_a75c203f3dc753fa4d50c51d24f84c0f7}{codecache} == \hyperlink{lua__vmprep_8h_ae9c1123fd62f90bf670399df96086c78}{AP\_LUA\_CACHE\_NEVER}) \{
+530             \textcolor{keywordflow}{if} (cache\_info->\hyperlink{structap__lua__finfo_a579b5cb9299631a471316e8edda02dd7}{runs} == 0)
+531                 tryCache = 1;
+532         \}
+533         cache\_info->\hyperlink{structap__lua__finfo_a579b5cb9299631a471316e8edda02dd7}{runs}++;
+534     \}
+535     \textcolor{keywordflow}{if} (tryCache == 0 && spec->\hyperlink{structap__lua__vm__spec_a3f48f62745598fabcf1715977f6e8d77}{scope} != \hyperlink{lua__vmprep_8h_adfae3b7fdedaa3a7c74c510778ef370c}{AP\_LUA\_SCOPE\_ONCE}) \{
+536         \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+537         \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, lifecycle\_pool, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02332)
+538             \textcolor{stringliteral}{"(re)loading lua file %s"}, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file});
+539         rc = luaL\_loadfile(L, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file});
+540         \textcolor{keywordflow}{if} (rc != 0) \{
+541             \hyperlink{group__APACHE__CORE__LOG_ga6cc9f8ca3eb1a5010390a4883c416d0b}{ap\_log\_perror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 0, lifecycle\_pool, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02333)
+542                           \textcolor{stringliteral}{"Error loading %s: %s"}, spec->\hyperlink{structap__lua__vm__spec_aff6a944e039ad2b6bab3536c612a1753}{file},
+543                           rc == LUA\_ERRMEM ? \textcolor{stringliteral}{"memory allocation error"}
+544                                            : lua\_tostring(L, 0));
+545             \textcolor{keywordflow}{return} 0;
+546         \}
+547         lua\_pcall(L, 0, LUA\_MULTRET, 0);
+548     \}
+549 
+550     \textcolor{keywordflow}{return} \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L};
+551 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{lua__vmprep_8c_a1f909bf64e667c74fa4bf215f179d6d7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}!ap\+\_\+lua\+\_\+init\+\_\+mutex@{ap\+\_\+lua\+\_\+init\+\_\+mutex}}
+\index{ap\+\_\+lua\+\_\+init\+\_\+mutex@{ap\+\_\+lua\+\_\+init\+\_\+mutex}!lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+init\+\_\+mutex(apr\+\_\+pool\+\_\+t $\ast$pool, server\+\_\+rec $\ast$s)}{ap_lua_init_mutex(apr_pool_t *pool, server_rec *s)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+lua\+\_\+init\+\_\+mutex (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf server\+\_\+rec} $\ast$}]{s}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__vmprep_8c_a247a1daa58f03a88b4365c919a241593}{}\label{lua__vmprep_8c_a247a1daa58f03a88b4365c919a241593}
+
+\begin{DoxyCode}
+44 \{
+45     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+46     
+47     \textcolor{comment}{/* global IVM mutex */}
+48     rv = apr\_global\_mutex\_child\_init(&\hyperlink{lua__vmprep_8c_a1da5ec2434f85566057dab42de51edab}{lua\_ivm\_mutex},
+49                                      apr\_global\_mutex\_lockfile(\hyperlink{lua__vmprep_8c_a1da5ec2434f85566057dab42de51edab}{lua\_ivm\_mutex}),
+50                                      pool);
+51     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+52         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{APLOG\_CRIT}, rv, s, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03016)
+53                      \textcolor{stringliteral}{"mod\_lua: Failed to reopen mutex lua-ivm-shm in child"});
+54         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1); \textcolor{comment}{/* bah :( */}
+55     \}
+56     
+57     \textcolor{comment}{/* Server pool mutex */}
+58 \textcolor{preprocessor}{#if APR\_HAS\_THREADS}
+59     apr\_thread\_mutex\_create(&ap\_lua\_mutex, \hyperlink{group__apr__thread__mutex_ga579050872f9aff06e773b084264f7d06}{APR\_THREAD\_MUTEX\_DEFAULT}, pool);
+60 \textcolor{preprocessor}{#endif}
+61 \}
+\end{DoxyCode}
+\index{lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}!ap\+\_\+lua\+\_\+load\+\_\+apache2\+\_\+lmodule@{ap\+\_\+lua\+\_\+load\+\_\+apache2\+\_\+lmodule}}
+\index{ap\+\_\+lua\+\_\+load\+\_\+apache2\+\_\+lmodule@{ap\+\_\+lua\+\_\+load\+\_\+apache2\+\_\+lmodule}!lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+lua\+\_\+load\+\_\+apache2\+\_\+lmodule(lua\+\_\+\+State $\ast$\+L)}{ap_lua_load_apache2_lmodule(lua_State *L)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+lua\+\_\+load\+\_\+apache2\+\_\+lmodule (
+\begin{DoxyParamCaption}
+\item[{lua\+\_\+\+State $\ast$}]{L}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__vmprep_8c_a837cef186260da72d57dcde584ec7578}{}\label{lua__vmprep_8c_a837cef186260da72d57dcde584ec7578}
+Fake out addition of the \char`\"{}apache2\char`\"{} module 
+\begin{DoxyCode}
+146 \{
+147     lua\_getglobal(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"package"});
+148     lua\_getfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -1, \textcolor{stringliteral}{"loaded"});
+149     lua\_newtable(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L});
+150     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2, \textcolor{stringliteral}{"apache2"});
+151     lua\_setglobal(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"apache2"});
+152     lua\_pop(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, 1);              \textcolor{comment}{/* empty stack */}
+153 
+154     lua\_getglobal(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \textcolor{stringliteral}{"apache2"});
+155 
+156     lua\_pushstring(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, ap\_get\_server\_banner());
+157     lua\_setfield(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, -2, \textcolor{stringliteral}{"version"});
+158 
+159     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK});
+160     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{DECLINED});
+161     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__APACHE__CORE__DAEMON_gabe6b865c045f3e7c6892ef4f15ff5779}{DONE});
+162     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__HTTP__Status_ga84d570ec8ad2a734b395141f5c67dc58}{HTTP\_MOVED\_TEMPORARILY});
+163     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__ProxyReq_ga7fa0b3313f7e51f2dac785e0b0772c32}{PROXYREQ\_NONE});
+164     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__ProxyReq_gaa879e84f9b9d334007ef4c542bf6374e}{PROXYREQ\_PROXY});
+165     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__ProxyReq_gada87167650249c33339a5992ad199219}{PROXYREQ\_REVERSE});
+166     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__ProxyReq_gaedfe04be933e20251ce580aa6b15d864}{PROXYREQ\_RESPONSE});
+167     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{group__ProxyReq_gaedfe04be933e20251ce580aa6b15d864}{PROXYREQ\_RESPONSE});
+168     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{mod__auth_8h_a60cb8601ab21d62c160006c0cbbd24cea4b987893f6f3b7f052e62cd414158e00}{AUTHZ\_DENIED});
+169     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{mod__auth_8h_a60cb8601ab21d62c160006c0cbbd24ceabde608c2a117c052dc58f9f274b07b49}{AUTHZ\_GRANTED});
+170     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{mod__auth_8h_a60cb8601ab21d62c160006c0cbbd24ceaa46f15e144ac2ff83599160b77052e6d}{AUTHZ\_NEUTRAL});
+171     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{mod__auth_8h_a60cb8601ab21d62c160006c0cbbd24cea5df2d570e213d8532752e2192fdda845}{AUTHZ\_GENERAL\_ERROR});
+172     \hyperlink{lua__vmprep_8c_abf7560f50dc598a7275e75a6595ca862}{makeintegerfield}(\hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}, \hyperlink{mod__auth_8h_a60cb8601ab21d62c160006c0cbbd24cea5e23e459329bf841c42fc9a365e5bc67}{AUTHZ\_DENIED\_NO\_USER});
+173     
+174     \textcolor{comment}{/*}
+175 \textcolor{comment}{       makeintegerfield(L, HTTP\_CONTINUE);}
+176 \textcolor{comment}{       makeintegerfield(L, HTTP\_SWITCHING\_PROTOCOLS);}
+177 \textcolor{comment}{       makeintegerfield(L, HTTP\_PROCESSING);}
+178 \textcolor{comment}{       makeintegerfield(L, HTTP\_OK);}
+179 \textcolor{comment}{       makeintegerfield(L, HTTP\_CREATED);}
+180 \textcolor{comment}{       makeintegerfield(L, HTTP\_ACCEPTED);}
+181 \textcolor{comment}{       makeintegerfield(L, HTTP\_NON\_AUTHORITATIVE);}
+182 \textcolor{comment}{       makeintegerfield(L, HTTP\_NO\_CONTENT);}
+183 \textcolor{comment}{       makeintegerfield(L, HTTP\_RESET\_CONTENT);}
+184 \textcolor{comment}{       makeintegerfield(L, HTTP\_PARTIAL\_CONTENT);}
+185 \textcolor{comment}{       makeintegerfield(L, HTTP\_MULTI\_STATUS);}
+186 \textcolor{comment}{       makeintegerfield(L, HTTP\_ALREADY\_REPORTED);}
+187 \textcolor{comment}{       makeintegerfield(L, HTTP\_IM\_USED);}
+188 \textcolor{comment}{       makeintegerfield(L, HTTP\_MULTIPLE\_CHOICES);}
+189 \textcolor{comment}{       makeintegerfield(L, HTTP\_MOVED\_PERMANENTLY);}
+190 \textcolor{comment}{       makeintegerfield(L, HTTP\_MOVED\_TEMPORARILY);}
+191 \textcolor{comment}{       makeintegerfield(L, HTTP\_SEE\_OTHER);}
+192 \textcolor{comment}{       makeintegerfield(L, HTTP\_NOT\_MODIFIED);}
+193 \textcolor{comment}{       makeintegerfield(L, HTTP\_USE\_PROXY);}
+194 \textcolor{comment}{       makeintegerfield(L, HTTP\_TEMPORARY\_REDIRECT);}
+195 \textcolor{comment}{       makeintegerfield(L, HTTP\_PERMANENT\_REDIRECT);}
+196 \textcolor{comment}{       makeintegerfield(L, HTTP\_BAD\_REQUEST);}
+197 \textcolor{comment}{       makeintegerfield(L, HTTP\_UNAUTHORIZED);}
+198 \textcolor{comment}{       makeintegerfield(L, HTTP\_PAYMENT\_REQUIRED);}
+199 \textcolor{comment}{       makeintegerfield(L, HTTP\_FORBIDDEN);}
+200 \textcolor{comment}{       makeintegerfield(L, HTTP\_NOT\_FOUND);}
+201 \textcolor{comment}{       makeintegerfield(L, HTTP\_METHOD\_NOT\_ALLOWED);}
+202 \textcolor{comment}{       makeintegerfield(L, HTTP\_NOT\_ACCEPTABLE);}
+203 \textcolor{comment}{       makeintegerfield(L, HTTP\_PROXY\_AUTHENTICATION\_REQUIRED);}
+204 \textcolor{comment}{       makeintegerfield(L, HTTP\_REQUEST\_TIME\_OUT);}
+205 \textcolor{comment}{       makeintegerfield(L, HTTP\_CONFLICT);}
+206 \textcolor{comment}{       makeintegerfield(L, HTTP\_GONE);}
+207 \textcolor{comment}{       makeintegerfield(L, HTTP\_LENGTH\_REQUIRED);}
+208 \textcolor{comment}{       makeintegerfield(L, HTTP\_PRECONDITION\_FAILED);}
+209 \textcolor{comment}{       makeintegerfield(L, HTTP\_REQUEST\_ENTITY\_TOO\_LARGE);}
+210 \textcolor{comment}{       makeintegerfield(L, HTTP\_REQUEST\_URI\_TOO\_LARGE);}
+211 \textcolor{comment}{       makeintegerfield(L, HTTP\_UNSUPPORTED\_MEDIA\_TYPE);}
+212 \textcolor{comment}{       makeintegerfield(L, HTTP\_RANGE\_NOT\_SATISFIABLE);}
+213 \textcolor{comment}{       makeintegerfield(L, HTTP\_EXPECTATION\_FAILED);}
+214 \textcolor{comment}{       makeintegerfield(L, HTTP\_UNPROCESSABLE\_ENTITY);}
+215 \textcolor{comment}{       makeintegerfield(L, HTTP\_LOCKED);}
+216 \textcolor{comment}{       makeintegerfield(L, HTTP\_FAILED\_DEPENDENCY);}
+217 \textcolor{comment}{       makeintegerfield(L, HTTP\_UPGRADE\_REQUIRED);}
+218 \textcolor{comment}{       makeintegerfield(L, HTTP\_PRECONDITION\_REQUIRED);}
+219 \textcolor{comment}{       makeintegerfield(L, HTTP\_TOO\_MANY\_REQUESTS);}
+220 \textcolor{comment}{       makeintegerfield(L, HTTP\_REQUEST\_HEADER\_FIELDS\_TOO\_LARGE);}
+221 \textcolor{comment}{       makeintegerfield(L, HTTP\_INTERNAL\_SERVER\_ERROR);}
+222 \textcolor{comment}{       makeintegerfield(L, HTTP\_NOT\_IMPLEMENTED);}
+223 \textcolor{comment}{       makeintegerfield(L, HTTP\_BAD\_GATEWAY);}
+224 \textcolor{comment}{       makeintegerfield(L, HTTP\_SERVICE\_UNAVAILABLE);}
+225 \textcolor{comment}{       makeintegerfield(L, HTTP\_GATEWAY\_TIME\_OUT);}
+226 \textcolor{comment}{       makeintegerfield(L, HTTP\_VERSION\_NOT\_SUPPORTED);}
+227 \textcolor{comment}{       makeintegerfield(L, HTTP\_VARIANT\_ALSO\_VARIES);}
+228 \textcolor{comment}{       makeintegerfield(L, HTTP\_INSUFFICIENT\_STORAGE);}
+229 \textcolor{comment}{       makeintegerfield(L, HTTP\_LOOP\_DETECTED);}
+230 \textcolor{comment}{       makeintegerfield(L, HTTP\_NOT\_EXTENDED);}
+231 \textcolor{comment}{       makeintegerfield(L, HTTP\_NETWORK\_AUTHENTICATION\_REQUIRED);}
+232 \textcolor{comment}{     */}
+233 \}
+\end{DoxyCode}
+\index{lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}!A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}!lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+L\+E(lua)}{APLOG_USE_MODULE(lua)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{lua}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__vmprep_8c_a8a924a2ae75955f480f27c800e6eca36}{}\label{lua__vmprep_8c_a8a924a2ae75955f480f27c800e6eca36}
+Licensed to the \hyperlink{namespaceApache}{Apache} Software Foundation (A\+SF) under one or more contributor license agreements. See the N\+O\+T\+I\+CE file distributed with this work for additional information regarding copyright ownership. The A\+SF licenses this file to You under the \hyperlink{namespaceApache}{Apache} License, Version 2.\+0 (the \char`\"{}\+License\char`\"{}); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+\href{http://www.apache.org/licenses/LICENSE-2.0}{\tt http\+://www.\+apache.\+org/licenses/\+L\+I\+C\+E\+N\+S\+E-\/2.\+0}
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \char`\"{}\+A\+S I\+S\char`\"{} B\+A\+S\+IS, W\+I\+T\+H\+O\+UT W\+A\+R\+R\+A\+N\+T\+I\+ES OR C\+O\+N\+D\+I\+T\+I\+O\+NS OF A\+NY K\+I\+ND, either express or implied. See the License for the specific language governing permissions and limitations under the License. 
+
+\subsection{Variable Documentation}
+\index{lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}!lua\+\_\+ivm\+\_\+mutex@{lua\+\_\+ivm\+\_\+mutex}}
+\index{lua\+\_\+ivm\+\_\+mutex@{lua\+\_\+ivm\+\_\+mutex}!lua\+\_\+vmprep.\+c@{lua\+\_\+vmprep.\+c}}
+\subsubsection[{\texorpdfstring{lua\+\_\+ivm\+\_\+mutex}{lua_ivm_mutex}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+global\+\_\+mutex\+\_\+t}$\ast$ lua\+\_\+ivm\+\_\+mutex}\hypertarget{lua__vmprep_8c_a1da5ec2434f85566057dab42de51edab}{}\label{lua__vmprep_8c_a1da5ec2434f85566057dab42de51edab}

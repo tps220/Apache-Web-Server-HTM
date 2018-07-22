@@ -1,0 +1,669 @@
+\hypertarget{mod__dav_8h}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/dav/main/mod\+\_\+dav.h File Reference}
+\label{mod__dav_8h}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/mod\+\_\+dav.\+h@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/mod\+\_\+dav.\+h}}
+
+
+D\+AV extension module for \hyperlink{namespaceApache}{Apache} 2.\+0.$\ast$.  
+
+
+{\ttfamily \#include \char`\"{}apr\+\_\+hooks.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+dbm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+tables.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+xml.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$limits.\+h$>$}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+Include dependency graph for mod\+\_\+dav.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__dav_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__dav_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdav__error}{dav\+\_\+error}
+\item 
+struct \hyperlink{structdav__resource}{dav\+\_\+resource}
+\item 
+struct \hyperlink{structdav__buffer}{dav\+\_\+buffer}
+\item 
+struct \hyperlink{structdav__get__props__result}{dav\+\_\+get\+\_\+props\+\_\+result}
+\item 
+struct \hyperlink{structdav__response}{dav\+\_\+response}
+\item 
+struct \hyperlink{structdav__lookup__result}{dav\+\_\+lookup\+\_\+result}
+\item 
+struct \hyperlink{structdav__xmlns__info}{dav\+\_\+xmlns\+\_\+info}
+\item 
+struct \hyperlink{structdav__provider}{dav\+\_\+provider}
+\item 
+struct \hyperlink{structdav__if__state__list}{dav\+\_\+if\+\_\+state\+\_\+list}
+\item 
+struct \hyperlink{structdav__if__header}{dav\+\_\+if\+\_\+header}
+\item 
+struct \hyperlink{structdav__locktoken__list}{dav\+\_\+locktoken\+\_\+list}
+\item 
+struct \hyperlink{structdav__hooks__liveprop}{dav\+\_\+hooks\+\_\+liveprop}
+\item 
+struct \hyperlink{structdav__liveprop__spec}{dav\+\_\+liveprop\+\_\+spec}
+\item 
+struct \hyperlink{structdav__liveprop__group}{dav\+\_\+liveprop\+\_\+group}
+\item 
+struct \hyperlink{structdav__prop__name}{dav\+\_\+prop\+\_\+name}
+\item 
+struct \hyperlink{structdav__hooks__propdb}{dav\+\_\+hooks\+\_\+propdb}
+\item 
+struct \hyperlink{structdav__lockdb}{dav\+\_\+lockdb}
+\item 
+struct \hyperlink{structdav__lock}{dav\+\_\+lock}
+\item 
+struct \hyperlink{structdav__hooks__locks}{dav\+\_\+hooks\+\_\+locks}
+\item 
+struct \hyperlink{structdav__prop__ctx}{dav\+\_\+prop\+\_\+ctx}
+\item 
+struct \hyperlink{structdav__walk__resource}{dav\+\_\+walk\+\_\+resource}
+\item 
+struct \hyperlink{structdav__walk__params}{dav\+\_\+walk\+\_\+params}
+\item 
+struct \hyperlink{structdav__walker__ctx}{dav\+\_\+walker\+\_\+ctx}
+\item 
+struct \hyperlink{structdav__hooks__repository}{dav\+\_\+hooks\+\_\+repository}
+\item 
+struct \hyperlink{structdav__auto__version__info}{dav\+\_\+auto\+\_\+version\+\_\+info}
+\item 
+struct \hyperlink{structdav__report__elem}{dav\+\_\+report\+\_\+elem}
+\item 
+struct \hyperlink{structdav__hooks__vsn}{dav\+\_\+hooks\+\_\+vsn}
+\item 
+struct \hyperlink{structdav__hooks__binding}{dav\+\_\+hooks\+\_\+binding}
+\item 
+struct \hyperlink{structdav__hooks__search}{dav\+\_\+hooks\+\_\+search}
+\item 
+struct \hyperlink{structdav__elem__private}{dav\+\_\+elem\+\_\+private}
+\item 
+struct \hyperlink{structdav__options__provider}{dav\+\_\+options\+\_\+provider}
+\item 
+struct \hyperlink{structdav__resource__type__provider}{dav\+\_\+resource\+\_\+type\+\_\+provider}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__MOD__DAV_gaf17ddfe12ada03a45c94d0118f3d98ed}{D\+A\+V\+\_\+\+V\+E\+R\+S\+I\+ON}~\hyperlink{ap__release_8h_ac3c1bba908df6cbf4e708ef771eac28a}{A\+P\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+B\+A\+S\+E\+R\+E\+V\+I\+S\+I\+ON}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga09257098b526bed329d659455dca36c1}{D\+A\+V\+\_\+\+X\+M\+L\+\_\+\+H\+E\+A\+D\+ER}~\char`\"{}$<$?xml version=\textbackslash{}\char`\"{}1.\+0\textbackslash{}\char`\"{} \hyperlink{mod__mime__magic_8c_abfd0452ce0a5ba319ea4d624dc209250}{encoding}=\textbackslash{}\char`\"{}utf-\/8\textbackslash{}\char`\"{}?$>$\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_gac3871a7e80b1d24a0fe3ca946e546c64}{D\+A\+V\+\_\+\+X\+M\+L\+\_\+\+C\+O\+N\+T\+E\+N\+T\+\_\+\+T\+Y\+PE}~\char`\"{}text/xml; charset=\textbackslash{}\char`\"{}utf-\/8\textbackslash{}\char`\"{}\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga466c473ff062d9669609a53aaee8e07c}{D\+A\+V\+\_\+\+R\+E\+A\+D\+\_\+\+B\+L\+O\+C\+K\+S\+I\+ZE}~2048    /$\ast$ \hyperlink{pcregrep_8txt_ac199431a7baad211fadcdb6c45bfe7c0}{used} for reading \hyperlink{perltest_8txt_a1d3f4df61ab6d72e9cfd2de361e2a85b}{input} blocks $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga7f0849cc23f9c9ad4e05df187d82f76f}{D\+A\+V\+\_\+\+R\+E\+S\+P\+O\+N\+S\+E\+\_\+\+B\+O\+D\+Y\+\_\+1}~\char`\"{}$<$!D\+O\+C\+T\+Y\+PE H\+T\+ML P\+U\+B\+L\+IC \textbackslash{}\char`\"{}-\///I\+E\+TF//D\+TD H\+T\+ML 2.\+0//E\+N\textbackslash{}\char`\"{}$>$\textbackslash{}n$<$html$>$$<$head$>$\textbackslash{}\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}$<$title$>$\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga372e1f8ead627c86993b64c853f37561}{D\+A\+V\+\_\+\+R\+E\+S\+P\+O\+N\+S\+E\+\_\+\+B\+O\+D\+Y\+\_\+2}~\char`\"{}$<$/title$>$\textbackslash{}\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}$<$/head$>$$<$\hyperlink{group__MOD__DAV_gac4ba05af5940fc47e3b0aa0a79eb4bdc}{body}$>$\textbackslash{}\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}$<$\hyperlink{group__apr__hash_ga7424aa17231f37fcf2350b861ca9b549}{h1}$>$\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga211409ba73cb987339fe70fd7b6f18bb}{D\+A\+V\+\_\+\+R\+E\+S\+P\+O\+N\+S\+E\+\_\+\+B\+O\+D\+Y\+\_\+3}~\char`\"{}$<$/h1$>$\textbackslash{}\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}$<$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}$>$\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_gacfc310700b422ab69521c98abdd5041e}{D\+A\+V\+\_\+\+R\+E\+S\+P\+O\+N\+S\+E\+\_\+\+B\+O\+D\+Y\+\_\+4}~\char`\"{}$<$/p$>$\textbackslash{}\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_gaaebc6df0b8b601182f87443e86f192e1}{D\+A\+V\+\_\+\+R\+E\+S\+P\+O\+N\+S\+E\+\_\+\+B\+O\+D\+Y\+\_\+5}~\char`\"{}$<$/body$>$$<$/html$>$\textbackslash{}\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga1cdbb997c29c673f4ff1cc477c36879f}{D\+A\+V\+\_\+\+D\+O\+\_\+\+C\+O\+PY}~0
+\item 
+\#define \hyperlink{group__MOD__DAV_ga5785026a8692af865610bde99ad5689c}{D\+A\+V\+\_\+\+D\+O\+\_\+\+M\+O\+VE}~1
+\item 
+\#define \hyperlink{group__MOD__DAV_ga3157845e20a8b48d7e8e1af6aff1f1f6}{D\+A\+V\+\_\+\+D\+E\+B\+UG}~1
+\item 
+\#define \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{D\+E\+B\+U\+G\+\_\+\+CR}~\char`\"{}\textbackslash{}n\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_gaeacd07c4ce156e738f48ac5af78f347f}{D\+B\+G0}(\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f})
+\item 
+\#define \hyperlink{group__MOD__DAV_gac907e7461c441582a3c8ad377be58960}{D\+B\+G1}(\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f},  a1)
+\item 
+\#define \hyperlink{group__MOD__DAV_ga4e54532d51681216c00310b3b0ca06b1}{D\+B\+G2}(\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f},  a1,  a2)
+\item 
+\#define \hyperlink{group__MOD__DAV_ga1c58dd1c19a52c8572921ff39cfb9bf1}{D\+B\+G3}(\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f},  a1,  a2,  a3)
+\item 
+\#define \hyperlink{group__MOD__DAV_ga72b95fe139d3f6c6eeceed598b721ce1}{D\+A\+V\+\_\+\+I\+N\+F\+I\+N\+I\+TY}~I\+N\+T\+\_\+\+M\+AX    /$\ast$ for the Depth\+: header $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gac1d8f8c7263bd0716122e65c216b9fda}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}(\hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type})~\hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga70141aad7c6ab41a6b929bc00a6bbf2e}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}(\hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type})~\hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga4ee05f777f6bd4a85895f39895980698}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA}
+\item 
+\#define \hyperlink{group__MOD__DAV_gade37d0852e174c158a1b145b64f950b9}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+I\+F\+\_\+\+P\+A\+R\+SE}~100    /$\ast$ general parsing \hyperlink{pcre_8txt_a49f154ded02555c4d15e7861acf2e434}{error} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga4dd076b07f644c07652d8bfd799ef979}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+I\+F\+\_\+\+M\+U\+L\+T\+I\+P\+L\+E\+\_\+\+N\+OT}~101    /$\ast$ multiple \char`\"{}Not\char`\"{} found $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga92fa2c673998de12fdb768e2d55288d4}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+I\+F\+\_\+\+U\+N\+K\+\_\+\+C\+H\+AR}~102    /$\ast$ unknown char \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in} header $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gad8d1a29964cc5b946eef3cbd20b956d2}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+I\+F\+\_\+\+A\+B\+S\+E\+NT}~103    /$\ast$ no locktokens \hyperlink{pcregrep_8txt_a9dffb3dde41716fc3bef8d0ee982f378}{given} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga2a932613fe0715db2383fc4084904d81}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+I\+F\+\_\+\+T\+A\+G\+G\+ED}~104    /$\ast$ \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in} parsing tagged-\/\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga277c919816b34c884e8a8359dabcf87a}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+I\+F\+\_\+\+U\+N\+C\+L\+O\+S\+E\+D\+\_\+\+P\+A\+R\+EN}~105    /$\ast$ \hyperlink{group__apr__thread__proc_ga2e46fea00cc2238744ebca5061c62bcc}{in} no-\/tagged-\/\hyperlink{pcregrep_8txt_aeb6b944e4524f915483b5696b7f2f424}{list} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga6ad8e2e776147d0845128c9fd7772bc9}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+P\+R\+O\+P\+\_\+\+B\+A\+D\+\_\+\+M\+A\+J\+OR}~200    /$\ast$ major version was wrong $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga32783f0b2676012e1ff5d3dceb52a6a9}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+P\+R\+O\+P\+\_\+\+R\+E\+A\+D\+O\+N\+LY}~201    /$\ast$ prop \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a2569119f3fd3f0d7d7ecea3c96acb0bf}{is} \hyperlink{pcregrep_8txt_a889d26474f6571c80796a6143c968573}{read}-\/only $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gab29644c0253799bc3c8d72ea434a6aad}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+P\+R\+O\+P\+\_\+\+N\+O\+\_\+\+D\+A\+T\+A\+B\+A\+SE}~202    /$\ast$ writable db \hyperlink{pcre_8txt_aab236af6334f68eebb41dff13921475a}{not} avail $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gade7f16a531974096feddddc4b356fe0e}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+P\+R\+O\+P\+\_\+\+N\+O\+T\+\_\+\+F\+O\+U\+ND}~203    /$\ast$ prop \hyperlink{pcre_8txt_aab236af6334f68eebb41dff13921475a}{not} \hyperlink{pcregrep_8txt_a1fdac88190c7a3aca2735f0bf49094dd}{found} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga2b2b33090e46c0cef7145e6623f58986}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+P\+R\+O\+P\+\_\+\+B\+A\+D\+\_\+\+L\+O\+C\+K\+DB}~204    /$\ast$ could \hyperlink{pcre_8txt_aab236af6334f68eebb41dff13921475a}{not} \hyperlink{tcpdumpscii_8txt_ad449568b4dd17e38bd893db222d79724}{open} \hyperlink{group__MOD__DAV_ga4d2e2ae951dbf7731ef129422cb95674}{lockdb} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gaefd6815d386beaacb215557e856b5fdb}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+E\+N\+I\+NG}~205    /$\ast$ problem opening \hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga4a45bc2660feae1f83923f334e7789d9}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+P\+R\+O\+P\+\_\+\+E\+X\+EC}~206    /$\ast$ problem exec\textquotesingle{}\hyperlink{pcre_8txt_a7df9234d2ca772263dcd15a09fe2e661}{ing} patch $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga558e1848d3a4df8127548c5d536b6028}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+L\+O\+C\+K\+\_\+\+O\+P\+E\+N\+DB}~400    /$\ast$ could \hyperlink{pcre_8txt_aab236af6334f68eebb41dff13921475a}{not} \hyperlink{tcpdumpscii_8txt_ad449568b4dd17e38bd893db222d79724}{open} \hyperlink{group__MOD__DAV_ga4d2e2ae951dbf7731ef129422cb95674}{lockdb} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga07a727f1af38bf6464b9c1deb3bc374b}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+L\+O\+C\+K\+\_\+\+N\+O\+\_\+\+DB}~401    /$\ast$ no database \hyperlink{pcregrep_8txt_ab69dfbed7b22a45ae37a17aae2686509}{defined} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga8aaca3e410e11c3303176f8acffac73b}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+L\+O\+C\+K\+\_\+\+C\+O\+R\+R\+U\+P\+T\+\_\+\+DB}~402    /$\ast$ DB \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a2569119f3fd3f0d7d7ecea3c96acb0bf}{is} corrupt $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gab32629b9356f4a1f244ddfd6ce888acc}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+L\+O\+C\+K\+\_\+\+U\+N\+K\+\_\+\+S\+T\+A\+T\+E\+\_\+\+T\+O\+K\+EN}~403    /$\ast$ unknown State-\/token $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga5267c918ca98ee06252e31550dd7c52f}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+L\+O\+C\+K\+\_\+\+P\+A\+R\+S\+E\+\_\+\+T\+O\+K\+EN}~404    /$\ast$ \hyperlink{ab_8c_a27a1c72438b4005fdc9b5b0d16705279}{bad} opaquelocktoken $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gaa8e34a3bd584ba373a6c1f83ab6ad7a8}{D\+A\+V\+\_\+\+E\+R\+R\+\_\+\+L\+O\+C\+K\+\_\+\+S\+A\+V\+E\+\_\+\+L\+O\+CK}~405    /$\ast$ \hyperlink{group__apr__thread__proc_ga156fcecee9d33dd7b55c3d8fdaba7159}{err} saving \hyperlink{group__MOD__DAV_ga3d3cc325e4516ee89b4f0890dba7514e}{locks} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gae3c1ffe0a4b1cb9a17b3d8d4c9a8718c}{D\+A\+V\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+M\+I\+N\+S\+I\+ZE}~256    /$\ast$ minimum \hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size} for \hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga8af74674e7bc2f56c3dcaeecbe09fe32}{D\+A\+V\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+P\+AD}~64     /$\ast$ amount \hyperlink{pcre_8txt_a9d5b55a535a7d176d14b62d664b47b4d}{of} \hyperlink{group__MOD__DAV_gace179413e6bb5f28178968aaf55ff4f6}{pad} when growing $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gaa42a2926ef9599c5108098206f6043c6}{D\+A\+V\+\_\+\+S\+T\+Y\+L\+E\+\_\+\+I\+S\+O8601}~1
+\item 
+\#define \hyperlink{group__MOD__DAV_ga87e1b8c0e04939165f2b74821d4c5b7f}{D\+A\+V\+\_\+\+S\+T\+Y\+L\+E\+\_\+\+R\+F\+C822}~2
+\item 
+\#define \hyperlink{group__MOD__DAV_ga678c4749c1601d0aa737de2ede2c658c}{D\+A\+V\+\_\+\+T\+I\+M\+E\+B\+U\+F\+\_\+\+S\+I\+ZE}~30
+\item 
+\#define \hyperlink{group__MOD__DAV_ga186a872deb178e4e1a28279277e1e8e3}{D\+A\+V\+\_\+\+G\+E\+T\+\_\+\+H\+O\+O\+K\+S\+\_\+\+P\+R\+O\+P\+DB}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~dav\+\_\+get\+\_\+propdb\+\_\+hooks(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{group__MOD__DAV_ga0300526f19a870f40f3827266111add5}{D\+A\+V\+\_\+\+G\+E\+T\+\_\+\+H\+O\+O\+K\+S\+\_\+\+L\+O\+C\+KS}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~dav\+\_\+get\+\_\+lock\+\_\+hooks(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{group__MOD__DAV_gad02e04cfbdca6552716eb8b1e7e06ce9}{D\+A\+V\+\_\+\+G\+E\+T\+\_\+\+H\+O\+O\+K\+S\+\_\+\+V\+SN}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~dav\+\_\+get\+\_\+vsn\+\_\+hooks(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{group__MOD__DAV_ga1cc321dbfbfbb64a120d5ec6dad561bd}{D\+A\+V\+\_\+\+G\+E\+T\+\_\+\+H\+O\+O\+K\+S\+\_\+\+B\+I\+N\+D\+I\+NG}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~dav\+\_\+get\+\_\+binding\+\_\+hooks(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{group__MOD__DAV_ga8155b5b1e359a36e8b5a7c54489ff016}{D\+A\+V\+\_\+\+G\+E\+T\+\_\+\+H\+O\+O\+K\+S\+\_\+\+S\+E\+A\+R\+CH}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~dav\+\_\+get\+\_\+search\+\_\+hooks(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{mod__dav_8h_a5b645a22190541c8b3866036d4cabdbf}{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+O\+R\+M\+AL}~0
+\item 
+\#define \hyperlink{mod__dav_8h_a83c4d48c6cb930b1f7126997d5ef0afc}{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+OT}~1    /$\ast$ \char`\"{}Not\char`\"{} was applied $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gac4c19935b3c101a1aaae9d3bdbf85720}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+C\+O\+RE}~10000   /$\ast$ ..\+10099. \hyperlink{pcregrep_8txt_ab69dfbed7b22a45ae37a17aae2686509}{defined} by mod\+\_\+dav $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gaf920a023f022af338bca841d5a8ef418}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+FS}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga7f09ddc35d2ff64baf54e4e7a8eee9db}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+T\+E\+S\+T1}~10300   /$\ast$ ..\+10399 $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga3d09ef7f5602e50820d8103568d534c3}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+T\+E\+S\+T2}~10400   /$\ast$ ..\+10499 $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga226c8aabd748e90dcef1f01f1eafb540}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+T\+E\+S\+T3}~10500   /$\ast$ ..\+10599 $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gac73dd532e3e6fa30d2e18ba644c5816a}{D\+A\+V\+\_\+\+T\+I\+M\+E\+O\+U\+T\+\_\+\+I\+N\+F\+I\+N\+I\+TE}~0
+\item 
+\#define \hyperlink{group__MOD__DAV_ga08f6721df6fb55b118a54def82007a8c}{D\+A\+V\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+R\+E\+S\+O\+U\+R\+CE}~0x0010  /$\ast$ validate just the resource $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gab881116857faf5b971cdab252ae8b51c}{D\+A\+V\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+P\+A\+R\+E\+NT}~0x0020  /$\ast$ validate resource A\+N\+D its parent $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga8b16070bf397a37a6c30671967767e55}{D\+A\+V\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+A\+D\+D\+\_\+\+LD}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga9bbe244391cc0a4022c33c6fec937920}{D\+A\+V\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+U\+S\+E\+\_\+424}~0x0080  /$\ast$ return 424 status, not 207 $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gad0e3323306052a3cc35542d73fea1e73}{D\+A\+V\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+I\+S\+\_\+\+P\+A\+R\+E\+NT}~0x0100  /$\ast$ for internal use $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga3279e589a23dc97051629161bea150ce}{D\+A\+V\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+N\+O\+\_\+\+M\+O\+D\+I\+FY}
+\item 
+\#define \hyperlink{mod__dav_8h_ad434e060ea94e4d89713f381e2931804}{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+R\+E\+S\+O\+L\+V\+ED}~0    /$\ast$ resolve indirects \hyperlink{pcretest_8txt_aa22c98f630e4b3fe86ee17ce5150c62f}{to} directs $\ast$/
+\item 
+\#define \hyperlink{mod__dav_8h_ab89aafebe076cdbe6e3415eb37643c29}{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+P\+A\+R\+T\+I\+AL}~1    /$\ast$ leave indirects partially filled $\ast$/
+\item 
+\#define \hyperlink{mod__dav_8h_a335a32c54b47a4b18100a28418d96a7c}{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+C\+O\+M\+P\+L\+E\+TE}~2    /$\ast$ fill \hyperlink{apr__sha1_8h_acc4166708bf1c388b137e1861496523e}{out} indirect \hyperlink{group__MOD__DAV_ga3d3cc325e4516ee89b4f0890dba7514e}{locks} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga0576094418828f2c5bde553bf80468dd}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+L\+O\+C\+K\+\_\+\+N\+U\+LL}~10    /$\ast$ \hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource} \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}-\/null $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga37ae65e525c2100f87804dc64717d7d9}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+N\+U\+LL}~11    /$\ast$ \hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource} null $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gaecf22157905f5dcae0100a6ea3b1c9ac}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+E\+X\+I\+S\+TS}~12    /$\ast$ \hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource} exists $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_ga86da207601b9f69b82c97d734dfa6f7c}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+E\+R\+R\+OR}~13    /$\ast$ an \hyperlink{pcre_8txt_a49f154ded02555c4d15e7861acf2e434}{error} occurred $\ast$/
+\item 
+\#define \hyperlink{mod__dav_8h_af58dc57a374ca8cf5db3860de73e9f3f}{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+S\+ET}~1    /$\ast$ \hyperlink{README_8txt_af5b772536a61c888f9b40122c9816047}{set} \hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a} property \hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value} $\ast$/
+\item 
+\#define \hyperlink{mod__dav_8h_a6ebefa1599c2d120837209790e0aabef}{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+D\+E\+L\+E\+TE}~2    /$\ast$ delete \hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a} prop \hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value} $\ast$/
+\item 
+\#define \hyperlink{group__MOD__DAV_gaf5d250eb7ef6eea4c01107331c12e90c}{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+C\+T\+X\+\_\+\+H\+A\+S\+\_\+\+E\+RR}(dpc)~((dpc).\hyperlink{group__apr__thread__proc_ga156fcecee9d33dd7b55c3d8fdaba7159}{err} \&\& (dpc).\hyperlink{group__apr__thread__proc_ga156fcecee9d33dd7b55c3d8fdaba7159}{err}-\/$>$\hyperlink{group__apr__thread__proc_gae7daf19056dc6ab36e8f2e72e911646d}{status} $>$= 300)
+\item 
+\#define \hyperlink{mod__dav_8h_a26eec213f2feb6d4f0834209c5ac9bb7}{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+A\+U\+TH}~0x0001  /$\ast$ limit to authorized files $\ast$/
+\item 
+\#define \hyperlink{mod__dav_8h_af880dad2a6a3faa599e31adb2505d9f9}{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+N\+O\+R\+M\+AL}~0x0002  /$\ast$ walk normal files $\ast$/
+\item 
+\#define \hyperlink{mod__dav_8h_adfdb6aec1afd2b4928f382f848fe6bdd}{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+L\+O\+C\+K\+N\+U\+LL}~0x0004  /$\ast$ walk locknull resources $\ast$/
+\item 
+\#define \hyperlink{mod__dav_8h_a205ac4337cfb0046fc31c722f5df1314}{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+A\+L\+L\+P\+R\+OP}~1
+\item 
+\#define \hyperlink{mod__dav_8h_a397acb1bf9d82966845b8bcfedabb58a}{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+O\+P\+N\+A\+ME}~2
+\item 
+\#define \hyperlink{mod__dav_8h_ad8d90764e6c4d1c85309b65cf61e59bf}{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+OP}~3
+\item 
+\#define \hyperlink{group__MOD__DAV_ga9b09d166d48b913cde4f8cb3d4e132b3}{D\+A\+V\+\_\+\+O\+P\+T\+I\+O\+N\+S\+\_\+\+E\+X\+T\+E\+N\+S\+I\+O\+N\+\_\+\+G\+R\+O\+UP}~\char`\"{}dav\+\_\+options\char`\"{}
+\item 
+\#define \hyperlink{group__MOD__DAV_ga1293734e77350a134d4791b31bcbeff0}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+G\+R\+O\+UP}~\char`\"{}dav\+\_\+resource\+\_\+type\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structdav__error}{dav\+\_\+error} \hyperlink{group__MOD__DAV_gaaca09776e4b1d7ae7844e1c331e4e152}{dav\+\_\+error}
+\item 
+typedef struct \hyperlink{structdav__response}{dav\+\_\+response} \hyperlink{group__MOD__DAV_ga2cd181241bc818bff9c2640de1e823e1}{dav\+\_\+response}
+\item 
+typedef struct \hyperlink{structdav__hooks__propdb}{dav\+\_\+hooks\+\_\+propdb} \hyperlink{group__MOD__DAV_gae0928279f0bc1535e8858e02527ee015}{dav\+\_\+hooks\+\_\+propdb}
+\item 
+typedef struct \hyperlink{structdav__hooks__locks}{dav\+\_\+hooks\+\_\+locks} \hyperlink{group__MOD__DAV_ga6693321785ea9339e16297428531d51d}{dav\+\_\+hooks\+\_\+locks}
+\item 
+typedef struct \hyperlink{structdav__hooks__vsn}{dav\+\_\+hooks\+\_\+vsn} \hyperlink{group__MOD__DAV_gad49c563d300f2c0c8a83916f375be9a7}{dav\+\_\+hooks\+\_\+vsn}
+\item 
+typedef struct \hyperlink{structdav__hooks__repository}{dav\+\_\+hooks\+\_\+repository} \hyperlink{group__MOD__DAV_ga23c20415a7a56d3ca00265c673bf3f7a}{dav\+\_\+hooks\+\_\+repository}
+\item 
+typedef struct \hyperlink{structdav__hooks__liveprop}{dav\+\_\+hooks\+\_\+liveprop} \hyperlink{group__MOD__DAV_ga866619ce3e7106716a7b418dc491b2f4}{dav\+\_\+hooks\+\_\+liveprop}
+\item 
+typedef struct \hyperlink{structdav__hooks__binding}{dav\+\_\+hooks\+\_\+binding} \hyperlink{group__MOD__DAV_gaf0e1094c9919b7bde611cbb9e2456f4e}{dav\+\_\+hooks\+\_\+binding}
+\item 
+typedef struct \hyperlink{structdav__hooks__search}{dav\+\_\+hooks\+\_\+search} \hyperlink{group__MOD__DAV_ga2506c1080f7dd94c91e54173fd51b586}{dav\+\_\+hooks\+\_\+search}
+\item 
+typedef \hyperlink{structdav__hooks__propdb}{dav\+\_\+hooks\+\_\+propdb} \hyperlink{group__MOD__DAV_gafb40434fe70df3d6b814d00757680507}{dav\+\_\+hooks\+\_\+db}
+\item 
+typedef struct \hyperlink{structdav__resource__private}{dav\+\_\+resource\+\_\+private} \hyperlink{group__MOD__DAV_ga42411ebc870b36ad29f4db65778aa6fe}{dav\+\_\+resource\+\_\+private}
+\item 
+typedef struct \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{group__MOD__DAV_ga3c6a9bf4a34a360a07f269dc4aa783e2}{dav\+\_\+resource}
+\item 
+typedef struct \hyperlink{structdav__locktoken}{dav\+\_\+locktoken} \hyperlink{group__MOD__DAV_ga97f63d90aa669c1fa6551842d3c803e3}{dav\+\_\+locktoken}
+\item 
+typedef struct \hyperlink{structdav__if__state__list}{dav\+\_\+if\+\_\+state\+\_\+list} \hyperlink{group__MOD__DAV_gaf195143ed1d91d770e93caed11ce5ce5}{dav\+\_\+if\+\_\+state\+\_\+list}
+\item 
+typedef struct \hyperlink{structdav__if__header}{dav\+\_\+if\+\_\+header} \hyperlink{group__MOD__DAV_ga1a21f29b09e55f34321b710885506fd4}{dav\+\_\+if\+\_\+header}
+\item 
+typedef struct \hyperlink{structdav__locktoken__list}{dav\+\_\+locktoken\+\_\+list} \hyperlink{group__MOD__DAV_ga88eab7a69068f5595f82210267250d7e}{dav\+\_\+locktoken\+\_\+list}
+\item 
+typedef struct \hyperlink{group__MOD__DAV_gafa19778d61300befd3b972a18cd564d5}{dav\+\_\+liveprop\+\_\+rollback} \hyperlink{group__MOD__DAV_gafa19778d61300befd3b972a18cd564d5}{dav\+\_\+liveprop\+\_\+rollback}
+\item 
+typedef struct \hyperlink{structdav__db}{dav\+\_\+db} \hyperlink{group__MOD__DAV_ga7600f4d1916918bf969eb543c5399568}{dav\+\_\+db}
+\item 
+typedef struct \hyperlink{structdav__namespace__map}{dav\+\_\+namespace\+\_\+map} \hyperlink{group__MOD__DAV_gacd79bb3e59ca44135b1037d2e0aa5f29}{dav\+\_\+namespace\+\_\+map}
+\item 
+typedef struct \hyperlink{structdav__deadprop__rollback}{dav\+\_\+deadprop\+\_\+rollback} \hyperlink{group__MOD__DAV_ga6fd5e66543b954f28aef968ede259862}{dav\+\_\+deadprop\+\_\+rollback}
+\item 
+typedef struct \hyperlink{structdav__lockdb__private}{dav\+\_\+lockdb\+\_\+private} \hyperlink{group__MOD__DAV_ga1a051de73610d45ef4200319270c5dae}{dav\+\_\+lockdb\+\_\+private}
+\item 
+typedef struct \hyperlink{structdav__lock__private}{dav\+\_\+lock\+\_\+private} \hyperlink{group__MOD__DAV_gaea2b96e0ff557afc868d5fa3894f6b9d}{dav\+\_\+lock\+\_\+private}
+\item 
+typedef struct \hyperlink{structdav__lock}{dav\+\_\+lock} \hyperlink{group__MOD__DAV_ga1cff82155446038cb3433376c78eb085}{dav\+\_\+lock}
+\item 
+typedef struct \hyperlink{structdav__propdb}{dav\+\_\+propdb} \hyperlink{group__MOD__DAV_ga3950a19aee33c6595720afb0b42dfb46}{dav\+\_\+propdb}
+\item 
+typedef struct \hyperlink{structdav__prop__ctx}{dav\+\_\+prop\+\_\+ctx} \hyperlink{group__MOD__DAV_ga39282b6c6448d23b49791867f63aed77}{dav\+\_\+prop\+\_\+ctx}
+\item 
+typedef struct \hyperlink{structdav__walker__ctx}{dav\+\_\+walker\+\_\+ctx} \hyperlink{group__MOD__DAV_ga4019584d367580a1f462a4f38baeddfe}{dav\+\_\+walker\+\_\+ctx}
+\item 
+typedef struct \hyperlink{structdav__stream}{dav\+\_\+stream} \hyperlink{group__MOD__DAV_ga74927be963f6a960133c4f25e33efebf}{dav\+\_\+stream}
+\item 
+typedef struct \hyperlink{structdav__options__provider}{dav\+\_\+options\+\_\+provider} \hyperlink{group__MOD__DAV_ga3f9bbd119abc8278c7f006e4bb9d95be}{dav\+\_\+options\+\_\+provider}
+\item 
+typedef struct \hyperlink{structdav__resource__type__provider}{dav\+\_\+resource\+\_\+type\+\_\+provider} \hyperlink{group__MOD__DAV_ga51d12fbae5d67e214810ee44056ac114}{dav\+\_\+resource\+\_\+type\+\_\+provider}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{group__MOD__DAV_gad94695b8d6724b766cfa9f5ec84c0fe2}{dav\+\_\+resource\+\_\+type} \{ \\*
+\hyperlink{group__MOD__DAV_ggad94695b8d6724b766cfa9f5ec84c0fe2ac8a224d9b655ee38ad932b97f601fbf2}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+U\+N\+K\+N\+O\+WN}, 
+\hyperlink{group__MOD__DAV_ggad94695b8d6724b766cfa9f5ec84c0fe2a567c5375a827c1f808ac4dc5ed1e8e80}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+R\+E\+G\+U\+L\+AR}, 
+\hyperlink{group__MOD__DAV_ggad94695b8d6724b766cfa9f5ec84c0fe2a2af72686e7dd0b4e30019abdd5befe12}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+V\+E\+R\+S\+I\+ON}, 
+\hyperlink{group__MOD__DAV_ggad94695b8d6724b766cfa9f5ec84c0fe2abe923bf6ee61580d277c32e152cc486c}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+H\+I\+S\+T\+O\+RY}, 
+\\*
+\hyperlink{group__MOD__DAV_ggad94695b8d6724b766cfa9f5ec84c0fe2a612d793283e8edb2a783c01cec4b7fb0}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+W\+O\+R\+K\+I\+NG}, 
+\hyperlink{group__MOD__DAV_ggad94695b8d6724b766cfa9f5ec84c0fe2a53a8b526675a70cec4215fdfbb2f84cd}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+W\+O\+R\+K\+S\+P\+A\+CE}, 
+\hyperlink{group__MOD__DAV_ggad94695b8d6724b766cfa9f5ec84c0fe2a962239fd7228f548592f250cd3eecc0f}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+C\+T\+I\+V\+I\+TY}, 
+\hyperlink{group__MOD__DAV_ggad94695b8d6724b766cfa9f5ec84c0fe2a28d1cb8f879556fd05593f32658c2894}{D\+A\+V\+\_\+\+R\+E\+S\+O\+U\+R\+C\+E\+\_\+\+T\+Y\+P\+E\+\_\+\+P\+R\+I\+V\+A\+TE}
+ \}
+\item 
+enum \hyperlink{group__MOD__DAV_ga4c0cd73bce52d0eda981ce54973f27af}{dav\+\_\+prop\+\_\+insert} \{ \\*
+\hyperlink{group__MOD__DAV_gga4c0cd73bce52d0eda981ce54973f27afad6c4707dbee26a2512e29fe1aac31e34}{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+N\+O\+T\+D\+EF}, 
+\hyperlink{group__MOD__DAV_gga4c0cd73bce52d0eda981ce54973f27afae4995228c2489d111aae3f29f473eee0}{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+N\+O\+T\+S\+U\+PP}, 
+\hyperlink{group__MOD__DAV_gga4c0cd73bce52d0eda981ce54973f27afa331df26b3f9729a36058dd7cf56b0267}{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+N\+A\+ME}, 
+\hyperlink{group__MOD__DAV_gga4c0cd73bce52d0eda981ce54973f27afaac24aa1113cbab49a3fbc47398293d8f}{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+V\+A\+L\+UE}, 
+\\*
+\hyperlink{group__MOD__DAV_gga4c0cd73bce52d0eda981ce54973f27afaf615c37a063c2d90eac2dad9e07438e3}{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+S\+U\+P\+P\+O\+R\+T\+ED}
+ \}
+\item 
+enum \hyperlink{group__MOD__DAV_gaacd61686abea10e22a15da15b91906b7}{dav\+\_\+if\+\_\+state\+\_\+type} \{ \hyperlink{group__MOD__DAV_ggaacd61686abea10e22a15da15b91906b7ac21e3a9eb4bbf7b7de3359931d4efa6b}{dav\+\_\+if\+\_\+etag}, 
+\hyperlink{group__MOD__DAV_ggaacd61686abea10e22a15da15b91906b7a3f33da2f8ee7d1a9804cd02b531c01d6}{dav\+\_\+if\+\_\+opaquelock}, 
+\hyperlink{group__MOD__DAV_ggaacd61686abea10e22a15da15b91906b7a34a053e56735a57014188d804cefa874}{dav\+\_\+if\+\_\+unknown}
+ \}
+\item 
+enum \{ \\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a0067d47b7410b2745e0fae428db6f19f}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+B\+E\+G\+IN} = 20000, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a3f523a6718886ade0fcb2249b8e72895}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+creationdate}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a9f2e1c46803ec74e9c286b0993d33a71}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+displayname}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635aa29f0516fdcd0e743a4c1677fb926c96}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+getcontentlanguage}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a0804ca25756a42e91b6eca81b9382639}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+getcontentlength}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a7282a6989a90c4e49023c6441d54baa2}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+getcontenttype}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a0984ef9eb8ae46620536251a15a80179}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+getetag}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a8f9f1ea65a7d323c3d49e50b12bc21d9}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+getlastmodified}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635ac768afe2cc3921fa76f36e21195b1574}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+lockdiscovery}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a4bbb755106150230f972432e2e1e8566}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+resourcetype}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a624bfb4c3fffa48ef25ee91bbb4b0048}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+source}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635afa8f2eba194e8b7fbeb177227d032ab6}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+supportedlock}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a083ba328435b0c80ac6d297457793b54}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+activity\+\_\+checkout\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a9060cde2a2e7cd7f4eef0b812c099510}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+activity\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a2c4810c6b399164f06b0e1e0a5d0d56c}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+activity\+\_\+version\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a4327d36330dfa5aac085c35901dd863e}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+auto\+\_\+merge\+\_\+set}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a0f56d63df5f97d70cb31e64c2dc3eb66}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+auto\+\_\+version}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a0bb0ca7dab49d466ba00b7aeb4283c08}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+baseline\+\_\+collection}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a9ee42bcc3d37f0f0bb6aefc2da1fb885}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+baseline\+\_\+controlled\+\_\+collection}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635af803fc023a22efee44eed3eac343c562}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+baseline\+\_\+controlled\+\_\+collection\+\_\+set}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a92b46820fd6ba89935416f30fbe9e7a6}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+checked\+\_\+in}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a6d10b8f5b79682d7351f8124a5ced1a5}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+checked\+\_\+out}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a29642716b0684c778bc809277ec7c080}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+checkin\+\_\+fork}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a0fda4190c5651e8aa24ee73b29a4edd3}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+checkout\+\_\+fork}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635abdaebfda5e2ee189d2a1f7e4c7faf352}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+checkout\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635aa04c089c65df3a805fecfbc2392afdfe}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+comment}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635aea6d477978d40507c651c0d8e5cf5a38}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+creator\+\_\+displayname}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635ad2b2f22f8df6c4f3d3954f4414063e66}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+current\+\_\+activity\+\_\+set}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635ae3a1c3665fdcabb481b2cfdf77870bf5}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+current\+\_\+workspace\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a6f6bdd2f55008247b46c0e363c7947d6}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+default\+\_\+variant}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a8abeeaa03ab7009fe1667d67ed26a8bb}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+eclipsed\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a476b76e408aef581ebd33c981de9d092}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+label\+\_\+name\+\_\+set}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a7e1779624fdec82432a72754ff576fc6}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+merge\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635ace120c0035330255d72702a1fa17e133}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+precursor\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635afb22028c218f4851fdbf6b6bda593065}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+predecessor\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a694cedbdb195aec6c8399328a6da884d}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+root\+\_\+version}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635ade9d05b6e19ac38e5d0425a80906830d}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+subactivity\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635ad31c592ea201a2d4069ac4531a1d20c3}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+subbaseline\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a87c11d3ab9d8263495f9f685c0f00893}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+successor\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a81d3d6ddf49e81731236fbd283afeb3d}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+supported\+\_\+method\+\_\+set}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a16ef27088c44dfc65b77159e0ae8a140}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+supported\+\_\+live\+\_\+property\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635ac891eb92d008510846d3ce474cc5f5fb}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+supported\+\_\+report\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635ab07823dc072bcc08ccb8309895d563b1}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+unreserved}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a5843793444a4fb67d7be3f013f757b29}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+variant\+\_\+set}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a286a96264fcbcddbdd174f3808e23ba3}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+version\+\_\+controlled\+\_\+binding\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a7aa6ced703b69638895f52da63b84242}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+version\+\_\+controlled\+\_\+configuration}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a082b71755e72bbd70650ef680426cce9}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+version\+\_\+history}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a81a33b6f9cdd6e097304be261e25ff72}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+version\+\_\+name}, 
+\\*
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a2539bacc19143903e7b889cf68fdbda4}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+workspace}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a477193a4d43e8bafc5cfb6c0f779b8f7}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+workspace\+\_\+checkout\+\_\+set}, 
+\hyperlink{group__MOD__DAV_gga726ca809ffd3d67ab4b8476646f26635a4ae0f5ad607a2b48387958b48fba4325}{D\+A\+V\+\_\+\+P\+R\+O\+P\+I\+D\+\_\+\+E\+ND}
+ \}
+\item 
+enum \hyperlink{group__MOD__DAV_ga4840019bf9343c4c1a95befb97b12a88}{dav\+\_\+lock\+\_\+scope} \{ \hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88a3e019b5ebe87778ed144aad7cfc9d2e7}{D\+A\+V\+\_\+\+L\+O\+C\+K\+S\+C\+O\+P\+E\+\_\+\+U\+N\+K\+N\+O\+WN}, 
+\hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88aeb6d70b4e2b1c2968b4bff039c79d43c}{D\+A\+V\+\_\+\+L\+O\+C\+K\+S\+C\+O\+P\+E\+\_\+\+E\+X\+C\+L\+U\+S\+I\+VE}, 
+\hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88a9961b30fb47aa623dc82f41f979d6912}{D\+A\+V\+\_\+\+L\+O\+C\+K\+S\+C\+O\+P\+E\+\_\+\+S\+H\+A\+R\+ED}
+ \}
+\item 
+enum \hyperlink{group__MOD__DAV_ga9089e677b6d1b25daccbc1efa484a829}{dav\+\_\+lock\+\_\+type} \{ \hyperlink{group__MOD__DAV_gga9089e677b6d1b25daccbc1efa484a829a599e4abedd7d53d6d448fc769698af4f}{D\+A\+V\+\_\+\+L\+O\+C\+K\+T\+Y\+P\+E\+\_\+\+U\+N\+K\+N\+O\+WN}, 
+\hyperlink{group__MOD__DAV_gga9089e677b6d1b25daccbc1efa484a829ad71440467fd4e5e5268f2fddbe658819}{D\+A\+V\+\_\+\+L\+O\+C\+K\+T\+Y\+P\+E\+\_\+\+W\+R\+I\+TE}
+ \}
+\item 
+enum \hyperlink{group__MOD__DAV_ga35626623c09f0611245743b5868eb936}{dav\+\_\+lock\+\_\+rectype} \{ \hyperlink{group__MOD__DAV_gga35626623c09f0611245743b5868eb936a14a2b13c257d1578c1700d6aca8efdc7}{D\+A\+V\+\_\+\+L\+O\+C\+K\+R\+E\+C\+\_\+\+D\+I\+R\+E\+CT}, 
+\hyperlink{group__MOD__DAV_gga35626623c09f0611245743b5868eb936ac4db8060ad15f6447c36ead91911c712}{D\+A\+V\+\_\+\+L\+O\+C\+K\+R\+E\+C\+\_\+\+I\+N\+D\+I\+R\+E\+CT}, 
+\hyperlink{group__MOD__DAV_gga35626623c09f0611245743b5868eb936a54f61e288144fbd760131e3c98356d41}{D\+A\+V\+\_\+\+L\+O\+C\+K\+R\+E\+C\+\_\+\+I\+N\+D\+I\+R\+E\+C\+T\+\_\+\+P\+A\+R\+T\+I\+AL}
+ \}
+\item 
+enum \{ \hyperlink{group__MOD__DAV_gga0411cd49bb5b71852cecd93bcbf0ca2dab6659c0bbe2c3389db76fecc4e9e67a7}{D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+M\+E\+M\+B\+ER} = 1, 
+\hyperlink{group__MOD__DAV_gga0411cd49bb5b71852cecd93bcbf0ca2daa53efecda100903972b168129d161e0b}{D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+I\+ON}, 
+\hyperlink{group__MOD__DAV_gga0411cd49bb5b71852cecd93bcbf0ca2da6917f69713923c0aec6c925af9ad4f39}{D\+A\+V\+\_\+\+C\+A\+L\+L\+T\+Y\+P\+E\+\_\+\+L\+O\+C\+K\+N\+U\+LL}
+ \}
+\item 
+enum \hyperlink{group__MOD__DAV_gaa9b8fd424c6f34394f12b0278bdc747b}{dav\+\_\+stream\+\_\+mode} \{ \hyperlink{group__MOD__DAV_ggaa9b8fd424c6f34394f12b0278bdc747baed0c12b04277f546544b106a44f5aea2}{D\+A\+V\+\_\+\+M\+O\+D\+E\+\_\+\+W\+R\+I\+T\+E\+\_\+\+T\+R\+U\+NC}, 
+\hyperlink{group__MOD__DAV_ggaa9b8fd424c6f34394f12b0278bdc747ba16a781775dce0c24f5981c51716d0008}{D\+A\+V\+\_\+\+M\+O\+D\+E\+\_\+\+W\+R\+I\+T\+E\+\_\+\+S\+E\+E\+K\+A\+B\+LE}
+ \}
+\item 
+enum \hyperlink{group__MOD__DAV_ga3e7f63f564d3cdf36d400e92e309397d}{dav\+\_\+auto\+\_\+version} \{ \hyperlink{group__MOD__DAV_gga3e7f63f564d3cdf36d400e92e309397da05645f3619952cd10b261b4a8d811cea}{D\+A\+V\+\_\+\+A\+U\+T\+O\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+N\+E\+V\+ER}, 
+\hyperlink{group__MOD__DAV_gga3e7f63f564d3cdf36d400e92e309397dad2eb1c7c8301e90683dfffbcaacde272}{D\+A\+V\+\_\+\+A\+U\+T\+O\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+A\+L\+W\+A\+YS}, 
+\hyperlink{group__MOD__DAV_gga3e7f63f564d3cdf36d400e92e309397da26c8864746f09dd0f3be5aedbd80412d}{D\+A\+V\+\_\+\+A\+U\+T\+O\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+L\+O\+C\+K\+ED}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__DAV_ga1436a9b936474851cda85aedaee6422c}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__error}{dav\+\_\+error} $\ast$) dav\+\_\+new\+\_\+error(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+\hyperlink{group__MOD__DAV_ga14c29a4af4cdc80eb0d0a044dc344fb5}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}) dav\+\_\+handle\+\_\+err(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}
+\item 
+\hyperlink{group__MOD__DAV_ga5346cfac22d6d96b13bf3354df96a389}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) dav\+\_\+set\+\_\+bufsize(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+\hyperlink{group__MOD__DAV_gaadd15801fe862212e7367dabe50780c2}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__lookup__result}{dav\+\_\+lookup\+\_\+result}) dav\+\_\+lookup\+\_\+uri(const char $\ast$\hyperlink{group__APR__Util__XML_ga69ec24fb2d0a5f5e532deb9adaab81d6}{uri}
+\item 
+\hyperlink{group__MOD__DAV_ga61f61992518a57060f4713a266bf3b97}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__text}{apr\+\_\+text} $\ast$) dav\+\_\+failed\+\_\+proppatch(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+\hyperlink{group__MOD__DAV_ga14df3471d29b1e34f44a7f72b9d8eb26}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__xml__elem}{apr\+\_\+xml\+\_\+elem} $\ast$) dav\+\_\+find\+\_\+child(const \hyperlink{structapr__xml__elem}{apr\+\_\+xml\+\_\+elem} $\ast$\hyperlink{structelem}{elem}
+\item 
+\hyperlink{group__MOD__DAV_gafbee4454bf3a2993e9950ecdf3c15ad1}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$) dav\+\_\+xml\+\_\+get\+\_\+cdata(const \hyperlink{structapr__xml__elem}{apr\+\_\+xml\+\_\+elem} $\ast$\hyperlink{structelem}{elem}
+\item 
+\hyperlink{group__MOD__DAV_ga6a529d0d3d774f021627664aed68a07d}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__xmlns__info}{dav\+\_\+xmlns\+\_\+info} $\ast$) dav\+\_\+xmlns\+\_\+create(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool})
+\item 
+\hyperlink{group__MOD__DAV_ga1d9b163c7a5de5a5bb3c948719471132}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+E\+X\+T\+E\+R\+N\+A\+L\+\_\+\+H\+O\+OK} (dav, \hyperlink{group__MOD__DAV_gab3d9c9436d79e6e827e3d828f67f6053}{D\+AV}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}, gather\+\_\+propsets,(\hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$uris)) A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+E\+X\+T\+E\+R\+N\+A\+L\+\_\+\+H\+O\+OK(dav
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} const char const char const \hyperlink{structdav__hooks__liveprop}{dav\+\_\+hooks\+\_\+liveprop} $\ast$$\ast$\hyperlink{group__MOD__DAV_ga2f89c7cfd67d24769756d6d2df79bf5c}{hooks} \hyperlink{group__MOD__DAV_ga067d7abcfe48387bfa3260c37f860d03}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+E\+X\+T\+E\+R\+N\+A\+L\+\_\+\+H\+O\+OK} (dav, \hyperlink{group__MOD__DAV_gab3d9c9436d79e6e827e3d828f67f6053}{D\+AV}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}, insert\+\_\+all\+\_\+liveprops,(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$\hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource}, \hyperlink{group__MOD__DAV_ga4c0cd73bce52d0eda981ce54973f27af}{dav\+\_\+prop\+\_\+insert} \hyperlink{group__apr__thread__proc_gaf132f350c1657f61f533df7066e903c4}{what}, \hyperlink{structapr__text__header}{apr\+\_\+text\+\_\+header} $\ast$\hyperlink{group__MOD__DAV_ga08f35dafe4ef680fc79b6e69d71c8f90}{phdr})) \hyperlink{util__lock_8c_afe2f14122c74bb061f2f1f6545627af0}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}(const \hyperlink{structdav__hooks__locks}{dav\+\_\+hooks\+\_\+locks} $\ast$) dav\+\_\+get\+\_\+lock\+\_\+hooks(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__MOD__DAV_ga71ea2ae65144af3e1daee9f20185c465}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__propdb}{dav\+\_\+hooks\+\_\+propdb} $\ast$) dav\+\_\+get\+\_\+propdb\+\_\+hooks(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__MOD__DAV_ga1fa982be01e1bef76c768d1aadbfb1f2}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__vsn}{dav\+\_\+hooks\+\_\+vsn} $\ast$) dav\+\_\+get\+\_\+vsn\+\_\+hooks(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__MOD__DAV_gaaf5ac43ec716e8aff833437636eb9ed3}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__binding}{dav\+\_\+hooks\+\_\+binding} $\ast$) dav\+\_\+get\+\_\+binding\+\_\+hooks(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__MOD__DAV_gaf8d98335d9e9b9707740b1b48cb7fcfa}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__search}{dav\+\_\+hooks\+\_\+search} $\ast$) dav\+\_\+get\+\_\+search\+\_\+hooks(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__MOD__DAV_gaac3039fa3a1a119506817f9593cae4b7}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__provider}{dav\+\_\+provider} $\ast$) dav\+\_\+lookup\+\_\+provider(const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name})
+\item 
+\hyperlink{group__MOD__DAV_gaa770ca60f1de0a213bebf3118e8d153e}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (long) dav\+\_\+get\+\_\+liveprop\+\_\+info(\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} propid
+\item 
+\hyperlink{group__MOD__DAV_ga390ce7b527ab1aff495d2c425f12159b}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}) dav\+\_\+core\+\_\+find\+\_\+liveprop(const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$\hyperlink{group__APR__Util__RL_gaa6244aacafcc4ec1d0727bdb32614b11}{resource}
+\item 
+\hyperlink{group__MOD__DAV_gae0020162c35067f4596472c03dfe81c4}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) dav\+\_\+core\+\_\+insert\+\_\+all\+\_\+liveprops(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}
+\item 
+\hyperlink{group__MOD__DAV_ga623d098178ceab8f86c45aac15312f6d}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (time\+\_\+t) dav\+\_\+get\+\_\+timeout(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__MOD__DAV_ga1473689118183441ccbc968decab953b}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__get__props__result}{dav\+\_\+get\+\_\+props\+\_\+result}) dav\+\_\+get\+\_\+props(\hyperlink{structdav__propdb}{dav\+\_\+propdb} $\ast$db
+\item 
+\hyperlink{group__MOD__DAV_gab465d0cabd78fc09d25ade2efd40f93c}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__options__provider}{dav\+\_\+options\+\_\+provider} $\ast$) dav\+\_\+get\+\_\+options\+\_\+providers(const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name})
+\item 
+\hyperlink{group__MOD__DAV_ga8f4ea9b77ffada8c15c0df69a8242d6e}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__resource__type__provider}{dav\+\_\+resource\+\_\+type\+\_\+provider} $\ast$) dav\+\_\+get\+\_\+resource\+\_\+type\+\_\+providers(const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga6e27f49150e9a14580fb313cc2777e00}{status}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga5e2420d462bed5cf0127a1ebe06ca4d1}{error\+\_\+id}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__MOD__DAV_gad6ab505736bdeb22c744ff1560e6504a}{aprerr}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} const char $\ast$ \hyperlink{group__MOD__DAV_ga21c7b5d68e8da2320aba56644b2a5447}{desc}
+\item 
+namespace const char $\ast$ \hyperlink{group__MOD__DAV_gad88f0e2b448f8637fffbb0e4fc4fec45}{tagname}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} const char \hyperlink{structdav__error}{dav\+\_\+error} $\ast$ \hyperlink{group__MOD__DAV_gacc5462e7a268b365a64468a6cf83b727}{prev}
+\item 
+\hyperlink{structdav__error}{dav\+\_\+error} $\ast$ \hyperlink{group__MOD__DAV_gac04f87655105455048cb4f5f7af79fe2}{src}
+\item 
+\hyperlink{structdav__error}{dav\+\_\+error} $\ast$ \hyperlink{group__MOD__DAV_gae58fd63a27d8e9a2accfa334571b45c0}{err}
+\item 
+\hyperlink{structdav__error}{dav\+\_\+error} \hyperlink{structdav__response}{dav\+\_\+response} $\ast$ \hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}
+\item 
+\hyperlink{structdav__buffer}{dav\+\_\+buffer} $\ast$ \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}
+\item 
+\hyperlink{structdav__buffer}{dav\+\_\+buffer} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__MOD__DAV_ga27ce0bf89fa123532a37277e6bca10f6}{size}
+\item 
+\hyperlink{structdav__buffer}{dav\+\_\+buffer} const char $\ast$ \hyperlink{group__MOD__DAV_ga645b5471f6fa6da283c82b7ea6a2b010}{str}
+\item 
+\hyperlink{structdav__buffer}{dav\+\_\+buffer} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__MOD__DAV_ga3e7b13c5862c47c96b564314fe11d41d}{extra\+\_\+needed}
+\item 
+\hyperlink{structdav__buffer}{dav\+\_\+buffer} const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{group__MOD__DAV_gac8d0feaae3f1c6b0eac72aaa9af557c1}{mem}
+\item 
+\hyperlink{structdav__buffer}{dav\+\_\+buffer} const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__MOD__DAV_ga9d0b8ad7f59b3495f813810d33bc3664}{amt}
+\item 
+\hyperlink{structdav__buffer}{dav\+\_\+buffer} const \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__MOD__DAV_gace179413e6bb5f28178968aaf55ff4f6}{pad}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$ \hyperlink{group__MOD__DAV_gac68e921ed15f71060d618adb662a84f6}{r}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga3ef31f51e842b1a8129709ce7c811c8d}{must\+\_\+be\+\_\+absolute}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$ \hyperlink{group__MOD__DAV_ga0b0eadb381dbe958da483f3d9fc9521a}{bb}
+\item 
+\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__MOD__DAV_ga35230907c170df5d4d7f0ca99274c574}{pool}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$ \hyperlink{group__MOD__DAV_ga693d7e57299e41429256463b6978cfd6}{namespaces}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structdav__response}{dav\+\_\+response} $\ast$ \hyperlink{group__MOD__DAV_gae5e6e8bc4bfa800414992418716f96df}{first}
+\item 
+\hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$ \hyperlink{group__MOD__DAV_ga558264c251695440cf0314f8fee98ee9}{prop\+\_\+ctx}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_gacbd5af9ff1f1068fb0f530217a8f5b40}{def\+\_\+depth}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_gadde0088b83bfa79d60a5603dd8f1c6c1}{strip\+\_\+white}
+\item 
+const char $\ast$ \hyperlink{group__MOD__DAV_ga5b41c5ae4505891e6c53e26df197e02b}{prefix}
+\item 
+const char const char $\ast$ \hyperlink{group__MOD__DAV_ga69ec24fb2d0a5f5e532deb9adaab81d6}{uri}
+\item 
+\hyperlink{structapr__text__header}{apr\+\_\+text\+\_\+header} $\ast$ \hyperlink{group__MOD__DAV_ga08f35dafe4ef680fc79b6e69d71c8f90}{phdr}
+\item 
+\hyperlink{group__MOD__DAV_gab3d9c9436d79e6e827e3d828f67f6053}{D\+AV}
+\item 
+\hyperlink{group__MOD__DAV_ga61569f2965b7a369eb10b6d75d410d11}{int}
+\item 
+\hyperlink{group__MOD__DAV_gaf47594d1c8656da141d16c249230f9bc}{find\+\_\+liveprop}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$ \hyperlink{group__MOD__DAV_gace5ccd456846e6c0fdd4da4136bd9a44}{resource}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} const char $\ast$ \hyperlink{group__MOD__DAV_ga08d1a5845fd4b9e4370e9423ecb88d75}{ns\+\_\+uri}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} const char const char $\ast$ \hyperlink{group__MOD__DAV_ga8f8f80d37794cde9472343e4487ba3eb}{name}
+\item 
+const char const \hyperlink{structdav__provider}{dav\+\_\+provider} $\ast$ \hyperlink{group__MOD__DAV_ga2f89c7cfd67d24769756d6d2df79bf5c}{hooks}
+\item 
+\hyperlink{structdav__locktoken__list}{dav\+\_\+locktoken\+\_\+list} $\ast$$\ast$ \hyperlink{group__MOD__DAV_gae93a71ee2894bbcd0b2a5e997a7abcb1}{ltl}
+\item 
+const char const \hyperlink{structdav__liveprop__group}{dav\+\_\+liveprop\+\_\+group} $\ast$ \hyperlink{group__MOD__DAV_gadc3add9d56a1a732c371606682db4c4e}{group}
+\item 
+const \hyperlink{structdav__liveprop__group}{dav\+\_\+liveprop\+\_\+group} const \hyperlink{structdav__liveprop__spec}{dav\+\_\+liveprop\+\_\+spec} $\ast$$\ast$ \hyperlink{group__MOD__DAV_ga533561439682bae03f90d9e96eb1d30b}{info}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{group__MOD__DAV_ga4c0cd73bce52d0eda981ce54973f27af}{dav\+\_\+prop\+\_\+insert} \hyperlink{group__MOD__DAV_ga2a369f77672da2ad7391991461733e6c}{what}
+\item 
+\hyperlink{structdav__lock}{dav\+\_\+lock} $\ast$ \hyperlink{group__MOD__DAV_ga3d3cc325e4516ee89b4f0890dba7514e}{locks}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} $\ast$ \hyperlink{group__MOD__DAV_ga8ea0b6c91d5216eba86c4c0a7a66bef7}{resrouce}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{structdav__lockdb}{dav\+\_\+lockdb} $\ast$ \hyperlink{group__MOD__DAV_ga4d2e2ae951dbf7731ef129422cb95674}{lockdb}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{structdav__lockdb}{dav\+\_\+lockdb} const \hyperlink{structapr__xml__doc}{apr\+\_\+xml\+\_\+doc} $\ast$ \hyperlink{group__MOD__DAV_gab79aad8aa27988a0e86b9397d43541e8}{doc}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{structdav__lockdb}{dav\+\_\+lockdb} const \hyperlink{structapr__xml__doc}{apr\+\_\+xml\+\_\+doc} \hyperlink{structdav__lock}{dav\+\_\+lock} $\ast$$\ast$ \hyperlink{group__MOD__DAV_gab4436a0928746b4d531ca686d2a0c0bf}{lock\+\_\+request}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} const \hyperlink{structdav__locktoken}{dav\+\_\+locktoken} $\ast$ \hyperlink{group__MOD__DAV_gaa2478c643fbd5d72dc6c31696dfc6a03}{locktoken}
+\item 
+const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{structdav__lockdb}{dav\+\_\+lockdb} \hyperlink{structdav__lock}{dav\+\_\+lock} $\ast$ \hyperlink{group__MOD__DAV_gad8198a9ef18b7a4ce247f8e4b652259a}{request}
+\item 
+\hyperlink{structdav__lockdb}{dav\+\_\+lockdb} const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga99e7f65024e2b00e24c1ddbee745e511}{resource\+\_\+state}
+\item 
+\hyperlink{structdav__lockdb}{dav\+\_\+lockdb} const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga1e39589253388daddc3eade7e70744e5}{depth}
+\item 
+\hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structdav__locktoken}{dav\+\_\+locktoken} \hyperlink{structdav__response}{dav\+\_\+response} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_gaf9edd4859daf0078e78e534b424fe4f3}{flags}
+\item 
+\hyperlink{structdav__lockdb}{dav\+\_\+lockdb} const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga82a842d0e207f481db3ebda5e61c7135}{ro}
+\item 
+\hyperlink{structdav__lockdb}{dav\+\_\+lockdb} const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$ \hyperlink{group__MOD__DAV_gaa25c4e4aa77339ae2c25aeca085180c7}{ns\+\_\+xlate}
+\item 
+\hyperlink{structdav__lockdb}{dav\+\_\+lockdb} const \hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} \hyperlink{structdav__propdb}{dav\+\_\+propdb} $\ast$$\ast$ \hyperlink{group__MOD__DAV_gac428117c2c7c0121d6e49a52085fd196}{propdb}
+\item 
+const char const char $\ast$ \hyperlink{group__MOD__DAV_ga91236178121f18751d683ebbc4a67aba}{propname}
+\item 
+const char const char \hyperlink{structapr__text__header}{apr\+\_\+text\+\_\+header} $\ast$ \hyperlink{group__MOD__DAV_gac4ba05af5940fc47e3b0aa0a79eb4bdc}{body}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structdav__get__props__result}{dav\+\_\+get\+\_\+props\+\_\+result} $\ast$ \hyperlink{group__MOD__DAV_ga943fae2396117a775d57830a22f85ddb}{propstats}
+\item 
+\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$ \hyperlink{group__MOD__DAV_ga88f1c33cbfbc8da7746840cffd827b59}{out\+\_\+req}
+\item 
+\hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_ga77494802fe3304b88fe3d4a28ccc7a46}{parent\+\_\+only}
+\item 
+\hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{structdav__auto__version__info}{dav\+\_\+auto\+\_\+version\+\_\+info} $\ast$ \hyperlink{group__MOD__DAV_ga9b9e3731681a56e2bf4dec3e3fb956a6}{av\+\_\+info}
+\item 
+\hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_gae0dedc57fbbe42ccdabee641dd43f047}{undo}
+\item 
+\hyperlink{structdav__resource}{dav\+\_\+resource} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__DAV_gaffa9847fd05b455996e2dcd415f76a13}{unlock}
+\item 
+const char const \hyperlink{structdav__options__provider}{dav\+\_\+options\+\_\+provider} $\ast$ \hyperlink{group__MOD__DAV_gaf0b2e32aa25087ef77626ce8bb9d7aa4}{provider}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+D\+AV extension module for \hyperlink{namespaceApache}{Apache} 2.\+0.$\ast$. 
+
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+C\+O\+M\+P\+L\+E\+TE@{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+C\+O\+M\+P\+L\+E\+TE}}
+\index{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+C\+O\+M\+P\+L\+E\+TE@{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+C\+O\+M\+P\+L\+E\+TE}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+C\+O\+M\+P\+L\+E\+TE}{DAV_GETLOCKS_COMPLETE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+C\+O\+M\+P\+L\+E\+TE~2    /$\ast$ fill {\bf out} indirect {\bf locks} $\ast$/}\hypertarget{mod__dav_8h_a335a32c54b47a4b18100a28418d96a7c}{}\label{mod__dav_8h_a335a32c54b47a4b18100a28418d96a7c}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+P\+A\+R\+T\+I\+AL@{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+P\+A\+R\+T\+I\+AL}}
+\index{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+P\+A\+R\+T\+I\+AL@{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+P\+A\+R\+T\+I\+AL}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+P\+A\+R\+T\+I\+AL}{DAV_GETLOCKS_PARTIAL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+P\+A\+R\+T\+I\+AL~1    /$\ast$ leave indirects partially filled $\ast$/}\hypertarget{mod__dav_8h_ab89aafebe076cdbe6e3415eb37643c29}{}\label{mod__dav_8h_ab89aafebe076cdbe6e3415eb37643c29}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+R\+E\+S\+O\+L\+V\+ED@{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+R\+E\+S\+O\+L\+V\+ED}}
+\index{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+R\+E\+S\+O\+L\+V\+ED@{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+R\+E\+S\+O\+L\+V\+ED}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+R\+E\+S\+O\+L\+V\+ED}{DAV_GETLOCKS_RESOLVED}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+G\+E\+T\+L\+O\+C\+K\+S\+\_\+\+R\+E\+S\+O\+L\+V\+ED~0    /$\ast$ resolve indirects {\bf to} directs $\ast$/}\hypertarget{mod__dav_8h_ad434e060ea94e4d89713f381e2931804}{}\label{mod__dav_8h_ad434e060ea94e4d89713f381e2931804}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+O\+R\+M\+AL@{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+O\+R\+M\+AL}}
+\index{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+O\+R\+M\+AL@{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+O\+R\+M\+AL}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+O\+R\+M\+AL}{DAV_IF_COND_NORMAL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+O\+R\+M\+AL~0}\hypertarget{mod__dav_8h_a5b645a22190541c8b3866036d4cabdbf}{}\label{mod__dav_8h_a5b645a22190541c8b3866036d4cabdbf}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+OT@{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+OT}}
+\index{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+OT@{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+OT}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+OT}{DAV_IF_COND_NOT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+I\+F\+\_\+\+C\+O\+N\+D\+\_\+\+N\+OT~1    /$\ast$ \char`\"{}Not\char`\"{} was applied $\ast$/}\hypertarget{mod__dav_8h_a83c4d48c6cb930b1f7126997d5ef0afc}{}\label{mod__dav_8h_a83c4d48c6cb930b1f7126997d5ef0afc}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+D\+E\+L\+E\+TE@{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+D\+E\+L\+E\+TE}}
+\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+D\+E\+L\+E\+TE@{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+D\+E\+L\+E\+TE}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+D\+E\+L\+E\+TE}{DAV_PROP_OP_DELETE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+D\+E\+L\+E\+TE~2    /$\ast$ delete {\bf a} prop {\bf value} $\ast$/}\hypertarget{mod__dav_8h_a6ebefa1599c2d120837209790e0aabef}{}\label{mod__dav_8h_a6ebefa1599c2d120837209790e0aabef}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+S\+ET@{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+S\+ET}}
+\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+S\+ET@{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+S\+ET}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+S\+ET}{DAV_PROP_OP_SET}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+P\+R\+O\+P\+\_\+\+O\+P\+\_\+\+S\+ET~1    /$\ast$ {\bf set} {\bf a} property {\bf value} $\ast$/}\hypertarget{mod__dav_8h_af58dc57a374ca8cf5db3860de73e9f3f}{}\label{mod__dav_8h_af58dc57a374ca8cf5db3860de73e9f3f}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+A\+L\+L\+P\+R\+OP@{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+A\+L\+L\+P\+R\+OP}}
+\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+A\+L\+L\+P\+R\+OP@{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+A\+L\+L\+P\+R\+OP}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+A\+L\+L\+P\+R\+OP}{DAV_PROPFIND_IS_ALLPROP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+A\+L\+L\+P\+R\+OP~1}\hypertarget{mod__dav_8h_a205ac4337cfb0046fc31c722f5df1314}{}\label{mod__dav_8h_a205ac4337cfb0046fc31c722f5df1314}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+OP@{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+OP}}
+\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+OP@{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+OP}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+OP}{DAV_PROPFIND_IS_PROP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+OP~3}\hypertarget{mod__dav_8h_ad8d90764e6c4d1c85309b65cf61e59bf}{}\label{mod__dav_8h_ad8d90764e6c4d1c85309b65cf61e59bf}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+O\+P\+N\+A\+ME@{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+O\+P\+N\+A\+ME}}
+\index{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+O\+P\+N\+A\+ME@{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+O\+P\+N\+A\+ME}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+O\+P\+N\+A\+ME}{DAV_PROPFIND_IS_PROPNAME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+P\+R\+O\+P\+F\+I\+N\+D\+\_\+\+I\+S\+\_\+\+P\+R\+O\+P\+N\+A\+ME~2}\hypertarget{mod__dav_8h_a397acb1bf9d82966845b8bcfedabb58a}{}\label{mod__dav_8h_a397acb1bf9d82966845b8bcfedabb58a}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+A\+U\+TH@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+A\+U\+TH}}
+\index{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+A\+U\+TH@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+A\+U\+TH}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+A\+U\+TH}{DAV_WALKTYPE_AUTH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+A\+U\+TH~0x0001  /$\ast$ limit to authorized files $\ast$/}\hypertarget{mod__dav_8h_a26eec213f2feb6d4f0834209c5ac9bb7}{}\label{mod__dav_8h_a26eec213f2feb6d4f0834209c5ac9bb7}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+L\+O\+C\+K\+N\+U\+LL@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+L\+O\+C\+K\+N\+U\+LL}}
+\index{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+L\+O\+C\+K\+N\+U\+LL@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+L\+O\+C\+K\+N\+U\+LL}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+L\+O\+C\+K\+N\+U\+LL}{DAV_WALKTYPE_LOCKNULL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+L\+O\+C\+K\+N\+U\+LL~0x0004  /$\ast$ walk locknull resources $\ast$/}\hypertarget{mod__dav_8h_adfdb6aec1afd2b4928f382f848fe6bdd}{}\label{mod__dav_8h_adfdb6aec1afd2b4928f382f848fe6bdd}
+\index{mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}!D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+N\+O\+R\+M\+AL@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+N\+O\+R\+M\+AL}}
+\index{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+N\+O\+R\+M\+AL@{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+N\+O\+R\+M\+AL}!mod\+\_\+dav.\+h@{mod\+\_\+dav.\+h}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+N\+O\+R\+M\+AL}{DAV_WALKTYPE_NORMAL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+W\+A\+L\+K\+T\+Y\+P\+E\+\_\+\+N\+O\+R\+M\+AL~0x0002  /$\ast$ walk normal files $\ast$/}\hypertarget{mod__dav_8h_af880dad2a6a3faa599e31adb2505d9f9}{}\label{mod__dav_8h_af880dad2a6a3faa599e31adb2505d9f9}

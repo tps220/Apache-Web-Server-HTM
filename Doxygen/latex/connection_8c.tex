@@ -1,0 +1,104 @@
+\hypertarget{connection_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/connection.c File Reference}
+\label{connection_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/connection.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/connection.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+connection.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+vhost.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+Include dependency graph for connection.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{connection_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{connection_8c_a44417ff4501cdb7612de59d7eba5a9fe}{M\+A\+X\+\_\+\+S\+E\+C\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER}~30
+\item 
+\#define \hyperlink{connection_8c_aada5fbf649e7899049d5deb1e0d86620}{S\+E\+C\+O\+N\+D\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER}~2
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{connection_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT} ()
+\item 
+\hyperlink{group__MOD__CORE_ga67c82c46d8e12b9b3ccf7c96c288f207}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{connection_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{connection.\+c@{connection.\+c}!M\+A\+X\+\_\+\+S\+E\+C\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER@{M\+A\+X\+\_\+\+S\+E\+C\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER}}
+\index{M\+A\+X\+\_\+\+S\+E\+C\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER@{M\+A\+X\+\_\+\+S\+E\+C\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER}!connection.\+c@{connection.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+S\+E\+C\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER}{MAX_SECS_TO_LINGER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+S\+E\+C\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER~30}\hypertarget{connection_8c_a44417ff4501cdb7612de59d7eba5a9fe}{}\label{connection_8c_a44417ff4501cdb7612de59d7eba5a9fe}
+\index{connection.\+c@{connection.\+c}!S\+E\+C\+O\+N\+D\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER@{S\+E\+C\+O\+N\+D\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER}}
+\index{S\+E\+C\+O\+N\+D\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER@{S\+E\+C\+O\+N\+D\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER}!connection.\+c@{connection.\+c}}
+\subsubsection[{\texorpdfstring{S\+E\+C\+O\+N\+D\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER}{SECONDS_TO_LINGER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+E\+C\+O\+N\+D\+S\+\_\+\+T\+O\+\_\+\+L\+I\+N\+G\+ER~2}\hypertarget{connection_8c_aada5fbf649e7899049d5deb1e0d86620}{}\label{connection_8c_aada5fbf649e7899049d5deb1e0d86620}
+
+
+\subsection{Function Documentation}
+\index{connection.\+c@{connection.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!connection.\+c@{connection.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{AP_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{connection_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{}\label{connection_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}
+
+\begin{DoxyCode}
+99 \{
+100     \textcolor{comment}{/* Give protocol handlers one last chance to raise their voice */}
+101     ap\_run\_pre\_close\_connection(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c});
+102     
+103     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_af0e434bcb2a0a47c13e94069431fb281}{sbh}) \{
+104         ap\_update\_child\_status(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_af0e434bcb2a0a47c13e94069431fb281}{sbh}, \hyperlink{scoreboard_8h_a1e1e4ddbb921f6c841f8f303a49baf1f}{SERVER\_CLOSING}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+105     \}
+106     \textcolor{keywordflow}{return} 0;
+107 \}
+\end{DoxyCode}
+\index{connection.\+c@{connection.\+c}!A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}}
+\index{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}!connection.\+c@{connection.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+C\+T()}{APR_HOOK_STRUCT()}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{connection_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{}\label{connection_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}
+
+\begin{DoxyCode}
+71 \{
+72     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+73     \hyperlink{structapr__bucket__brigade}{apr\_bucket\_brigade} *\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb};
+74     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+75 
+76     bb = apr\_brigade\_create(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_a1dc5f31c7afc4a6f9c4ede0daea8cd1d}{pool}, \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+77 
+78     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONNECTION_ga0e45940edc0a96a29eea9b91650341ae}{flush}) \{
+79         \textcolor{comment}{/* FLUSH bucket */}
+80         b = apr\_bucket\_flush\_create(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+81         \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bb, b);
+82     \}
+83 
+84     \textcolor{comment}{/* End Of Connection bucket */}
+85     b = ap\_bucket\_eoc\_create(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+86     \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(bb, b);
+87 
+88     rv = ap\_pass\_brigade(\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}->\hyperlink{structconn__rec_a41ce808290656ac63a859b7145b0602c}{output\_filters}, bb);
+89     apr\_brigade\_destroy(bb);
+90     \textcolor{keywordflow}{return} rv;
+91 \}
+\end{DoxyCode}

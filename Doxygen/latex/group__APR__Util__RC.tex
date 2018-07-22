@@ -1,0 +1,543 @@
+\hypertarget{group__APR__Util__RC}{}\section{Redis Client Routines}
+\label{group__APR__Util__RC}\index{Redis Client Routines@{Redis Client Routines}}
+Collaboration diagram for Redis Client Routines\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=341pt]{group__APR__Util__RC}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structapr__redis__server__t}{apr\+\_\+redis\+\_\+server\+\_\+t}
+\item 
+struct \hyperlink{structapr__redis__t}{apr\+\_\+redis\+\_\+t}
+\item 
+struct \hyperlink{structapr__redis__stats__t}{apr\+\_\+redis\+\_\+stats\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structapr__redis__conn__t}{apr\+\_\+redis\+\_\+conn\+\_\+t} \hyperlink{group__APR__Util__RC_ga5a4ef8d9748b79e176a30b63ab0128a6}{apr\+\_\+redis\+\_\+conn\+\_\+t}
+\item 
+typedef struct \hyperlink{structapr__redis__server__t}{apr\+\_\+redis\+\_\+server\+\_\+t} \hyperlink{group__APR__Util__RC_ga02345ba6c8fb432d89c74b971473f3e3}{apr\+\_\+redis\+\_\+server\+\_\+t}
+\item 
+typedef struct \hyperlink{structapr__redis__t}{apr\+\_\+redis\+\_\+t} \hyperlink{group__APR__Util__RC_ga133584a8de2b03e2538a8a1f8d506173}{apr\+\_\+redis\+\_\+t}
+\item 
+typedef \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t}($\ast$ \hyperlink{group__APR__Util__RC_ga2f0c5b75879b3ba94f89bc8e68528bb1}{apr\+\_\+redis\+\_\+hash\+\_\+func}) (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__RC_ga37840dc44e2b0b5a127a6828fffe2a8c}{baton}, const char $\ast$\hyperlink{structdata}{data}, const \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APR__Util__RC_ga371e964d98d4000f4bc080fa4ad81902}{data\+\_\+len})
+\item 
+typedef \hyperlink{structapr__redis__server__t}{apr\+\_\+redis\+\_\+server\+\_\+t} $\ast$($\ast$ \hyperlink{group__APR__Util__RC_ga7f2fc18eb8f02ba970d7a8bfde2b048c}{apr\+\_\+redis\+\_\+server\+\_\+func}) (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__RC_ga37840dc44e2b0b5a127a6828fffe2a8c}{baton}, \hyperlink{structapr__redis__t}{apr\+\_\+redis\+\_\+t} $\ast$\hyperlink{group__APR__Util__RC_ga38828c1c35a96d3d86edce1458ba991f}{rc}, const \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{testpass_8c_adfc0cb134ace18ba7fde0fefbae7a391}{hash})
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{group__APR__Util__RC_gaab66b126b216452bfae7e27f1ecdff8d}{apr\+\_\+redis\+\_\+server\+\_\+status\+\_\+t} \{ \hyperlink{group__APR__Util__RC_ggaab66b126b216452bfae7e27f1ecdff8da23ba9dc7877e94fe88cdf9adbb9a8244}{A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+VE}, 
+\hyperlink{group__APR__Util__RC_ggaab66b126b216452bfae7e27f1ecdff8da7007f5d2a45e362168d8f317321c4b3a}{A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+D\+E\+AD}
+ \}
+\item 
+enum \hyperlink{group__APR__Util__RC_ga2ea331e208371373bf937ec1a77bb867}{apr\+\_\+redis\+\_\+server\+\_\+role\+\_\+t} \{ \hyperlink{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867a71bddecba04705afdb8e42841df3b0b1}{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+M\+A\+S\+T\+ER}, 
+\hyperlink{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867aed519c7ada7da7e3621a89a9f4178e9c}{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+S\+L\+A\+VE}, 
+\hyperlink{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867ac2c0f3bd886578f1cff2d2faa4e06cc6}{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+U\+N\+K\+N\+O\+WN}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APR__Util__RC_ga0320ff12fe08e295265a06e0b615bde3}{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t}) apr\+\_\+redis\+\_\+hash(\hyperlink{structapr__redis__t}{apr\+\_\+redis\+\_\+t} $\ast$\hyperlink{group__APR__Util__RC_ga38828c1c35a96d3d86edce1458ba991f}{rc}
+\item 
+\hyperlink{group__APR__Util__RC_ga4032db1164e06580e79858f2effd5a90}{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__redis__server__t}{apr\+\_\+redis\+\_\+server\+\_\+t} $\ast$) \hyperlink{apr__redis_8c_a31a1bf0748f91cb73d35c3c8b3385be1}{apr\+\_\+redis\+\_\+find\+\_\+server\+\_\+hash}(\hyperlink{structapr__redis__t}{apr\+\_\+redis\+\_\+t} $\ast$\hyperlink{group__APR__Util__RC_ga38828c1c35a96d3d86edce1458ba991f}{rc}
+\item 
+\hyperlink{group__APR__Util__RC_ga316226b43bc33d042d27e089f84d6f60}{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) apr\+\_\+redis\+\_\+add\+\_\+server(\hyperlink{structapr__redis__t}{apr\+\_\+redis\+\_\+t} $\ast$\hyperlink{group__APR__Util__RC_ga38828c1c35a96d3d86edce1458ba991f}{rc}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{group__APR__Util__RC_ga8f64897c7ccc5c13f276d1d07c4e7095}{data}
+\item 
+const char const \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APR__Util__RC_ga371e964d98d4000f4bc080fa4ad81902}{data\+\_\+len}
+\item 
+const \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RC_gaf86d4a5b21e961280c272d79aacf26ca}{hash}
+\item 
+\hyperlink{structapr__redis__t}{apr\+\_\+redis\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_ga38828c1c35a96d3d86edce1458ba991f}{rc}
+\item 
+\hyperlink{structapr__redis__server__t}{apr\+\_\+redis\+\_\+server\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_ga48a1618bc9e57e0406979ef034512520}{server}
+\item 
+const char $\ast$ \hyperlink{group__APR__Util__RC_gae032e164f1daa754d6fbb79d59723931}{host}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{group__APR__Util__RC_ga225c76c246a5cc263c5a2628eb99353e}{port}
+\item 
+\hyperlink{structapr__redis__server__t}{apr\+\_\+redis\+\_\+server\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_ga2f1b060c750d4f17eb602a451b6e4edc}{rs}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RC_gaed1ae724c786d088e40b9e6667e4e039}{min}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RC_ga5645303505286909d95c228588952953}{smax}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RC_ga38e7d1fc94ad8c6709d5b2243d2fd94b}{max}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RC_ga6e9eb567b7ddf19610db54e8c46cf78b}{ttl}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RC_ga964b53e25648f95eb52322b28eac28ec}{rwto}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{structapr__redis__server__t}{apr\+\_\+redis\+\_\+server\+\_\+t} $\ast$$\ast$ \hyperlink{group__APR__Util__RC_ga16ebca092e717a050cdb4feb7bb59849}{ns}
+\item 
+\hyperlink{group__apr__platform_ga3fb87c977e28a526d872d1081411b129}{apr\+\_\+uint16\+\_\+t} \hyperlink{group__APR__Util__RC_ga6d125da079a6df3cd41060e74d7b8616}{max\+\_\+servers}
+\item 
+\hyperlink{group__apr__platform_ga3fb87c977e28a526d872d1081411b129}{apr\+\_\+uint16\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RC_gad1f784cc84e0ca7eb04ee77df95eb26a}{flags}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_ga2e727f881424334cf12d8af10f50ec6c}{p}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} const char $\ast$ \hyperlink{group__APR__Util__RC_gacd3d88da3c0e0313c3645ff34f62f542}{key}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} const char char $\ast$$\ast$ \hyperlink{group__APR__Util__RC_ga37840dc44e2b0b5a127a6828fffe2a8c}{baton}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} const char char \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_gaec3bbc8c406590287ccd8d9613df4f8d}{len}
+\item 
+const char char const \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APR__Util__RC_ga6346d4acf7ce0561990228c94d64f893}{data\+\_\+size}
+\item 
+const char char const \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RC_ga48b7aa88e5841c0fe69f7d9a88646af3}{timeout}
+\item 
+const char \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\+\_\+int32\+\_\+t} \hyperlink{group__APR__Util__RC_ga3032890ab2e5d12bfb3b92c280a84216}{inc}
+\item 
+const char \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\+\_\+int32\+\_\+t} \hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_ga6da6ffe4e1ccb7d07da0409bc5a2728b}{new\+\_\+value}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_gabc902b08134dbf7de7c4ea169a265f56}{temp\+\_\+pool}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_ga225953f0223e74926c10078f71a9510e}{data\+\_\+pool}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{structapr__hash__t}{apr\+\_\+hash\+\_\+t} $\ast$ \hyperlink{group__APR__Util__RC_ga4f3aba886fed854e787b8e8b1b7f6841}{values}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} \hyperlink{structapr__redis__stats__t}{apr\+\_\+redis\+\_\+stats\+\_\+t} $\ast$$\ast$ \hyperlink{group__APR__Util__RC_ga746d3da2c641e8422343c4061b178fe9}{stats}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Typedef Documentation}
+\index{Redis Client Routines@{Redis Client Routines}!apr\+\_\+redis\+\_\+conn\+\_\+t@{apr\+\_\+redis\+\_\+conn\+\_\+t}}
+\index{apr\+\_\+redis\+\_\+conn\+\_\+t@{apr\+\_\+redis\+\_\+conn\+\_\+t}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+redis\+\_\+conn\+\_\+t}{apr_redis_conn_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+redis\+\_\+conn\+\_\+t} {\bf apr\+\_\+redis\+\_\+conn\+\_\+t}}\hypertarget{group__APR__Util__RC_ga5a4ef8d9748b79e176a30b63ab0128a6}{}\label{group__APR__Util__RC_ga5a4ef8d9748b79e176a30b63ab0128a6}
+Opaque redis client connection object \index{Redis Client Routines@{Redis Client Routines}!apr\+\_\+redis\+\_\+hash\+\_\+func@{apr\+\_\+redis\+\_\+hash\+\_\+func}}
+\index{apr\+\_\+redis\+\_\+hash\+\_\+func@{apr\+\_\+redis\+\_\+hash\+\_\+func}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+redis\+\_\+hash\+\_\+func}{apr_redis_hash_func}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+uint32\+\_\+t}($\ast$ apr\+\_\+redis\+\_\+hash\+\_\+func) ({\bf void} $\ast${\bf baton}, const char $\ast${\bf data}, const {\bf apr\+\_\+size\+\_\+t} {\bf data\+\_\+len})}\hypertarget{group__APR__Util__RC_ga2f0c5b75879b3ba94f89bc8e68528bb1}{}\label{group__APR__Util__RC_ga2f0c5b75879b3ba94f89bc8e68528bb1}
+\index{Redis Client Routines@{Redis Client Routines}!apr\+\_\+redis\+\_\+server\+\_\+func@{apr\+\_\+redis\+\_\+server\+\_\+func}}
+\index{apr\+\_\+redis\+\_\+server\+\_\+func@{apr\+\_\+redis\+\_\+server\+\_\+func}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+redis\+\_\+server\+\_\+func}{apr_redis_server_func}}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf apr\+\_\+redis\+\_\+server\+\_\+t}$\ast$($\ast$ apr\+\_\+redis\+\_\+server\+\_\+func) ({\bf void} $\ast${\bf baton}, {\bf apr\+\_\+redis\+\_\+t} $\ast${\bf rc}, const {\bf apr\+\_\+uint32\+\_\+t} {\bf hash})}\hypertarget{group__APR__Util__RC_ga7f2fc18eb8f02ba970d7a8bfde2b048c}{}\label{group__APR__Util__RC_ga7f2fc18eb8f02ba970d7a8bfde2b048c}
+\index{Redis Client Routines@{Redis Client Routines}!apr\+\_\+redis\+\_\+server\+\_\+t@{apr\+\_\+redis\+\_\+server\+\_\+t}}
+\index{apr\+\_\+redis\+\_\+server\+\_\+t@{apr\+\_\+redis\+\_\+server\+\_\+t}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+redis\+\_\+server\+\_\+t}{apr_redis_server_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+redis\+\_\+server\+\_\+t} {\bf apr\+\_\+redis\+\_\+server\+\_\+t}}\hypertarget{group__APR__Util__RC_ga02345ba6c8fb432d89c74b971473f3e3}{}\label{group__APR__Util__RC_ga02345ba6c8fb432d89c74b971473f3e3}
+Redis Server Info Object \index{Redis Client Routines@{Redis Client Routines}!apr\+\_\+redis\+\_\+t@{apr\+\_\+redis\+\_\+t}}
+\index{apr\+\_\+redis\+\_\+t@{apr\+\_\+redis\+\_\+t}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+redis\+\_\+t}{apr_redis_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+redis\+\_\+t} {\bf apr\+\_\+redis\+\_\+t}}\hypertarget{group__APR__Util__RC_ga133584a8de2b03e2538a8a1f8d506173}{}\label{group__APR__Util__RC_ga133584a8de2b03e2538a8a1f8d506173}
+
+
+\subsection{Enumeration Type Documentation}
+\index{Redis Client Routines@{Redis Client Routines}!apr\+\_\+redis\+\_\+server\+\_\+role\+\_\+t@{apr\+\_\+redis\+\_\+server\+\_\+role\+\_\+t}}
+\index{apr\+\_\+redis\+\_\+server\+\_\+role\+\_\+t@{apr\+\_\+redis\+\_\+server\+\_\+role\+\_\+t}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+redis\+\_\+server\+\_\+role\+\_\+t}{apr_redis_server_role_t}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf apr\+\_\+redis\+\_\+server\+\_\+role\+\_\+t}}\hypertarget{group__APR__Util__RC_ga2ea331e208371373bf937ec1a77bb867}{}\label{group__APR__Util__RC_ga2ea331e208371373bf937ec1a77bb867}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+M\+A\+S\+T\+ER@{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+M\+A\+S\+T\+ER}!Redis Client Routines@{Redis Client Routines}}\index{Redis Client Routines@{Redis Client Routines}!A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+M\+A\+S\+T\+ER@{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+M\+A\+S\+T\+ER}}\item[{\em 
+A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+M\+A\+S\+T\+ER\hypertarget{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867a71bddecba04705afdb8e42841df3b0b1}{}\label{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867a71bddecba04705afdb8e42841df3b0b1}
+}]Server is a master \index{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+S\+L\+A\+VE@{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+S\+L\+A\+VE}!Redis Client Routines@{Redis Client Routines}}\index{Redis Client Routines@{Redis Client Routines}!A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+S\+L\+A\+VE@{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+S\+L\+A\+VE}}\item[{\em 
+A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+S\+L\+A\+VE\hypertarget{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867aed519c7ada7da7e3621a89a9f4178e9c}{}\label{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867aed519c7ada7da7e3621a89a9f4178e9c}
+}]Server is a slave \index{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+U\+N\+K\+N\+O\+WN@{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+U\+N\+K\+N\+O\+WN}!Redis Client Routines@{Redis Client Routines}}\index{Redis Client Routines@{Redis Client Routines}!A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+U\+N\+K\+N\+O\+WN@{A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+U\+N\+K\+N\+O\+WN}}\item[{\em 
+A\+P\+R\+\_\+\+R\+S\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+U\+N\+K\+N\+O\+WN\hypertarget{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867ac2c0f3bd886578f1cff2d2faa4e06cc6}{}\label{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867ac2c0f3bd886578f1cff2d2faa4e06cc6}
+}]Server role is unknown \end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+374 \{
+375     \hyperlink{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867a71bddecba04705afdb8e42841df3b0b1}{APR\_RS\_SERVER\_MASTER}, 
+376     \hyperlink{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867aed519c7ada7da7e3621a89a9f4178e9c}{APR\_RS\_SERVER\_SLAVE},  
+377     \hyperlink{group__APR__Util__RC_gga2ea331e208371373bf937ec1a77bb867ac2c0f3bd886578f1cff2d2faa4e06cc6}{APR\_RS\_SERVER\_UNKNOWN}  
+378 \} \hyperlink{group__APR__Util__RC_ga2ea331e208371373bf937ec1a77bb867}{apr\_redis\_server\_role\_t};
+\end{DoxyCode}
+\index{Redis Client Routines@{Redis Client Routines}!apr\+\_\+redis\+\_\+server\+\_\+status\+\_\+t@{apr\+\_\+redis\+\_\+server\+\_\+status\+\_\+t}}
+\index{apr\+\_\+redis\+\_\+server\+\_\+status\+\_\+t@{apr\+\_\+redis\+\_\+server\+\_\+status\+\_\+t}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+redis\+\_\+server\+\_\+status\+\_\+t}{apr_redis_server_status_t}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf apr\+\_\+redis\+\_\+server\+\_\+status\+\_\+t}}\hypertarget{group__APR__Util__RC_gaab66b126b216452bfae7e27f1ecdff8d}{}\label{group__APR__Util__RC_gaab66b126b216452bfae7e27f1ecdff8d}
+Specifies the status of a redis server \begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+VE@{A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+VE}!Redis Client Routines@{Redis Client Routines}}\index{Redis Client Routines@{Redis Client Routines}!A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+VE@{A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+VE}}\item[{\em 
+A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+VE\hypertarget{group__APR__Util__RC_ggaab66b126b216452bfae7e27f1ecdff8da23ba9dc7877e94fe88cdf9adbb9a8244}{}\label{group__APR__Util__RC_ggaab66b126b216452bfae7e27f1ecdff8da23ba9dc7877e94fe88cdf9adbb9a8244}
+}]Server is alive and responding to requests \index{A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+D\+E\+AD@{A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+D\+E\+AD}!Redis Client Routines@{Redis Client Routines}}\index{Redis Client Routines@{Redis Client Routines}!A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+D\+E\+AD@{A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+D\+E\+AD}}\item[{\em 
+A\+P\+R\+\_\+\+R\+C\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+D\+E\+AD\hypertarget{group__APR__Util__RC_ggaab66b126b216452bfae7e27f1ecdff8da7007f5d2a45e362168d8f317321c4b3a}{}\label{group__APR__Util__RC_ggaab66b126b216452bfae7e27f1ecdff8da7007f5d2a45e362168d8f317321c4b3a}
+}]Server is not responding to requests \end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+65 \{
+66     \hyperlink{group__APR__Util__RC_ggaab66b126b216452bfae7e27f1ecdff8da23ba9dc7877e94fe88cdf9adbb9a8244}{APR\_RC\_SERVER\_LIVE}, 
+67     \hyperlink{group__APR__Util__RC_ggaab66b126b216452bfae7e27f1ecdff8da7007f5d2a45e362168d8f317321c4b3a}{APR\_RC\_SERVER\_DEAD}  
+68 \} \hyperlink{group__APR__Util__RC_gaab66b126b216452bfae7e27f1ecdff8d}{apr\_redis\_server\_status\_t};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{Redis Client Routines@{Redis Client Routines}!A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+uint32\+\_\+t) apr\+\_\+redis\+\_\+hash(apr\+\_\+redis\+\_\+t $\ast$rc}{APU_DECLARE(apr_uint32_t) apr_redis_hash(apr_redis_t *rc}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+uint32\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APR__Util__RC_ga0320ff12fe08e295265a06e0b615bde3}{}\label{group__APR__Util__RC_ga0320ff12fe08e295265a06e0b615bde3}
+Creates a crc32 hash used to split keys between servers 
+\begin{DoxyParams}{Parameters}
+{\em rc} & The redis client object to use \\
+\hline
+{\em data} & Data to be hashed \\
+\hline
+{\em data\+\_\+len} & Length of the data to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+crc32 hash of data 
+\end{DoxyReturn}
+\begin{DoxyRemark}{Remarks}
+The crc32 hash is not compatible with old redisd clients.
+\end{DoxyRemark}
+Pure C\+R\+C32 Hash. Used by some clients.
+
+hash compatible with the standard Perl Client. 
+\begin{DoxyCode}
+559 \{
+560     \textcolor{comment}{/* The default Perl Client doesn't actually use just crc32 -- it shifts it again}
+561 \textcolor{comment}{     * like this....}
+562 \textcolor{comment}{     */}
+563     \textcolor{keywordflow}{return} ((apr\_memcache\_hash\_crc32(\hyperlink{group__APACHE__CORE__MPM_ga3b2abf82e64753cd3564882d9ad8eb86}{baton}, \hyperlink{structdata}{data}, \hyperlink{group__APR__Util__MC_ga371e964d98d4000f4bc080fa4ad81902}{data\_len}) >> 16) & 0x7fff);
+564 \}
+\end{DoxyCode}
+\index{Redis Client Routines@{Redis Client Routines}!A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+redis\+\_\+server\+\_\+t $\ast$) apr\+\_\+redis\+\_\+find\+\_\+server\+\_\+hash(apr\+\_\+redis\+\_\+t $\ast$rc}{APU_DECLARE(apr_redis_server_t *) apr_redis_find_server_hash(apr_redis_t *rc}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+redis\+\_\+server\+\_\+t} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APR__Util__RC_ga4032db1164e06580e79858f2effd5a90}{}\label{group__APR__Util__RC_ga4032db1164e06580e79858f2effd5a90}
+Picks a server based on a hash 
+\begin{DoxyParams}{Parameters}
+{\em rc} & The redis client object to use \\
+\hline
+{\em hash} & Hashed value of a Key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+server that controls specified hash 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+apr\+\_\+redis\+\_\+hash
+\end{DoxySeeAlso}
+server selection compatible with the standard Perl Client.
+
+Finds a Server object based on a hostname/port pair 
+\begin{DoxyParams}{Parameters}
+{\em rc} & The redis client object to use \\
+\hline
+{\em host} & Hostname of the server \\
+\hline
+{\em port} & Port of the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Server with matching Hostname and Port, or N\+U\+LL if none was found. 
+\end{DoxyReturn}
+\index{Redis Client Routines@{Redis Client Routines}!A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t) apr\+\_\+redis\+\_\+add\+\_\+server(apr\+\_\+redis\+\_\+t $\ast$rc}{APU_DECLARE(apr_status_t) apr_redis_add_server(apr_redis_t *rc}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+U\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__APR__Util__RC_ga316226b43bc33d042d27e089f84d6f60}{}\label{group__APR__Util__RC_ga316226b43bc33d042d27e089f84d6f60}
+Adds a server to a client object 
+\begin{DoxyParams}{Parameters}
+{\em rc} & The redis client object to use \\
+\hline
+{\em server} & Server to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{Remarks}
+Adding servers is not thread safe, and should be done once at startup. 
+\end{DoxyRemark}
+\begin{DoxyWarning}{Warning}
+Changing servers after startup may cause keys to go to different servers.
+\end{DoxyWarning}
+Enables a Server for use again 
+\begin{DoxyParams}{Parameters}
+{\em rc} & The redis client object to use \\
+\hline
+{\em rs} & Server to Activate\\
+\hline
+\end{DoxyParams}
+Disable a Server 
+\begin{DoxyParams}{Parameters}
+{\em rc} & The redis client object to use \\
+\hline
+{\em rs} & Server to Disable\\
+\hline
+\end{DoxyParams}
+Creates a new Server Object 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to use \\
+\hline
+{\em host} & hostname of the server \\
+\hline
+{\em port} & port of the server \\
+\hline
+{\em min} & minimum number of client sockets to open \\
+\hline
+{\em smax} & soft maximum number of client connections to open \\
+\hline
+{\em max} & hard maximum number of client connections \\
+\hline
+{\em ttl} & time to live in microseconds of a client connection \\
+\hline
+{\em rwto} & r/w timeout value in seconds of a client connection \\
+\hline
+{\em ns} & location of the new server object \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+apr\+\_\+reslist\+\_\+create 
+\end{DoxySeeAlso}
+\begin{DoxyRemark}{Remarks}
+min, smax, and max are only used when A\+P\+R\+\_\+\+H\+A\+S\+\_\+\+T\+H\+R\+E\+A\+DS
+\end{DoxyRemark}
+Creates a new redisd client object 
+\begin{DoxyParams}{Parameters}
+{\em p} & Pool to use \\
+\hline
+{\em max\+\_\+servers} & maximum number of servers \\
+\hline
+{\em flags} & Not currently used \\
+\hline
+{\em rc} & location of the new redis client object\\
+\hline
+\end{DoxyParams}
+Gets a value from the server, allocating the value out of p 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em p} & Pool to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & location of the allocated value \\
+\hline
+{\em len} & length of data at baton \\
+\hline
+{\em flags} & any flags set by the client for this key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+Sets a value by key on the server 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & data to store on the server \\
+\hline
+{\em data\+\_\+size} & length of data at baton \\
+\hline
+{\em flags} & any flags set by the client for this key\\
+\hline
+\end{DoxyParams}
+Sets a value by key on the server 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em baton} & data to store on the server \\
+\hline
+{\em data\+\_\+size} & length of data at baton \\
+\hline
+{\em timeout} & time in seconds for the data to live on the server \\
+\hline
+{\em flags} & any flags set by the client for this key\\
+\hline
+\end{DoxyParams}
+Deletes a key from a server 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em timeout} & time for the delete to stop other clients from adding\\
+\hline
+\end{DoxyParams}
+Query a server\textquotesingle{}s version 
+\begin{DoxyParams}{Parameters}
+{\em rs} & server to query \\
+\hline
+{\em p} & Pool to allocate answer from \\
+\hline
+{\em baton} & location to store server version string\\
+\hline
+\end{DoxyParams}
+Query a server\textquotesingle{}s I\+N\+FO 
+\begin{DoxyParams}{Parameters}
+{\em rs} & server to query \\
+\hline
+{\em p} & Pool to allocate answer from \\
+\hline
+{\em baton} & location to store server I\+N\+FO response string\\
+\hline
+\end{DoxyParams}
+Increments a value 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em inc} & number to increment by \\
+\hline
+{\em new\+\_\+value} & new value after incrementing\\
+\hline
+\end{DoxyParams}
+Decrements a value 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em key} & null terminated string containing the key \\
+\hline
+{\em inc} & number to decrement by \\
+\hline
+{\em new\+\_\+value} & new value after decrementing\\
+\hline
+\end{DoxyParams}
+Pings the server 
+\begin{DoxyParams}{Parameters}
+{\em rs} & Server to ping\\
+\hline
+\end{DoxyParams}
+Gets multiple values from the server, allocating the values out of p 
+\begin{DoxyParams}{Parameters}
+{\em rc} & client to use \\
+\hline
+{\em temp\+\_\+pool} & Pool used for temporary allocations. May be cleared inside this call. \\
+\hline
+{\em data\+\_\+pool} & Pool used to allocate data for the returned values. \\
+\hline
+{\em values} & hash of apr\+\_\+redis\+\_\+value\+\_\+t keyed by strings, contains the result of the multiget call. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+Query a server for statistics 
+\begin{DoxyParams}{Parameters}
+{\em rs} & server to query \\
+\hline
+{\em p} & Pool to allocate answer from \\
+\hline
+{\em stats} & location of the new statistics structure \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+38 \{
+39     \hyperlink{structapr__bucket__brigade}{apr\_bucket\_brigade} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b} = \hyperlink{group__APACHE__CORE__LOG_gae4950db1dbfff8459a712737063b61aa}{data};
+40     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+41 
+42     \textcolor{keywordflow}{while} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(b)) \{
+43         e = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(b);
+44         \hyperlink{group__APR__Util__Bucket__Brigades_ga8925c02a7f95e8c1c3986294d4678797}{apr\_bucket\_delete}(e);
+45     \}
+46     \textcolor{comment}{/* We don't need to free(bb) because it's allocated from a pool. */}
+47     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+48 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{Redis Client Routines@{Redis Client Routines}!baton@{baton}}
+\index{baton@{baton}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{baton}{baton}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t} char$\ast$$\ast$ baton}\hypertarget{group__APR__Util__RC_ga37840dc44e2b0b5a127a6828fffe2a8c}{}\label{group__APR__Util__RC_ga37840dc44e2b0b5a127a6828fffe2a8c}
+\index{Redis Client Routines@{Redis Client Routines}!data@{data}}
+\index{data@{data}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{data}{data}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ {\bf data}}\hypertarget{group__APR__Util__RC_ga8f64897c7ccc5c13f276d1d07c4e7095}{}\label{group__APR__Util__RC_ga8f64897c7ccc5c13f276d1d07c4e7095}
+\index{Redis Client Routines@{Redis Client Routines}!data\+\_\+len@{data\+\_\+len}}
+\index{data\+\_\+len@{data\+\_\+len}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{data\+\_\+len}{data_len}}]{\setlength{\rightskip}{0pt plus 5cm}const char const {\bf apr\+\_\+size\+\_\+t} data\+\_\+len}\hypertarget{group__APR__Util__RC_ga371e964d98d4000f4bc080fa4ad81902}{}\label{group__APR__Util__RC_ga371e964d98d4000f4bc080fa4ad81902}
+\index{Redis Client Routines@{Redis Client Routines}!data\+\_\+pool@{data\+\_\+pool}}
+\index{data\+\_\+pool@{data\+\_\+pool}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{data\+\_\+pool}{data_pool}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+pool\+\_\+t}$\ast$ data\+\_\+pool}\hypertarget{group__APR__Util__RC_ga225953f0223e74926c10078f71a9510e}{}\label{group__APR__Util__RC_ga225953f0223e74926c10078f71a9510e}
+\index{Redis Client Routines@{Redis Client Routines}!data\+\_\+size@{data\+\_\+size}}
+\index{data\+\_\+size@{data\+\_\+size}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{data\+\_\+size}{data_size}}]{\setlength{\rightskip}{0pt plus 5cm}const char char const {\bf apr\+\_\+size\+\_\+t} data\+\_\+size}\hypertarget{group__APR__Util__RC_ga6346d4acf7ce0561990228c94d64f893}{}\label{group__APR__Util__RC_ga6346d4acf7ce0561990228c94d64f893}
+\index{Redis Client Routines@{Redis Client Routines}!flags@{flags}}
+\index{flags@{flags}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{flags}{flags}}]{\setlength{\rightskip}{0pt plus 5cm}const char char const {\bf apr\+\_\+size\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint16\+\_\+t} flags}\hypertarget{group__APR__Util__RC_gad1f784cc84e0ca7eb04ee77df95eb26a}{}\label{group__APR__Util__RC_gad1f784cc84e0ca7eb04ee77df95eb26a}
+\index{Redis Client Routines@{Redis Client Routines}!hash@{hash}}
+\index{hash@{hash}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{hash}{hash}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+redis\+\_\+t} const {\bf apr\+\_\+uint32\+\_\+t} hash}\hypertarget{group__APR__Util__RC_gaf86d4a5b21e961280c272d79aacf26ca}{}\label{group__APR__Util__RC_gaf86d4a5b21e961280c272d79aacf26ca}
+\index{Redis Client Routines@{Redis Client Routines}!host@{host}}
+\index{host@{host}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{host}{host}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ host}\hypertarget{group__APR__Util__RC_gae032e164f1daa754d6fbb79d59723931}{}\label{group__APR__Util__RC_gae032e164f1daa754d6fbb79d59723931}
+\index{Redis Client Routines@{Redis Client Routines}!inc@{inc}}
+\index{inc@{inc}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{inc}{inc}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+int32\+\_\+t} inc}\hypertarget{group__APR__Util__RC_ga3032890ab2e5d12bfb3b92c280a84216}{}\label{group__APR__Util__RC_ga3032890ab2e5d12bfb3b92c280a84216}
+\index{Redis Client Routines@{Redis Client Routines}!key@{key}}
+\index{key@{key}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{key}{key}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ key}\hypertarget{group__APR__Util__RC_gacd3d88da3c0e0313c3645ff34f62f542}{}\label{group__APR__Util__RC_gacd3d88da3c0e0313c3645ff34f62f542}
+\index{Redis Client Routines@{Redis Client Routines}!len@{len}}
+\index{len@{len}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{len}{len}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t} const char char {\bf apr\+\_\+size\+\_\+t}$\ast$ len}\hypertarget{group__APR__Util__RC_gaec3bbc8c406590287ccd8d9613df4f8d}{}\label{group__APR__Util__RC_gaec3bbc8c406590287ccd8d9613df4f8d}
+\index{Redis Client Routines@{Redis Client Routines}!max@{max}}
+\index{max@{max}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{max}{max}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+port\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} max}\hypertarget{group__APR__Util__RC_ga38e7d1fc94ad8c6709d5b2243d2fd94b}{}\label{group__APR__Util__RC_ga38e7d1fc94ad8c6709d5b2243d2fd94b}
+\index{Redis Client Routines@{Redis Client Routines}!max\+\_\+servers@{max\+\_\+servers}}
+\index{max\+\_\+servers@{max\+\_\+servers}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{max\+\_\+servers}{max_servers}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+uint16\+\_\+t} max\+\_\+servers}\hypertarget{group__APR__Util__RC_ga6d125da079a6df3cd41060e74d7b8616}{}\label{group__APR__Util__RC_ga6d125da079a6df3cd41060e74d7b8616}
+\index{Redis Client Routines@{Redis Client Routines}!min@{min}}
+\index{min@{min}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{min}{min}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+port\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} min}\hypertarget{group__APR__Util__RC_gaed1ae724c786d088e40b9e6667e4e039}{}\label{group__APR__Util__RC_gaed1ae724c786d088e40b9e6667e4e039}
+\index{Redis Client Routines@{Redis Client Routines}!new\+\_\+value@{new\+\_\+value}}
+\index{new\+\_\+value@{new\+\_\+value}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{new\+\_\+value}{new_value}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+int32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t}$\ast$ new\+\_\+value}\hypertarget{group__APR__Util__RC_ga6da6ffe4e1ccb7d07da0409bc5a2728b}{}\label{group__APR__Util__RC_ga6da6ffe4e1ccb7d07da0409bc5a2728b}
+\index{Redis Client Routines@{Redis Client Routines}!ns@{ns}}
+\index{ns@{ns}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{ns}{ns}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+port\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+redis\+\_\+server\+\_\+t}$\ast$$\ast$ ns}\hypertarget{group__APR__Util__RC_ga16ebca092e717a050cdb4feb7bb59849}{}\label{group__APR__Util__RC_ga16ebca092e717a050cdb4feb7bb59849}
+\index{Redis Client Routines@{Redis Client Routines}!p@{p}}
+\index{p@{p}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{p}{p}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ p}\hypertarget{group__APR__Util__RC_ga2e727f881424334cf12d8af10f50ec6c}{}\label{group__APR__Util__RC_ga2e727f881424334cf12d8af10f50ec6c}
+\index{Redis Client Routines@{Redis Client Routines}!port@{port}}
+\index{port@{port}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{port}{port}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+port\+\_\+t} port}\hypertarget{group__APR__Util__RC_ga225c76c246a5cc263c5a2628eb99353e}{}\label{group__APR__Util__RC_ga225c76c246a5cc263c5a2628eb99353e}
+\index{Redis Client Routines@{Redis Client Routines}!rc@{rc}}
+\index{rc@{rc}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{rc}{rc}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+uint16\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+redis\+\_\+t}$\ast$$\ast$ rc}\hypertarget{group__APR__Util__RC_ga38828c1c35a96d3d86edce1458ba991f}{}\label{group__APR__Util__RC_ga38828c1c35a96d3d86edce1458ba991f}
+\index{Redis Client Routines@{Redis Client Routines}!rs@{rs}}
+\index{rs@{rs}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{rs}{rs}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+redis\+\_\+server\+\_\+t} $\ast$ rs}\hypertarget{group__APR__Util__RC_ga2f1b060c750d4f17eb602a451b6e4edc}{}\label{group__APR__Util__RC_ga2f1b060c750d4f17eb602a451b6e4edc}
+\index{Redis Client Routines@{Redis Client Routines}!rwto@{rwto}}
+\index{rwto@{rwto}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{rwto}{rwto}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+port\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} rwto}\hypertarget{group__APR__Util__RC_ga964b53e25648f95eb52322b28eac28ec}{}\label{group__APR__Util__RC_ga964b53e25648f95eb52322b28eac28ec}
+\index{Redis Client Routines@{Redis Client Routines}!server@{server}}
+\index{server@{server}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{server}{server}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+redis\+\_\+server\+\_\+t}$\ast$ server}\hypertarget{group__APR__Util__RC_ga48a1618bc9e57e0406979ef034512520}{}\label{group__APR__Util__RC_ga48a1618bc9e57e0406979ef034512520}
+\index{Redis Client Routines@{Redis Client Routines}!smax@{smax}}
+\index{smax@{smax}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{smax}{smax}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+port\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} smax}\hypertarget{group__APR__Util__RC_ga5645303505286909d95c228588952953}{}\label{group__APR__Util__RC_ga5645303505286909d95c228588952953}
+\index{Redis Client Routines@{Redis Client Routines}!stats@{stats}}
+\index{stats@{stats}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{stats}{stats}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+redis\+\_\+stats\+\_\+t}$\ast$$\ast$ stats}\hypertarget{group__APR__Util__RC_ga746d3da2c641e8422343c4061b178fe9}{}\label{group__APR__Util__RC_ga746d3da2c641e8422343c4061b178fe9}
+\index{Redis Client Routines@{Redis Client Routines}!temp\+\_\+pool@{temp\+\_\+pool}}
+\index{temp\+\_\+pool@{temp\+\_\+pool}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{temp\+\_\+pool}{temp_pool}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ temp\+\_\+pool}\hypertarget{group__APR__Util__RC_gabc902b08134dbf7de7c4ea169a265f56}{}\label{group__APR__Util__RC_gabc902b08134dbf7de7c4ea169a265f56}
+\index{Redis Client Routines@{Redis Client Routines}!timeout@{timeout}}
+\index{timeout@{timeout}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{timeout}{timeout}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+uint32\+\_\+t} timeout}\hypertarget{group__APR__Util__RC_ga48b7aa88e5841c0fe69f7d9a88646af3}{}\label{group__APR__Util__RC_ga48b7aa88e5841c0fe69f7d9a88646af3}
+\index{Redis Client Routines@{Redis Client Routines}!ttl@{ttl}}
+\index{ttl@{ttl}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{ttl}{ttl}}]{\setlength{\rightskip}{0pt plus 5cm}const char {\bf apr\+\_\+port\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} {\bf apr\+\_\+uint32\+\_\+t} ttl}\hypertarget{group__APR__Util__RC_ga6e9eb567b7ddf19610db54e8c46cf78b}{}\label{group__APR__Util__RC_ga6e9eb567b7ddf19610db54e8c46cf78b}
+\index{Redis Client Routines@{Redis Client Routines}!values@{values}}
+\index{values@{values}!Redis Client Routines@{Redis Client Routines}}
+\subsubsection[{\texorpdfstring{values}{values}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+pool\+\_\+t} {\bf apr\+\_\+hash\+\_\+t}$\ast$ values}\hypertarget{group__APR__Util__RC_ga4f3aba886fed854e787b8e8b1b7f6841}{}\label{group__APR__Util__RC_ga4f3aba886fed854e787b8e8b1b7f6841}

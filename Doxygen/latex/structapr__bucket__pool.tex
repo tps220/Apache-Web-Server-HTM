@@ -1,0 +1,50 @@
+\hypertarget{structapr__bucket__pool}{}\section{apr\+\_\+bucket\+\_\+pool Struct Reference}
+\label{structapr__bucket__pool}\index{apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}}
+
+
+{\ttfamily \#include $<$apr\+\_\+buckets.\+h$>$}
+
+
+
+Collaboration diagram for apr\+\_\+bucket\+\_\+pool\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structapr__bucket__pool__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__bucket__heap}{apr\+\_\+bucket\+\_\+heap} \hyperlink{structapr__bucket__pool_a0fe0b0dedea28fb1ed0a1a0f42338225}{heap}
+\item 
+const char $\ast$ \hyperlink{structapr__bucket__pool_a9ee5297361ba548a20c3aa626a37c068}{base}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{structapr__bucket__pool_af55591a1e7f3b097e7c271683bc80968}{pool}
+\item 
+\hyperlink{structapr__bucket__alloc__t}{apr\+\_\+bucket\+\_\+alloc\+\_\+t} $\ast$ \hyperlink{structapr__bucket__pool_a651aa0c18658342daf72ff86680bfaca}{list}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A bucket referring to data allocated from a pool 
+
+\subsection{Field Documentation}
+\index{apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}!base@{base}}
+\index{base@{base}!apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}}
+\subsubsection[{\texorpdfstring{base}{base}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ apr\+\_\+bucket\+\_\+pool\+::base}\hypertarget{structapr__bucket__pool_a9ee5297361ba548a20c3aa626a37c068}{}\label{structapr__bucket__pool_a9ee5297361ba548a20c3aa626a37c068}
+The block of data actually allocated from the pool. Segments of this block are referenced by adjusting the start and length of the \hyperlink{structapr__bucket}{apr\+\_\+bucket} accordingly. This will be N\+U\+LL after the pool gets cleaned up. \index{apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}!heap@{heap}}
+\index{heap@{heap}!apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}}
+\subsubsection[{\texorpdfstring{heap}{heap}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+heap} apr\+\_\+bucket\+\_\+pool\+::heap}\hypertarget{structapr__bucket__pool_a0fe0b0dedea28fb1ed0a1a0f42338225}{}\label{structapr__bucket__pool_a0fe0b0dedea28fb1ed0a1a0f42338225}
+The pool bucket must be able to be easily morphed to a heap bucket if the pool gets cleaned up before all references are destroyed. This \hyperlink{structapr__bucket__heap}{apr\+\_\+bucket\+\_\+heap} structure is populated automatically when the pool gets cleaned up, and subsequent calls to pool\+\_\+read() will result in the \hyperlink{structapr__bucket}{apr\+\_\+bucket} in question being morphed into a regular heap bucket. (To avoid having to do many extra refcount manipulations and b-\/$>$data manipulations, the \hyperlink{structapr__bucket__pool}{apr\+\_\+bucket\+\_\+pool} struct actually {\itshape contains} the \hyperlink{structapr__bucket__heap}{apr\+\_\+bucket\+\_\+heap} struct that it will become as its first element; the two share their \hyperlink{structapr__bucket__refcount}{apr\+\_\+bucket\+\_\+refcount} members.) \index{apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}!list@{list}}
+\index{list@{list}!apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}}
+\subsubsection[{\texorpdfstring{list}{list}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+bucket\+\_\+alloc\+\_\+t}$\ast$ apr\+\_\+bucket\+\_\+pool\+::list}\hypertarget{structapr__bucket__pool_a651aa0c18658342daf72ff86680bfaca}{}\label{structapr__bucket__pool_a651aa0c18658342daf72ff86680bfaca}
+The freelist this structure was allocated from, which is needed in the cleanup phase in order to allocate space on the heap \index{apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}!pool@{pool}}
+\index{pool@{pool}!apr\+\_\+bucket\+\_\+pool@{apr\+\_\+bucket\+\_\+pool}}
+\subsubsection[{\texorpdfstring{pool}{pool}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ apr\+\_\+bucket\+\_\+pool\+::pool}\hypertarget{structapr__bucket__pool_af55591a1e7f3b097e7c271683bc80968}{}\label{structapr__bucket__pool_af55591a1e7f3b097e7c271683bc80968}
+The pool the data was allocated from. When the pool is cleaned up, this gets set to N\+U\+LL as an indicator to pool\+\_\+read() that the data is now on the heap and so it should morph the bucket into a regular heap bucket before continuing. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr-\/util/include/\hyperlink{apr__buckets_8h}{apr\+\_\+buckets.\+h}\end{DoxyCompactItemize}

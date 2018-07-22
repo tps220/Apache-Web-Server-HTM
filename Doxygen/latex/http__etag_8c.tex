@@ -1,0 +1,168 @@
+\hypertarget{http__etag_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http/http\+\_\+etag.c File Reference}
+\label{http__etag_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http/http\+\_\+etag.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http/http\+\_\+etag.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+connection.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+Include dependency graph for http\+\_\+etag.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{http__etag_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{http__etag_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{http__etag_8c_a860c15caf8679b621e3fbe1231200f45}{H\+E\+X\+\_\+\+D\+I\+G\+I\+TS}~\char`\"{}0123456789abcdef\char`\"{}
+\item 
+\#define \hyperlink{http__etag_8c_aabd911d98e4f15601865dac315bd16fe}{E\+T\+A\+G\+\_\+\+W\+E\+AK}~\char`\"{}W/\char`\"{}
+\item 
+\#define \hyperlink{http__etag_8c_af08db7156f3dd6041df92067e1613d62}{C\+H\+A\+R\+S\+\_\+\+P\+E\+R\+\_\+\+U\+I\+N\+T64}~(sizeof(\hyperlink{group__apr__platform_ga722b277a42230f3fd41cb5be7a76cfb4}{apr\+\_\+uint64\+\_\+t}) $\ast$ 2)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{http__etag_8c_a06b3fd33a5a08e9247c55ecf018e8e67}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (char $\ast$)
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{http\+\_\+etag.\+c@{http\+\_\+etag.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!http\+\_\+etag.\+c@{http\+\_\+etag.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{http__etag_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{http__etag_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{http\+\_\+etag.\+c@{http\+\_\+etag.\+c}!C\+H\+A\+R\+S\+\_\+\+P\+E\+R\+\_\+\+U\+I\+N\+T64@{C\+H\+A\+R\+S\+\_\+\+P\+E\+R\+\_\+\+U\+I\+N\+T64}}
+\index{C\+H\+A\+R\+S\+\_\+\+P\+E\+R\+\_\+\+U\+I\+N\+T64@{C\+H\+A\+R\+S\+\_\+\+P\+E\+R\+\_\+\+U\+I\+N\+T64}!http\+\_\+etag.\+c@{http\+\_\+etag.\+c}}
+\subsubsection[{\texorpdfstring{C\+H\+A\+R\+S\+\_\+\+P\+E\+R\+\_\+\+U\+I\+N\+T64}{CHARS_PER_UINT64}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+H\+A\+R\+S\+\_\+\+P\+E\+R\+\_\+\+U\+I\+N\+T64~(sizeof({\bf apr\+\_\+uint64\+\_\+t}) $\ast$ 2)}\hypertarget{http__etag_8c_af08db7156f3dd6041df92067e1613d62}{}\label{http__etag_8c_af08db7156f3dd6041df92067e1613d62}
+\index{http\+\_\+etag.\+c@{http\+\_\+etag.\+c}!E\+T\+A\+G\+\_\+\+W\+E\+AK@{E\+T\+A\+G\+\_\+\+W\+E\+AK}}
+\index{E\+T\+A\+G\+\_\+\+W\+E\+AK@{E\+T\+A\+G\+\_\+\+W\+E\+AK}!http\+\_\+etag.\+c@{http\+\_\+etag.\+c}}
+\subsubsection[{\texorpdfstring{E\+T\+A\+G\+\_\+\+W\+E\+AK}{ETAG_WEAK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define E\+T\+A\+G\+\_\+\+W\+E\+AK~\char`\"{}W/\char`\"{}}\hypertarget{http__etag_8c_aabd911d98e4f15601865dac315bd16fe}{}\label{http__etag_8c_aabd911d98e4f15601865dac315bd16fe}
+\index{http\+\_\+etag.\+c@{http\+\_\+etag.\+c}!H\+E\+X\+\_\+\+D\+I\+G\+I\+TS@{H\+E\+X\+\_\+\+D\+I\+G\+I\+TS}}
+\index{H\+E\+X\+\_\+\+D\+I\+G\+I\+TS@{H\+E\+X\+\_\+\+D\+I\+G\+I\+TS}!http\+\_\+etag.\+c@{http\+\_\+etag.\+c}}
+\subsubsection[{\texorpdfstring{H\+E\+X\+\_\+\+D\+I\+G\+I\+TS}{HEX_DIGITS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+E\+X\+\_\+\+D\+I\+G\+I\+TS~\char`\"{}0123456789abcdef\char`\"{}}\hypertarget{http__etag_8c_a860c15caf8679b621e3fbe1231200f45}{}\label{http__etag_8c_a860c15caf8679b621e3fbe1231200f45}
+
+
+\subsection{Function Documentation}
+\index{http\+\_\+etag.\+c@{http\+\_\+etag.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!http\+\_\+etag.\+c@{http\+\_\+etag.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(char $\ast$)}{AP_DECLARE(char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{http__etag_8c_a06b3fd33a5a08e9247c55ecf018e8e67}{}\label{http__etag_8c_a06b3fd33a5a08e9247c55ecf018e8e67}
+
+\begin{DoxyCode}
+64 \{
+65     \textcolor{keywordtype}{char} *weak;
+66     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} weak\_len;
+67     \textcolor{keywordtype}{char} *etag;
+68     \textcolor{keywordtype}{char} *next;
+69     \hyperlink{structcore__dir__config}{core\_dir\_config} *cfg;
+70     \hyperlink{group__APACHE__CORE__HTTPD_gaf3e69b939656940e28afaf69f5b186f9}{etag\_components\_t} etag\_bits;
+71     \hyperlink{group__APACHE__CORE__HTTPD_gaf3e69b939656940e28afaf69f5b186f9}{etag\_components\_t} bits\_added;
+72 
+73     cfg = (\hyperlink{structcore__dir__config}{core\_dir\_config} *)\hyperlink{group__APACHE__CORE__HTTPD_ga5e96e185d9e95051576a4fbb7846ae51}{ap\_get\_core\_module\_config}(
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0935ac19a61c462c8986898b4c30547d}{per\_dir\_config});
+74     etag\_bits = (cfg->\hyperlink{structcore__dir__config_afc392d0fba65e414d4c8f2383a6060d1}{etag\_bits} & (~ cfg->etag\_remove)) | cfg->\hyperlink{structcore__dir__config_a3e6d4f7380cd0576da2661ddf359b876}{etag\_add};
+75 
+76     \textcolor{comment}{/*}
+77 \textcolor{comment}{     * If it's a file (or we wouldn't be here) and no ETags}
+78 \textcolor{comment}{     * should be set for files, return an empty string and}
+79 \textcolor{comment}{     * note it for the header-sender to ignore.}
+80 \textcolor{comment}{     */}
+81     \textcolor{keywordflow}{if} (etag\_bits & \hyperlink{group__APACHE__CORE__HTTPD_ga5288af3e6a6a7a234625d88ec8d23f08}{ETAG\_NONE}) \{
+82         apr\_table\_setn(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a8be66d4328766cf1da8913c9b51e0e30}{notes}, \textcolor{stringliteral}{"no-etag"}, \textcolor{stringliteral}{"omit"});
+83         \textcolor{keywordflow}{return} \textcolor{stringliteral}{""};
+84     \}
+85 
+86     \textcolor{keywordflow}{if} (etag\_bits == \hyperlink{group__APACHE__CORE__HTTPD_gab2d67fe1c40ee439106b3b4b364e56bf}{ETAG\_UNSET}) \{
+87         etag\_bits = \hyperlink{group__APACHE__CORE__HTTPD_ga0318e03c433a59eca2826a7548a843d9}{ETAG\_BACKWARD};
+88     \}
+89     \textcolor{comment}{/*}
+90 \textcolor{comment}{     * Make an ETag header out of various pieces of information. We use}
+91 \textcolor{comment}{     * the last-modified date and, if we have a real file, the}
+92 \textcolor{comment}{     * length and inode number - note that this doesn't have to match}
+93 \textcolor{comment}{     * the content-length (i.e. includes), it just has to be unique}
+94 \textcolor{comment}{     * for the file.}
+95 \textcolor{comment}{     *}
+96 \textcolor{comment}{     * If the request was made within a second of the last-modified date,}
+97 \textcolor{comment}{     * we send a weak tag instead of a strong one, since it could}
+98 \textcolor{comment}{     * be modified again later in the second, and the validation}
+99 \textcolor{comment}{     * would be incorrect.}
+100 \textcolor{comment}{     */}
+101     \textcolor{keywordflow}{if} ((\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a2dadff0630a13ea1ccc2037356ffbb81}{request\_time} - \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a25d43eb990fee28e18daefe42bf1d996}{mtime} > (1 * \hyperlink{group__apr__time_gab4dd3f3015d25a50f3be3e0e91043abf}{APR\_USEC\_PER\_SEC})) &&
+102         !\hyperlink{group__APACHE__CORE__PROTO_gaa10508626cb1e5068f2724d3dc581300}{force\_weak}) \{
+103         weak = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+104         weak\_len = 0;
+105     \}
+106     \textcolor{keywordflow}{else} \{
+107         weak = \hyperlink{http__etag_8c_aabd911d98e4f15601865dac315bd16fe}{ETAG\_WEAK};
+108         weak\_len = \textcolor{keyword}{sizeof}(\hyperlink{http__etag_8c_aabd911d98e4f15601865dac315bd16fe}{ETAG\_WEAK});
+109     \}
+110 
+111     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0020e19be2cc5c7c4a385167e3b8d35}{finfo}.\hyperlink{structapr__finfo__t_a274ae0dd60b59182c2e0134bc9a09a20}{filetype} != \hyperlink{group__apr__file__info_ggae3f0ce3014337a52b39852f8bf81ca7cae5877c29ba5fd483edbde0c51c0ac5e9}{APR\_NOFILE}) \{
+112         \textcolor{comment}{/*}
+113 \textcolor{comment}{         * ETag gets set to [W/]"inode-size-mtime", modulo any}
+114 \textcolor{comment}{         * FileETag keywords.}
+115 \textcolor{comment}{         */}
+116         etag = apr\_palloc(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, weak\_len + \textcolor{keyword}{sizeof}(\textcolor{stringliteral}{"\(\backslash\)"--\(\backslash\)""}) +
+117                           3 * \hyperlink{http__etag_8c_af08db7156f3dd6041df92067e1613d62}{CHARS\_PER\_UINT64} + 1);
+118         next = etag;
+119         \textcolor{keywordflow}{if} (weak) \{
+120             \textcolor{keywordflow}{while} (*weak) \{
+121                 *next++ = *weak++;
+122             \}
+123         \}
+124         *next++ = \textcolor{charliteral}{'"'};
+125         bits\_added = 0;
+126         \textcolor{keywordflow}{if} (etag\_bits & \hyperlink{group__APACHE__CORE__HTTPD_ga0df92716554baef930c8713cff7c2711}{ETAG\_INODE}) \{
+127             next = etag\_uint64\_to\_hex(next, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0020e19be2cc5c7c4a385167e3b8d35}{finfo}.\hyperlink{structapr__finfo__t_a73aebb666ddc391d53a871802c27eed6}{inode});
+128             bits\_added |= \hyperlink{group__APACHE__CORE__HTTPD_ga0df92716554baef930c8713cff7c2711}{ETAG\_INODE};
+129         \}
+130         \textcolor{keywordflow}{if} (etag\_bits & \hyperlink{group__APACHE__CORE__HTTPD_ga8720731a6862b82b5cd64ec88290e90b}{ETAG\_SIZE}) \{
+131             \textcolor{keywordflow}{if} (bits\_added != 0) \{
+132                 *next++ = \textcolor{charliteral}{'-'};
+133             \}
+134             next = etag\_uint64\_to\_hex(next, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0020e19be2cc5c7c4a385167e3b8d35}{finfo}.\hyperlink{structapr__finfo__t_a3e47a673c5b82a25a783a732dee6f946}{size});
+135             bits\_added |= \hyperlink{group__APACHE__CORE__HTTPD_ga8720731a6862b82b5cd64ec88290e90b}{ETAG\_SIZE};
+136         \}
+137         \textcolor{keywordflow}{if} (etag\_bits & \hyperlink{group__APACHE__CORE__HTTPD_ga41215ae3dad3f1fa21496c094425a610}{ETAG\_MTIME}) \{
+138             \textcolor{keywordflow}{if} (bits\_added != 0) \{
+139                 *next++ = \textcolor{charliteral}{'-'};
+140             \}
+141             next = etag\_uint64\_to\_hex(next, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a25d43eb990fee28e18daefe42bf1d996}{mtime});
+142         \}
+143         *next++ = \textcolor{charliteral}{'"'};
+144         *next = \textcolor{charliteral}{'\(\backslash\)0'};
+145     \}
+146     \textcolor{keywordflow}{else} \{
+147         \textcolor{comment}{/*}
+148 \textcolor{comment}{         * Not a file document, so just use the mtime: [W/]"mtime"}
+149 \textcolor{comment}{         */}
+150         etag = apr\_palloc(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, weak\_len + \textcolor{keyword}{sizeof}(\textcolor{stringliteral}{"\(\backslash\)"\(\backslash\)""}) +
+151                           \hyperlink{http__etag_8c_af08db7156f3dd6041df92067e1613d62}{CHARS\_PER\_UINT64} + 1);
+152         next = etag;
+153         \textcolor{keywordflow}{if} (weak) \{
+154             \textcolor{keywordflow}{while} (*weak) \{
+155                 *next++ = *weak++;
+156             \}
+157         \}
+158         *next++ = \textcolor{charliteral}{'"'};
+159         next = etag\_uint64\_to\_hex(next, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a25d43eb990fee28e18daefe42bf1d996}{mtime});
+160         *next++ = \textcolor{charliteral}{'"'};
+161         *next = \textcolor{charliteral}{'\(\backslash\)0'};
+162     \}
+163 
+164     \textcolor{keywordflow}{return} etag;
+165 \}
+\end{DoxyCode}

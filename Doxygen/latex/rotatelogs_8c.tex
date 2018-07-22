@@ -1,0 +1,326 @@
+\hypertarget{rotatelogs_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/rotatelogs.c File Reference}
+\label{rotatelogs_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/rotatelogs.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/rotatelogs.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+errno.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+info.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+getopt.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+Include dependency graph for rotatelogs.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{rotatelogs_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structrotate__config}{rotate\+\_\+config}
+\item 
+struct \hyperlink{structlogfile}{logfile}
+\item 
+struct \hyperlink{structrotate__status}{rotate\+\_\+status}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{rotatelogs_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{rotatelogs_8c_aeca034f67218340ecb2261a22c2f3dcd}{B\+U\+F\+S\+I\+ZE}~65536
+\item 
+\#define \hyperlink{rotatelogs_8c_a02cbbece2445e43cb96e632136578950}{E\+R\+R\+M\+S\+G\+SZ}~256
+\item 
+\#define \hyperlink{rotatelogs_8c_ad278402dc6b0acafa64fc3a876d40afd}{R\+O\+T\+A\+T\+E\+\_\+\+N\+O\+NE}~0
+\item 
+\#define \hyperlink{rotatelogs_8c_a1050adae0ce33e6147b3a3350a6586ca}{R\+O\+T\+A\+T\+E\+\_\+\+N\+EW}~1
+\item 
+\#define \hyperlink{rotatelogs_8c_a141d9a04403db5e45a54f37f5e826b66}{R\+O\+T\+A\+T\+E\+\_\+\+T\+I\+ME}~2
+\item 
+\#define \hyperlink{rotatelogs_8c_a302fbd4b1abceb7f3bba64d73fb801a8}{R\+O\+T\+A\+T\+E\+\_\+\+S\+I\+ZE}~3
+\item 
+\#define \hyperlink{rotatelogs_8c_a9f64685cf84db85af0667a625b20c9d1}{R\+O\+T\+A\+T\+E\+\_\+\+F\+O\+R\+CE}~4
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structrotate__config}{rotate\+\_\+config} \hyperlink{rotatelogs_8c_a97d4d7897e226ce45440c8e3f6677b15}{rotate\+\_\+config\+\_\+t}
+\item 
+typedef struct \hyperlink{structrotate__status}{rotate\+\_\+status} \hyperlink{rotatelogs_8c_a5436446d16a6bf1a07f1f769a491c164}{rotate\+\_\+status\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{rotatelogs_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{rotatelogs_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{rotatelogs_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!B\+U\+F\+S\+I\+ZE@{B\+U\+F\+S\+I\+ZE}}
+\index{B\+U\+F\+S\+I\+ZE@{B\+U\+F\+S\+I\+ZE}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{B\+U\+F\+S\+I\+ZE}{BUFSIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+U\+F\+S\+I\+ZE~65536}\hypertarget{rotatelogs_8c_aeca034f67218340ecb2261a22c2f3dcd}{}\label{rotatelogs_8c_aeca034f67218340ecb2261a22c2f3dcd}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!E\+R\+R\+M\+S\+G\+SZ@{E\+R\+R\+M\+S\+G\+SZ}}
+\index{E\+R\+R\+M\+S\+G\+SZ@{E\+R\+R\+M\+S\+G\+SZ}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{E\+R\+R\+M\+S\+G\+SZ}{ERRMSGSZ}}]{\setlength{\rightskip}{0pt plus 5cm}\#define E\+R\+R\+M\+S\+G\+SZ~256}\hypertarget{rotatelogs_8c_a02cbbece2445e43cb96e632136578950}{}\label{rotatelogs_8c_a02cbbece2445e43cb96e632136578950}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!R\+O\+T\+A\+T\+E\+\_\+\+F\+O\+R\+CE@{R\+O\+T\+A\+T\+E\+\_\+\+F\+O\+R\+CE}}
+\index{R\+O\+T\+A\+T\+E\+\_\+\+F\+O\+R\+CE@{R\+O\+T\+A\+T\+E\+\_\+\+F\+O\+R\+CE}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{R\+O\+T\+A\+T\+E\+\_\+\+F\+O\+R\+CE}{ROTATE_FORCE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+O\+T\+A\+T\+E\+\_\+\+F\+O\+R\+CE~4}\hypertarget{rotatelogs_8c_a9f64685cf84db85af0667a625b20c9d1}{}\label{rotatelogs_8c_a9f64685cf84db85af0667a625b20c9d1}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!R\+O\+T\+A\+T\+E\+\_\+\+N\+EW@{R\+O\+T\+A\+T\+E\+\_\+\+N\+EW}}
+\index{R\+O\+T\+A\+T\+E\+\_\+\+N\+EW@{R\+O\+T\+A\+T\+E\+\_\+\+N\+EW}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{R\+O\+T\+A\+T\+E\+\_\+\+N\+EW}{ROTATE_NEW}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+O\+T\+A\+T\+E\+\_\+\+N\+EW~1}\hypertarget{rotatelogs_8c_a1050adae0ce33e6147b3a3350a6586ca}{}\label{rotatelogs_8c_a1050adae0ce33e6147b3a3350a6586ca}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!R\+O\+T\+A\+T\+E\+\_\+\+N\+O\+NE@{R\+O\+T\+A\+T\+E\+\_\+\+N\+O\+NE}}
+\index{R\+O\+T\+A\+T\+E\+\_\+\+N\+O\+NE@{R\+O\+T\+A\+T\+E\+\_\+\+N\+O\+NE}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{R\+O\+T\+A\+T\+E\+\_\+\+N\+O\+NE}{ROTATE_NONE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+O\+T\+A\+T\+E\+\_\+\+N\+O\+NE~0}\hypertarget{rotatelogs_8c_ad278402dc6b0acafa64fc3a876d40afd}{}\label{rotatelogs_8c_ad278402dc6b0acafa64fc3a876d40afd}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!R\+O\+T\+A\+T\+E\+\_\+\+S\+I\+ZE@{R\+O\+T\+A\+T\+E\+\_\+\+S\+I\+ZE}}
+\index{R\+O\+T\+A\+T\+E\+\_\+\+S\+I\+ZE@{R\+O\+T\+A\+T\+E\+\_\+\+S\+I\+ZE}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{R\+O\+T\+A\+T\+E\+\_\+\+S\+I\+ZE}{ROTATE_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+O\+T\+A\+T\+E\+\_\+\+S\+I\+ZE~3}\hypertarget{rotatelogs_8c_a302fbd4b1abceb7f3bba64d73fb801a8}{}\label{rotatelogs_8c_a302fbd4b1abceb7f3bba64d73fb801a8}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!R\+O\+T\+A\+T\+E\+\_\+\+T\+I\+ME@{R\+O\+T\+A\+T\+E\+\_\+\+T\+I\+ME}}
+\index{R\+O\+T\+A\+T\+E\+\_\+\+T\+I\+ME@{R\+O\+T\+A\+T\+E\+\_\+\+T\+I\+ME}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{R\+O\+T\+A\+T\+E\+\_\+\+T\+I\+ME}{ROTATE_TIME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\+O\+T\+A\+T\+E\+\_\+\+T\+I\+ME~2}\hypertarget{rotatelogs_8c_a141d9a04403db5e45a54f37f5e826b66}{}\label{rotatelogs_8c_a141d9a04403db5e45a54f37f5e826b66}
+
+
+\subsection{Typedef Documentation}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!rotate\+\_\+config\+\_\+t@{rotate\+\_\+config\+\_\+t}}
+\index{rotate\+\_\+config\+\_\+t@{rotate\+\_\+config\+\_\+t}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{rotate\+\_\+config\+\_\+t}{rotate_config_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf rotate\+\_\+config} {\bf rotate\+\_\+config\+\_\+t}}\hypertarget{rotatelogs_8c_a97d4d7897e226ce45440c8e3f6677b15}{}\label{rotatelogs_8c_a97d4d7897e226ce45440c8e3f6677b15}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!rotate\+\_\+status\+\_\+t@{rotate\+\_\+status\+\_\+t}}
+\index{rotate\+\_\+status\+\_\+t@{rotate\+\_\+status\+\_\+t}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{rotate\+\_\+status\+\_\+t}{rotate_status_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf rotate\+\_\+status} {\bf rotate\+\_\+status\+\_\+t}}\hypertarget{rotatelogs_8c_a5436446d16a6bf1a07f1f769a491c164}{}\label{rotatelogs_8c_a5436446d16a6bf1a07f1f769a491c164}
+
+
+\subsection{Function Documentation}
+\index{rotatelogs.\+c@{rotatelogs.\+c}!main@{main}}
+\index{main@{main}!rotatelogs.\+c@{rotatelogs.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{rotatelogs_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{rotatelogs_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+522 \{
+523     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}[\hyperlink{rotatelogs_8c_aeca034f67218340ecb2261a22c2f3dcd}{BUFSIZE}];
+524     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} nRead, nWrite;
+525     \hyperlink{structapr__file__t}{apr\_file\_t} *f\_stdin;
+526     \hyperlink{structapr__file__t}{apr\_file\_t} *f\_stdout;
+527     \hyperlink{structapr__getopt__t}{apr\_getopt\_t} *\hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt};
+528     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+529     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+530     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *opt\_arg;
+531     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+532 \textcolor{preprocessor}{#if APR\_FILES\_AS\_SOCKETS}
+533     \hyperlink{structapr__pollfd__t}{apr\_pollfd\_t} \hyperlink{structpollfd}{pollfd} = \{ 0 \};
+534     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} pollret = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+535     \textcolor{keywordtype}{int} polltimeout;
+536 \textcolor{preprocessor}{#endif}
+537 
+538     apr\_app\_initialize(&\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+539     atexit(apr\_terminate);
+540 
+541     memset(&config, 0, \textcolor{keyword}{sizeof} config);
+542     memset(&status, 0, \textcolor{keyword}{sizeof} status);
+543     \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.rotateReason = \hyperlink{rotatelogs_8c_ad278402dc6b0acafa64fc3a876d40afd}{ROTATE\_NONE};
+544 
+545     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&\hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.pool, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+546     apr\_getopt\_init(&opt, \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.pool, \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+547 \textcolor{preprocessor}{#if APR\_FILES\_AS\_SOCKETS}
+548     \textcolor{keywordflow}{while} ((rv = apr\_getopt(opt, \textcolor{stringliteral}{"lL:p:ftvecn:"}, &c, &opt\_arg)) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+549 \textcolor{preprocessor}{#else}
+550     \textcolor{keywordflow}{while} ((rv = apr\_getopt(opt, \textcolor{stringliteral}{"lL:p:ftven:"}, &c, &opt\_arg)) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+551 \textcolor{preprocessor}{#endif}
+552         \textcolor{keywordflow}{switch} (c) \{
+553         \textcolor{keywordflow}{case} \textcolor{charliteral}{'l'}:
+554             config.\hyperlink{structrotate__config_a0a19006aff1fd73c76ba9afe93323b47}{use\_localtime} = 1;
+555             \textcolor{keywordflow}{break};
+556         \textcolor{keywordflow}{case} \textcolor{charliteral}{'L'}:
+557             config.\hyperlink{structrotate__config_a6c095c2a2061e2ff5f7b15e287728663}{linkfile} = opt\_arg;
+558             \textcolor{keywordflow}{break};
+559         \textcolor{keywordflow}{case} \textcolor{charliteral}{'p'}:
+560             config.\hyperlink{structrotate__config_af08f44aa9d58b9644e44b6ca394dfb85}{postrotate\_prog} = opt\_arg;
+561 \textcolor{preprocessor}{#ifdef SIGCHLD}
+562             \textcolor{comment}{/* Prevent creation of zombies (on modern Unix systems). */}
+563             apr\_signal(SIGCHLD, SIG\_IGN);
+564 \textcolor{preprocessor}{#endif}
+565             \textcolor{keywordflow}{break};
+566         \textcolor{keywordflow}{case} \textcolor{charliteral}{'f'}:
+567             config.\hyperlink{structrotate__config_a8917a50032c1706f3c4688072b9ca7c6}{force\_open} = 1;
+568             \textcolor{keywordflow}{break};
+569         \textcolor{keywordflow}{case} \textcolor{charliteral}{'t'}:
+570             config.\hyperlink{structrotate__config_a77ccfd07abe0af48f187499eb465c6be}{truncate} = 1;
+571             \textcolor{keywordflow}{break};
+572         \textcolor{keywordflow}{case} \textcolor{charliteral}{'v'}:
+573             config.\hyperlink{structrotate__config_a91abcd272d57fd42a78cf5ee99c15e14}{verbose} = 1;
+574             \textcolor{keywordflow}{break};
+575         \textcolor{keywordflow}{case} \textcolor{charliteral}{'e'}:
+576             config.\hyperlink{structrotate__config_adf35b051fdd7caa43b30057135508cbe}{echo} = 1;
+577             \textcolor{keywordflow}{break};
+578 \textcolor{preprocessor}{#if APR\_FILES\_AS\_SOCKETS}
+579         \textcolor{keywordflow}{case} \textcolor{charliteral}{'c'}:
+580             config.create\_empty = 1;
+581             \textcolor{keywordflow}{break};
+582 \textcolor{preprocessor}{#endif}
+583         \textcolor{keywordflow}{case} \textcolor{charliteral}{'n'}:
+584             config.\hyperlink{structrotate__config_a7da88ff2062be9efa6e12e49d9a7a7aa}{num\_files} = atoi(opt\_arg);
+585             \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.fileNum = -1;
+586             \textcolor{keywordflow}{break};
+587         \}
+588     \}
+589 
+590     \textcolor{keywordflow}{if} (rv != \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF}) \{
+591         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} \textcolor{comment}{/* specific error message already issued */} );
+592     \}
+593 
+594     \textcolor{comment}{/*}
+595 \textcolor{comment}{     * After the initial flags we need 2 to 4 arguments,}
+596 \textcolor{comment}{     * the file name, either the rotation interval time or size}
+597 \textcolor{comment}{     * or both of them, and optionally the UTC offset.}
+598 \textcolor{comment}{     */}
+599     \textcolor{keywordflow}{if} ((\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} - opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind} < 2) || (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} - opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind} > 4) ) \{
+600         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], \textcolor{stringliteral}{"Incorrect number of arguments"});
+601     \}
+602 
+603     config.\hyperlink{structrotate__config_a5605c25dfeaa6c4a9ba8766d5db639c4}{szLogRoot} = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}++];
+604 
+605     \textcolor{comment}{/* Read in the remaining flags, namely time, size and UTC offset. */}
+606     \textcolor{keywordflow}{for}(; opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind} < \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}; opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}++) \{
+607         \textcolor{keywordflow}{if} ((err = get\_time\_or\_size(&config, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind}],
+608                                     opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind} < \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} - 1 ? 0 : 1)) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+609             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[0], err);
+610         \}
+611     \}
+612 
+613     config.\hyperlink{structrotate__config_aa722a6560c1e0a5f1056be971d28be6e}{use\_strftime} = (strchr(config.\hyperlink{structrotate__config_a5605c25dfeaa6c4a9ba8766d5db639c4}{szLogRoot}, \textcolor{charliteral}{'%'}) != 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+614 
+615     \textcolor{keywordflow}{if} (config.\hyperlink{structrotate__config_aa722a6560c1e0a5f1056be971d28be6e}{use\_strftime} && config.\hyperlink{structrotate__config_a7da88ff2062be9efa6e12e49d9a7a7aa}{num\_files} > 0) \{ 
+616         fprintf(stderr, \textcolor{stringliteral}{"Cannot use -n with %% in filename\(\backslash\)n"});
+617         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+618     \}
+619 
+620     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.fileNum == -1 && config.\hyperlink{structrotate__config_a7da88ff2062be9efa6e12e49d9a7a7aa}{num\_files} < 1) \{ 
+621         fprintf(stderr, \textcolor{stringliteral}{"Invalid -n argument\(\backslash\)n"});
+622         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+623     \}
+624 
+625     \textcolor{keywordflow}{if} (apr\_file\_open\_stdin(&f\_stdin, \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.pool) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+626         fprintf(stderr, \textcolor{stringliteral}{"Unable to open stdin\(\backslash\)n"});
+627         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+628     \}
+629 
+630     \textcolor{keywordflow}{if} (apr\_file\_open\_stdout(&f\_stdout, \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.pool) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+631         fprintf(stderr, \textcolor{stringliteral}{"Unable to open stdout\(\backslash\)n"});
+632         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(1);
+633     \}
+634 
+635     \textcolor{comment}{/*}
+636 \textcolor{comment}{     * Write out result of config parsing if verbose is set.}
+637 \textcolor{comment}{     */}
+638     \textcolor{keywordflow}{if} (config.\hyperlink{structrotate__config_a91abcd272d57fd42a78cf5ee99c15e14}{verbose}) \{
+639         dumpConfig(&config);
+640     \}
+641 
+642 \textcolor{preprocessor}{#if APR\_FILES\_AS\_SOCKETS}
+643     \textcolor{keywordflow}{if} (config.create\_empty && config.\hyperlink{structrotate__config_a76f48c552987ee8a649982e64d5e1aa7}{tRotation}) \{
+644         pollfd.\hyperlink{structapr__pollfd__t_adae68586ed671472590efe8770de38cc}{p} = \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.pool;
+645         pollfd.\hyperlink{structapr__pollfd__t_acfafd260241a874745f49ba2df246c53}{desc\_type} = \hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a8351d461bf66b706232962fd02e84202}{APR\_POLL\_FILE};
+646         pollfd.\hyperlink{structapr__pollfd__t_abcedac7097a97823a38ece6e47f4ea9f}{reqevents} = \hyperlink{group__pollopts_ga746222e6b858bc2fc77328d59f78e788}{APR\_POLLIN};
+647         pollfd.\hyperlink{structapr__pollfd__t_ad63baa71bb91f80513d33482e28fb967}{desc}.\hyperlink{unionapr__descriptor_a69d605f2bb33b05ceedb3d95b744ca7e}{f} = f\_stdin;
+648     \}
+649 \textcolor{preprocessor}{#endif}
+650 
+651     \textcolor{comment}{/*}
+652 \textcolor{comment}{     * Immediately open the logfile as we start, if we were forced}
+653 \textcolor{comment}{     * to do so via '-f'.}
+654 \textcolor{comment}{     */}
+655     \textcolor{keywordflow}{if} (config.\hyperlink{structrotate__config_a8917a50032c1706f3c4688072b9ca7c6}{force\_open}) \{
+656         doRotate(&config, &status);
+657     \}
+658 
+659     \textcolor{keywordflow}{for} (;;) \{
+660         nRead = \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf});
+661 \textcolor{preprocessor}{#if APR\_FILES\_AS\_SOCKETS}
+662         \textcolor{keywordflow}{if} (config.create\_empty && config.\hyperlink{structrotate__config_a76f48c552987ee8a649982e64d5e1aa7}{tRotation}) \{
+663             polltimeout = \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.tLogEnd ? \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.tLogEnd - get\_now(&config) : config.tRotation
+      ;
+664             \textcolor{keywordflow}{if} (polltimeout <= 0) \{
+665                 pollret = \hyperlink{group__APR__Error_ga9ac087c25ffb0d3bb4d75bee36709853}{APR\_TIMEUP};
+666             \}
+667             \textcolor{keywordflow}{else} \{
+668                 pollret = apr\_poll(&pollfd, 1, &pollret, \hyperlink{group__apr__time_gaec56c2c03299a750006bfcc08d64ec32}{apr\_time\_from\_sec}(polltimeout));
+669             \}
+670         \}
+671         \textcolor{keywordflow}{if} (pollret == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+672             rv = apr\_file\_read(f\_stdin, buf, &nRead);
+673             \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_gaf4232cd96b47b76aec9607b1a78e694f}{APR\_STATUS\_IS\_EOF}(rv)) \{
+674                 \textcolor{keywordflow}{break};
+675             \}
+676             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+677                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(3);
+678             \}
+679         \}
+680         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (pollret == \hyperlink{group__APR__Error_ga9ac087c25ffb0d3bb4d75bee36709853}{APR\_TIMEUP}) \{
+681             *buf = 0;
+682             nRead = 0;
+683         \}
+684         \textcolor{keywordflow}{else} \{
+685             fprintf(stderr, \textcolor{stringliteral}{"Unable to poll stdin\(\backslash\)n"});
+686             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(5);
+687         \}
+688 \textcolor{preprocessor}{#else }\textcolor{comment}{/* APR\_FILES\_AS\_SOCKETS */}\textcolor{preprocessor}{}
+689         rv = apr\_file\_read(f\_stdin, buf, &nRead);
+690         \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_gaf4232cd96b47b76aec9607b1a78e694f}{APR\_STATUS\_IS\_EOF}(rv)) \{
+691             \textcolor{keywordflow}{break};
+692         \}
+693         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+694             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(3);
+695         \}
+696 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* APR\_FILES\_AS\_SOCKETS */}\textcolor{preprocessor}{}
+697         checkRotate(&config, &status);
+698         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.rotateReason != \hyperlink{rotatelogs_8c_ad278402dc6b0acafa64fc3a876d40afd}{ROTATE\_NONE}) \{
+699             doRotate(&config, &status);
+700         \}
+701 
+702         nWrite = nRead;
+703         rv = apr\_file\_write\_full(\hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.current.fd, buf, nWrite, &nWrite);
+704         \textcolor{keywordflow}{if} (nWrite != nRead) \{
+705             \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} cur\_offset;
+706 
+707             cur\_offset = 0;
+708             \textcolor{keywordflow}{if} (apr\_file\_seek(\hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.current.fd, \hyperlink{group__apr__file__seek__flags_gae17abc53fea00bfd51e184017113e250}{APR\_CUR}, &cur\_offset) != 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+709                 cur\_offset = -1;
+710             \}
+711             \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.nMessCount++;
+712             apr\_snprintf(\hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.errbuf, \textcolor{keyword}{sizeof} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.errbuf,
+713                          \textcolor{stringliteral}{"Error %d writing to log file at offset %"} 
+      \hyperlink{group__apr__platform_gad71d0d5a325d1aedeb6328d6bdacac76}{APR\_OFF\_T\_FMT} \textcolor{stringliteral}{". "}
+714                          \textcolor{stringliteral}{"%10d messages lost (%pm)\(\backslash\)n"},
+715                          rv, cur\_offset, \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.nMessCount, &rv);
+716 
+717             truncate\_and\_write\_error(&status);
+718         \}
+719         \textcolor{keywordflow}{else} \{
+720             \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status}.nMessCount++;
+721         \}
+722         \textcolor{keywordflow}{if} (config.\hyperlink{structrotate__config_adf35b051fdd7caa43b30057135508cbe}{echo}) \{
+723             \textcolor{keywordflow}{if} (apr\_file\_write\_full(f\_stdout, buf, nRead, &nWrite)) \{
+724                 fprintf(stderr, \textcolor{stringliteral}{"Unable to write to stdout\(\backslash\)n"});
+725                 \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(4);
+726             \}
+727         \}
+728     \}
+729 
+730     \textcolor{keywordflow}{return} 0; \textcolor{comment}{/* reached only at stdin EOF. */}
+731 \}
+\end{DoxyCode}

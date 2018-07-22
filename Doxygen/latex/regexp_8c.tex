@@ -1,0 +1,398 @@
+\hypertarget{regexp_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/filters/regexp.c File Reference}
+\label{regexp_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/regexp.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/filters/regexp.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}libsed.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}regexp.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}sed.\+h\char`\"{}}\\*
+Include dependency graph for regexp.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{regexp_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{G\+E\+TC}()~((unsigned char)$\ast$sp++)
+\item 
+\#define \hyperlink{regexp_8c_a0600afc74fa0637c9a21d27f0e126073}{P\+E\+E\+KC}()~((unsigned char)$\ast$sp)
+\item 
+\#define \hyperlink{regexp_8c_a4eca060cfb92255cddaf8e69a161fed6}{U\+N\+G\+E\+TC}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~(-\/-\/sp)
+\item 
+\#define \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{S\+E\+D\+C\+O\+M\+P\+I\+L\+E\+\_\+\+E\+R\+R\+OR}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\#define \hyperlink{regexp_8c_aa27e4a0debeed0c15d86e1eef2dc0bfc}{ecmp}(s1,  \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2},  \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~(strncmp(s1, \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2}, \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}) == 0)
+\item 
+\#define \hyperlink{regexp_8c_a6e45a01477ad005f25bdcbc8c3913e7b}{uletter}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~(\hyperlink{README_8txt_a1a9982a5b5761e5270bf12839e8b1b35}{isalpha}(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}) $\vert$$\vert$ \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c} == \textquotesingle{}\+\_\+\textquotesingle{})
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{regexp_8c_a9a57da97dc285f94737a35ce1ea74709}{sed\+\_\+step} (char $\ast$p1, char $\ast$p2, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} circf, \hyperlink{regexp_8h_a86803955e891b45f2460a7bd44c785d4}{step\+\_\+vars\+\_\+storage} $\ast$vars)
+\item 
+char $\ast$ \hyperlink{regexp_8c_a6f10b33e0320922b2a6dbf86c17be521}{sed\+\_\+compile} (\hyperlink{libsed_8h_a859d78cc648723665a860a763f2fb291}{sed\+\_\+commands\+\_\+t} $\ast$commands, \hyperlink{regexp_8h_ae105055204b23b7057355ec58a816127}{sed\+\_\+comp\+\_\+args} $\ast$compargs, char $\ast$ep, char $\ast$endbuf, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} seof)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{regexp.\+c@{regexp.\+c}!ecmp@{ecmp}}
+\index{ecmp@{ecmp}!regexp.\+c@{regexp.\+c}}
+\subsubsection[{\texorpdfstring{ecmp}{ecmp}}]{\setlength{\rightskip}{0pt plus 5cm}\#define ecmp(
+\begin{DoxyParamCaption}
+\item[{}]{s1, }
+\item[{}]{{\bf s2}, }
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~(strncmp(s1, {\bf s2}, {\bf n}) == 0)}\hypertarget{regexp_8c_aa27e4a0debeed0c15d86e1eef2dc0bfc}{}\label{regexp_8c_aa27e4a0debeed0c15d86e1eef2dc0bfc}
+\index{regexp.\+c@{regexp.\+c}!G\+E\+TC@{G\+E\+TC}}
+\index{G\+E\+TC@{G\+E\+TC}!regexp.\+c@{regexp.\+c}}
+\subsubsection[{\texorpdfstring{G\+E\+TC}{GETC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\+E\+TC(
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)~((unsigned char)$\ast$sp++)}\hypertarget{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{}\label{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}
+\index{regexp.\+c@{regexp.\+c}!P\+E\+E\+KC@{P\+E\+E\+KC}}
+\index{P\+E\+E\+KC@{P\+E\+E\+KC}!regexp.\+c@{regexp.\+c}}
+\subsubsection[{\texorpdfstring{P\+E\+E\+KC}{PEEKC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+E\+E\+KC(
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)~((unsigned char)$\ast$sp)}\hypertarget{regexp_8c_a0600afc74fa0637c9a21d27f0e126073}{}\label{regexp_8c_a0600afc74fa0637c9a21d27f0e126073}
+\index{regexp.\+c@{regexp.\+c}!S\+E\+D\+C\+O\+M\+P\+I\+L\+E\+\_\+\+E\+R\+R\+OR@{S\+E\+D\+C\+O\+M\+P\+I\+L\+E\+\_\+\+E\+R\+R\+OR}}
+\index{S\+E\+D\+C\+O\+M\+P\+I\+L\+E\+\_\+\+E\+R\+R\+OR@{S\+E\+D\+C\+O\+M\+P\+I\+L\+E\+\_\+\+E\+R\+R\+OR}!regexp.\+c@{regexp.\+c}}
+\subsubsection[{\texorpdfstring{S\+E\+D\+C\+O\+M\+P\+I\+L\+E\+\_\+\+E\+R\+R\+OR}{SEDCOMPILE_ERROR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+E\+D\+C\+O\+M\+P\+I\+L\+E\+\_\+\+E\+R\+R\+OR(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf c}}
+\end{DoxyParamCaption}
+)}\hypertarget{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{}\label{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{ \(\backslash\)
+            regerrno = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c}; \(\backslash\)
+            goto \hyperlink{group__APACHE__CORE__MUTEX_gac9982b93474ad913f3fcbdcff95accf4}{out}; \(\backslash\)
+            \}
+\end{DoxyCode}
+\index{regexp.\+c@{regexp.\+c}!uletter@{uletter}}
+\index{uletter@{uletter}!regexp.\+c@{regexp.\+c}}
+\subsubsection[{\texorpdfstring{uletter}{uletter}}]{\setlength{\rightskip}{0pt plus 5cm}\#define uletter(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf c}}
+\end{DoxyParamCaption}
+)~({\bf isalpha}({\bf c}) $\vert$$\vert$ {\bf c} == \textquotesingle{}\+\_\+\textquotesingle{})}\hypertarget{regexp_8c_a6e45a01477ad005f25bdcbc8c3913e7b}{}\label{regexp_8c_a6e45a01477ad005f25bdcbc8c3913e7b}
+\index{regexp.\+c@{regexp.\+c}!U\+N\+G\+E\+TC@{U\+N\+G\+E\+TC}}
+\index{U\+N\+G\+E\+TC@{U\+N\+G\+E\+TC}!regexp.\+c@{regexp.\+c}}
+\subsubsection[{\texorpdfstring{U\+N\+G\+E\+TC}{UNGETC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define U\+N\+G\+E\+TC(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf c}}
+\end{DoxyParamCaption}
+)~(-\/-\/sp)}\hypertarget{regexp_8c_a4eca060cfb92255cddaf8e69a161fed6}{}\label{regexp_8c_a4eca060cfb92255cddaf8e69a161fed6}
+
+
+\subsection{Function Documentation}
+\index{regexp.\+c@{regexp.\+c}!sed\+\_\+compile@{sed\+\_\+compile}}
+\index{sed\+\_\+compile@{sed\+\_\+compile}!regexp.\+c@{regexp.\+c}}
+\subsubsection[{\texorpdfstring{sed\+\_\+compile(sed\+\_\+commands\+\_\+t $\ast$commands, sed\+\_\+comp\+\_\+args $\ast$compargs, char $\ast$ep, char $\ast$endbuf, int seof)}{sed_compile(sed_commands_t *commands, sed_comp_args *compargs, char *ep, char *endbuf, int seof)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ sed\+\_\+compile (
+\begin{DoxyParamCaption}
+\item[{{\bf sed\+\_\+commands\+\_\+t} $\ast$}]{commands, }
+\item[{{\bf sed\+\_\+comp\+\_\+args} $\ast$}]{compargs, }
+\item[{char $\ast$}]{ep, }
+\item[{char $\ast$}]{endbuf, }
+\item[{{\bf int}}]{seof}
+\end{DoxyParamCaption}
+)}\hypertarget{regexp_8c_a6f10b33e0320922b2a6dbf86c17be521}{}\label{regexp_8c_a6f10b33e0320922b2a6dbf86c17be521}
+
+\begin{DoxyCode}
+134 \{
+135     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+136     \textcolor{keywordtype}{int} eof = seof;
+137     \textcolor{keywordtype}{char} *lastep;
+138     \textcolor{keywordtype}{int} cclcnt;
+139     \textcolor{keywordtype}{char} bracket[\hyperlink{regexp_8h_a134ce5560a37eca1ccda53f71cbffc22}{NBRA}], *bracketp;
+140     \textcolor{keywordtype}{int} closed;
+141     \textcolor{keywordtype}{int} neg;
+142     \textcolor{keywordtype}{int} lc;
+143     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, cflg;
+144     \textcolor{keywordtype}{int} iflag; \textcolor{comment}{/* used for non-ascii characters in brackets */}
+145     \textcolor{keywordtype}{char} *sp = commands->\hyperlink{structsed__commands__s_a0a0a309905229eb685c0fc61364d63a3}{cp};
+146     \textcolor{keywordtype}{int} regerrno = 0;
+147 
+148     lastep = 0;
+149     \textcolor{keywordflow}{if} ((c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}()) == eof || c == \textcolor{charliteral}{'\(\backslash\)n'}) \{
+150         \textcolor{keywordflow}{if} (c == \textcolor{charliteral}{'\(\backslash\)n'}) \{
+151             \hyperlink{regexp_8c_a4eca060cfb92255cddaf8e69a161fed6}{UNGETC}(c);
+152         \}
+153         commands->\hyperlink{structsed__commands__s_a0a0a309905229eb685c0fc61364d63a3}{cp} = sp;
+154         \textcolor{keywordflow}{goto} \hyperlink{group__APACHE__CORE__MUTEX_gac9982b93474ad913f3fcbdcff95accf4}{out};
+155     \}
+156     bracketp = bracket;
+157     compargs->\hyperlink{struct__sed__comp__args_a91a72fe734b82eefcf75d95e5e7e9995}{circf} = closed = compargs->\hyperlink{struct__sed__comp__args_a028c74968591ad5103b26b42ff700e4c}{nbra} = 0;
+158     \textcolor{keywordflow}{if} (c == \textcolor{charliteral}{'^'})
+159         compargs->\hyperlink{struct__sed__comp__args_a91a72fe734b82eefcf75d95e5e7e9995}{circf}++;
+160     \textcolor{keywordflow}{else}
+161         \hyperlink{regexp_8c_a4eca060cfb92255cddaf8e69a161fed6}{UNGETC}(c);
+162     \textcolor{keywordflow}{while} (1) \{
+163         \textcolor{keywordflow}{if} (ep >= endbuf)
+164             \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(50);
+165         c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}();
+166         \textcolor{keywordflow}{if} (c != \textcolor{charliteral}{'*'} && ((c != \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'}) || (\hyperlink{regexp_8c_a0600afc74fa0637c9a21d27f0e126073}{PEEKC}() != \textcolor{charliteral}{'\{'})))
+167             lastep = ep;
+168         \textcolor{keywordflow}{if} (c == eof) \{
+169             *ep++ = \hyperlink{regexp_8h_a6be545b640873b43a6dbb0b37d167dea}{CCEOF};
+170             \textcolor{keywordflow}{if} (bracketp != bracket)
+171                 \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(42);
+172             commands->\hyperlink{structsed__commands__s_a0a0a309905229eb685c0fc61364d63a3}{cp} = sp;
+173             \textcolor{keywordflow}{goto} \hyperlink{group__APACHE__CORE__MUTEX_gac9982b93474ad913f3fcbdcff95accf4}{out};
+174         \}
+175         \textcolor{keywordflow}{switch} (c) \{
+176 
+177         \textcolor{keywordflow}{case} \textcolor{charliteral}{'.'}:
+178             *ep++ = \hyperlink{regexp_8h_afcaec891204522602d62e0f07cc2dc58}{CDOT};
+179             \textcolor{keywordflow}{continue};
+180 
+181         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)n'}:
+182             \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(36);
+183             commands->\hyperlink{structsed__commands__s_a0a0a309905229eb685c0fc61364d63a3}{cp} = sp;
+184             \textcolor{keywordflow}{goto} \hyperlink{group__APACHE__CORE__MUTEX_gac9982b93474ad913f3fcbdcff95accf4}{out};
+185         \textcolor{keywordflow}{case} \textcolor{charliteral}{'*'}:
+186             \textcolor{keywordflow}{if} (lastep == 0 || *lastep == \hyperlink{regexp_8h_ac40e105ec16fc80c78729ce5d962cd2b}{CBRA} || *lastep == \hyperlink{regexp_8h_af430f1d5972249aee92ab3cc5d4984f9}{CKET})
+187                 \textcolor{keywordflow}{goto} defchar;
+188             *lastep |= \hyperlink{regexp_8h_a94c3dc9846edbbb70f678768633a4796}{STAR};
+189             \textcolor{keywordflow}{continue};
+190 
+191         \textcolor{keywordflow}{case} \textcolor{charliteral}{'$'}:
+192             \textcolor{keywordflow}{if} (\hyperlink{regexp_8c_a0600afc74fa0637c9a21d27f0e126073}{PEEKC}() != eof && \hyperlink{regexp_8c_a0600afc74fa0637c9a21d27f0e126073}{PEEKC}() != \textcolor{charliteral}{'\(\backslash\)n'})
+193                 \textcolor{keywordflow}{goto} defchar;
+194             *ep++ = \hyperlink{regexp_8h_a20509f5e24f1387e34d678410f679af5}{CDOL};
+195             \textcolor{keywordflow}{continue};
+196 
+197         \textcolor{keywordflow}{case} \textcolor{charliteral}{'['}:
+198             \textcolor{keywordflow}{if} (&ep[17] >= endbuf)
+199                 \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(50);
+200 
+201             *ep++ = \hyperlink{regexp_8h_a97cc076f2f5a6f58fb8e221f440cc699}{CCL};
+202             lc = 0;
+203             \textcolor{keywordflow}{for} (i = 0; i < 16; i++)
+204                 ep[i] = 0;
+205 
+206             neg = 0;
+207             \textcolor{keywordflow}{if} ((c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}()) == \textcolor{charliteral}{'^'}) \{
+208                 neg = 1;
+209                 c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}();
+210             \}
+211             iflag = 1;
+212             \textcolor{keywordflow}{do} \{
+213                 c &= 0377;
+214                 \textcolor{keywordflow}{if} (c == \textcolor{charliteral}{'\(\backslash\)0'} || c == \textcolor{charliteral}{'\(\backslash\)n'})
+215                     \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(49);
+216                 \textcolor{keywordflow}{if} ((c & 0200) && iflag) \{
+217                     iflag = 0;
+218                     \textcolor{keywordflow}{if} (&ep[32] >= endbuf)
+219                         \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(50);
+220                     ep[-1] = \hyperlink{regexp_8h_a30bcea24fced0e6fed1a149d6f2a2509}{CXCL};
+221                     \textcolor{keywordflow}{for} (i = 16; i < 32; i++)
+222                         ep[i] = 0;
+223                 \}
+224                 \textcolor{keywordflow}{if} (c == \textcolor{charliteral}{'-'} && lc != 0) \{
+225                     \textcolor{keywordflow}{if} ((c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}()) == \textcolor{charliteral}{']'}) \{
+226                         \hyperlink{regexp_8h_a8f484178b95b8d3c5c8767c5458d53e5}{PLACE}(\textcolor{charliteral}{'-'});
+227                         \textcolor{keywordflow}{break};
+228                     \}
+229                     \textcolor{keywordflow}{if} ((c & 0200) && iflag) \{
+230                         iflag = 0;
+231                         \textcolor{keywordflow}{if} (&ep[32] >= endbuf)
+232                             \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(50);
+233                         ep[-1] = \hyperlink{regexp_8h_a30bcea24fced0e6fed1a149d6f2a2509}{CXCL};
+234                         \textcolor{keywordflow}{for} (i = 16; i < 32; i++)
+235                             ep[i] = 0;
+236                     \}
+237                     \textcolor{keywordflow}{while} (lc < c) \{
+238                         \hyperlink{regexp_8h_a8f484178b95b8d3c5c8767c5458d53e5}{PLACE}(lc);
+239                         lc++;
+240                     \}
+241                 \}
+242                 lc = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+243                 \hyperlink{regexp_8h_a8f484178b95b8d3c5c8767c5458d53e5}{PLACE}(c);
+244             \} \textcolor{keywordflow}{while} ((c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}()) != \textcolor{charliteral}{']'});
+245 
+246             \textcolor{keywordflow}{if} (iflag)
+247                 iflag = 16;
+248             \textcolor{keywordflow}{else}
+249                 iflag = 32;
+250 
+251             \textcolor{keywordflow}{if} (neg) \{
+252                 \textcolor{keywordflow}{if} (iflag == 32) \{
+253                     \textcolor{keywordflow}{for} (cclcnt = 0; cclcnt < iflag;
+254                         cclcnt++)
+255                         ep[cclcnt] ^= 0377;
+256                     ep[0] &= 0376;
+257                 \} \textcolor{keywordflow}{else} \{
+258                     ep[-1] = \hyperlink{regexp_8h_a44d8a0495141ebd3d1dec1f8ed03a75b}{NCCL};
+259                     \textcolor{comment}{/* make nulls match so test fails */}
+260                     ep[0] |= 01;
+261                 \}
+262             \}
+263 
+264             ep += iflag;
+265 
+266             \textcolor{keywordflow}{continue};
+267 
+268         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'}:
+269             \textcolor{keywordflow}{switch} (c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}()) \{
+270 
+271             \textcolor{keywordflow}{case} \textcolor{charliteral}{'('}:
+272                 \textcolor{keywordflow}{if} (compargs->\hyperlink{struct__sed__comp__args_a028c74968591ad5103b26b42ff700e4c}{nbra} >= \hyperlink{regexp_8h_a134ce5560a37eca1ccda53f71cbffc22}{NBRA})
+273                     \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(43);
+274                 *bracketp++ = compargs->\hyperlink{struct__sed__comp__args_a028c74968591ad5103b26b42ff700e4c}{nbra};
+275                 *ep++ = \hyperlink{regexp_8h_ac40e105ec16fc80c78729ce5d962cd2b}{CBRA};
+276                 *ep++ = compargs->\hyperlink{struct__sed__comp__args_a028c74968591ad5103b26b42ff700e4c}{nbra}++;
+277                 \textcolor{keywordflow}{continue};
+278 
+279             \textcolor{keywordflow}{case} \textcolor{charliteral}{')'}:
+280                 \textcolor{keywordflow}{if} (bracketp <= bracket)
+281                     \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(42);
+282                 *ep++ = \hyperlink{regexp_8h_af430f1d5972249aee92ab3cc5d4984f9}{CKET};
+283                 *ep++ = *--bracketp;
+284                 closed++;
+285                 \textcolor{keywordflow}{continue};
+286 
+287             \textcolor{keywordflow}{case} \textcolor{charliteral}{'\{'}:
+288                 \textcolor{keywordflow}{if} (lastep == (\textcolor{keywordtype}{char} *) 0)
+289                     \textcolor{keywordflow}{goto} defchar;
+290                 *lastep |= \hyperlink{regexp_8h_a336aa4a5fef4b6a6174dd8f2dfc3a877}{RNGE};
+291                 cflg = 0;
+292             nlim:
+293                 c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}();
+294                 i = 0;
+295                 \textcolor{keywordflow}{do} \{
+296                     \textcolor{keywordflow}{if} (\textcolor{charliteral}{'0'} <= c && c <= \textcolor{charliteral}{'9'})
+297                         i = 10 * i + c - \textcolor{charliteral}{'0'};
+298                     \textcolor{keywordflow}{else}
+299                         \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(16);
+300                 \} \textcolor{keywordflow}{while} (((c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}()) != \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'}) && (c != \textcolor{charliteral}{','}));
+301                 \textcolor{keywordflow}{if} (i >= 255)
+302                     \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(11);
+303                 *ep++ = \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+304                 \textcolor{keywordflow}{if} (c == \textcolor{charliteral}{','}) \{
+305                     \textcolor{keywordflow}{if} (cflg++)
+306                         \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(44);
+307                     \textcolor{keywordflow}{if} ((c = \hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}()) == \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'})
+308                         *ep++ = (char) 255;
+309                     \textcolor{keywordflow}{else} \{
+310                         \hyperlink{regexp_8c_a4eca060cfb92255cddaf8e69a161fed6}{UNGETC}(c);
+311                         \textcolor{keywordflow}{goto} nlim;
+312                         \textcolor{comment}{/* get 2'nd number */}
+313                     \}
+314                 \}
+315                 \textcolor{keywordflow}{if} (\hyperlink{regexp_8c_a2d4f068153f38364bf93defa7ff432f5}{GETC}() != \textcolor{charliteral}{'\}'})
+316                     \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(45);
+317                 \textcolor{keywordflow}{if} (!cflg)    \textcolor{comment}{/* one number */}
+318                     *ep++ = \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+319                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((ep[-1] & 0377) < (ep[-2] & 0377))
+320                     \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(46);
+321                 \textcolor{keywordflow}{continue};
+322 
+323             \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)n'}:
+324                 \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(36);
+325 
+326             \textcolor{keywordflow}{case} \textcolor{charliteral}{'n'}:
+327                 c = \textcolor{charliteral}{'\(\backslash\)n'};
+328                 \textcolor{keywordflow}{goto} defchar;
+329 
+330             \textcolor{keywordflow}{default}:
+331                 \textcolor{keywordflow}{if} (c >= \textcolor{charliteral}{'1'} && c <= \textcolor{charliteral}{'9'}) \{
+332                     \textcolor{keywordflow}{if} ((c -= \textcolor{charliteral}{'1'}) >= closed)
+333                         \hyperlink{regexp_8c_ab6fc8e61f46f752fb2c5c64d88cd576e}{SEDCOMPILE\_ERROR}(25);
+334                     *ep++ = \hyperlink{regexp_8h_aa66522395aa444ba2aa45b9e5be18dd7}{CBACK};
+335                     *ep++ = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+336                     \textcolor{keywordflow}{continue};
+337                 \}
+338             \}
+339     \textcolor{comment}{/* Drop through to default to use \(\backslash\) to turn off special chars */}
+340 
+341         defchar:
+342         \textcolor{keywordflow}{default}:
+343             lastep = ep;
+344             *ep++ = \hyperlink{regexp_8h_aaa1db86773a082b20a3912c4d35a5d97}{CCHR};
+345             *ep++ = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+346         \}
+347     \}
+348 \hyperlink{group__APACHE__CORE__MUTEX_gac9982b93474ad913f3fcbdcff95accf4}{out}:
+349     \textcolor{keywordflow}{if} (regerrno) \{
+350         regerr(commands, regerrno);
+351         \textcolor{keywordflow}{return} (\textcolor{keywordtype}{char}*) \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+352     \}
+353     \textcolor{comment}{/* XXX : Basant : what extra */}
+354     \textcolor{comment}{/* int reglength = (int)(ep - expbuf); */}
+355     \textcolor{keywordflow}{return} ep;
+356 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{regexp_8c_a6f10b33e0320922b2a6dbf86c17be521_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{regexp.\+c@{regexp.\+c}!sed\+\_\+step@{sed\+\_\+step}}
+\index{sed\+\_\+step@{sed\+\_\+step}!regexp.\+c@{regexp.\+c}}
+\subsubsection[{\texorpdfstring{sed\+\_\+step(char $\ast$p1, char $\ast$p2, int circf, step\+\_\+vars\+\_\+storage $\ast$vars)}{sed_step(char *p1, char *p2, int circf, step_vars_storage *vars)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} sed\+\_\+step (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{p1, }
+\item[{char $\ast$}]{p2, }
+\item[{{\bf int}}]{circf, }
+\item[{{\bf step\+\_\+vars\+\_\+storage} $\ast$}]{vars}
+\end{DoxyParamCaption}
+)}\hypertarget{regexp_8c_a9a57da97dc285f94737a35ce1ea74709}{}\label{regexp_8c_a9a57da97dc285f94737a35ce1ea74709}
+
+\begin{DoxyCode}
+359 \{
+360     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+361 
+362 
+363     \textcolor{keywordflow}{if} (circf) \{
+364         vars->\hyperlink{struct__step__vars__storage_a780c9cc2d142cbd9c48b6ec052554cb3}{loc1} = p1;
+365         \textcolor{keywordflow}{return} (\_advance(p1, p2, vars));
+366     \}
+367     \textcolor{comment}{/* fast check for first character */}
+368     \textcolor{keywordflow}{if} (*p2 == \hyperlink{regexp_8h_aaa1db86773a082b20a3912c4d35a5d97}{CCHR}) \{
+369         c = p2[1];
+370         \textcolor{keywordflow}{do} \{
+371             \textcolor{keywordflow}{if} (*p1 != c)
+372                 \textcolor{keywordflow}{continue};
+373             \textcolor{keywordflow}{if} (\_advance(p1, p2, vars)) \{
+374                 vars->\hyperlink{struct__step__vars__storage_a780c9cc2d142cbd9c48b6ec052554cb3}{loc1} = p1;
+375                 \textcolor{keywordflow}{return} (1);
+376             \}
+377         \} \textcolor{keywordflow}{while} (*p1++);
+378         \textcolor{keywordflow}{return} (0);
+379     \}
+380         \textcolor{comment}{/* regular algorithm */}
+381     \textcolor{keywordflow}{do} \{
+382         \textcolor{keywordflow}{if} (\_advance(p1, p2, vars)) \{
+383             vars->\hyperlink{struct__step__vars__storage_a780c9cc2d142cbd9c48b6ec052554cb3}{loc1} = p1;
+384             \textcolor{keywordflow}{return} (1);
+385         \}
+386     \} \textcolor{keywordflow}{while} (*p1++);
+387     \textcolor{keywordflow}{return} (0);
+388 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{regexp_8c_a9a57da97dc285f94737a35ce1ea74709_icgraph}
+\end{center}
+\end{figure}
+
+

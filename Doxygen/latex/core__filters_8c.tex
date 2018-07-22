@@ -1,0 +1,355 @@
+\hypertarget{core__filters_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/core\+\_\+filters.c File Reference}
+\label{core__filters_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/core\+\_\+filters.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/core\+\_\+filters.\+c}}
+
+
+Core input/output network filters.  
+
+
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+fnmatch.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+vhost.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+connection.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+ebcdic.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+listen.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+so.\+h\char`\"{}}\\*
+Include dependency graph for core\+\_\+filters.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{core__filters_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcore__output__filter__ctx}{core\+\_\+output\+\_\+filter\+\_\+ctx}
+\item 
+struct \hyperlink{structcore__filter__ctx}{core\+\_\+filter\+\_\+ctx}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{core__filters_8c_a79e8fc75167d0e530c6afb5172e2a32b}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}
+\item 
+\#define \hyperlink{core__filters_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{core__filters_8c_a26faf43e3f61783d8b7aa928c0a41a11}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}
+\item 
+\#define \hyperlink{core__filters_8c_ac501858bdd26a3240332e202560c341c}{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES}~(256)
+\item 
+\#define \hyperlink{core__filters_8c_ac93bec585e1c01c10e586439154e9b88}{B\+R\+I\+G\+A\+D\+E\+\_\+\+N\+O\+R\+M\+A\+L\+I\+ZE}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})
+\item 
+\#define \hyperlink{core__filters_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~\hyperlink{group__APACHE__CORE__HTTPD_gaf1cdaac5f4562d9d20bae417471ad422}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\item 
+\#define \hyperlink{core__filters_8c_ad616bd099ff8a10a8d4ba8c83dbfdcf6}{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+I\+N\+\_\+\+W\+R\+I\+TE}~4096
+\item 
+\#define \hyperlink{core__filters_8c_a392d119c7122d8ce332d0416f08685af}{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+A\+X\+\_\+\+B\+U\+F\+F\+ER}~65536
+\item 
+\#define \hyperlink{core__filters_8c_aab9217cd09a8188bfcb04468f9061e80}{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+S\+\_\+\+I\+N\+\_\+\+P\+I\+P\+E\+L\+I\+NE}~5
+\item 
+\#define \hyperlink{core__filters_8c_a3a2bb12756134250249cf39f88a455e8}{M\+A\+X\+\_\+\+I\+O\+V\+E\+C\+\_\+\+T\+O\+\_\+\+W\+R\+I\+TE}~16
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{group__APACHE__CORE__HTTPD_ga4b1afebb56051e612e291712cd0383aa}{ap\+\_\+core\+\_\+input\+\_\+filter} (\hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f}, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}, \hyperlink{util__filter_8h_ab570898d09fbbe5b6d838e28b90134e0}{ap\+\_\+input\+\_\+mode\+\_\+t} \hyperlink{pcregrep_8txt_ad194431669b7d1f96d2dacfb7be21261}{mode}, \hyperlink{group__APR__Util__Bucket__Brigades_ga756973fb6392bd1026c3d96b4519776d}{apr\+\_\+read\+\_\+type\+\_\+e} \hyperlink{pcretest_8txt_aebde0006968e3c574305c604c927277a}{block}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__APACHE__CORE__FILTER_ga0ce3dc88443223a04b0d1a3167356aee}{readbytes})
+\item 
+\hyperlink{core__filters_8c_a78b9309a2319e29751a1a5a8af88c4ba}{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE} (\hyperlink{group__APACHE__CORE__HTTPD_gad1d337086972f0a3acedbf68359fef78}{ap\+\_\+logio\+\_\+add\+\_\+bytes\+\_\+out})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Core input/output network filters. 
+
+
+
+\subsection{Macro Definition Documentation}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES@{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES}}
+\index{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES@{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES}{AP_MIN_SENDFILE_BYTES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+M\+I\+N\+\_\+\+S\+E\+N\+D\+F\+I\+L\+E\+\_\+\+B\+Y\+T\+ES~(256)}\hypertarget{core__filters_8c_ac501858bdd26a3240332e202560c341c}{}\label{core__filters_8c_ac501858bdd26a3240332e202560c341c}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}
+\index{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}{APLOG_MODULE_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX~{\bf A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}\hypertarget{core__filters_8c_ae75325996d1b2cf6120dded4cb153a22}{}\label{core__filters_8c_ae75325996d1b2cf6120dded4cb153a22}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}{APR_WANT_IOVEC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+I\+O\+V\+EC}\hypertarget{core__filters_8c_a79e8fc75167d0e530c6afb5172e2a32b}{}\label{core__filters_8c_a79e8fc75167d0e530c6afb5172e2a32b}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}{APR_WANT_MEMFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+M\+E\+M\+F\+U\+NC}\hypertarget{core__filters_8c_a26faf43e3f61783d8b7aa928c0a41a11}{}\label{core__filters_8c_a26faf43e3f61783d8b7aa928c0a41a11}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{core__filters_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{core__filters_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!B\+R\+I\+G\+A\+D\+E\+\_\+\+N\+O\+R\+M\+A\+L\+I\+ZE@{B\+R\+I\+G\+A\+D\+E\+\_\+\+N\+O\+R\+M\+A\+L\+I\+ZE}}
+\index{B\+R\+I\+G\+A\+D\+E\+\_\+\+N\+O\+R\+M\+A\+L\+I\+ZE@{B\+R\+I\+G\+A\+D\+E\+\_\+\+N\+O\+R\+M\+A\+L\+I\+ZE}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{B\+R\+I\+G\+A\+D\+E\+\_\+\+N\+O\+R\+M\+A\+L\+I\+ZE}{BRIGADE_NORMALIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+R\+I\+G\+A\+D\+E\+\_\+\+N\+O\+R\+M\+A\+L\+I\+ZE(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)}\hypertarget{core__filters_8c_ac93bec585e1c01c10e586439154e9b88}{}\label{core__filters_8c_ac93bec585e1c01c10e586439154e9b88}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{ \hyperlink{group__APR__Util__Bucket__Brigades_gaa17a456120961b1c5af0525f4900a457}{\(\backslash\)}
+\hyperlink{group__APR__Util__Bucket__Brigades_gaa17a456120961b1c5af0525f4900a457}{    apr\_bucket} *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e} = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}); \hyperlink{pcregrep_8txt_a29df1716374a8e3439d34a27760970bd}{\(\backslash\)}
+\hyperlink{pcregrep_8txt_a29df1716374a8e3439d34a27760970bd}{    do} \{  \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{\(\backslash\)}
+\hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{        if} (e->length == 0 && !\hyperlink{group__APR__Util__Bucket__Brigades_ga506cb29cc1ec1abeb487e01b122bd4d9}{APR\_BUCKET\_IS\_METADATA}(e)) \{ 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gaa17a456120961b1c5af0525f4900a457}{\(\backslash\)}
+\hyperlink{group__APR__Util__Bucket__Brigades_gaa17a456120961b1c5af0525f4900a457}{            apr\_bucket} *\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d}; \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{\(\backslash\)}
+\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{            d} = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(e); \hyperlink{group__APR__Util__Bucket__Brigades_ga8925c02a7f95e8c1c3986294d4678797}{\(\backslash\)}
+\hyperlink{group__APR__Util__Bucket__Brigades_ga8925c02a7f95e8c1c3986294d4678797}{            apr\_bucket\_delete}(e); \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{\(\backslash\)}
+\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{            e} = \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d}; \(\backslash\)
+        \} \(\backslash\)
+        else \{ \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{\(\backslash\)}
+\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{            e} = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(e); \(\backslash\)
+        \} \(\backslash\)
+    \} \textcolor{keywordflow}{while} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}) && (e != 
+      \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}))); \(\backslash\)
+\} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+Remove all zero length buckets from the brigade. \index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!M\+A\+X\+\_\+\+I\+O\+V\+E\+C\+\_\+\+T\+O\+\_\+\+W\+R\+I\+TE@{M\+A\+X\+\_\+\+I\+O\+V\+E\+C\+\_\+\+T\+O\+\_\+\+W\+R\+I\+TE}}
+\index{M\+A\+X\+\_\+\+I\+O\+V\+E\+C\+\_\+\+T\+O\+\_\+\+W\+R\+I\+TE@{M\+A\+X\+\_\+\+I\+O\+V\+E\+C\+\_\+\+T\+O\+\_\+\+W\+R\+I\+TE}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+I\+O\+V\+E\+C\+\_\+\+T\+O\+\_\+\+W\+R\+I\+TE}{MAX_IOVEC_TO_WRITE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+I\+O\+V\+E\+C\+\_\+\+T\+O\+\_\+\+W\+R\+I\+TE~16}\hypertarget{core__filters_8c_a3a2bb12756134250249cf39f88a455e8}{}\label{core__filters_8c_a3a2bb12756134250249cf39f88a455e8}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+S\+\_\+\+I\+N\+\_\+\+P\+I\+P\+E\+L\+I\+NE@{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+S\+\_\+\+I\+N\+\_\+\+P\+I\+P\+E\+L\+I\+NE}}
+\index{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+S\+\_\+\+I\+N\+\_\+\+P\+I\+P\+E\+L\+I\+NE@{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+S\+\_\+\+I\+N\+\_\+\+P\+I\+P\+E\+L\+I\+NE}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+S\+\_\+\+I\+N\+\_\+\+P\+I\+P\+E\+L\+I\+NE}{MAX_REQUESTS_IN_PIPELINE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+S\+\_\+\+I\+N\+\_\+\+P\+I\+P\+E\+L\+I\+NE~5}\hypertarget{core__filters_8c_aab9217cd09a8188bfcb04468f9061e80}{}\label{core__filters_8c_aab9217cd09a8188bfcb04468f9061e80}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+A\+X\+\_\+\+B\+U\+F\+F\+ER@{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+A\+X\+\_\+\+B\+U\+F\+F\+ER}}
+\index{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+A\+X\+\_\+\+B\+U\+F\+F\+ER@{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+A\+X\+\_\+\+B\+U\+F\+F\+ER}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+A\+X\+\_\+\+B\+U\+F\+F\+ER}{THRESHOLD_MAX_BUFFER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+A\+X\+\_\+\+B\+U\+F\+F\+ER~65536}\hypertarget{core__filters_8c_a392d119c7122d8ce332d0416f08685af}{}\label{core__filters_8c_a392d119c7122d8ce332d0416f08685af}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+I\+N\+\_\+\+W\+R\+I\+TE@{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+I\+N\+\_\+\+W\+R\+I\+TE}}
+\index{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+I\+N\+\_\+\+W\+R\+I\+TE@{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+I\+N\+\_\+\+W\+R\+I\+TE}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+I\+N\+\_\+\+W\+R\+I\+TE}{THRESHOLD_MIN_WRITE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+H\+R\+E\+S\+H\+O\+L\+D\+\_\+\+M\+I\+N\+\_\+\+W\+R\+I\+TE~4096}\hypertarget{core__filters_8c_ad616bd099ff8a10a8d4ba8c83dbfdcf6}{}\label{core__filters_8c_ad616bd099ff8a10a8d4ba8c83dbfdcf6}
+
+
+\subsection{Function Documentation}
+\index{core\+\_\+filters.\+c@{core\+\_\+filters.\+c}!A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE@{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE}}
+\index{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE@{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE}!core\+\_\+filters.\+c@{core\+\_\+filters.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+P\+E(ap\+\_\+logio\+\_\+add\+\_\+bytes\+\_\+out)}{APR_OPTIONAL_FN_TYPE(ap_logio_add_bytes_out)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N\+\_\+\+T\+Y\+PE (
+\begin{DoxyParamCaption}
+\item[{{\bf ap\+\_\+logio\+\_\+add\+\_\+bytes\+\_\+out}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{core__filters_8c_a78b9309a2319e29751a1a5a8af88c4ba}{}\label{core__filters_8c_a78b9309a2319e29751a1a5a8af88c4ba}
+
+\begin{DoxyCode}
+372 \{
+373     \hyperlink{structconn__rec}{conn\_rec} *\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c} = \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}->c;
+374     \hyperlink{structcore__net__rec}{core\_net\_rec} *net = \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}->ctx;
+375     \hyperlink{structcore__output__filter__ctx}{core\_output\_filter\_ctx\_t} *\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx} = net->\hyperlink{structcore__net__rec_ae179d22c23e8ff2f19d98a6c00f6c14a}{out\_ctx};
+376     \hyperlink{structapr__bucket__brigade}{apr\_bucket\_brigade} *\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+377     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__FILTER_ga6550e0bd0ee31e160be60d67874dbcbc}{bucket}, *next, *flush\_upto = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+378     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} bytes\_in\_brigade, non\_file\_bytes\_in\_brigade;
+379     \textcolor{keywordtype}{int} eor\_buckets\_in\_brigade, morphing\_bucket\_in\_brigade;
+380     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+381 
+382     \textcolor{comment}{/* Fail quickly if the connection has already been aborted. */}
+383     \textcolor{keywordflow}{if} (c->\hyperlink{structconn__rec_aead9e56515e09e4f4b32a543e988e123}{aborted}) \{
+384         \textcolor{keywordflow}{if} (new\_bb != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+385             apr\_brigade\_cleanup(new\_bb);
+386         \}
+387         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga9458da18e0ee46a5d37c9cdfdc43efd2}{APR\_ECONNABORTED};
+388     \}
+389 
+390     \textcolor{keywordflow}{if} (ctx == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+391         ctx = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(c->\hyperlink{structconn__rec_a1dc5f31c7afc4a6f9c4ede0daea8cd1d}{pool}, \textcolor{keyword}{sizeof}(*ctx));
+392         net->\hyperlink{structcore__net__rec_ae179d22c23e8ff2f19d98a6c00f6c14a}{out\_ctx} = (\hyperlink{structcore__output__filter__ctx}{core\_output\_filter\_ctx\_t} *)ctx;
+393         \textcolor{comment}{/*}
+394 \textcolor{comment}{         * Need to create tmp brigade with correct lifetime. Passing}
+395 \textcolor{comment}{         * NULL to apr\_brigade\_split\_ex would result in a brigade}
+396 \textcolor{comment}{         * allocated from bb->pool which might be wrong.}
+397 \textcolor{comment}{         */}
+398         ctx->\hyperlink{structcore__output__filter__ctx_a4ace06e703ead7dd323d06811b1b5dc9}{tmp\_flush\_bb} = apr\_brigade\_create(c->\hyperlink{structconn__rec_a1dc5f31c7afc4a6f9c4ede0daea8cd1d}{pool}, c->
+      \hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+399         \textcolor{comment}{/* same for buffered\_bb and ap\_save\_brigade */}
+400         ctx->\hyperlink{structcore__output__filter__ctx_a04cf905413fb49ea1aa66f928a224bfe}{buffered\_bb} = apr\_brigade\_create(c->\hyperlink{structconn__rec_a1dc5f31c7afc4a6f9c4ede0daea8cd1d}{pool}, c->
+      \hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+401     \}
+402 
+403     \textcolor{keywordflow}{if} (new\_bb != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+404         bb = new\_bb;
+405 
+406     \textcolor{keywordflow}{if} ((ctx->\hyperlink{structcore__output__filter__ctx_a04cf905413fb49ea1aa66f928a224bfe}{buffered\_bb} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) &&
+407         !\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(ctx->\hyperlink{structcore__output__filter__ctx_a04cf905413fb49ea1aa66f928a224bfe}{buffered\_bb})) \{
+408         \textcolor{keywordflow}{if} (new\_bb != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+409             \hyperlink{group__APR__Util__Bucket__Brigades_ga52ba212f76507a79ccae213875150ad1}{APR\_BRIGADE\_PREPEND}(bb, ctx->\hyperlink{structcore__output__filter__ctx_a04cf905413fb49ea1aa66f928a224bfe}{buffered\_bb});
+410         \}
+411         \textcolor{keywordflow}{else} \{
+412             bb = ctx->\hyperlink{structcore__output__filter__ctx_a04cf905413fb49ea1aa66f928a224bfe}{buffered\_bb};
+413         \}
+414         c->\hyperlink{structconn__rec_a148edf3d5ae7140635f46d719aba83fd}{data\_in\_output\_filters} = 0;
+415     \}
+416     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (new\_bb == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+417         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+418     \}
+419 
+420     \textcolor{comment}{/* Scan through the brigade and decide whether to attempt a write,}
+421 \textcolor{comment}{     * and how much to write, based on the following rules:}
+422 \textcolor{comment}{     *}
+423 \textcolor{comment}{     *  1) The new\_bb is null: Do a nonblocking write of as much as}
+424 \textcolor{comment}{     *     possible: do a nonblocking write of as much data as possible,}
+425 \textcolor{comment}{     *     then save the rest in ctx->buffered\_bb.  (If new\_bb == NULL,}
+426 \textcolor{comment}{     *     it probably means that the MPM is doing asynchronous write}
+427 \textcolor{comment}{     *     completion and has just determined that this connection}
+428 \textcolor{comment}{     *     is writable.)}
+429 \textcolor{comment}{     *}
+430 \textcolor{comment}{     *  2) Determine if and up to which bucket we need to do a blocking}
+431 \textcolor{comment}{     *     write:}
+432 \textcolor{comment}{     *}
+433 \textcolor{comment}{     *  a) The brigade contains a flush bucket: Do a blocking write}
+434 \textcolor{comment}{     *     of everything up that point.}
+435 \textcolor{comment}{     *}
+436 \textcolor{comment}{     *  b) The request is in CONN\_STATE\_HANDLER state, and the brigade}
+437 \textcolor{comment}{     *     contains at least THRESHOLD\_MAX\_BUFFER bytes in non-file}
+438 \textcolor{comment}{     *     buckets: Do blocking writes until the amount of data in the}
+439 \textcolor{comment}{     *     buffer is less than THRESHOLD\_MAX\_BUFFER.  (The point of this}
+440 \textcolor{comment}{     *     rule is to provide flow control, in case a handler is}
+441 \textcolor{comment}{     *     streaming out lots of data faster than the data can be}
+442 \textcolor{comment}{     *     sent to the client.)}
+443 \textcolor{comment}{     *}
+444 \textcolor{comment}{     *  c) The request is in CONN\_STATE\_HANDLER state, and the brigade}
+445 \textcolor{comment}{     *     contains at least MAX\_REQUESTS\_IN\_PIPELINE EOR buckets:}
+446 \textcolor{comment}{     *     Do blocking writes until less than MAX\_REQUESTS\_IN\_PIPELINE EOR}
+447 \textcolor{comment}{     *     buckets are left. (The point of this rule is to prevent too many}
+448 \textcolor{comment}{     *     FDs being kept open by pipelined requests, possibly allowing a}
+449 \textcolor{comment}{     *     DoS).}
+450 \textcolor{comment}{     *}
+451 \textcolor{comment}{     *  d) The brigade contains a morphing bucket: If there was no other}
+452 \textcolor{comment}{     *     reason to do a blocking write yet, try reading the bucket. If its}
+453 \textcolor{comment}{     *     contents fit into memory before THRESHOLD\_MAX\_BUFFER is reached,}
+454 \textcolor{comment}{     *     everything is fine. Otherwise we need to do a blocking write the}
+455 \textcolor{comment}{     *     up to and including the morphing bucket, because ap\_save\_brigade()}
+456 \textcolor{comment}{     *     would read the whole bucket into memory later on.}
+457 \textcolor{comment}{     *}
+458 \textcolor{comment}{     *  3) Actually do the blocking write up to the last bucket determined}
+459 \textcolor{comment}{     *     by rules 2a-d. The point of doing only one flush is to make as}
+460 \textcolor{comment}{     *     few calls to writev() as possible.}
+461 \textcolor{comment}{     *}
+462 \textcolor{comment}{     *  4) If the brigade contains at least THRESHOLD\_MIN\_WRITE}
+463 \textcolor{comment}{     *     bytes: Do a nonblocking write of as much data as possible,}
+464 \textcolor{comment}{     *     then save the rest in ctx->buffered\_bb.}
+465 \textcolor{comment}{     */}
+466 
+467     \textcolor{keywordflow}{if} (new\_bb == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+468         rv = send\_brigade\_nonblocking(net->\hyperlink{structcore__net__rec_a046caddb3d9d6fb6c002ffa514e67c1a}{client\_socket}, bb,
+469                                       &(ctx->\hyperlink{structcore__output__filter__ctx_a2c23def8a39ea275c8a614ff9c086189}{bytes\_written}), c);
+470         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && !\hyperlink{group__APR__STATUS__IS_ga9dd578bfcd76a2d997395608ae5b3a4e}{APR\_STATUS\_IS\_EAGAIN}(rv)) \{
+471             \textcolor{comment}{/* The client has aborted the connection */}
+472             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, rv, c,
+473                           \textcolor{stringliteral}{"core\_output\_filter: writing data to the network"});
+474             apr\_brigade\_cleanup(bb);
+475             c->\hyperlink{structconn__rec_aead9e56515e09e4f4b32a543e988e123}{aborted} = 1;
+476             \textcolor{keywordflow}{return} rv;
+477         \}
+478         setaside\_remaining\_output(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}, ctx, bb, c);
+479         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+480     \}
+481 
+482     bytes\_in\_brigade = 0;
+483     non\_file\_bytes\_in\_brigade = 0;
+484     eor\_buckets\_in\_brigade = 0;
+485     morphing\_bucket\_in\_brigade = 0;
+486 
+487     \textcolor{keywordflow}{for} (bucket = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb); bucket != 
+      \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb);
+488          bucket = next) \{
+489         next = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(bucket);
+490 
+491         \textcolor{keywordflow}{if} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga506cb29cc1ec1abeb487e01b122bd4d9}{APR\_BUCKET\_IS\_METADATA}(bucket)) \{
+492             \textcolor{keywordflow}{if} (bucket->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})-1) \{
+493                 \textcolor{comment}{/*}
+494 \textcolor{comment}{                 * A setaside of morphing buckets would read everything into}
+495 \textcolor{comment}{                 * memory. Instead, we will flush everything up to and}
+496 \textcolor{comment}{                 * including this bucket.}
+497 \textcolor{comment}{                 */}
+498                 morphing\_bucket\_in\_brigade = 1;
+499             \}
+500             \textcolor{keywordflow}{else} \{
+501                 bytes\_in\_brigade += bucket->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+502                 \textcolor{keywordflow}{if} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga1d54037bb6953c73d5c61f64c311d470}{APR\_BUCKET\_IS\_FILE}(bucket))
+503                     non\_file\_bytes\_in\_brigade += bucket->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+504             \}
+505         \}
+506         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__REQ_ga8318214baeaec5af97903afeef38f253}{AP\_BUCKET\_IS\_EOR}(bucket)) \{
+507             eor\_buckets\_in\_brigade++;
+508         \}
+509 
+510         \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga24105da0bb755a775c4b2a519d7c25f9}{APR\_BUCKET\_IS\_FLUSH}(bucket)
+511             || non\_file\_bytes\_in\_brigade >= \hyperlink{core__filters_8c_a392d119c7122d8ce332d0416f08685af}{THRESHOLD\_MAX\_BUFFER}
+512             || morphing\_bucket\_in\_brigade
+513             || eor\_buckets\_in\_brigade > \hyperlink{core__filters_8c_aab9217cd09a8188bfcb04468f9061e80}{MAX\_REQUESTS\_IN\_PIPELINE}) \{
+514             \textcolor{comment}{/* this segment of the brigade MUST be sent before returning. */}
+515 
+516             \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LOG_ga23c736a4c9602da83b6f06810dd36ef7}{APLOGctrace6}(c)) \{
+517                 \textcolor{keywordtype}{char} *\hyperlink{group__apr__thread__proc_gabf19fa5e55c24b9556075afc7b302bbe}{reason} = \hyperlink{group__APR__Util__Bucket__Brigades_ga24105da0bb755a775c4b2a519d7c25f9}{APR\_BUCKET\_IS\_FLUSH}(bucket) ?
+518                                \textcolor{stringliteral}{"FLUSH bucket"} :
+519                                (non\_file\_bytes\_in\_brigade >= 
+      \hyperlink{core__filters_8c_a392d119c7122d8ce332d0416f08685af}{THRESHOLD\_MAX\_BUFFER}) ?
+520                                \textcolor{stringliteral}{"THRESHOLD\_MAX\_BUFFER"} :
+521                                morphing\_bucket\_in\_brigade ? \textcolor{stringliteral}{"morphing bucket"} :
+522                                \textcolor{stringliteral}{"MAX\_REQUESTS\_IN\_PIPELINE"};
+523                 \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gad067edc2e8853edaa2a1b54792b62f87}{APLOG\_TRACE6}, 0, c,
+524                               \textcolor{stringliteral}{"core\_output\_filter: flushing because of %s"},
+525                               reason);
+526             \}
+527             \textcolor{comment}{/*}
+528 \textcolor{comment}{             * Defer the actual blocking write to avoid doing many writes.}
+529 \textcolor{comment}{             */}
+530             flush\_upto = next;
+531 
+532             bytes\_in\_brigade = 0;
+533             non\_file\_bytes\_in\_brigade = 0;
+534             eor\_buckets\_in\_brigade = 0;
+535             morphing\_bucket\_in\_brigade = 0;
+536         \}
+537     \}
+538 
+539     \textcolor{keywordflow}{if} (flush\_upto != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+540         ctx->\hyperlink{structcore__output__filter__ctx_a4ace06e703ead7dd323d06811b1b5dc9}{tmp\_flush\_bb} = apr\_brigade\_split\_ex(bb, flush\_upto,
+541                                                  ctx->\hyperlink{structcore__output__filter__ctx_a4ace06e703ead7dd323d06811b1b5dc9}{tmp\_flush\_bb});
+542         rv = send\_brigade\_blocking(net->\hyperlink{structcore__net__rec_a046caddb3d9d6fb6c002ffa514e67c1a}{client\_socket}, bb,
+543                                    &(ctx->\hyperlink{structcore__output__filter__ctx_a2c23def8a39ea275c8a614ff9c086189}{bytes\_written}), c);
+544         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+545             \textcolor{comment}{/* The client has aborted the connection */}
+546             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, rv, c,
+547                           \textcolor{stringliteral}{"core\_output\_filter: writing data to the network"});
+548             apr\_brigade\_cleanup(bb);
+549             c->\hyperlink{structconn__rec_aead9e56515e09e4f4b32a543e988e123}{aborted} = 1;
+550             \textcolor{keywordflow}{return} rv;
+551         \}
+552         \hyperlink{group__APR__Util__Bucket__Brigades_ga7cecbc89be912ce9ab24c889eb8f955b}{APR\_BRIGADE\_CONCAT}(bb, ctx->\hyperlink{structcore__output__filter__ctx_a4ace06e703ead7dd323d06811b1b5dc9}{tmp\_flush\_bb});
+553     \}
+554 
+555     \textcolor{keywordflow}{if} (bytes\_in\_brigade >= \hyperlink{core__filters_8c_ad616bd099ff8a10a8d4ba8c83dbfdcf6}{THRESHOLD\_MIN\_WRITE}) \{
+556         rv = send\_brigade\_nonblocking(net->\hyperlink{structcore__net__rec_a046caddb3d9d6fb6c002ffa514e67c1a}{client\_socket}, bb,
+557                                       &(ctx->\hyperlink{structcore__output__filter__ctx_a2c23def8a39ea275c8a614ff9c086189}{bytes\_written}), c);
+558         \textcolor{keywordflow}{if} ((rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) && (!\hyperlink{group__APR__STATUS__IS_ga9dd578bfcd76a2d997395608ae5b3a4e}{APR\_STATUS\_IS\_EAGAIN}(rv))) \{
+559             \textcolor{comment}{/* The client has aborted the connection */}
+560             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, rv, c,
+561                           \textcolor{stringliteral}{"core\_output\_filter: writing data to the network"});
+562             apr\_brigade\_cleanup(bb);
+563             c->\hyperlink{structconn__rec_aead9e56515e09e4f4b32a543e988e123}{aborted} = 1;
+564             \textcolor{keywordflow}{return} rv;
+565         \}
+566     \}
+567 
+568     setaside\_remaining\_output(\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}, ctx, bb, c);
+569     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+570 \}
+\end{DoxyCode}

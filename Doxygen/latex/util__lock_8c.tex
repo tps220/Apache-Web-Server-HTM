@@ -1,0 +1,372 @@
+\hypertarget{util__lock_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/dav/main/util\+\_\+lock.c File Reference}
+\label{util__lock_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/util\+\_\+lock.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/util\+\_\+lock.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+dav.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+Include dependency graph for util\+\_\+lock.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{util__lock_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{util__lock_8c_a69d6c57c8f0568435ad44220639b5129}{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE} (dav)
+\item 
+\hyperlink{util__lock_8c_a814f27f5b49e60ccbab42f6d7e9ec83b}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$)
+\item 
+\hyperlink{util__lock_8c_a6cf889c691920d48451a89dc46fef863}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structdav__error}{dav\+\_\+error} $\ast$)
+\item 
+\hyperlink{util__lock_8c_afe2f14122c74bb061f2f1f6545627af0}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{util\+\_\+lock.\+c@{util\+\_\+lock.\+c}!A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}!util\+\_\+lock.\+c@{util\+\_\+lock.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+L\+E(dav)}{APLOG_USE_MODULE(dav)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{dav}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__lock_8c_a69d6c57c8f0568435ad44220639b5129}{}\label{util__lock_8c_a69d6c57c8f0568435ad44220639b5129}
+\index{util\+\_\+lock.\+c@{util\+\_\+lock.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+lock.\+c@{util\+\_\+lock.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(const char $\ast$)}{DAV_DECLARE(const char *)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__lock_8c_a814f27f5b49e60ccbab42f6d7e9ec83b}{}\label{util__lock_8c_a814f27f5b49e60ccbab42f6d7e9ec83b}
+
+\begin{DoxyCode}
+45 \{
+46     \hyperlink{structdav__lock}{dav\_lock} *lock\_scan;
+47     \textcolor{keyword}{const} \hyperlink{structdav__hooks__locks}{dav\_hooks\_locks} *\hyperlink{group__MOD__DAV_ga2f89c7cfd67d24769756d6d2df79bf5c}{hooks} = \hyperlink{group__MOD__DAV_ga0300526f19a870f40f3827266111add5}{DAV\_GET\_HOOKS\_LOCKS}(
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+48     \textcolor{keywordtype}{int} \hyperlink{group__APR__MD5_ga16ff2d8e15ade4948398b0aeb80124a8}{count} = 0;
+49     \hyperlink{structdav__buffer}{dav\_buffer} work\_buf = \{ 0 \};
+50     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p} = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool};
+51 
+52     \textcolor{comment}{/* If no locks or no lock provider, there are no locks */}
+53     \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} || hooks == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+54         \textcolor{comment}{/*}
+55 \textcolor{comment}{        ** Since resourcediscovery is defined with (activelock)*,}
+56 \textcolor{comment}{        ** <D:activelock/> shouldn't be necessary for an empty lock.}
+57 \textcolor{comment}{        */}
+58         \textcolor{keywordflow}{return} \textcolor{stringliteral}{""};
+59     \}
+60 
+61     \textcolor{comment}{/*}
+62 \textcolor{comment}{    ** Note: it could be interesting to sum the lengths of the owners}
+63 \textcolor{comment}{    **       and locktokens during this loop. However, the buffer}
+64 \textcolor{comment}{    **       mechanism provides some rough padding so that we don't}
+65 \textcolor{comment}{    **       really need to have an exact size. Further, constructing}
+66 \textcolor{comment}{    **       locktoken strings could be relatively expensive.}
+67 \textcolor{comment}{    */}
+68     \textcolor{keywordflow}{for} (lock\_scan = \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}; lock\_scan != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; lock\_scan = lock\_scan->
+      \hyperlink{structdav__lock_a66477789d4e9ff6e7c5b50c334805b85}{next})
+69         count++;
+70 
+71     \textcolor{comment}{/* if a buffer was not provided, then use an internal buffer */}
+72     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+73         \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf} = &work\_buf;
+74 
+75     \textcolor{comment}{/* reset the length before we start appending stuff */}
+76     \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->\hyperlink{structdav__buffer_a8d43337c127b3e07aada116e7f3cb2a9}{cur\_len} = 0;
+77 
+78     \textcolor{comment}{/* prep the buffer with a "good" size */}
+79     dav\_check\_bufsize(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, count * 300);
+80 
+81     \textcolor{keywordflow}{for} (; \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock} = \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->next) \{
+82         \textcolor{keywordtype}{char} tmp[100];
+83 
+84 \textcolor{preprocessor}{#if DAV\_DEBUG}
+85         \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->rectype == \hyperlink{group__MOD__DAV_gga35626623c09f0611245743b5868eb936a54f61e288144fbd760131e3c98356d41}{DAV\_LOCKREC\_INDIRECT\_PARTIAL}) \{
+86             \textcolor{comment}{/* ### crap. design error */}
+87             dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf},
+88                               \textcolor{stringliteral}{"DESIGN ERROR: attempted to product an "}
+89                               \textcolor{stringliteral}{"activelock element from a partial, indirect "}
+90                               \textcolor{stringliteral}{"lock record. Creating an XML parsing error "}
+91                               \textcolor{stringliteral}{"to ease detection of this situation: <"});
+92         \}
+93 \textcolor{preprocessor}{#endif}
+94 
+95         dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"<D:activelock>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR} \textcolor{stringliteral}{"<D:locktype>"});
+96         \textcolor{keywordflow}{switch} (\hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->\hyperlink{structapr__anylock__t_abe78b2ee0daaee1b19c952c4f8fc903a}{type}) \{
+97         \textcolor{keywordflow}{case} \hyperlink{group__MOD__DAV_gga9089e677b6d1b25daccbc1efa484a829ad71440467fd4e5e5268f2fddbe658819}{DAV\_LOCKTYPE\_WRITE}:
+98             dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"<D:write/>"});
+99             \textcolor{keywordflow}{break};
+100         \textcolor{keywordflow}{default}:
+101             \textcolor{comment}{/* ### internal error. log something? */}
+102             \textcolor{keywordflow}{break};
+103         \}
+104         dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"</D:locktype>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR} \textcolor{stringliteral}{"<D:lockscope>"});
+105         \textcolor{keywordflow}{switch} (\hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->scope) \{
+106         \textcolor{keywordflow}{case} \hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88aeb6d70b4e2b1c2968b4bff039c79d43c}{DAV\_LOCKSCOPE\_EXCLUSIVE}:
+107             dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"<D:exclusive/>"});
+108             \textcolor{keywordflow}{break};
+109         \textcolor{keywordflow}{case} \hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88a9961b30fb47aa623dc82f41f979d6912}{DAV\_LOCKSCOPE\_SHARED}:
+110             dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"<D:shared/>"});
+111             \textcolor{keywordflow}{break};
+112         \textcolor{keywordflow}{default}:
+113             \textcolor{comment}{/* ### internal error. log something? */}
+114             \textcolor{keywordflow}{break};
+115         \}
+116         dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"</D:lockscope>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+117         apr\_snprintf(tmp, \textcolor{keyword}{sizeof}(tmp), \textcolor{stringliteral}{"<D:depth>%s</D:depth>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR},
+118                      \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->depth == \hyperlink{group__MOD__DAV_ga72b95fe139d3f6c6eeceed598b721ce1}{DAV\_INFINITY} ? \textcolor{stringliteral}{"infinity"} : \textcolor{stringliteral}{"0"});
+119         dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, tmp);
+120 
+121         \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->owner) \{
+122             \textcolor{comment}{/*}
+123 \textcolor{comment}{            ** This contains a complete, self-contained <DAV:owner> element,}
+124 \textcolor{comment}{            ** with namespace declarations and xml:lang handling. Just drop}
+125 \textcolor{comment}{            ** it in.}
+126 \textcolor{comment}{            */}
+127             dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->owner);
+128         \}
+129 
+130         dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"<D:timeout>"});
+131         \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->timeout == \hyperlink{group__MOD__DAV_gac73dd532e3e6fa30d2e18ba644c5816a}{DAV\_TIMEOUT\_INFINITE}) \{
+132             dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"Infinite"});
+133         \}
+134         \textcolor{keywordflow}{else} \{
+135             time\_t \hyperlink{group__MOD__CACHE_ga33504014e188d5d7506173cc14fb5801}{now} = \hyperlink{pcre_8txt_aafdc0b2481cb13eb2e0183db31aa1c5d}{time}(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+136             
+137             \textcolor{comment}{/*}
+138 \textcolor{comment}{            ** Check if the timeout is not, for any reason, already elapsed.}
+139 \textcolor{comment}{            ** (e.g., because of a large collection, or disk under heavy load...)}
+140 \textcolor{comment}{             */}
+141             \textcolor{keywordflow}{if} (now >= \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->timeout) \{
+142                 dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, \textcolor{stringliteral}{"Second-0"});
+143             \}
+144             \textcolor{keywordflow}{else} \{
+145                 apr\_snprintf(tmp, \textcolor{keyword}{sizeof}(tmp), \textcolor{stringliteral}{"Second-%lu"}, (\textcolor{keywordtype}{long} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})(
+      \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->timeout - now));
+146                 dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}, tmp);
+147             \}
+148         \}
+149 
+150         dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf},
+151                           \textcolor{stringliteral}{"</D:timeout>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR}
+152                           \textcolor{stringliteral}{"<D:locktoken>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR}
+153                           \textcolor{stringliteral}{"<D:href>"});
+154         dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf},
+155                           (*hooks->\hyperlink{structdav__hooks__locks_a2a0a2169e202d658d9afc9e2b8b53238}{format\_locktoken})(p, \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock}->locktoken));
+156         dav\_buffer\_append(p, \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf},
+157                           \textcolor{stringliteral}{"</D:href>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR}
+158                           \textcolor{stringliteral}{"</D:locktoken>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR}
+159                           \textcolor{stringliteral}{"</D:activelock>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+160     \}
+161 
+162     \textcolor{keywordflow}{return} \hyperlink{group__MOD__DAV_gae1a94d2dbbb7065be386af579bdbe312}{pbuf}->\hyperlink{structdav__buffer_ab55f9f7e74cadc2abbc7f4fc99090f01}{buf};
+163 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{util__lock_8c_a814f27f5b49e60ccbab42f6d7e9ec83b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{util\+\_\+lock.\+c@{util\+\_\+lock.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+lock.\+c@{util\+\_\+lock.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(dav\+\_\+error $\ast$)}{DAV_DECLARE(dav_error *)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf dav\+\_\+error} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__lock_8c_a6cf889c691920d48451a89dc46fef863}{}\label{util__lock_8c_a6cf889c691920d48451a89dc46fef863}
+
+\begin{DoxyCode}
+175 \{
+176     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p} = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool};
+177     \hyperlink{structdav__error}{dav\_error} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+178     \hyperlink{structapr__xml__elem}{apr\_xml\_elem} *child;
+179     \hyperlink{structdav__lock}{dav\_lock} *\hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock};
+180 
+181     \textcolor{keywordflow}{if} (!dav\_validate\_root(\hyperlink{group__MOD__DAV_gab79aad8aa27988a0e86b9397d43541e8}{doc}, \textcolor{stringliteral}{"lockinfo"})) \{
+182         \textcolor{keywordflow}{return} dav\_new\_error(p, \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST}, 0, 0,
+183                              \textcolor{stringliteral}{"The request body contains an unexpected "}
+184                              \textcolor{stringliteral}{"XML root element."});
+185     \}
+186 
+187     \textcolor{keywordflow}{if} ((err = (*\hyperlink{group__MOD__DAV_ga4d2e2ae951dbf7731ef129422cb95674}{lockdb}->\hyperlink{structdav__resource_a68b6668d61d787457251783e1caf4f12}{hooks}->create\_lock)(\hyperlink{group__MOD__DAV_ga4d2e2ae951dbf7731ef129422cb95674}{lockdb}, \hyperlink{group__MOD__DAV_gace5ccd456846e6c0fdd4da4136bd9a44}{resource},
+188                                              &lock)) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+189         \textcolor{keywordflow}{return} dav\_push\_error(p, err->\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status}, 0,
+190                               \textcolor{stringliteral}{"Could not parse the lockinfo due to an "}
+191                               \textcolor{stringliteral}{"internal problem creating a lock structure."},
+192                               err);
+193     \}
+194 
+195     lock->\hyperlink{structdav__lock_a5bb85bc71ec6944b0f93c9b7b80877ae}{depth} = dav\_get\_depth(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__MOD__DAV_ga72b95fe139d3f6c6eeceed598b721ce1}{DAV\_INFINITY});
+196     \textcolor{keywordflow}{if} (lock->\hyperlink{structdav__lock_a5bb85bc71ec6944b0f93c9b7b80877ae}{depth} == -1) \{
+197         \textcolor{keywordflow}{return} dav\_new\_error(p, \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{HTTP\_BAD\_REQUEST}, 0, 0,
+198                              \textcolor{stringliteral}{"An invalid Depth header was specified."});
+199     \}
+200     lock->\hyperlink{structdav__lock_a03cbe5184a1fb4a732c41180dee9f669}{timeout} = dav\_get\_timeout(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+201 
+202     \textcolor{comment}{/* Parse elements in the XML body */}
+203     \textcolor{keywordflow}{for} (child = \hyperlink{group__MOD__DAV_gab79aad8aa27988a0e86b9397d43541e8}{doc}->root->first\_child; child; child = child->\hyperlink{structapr__xml__elem_a8687253d504b1c1363c47117611042ac}{next}) \{
+204         \textcolor{keywordflow}{if} (strcmp(child->\hyperlink{structapr__xml__elem_a5b2fb684a9cfb244f88ad88f539fe3d6}{name}, \textcolor{stringliteral}{"locktype"}) == 0
+205             && child->\hyperlink{structapr__xml__elem_a620a28337f36592d4cb1f6dd3d2e97e0}{first\_child}
+206             && lock->\hyperlink{structdav__lock_a4aa3e9701a82c81261524a82dc6e7416}{type} == \hyperlink{group__MOD__DAV_gga9089e677b6d1b25daccbc1efa484a829a599e4abedd7d53d6d448fc769698af4f}{DAV\_LOCKTYPE\_UNKNOWN}) \{
+207             \textcolor{keywordflow}{if} (strcmp(child->\hyperlink{structapr__xml__elem_a620a28337f36592d4cb1f6dd3d2e97e0}{first\_child}->\hyperlink{structapr__xml__elem_a5b2fb684a9cfb244f88ad88f539fe3d6}{name}, \textcolor{stringliteral}{"write"}) == 0) \{
+208                 lock->\hyperlink{structdav__lock_a4aa3e9701a82c81261524a82dc6e7416}{type} = \hyperlink{group__MOD__DAV_gga9089e677b6d1b25daccbc1efa484a829ad71440467fd4e5e5268f2fddbe658819}{DAV\_LOCKTYPE\_WRITE};
+209                 \textcolor{keywordflow}{continue};
+210             \}
+211         \}
+212         \textcolor{keywordflow}{if} (strcmp(child->\hyperlink{structapr__xml__elem_a5b2fb684a9cfb244f88ad88f539fe3d6}{name}, \textcolor{stringliteral}{"lockscope"}) == 0
+213             && child->\hyperlink{structapr__xml__elem_a620a28337f36592d4cb1f6dd3d2e97e0}{first\_child}
+214             && lock->\hyperlink{structdav__lock_a8ba66b35529c414fed105e134f14ee3d}{scope} == \hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88a3e019b5ebe87778ed144aad7cfc9d2e7}{DAV\_LOCKSCOPE\_UNKNOWN}) \{
+215             \textcolor{keywordflow}{if} (strcmp(child->\hyperlink{structapr__xml__elem_a620a28337f36592d4cb1f6dd3d2e97e0}{first\_child}->\hyperlink{structapr__xml__elem_a5b2fb684a9cfb244f88ad88f539fe3d6}{name}, \textcolor{stringliteral}{"exclusive"}) == 0)
+216                 lock->\hyperlink{structdav__lock_a8ba66b35529c414fed105e134f14ee3d}{scope} = \hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88aeb6d70b4e2b1c2968b4bff039c79d43c}{DAV\_LOCKSCOPE\_EXCLUSIVE};
+217             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(child->\hyperlink{structapr__xml__elem_a620a28337f36592d4cb1f6dd3d2e97e0}{first\_child}->\hyperlink{structapr__xml__elem_a5b2fb684a9cfb244f88ad88f539fe3d6}{name}, \textcolor{stringliteral}{"shared"}) == 0)
+218                 lock->\hyperlink{structdav__lock_a8ba66b35529c414fed105e134f14ee3d}{scope} = \hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88a9961b30fb47aa623dc82f41f979d6912}{DAV\_LOCKSCOPE\_SHARED};
+219             \textcolor{keywordflow}{if} (lock->\hyperlink{structdav__lock_a8ba66b35529c414fed105e134f14ee3d}{scope} != \hyperlink{group__MOD__DAV_gga4840019bf9343c4c1a95befb97b12a88a3e019b5ebe87778ed144aad7cfc9d2e7}{DAV\_LOCKSCOPE\_UNKNOWN})
+220                 \textcolor{keywordflow}{continue};
+221         \}
+222 
+223         \textcolor{keywordflow}{if} (strcmp(child->\hyperlink{structapr__xml__elem_a5b2fb684a9cfb244f88ad88f539fe3d6}{name}, \textcolor{stringliteral}{"owner"}) == 0 && lock->\hyperlink{structdav__lock_ae78ed4ddbc46974c039442c376f84167}{owner} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+224             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APR__Util__XML_ga6f353ddc97cf6dc93417f58016afe82c}{text};
+225 
+226             \textcolor{comment}{/* quote all the values in the <DAV:owner> element */}
+227             apr\_xml\_quote\_elem(p, child);
+228 
+229             \textcolor{comment}{/*}
+230 \textcolor{comment}{            ** Store a full <DAV:owner> element with namespace definitions}
+231 \textcolor{comment}{            ** and an xml:lang definition, if applicable.}
+232 \textcolor{comment}{            */}
+233             apr\_xml\_to\_text(p, child, \hyperlink{group__APR__Util__XML_ga7b2cd4c48940cd95a56ace294a94d938}{APR\_XML\_X2T\_FULL\_NS\_LANG}, 
+      \hyperlink{group__MOD__DAV_gab79aad8aa27988a0e86b9397d43541e8}{doc}->namespaces,
+234                             \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, &text, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+235             lock->\hyperlink{structdav__lock_ae78ed4ddbc46974c039442c376f84167}{owner} = \hyperlink{group__APR__Util__XML_ga6f353ddc97cf6dc93417f58016afe82c}{text};
+236 
+237             \textcolor{keywordflow}{continue};
+238         \}
+239 
+240         \textcolor{keywordflow}{return} dav\_new\_error(p, \hyperlink{group__HTTP__Status_ga2861af5b328c5c8209dbd3a7147e9727}{HTTP\_PRECONDITION\_FAILED}, 0, 0,
+241                              apr\_psprintf(p,
+242                                          \textcolor{stringliteral}{"The server cannot satisfy the "}
+243                                          \textcolor{stringliteral}{"LOCK request due to an unknown XML "}
+244                                          \textcolor{stringliteral}{"element (\(\backslash\)"%s\(\backslash\)") within the "}
+245                                          \textcolor{stringliteral}{"DAV:lockinfo element."},
+246                                          child->\hyperlink{structapr__xml__elem_a5b2fb684a9cfb244f88ad88f539fe3d6}{name}));
+247     \}
+248 
+249     *\hyperlink{group__MOD__DAV_gab4436a0928746b4d531ca686d2a0c0bf}{lock\_request} = \hyperlink{group__APR__Util__RMM_ga0353fe7d0bd33c38d9a7a57a73b6407e}{lock};
+250     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+251 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{util__lock_8c_a6cf889c691920d48451a89dc46fef863_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{util\+\_\+lock.\+c@{util\+\_\+lock.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!util\+\_\+lock.\+c@{util\+\_\+lock.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{DAV_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{util__lock_8c_afe2f14122c74bb061f2f1f6545627af0}{}\label{util__lock_8c_afe2f14122c74bb061f2f1f6545627af0}
+
+\begin{DoxyCode}
+499 \{
+500     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+501     \hyperlink{structdav__lockdb}{dav\_lockdb} *\hyperlink{group__MOD__DAV_ga4d2e2ae951dbf7731ef129422cb95674}{lockdb};
+502     \textcolor{keyword}{const} \hyperlink{structdav__resource}{dav\_resource} *lock\_resource = \hyperlink{group__MOD__DAV_gace5ccd456846e6c0fdd4da4136bd9a44}{resource};
+503     \textcolor{keyword}{const} \hyperlink{structdav__hooks__locks}{dav\_hooks\_locks} *\hyperlink{group__MOD__DAV_ga2f89c7cfd67d24769756d6d2df79bf5c}{hooks} = \hyperlink{group__MOD__DAV_ga0300526f19a870f40f3827266111add5}{DAV\_GET\_HOOKS\_LOCKS}(
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r});
+504     \textcolor{keyword}{const} \hyperlink{structdav__hooks__repository}{dav\_hooks\_repository} *repos\_hooks = \hyperlink{group__MOD__DAV_gace5ccd456846e6c0fdd4da4136bd9a44}{resource}->
+      \hyperlink{structdav__resource_a68b6668d61d787457251783e1caf4f12}{hooks};
+505     \hyperlink{structdav__walker__ctx}{dav\_walker\_ctx} \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx} = \{ \{ 0 \} \};
+506     \hyperlink{structdav__response}{dav\_response} *multi\_status;
+507     \hyperlink{structdav__error}{dav\_error} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+508 
+509     \textcolor{comment}{/* If no locks provider, then there is nothing to unlock. */}
+510     \textcolor{keywordflow}{if} (hooks == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+511         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+512     \}
+513 
+514     \textcolor{comment}{/* 2518 requires the entire lock to be removed if resource/locktoken}
+515 \textcolor{comment}{     * point to an indirect lock.  We need resource of the \_direct\_}
+516 \textcolor{comment}{     * lock in order to walk down the tree and remove the locks.  So,}
+517 \textcolor{comment}{     * If locktoken != null\_locktoken,}
+518 \textcolor{comment}{     *    Walk up the resource hierarchy until we see a direct lock.}
+519 \textcolor{comment}{     *    Or, we could get the direct lock's db/key, pick out the URL}
+520 \textcolor{comment}{     *    and do a subrequest.  I think walking up is faster and will work}
+521 \textcolor{comment}{     *    all the time.}
+522 \textcolor{comment}{     * Else}
+523 \textcolor{comment}{     *    Just start removing all locks at and below resource.}
+524 \textcolor{comment}{     */}
+525 
+526     \textcolor{keywordflow}{if} ((err = (*hooks->\hyperlink{structdav__hooks__locks_a84b994d542610dace4ae1fe42126d65a}{open\_lockdb})(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, 0, 1, &lockdb)) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+527         \textcolor{comment}{/* ### return err! maybe add a higher-level desc */}
+528         \textcolor{comment}{/* ### map result to something nice; log an error */}
+529         \textcolor{keywordflow}{return} \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{HTTP\_INTERNAL\_SERVER\_ERROR};
+530     \}
+531 
+532     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gaa2478c643fbd5d72dc6c31696dfc6a03}{locktoken} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}
+533         && (err = dav\_get\_direct\_resource(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, lockdb,
+534                                           \hyperlink{group__MOD__DAV_gaa2478c643fbd5d72dc6c31696dfc6a03}{locktoken}, \hyperlink{group__MOD__DAV_gace5ccd456846e6c0fdd4da4136bd9a44}{resource},
+535                                           &lock\_resource)) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+536         \textcolor{comment}{/* ### add a higher-level desc? */}
+537         \textcolor{comment}{/* ### should return err! */}
+538         \textcolor{keywordflow}{return} err->\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status};
+539     \}
+540 
+541     \textcolor{comment}{/* At this point, lock\_resource/locktoken refers to a direct lock (key), ie}
+542 \textcolor{comment}{     * the root of a depth > 0 lock, or locktoken is null.}
+543 \textcolor{comment}{     */}
+544     ctx.\hyperlink{structdav__walker__ctx_a0139e9bc9666780fd522efd2b48fd599}{w}.\hyperlink{structdav__walk__params_a10c05b514a19d58e7a2874db19b97663}{walk\_type} = \hyperlink{mod__dav_8h_af880dad2a6a3faa599e31adb2505d9f9}{DAV\_WALKTYPE\_NORMAL} | 
+      \hyperlink{mod__dav_8h_adfdb6aec1afd2b4928f382f848fe6bdd}{DAV\_WALKTYPE\_LOCKNULL};
+545     ctx.\hyperlink{structdav__walker__ctx_a0139e9bc9666780fd522efd2b48fd599}{w}.\hyperlink{structdav__walk__params_a3a2101d369ce35dba3330205375d871f}{func} = dav\_unlock\_walker;
+546     ctx.\hyperlink{structdav__walker__ctx_a0139e9bc9666780fd522efd2b48fd599}{w}.\hyperlink{structdav__walk__params_a476b879ce49370324a3b150f2bfa77ea}{walk\_ctx} = &\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx};
+547     ctx.\hyperlink{structdav__walker__ctx_a0139e9bc9666780fd522efd2b48fd599}{w}.\hyperlink{structdav__walk__params_a510a9eb72f64d77f780f3a5b83e73165}{pool} = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool};
+548     ctx.\hyperlink{structdav__walker__ctx_a0139e9bc9666780fd522efd2b48fd599}{w}.\hyperlink{structdav__walk__params_a42b1e5b5b1a86ded12015260dc28ce89}{root} = lock\_resource;
+549     ctx.\hyperlink{structdav__walker__ctx_a0139e9bc9666780fd522efd2b48fd599}{w}.\hyperlink{structdav__walk__params_a2e861fbd5fbcc684d61d464a7186c906}{lockdb} = \hyperlink{group__MOD__DAV_ga4d2e2ae951dbf7731ef129422cb95674}{lockdb};
+550 
+551     ctx.\hyperlink{structdav__walker__ctx_af55712be4c33037660ba0eb114448f40}{r} = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r};
+552     ctx.\hyperlink{structdav__walker__ctx_a1f3340d6f2109b48955872ad9437309c}{locktoken} = \hyperlink{group__MOD__DAV_gaa2478c643fbd5d72dc6c31696dfc6a03}{locktoken};
+553 
+554     err = (*repos\_hooks->\hyperlink{structdav__hooks__repository_a2b96b1b50859933db39ec1831656e006}{walk})(&ctx.\hyperlink{structdav__walker__ctx_a0139e9bc9666780fd522efd2b48fd599}{w}, \hyperlink{group__MOD__DAV_ga72b95fe139d3f6c6eeceed598b721ce1}{DAV\_INFINITY}, &multi\_status);
+555 
+556     \textcolor{comment}{/* ### fix this! */}
+557     \textcolor{comment}{/* ### do something with multi\_status */}
+558     result = err == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} ? \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK} : err->\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status};
+559 
+560     (*hooks->\hyperlink{structdav__hooks__locks_a24228d41a138f1eab1252ea3cc6e927d}{close\_lockdb})(lockdb);
+561 
+562     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_ga9f5959dd76d5c83e775dcf44de684686}{result};
+563 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{util__lock_8c_afe2f14122c74bb061f2f1f6545627af0_cgraph}
+\end{center}
+\end{figure}
+
+

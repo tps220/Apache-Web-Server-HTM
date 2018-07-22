@@ -1,0 +1,70 @@
+\hypertarget{globalmutexchild_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/test/globalmutexchild.c File Reference}
+\label{globalmutexchild_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/globalmutexchild.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/test/globalmutexchild.\+c}}
+{\ttfamily \#include \char`\"{}testglobalmutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+global\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+Include dependency graph for globalmutexchild.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{globalmutexchild_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{globalmutexchild_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{globalmutexchild.\+c@{globalmutexchild.\+c}!main@{main}}
+\index{main@{main}!globalmutexchild.\+c@{globalmutexchild.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{globalmutexchild_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{globalmutexchild_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+31 \{
+32     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+33     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0;
+34     \hyperlink{group__apr__proc__mutex_ga75dd95a48a1e855a87b509b522746ed4}{apr\_lockmech\_e} \hyperlink{group__APR__GlobalMutex_ga1e2bd4bf5e9584b52b5fc7d60cc52cb3}{mech};
+35     \hyperlink{structapr__global__mutex__t}{apr\_global\_mutex\_t} *global\_lock;
+36     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+37 
+38     apr\_initialize();
+39     atexit(apr\_terminate);
+40     
+41     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&p, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+42     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} >= 2) \{
+43         mech = (\hyperlink{group__apr__proc__mutex_ga75dd95a48a1e855a87b509b522746ed4}{apr\_lockmech\_e})apr\_strtoi64(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1], \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 0);
+44     \}
+45     \textcolor{keywordflow}{else} \{
+46         mech = \hyperlink{group__apr__proc__mutex_gga75dd95a48a1e855a87b509b522746ed4ae91fb435c45216bcf84f506db99d0f19}{APR\_LOCK\_DEFAULT};
+47     \}
+48     rv = apr\_global\_mutex\_create(&global\_lock, \hyperlink{testglobalmutex_8h_a869f3a387bf2529a5fdba260a82dc1d7}{LOCKNAME}, mech, p);
+49     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+50         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(-rv);
+51     \}
+52     apr\_global\_mutex\_child\_init(&global\_lock, \hyperlink{testglobalmutex_8h_a869f3a387bf2529a5fdba260a82dc1d7}{LOCKNAME}, p);
+53     
+54     \textcolor{keywordflow}{while} (1) \{
+55         apr\_global\_mutex\_lock(global\_lock);
+56         \textcolor{keywordflow}{if} (i == \hyperlink{testglobalmutex_8h_acd517c6f195c75b9dd0f3aad65326f3b}{MAX\_ITER}) \{
+57             apr\_global\_mutex\_unlock(global\_lock);
+58             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(i);
+59         \}
+60         i++;
+61         apr\_global\_mutex\_unlock(global\_lock);
+62     \}
+63     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(0);
+64 \}
+\end{DoxyCode}

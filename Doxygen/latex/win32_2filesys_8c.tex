@@ -1,0 +1,190 @@
+\hypertarget{win32_2filesys_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/file\+\_\+io/win32/filesys.c File Reference}
+\label{win32_2filesys_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/win32/filesys.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/file\+\_\+io/win32/filesys.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+Include dependency graph for filesys.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{win32_2filesys_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{win32_2filesys_8c_ad1c1970bf09bf11518b42a273adf1b01}{filepath\+\_\+root\+\_\+test} (char $\ast$\hyperlink{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{path}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{win32_2filesys_8c_aeb540200297b8586379f9508874d10eb}{filepath\+\_\+drive\+\_\+get} (char $\ast$$\ast$\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}, char drive, \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\+\_\+int32\+\_\+t} \hyperlink{pcre_8txt_ad7a10cd81a384ff727296d05bb827806}{flags}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{win32_2filesys_8c_a5db34f7c27906e8c7d819e22213b3226}{filepath\+\_\+root\+\_\+case} (char $\ast$$\ast$\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}, char $\ast$root, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+\hyperlink{group__apr__allocator_ga9cb19a118179bbd8625eacfec66a9ab8}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char \hyperlink{win32_2filesys_8c_a04deeaa07c9e9d35f6bce20d36d9515f}{apr\+\_\+c\+\_\+is\+\_\+fnchar} \mbox{[}256\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{win32/filesys.\+c@{win32/filesys.\+c}!filepath\+\_\+drive\+\_\+get@{filepath\+\_\+drive\+\_\+get}}
+\index{filepath\+\_\+drive\+\_\+get@{filepath\+\_\+drive\+\_\+get}!win32/filesys.\+c@{win32/filesys.\+c}}
+\subsubsection[{\texorpdfstring{filepath\+\_\+drive\+\_\+get(char $\ast$$\ast$rootpath, char drive, apr\+\_\+int32\+\_\+t flags, apr\+\_\+pool\+\_\+t $\ast$p)}{filepath_drive_get(char **rootpath, char drive, apr_int32_t flags, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} filepath\+\_\+drive\+\_\+get (
+\begin{DoxyParamCaption}
+\item[{char $\ast$$\ast$}]{rootpath, }
+\item[{char}]{drive, }
+\item[{{\bf apr\+\_\+int32\+\_\+t}}]{flags, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{win32_2filesys_8c_aeb540200297b8586379f9508874d10eb}{}\label{win32_2filesys_8c_aeb540200297b8586379f9508874d10eb}
+
+\begin{DoxyCode}
+90 \{
+91     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path}[APR\_PATH\_MAX];
+92 \textcolor{preprocessor}{#if APR\_HAS\_UNICODE\_FS}
+93     \hyperlink{win32_2apr__arch__misc_8h_a8c631486790f65bd87ed0623a25bdd3d}{IF\_WIN\_OS\_IS\_UNICODE}
+94     \{
+95         \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} *\hyperlink{perltest_8txt_a832f3364a14e5d2ec955e936dab888e6}{ignored};
+96         \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} wdrive[8];
+97         \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} wpath[APR\_PATH\_MAX];
+98         \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+99         \textcolor{comment}{/* ???: This needs review, apparently "\(\backslash\)\(\backslash\)?\(\backslash\)d:." returns "\(\backslash\)\(\backslash\)?\(\backslash\)d:" }
+100 \textcolor{comment}{         * as if that is useful for anything.}
+101 \textcolor{comment}{         */}
+102         wcscpy(wdrive, \hyperlink{mod__lua_8h_a62f94dfc0036bec0c14106c2f15caf3e}{L}\textcolor{stringliteral}{"D:."});
+103         wdrive[0] = (\hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t})(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char})drive;
+104         \textcolor{keywordflow}{if} (!GetFullPathNameW(wdrive, \textcolor{keyword}{sizeof}(wpath) / \textcolor{keyword}{sizeof}(\hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t}), wpath, &ignored))
+105             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_gaa76e122da00af0ce2e8c8d7ff538bdfa}{apr\_get\_os\_error}();
+106         \textcolor{keywordflow}{if} ((rv = unicode\_to\_utf8\_path(path, \textcolor{keyword}{sizeof}(path), wpath)))
+107             \textcolor{keywordflow}{return} rv;
+108     \}
+109 \textcolor{preprocessor}{#endif}
+110 \textcolor{preprocessor}{#if APR\_HAS\_ANSI\_FS}
+111     \hyperlink{win32_2apr__arch__misc_8h_a2d1423da7a6a46da1276017c8140be22}{ELSE\_WIN\_OS\_IS\_ANSI}
+112     \{
+113         \textcolor{keywordtype}{char} *\hyperlink{perltest_8txt_a832f3364a14e5d2ec955e936dab888e6}{ignored};
+114         \textcolor{keywordtype}{char} drivestr[4];
+115         drivestr[0] = drive;
+116         drivestr[1] = \textcolor{charliteral}{':'};
+117         drivestr[2] = \textcolor{charliteral}{'.'};;
+118         drivestr[3] = \textcolor{charliteral}{'\(\backslash\)0'};
+119         \textcolor{keywordflow}{if} (!GetFullPathName(drivestr, \textcolor{keyword}{sizeof}(path), path, &ignored))
+120             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_gaa76e122da00af0ce2e8c8d7ff538bdfa}{apr\_get\_os\_error}();
+121     \}
+122 \textcolor{preprocessor}{#endif}
+123     \textcolor{keywordflow}{if} (!(\hyperlink{group__AP__EXPR_gad7a10cd81a384ff727296d05bb827806}{flags} & \hyperlink{group__apr__filepath_ga2d72ade2cada76d2fa8af3fe4d8fb1de}{APR\_FILEPATH\_NATIVE})) \{
+124         \textcolor{keywordflow}{for} (*\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath} = path; **\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}; ++*\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath}) \{
+125             \textcolor{keywordflow}{if} (**\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath} == \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'})
+126                 **\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath} = \textcolor{charliteral}{'/'};
+127         \}
+128     \}
+129     *\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath} = apr\_pstrdup(p, path);
+130     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+131 \}
+\end{DoxyCode}
+\index{win32/filesys.\+c@{win32/filesys.\+c}!filepath\+\_\+root\+\_\+case@{filepath\+\_\+root\+\_\+case}}
+\index{filepath\+\_\+root\+\_\+case@{filepath\+\_\+root\+\_\+case}!win32/filesys.\+c@{win32/filesys.\+c}}
+\subsubsection[{\texorpdfstring{filepath\+\_\+root\+\_\+case(char $\ast$$\ast$rootpath, char $\ast$root, apr\+\_\+pool\+\_\+t $\ast$p)}{filepath_root_case(char **rootpath, char *root, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} filepath\+\_\+root\+\_\+case (
+\begin{DoxyParamCaption}
+\item[{char $\ast$$\ast$}]{rootpath, }
+\item[{char $\ast$}]{root, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{win32_2filesys_8c_a5db34f7c27906e8c7d819e22213b3226}{}\label{win32_2filesys_8c_a5db34f7c27906e8c7d819e22213b3226}
+
+\begin{DoxyCode}
+135 \{
+136 \textcolor{preprocessor}{#if APR\_HAS\_UNICODE\_FS}
+137     \hyperlink{win32_2apr__arch__misc_8h_a8c631486790f65bd87ed0623a25bdd3d}{IF\_WIN\_OS\_IS\_UNICODE}
+138     \{
+139         \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} *\hyperlink{perltest_8txt_a832f3364a14e5d2ec955e936dab888e6}{ignored};
+140         \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} wpath[APR\_PATH\_MAX];
+141         \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+142         \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} wroot[APR\_PATH\_MAX];
+143         \textcolor{comment}{/* ???: This needs review, apparently "\(\backslash\)\(\backslash\)?\(\backslash\)d:." returns "\(\backslash\)\(\backslash\)?\(\backslash\)d:" }
+144 \textcolor{comment}{         * as if that is useful for anything.}
+145 \textcolor{comment}{         */}
+146         \textcolor{keywordflow}{if} ((rv = utf8\_to\_unicode\_path(wroot, \textcolor{keyword}{sizeof}(wroot) 
+147                                             / \textcolor{keyword}{sizeof}(\hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t}), root)))
+148             \textcolor{keywordflow}{return} rv;
+149         \textcolor{keywordflow}{if} (!GetFullPathNameW(wroot, \textcolor{keyword}{sizeof}(wpath) / \textcolor{keyword}{sizeof}(\hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t}), wpath, &ignored))
+150             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_gaa76e122da00af0ce2e8c8d7ff538bdfa}{apr\_get\_os\_error}();
+151 
+152         \textcolor{comment}{/* Borrow wroot as a char buffer (twice as big as necessary) }
+153 \textcolor{comment}{         */}
+154         \textcolor{keywordflow}{if} ((rv = unicode\_to\_utf8\_path((\textcolor{keywordtype}{char}*)wroot, \textcolor{keyword}{sizeof}(wroot), wpath)))
+155             \textcolor{keywordflow}{return} rv;
+156         *\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath} = apr\_pstrdup(p, (\textcolor{keywordtype}{char}*)wroot);
+157     \}
+158 \textcolor{preprocessor}{#endif}
+159 \textcolor{preprocessor}{#if APR\_HAS\_ANSI\_FS}
+160     \hyperlink{win32_2apr__arch__misc_8h_a2d1423da7a6a46da1276017c8140be22}{ELSE\_WIN\_OS\_IS\_ANSI}
+161     \{
+162         \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path}[APR\_PATH\_MAX];
+163         \textcolor{keywordtype}{char} *\hyperlink{perltest_8txt_a832f3364a14e5d2ec955e936dab888e6}{ignored};
+164         \textcolor{keywordflow}{if} (!GetFullPathName(root, \textcolor{keyword}{sizeof}(path), path, &ignored))
+165             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_gaa76e122da00af0ce2e8c8d7ff538bdfa}{apr\_get\_os\_error}();
+166         *\hyperlink{group__apr__filepath_ga5e93c5b47952eec88fe4251b4f1a228f}{rootpath} = apr\_pstrdup(p, path);
+167     \}
+168 \textcolor{preprocessor}{#endif}
+169     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+170 \}
+\end{DoxyCode}
+\index{win32/filesys.\+c@{win32/filesys.\+c}!filepath\+\_\+root\+\_\+test@{filepath\+\_\+root\+\_\+test}}
+\index{filepath\+\_\+root\+\_\+test@{filepath\+\_\+root\+\_\+test}!win32/filesys.\+c@{win32/filesys.\+c}}
+\subsubsection[{\texorpdfstring{filepath\+\_\+root\+\_\+test(char $\ast$path, apr\+\_\+pool\+\_\+t $\ast$p)}{filepath_root_test(char *path, apr_pool_t *p)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} filepath\+\_\+root\+\_\+test (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{path, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\hypertarget{win32_2filesys_8c_ad1c1970bf09bf11518b42a273adf1b01}{}\label{win32_2filesys_8c_ad1c1970bf09bf11518b42a273adf1b01}
+
+\begin{DoxyCode}
+67 \{
+68     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+69 \textcolor{preprocessor}{#if APR\_HAS\_UNICODE\_FS}
+70     \textcolor{keywordflow}{if} (\hyperlink{win32_2apr__arch__misc_8h_a6f3751edc39de5f80b87c6ec5ebe0a07}{apr\_os\_level} >= \hyperlink{win32_2apr__arch__misc_8h_a7d104c1993f4306484d5fc6795257402a0b489165a9ea56e1b242a8e2d5882a18}{APR\_WIN\_NT})
+71     \{
+72         \hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t} wpath[APR\_PATH\_MAX];
+73         \textcolor{keywordflow}{if} ((rv = utf8\_to\_unicode\_path(wpath, \textcolor{keyword}{sizeof}(wpath) 
+74                                             / \textcolor{keyword}{sizeof}(\hyperlink{apr__arch__utf8_8h_a72c93c6f539bceb60f263635adeb71b6}{apr\_wchar\_t}), 
+      \hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path})))
+75             \textcolor{keywordflow}{return} rv;
+76         rv = GetDriveTypeW(wpath);
+77     \}
+78     \textcolor{keywordflow}{else}
+79 \textcolor{preprocessor}{#endif}
+80         rv = GetDriveType(\hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path});
+81 
+82     \textcolor{keywordflow}{if} (rv == DRIVE\_UNKNOWN || rv == DRIVE\_NO\_ROOT\_DIR)
+83         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga1731292eb3e3cdc801d3bf0b09cd8da7}{APR\_EBADPATH};
+84     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+85 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{win32/filesys.\+c@{win32/filesys.\+c}!apr\+\_\+c\+\_\+is\+\_\+fnchar@{apr\+\_\+c\+\_\+is\+\_\+fnchar}}
+\index{apr\+\_\+c\+\_\+is\+\_\+fnchar@{apr\+\_\+c\+\_\+is\+\_\+fnchar}!win32/filesys.\+c@{win32/filesys.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+c\+\_\+is\+\_\+fnchar}{apr_c_is_fnchar}}]{\setlength{\rightskip}{0pt plus 5cm}const char apr\+\_\+c\+\_\+is\+\_\+fnchar\mbox{[}256\mbox{]}}\hypertarget{win32_2filesys_8c_a04deeaa07c9e9d35f6bce20d36d9515f}{}\label{win32_2filesys_8c_a04deeaa07c9e9d35f6bce20d36d9515f}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=
+\{
+    0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+ 
+    1,1,2,1,3,3,3,3,3,3,2,1,1,1,1,0, 1,1,1,1,1,1,1,1,1,1,0,3,2,1,2,2,
+ 
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,3,2,3,3,1,
+ 
+    3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,3,2,3,3,1,
+ 
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+\}
+\end{DoxyCode}

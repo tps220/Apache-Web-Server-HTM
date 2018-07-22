@@ -1,0 +1,149 @@
+\hypertarget{mod__headers_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/metadata/mod\+\_\+headers.c File Reference}
+\label{mod__headers_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/metadata/mod\+\_\+headers.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/metadata/mod\+\_\+headers.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+expr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+ssl.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+headers.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__headers_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structformat__tag}{format\+\_\+tag}
+\item 
+struct \hyperlink{structheader__entry}{header\+\_\+entry}
+\item 
+struct \hyperlink{structecho__do}{echo\+\_\+do}
+\item 
+struct \hyperlink{structedit__do}{edit\+\_\+do}
+\item 
+struct \hyperlink{structheaders__conf}{headers\+\_\+conf}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__headers_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef const char $\ast$ \hyperlink{mod__headers_8c_ae5c29e51e20844a185ea6eb7aaef330b}{format\+\_\+tag\+\_\+fn}(\hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, char $\ast$\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72f}{hdr\+\_\+actions} \{ \\*
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa098a2799e109789353f5b82215464d43}{hdr\+\_\+add} = \textquotesingle{}a\textquotesingle{}, 
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa528396f280558878ef8b327ea5007fa2}{hdr\+\_\+set} = \textquotesingle{}s\textquotesingle{}, 
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fafe561784cb6749de442f9df88523e999}{hdr\+\_\+append} = \textquotesingle{}m\textquotesingle{}, 
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa309549bc8309bcdb1664889e5a9d5c1f}{hdr\+\_\+merge} = \textquotesingle{}g\textquotesingle{}, 
+\\*
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fab00c041d3e3ce69c22f834db8f8cf0fc}{hdr\+\_\+unset} = \textquotesingle{}u\textquotesingle{}, 
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fafe88a7e26da7afdcf3c85216082456b2}{hdr\+\_\+echo} = \textquotesingle{}e\textquotesingle{}, 
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72faae045b2ec6216cc6abd157d3bf5f833b}{hdr\+\_\+edit} = \textquotesingle{}r\textquotesingle{}, 
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa486196ff87d204d2d0305677a1b7b443}{hdr\+\_\+edit\+\_\+r} = \textquotesingle{}R\textquotesingle{}, 
+\\*
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa921e49282080a24363485c2b19654271}{hdr\+\_\+setifempty} = \textquotesingle{}i\textquotesingle{}, 
+\hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa3e4a3e6d181be83a4f9c89d2aa8d3bd1}{hdr\+\_\+note} = \textquotesingle{}n\textquotesingle{}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__headers_8c_abfbd64f38024a231a88b138989185e0e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (\hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__headers_8c_a06251e7dea13abe41db78f99f822f817}{headers\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__headers_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__headers_8c_a88a4bf7f483aad3f3945773f3383e713}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!format\+\_\+tag\+\_\+fn@{format\+\_\+tag\+\_\+fn}}
+\index{format\+\_\+tag\+\_\+fn@{format\+\_\+tag\+\_\+fn}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}
+\subsubsection[{\texorpdfstring{format\+\_\+tag\+\_\+fn}{format_tag_fn}}]{\setlength{\rightskip}{0pt plus 5cm}typedef const char$\ast$ format\+\_\+tag\+\_\+fn({\bf request\+\_\+rec} $\ast${\bf r}, char $\ast${\bf a})}\hypertarget{mod__headers_8c_ae5c29e51e20844a185ea6eb7aaef330b}{}\label{mod__headers_8c_ae5c29e51e20844a185ea6eb7aaef330b}
+
+
+\subsection{Enumeration Type Documentation}
+\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+actions@{hdr\+\_\+actions}}
+\index{hdr\+\_\+actions@{hdr\+\_\+actions}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}
+\subsubsection[{\texorpdfstring{hdr\+\_\+actions}{hdr_actions}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf hdr\+\_\+actions}}\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72f}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72f}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{hdr\+\_\+add@{hdr\+\_\+add}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+add@{hdr\+\_\+add}}\item[{\em 
+hdr\+\_\+add\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa098a2799e109789353f5b82215464d43}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa098a2799e109789353f5b82215464d43}
+}]\index{hdr\+\_\+set@{hdr\+\_\+set}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+set@{hdr\+\_\+set}}\item[{\em 
+hdr\+\_\+set\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa528396f280558878ef8b327ea5007fa2}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa528396f280558878ef8b327ea5007fa2}
+}]\index{hdr\+\_\+append@{hdr\+\_\+append}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+append@{hdr\+\_\+append}}\item[{\em 
+hdr\+\_\+append\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fafe561784cb6749de442f9df88523e999}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fafe561784cb6749de442f9df88523e999}
+}]\index{hdr\+\_\+merge@{hdr\+\_\+merge}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+merge@{hdr\+\_\+merge}}\item[{\em 
+hdr\+\_\+merge\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa309549bc8309bcdb1664889e5a9d5c1f}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa309549bc8309bcdb1664889e5a9d5c1f}
+}]\index{hdr\+\_\+unset@{hdr\+\_\+unset}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+unset@{hdr\+\_\+unset}}\item[{\em 
+hdr\+\_\+unset\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fab00c041d3e3ce69c22f834db8f8cf0fc}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fab00c041d3e3ce69c22f834db8f8cf0fc}
+}]\index{hdr\+\_\+echo@{hdr\+\_\+echo}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+echo@{hdr\+\_\+echo}}\item[{\em 
+hdr\+\_\+echo\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fafe88a7e26da7afdcf3c85216082456b2}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fafe88a7e26da7afdcf3c85216082456b2}
+}]\index{hdr\+\_\+edit@{hdr\+\_\+edit}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+edit@{hdr\+\_\+edit}}\item[{\em 
+hdr\+\_\+edit\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72faae045b2ec6216cc6abd157d3bf5f833b}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72faae045b2ec6216cc6abd157d3bf5f833b}
+}]\index{hdr\+\_\+edit\+\_\+r@{hdr\+\_\+edit\+\_\+r}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+edit\+\_\+r@{hdr\+\_\+edit\+\_\+r}}\item[{\em 
+hdr\+\_\+edit\+\_\+r\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa486196ff87d204d2d0305677a1b7b443}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa486196ff87d204d2d0305677a1b7b443}
+}]\index{hdr\+\_\+setifempty@{hdr\+\_\+setifempty}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+setifempty@{hdr\+\_\+setifempty}}\item[{\em 
+hdr\+\_\+setifempty\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa921e49282080a24363485c2b19654271}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa921e49282080a24363485c2b19654271}
+}]\index{hdr\+\_\+note@{hdr\+\_\+note}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!hdr\+\_\+note@{hdr\+\_\+note}}\item[{\em 
+hdr\+\_\+note\hypertarget{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa3e4a3e6d181be83a4f9c89d2aa8d3bd1}{}\label{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa3e4a3e6d181be83a4f9c89d2aa8d3bd1}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+91              \{
+92     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa098a2799e109789353f5b82215464d43}{hdr\_add} = \textcolor{charliteral}{'a'},              \textcolor{comment}{/* add header (could mean multiple hdrs) */}
+93     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa528396f280558878ef8b327ea5007fa2}{hdr\_set} = \textcolor{charliteral}{'s'},              \textcolor{comment}{/* set (replace old value) */}
+94     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fafe561784cb6749de442f9df88523e999}{hdr\_append} = \textcolor{charliteral}{'m'},           \textcolor{comment}{/* append (merge into any old value) */}
+95     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa309549bc8309bcdb1664889e5a9d5c1f}{hdr\_merge} = \textcolor{charliteral}{'g'},            \textcolor{comment}{/* merge (merge, but avoid duplicates) */}
+96     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fab00c041d3e3ce69c22f834db8f8cf0fc}{hdr\_unset} = \textcolor{charliteral}{'u'},            \textcolor{comment}{/* unset header */}
+97     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fafe88a7e26da7afdcf3c85216082456b2}{hdr\_echo} = \textcolor{charliteral}{'e'},             \textcolor{comment}{/* echo headers from request to response */}
+98     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72faae045b2ec6216cc6abd157d3bf5f833b}{hdr\_edit} = \textcolor{charliteral}{'r'},             \textcolor{comment}{/* change value by regexp, match once */}
+99     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa486196ff87d204d2d0305677a1b7b443}{hdr\_edit\_r} = \textcolor{charliteral}{'R'},           \textcolor{comment}{/* change value by regexp, everymatch */}
+100     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa921e49282080a24363485c2b19654271}{hdr\_setifempty} = \textcolor{charliteral}{'i'},       \textcolor{comment}{/* set value if header not already present*/}
+101     \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72fa3e4a3e6d181be83a4f9c89d2aa8d3bd1}{hdr\_note} = \textcolor{charliteral}{'n'}              \textcolor{comment}{/* set value of header in a note */}
+102 \} \hyperlink{mod__headers_8c_a4e939d94f5cdefee38ff352473d7b72f}{hdr\_actions};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(headers)}{AP_DECLARE_MODULE(headers)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{{\bf headers}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__headers_8c_abfbd64f38024a231a88b138989185e0e}{}\label{mod__headers_8c_abfbd64f38024a231a88b138989185e0e}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}!headers\+\_\+module@{headers\+\_\+module}}
+\index{headers\+\_\+module@{headers\+\_\+module}!mod\+\_\+headers.\+c@{mod\+\_\+headers.\+c}}
+\subsubsection[{\texorpdfstring{headers\+\_\+module}{headers_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} headers\+\_\+module}\hypertarget{mod__headers_8c_a06251e7dea13abe41db78f99f822f817}{}\label{mod__headers_8c_a06251e7dea13abe41db78f99f822f817}

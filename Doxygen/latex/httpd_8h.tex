@@ -1,0 +1,642 @@
+\hypertarget{httpd_8h}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/include/httpd.h File Reference}
+\label{httpd_8h}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/include/httpd.\+h@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/include/httpd.\+h}}
+
+
+H\+T\+TP Daemon routines.  
+
+
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mmn.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+release.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+tables.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+pools.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+network\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+poll.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}os.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+regex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+uri.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+Include dependency graph for httpd.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{httpd_8h__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structap__version__t}{ap\+\_\+version\+\_\+t}
+\begin{DoxyCompactList}\small\item\em The numeric version information is broken out into fields within this structure. \end{DoxyCompactList}\item 
+struct \hyperlink{structap__method__list__t}{ap\+\_\+method\+\_\+list\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Structure for handling H\+T\+TP methods. \end{DoxyCompactList}\item 
+struct \hyperlink{structhtaccess__result}{htaccess\+\_\+result}
+\begin{DoxyCompactList}\small\item\em This represents the result of calling htaccess; these are cached for each request. \end{DoxyCompactList}\item 
+struct \hyperlink{structprocess__rec}{process\+\_\+rec}
+\begin{DoxyCompactList}\small\item\em A structure that represents one process. \end{DoxyCompactList}\item 
+struct \hyperlink{structrequest__rec}{request\+\_\+rec}
+\begin{DoxyCompactList}\small\item\em A structure that represents the current request. \end{DoxyCompactList}\item 
+struct \hyperlink{structconn__rec}{conn\+\_\+rec}
+\begin{DoxyCompactList}\small\item\em Structure to store things which are per connection. \end{DoxyCompactList}\item 
+struct \hyperlink{structconn__state__t}{conn\+\_\+state\+\_\+t}
+\begin{DoxyCompactList}\small\item\em A structure to contain connection state information. \end{DoxyCompactList}\item 
+struct \hyperlink{structserver__addr__rec}{server\+\_\+addr\+\_\+rec}
+\begin{DoxyCompactList}\small\item\em A structure to be used for Per-\/vhost config. \end{DoxyCompactList}\item 
+struct \hyperlink{structap__logconf}{ap\+\_\+logconf}
+\item 
+struct \hyperlink{structserver__rec}{server\+\_\+rec}
+\begin{DoxyCompactList}\small\item\em A structure to store information for each virtual server. \end{DoxyCompactList}\item 
+struct \hyperlink{structap__sload__t}{ap\+\_\+sload\+\_\+t}
+\begin{DoxyCompactList}\small\item\em A structure to hold server load params. \end{DoxyCompactList}\item 
+struct \hyperlink{structap__loadavg__t}{ap\+\_\+loadavg\+\_\+t}
+\begin{DoxyCompactList}\small\item\em A structure to hold various server loadavg. \end{DoxyCompactList}\item 
+struct \hyperlink{structap__form__pair__t}{ap\+\_\+form\+\_\+pair\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gafbc041e73ff5e4698c985ea902af7c5a}{D\+O\+C\+U\+M\+E\+N\+T\+\_\+\+L\+O\+C\+A\+T\+I\+ON}~\hyperlink{ap__config__auto_8h_a0bd140f3348de0944514ff605c585016}{H\+T\+T\+P\+D\+\_\+\+R\+O\+OT} \char`\"{}/htdocs\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga7e7af5ed7b4f1713e6bc405b01a31617}{D\+Y\+N\+A\+M\+I\+C\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+M\+IT}~256
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaa01f09b9d40369ba1f14b88005897d5f}{D\+E\+F\+A\+U\+L\+T\+\_\+\+A\+D\+M\+IN}~\char`\"{}\mbox{[}no \hyperlink{pcre_8txt_a50a1f7a1407aa5acc342dab031a6ca50}{address} \hyperlink{pcregrep_8txt_a9dffb3dde41716fc3bef8d0ee982f378}{given}\mbox{]}\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga6a9ad3e96d60dc6c82112be50b73bbb4}{D\+E\+F\+A\+U\+L\+T\+\_\+\+E\+R\+R\+O\+R\+L\+OG}~\char`\"{}logs/error\+\_\+log\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaabffdcb2c80cb7d6221a5e468b8b2b24}{D\+E\+F\+A\+U\+L\+T\+\_\+\+A\+C\+C\+E\+S\+S\+\_\+\+F\+N\+A\+ME}~\char`\"{}.htaccess\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga72c1937b26ce9a87266ca6c802b047a0}{D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+A\+TH}~\char`\"{}/bin\+:/usr/bin\+:/usr/ucb\+:/usr/bsd\+:/usr/local/bin\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaad2dd72565852b91c809cd4685833b17}{D\+E\+F\+A\+U\+L\+T\+\_\+\+T\+I\+M\+E\+O\+UT}~60
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga2cd430599decbe43ab75edf8a23e1466}{D\+E\+F\+A\+U\+L\+T\+\_\+\+K\+E\+E\+P\+A\+L\+I\+V\+E\+\_\+\+T\+I\+M\+E\+O\+UT}~5
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga2155d4b485c3a06e1df1c88596db9f06}{D\+E\+F\+A\+U\+L\+T\+\_\+\+K\+E\+E\+P\+A\+L\+I\+VE}~100
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga085b56b77705764631506c08e928e5d7}{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+L\+I\+NE}~8190
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga8891efcf92c7e9e13bbe541d694340d2}{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+F\+I\+E\+L\+D\+S\+I\+ZE}~8190
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga19ecf472828b0092e2b5c4fb18b604d2}{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+F\+I\+E\+L\+DS}~100
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga0b2e091c0d3f60a24caa44ec2cdb106e}{D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+I\+M\+I\+T\+\_\+\+B\+L\+A\+N\+K\+\_\+\+L\+I\+N\+ES}~10
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaf5ce507d0fcb36e6129cc2aec6cac122}{D\+E\+F\+A\+U\+L\+T\+\_\+\+A\+D\+D\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+C\+H\+A\+R\+S\+E\+T\+\_\+\+N\+A\+ME}~\char`\"{}iso-\/8859-\/1\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga7432aed9e5cf19107a870f71c5bde58a}{A\+P\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+P\+R\+O\+T\+O\+C\+OL}~\char`\"{}H\+T\+TP/1.\+1\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaa4384b5cab4ea8f7508656a8a65f6298}{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+I\+N\+D\+EX}~\char`\"{}index.\+html\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga70618842d5ed94e721b9513714d994e7}{D\+O\+C\+T\+Y\+P\+E\+\_\+\+H\+T\+M\+L\+\_\+2\+\_\+0}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga979c3a0415bdbf6011e4ac998aab20d2}{D\+O\+C\+T\+Y\+P\+E\+\_\+\+H\+T\+M\+L\+\_\+3\+\_\+2}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga1de1c29435101cf2d912b20e2f247f84}{D\+O\+C\+T\+Y\+P\+E\+\_\+\+H\+T\+M\+L\+\_\+4\+\_\+0S}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga774d5c6a0abb4bb9765b73644d7fa0ad}{D\+O\+C\+T\+Y\+P\+E\+\_\+\+H\+T\+M\+L\+\_\+4\+\_\+0T}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gabe311802e6b92d023b0e1ef8bdec62ee}{D\+O\+C\+T\+Y\+P\+E\+\_\+\+H\+T\+M\+L\+\_\+4\+\_\+0F}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga1b747d3a2021b33a60218641dc85a9a3}{D\+O\+C\+T\+Y\+P\+E\+\_\+\+X\+H\+T\+M\+L\+\_\+1\+\_\+0S}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga4b26e40deab9f18d2cbd36d163231430}{D\+O\+C\+T\+Y\+P\+E\+\_\+\+X\+H\+T\+M\+L\+\_\+1\+\_\+0T}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga989caf00bd323a633f5da00ea176c6c5}{D\+O\+C\+T\+Y\+P\+E\+\_\+\+X\+H\+T\+M\+L\+\_\+1\+\_\+0F}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gab48aba3b8935a26d38b88710041a1b6a}{H\+T\+T\+P\+\_\+\+V\+E\+R\+S\+I\+ON}(major,  minor)~(1000$\ast$(major)+(minor))
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga16b14e7e138666eaf8d415a9f27f2768}{H\+T\+T\+P\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+M\+A\+J\+OR}(\hyperlink{pcretest_8txt_a7965c027cf47c0c0e2396d2f8e6b40c3}{number})~((\hyperlink{pcretest_8txt_a7965c027cf47c0c0e2396d2f8e6b40c3}{number})/1000)
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga4f29ee79b19591bbf34147bce2d84b0b}{H\+T\+T\+P\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+M\+I\+N\+OR}(\hyperlink{pcretest_8txt_a7965c027cf47c0c0e2396d2f8e6b40c3}{number})~((\hyperlink{pcretest_8txt_a7965c027cf47c0c0e2396d2f8e6b40c3}{number})\%1000)
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gabc476b8e19df2e50e6759f1832030a7b}{D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+T\+T\+P\+\_\+\+P\+O\+RT}~80
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga88dcc6802211651387bab81dea44468f}{D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+T\+T\+P\+S\+\_\+\+P\+O\+RT}~443
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gae5bc38a44a7c51bef163b8208559f3a1}{ap\+\_\+is\+\_\+default\+\_\+port}(\hyperlink{ab_8c_ab3bdaca3e004f9926a8c2530f1d9e9dc}{port},  \hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~((\hyperlink{ab_8c_ab3bdaca3e004f9926a8c2530f1d9e9dc}{port}) == \hyperlink{group__APACHE__CORE__DAEMON_ga40a8e6df164cf715f55dcddd384d0c26}{ap\+\_\+default\+\_\+port}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}))
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga40a8e6df164cf715f55dcddd384d0c26}{ap\+\_\+default\+\_\+port}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~ap\+\_\+run\+\_\+default\+\_\+port(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga486f75485b725c5c3baaa577409d36f3}{ap\+\_\+http\+\_\+scheme}(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})~ap\+\_\+run\+\_\+http\+\_\+scheme(\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga4fa9aad0e9c7cc2e344b679cdbb2b67d}{M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}~\hyperlink{group__apr__lib_ga0c9dd98f46b90b5bcd4cbf75e252d0da}{H\+U\+G\+E\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga0c9dd98f46b90b5bcd4cbf75e252d0da}{H\+U\+G\+E\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}~8192
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga6be89020c751a112c553c200335a2fff}{A\+P\+\_\+\+I\+O\+B\+U\+F\+S\+I\+ZE}~8192
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga7cc324c99d14a68ba7c8d1aae306a8d8}{A\+P\+\_\+\+M\+A\+X\+\_\+\+R\+E\+G\+\_\+\+M\+A\+T\+CH}~10
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga9eac925b49a5ba9d68f29b6c93e3e1e5}{A\+P\+\_\+\+M\+A\+X\+\_\+\+S\+E\+N\+D\+F\+I\+LE}~16777216  /$\ast$ 2$^\wedge$24 $\ast$/
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga2397a8dff5b05e1856799982519a8c97}{A\+P\+E\+X\+I\+T\+\_\+\+OK}~0x0
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga24875285f74462463d2ba76bc3ff64b8}{A\+P\+E\+X\+I\+T\+\_\+\+I\+N\+IT}~0x2
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gac7e17446142d98480983c42cad11b216}{A\+P\+E\+X\+I\+T\+\_\+\+C\+H\+I\+L\+D\+I\+N\+IT}~0x3
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaa1491b2252978d25f8bc8c5897f5f1b7}{A\+P\+E\+X\+I\+T\+\_\+\+C\+H\+I\+L\+D\+S\+I\+CK}~0x7
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaded5da364cad9d77f9c3dae73bd1d4bf}{A\+P\+E\+X\+I\+T\+\_\+\+C\+H\+I\+L\+D\+F\+A\+T\+AL}~0xf
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gab4a5c9c13f1c0b497077936112e5aae0}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+RE}~\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaf178f9ed5d434562c006bcf49d210b2d}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}~\hyperlink{vhost_8c_a3c3d35fe71135329f5cf444e02610da7}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+N\+O\+N\+S\+TD}
+\item 
+\#define \hyperlink{group__APACHE__APR__STATUS__T_gabc1b4115a47400f6807250f594f7d731}{A\+P\+\_\+\+S\+T\+A\+R\+T\+\_\+\+U\+S\+E\+R\+E\+RR}~(\hyperlink{group__apr__errno_gacd35b2de1e38a1fa4717e38d5e153571}{A\+P\+R\+\_\+\+O\+S\+\_\+\+S\+T\+A\+R\+T\+\_\+\+U\+S\+E\+R\+E\+RR} + 2000)
+\item 
+\#define \hyperlink{group__APACHE__APR__STATUS__T_gaafa0bf786fd2e77e9d0ccd3f14c859d1}{A\+P\+\_\+\+U\+S\+E\+R\+E\+R\+R\+\_\+\+L\+EN}~1000
+\item 
+\#define \hyperlink{group__APACHE__APR__STATUS__T_gab9f17ee05fd266f6293ea11ee9bef1a5}{A\+P\+\_\+\+D\+E\+C\+L\+I\+N\+ED}~(\hyperlink{group__APACHE__APR__STATUS__T_gabc1b4115a47400f6807250f594f7d731}{A\+P\+\_\+\+S\+T\+A\+R\+T\+\_\+\+U\+S\+E\+R\+E\+RR} + 0)
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}~0
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{D\+E\+C\+L\+I\+N\+ED}~-\/1
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gabe6b865c045f3e7c6892ef4f15ff5779}{D\+O\+NE}~-\/2
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gaeb2de2a76ea6728368042cf7a3fcd60c}{S\+U\+S\+P\+E\+N\+D\+ED}~-\/3
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gab6541339293a2dc16d92208f9656ba02}{A\+P\+\_\+\+N\+O\+B\+O\+D\+Y\+\_\+\+W\+R\+O\+TE}~-\/100
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gafafcc328b1e4659b888a331e302c7d43}{A\+P\+\_\+\+N\+O\+B\+O\+D\+Y\+\_\+\+R\+E\+AD}~-\/101
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga571664f1af74affc2b898a892f335b82}{A\+P\+\_\+\+F\+I\+L\+T\+E\+R\+\_\+\+E\+R\+R\+OR}~-\/102
+\item 
+\#define \hyperlink{group__HTTP__Status_ga92c5b6a301e46085a0db6b9d0f36a1ce}{R\+E\+S\+P\+O\+N\+S\+E\+\_\+\+C\+O\+D\+ES}~103
+\item 
+\#define \hyperlink{group__HTTP__Status_ga3c520c5e65c710a1c7bbb1fa79fd3a9d}{H\+T\+T\+P\+\_\+\+C\+O\+N\+T\+I\+N\+UE}~100
+\item 
+\#define \hyperlink{group__HTTP__Status_gaa37bb5670913f3e1920e9271a604d763}{H\+T\+T\+P\+\_\+\+S\+W\+I\+T\+C\+H\+I\+N\+G\+\_\+\+P\+R\+O\+T\+O\+C\+O\+LS}~101
+\item 
+\#define \hyperlink{group__HTTP__Status_gaad76b47755281ea8ba65edc6683be8f9}{H\+T\+T\+P\+\_\+\+P\+R\+O\+C\+E\+S\+S\+I\+NG}~102
+\item 
+\#define \hyperlink{group__HTTP__Status_ga02e6d59009dee759528ec81fc9a8eeff}{H\+T\+T\+P\+\_\+\+OK}~200
+\item 
+\#define \hyperlink{group__HTTP__Status_gac19a79fb4cf575d20efd0633c1669ed9}{H\+T\+T\+P\+\_\+\+C\+R\+E\+A\+T\+ED}~201
+\item 
+\#define \hyperlink{group__HTTP__Status_gad53204f337b45ad77e9a746e434d1817}{H\+T\+T\+P\+\_\+\+A\+C\+C\+E\+P\+T\+ED}~202
+\item 
+\#define \hyperlink{group__HTTP__Status_gadee2fb81c1815ad215a41d304a1873c7}{H\+T\+T\+P\+\_\+\+N\+O\+N\+\_\+\+A\+U\+T\+H\+O\+R\+I\+T\+A\+T\+I\+VE}~203
+\item 
+\#define \hyperlink{group__HTTP__Status_gac5bae07abf22b6f4497500f9daa38bdc}{H\+T\+T\+P\+\_\+\+N\+O\+\_\+\+C\+O\+N\+T\+E\+NT}~204
+\item 
+\#define \hyperlink{group__HTTP__Status_ga425e6d17ace3dc2077df17c484570781}{H\+T\+T\+P\+\_\+\+R\+E\+S\+E\+T\+\_\+\+C\+O\+N\+T\+E\+NT}~205
+\item 
+\#define \hyperlink{group__HTTP__Status_ga9b80719aeec7415ec03e5fc0083f2dc3}{H\+T\+T\+P\+\_\+\+P\+A\+R\+T\+I\+A\+L\+\_\+\+C\+O\+N\+T\+E\+NT}~206
+\item 
+\#define \hyperlink{group__HTTP__Status_ga107ec20470907358953f6259538d45a1}{H\+T\+T\+P\+\_\+\+M\+U\+L\+T\+I\+\_\+\+S\+T\+A\+T\+US}~207
+\item 
+\#define \hyperlink{group__HTTP__Status_ga3fc573d9890dec0d6fdd6ff4fe953fd3}{H\+T\+T\+P\+\_\+\+A\+L\+R\+E\+A\+D\+Y\+\_\+\+R\+E\+P\+O\+R\+T\+ED}~208
+\item 
+\#define \hyperlink{group__HTTP__Status_ga99382ca4f73c90f5806bb289eae7d4fa}{H\+T\+T\+P\+\_\+\+I\+M\+\_\+\+U\+S\+ED}~226
+\item 
+\#define \hyperlink{group__HTTP__Status_ga0020e1d43d11d956809d64654fd6988b}{H\+T\+T\+P\+\_\+\+M\+U\+L\+T\+I\+P\+L\+E\+\_\+\+C\+H\+O\+I\+C\+ES}~300
+\item 
+\#define \hyperlink{group__HTTP__Status_ga9ff5a45ec521f0b2d39a17087b9a60da}{H\+T\+T\+P\+\_\+\+M\+O\+V\+E\+D\+\_\+\+P\+E\+R\+M\+A\+N\+E\+N\+T\+LY}~301
+\item 
+\#define \hyperlink{group__HTTP__Status_ga84d570ec8ad2a734b395141f5c67dc58}{H\+T\+T\+P\+\_\+\+M\+O\+V\+E\+D\+\_\+\+T\+E\+M\+P\+O\+R\+A\+R\+I\+LY}~302
+\item 
+\#define \hyperlink{group__HTTP__Status_ga1a8913a933dfe4d26a328d57fec0fa70}{H\+T\+T\+P\+\_\+\+S\+E\+E\+\_\+\+O\+T\+H\+ER}~303
+\item 
+\#define \hyperlink{group__HTTP__Status_ga4ca0e7d2bc7164156ded3b31e7d51c77}{H\+T\+T\+P\+\_\+\+N\+O\+T\+\_\+\+M\+O\+D\+I\+F\+I\+ED}~304
+\item 
+\#define \hyperlink{group__HTTP__Status_gaea9903a7f87cb6701a1cfb29f04a9cd3}{H\+T\+T\+P\+\_\+\+U\+S\+E\+\_\+\+P\+R\+O\+XY}~305
+\item 
+\#define \hyperlink{group__HTTP__Status_gae6d4ecde2bc6052a3474c3b1592eb712}{H\+T\+T\+P\+\_\+\+T\+E\+M\+P\+O\+R\+A\+R\+Y\+\_\+\+R\+E\+D\+I\+R\+E\+CT}~307
+\item 
+\#define \hyperlink{group__HTTP__Status_ga8b5ce939a6c68f4a9a4c37d205a2eeaa}{H\+T\+T\+P\+\_\+\+P\+E\+R\+M\+A\+N\+E\+N\+T\+\_\+\+R\+E\+D\+I\+R\+E\+CT}~308
+\item 
+\#define \hyperlink{group__HTTP__Status_ga0c1fdbbb10800664989907cbd3a5a023}{H\+T\+T\+P\+\_\+\+B\+A\+D\+\_\+\+R\+E\+Q\+U\+E\+ST}~400
+\item 
+\#define \hyperlink{group__HTTP__Status_gac4cfa4b7a737abff1264ddba3752a2ad}{H\+T\+T\+P\+\_\+\+U\+N\+A\+U\+T\+H\+O\+R\+I\+Z\+ED}~401
+\item 
+\#define \hyperlink{group__HTTP__Status_gac05943d3542b1f3e9d289f3427cea690}{H\+T\+T\+P\+\_\+\+P\+A\+Y\+M\+E\+N\+T\+\_\+\+R\+E\+Q\+U\+I\+R\+ED}~402
+\item 
+\#define \hyperlink{group__HTTP__Status_ga92646f876056a1e5013e0050496dc04d}{H\+T\+T\+P\+\_\+\+F\+O\+R\+B\+I\+D\+D\+EN}~403
+\item 
+\#define \hyperlink{group__HTTP__Status_gabd505b5244bd18ae61c581484b4bc5a0}{H\+T\+T\+P\+\_\+\+N\+O\+T\+\_\+\+F\+O\+U\+ND}~404
+\item 
+\#define \hyperlink{group__HTTP__Status_ga9089f2da2b4b844931500848e2dce01c}{H\+T\+T\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+N\+O\+T\+\_\+\+A\+L\+L\+O\+W\+ED}~405
+\item 
+\#define \hyperlink{group__HTTP__Status_gacb89221da09275b64daddfb415644055}{H\+T\+T\+P\+\_\+\+N\+O\+T\+\_\+\+A\+C\+C\+E\+P\+T\+A\+B\+LE}~406
+\item 
+\#define \hyperlink{group__HTTP__Status_ga23bec441a6233a1b687d48d31d45ea57}{H\+T\+T\+P\+\_\+\+P\+R\+O\+X\+Y\+\_\+\+A\+U\+T\+H\+E\+N\+T\+I\+C\+A\+T\+I\+O\+N\+\_\+\+R\+E\+Q\+U\+I\+R\+ED}~407
+\item 
+\#define \hyperlink{group__HTTP__Status_ga19f05d6acd556bd28c1ffdbb763cf9aa}{H\+T\+T\+P\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+T\+I\+M\+E\+\_\+\+O\+UT}~408
+\item 
+\#define \hyperlink{group__HTTP__Status_gaec883057ad9f0c80b611818dc33bc990}{H\+T\+T\+P\+\_\+\+C\+O\+N\+F\+L\+I\+CT}~409
+\item 
+\#define \hyperlink{group__HTTP__Status_gab4af80c52cccc5b2c287fe12926b5dff}{H\+T\+T\+P\+\_\+\+G\+O\+NE}~410
+\item 
+\#define \hyperlink{group__HTTP__Status_ga19ee29b0b97ea2a09e35ac82f2d4bf73}{H\+T\+T\+P\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+R\+E\+Q\+U\+I\+R\+ED}~411
+\item 
+\#define \hyperlink{group__HTTP__Status_ga2861af5b328c5c8209dbd3a7147e9727}{H\+T\+T\+P\+\_\+\+P\+R\+E\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+F\+A\+I\+L\+ED}~412
+\item 
+\#define \hyperlink{group__HTTP__Status_ga93fd8ea184f2b91b69c000f86d2e35bf}{H\+T\+T\+P\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+E\+N\+T\+I\+T\+Y\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE}~413
+\item 
+\#define \hyperlink{group__HTTP__Status_ga4a24fc2734c1665d39672a81ee2a45a6}{H\+T\+T\+P\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+U\+R\+I\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE}~414
+\item 
+\#define \hyperlink{group__HTTP__Status_ga303e1d879c760fa572f3d53358f6631b}{H\+T\+T\+P\+\_\+\+U\+N\+S\+U\+P\+P\+O\+R\+T\+E\+D\+\_\+\+M\+E\+D\+I\+A\+\_\+\+T\+Y\+PE}~415
+\item 
+\#define \hyperlink{group__HTTP__Status_ga271f06010928c15d0f79db5732756dd5}{H\+T\+T\+P\+\_\+\+R\+A\+N\+G\+E\+\_\+\+N\+O\+T\+\_\+\+S\+A\+T\+I\+S\+F\+I\+A\+B\+LE}~416
+\item 
+\#define \hyperlink{group__HTTP__Status_ga9419cf3e03b1b3e36c67335cb59edf57}{H\+T\+T\+P\+\_\+\+E\+X\+P\+E\+C\+T\+A\+T\+I\+O\+N\+\_\+\+F\+A\+I\+L\+ED}~417
+\item 
+\#define \hyperlink{group__HTTP__Status_gaea662a5deb151adef021ea72815be2df}{H\+T\+T\+P\+\_\+\+M\+I\+S\+D\+I\+R\+E\+C\+T\+E\+D\+\_\+\+R\+E\+Q\+U\+E\+ST}~421
+\item 
+\#define \hyperlink{group__HTTP__Status_gac4022ba243c3221e89a00b9942e9b52b}{H\+T\+T\+P\+\_\+\+U\+N\+P\+R\+O\+C\+E\+S\+S\+A\+B\+L\+E\+\_\+\+E\+N\+T\+I\+TY}~422
+\item 
+\#define \hyperlink{group__HTTP__Status_ga7cbb0c030f5a67eaa7dfecb406edf75d}{H\+T\+T\+P\+\_\+\+L\+O\+C\+K\+ED}~423
+\item 
+\#define \hyperlink{group__HTTP__Status_ga786b81d7e7cb5c5ade4d914d10af4a17}{H\+T\+T\+P\+\_\+\+F\+A\+I\+L\+E\+D\+\_\+\+D\+E\+P\+E\+N\+D\+E\+N\+CY}~424
+\item 
+\#define \hyperlink{group__HTTP__Status_ga41c1cca4c30e8f491d57a3eab3b98d2d}{H\+T\+T\+P\+\_\+\+U\+P\+G\+R\+A\+D\+E\+\_\+\+R\+E\+Q\+U\+I\+R\+ED}~426
+\item 
+\#define \hyperlink{group__HTTP__Status_ga3c4821f80c3c1b8cf7ded01031a6e9e4}{H\+T\+T\+P\+\_\+\+P\+R\+E\+C\+O\+N\+D\+I\+T\+I\+O\+N\+\_\+\+R\+E\+Q\+U\+I\+R\+ED}~428
+\item 
+\#define \hyperlink{group__HTTP__Status_ga7ec0ca4de6248d9441c5b227e5deaf04}{H\+T\+T\+P\+\_\+\+T\+O\+O\+\_\+\+M\+A\+N\+Y\+\_\+\+R\+E\+Q\+U\+E\+S\+TS}~429
+\item 
+\#define \hyperlink{group__HTTP__Status_ga5f8382d54057ed1be5318a3ca3140e20}{H\+T\+T\+P\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+H\+E\+A\+D\+E\+R\+\_\+\+F\+I\+E\+L\+D\+S\+\_\+\+T\+O\+O\+\_\+\+L\+A\+R\+GE}~431
+\item 
+\#define \hyperlink{group__HTTP__Status_ga2db5183e84d14a1e2195329897405094}{H\+T\+T\+P\+\_\+\+U\+N\+A\+V\+A\+I\+L\+A\+B\+L\+E\+\_\+\+F\+O\+R\+\_\+\+L\+E\+G\+A\+L\+\_\+\+R\+E\+A\+S\+O\+NS}~451
+\item 
+\#define \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{H\+T\+T\+P\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+E\+R\+R\+OR}~500
+\item 
+\#define \hyperlink{group__HTTP__Status_gad8950a9ac05b1fe42c9a39dc7d8cbddf}{H\+T\+T\+P\+\_\+\+N\+O\+T\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+ED}~501
+\item 
+\#define \hyperlink{group__HTTP__Status_ga57ddfb82346d6efc864c3e164e574b10}{H\+T\+T\+P\+\_\+\+B\+A\+D\+\_\+\+G\+A\+T\+E\+W\+AY}~502
+\item 
+\#define \hyperlink{group__HTTP__Status_ga127ebc3e72d77c04cbabbf43082d35fe}{H\+T\+T\+P\+\_\+\+S\+E\+R\+V\+I\+C\+E\+\_\+\+U\+N\+A\+V\+A\+I\+L\+A\+B\+LE}~503
+\item 
+\#define \hyperlink{group__HTTP__Status_gaaf973dd6df946c88224a4b761bb079fc}{H\+T\+T\+P\+\_\+\+G\+A\+T\+E\+W\+A\+Y\+\_\+\+T\+I\+M\+E\+\_\+\+O\+UT}~504
+\item 
+\#define \hyperlink{group__HTTP__Status_ga5afac709466d3e236035fcb89a432098}{H\+T\+T\+P\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+N\+O\+T\+\_\+\+S\+U\+P\+P\+O\+R\+T\+ED}~505
+\item 
+\#define \hyperlink{group__HTTP__Status_gaeb2b4b66c2032ccd47cdc33a4fc09fbe}{H\+T\+T\+P\+\_\+\+V\+A\+R\+I\+A\+N\+T\+\_\+\+A\+L\+S\+O\+\_\+\+V\+A\+R\+I\+ES}~506
+\item 
+\#define \hyperlink{group__HTTP__Status_ga22f7047c07db7c74dc1b8574538ed7c8}{H\+T\+T\+P\+\_\+\+I\+N\+S\+U\+F\+F\+I\+C\+I\+E\+N\+T\+\_\+\+S\+T\+O\+R\+A\+GE}~507
+\item 
+\#define \hyperlink{group__HTTP__Status_gaf301ef6d2f55baf5dbdacdb9603bc8f7}{H\+T\+T\+P\+\_\+\+L\+O\+O\+P\+\_\+\+D\+E\+T\+E\+C\+T\+ED}~508
+\item 
+\#define \hyperlink{group__HTTP__Status_gafe1532ebc5bd48dbd10e55f33be2bdf7}{H\+T\+T\+P\+\_\+\+N\+O\+T\+\_\+\+E\+X\+T\+E\+N\+D\+ED}~510
+\item 
+\#define \hyperlink{group__HTTP__Status_gac319e16006402a28e6c3f66c3f142660}{H\+T\+T\+P\+\_\+\+N\+E\+T\+W\+O\+R\+K\+\_\+\+A\+U\+T\+H\+E\+N\+T\+I\+C\+A\+T\+I\+O\+N\+\_\+\+R\+E\+Q\+U\+I\+R\+ED}~511
+\item 
+\#define \hyperlink{group__HTTP__Status_ga66e040e5c6c5a494b7dd04f280e90274}{ap\+\_\+is\+\_\+\+H\+T\+T\+P\+\_\+\+I\+N\+FO}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= 100)\&\&((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$ 200))
+\item 
+\#define \hyperlink{group__HTTP__Status_gae0908ef87e454c3343bfe29be9e8d28b}{ap\+\_\+is\+\_\+\+H\+T\+T\+P\+\_\+\+S\+U\+C\+C\+E\+SS}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= 200)\&\&((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$ 300))
+\item 
+\#define \hyperlink{group__HTTP__Status_ga8cc5ef5e3fd1fe8b24f07f7db00d866c}{ap\+\_\+is\+\_\+\+H\+T\+T\+P\+\_\+\+R\+E\+D\+I\+R\+E\+CT}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= 300)\&\&((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$ 400))
+\item 
+\#define \hyperlink{group__HTTP__Status_ga8d68ab85112b05168201e4b827f69400}{ap\+\_\+is\+\_\+\+H\+T\+T\+P\+\_\+\+E\+R\+R\+OR}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= 400)\&\&((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$ 600))
+\item 
+\#define \hyperlink{group__HTTP__Status_ga9374b8956cdc91a639d79bd5fd665470}{ap\+\_\+is\+\_\+\+H\+T\+T\+P\+\_\+\+C\+L\+I\+E\+N\+T\+\_\+\+E\+R\+R\+OR}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= 400)\&\&((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$ 500))
+\item 
+\#define \hyperlink{group__HTTP__Status_gafb5ccb26d1e82a2ccee5cabcf0eecd46}{ap\+\_\+is\+\_\+\+H\+T\+T\+P\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+E\+R\+R\+OR}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= 500)\&\&((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$ 600))
+\item 
+\#define \hyperlink{group__HTTP__Status_ga0cdd763b32bf9c0f42e7da2eccf539ac}{ap\+\_\+is\+\_\+\+H\+T\+T\+P\+\_\+\+V\+A\+L\+I\+D\+\_\+\+R\+E\+S\+P\+O\+N\+SE}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~(((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= 100)\&\&((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $<$ 600))
+\item 
+\#define \hyperlink{group__HTTP__Status_gaf6029c20b468032acad1f82c4806ac6f}{ap\+\_\+status\+\_\+drops\+\_\+connection}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})
+\item 
+\#define \hyperlink{group__Methods_ga8793a8633545688a32ef097e9b0ac591}{M\+\_\+\+G\+ET}~0       /$\ast$$\ast$ R\+FC 2616\+: H\+T\+TP $\ast$/
+\item 
+\#define \hyperlink{group__Methods_ga15fe80957b13b098510092b1f10644d2}{M\+\_\+\+P\+UT}~1       /$\ast$  \+:             $\ast$/
+\item 
+\#define \hyperlink{group__Methods_ga7d031dd0f1b93bb8f535e2afaa22c9d7}{M\+\_\+\+P\+O\+ST}~2
+\item 
+\#define \hyperlink{group__Methods_gabe01af175a6e782872b5e7dd1567df24}{M\+\_\+\+D\+E\+L\+E\+TE}~3
+\item 
+\#define \hyperlink{group__Methods_ga4106bb987c2d4796a6c22646646c5c1b}{M\+\_\+\+C\+O\+N\+N\+E\+CT}~4
+\item 
+\#define \hyperlink{group__Methods_ga24915023381727825ec05bd5a83f9743}{M\+\_\+\+O\+P\+T\+I\+O\+NS}~5
+\item 
+\#define \hyperlink{group__Methods_ga7b43164abfdf24a3ef4cbcee7622551d}{M\+\_\+\+T\+R\+A\+CE}~6       /$\ast$$\ast$ R\+FC 2616\+: H\+T\+TP $\ast$/
+\item 
+\#define \hyperlink{group__Methods_ga078bdec5bbf4fdd33c594de044b06639}{M\+\_\+\+P\+A\+T\+CH}~7       /$\ast$$\ast$ no rfc(!)  \#\#\# \hyperlink{group__APACHE__CORE__COOKIE_ga7ebb94e118f56a4baf4bfe9cc313cf1d}{remove} \hyperlink{pcregrep_8txt_a1d4586f0a85ecec85237e5fb0f611dd1}{this} one? $\ast$/
+\item 
+\#define \hyperlink{group__Methods_ga68b6e538fbfecc59ee181d7794bb1ee0}{M\+\_\+\+P\+R\+O\+P\+F\+I\+ND}~8       /$\ast$$\ast$ R\+FC 2518\+: Web\+D\+AV $\ast$/
+\item 
+\#define \hyperlink{group__Methods_ga859db5148545953d1addb1a6137bf052}{M\+\_\+\+P\+R\+O\+P\+P\+A\+T\+CH}~9       /$\ast$  \+:               $\ast$/
+\item 
+\#define \hyperlink{group__Methods_gadfb4d527a8bc53d86fbb19275273ae2a}{M\+\_\+\+M\+K\+C\+OL}~10
+\item 
+\#define \hyperlink{group__Methods_ga928e39b0bef81fe16e1b92c3c9611575}{M\+\_\+\+C\+O\+PY}~11
+\item 
+\#define \hyperlink{group__Methods_ga6a2140ff5ae54ee6344f95f9bd22cf90}{M\+\_\+\+M\+O\+VE}~12
+\item 
+\#define \hyperlink{group__Methods_ga1e83c5bf3f02b16a4782782273dd12b0}{M\+\_\+\+L\+O\+CK}~13
+\item 
+\#define \hyperlink{group__Methods_gaada2a011bd593a1312d11bb15493e8bf}{M\+\_\+\+U\+N\+L\+O\+CK}~14      /$\ast$$\ast$ R\+FC 2518\+: Web\+D\+AV $\ast$/
+\item 
+\#define \hyperlink{group__Methods_ga3b5980ed972a6d8bf11f2871b1d40cf4}{M\+\_\+\+V\+E\+R\+S\+I\+O\+N\+\_\+\+C\+O\+N\+T\+R\+OL}~15      /$\ast$$\ast$ R\+FC 3253\+: Web\+D\+AV Versioning $\ast$/
+\item 
+\#define \hyperlink{group__Methods_ga3d53f0f6b8d26b790573cfa82bd9021c}{M\+\_\+\+C\+H\+E\+C\+K\+O\+UT}~16      /$\ast$  \+:                          $\ast$/
+\item 
+\#define \hyperlink{group__Methods_gaf69c034cfe6caaade542f6d5064cb633}{M\+\_\+\+U\+N\+C\+H\+E\+C\+K\+O\+UT}~17
+\item 
+\#define \hyperlink{group__Methods_gab2cb83a1be7a597c21547596b8a30a29}{M\+\_\+\+C\+H\+E\+C\+K\+IN}~18
+\item 
+\#define \hyperlink{group__Methods_gab4f114c1fd5f1e1027605fd8d5acc907}{M\+\_\+\+U\+P\+D\+A\+TE}~19
+\item 
+\#define \hyperlink{group__Methods_ga59be240e6236fa0f7c2cc1cf78f1b4a5}{M\+\_\+\+L\+A\+B\+EL}~20
+\item 
+\#define \hyperlink{group__Methods_gadb0db0439e55699cceb03ed44ee2100e}{M\+\_\+\+R\+E\+P\+O\+RT}~21
+\item 
+\#define \hyperlink{group__Methods_gaa41d152afa807ca69d28e7ea83fe43f7}{M\+\_\+\+M\+K\+W\+O\+R\+K\+S\+P\+A\+CE}~22
+\item 
+\#define \hyperlink{group__Methods_ga219bb3551459574081751e086fa9cc21}{M\+\_\+\+M\+K\+A\+C\+T\+I\+V\+I\+TY}~23
+\item 
+\#define \hyperlink{group__Methods_gab139390584b5afcd32e6b349393c0a81}{M\+\_\+\+B\+A\+S\+E\+L\+I\+N\+E\+\_\+\+C\+O\+N\+T\+R\+OL}~24
+\item 
+\#define \hyperlink{group__Methods_gab4087b38042f95153e145b0db37df9df}{M\+\_\+\+M\+E\+R\+GE}~25
+\item 
+\#define \hyperlink{group__Methods_gacc2a55b9810a0a140a6cfb53ab0baa36}{M\+\_\+\+I\+N\+V\+A\+L\+ID}~26      /$\ast$$\ast$ no valid \hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method} $\ast$/
+\item 
+\#define \hyperlink{group__Methods_ga450901c43a43e4dd81eba1e9e229d3a1}{M\+E\+T\+H\+O\+DS}~64
+\item 
+\#define \hyperlink{group__Methods_ga2c2414cfae1856a90350b3fba8a6dde9}{A\+P\+\_\+\+M\+E\+T\+H\+O\+D\+\_\+\+B\+IT}~((\hyperlink{group__apr__platform_ga4b75afbf973dc6c8aea4ae75b044aa08}{apr\+\_\+int64\+\_\+t})1)
+\item 
+\#define \hyperlink{group__module__magic_gad3207ba2e5e874a218a355eaf0877643}{C\+G\+I\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE}~\char`\"{}application/\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}-\/httpd-\/cgi\char`\"{}
+\item 
+\#define \hyperlink{group__module__magic_gac5a920125c7b78ceaaef16f37a8565c6}{I\+N\+C\+L\+U\+D\+E\+S\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE}~\char`\"{}text/\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}-\/\hyperlink{group__APR__Util__RC_ga48a1618bc9e57e0406979ef034512520}{server}-\/parsed-\/html\char`\"{}
+\item 
+\#define \hyperlink{group__module__magic_ga37aaf2dbe19ca4894dc31bf873b1861a}{I\+N\+C\+L\+U\+D\+E\+S\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+P\+E3}~\char`\"{}text/\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}-\/\hyperlink{group__APR__Util__RC_ga48a1618bc9e57e0406979ef034512520}{server}-\/parsed-\/html3\char`\"{}
+\item 
+\#define \hyperlink{group__module__magic_ga4f329be3fb523b9e986cb13480ba9990}{D\+I\+R\+\_\+\+M\+A\+G\+I\+C\+\_\+\+T\+Y\+PE}~\char`\"{}httpd/unix-\/\hyperlink{pcregrep_8txt_ac33d049ccd70185ffba7bed3d06d9ea2}{directory}\char`\"{}
+\item 
+\#define \hyperlink{group__module__magic_gae0c36b43b75c33f4d1d9fb501221ec20}{A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME}~\char`\"{}\char`\"{}
+\item 
+\#define \hyperlink{group__module__magic_gac3c80cd5f9050df44f87345cc4980e5e}{A\+P\+\_\+\+I\+S\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~($\ast$\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x} == \textquotesingle{}\textbackslash{}0\textquotesingle{})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gacdd2e847ca4860289abebda77d2b3c19}{LF}~10
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gac7dc463c440edc9cf8f6a1e316e0b55b}{CR}~13
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga596f22107770abbd60ffce8338be9732}{C\+R\+LF}~\char`\"{}\textbackslash{}015\textbackslash{}012\char`\"{}
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga27f3d44ac7137b1b7618bb122c125d75}{C\+R\+L\+F\+\_\+\+A\+S\+C\+II}~\char`\"{}\textbackslash{}015\textbackslash{}012\char`\"{}
+\item 
+\#define \hyperlink{group__values__request__rec__body_gaf74625e7d4f8f352ed14a4bdf3f7262b}{R\+E\+Q\+U\+E\+S\+T\+\_\+\+N\+O\+\_\+\+B\+O\+DY}~0
+\item 
+\#define \hyperlink{group__values__request__rec__body_ga49a17cc0a1f20af240d4e500b742d883}{R\+E\+Q\+U\+E\+S\+T\+\_\+\+C\+H\+U\+N\+K\+E\+D\+\_\+\+E\+R\+R\+OR}~1
+\item 
+\#define \hyperlink{group__values__request__rec__body_ga7f92a016589442201a742ebb637851b6}{R\+E\+Q\+U\+E\+S\+T\+\_\+\+C\+H\+U\+N\+K\+E\+D\+\_\+\+D\+E\+C\+H\+U\+NK}~2
+\item 
+\#define \hyperlink{group__values__request__rec__used__path__info_ga670d14db97da000aafdf65d938de04c7}{A\+P\+\_\+\+R\+E\+Q\+\_\+\+A\+C\+C\+E\+P\+T\+\_\+\+P\+A\+T\+H\+\_\+\+I\+N\+FO}~0
+\item 
+\#define \hyperlink{group__values__request__rec__used__path__info_ga671b854d16c687f92e4e6be0db74cf08}{A\+P\+\_\+\+R\+E\+Q\+\_\+\+R\+E\+J\+E\+C\+T\+\_\+\+P\+A\+T\+H\+\_\+\+I\+N\+FO}~1
+\item 
+\#define \hyperlink{group__values__request__rec__used__path__info_ga0a636f7227021011d3fa0c2418b918fa}{A\+P\+\_\+\+R\+E\+Q\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+A\+T\+H\+\_\+\+I\+N\+FO}~2
+\item 
+\#define \hyperlink{group__ProxyReq_ga7fa0b3313f7e51f2dac785e0b0772c32}{P\+R\+O\+X\+Y\+R\+E\+Q\+\_\+\+N\+O\+NE}~0
+\item 
+\#define \hyperlink{group__ProxyReq_gaa879e84f9b9d334007ef4c542bf6374e}{P\+R\+O\+X\+Y\+R\+E\+Q\+\_\+\+P\+R\+O\+XY}~1
+\item 
+\#define \hyperlink{group__ProxyReq_gada87167650249c33339a5992ad199219}{P\+R\+O\+X\+Y\+R\+E\+Q\+\_\+\+R\+E\+V\+E\+R\+SE}~2
+\item 
+\#define \hyperlink{group__ProxyReq_gaedfe04be933e20251ce580aa6b15d864}{P\+R\+O\+X\+Y\+R\+E\+Q\+\_\+\+R\+E\+S\+P\+O\+N\+SE}~3
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga4a85b545afcdbd61558b560155cf164b}{D\+E\+F\+A\+U\+L\+T\+\_\+\+V\+H\+O\+S\+T\+\_\+\+A\+D\+DR}~0xfffffffful
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga3df7a06ed11838b84264a6759b2c3674}{ap\+\_\+escape\+\_\+uri}(ppool,  \hyperlink{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{path})~ap\+\_\+os\+\_\+escape\+\_\+path(ppool,\hyperlink{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{path},1)
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gab9fe0e3639cb178b17970ab79f2eec2f}{ap\+\_\+escape\+\_\+html}(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p},  \hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})~ap\+\_\+escape\+\_\+html2(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p},\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},0)
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\+\_\+assert}(exp)~((exp) ? (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})0 \+: ap\+\_\+log\+\_\+assert(\#exp,\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+\_\+,\+\_\+\+\_\+\+L\+I\+N\+E\+\_\+\+\_\+))
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{A\+P\+\_\+\+D\+E\+B\+U\+G\+\_\+\+A\+S\+S\+E\+RT}(exp)~((\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})0)
+\item 
+\#define \hyperlink{group__stopsignal_ga1a2c74d1d18fd4295b929dbb5f92098c}{S\+I\+G\+S\+T\+O\+P\+\_\+\+D\+E\+T\+A\+CH}~1
+\item 
+\#define \hyperlink{group__stopsignal_ga0ed356a7ee2a608a8c45ac437d2b970a}{S\+I\+G\+S\+T\+O\+P\+\_\+\+M\+A\+K\+E\+\_\+\+C\+H\+I\+LD}~2
+\item 
+\#define \hyperlink{group__stopsignal_gad9c91b587b4cd0fa32b1236d0888acc8}{S\+I\+G\+S\+T\+O\+P\+\_\+\+S\+P\+A\+W\+N\+\_\+\+C\+H\+I\+LD}~4
+\item 
+\#define \hyperlink{group__stopsignal_ga21c726209f8012b7d62c041f41851190}{S\+I\+G\+S\+T\+O\+P\+\_\+\+P\+I\+P\+E\+D\+\_\+\+L\+O\+G\+\_\+\+S\+P\+A\+WN}~8
+\item 
+\#define \hyperlink{group__stopsignal_ga1f8707320757e1dca0cae9c565d9859c}{S\+I\+G\+S\+T\+O\+P\+\_\+\+C\+G\+I\+\_\+\+C\+H\+I\+LD}~16
+\item 
+\#define \hyperlink{group__stopsignal_ga65ab9e48a568bd082465da1ab82fcf66}{R\+A\+I\+S\+E\+\_\+\+S\+I\+G\+S\+T\+OP}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga00f71505dbeae5acc59be77258af34ad}{ap\+\_\+strchr}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~strchr(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\+\_\+strchr\+\_\+c}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~strchr(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga21e3f7a77835d6d9373f2570387b0a08}{ap\+\_\+strrchr}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~strrchr(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga469c14311b354f1b7e3013adbde2b50b}{ap\+\_\+strrchr\+\_\+c}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~strrchr(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga0656645369750a23d5276d28448f5abe}{ap\+\_\+strstr}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{apr__cpystrn_8c_a230063e3f4d6c1324129ea552e026c27}{strstr}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga48f6ba4ea178ad3a334403ec7206d7a3}{ap\+\_\+strstr\+\_\+c}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})~\hyperlink{apr__cpystrn_8c_a230063e3f4d6c1324129ea552e026c27}{strstr}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\#define \hyperlink{group__APACHE__CORE__DAEMON_ga52d3a802ce651d932f50d0885557e6fb}{A\+P\+\_\+\+N\+O\+R\+E\+S\+T\+A\+RT}~\hyperlink{group__apr__errno_ga803b8badf8695bdfa4fbcf4d330371f0}{A\+P\+R\+\_\+\+O\+S\+\_\+\+S\+T\+A\+R\+T\+\_\+\+U\+S\+E\+E\+RR} + 1
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structap__method__list__t}{ap\+\_\+method\+\_\+list\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga824fa57f315a0d50a7b56498c38939a3}{ap\+\_\+method\+\_\+list\+\_\+t}
+\item 
+typedef struct \hyperlink{structprocess__rec}{process\+\_\+rec} \hyperlink{group__APACHE__CORE__DAEMON_gac1d3451ddc972f4a6fd73acf7f47d1fb}{process\+\_\+rec}
+\item 
+typedef struct \hyperlink{structserver__rec}{server\+\_\+rec} \hyperlink{group__APACHE__CORE__DAEMON_ga60fc5abfdd375bb9fd6288cb855972fa}{server\+\_\+rec}
+\item 
+typedef struct \hyperlink{structconn__rec}{conn\+\_\+rec} \hyperlink{group__APACHE__CORE__DAEMON_ga304420d5069e376de5301b547155ee12}{conn\+\_\+rec}
+\item 
+typedef struct \hyperlink{structrequest__rec}{request\+\_\+rec} \hyperlink{group__APACHE__CORE__DAEMON_ga3128f4983d5f7a3c4e5d5b258f370ef4}{request\+\_\+rec}
+\item 
+typedef struct \hyperlink{structconn__state__t}{conn\+\_\+state\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga0d451c1a417b63673880a52c42bd0ace}{conn\+\_\+state\+\_\+t}
+\item 
+typedef struct \hyperlink{structserver__addr__rec}{server\+\_\+addr\+\_\+rec} \hyperlink{group__APACHE__CORE__DAEMON_ga9490881dcb192135f2ab47a5113ca651}{server\+\_\+addr\+\_\+rec}
+\item 
+typedef struct \hyperlink{structap__sload__t}{ap\+\_\+sload\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga221df691a601284059c96279ede3855e}{ap\+\_\+sload\+\_\+t}
+\item 
+typedef struct \hyperlink{structap__loadavg__t}{ap\+\_\+loadavg\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga3be00350e7092a1e1efcc2bd911871fc}{ap\+\_\+loadavg\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{group__APACHE__CORE__DAEMON_ga0fc39bb8f47f9c1f418f28354416db79}{ap\+\_\+conn\+\_\+keepalive\+\_\+e} \{ \hyperlink{group__APACHE__CORE__DAEMON_gga0fc39bb8f47f9c1f418f28354416db79ac07d9eea5535163a61a1f20669829221}{A\+P\+\_\+\+C\+O\+N\+N\+\_\+\+U\+N\+K\+N\+O\+WN}, 
+\hyperlink{group__APACHE__CORE__DAEMON_gga0fc39bb8f47f9c1f418f28354416db79ac991e8ec951fe03c8c2f36495859034d}{A\+P\+\_\+\+C\+O\+N\+N\+\_\+\+C\+L\+O\+SE}, 
+\hyperlink{group__APACHE__CORE__DAEMON_gga0fc39bb8f47f9c1f418f28354416db79a874db49e8429c46e82d463014736da01}{A\+P\+\_\+\+C\+O\+N\+N\+\_\+\+K\+E\+E\+P\+A\+L\+I\+VE}
+ \}\begin{DoxyCompactList}\small\item\em Enumeration of connection keepalive options. \end{DoxyCompactList}
+\item 
+enum \hyperlink{group__APACHE__CORE__DAEMON_ga60b752d9a3496ccdcf3c877bd2819d04}{conn\+\_\+state\+\_\+e} \{ \\*
+\hyperlink{group__APACHE__CORE__DAEMON_gga60b752d9a3496ccdcf3c877bd2819d04a7d157bf5ef7ec929d3deb7d966cb7829}{C\+O\+N\+N\+\_\+\+S\+T\+A\+T\+E\+\_\+\+C\+H\+E\+C\+K\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+L\+I\+N\+E\+\_\+\+R\+E\+A\+D\+A\+B\+LE}, 
+\hyperlink{group__APACHE__CORE__DAEMON_gga60b752d9a3496ccdcf3c877bd2819d04a6730ebad109e49acf371fa7850e1e509}{C\+O\+N\+N\+\_\+\+S\+T\+A\+T\+E\+\_\+\+R\+E\+A\+D\+\_\+\+R\+E\+Q\+U\+E\+S\+T\+\_\+\+L\+I\+NE}, 
+\hyperlink{group__APACHE__CORE__DAEMON_gga60b752d9a3496ccdcf3c877bd2819d04ad9a37837199d377aba66188b91a3eda2}{C\+O\+N\+N\+\_\+\+S\+T\+A\+T\+E\+\_\+\+H\+A\+N\+D\+L\+ER}, 
+\hyperlink{group__APACHE__CORE__DAEMON_gga60b752d9a3496ccdcf3c877bd2819d04aae6598a74e7d75f2edcfaf6174fbb84d}{C\+O\+N\+N\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+R\+I\+T\+E\+\_\+\+C\+O\+M\+P\+L\+E\+T\+I\+ON}, 
+\\*
+\hyperlink{group__APACHE__CORE__DAEMON_gga60b752d9a3496ccdcf3c877bd2819d04abc94f73d886bd12af6cf8e19f8d76977}{C\+O\+N\+N\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+U\+S\+P\+E\+N\+D\+ED}, 
+\hyperlink{group__APACHE__CORE__DAEMON_gga60b752d9a3496ccdcf3c877bd2819d04a15944d2aa2dae6f2b1cb7989ef5d36f3}{C\+O\+N\+N\+\_\+\+S\+T\+A\+T\+E\+\_\+\+L\+I\+N\+G\+ER}, 
+\hyperlink{group__APACHE__CORE__DAEMON_gga60b752d9a3496ccdcf3c877bd2819d04a56ef135b393c48e435551f1af0f97160}{C\+O\+N\+N\+\_\+\+S\+T\+A\+T\+E\+\_\+\+L\+I\+N\+G\+E\+R\+\_\+\+N\+O\+R\+M\+AL}, 
+\hyperlink{group__APACHE__CORE__DAEMON_gga60b752d9a3496ccdcf3c877bd2819d04a6cd68ca910c61ef4f5818fa8988098ea}{C\+O\+N\+N\+\_\+\+S\+T\+A\+T\+E\+\_\+\+L\+I\+N\+G\+E\+R\+\_\+\+S\+H\+O\+RT}
+ \}
+\item 
+enum \hyperlink{group__APACHE__CORE__DAEMON_gaae1efcb45706e72ff21b849a79ffbd58}{conn\+\_\+sense\+\_\+e} \{ \hyperlink{group__APACHE__CORE__DAEMON_ggaae1efcb45706e72ff21b849a79ffbd58a76476bf036964da89040adfd4675c3c5}{C\+O\+N\+N\+\_\+\+S\+E\+N\+S\+E\+\_\+\+D\+E\+F\+A\+U\+LT}, 
+\hyperlink{group__APACHE__CORE__DAEMON_ggaae1efcb45706e72ff21b849a79ffbd58abe11b20e9aaa7763dccd6c625a7f5ab5}{C\+O\+N\+N\+\_\+\+S\+E\+N\+S\+E\+\_\+\+W\+A\+N\+T\+\_\+\+R\+E\+AD}, 
+\hyperlink{group__APACHE__CORE__DAEMON_ggaae1efcb45706e72ff21b849a79ffbd58a0f7a5f5219522c65ced241a9f5add1c0}{C\+O\+N\+N\+\_\+\+S\+E\+N\+S\+E\+\_\+\+W\+A\+N\+T\+\_\+\+W\+R\+I\+TE}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__DAEMON_ga98d9ecbdc4a30bbaf4c5a47c65874599}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void}) ap\+\_\+get\+\_\+server\+\_\+revision(\hyperlink{structap__version__t}{ap\+\_\+version\+\_\+t} $\ast$version)
+\item 
+\hyperlink{group__APACHE__CORE__DAEMON_ga34542be6f597aa4a9eca1968073cfc9d}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$) ap\+\_\+get\+\_\+server\+\_\+banner(\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{group__APACHE__CORE__DAEMON_ga83eec54fbab15967dc52423761822d4a}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (char $\ast$) ap\+\_\+field\+\_\+noparam(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+\hyperlink{group__APACHE__CORE__DAEMON_gaa090fd6e4c79879a11154fd2c3a601e6}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}) ap\+\_\+find\+\_\+list\+\_\+item(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+\hyperlink{group__APACHE__CORE__DAEMON_ga6244ff1624044deef6f392f4cb55b103}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t}) ap\+\_\+escape\+\_\+errorlog\+\_\+item(char $\ast$\hyperlink{group__apr__thread__proc_gaaf051c44ea7115367430b40d8fdd496e}{dest}
+\item 
+\hyperlink{group__APACHE__CORE__DAEMON_gaef9a463eb46c9b223497cf9711b5504a}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structap__regex__t}{ap\+\_\+regex\+\_\+t} $\ast$) ap\+\_\+pregcomp(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}
+\item 
+char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga2dd9b90f73ee5472ab8217dc8cafb00a}{ap\+\_\+get\+\_\+local\+\_\+host} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+\item 
+const char \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} n\+Line \hyperlink{group__APACHE__CORE__DAEMON_gab47cd1b96a326f91da7bd6d898875ae8}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((noreturn))
+\item 
+\hyperlink{group__APACHE__CORE__DAEMON_gad61eb47e7a181a38f03a3cd1de2c2034}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t}) ap\+\_\+random\+\_\+pick(\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APR__Util__RL_ga3e202b201e6255d975cd6d3aff1f5a4d}{min}
+\item 
+\hyperlink{group__APACHE__CORE__DAEMON_ga7067b52470f2262f5900c8be2b49bb4a}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$) ap\+\_\+malloc(size\+\_\+t \hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size}) \hyperlink{group__APR__Util__Bucket__Brigades_gae0af316ed59541b70389da41aaeef4b6}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}((\hyperlink{pcre_8txt_ad76f22d0b284534d4248a90142e959b3}{malloc})) \hyperlink{group__APACHE__CORE__DAEMON_ga676a9b382621e4756603b5f32780ed18}{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+A\+L\+L\+O\+C\+\_\+\+S\+I\+ZE}(1)
+\item 
+size\+\_\+t \hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size} \hyperlink{group__APACHE__CORE__DAEMON_gae7fc4ee48afcffb08d441fc7970b6de8}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((\hyperlink{pcre_8txt_ad76f22d0b284534d4248a90142e959b3}{malloc})) \hyperlink{ap__config_8h_aa8bea9be45d067aac36f9ad5b1985eb2}{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+A\+L\+L\+O\+C\+\_\+\+S\+I\+Z\+E2}(1
+\item 
+size\+\_\+t \hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size} size\+\_\+t \hyperlink{README_8txt_a870076999eb1486aa63d2e2cf5cdfa55}{size} \hyperlink{ap__config_8h_a32e23b1a5dff60a46d0a1a24d87706b5}{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+W\+A\+R\+N\+\_\+\+U\+N\+U\+S\+E\+D\+\_\+\+R\+E\+S\+U\+LT} \hyperlink{group__APACHE__CORE__DAEMON_ga676a9b382621e4756603b5f32780ed18}{A\+P\+\_\+\+F\+N\+\_\+\+A\+T\+T\+R\+\_\+\+A\+L\+L\+O\+C\+\_\+\+S\+I\+ZE} (2)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga15f3129d47387a1e720de18aba5a23da}{component}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga5b41c5ae4505891e6c53e26df197e02b}{prefix}
+\item 
+const char const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gae6d749c77cf53887e389fee88eabb8fb}{document\+\_\+root}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gac1bad7796d7e6bd090437027211b717a}{intype}
+\item 
+\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_gabfa74bb4f05f3b2de1a89160025e5400}{t}
+\item 
+\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gacf53f259c50e76452489d799cd9f0e20}{fmt}
+\item 
+\hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\+\_\+time\+\_\+t} const char \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_gac77770304e1e349b358dab7a42649d6f}{gmt}
+\item 
+const char $\ast$$\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga2a7a1aa13a4f14075411123a4495593c}{line}
+\item 
+const char char \hyperlink{group__APACHE__CORE__DAEMON_gaa77e95f4cc3a2a8eb69ef54ee72d4d2a}{stop}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gadc1f34651f7bbfa3ba5af27db5f53817}{word}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga342def50f5e27714b3779c796673b996}{len}
+\item 
+const char $\ast$$\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gae5c4b068a26ad890b3f11ac8dc993347}{field}
+\item 
+const char const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gab250c55f81df5e1f93822c2bbcc84458}{tok}
+\item 
+const char \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$$\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga4b29dc6d812c1c567a7b51775ffdac64}{tokens}
+\item 
+const char \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_ga4d87469a8d11e77fcad40f6c57b94d2e}{skip\+\_\+invalid}
+\item 
+const char $\ast$$\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaca8a5887bf5a94e101c9ce2b8bab526d}{accept\+\_\+line}
+\item 
+const char \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_gaac2f0c94cf6ca416699c123d912ccf10}{accept\+\_\+white}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_ga738465ec008f4f3abf360f8a2c843c1b}{decode\+\_\+slashes}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gab87f55bd0280d90925050a4188c14ab5}{s}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga3b02c6de5c049804444a246f7fdf46b4}{path}
+\item 
+const char \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_ga4fb0d7c882706e056050447e482fcfdf}{partial}
+\item 
+const char \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_gae2cff837909a3ef8156648430446a838}{toasc}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaf25d6dc49269fa2003ac7c7fa6f13915}{str}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga512232c56efd177455c568d60ecd366a}{source}
+\item 
+const char \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga71e9cfb174fb4be19396f3f3d1b25bee}{buflen}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaad01339e89106fdf68f57ef118956fa9}{hostname}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga225c76c246a5cc263c5a2628eb99353e}{port}
+\item 
+const char \hyperlink{group__apr__network__io_gaa670a71960f6eb4fe0d0de2a1e7aba03}{apr\+\_\+port\+\_\+t} const \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gac68e921ed15f71060d618adb662a84f6}{r}
+\item 
+const char \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_gabfc835ba1bb93aeecef9b949481c4a2d}{n}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga6d902c83b02c43071b972ed0416729bc}{dir}
+\item 
+const char const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga4ccff52c6aab3f0dc41108e8905ab106}{expected}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga92f959d07c956e20e36ad44cb5de9c2e}{s2}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga814f6d0860324eaf81b119f21031d6f4}{bufcoded}
+\item 
+char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gae1adbce218e7a9d09164012443191d24}{string}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gacd28ae39c6440992e47d3da772c56602}{pattern}
+\item 
+const char \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_ga3defcfc322adaa47f01e20261c7483ff}{cflags}
+\item 
+\hyperlink{structap__regex__t}{ap\+\_\+regex\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaaa6cf5bbf86c3ce1886a4de4c8b6bb51}{reg}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaf801cc3fb2a90cf95d512d76fb498c3f}{input}
+\item 
+const char const char \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga92a43aa0352eb452970c83ba3da95a8f}{nmatch}
+\item 
+const char const char \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{structap__regmatch__t}{ap\+\_\+regmatch\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_gaa84c3b7a465311cc04c25e4998c81aec}{pmatch} \mbox{[}$\,$\mbox{]}
+\item 
+char $\ast$$\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaf4bf6905638893519df9fcba9d6c9a61}{result}
+\item 
+char const char const char \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{structap__regmatch__t}{ap\+\_\+regmatch\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen}
+\item 
+char \hyperlink{group__APACHE__CORE__DAEMON_ga74215a7b8ebafc681c939782cc5c1b7a}{c}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaeaf128dbd42015c0678aa250470596bf}{instring}
+\item 
+const char const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga06fee55efc4fe1dce4b42912a473beff}{delim}
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga48b7aa88e5841c0fe69f7d9a88646af3}{timeout}
+\item 
+\hyperlink{group__apr__time_gaae2129185a395cc393f76fabf4f43e47}{apr\+\_\+interval\+\_\+time\+\_\+t} const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga705f866eda5c4153fc83eac26d96947d}{default\+\_\+time\+\_\+unit}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaf51e37c9331049b1e3d250a7c8bc3c26}{src}
+\item 
+const char const char $\ast$$\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gab3584b12c2335a84c3010a92e888124e}{dest}
+\item 
+struct \hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} $\ast$$\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr}
+\item 
+struct \hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga86cf672daa4e0ad11ad10efc894d19c8}{num}
+\item 
+struct \hyperlink{structap__filter__t}{ap\+\_\+filter\+\_\+t} \hyperlink{structapr__array__header__t}{apr\+\_\+array\+\_\+header\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga5f598d678d0ca77c25732a145c68d3c7}{size}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga8f8f80d37794cde9472343e4487ba3eb}{name}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga4532846da31f0adc0a8ad7539d015049}{sz\+File}
+\item 
+\hyperlink{group__apr__platform_ga558548a135d8a816c4787250744ea147}{apr\+\_\+uint32\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_gac1b9c6a7bfbd9ec2444735d634d4a557}{max}
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__APACHE__CORE__DAEMON_ga780d813f1c57932b70208595e2a312d4}{srclen}
+\item 
+const char $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd}
+\item 
+const char const char $\ast$const $\ast$ \hyperlink{group__APACHE__CORE__DAEMON_gac02589c01422875b91f377e25ee991e3}{argv}
+\item 
+const char \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__DAEMON_ga6d3a995932cd00f6b3473898aa90d596}{start}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+H\+T\+TP Daemon routines. 
+

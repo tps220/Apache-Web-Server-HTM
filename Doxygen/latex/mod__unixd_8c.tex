@@ -1,0 +1,152 @@
+\hypertarget{mod__unixd_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/arch/unix/mod\+\_\+unixd.c File Reference}
+\label{mod__unixd_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/arch/unix/mod\+\_\+unixd.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/arch/unix/mod\+\_\+unixd.\+c}}
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}os.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+unixd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$sys/stat.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}unixd.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+unixd.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__unixd_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__unixd_8c_a69835b041523b72b6c9ffad26229abbd}{D\+E\+F\+A\+U\+L\+T\+\_\+\+U\+S\+ER}~\char`\"{}\#-\/1\char`\"{}
+\item 
+\#define \hyperlink{mod__unixd_8c_a45b6308e1477048e29afac209cfe9ec1}{D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+R\+O\+UP}~\char`\"{}\#-\/1\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__unixd_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{mod__unixd_8c_af12128675836fed26298f3ab5dc5faa7}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (unixd)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+unixd.\+c@{mod\+\_\+unixd.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+R\+O\+UP@{D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+R\+O\+UP}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+R\+O\+UP@{D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+R\+O\+UP}!mod\+\_\+unixd.\+c@{mod\+\_\+unixd.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+R\+O\+UP}{DEFAULT_GROUP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+G\+R\+O\+UP~\char`\"{}\#-\/1\char`\"{}}\hypertarget{mod__unixd_8c_a45b6308e1477048e29afac209cfe9ec1}{}\label{mod__unixd_8c_a45b6308e1477048e29afac209cfe9ec1}
+\index{mod\+\_\+unixd.\+c@{mod\+\_\+unixd.\+c}!D\+E\+F\+A\+U\+L\+T\+\_\+\+U\+S\+ER@{D\+E\+F\+A\+U\+L\+T\+\_\+\+U\+S\+ER}}
+\index{D\+E\+F\+A\+U\+L\+T\+\_\+\+U\+S\+ER@{D\+E\+F\+A\+U\+L\+T\+\_\+\+U\+S\+ER}!mod\+\_\+unixd.\+c@{mod\+\_\+unixd.\+c}}
+\subsubsection[{\texorpdfstring{D\+E\+F\+A\+U\+L\+T\+\_\+\+U\+S\+ER}{DEFAULT_USER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+F\+A\+U\+L\+T\+\_\+\+U\+S\+ER~\char`\"{}\#-\/1\char`\"{}}\hypertarget{mod__unixd_8c_a69835b041523b72b6c9ffad26229abbd}{}\label{mod__unixd_8c_a69835b041523b72b6c9ffad26229abbd}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+unixd.\+c@{mod\+\_\+unixd.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!mod\+\_\+unixd.\+c@{mod\+\_\+unixd.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{AP_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__unixd_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}{}\label{mod__unixd_8c_ace56382e8c8bdfffe9ffc8dbab06d36c}
+
+\begin{DoxyCode}
+323 \{
+324     \textcolor{keywordflow}{if} (set\_group\_privs()) \{
+325         \textcolor{keywordflow}{return} -1;
+326     \}
+327 
+328     \textcolor{keywordflow}{if} (\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} != \hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.\hyperlink{structunixd__config__rec_a692a2cb78197b083da9d167d8c0ead4a}{chroot\_dir}) \{
+329         \textcolor{keywordflow}{if} (geteuid()) \{
+330             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga80a3f6767c5810b74c36ab52abff7d87}{APLOG\_ALERT}, errno, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02164)
+331                          \textcolor{stringliteral}{"Cannot chroot when not started as root"});
+332             \textcolor{keywordflow}{return} -1;
+333         \}
+334         \textcolor{keywordflow}{if} (chdir(\hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.\hyperlink{structunixd__config__rec_a692a2cb78197b083da9d167d8c0ead4a}{chroot\_dir}) != 0) \{
+335             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga80a3f6767c5810b74c36ab52abff7d87}{APLOG\_ALERT}, errno, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02165)
+336                          \textcolor{stringliteral}{"Can't chdir to %s"}, \hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.
+      \hyperlink{structunixd__config__rec_a692a2cb78197b083da9d167d8c0ead4a}{chroot\_dir});
+337             \textcolor{keywordflow}{return} -1;
+338         \}
+339         \textcolor{keywordflow}{if} (chroot(\hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.\hyperlink{structunixd__config__rec_a692a2cb78197b083da9d167d8c0ead4a}{chroot\_dir}) != 0) \{
+340             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga80a3f6767c5810b74c36ab52abff7d87}{APLOG\_ALERT}, errno, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02166)
+341                          \textcolor{stringliteral}{"Can't chroot to %s"}, \hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.
+      \hyperlink{structunixd__config__rec_a692a2cb78197b083da9d167d8c0ead4a}{chroot\_dir});
+342             \textcolor{keywordflow}{return} -1;
+343         \}
+344         \textcolor{keywordflow}{if} (chdir(\textcolor{stringliteral}{"/"}) != 0) \{
+345             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga80a3f6767c5810b74c36ab52abff7d87}{APLOG\_ALERT}, errno, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02167)
+346                          \textcolor{stringliteral}{"Can't chdir to new root"});
+347             \textcolor{keywordflow}{return} -1;
+348         \}
+349     \}
+350 
+351     \textcolor{comment}{/* Only try to switch if we're running as root */}
+352     \textcolor{keywordflow}{if} (!geteuid() && (
+353 #ifdef \_OSD\_POSIX
+354         os\_init\_job\_environment(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.
+      \hyperlink{structunixd__config__rec_a9ad5824ad485ab8146926b852a4ba31b}{user\_name}, ap\_exists\_config\_define(\textcolor{stringliteral}{"DEBUG"})) != 0 ||
+355 #endif
+356         setuid(\hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.\hyperlink{structunixd__config__rec_a5a0cb8ffa8a7a2a7f74004988a516280}{user\_id}) == -1)) \{
+357         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga80a3f6767c5810b74c36ab52abff7d87}{APLOG\_ALERT}, errno, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02168)
+358                     \textcolor{stringliteral}{"setuid: unable to change to uid: %ld"},
+359                     (\textcolor{keywordtype}{long}) \hyperlink{group__APACHE__OS__UNIX_gab106efc911ecc78e6334f3004ba45e99}{ap\_unixd\_config}.\hyperlink{structunixd__config__rec_a5a0cb8ffa8a7a2a7f74004988a516280}{user\_id});
+360         \textcolor{keywordflow}{return} -1;
+361     \}
+362 \textcolor{preprocessor}{#if defined(HAVE\_PRCTL) && defined(PR\_SET\_DUMPABLE)}
+363     \textcolor{comment}{/* this applies to Linux 2.4+ */}
+364     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__MPM_gae197fcd0a6b0338f66b275d588b17cc7}{ap\_coredumpdir\_configured}) \{
+365         \textcolor{keywordflow}{if} (prctl(PR\_SET\_DUMPABLE, 1)) \{
+366             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga80a3f6767c5810b74c36ab52abff7d87}{APLOG\_ALERT}, errno, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02169)
+367                          \textcolor{stringliteral}{"set dumpable failed - this child will not coredump"}
+368                          \textcolor{stringliteral}{" after software errors"});
+369         \}
+370     \}
+371 \textcolor{preprocessor}{#endif}
+372     \textcolor{keywordflow}{return} 0;
+373 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{mod__unixd_8c_ace56382e8c8bdfffe9ffc8dbab06d36c_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{mod\+\_\+unixd.\+c@{mod\+\_\+unixd.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+unixd.\+c@{mod\+\_\+unixd.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(unixd)}{AP_DECLARE_MODULE(unixd)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{unixd}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__unixd_8c_af12128675836fed26298f3ab5dc5faa7}{}\label{mod__unixd_8c_af12128675836fed26298f3ab5dc5faa7}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{mod__unixd_8c_af12128675836fed26298f3ab5dc5faa7_icgraph}
+\end{center}
+\end{figure}
+
+

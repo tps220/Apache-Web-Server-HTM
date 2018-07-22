@@ -1,0 +1,478 @@
+\hypertarget{main_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/main.c File Reference}
+\label{main_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/main.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/main.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+getopt.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+version.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apu\+\_\+version.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+vhost.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+uri.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+ebcdic.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+Include dependency graph for main.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{main_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}
+\item 
+\#define \hyperlink{main_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{main_8c_aaa5a53d71fdf622de947e4c275208679}{T\+A\+S\+K\+\_\+\+S\+W\+I\+T\+C\+H\+\_\+\+S\+L\+E\+EP}~10000
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{main_8c_a814244b02f6701fd8ead246678bb3dae}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, const char $\ast$const \hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{main.\+c@{main.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}!main.\+c@{main.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}{APR_WANT_STDIO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}\hypertarget{main_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{}\label{main_8c_a4f3ace9204c571a34c0b2b9bd23b1133}
+\index{main.\+c@{main.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!main.\+c@{main.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{main_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{main_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{main.\+c@{main.\+c}!T\+A\+S\+K\+\_\+\+S\+W\+I\+T\+C\+H\+\_\+\+S\+L\+E\+EP@{T\+A\+S\+K\+\_\+\+S\+W\+I\+T\+C\+H\+\_\+\+S\+L\+E\+EP}}
+\index{T\+A\+S\+K\+\_\+\+S\+W\+I\+T\+C\+H\+\_\+\+S\+L\+E\+EP@{T\+A\+S\+K\+\_\+\+S\+W\+I\+T\+C\+H\+\_\+\+S\+L\+E\+EP}!main.\+c@{main.\+c}}
+\subsubsection[{\texorpdfstring{T\+A\+S\+K\+\_\+\+S\+W\+I\+T\+C\+H\+\_\+\+S\+L\+E\+EP}{TASK_SWITCH_SLEEP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+A\+S\+K\+\_\+\+S\+W\+I\+T\+C\+H\+\_\+\+S\+L\+E\+EP~10000}\hypertarget{main_8c_aaa5a53d71fdf622de947e4c275208679}{}\label{main_8c_aaa5a53d71fdf622de947e4c275208679}
+
+
+\subsection{Function Documentation}
+\index{main.\+c@{main.\+c}!main@{main}}
+\index{main@{main}!main.\+c@{main.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, const char $\ast$const argv[])}{main(int argc, const char *const argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{const char $\ast$const}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{main_8c_a814244b02f6701fd8ead246678bb3dae}{}\label{main_8c_a814244b02f6701fd8ead246678bb3dae}
+
+\begin{DoxyCode}
+441 \{
+442     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+443     \textcolor{keywordtype}{int} showcompile = 0, showdirectives = 0;
+444     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *confname = \hyperlink{ap__config__auto_8h_a8b9cc23fe2ef3e3d9cb2f3cc98f5ff14}{SERVER\_CONFIG\_FILE};
+445     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *def\_server\_root = \hyperlink{ap__config__auto_8h_a0bd140f3348de0944514ff605c585016}{HTTPD\_ROOT};
+446     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *temp\_error\_log = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+447     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__PROTO_ga11614f44ef4d939bdd984953346a7572}{error};
+448     \hyperlink{structprocess__rec}{process\_rec} *\hyperlink{pcretest_8txt_a8ec73ad58a04604170bd96796a2075a8}{process};
+449     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__CONFIG_gade454c9a3dc13ac389d15bf30f6c92b2}{pconf};
+450     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__CONFIG_gaa034d01ac4c0f083d21feaeae4e9c860}{plog}; \textcolor{comment}{/* Pool of log streams, reset \_after\_ each read of conf */}
+451     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__AP__EXPR_gaab85d20515306c350c88fbc8f58673b7}{ptemp}; \textcolor{comment}{/* Pool for temporary config stuff, reset often */}
+452     \hyperlink{structapr__pool__t}{apr\_pool\_t} *pcommands; \textcolor{comment}{/* Pool for -D, -C and -c switches */}
+453     \hyperlink{structapr__getopt__t}{apr\_getopt\_t} *\hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt};
+454     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+455     \hyperlink{structmodule__struct}{module} **\hyperlink{group__APACHE__CORE__CONFIG_ga6c76cdc81cd99ff0a028e1bda018be59}{mod};
+456     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *opt\_arg;
+457     \hyperlink{group__APR__Util__Opt_ga987fcf75505450f1b4ff9d7b3a7ff5d3}{APR\_OPTIONAL\_FN\_TYPE}(\hyperlink{group__APACHE__MPM_ga7d5ef13c9a1669642b422bcac870aac3}{ap\_signal\_server}) *signal\_server;
+458     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc} = \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+459 
+460     \hyperlink{ap__mpm_8h_a1c7875cf084cba436dd44e3a6e6fd0e6}{AP\_MONCONTROL}(0); \textcolor{comment}{/* turn off profiling of startup */}
+461 
+462     process = init\_process(&\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv});
+463     \hyperlink{group__APACHE__CORE__MAIN_gae8d16ca8eacac353b47d8d908c630d94}{ap\_pglobal} = process->\hyperlink{structprocess__rec_a10adc2d7a7a46a5285e6033cad375f24}{pool};
+464     pconf = process->\hyperlink{structprocess__rec_abd45db97ba3bd047eafc3bca08873e62}{pconf};
+465     \hyperlink{group__APACHE__CORE__MAIN_ga3b9f35b41e580b91b496512555d1f3b6}{ap\_server\_argv0} = process->\hyperlink{structprocess__rec_a6e3d376827f7d434c676d08c2bf0b995}{short\_name};
+466     ap\_init\_rng(\hyperlink{group__APACHE__CORE__MAIN_gae8d16ca8eacac353b47d8d908c630d94}{ap\_pglobal});
+467 
+468     \textcolor{comment}{/* Set up the OOM callback in the global pool, so all pools should}
+469 \textcolor{comment}{     * by default inherit it. */}
+470     apr\_pool\_abort\_set(abort\_on\_oom, apr\_pool\_parent\_get(process->\hyperlink{structprocess__rec_a10adc2d7a7a46a5285e6033cad375f24}{pool}));
+471 
+472 \textcolor{preprocessor}{#if APR\_CHARSET\_EBCDIC}
+473     \textcolor{keywordflow}{if} (ap\_init\_ebcdic(\hyperlink{group__APACHE__CORE__MAIN_gae8d16ca8eacac353b47d8d908c630d94}{ap\_pglobal}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+474         destroy\_and\_exit\_process(process, 1);
+475     \}
+476 \textcolor{preprocessor}{#endif}
+477 
+478     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pcommands, \hyperlink{group__APACHE__CORE__MAIN_gae8d16ca8eacac353b47d8d908c630d94}{ap\_pglobal});
+479     apr\_pool\_tag(pcommands, \textcolor{stringliteral}{"pcommands"});
+480     \hyperlink{group__APACHE__CORE__MAIN_gad3ee3481f3fb8dd80854e22780fd7ef3}{ap\_server\_pre\_read\_config}  = apr\_array\_make(pcommands, 1,
+481                                                 \textcolor{keyword}{sizeof}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *));
+482     \hyperlink{group__APACHE__CORE__MAIN_ga02ae1d9605521ea5e5485bc183f039ad}{ap\_server\_post\_read\_config} = apr\_array\_make(pcommands, 1,
+483                                                 \textcolor{keyword}{sizeof}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *));
+484     \hyperlink{group__APACHE__CORE__MAIN_ga6402302ec770b2decb574b57bbbe0fb8}{ap\_server\_config\_defines}   = apr\_array\_make(pcommands, 1,
+485                                                 \textcolor{keyword}{sizeof}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *));
+486 
+487     error = ap\_setup\_prelinked\_modules(process);
+488     \textcolor{keywordflow}{if} (error) \{
+489         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP}|
+      \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{APLOG\_EMERG}, 0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00012)
+490                      \textcolor{stringliteral}{"%s: %s"}, \hyperlink{group__APACHE__CORE__MAIN_ga3b9f35b41e580b91b496512555d1f3b6}{ap\_server\_argv0}, error);
+491         destroy\_and\_exit\_process(process, 1);
+492     \}
+493 
+494     ap\_run\_rewrite\_args(process);
+495 
+496     \textcolor{comment}{/* Maintain AP\_SERVER\_BASEARGS list in http\_main.h to allow the MPM}
+497 \textcolor{comment}{     * to safely pass on our args from its rewrite\_args() handler.}
+498 \textcolor{comment}{     */}
+499     apr\_getopt\_init(&opt, pcommands, process->\hyperlink{structprocess__rec_a0f2f21950cfa1b7ee6c7ddce4aa378f0}{argc}, process->\hyperlink{structprocess__rec_ac33b09935915f820f21f3f8a5a610519}{argv});
+500 
+501     \textcolor{keywordflow}{while} ((rv = apr\_getopt(opt, \hyperlink{group__APACHE__CORE__MAIN_gae239400e72c98b1b05b6c656d36ee03c}{AP\_SERVER\_BASEARGS}, &c, &opt\_arg))
+502             == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+503         \textcolor{keyword}{const} \textcolor{keywordtype}{char} **\textcolor{keyword}{new};
+504 
+505         \textcolor{keywordflow}{switch} (c) \{
+506         \textcolor{keywordflow}{case} \textcolor{charliteral}{'c'}:
+507             \textcolor{keyword}{new} = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)apr\_array\_push(\hyperlink{group__APACHE__CORE__MAIN_ga02ae1d9605521ea5e5485bc183f039ad}{ap\_server\_post\_read\_config});
+508             *\textcolor{keyword}{new} = apr\_pstrdup(pcommands, opt\_arg);
+509             \textcolor{keywordflow}{break};
+510 
+511         \textcolor{keywordflow}{case} \textcolor{charliteral}{'C'}:
+512             \textcolor{keyword}{new} = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)apr\_array\_push(\hyperlink{group__APACHE__CORE__MAIN_gad3ee3481f3fb8dd80854e22780fd7ef3}{ap\_server\_pre\_read\_config});
+513             *\textcolor{keyword}{new} = apr\_pstrdup(pcommands, opt\_arg);
+514             \textcolor{keywordflow}{break};
+515 
+516         \textcolor{keywordflow}{case} \textcolor{charliteral}{'d'}:
+517             def\_server\_root = opt\_arg;
+518             \textcolor{keywordflow}{break};
+519 
+520         \textcolor{keywordflow}{case} \textcolor{charliteral}{'D'}:
+521             \textcolor{keyword}{new} = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)apr\_array\_push(\hyperlink{group__APACHE__CORE__MAIN_ga6402302ec770b2decb574b57bbbe0fb8}{ap\_server\_config\_defines});
+522             *\textcolor{keyword}{new} = apr\_pstrdup(pcommands, opt\_arg);
+523             \textcolor{comment}{/* Setting -D DUMP\_VHOSTS should work like setting -S */}
+524             \textcolor{keywordflow}{if} (strcmp(opt\_arg, \textcolor{stringliteral}{"DUMP\_VHOSTS"}) == 0)
+525                 \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga0f9f4ecf42487f62311f7018fdeeffc1}{AP\_SQ\_RM\_CONFIG\_DUMP};
+526             \textcolor{comment}{/* Setting -D DUMP\_RUN\_CFG should work like setting -S */}
+527             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(opt\_arg, \textcolor{stringliteral}{"DUMP\_RUN\_CFG"}) == 0)
+528                 \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga0f9f4ecf42487f62311f7018fdeeffc1}{AP\_SQ\_RM\_CONFIG\_DUMP};
+529             \textcolor{comment}{/* Setting -D DUMP\_MODULES is equivalent to setting -M */}
+530             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(opt\_arg, \textcolor{stringliteral}{"DUMP\_MODULES"}) == 0)
+531                 \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga0f9f4ecf42487f62311f7018fdeeffc1}{AP\_SQ\_RM\_CONFIG\_DUMP};
+532             \textcolor{comment}{/* Setting -D DUMP\_INCLUDES is a type of configuration dump */}
+533             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (strcmp(opt\_arg, \textcolor{stringliteral}{"DUMP\_INCLUDES"}) == 0)
+534                 \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga0f9f4ecf42487f62311f7018fdeeffc1}{AP\_SQ\_RM\_CONFIG\_DUMP};
+535             \textcolor{keywordflow}{break};
+536 
+537         \textcolor{keywordflow}{case} \textcolor{charliteral}{'e'}:
+538             \textcolor{keywordflow}{if} (ap\_parse\_log\_level(opt\_arg, &\hyperlink{group__APACHE__CORE__LOG_ga3306700b5a77a80df513749df63d1613}{ap\_default\_loglevel}) != 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+539                 \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(process);
+540             \textcolor{keywordflow}{break};
+541 
+542         \textcolor{keywordflow}{case} \textcolor{charliteral}{'E'}:
+543             temp\_error\_log = apr\_pstrdup(process->\hyperlink{structprocess__rec_a10adc2d7a7a46a5285e6033cad375f24}{pool}, opt\_arg);
+544             \textcolor{keywordflow}{break};
+545 
+546         \textcolor{keywordflow}{case} \textcolor{charliteral}{'X'}:
+547             \textcolor{keyword}{new} = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)apr\_array\_push(\hyperlink{group__APACHE__CORE__MAIN_ga6402302ec770b2decb574b57bbbe0fb8}{ap\_server\_config\_defines});
+548             *\textcolor{keyword}{new} = \textcolor{stringliteral}{"DEBUG"};
+549             \textcolor{keywordflow}{break};
+550 
+551         \textcolor{keywordflow}{case} \textcolor{charliteral}{'f'}:
+552             confname = opt\_arg;
+553             \textcolor{keywordflow}{break};
+554 
+555         \textcolor{keywordflow}{case} \textcolor{charliteral}{'v'}:
+556             printf(\textcolor{stringliteral}{"Server version: %s\(\backslash\)n"}, ap\_get\_server\_description());
+557             printf(\textcolor{stringliteral}{"Server built:   %s\(\backslash\)n"}, ap\_get\_server\_built());
+558             destroy\_and\_exit\_process(process, 0);
+559 
+560         \textcolor{keywordflow}{case} \textcolor{charliteral}{'l'}:
+561             ap\_show\_modules();
+562             destroy\_and\_exit\_process(process, 0);
+563 
+564         \textcolor{keywordflow}{case} \textcolor{charliteral}{'L'}:
+565             \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga0f9f4ecf42487f62311f7018fdeeffc1}{AP\_SQ\_RM\_CONFIG\_DUMP};
+566             showdirectives = 1;
+567             \textcolor{keywordflow}{break};
+568 
+569         \textcolor{keywordflow}{case} \textcolor{charliteral}{'t'}:
+570             \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} == \hyperlink{group__APACHE__CORE__HTTPD_gaaaf96a9ade9932c291e30cb28ef4c0aa}{AP\_SQ\_RM\_UNKNOWN})
+571                 \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_gab7264066cd1bc1d87044e618ca2bb11b}{AP\_SQ\_RM\_CONFIG\_TEST};
+572             \textcolor{keywordflow}{break};
+573 
+574        \textcolor{keywordflow}{case} \textcolor{charliteral}{'T'}:
+575            \hyperlink{group__APACHE__CORE__MAIN_ga4ba96fbbb8c0c80ff8805b8cfae4fbfd}{ap\_document\_root\_check} = 0;
+576            \textcolor{keywordflow}{break};
+577 
+578         \textcolor{keywordflow}{case} \textcolor{charliteral}{'S'}:
+579             \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga0f9f4ecf42487f62311f7018fdeeffc1}{AP\_SQ\_RM\_CONFIG\_DUMP};
+580             \textcolor{keyword}{new} = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)apr\_array\_push(\hyperlink{group__APACHE__CORE__MAIN_ga6402302ec770b2decb574b57bbbe0fb8}{ap\_server\_config\_defines});
+581             *\textcolor{keyword}{new} = \textcolor{stringliteral}{"DUMP\_VHOSTS"};
+582             \textcolor{keyword}{new} = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)apr\_array\_push(\hyperlink{group__APACHE__CORE__MAIN_ga6402302ec770b2decb574b57bbbe0fb8}{ap\_server\_config\_defines});
+583             *\textcolor{keyword}{new} = \textcolor{stringliteral}{"DUMP\_RUN\_CFG"};
+584             \textcolor{keywordflow}{break};
+585 
+586         \textcolor{keywordflow}{case} \textcolor{charliteral}{'M'}:
+587             \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga0f9f4ecf42487f62311f7018fdeeffc1}{AP\_SQ\_RM\_CONFIG\_DUMP};
+588             \textcolor{keyword}{new} = (\textcolor{keyword}{const} \textcolor{keywordtype}{char} **)apr\_array\_push(\hyperlink{group__APACHE__CORE__MAIN_ga6402302ec770b2decb574b57bbbe0fb8}{ap\_server\_config\_defines});
+589             *\textcolor{keyword}{new} = \textcolor{stringliteral}{"DUMP\_MODULES"};
+590             \textcolor{keywordflow}{break};
+591 
+592         \textcolor{keywordflow}{case} \textcolor{charliteral}{'V'}:
+593             \textcolor{keywordflow}{if} (strcmp(ap\_show\_mpm(), \textcolor{stringliteral}{""})) \{ \textcolor{comment}{/* MPM built-in? */}
+594                 show\_compile\_settings();
+595                 destroy\_and\_exit\_process(process, 0);
+596             \}
+597             \textcolor{keywordflow}{else} \{
+598                 showcompile = 1;
+599                 \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga0f9f4ecf42487f62311f7018fdeeffc1}{AP\_SQ\_RM\_CONFIG\_DUMP};
+600             \}
+601             \textcolor{keywordflow}{break};
+602 
+603         \textcolor{keywordflow}{case} \textcolor{charliteral}{'h'}:
+604         \textcolor{keywordflow}{case} \textcolor{charliteral}{'?'}:
+605             \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(process);
+606         \}
+607     \}
+608 
+609     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} == \hyperlink{group__APACHE__CORE__HTTPD_gaaaf96a9ade9932c291e30cb28ef4c0aa}{AP\_SQ\_RM\_UNKNOWN})
+610         \hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} = \hyperlink{group__APACHE__CORE__HTTPD_ga59886acd6c44dcbd0a48dca833410805}{AP\_SQ\_RM\_NORMAL};
+611 
+612     \textcolor{comment}{/* bad cmdline option?  then we die */}
+613     \textcolor{keywordflow}{if} (rv != \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF} || opt->\hyperlink{structapr__getopt__t_ab04d49d670f095c3244dc9792b70ff07}{ind} < opt->\hyperlink{structapr__getopt__t_a58aeb33137aabdd5a00efbde05652094}{argc}) \{
+614         \hyperlink{pcre_8txt_aa9cd2818d74f0439394d545925927823}{usage}(process);
+615     \}
+616 
+617     \hyperlink{group__APACHE__CORE__MAIN_ga67bcf52a7e0a100757a834f270ef3fac}{ap\_main\_state} = \hyperlink{group__APACHE__CORE__HTTPD_ga19f7cb0f29a648ae407a291d42d1f35b}{AP\_SQ\_MS\_CREATE\_PRE\_CONFIG};
+618     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&plog, \hyperlink{group__APACHE__CORE__MAIN_gae8d16ca8eacac353b47d8d908c630d94}{ap\_pglobal});
+619     apr\_pool\_tag(plog, \textcolor{stringliteral}{"plog"});
+620     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&ptemp, pconf);
+621     apr\_pool\_tag(ptemp, \textcolor{stringliteral}{"ptemp"});
+622 
+623     \textcolor{comment}{/* Note that we preflight the config file once}
+624 \textcolor{comment}{     * before reading it \_again\_ in the main loop.}
+625 \textcolor{comment}{     * This allows things, log files configuration}
+626 \textcolor{comment}{     * for example, to settle down.}
+627 \textcolor{comment}{     */}
+628 
+629     \hyperlink{group__APACHE__CORE__MAIN_ga1c757ac6b804d090fba90a28bdbb0d8a}{ap\_server\_root} = def\_server\_root;
+630     \textcolor{keywordflow}{if} (temp\_error\_log) \{
+631         ap\_replace\_stderr\_log(process->\hyperlink{structprocess__rec_a10adc2d7a7a46a5285e6033cad375f24}{pool}, temp\_error\_log);
+632     \}
+633     \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf} = ap\_read\_config(process, ptemp, confname, &
+      \hyperlink{group__APACHE__CORE__CONFIG__TREE_gaf55369733bb7702836b806e63ff41503}{ap\_conftree});
+634     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}) \{
+635         \textcolor{keywordflow}{if} (showcompile) \{
+636             \textcolor{comment}{/* Well, we tried. Show as much as we can, but exit nonzero to}
+637 \textcolor{comment}{             * indicate that something's not right. The cause should have}
+638 \textcolor{comment}{             * already been logged. */}
+639             show\_compile\_settings();
+640         \}
+641         destroy\_and\_exit\_process(process, 1);
+642     \}
+643     apr\_pool\_cleanup\_register(pconf, &\hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, ap\_pool\_cleanup\_set\_null,
+644                               apr\_pool\_cleanup\_null);
+645 
+646     \textcolor{keywordflow}{if} (showcompile) \{ \textcolor{comment}{/* deferred due to dynamically loaded MPM */}
+647         show\_compile\_settings();
+648         destroy\_and\_exit\_process(process, 0);
+649     \}
+650 
+651     \textcolor{comment}{/* sort hooks here to make sure pre\_config hooks are sorted properly */}
+652     apr\_hook\_sort\_all();
+653 
+654     \textcolor{keywordflow}{if} (ap\_run\_pre\_config(pconf, plog, ptemp) != \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+655         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP} |
+      \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 0,
+656                      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00013) \textcolor{stringliteral}{"Pre-configuration failed"});
+657         destroy\_and\_exit\_process(process, 1);
+658     \}
+659 
+660     rv = ap\_process\_config\_tree(\hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__CONFIG__TREE_gaf55369733bb7702836b806e63ff41503}{ap\_conftree},
+661                                 process->\hyperlink{structprocess__rec_abd45db97ba3bd047eafc3bca08873e62}{pconf}, ptemp);
+662     \textcolor{keywordflow}{if} (rv == \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+663         ap\_fixup\_virtual\_hosts(pconf, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf});
+664         ap\_fini\_vhost\_config(pconf, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf});
+665         \textcolor{comment}{/*}
+666 \textcolor{comment}{         * Sort hooks again because ap\_process\_config\_tree may have add modules}
+667 \textcolor{comment}{         * and hence hooks. This happens with mod\_perl and modules written in}
+668 \textcolor{comment}{         * perl.}
+669 \textcolor{comment}{         */}
+670         apr\_hook\_sort\_all();
+671 
+672         \textcolor{keywordflow}{if} (ap\_run\_check\_config(pconf, plog, ptemp, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}) != 
+      \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+673             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP} |
+      \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 0,
+674                          \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00014) \textcolor{stringliteral}{"Configuration check failed"});
+675             destroy\_and\_exit\_process(process, 1);
+676         \}
+677 
+678         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} != \hyperlink{group__APACHE__CORE__HTTPD_ga59886acd6c44dcbd0a48dca833410805}{AP\_SQ\_RM\_NORMAL}) \{
+679             \textcolor{keywordflow}{if} (showdirectives) \{ \textcolor{comment}{/* deferred in case of DSOs */}
+680                 ap\_show\_directives();
+681                 destroy\_and\_exit\_process(process, 0);
+682             \}
+683             \textcolor{keywordflow}{else} \{
+684                 ap\_run\_test\_config(pconf, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf});
+685                 \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__MAIN_ga41e1a7a19bc534c1da2de0b00c887ce8}{ap\_run\_mode} == \hyperlink{group__APACHE__CORE__HTTPD_gab7264066cd1bc1d87044e618ca2bb11b}{AP\_SQ\_RM\_CONFIG\_TEST})
+686                     \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \textcolor{stringliteral}{"Syntax OK"});
+687             \}
+688             destroy\_and\_exit\_process(process, 0);
+689         \}
+690     \}
+691 
+692     \textcolor{comment}{/* If our config failed, deal with that here. */}
+693     \textcolor{keywordflow}{if} (rv != \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+694         destroy\_and\_exit\_process(process, 1);
+695     \}
+696 
+697     signal\_server = \hyperlink{group__APR__Util__Opt_ga35f2df25ca06248d2fdd3e7463446418}{APR\_RETRIEVE\_OPTIONAL\_FN}(
+      \hyperlink{group__APACHE__MPM_ga7d5ef13c9a1669642b422bcac870aac3}{ap\_signal\_server});
+698     \textcolor{keywordflow}{if} (signal\_server) \{
+699         \textcolor{keywordtype}{int} exit\_status;
+700 
+701         \textcolor{keywordflow}{if} (signal\_server(&exit\_status, pconf) != 0) \{
+702             destroy\_and\_exit\_process(process, exit\_status);
+703         \}
+704     \}
+705 
+706     apr\_pool\_clear(plog);
+707 
+708     \textcolor{keywordflow}{if} ( ap\_run\_open\_logs(pconf, plog, ptemp, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}) != 
+      \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+709         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP} |
+      \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR},
+710                      0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00015) \textcolor{stringliteral}{"Unable to open logs"});
+711         destroy\_and\_exit\_process(process, 1);
+712     \}
+713 
+714     \textcolor{keywordflow}{if} ( ap\_run\_post\_config(pconf, plog, ptemp, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}) != 
+      \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+715         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP} |
+      \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 0,
+716                      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00016) \textcolor{stringliteral}{"Configuration Failed"});
+717         destroy\_and\_exit\_process(process, 1);
+718     \}
+719 
+720     apr\_pool\_destroy(ptemp);
+721 
+722     \textcolor{keywordflow}{do} \{
+723         \hyperlink{group__APACHE__CORE__MAIN_ga67bcf52a7e0a100757a834f270ef3fac}{ap\_main\_state} = \hyperlink{group__APACHE__CORE__HTTPD_ga9ea4414ae0c87457d4e009b7cddda36a}{AP\_SQ\_MS\_DESTROY\_CONFIG};
+724         apr\_hook\_deregister\_all();
+725         apr\_pool\_clear(pconf);
+726         ap\_clear\_auth\_internal();
+727 
+728         \hyperlink{group__APACHE__CORE__MAIN_ga67bcf52a7e0a100757a834f270ef3fac}{ap\_main\_state} = \hyperlink{group__APACHE__CORE__HTTPD_ga43154cf04425f81cc9ed97e4e25d3f9c}{AP\_SQ\_MS\_CREATE\_CONFIG};
+729         \hyperlink{group__APACHE__CORE__MAIN_gaa9b53d3fdf7f7d23a4521c700e0f436f}{ap\_config\_generation}++;
+730         \textcolor{keywordflow}{for} (mod = \hyperlink{group__APACHE__CORE__CONFIG_gaee5bc5635e112a8e591fdd10c3797cda}{ap\_prelinked\_modules}; *mod != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; mod++) \{
+731             ap\_register\_hooks(*mod, pconf);
+732         \}
+733 
+734         \textcolor{comment}{/* This is a hack until we finish the code so that it only reads}
+735 \textcolor{comment}{         * the config file once and just operates on the tree already in}
+736 \textcolor{comment}{         * memory.  rbb}
+737 \textcolor{comment}{         */}
+738         \hyperlink{group__APACHE__CORE__CONFIG__TREE_gaf55369733bb7702836b806e63ff41503}{ap\_conftree} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+739         \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&ptemp, pconf);
+740         apr\_pool\_tag(ptemp, \textcolor{stringliteral}{"ptemp"});
+741         \hyperlink{group__APACHE__CORE__MAIN_ga1c757ac6b804d090fba90a28bdbb0d8a}{ap\_server\_root} = def\_server\_root;
+742         \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf} = ap\_read\_config(process, ptemp, confname, &
+      \hyperlink{group__APACHE__CORE__CONFIG__TREE_gaf55369733bb7702836b806e63ff41503}{ap\_conftree});
+743         \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}) \{
+744             destroy\_and\_exit\_process(process, 1);
+745         \}
+746         apr\_pool\_cleanup\_register(pconf, &\hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf},
+747                                   ap\_pool\_cleanup\_set\_null, apr\_pool\_cleanup\_null);
+748         \textcolor{comment}{/* sort hooks here to make sure pre\_config hooks are sorted properly */}
+749         apr\_hook\_sort\_all();
+750 
+751         \textcolor{keywordflow}{if} (ap\_run\_pre\_config(pconf, plog, ptemp) != \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+752             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{APLOG\_EMERG}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+753                          \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00017) \textcolor{stringliteral}{"Pre-configuration failed, exiting"});
+754             destroy\_and\_exit\_process(process, 1);
+755         \}
+756 
+757         \textcolor{keywordflow}{if} (ap\_process\_config\_tree(\hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__CONFIG__TREE_gaf55369733bb7702836b806e63ff41503}{ap\_conftree}, process->
+      \hyperlink{structprocess__rec_abd45db97ba3bd047eafc3bca08873e62}{pconf},
+758                                    ptemp) != \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+759             destroy\_and\_exit\_process(process, 1);
+760         \}
+761         ap\_fixup\_virtual\_hosts(pconf, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf});
+762         ap\_fini\_vhost\_config(pconf, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf});
+763         \textcolor{comment}{/*}
+764 \textcolor{comment}{         * Sort hooks again because ap\_process\_config\_tree may have add modules}
+765 \textcolor{comment}{         * and hence hooks. This happens with mod\_perl and modules written in}
+766 \textcolor{comment}{         * perl.}
+767 \textcolor{comment}{         */}
+768         apr\_hook\_sort\_all();
+769 
+770         \textcolor{keywordflow}{if} (ap\_run\_check\_config(pconf, plog, ptemp, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}) != 
+      \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+771             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{APLOG\_EMERG}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+772                          \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00018) \textcolor{stringliteral}{"Configuration check failed, exiting"});
+773             destroy\_and\_exit\_process(process, 1);
+774         \}
+775 
+776         apr\_pool\_clear(plog);
+777         \textcolor{keywordflow}{if} (ap\_run\_open\_logs(pconf, plog, ptemp, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}) != 
+      \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+778             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{APLOG\_EMERG}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+779                          \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00019) \textcolor{stringliteral}{"Unable to open logs, exiting"});
+780             destroy\_and\_exit\_process(process, 1);
+781         \}
+782 
+783         \textcolor{keywordflow}{if} (ap\_run\_post\_config(pconf, plog, ptemp, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}) != 
+      \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+784             \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{APLOG\_EMERG}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},
+785                          \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00020) \textcolor{stringliteral}{"Configuration Failed, exiting"});
+786             destroy\_and\_exit\_process(process, 1);
+787         \}
+788 
+789         apr\_pool\_destroy(ptemp);
+790         \hyperlink{group__PoolDebug_gaf225c04d565ebc6c37bbf018d6e407d5}{apr\_pool\_lock}(pconf, 1);
+791 
+792         ap\_run\_optional\_fn\_retrieve();
+793 
+794         \hyperlink{group__APACHE__CORE__MAIN_ga67bcf52a7e0a100757a834f270ef3fac}{ap\_main\_state} = \hyperlink{group__APACHE__CORE__HTTPD_ga2f9f192dae36858bfad1a78775dd17f1}{AP\_SQ\_MS\_RUN\_MPM};
+795         rc = ap\_run\_mpm(pconf, plog, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf});
+796 
+797         \hyperlink{group__PoolDebug_gaf225c04d565ebc6c37bbf018d6e407d5}{apr\_pool\_lock}(pconf, 0);
+798 
+799     \} \textcolor{keywordflow}{while} (rc == \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK});
+800 
+801     \textcolor{keywordflow}{if} (rc == \hyperlink{group__APACHE__CORE__DAEMON_gabe6b865c045f3e7c6892ef4f15ff5779}{DONE}) \{
+802         rc = \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+803     \}
+804     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (rc != \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}) \{
+805         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{APLOG\_EMERG}, 0, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(02818)
+806                      \textcolor{stringliteral}{"MPM run failed, exiting"});
+807     \}
+808     destroy\_and\_exit\_process(process, rc);
+809 
+810     \textcolor{comment}{/* NOTREACHED */}
+811     \textcolor{keywordflow}{return} !\hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+812 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{main_8c_a814244b02f6701fd8ead246678bb3dae_cgraph}
+\end{center}
+\end{figure}
+
+

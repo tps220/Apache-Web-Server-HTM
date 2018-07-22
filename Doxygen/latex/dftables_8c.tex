@@ -1,0 +1,208 @@
+\hypertarget{dftables_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/pcre/dftables.c File Reference}
+\label{dftables_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/dftables.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/dftables.\+c}}
+{\ttfamily \#include $<$ctype.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$locale.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}pcre\+\_\+internal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pcre\+\_\+maketables.\+c\char`\"{}}\\*
+Include dependency graph for dftables.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dftables_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{dftables_8c_a04b1605d521adebf40dece5c9f3fde71}{D\+F\+T\+A\+B\+L\+ES}~/$\ast$ \hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{pcre\+\_\+maketables.\+c} notices \hyperlink{pcregrep_8txt_a1d4586f0a85ecec85237e5fb0f611dd1}{this} $\ast$/
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{dftables_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$$\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{dftables.\+c@{dftables.\+c}!D\+F\+T\+A\+B\+L\+ES@{D\+F\+T\+A\+B\+L\+ES}}
+\index{D\+F\+T\+A\+B\+L\+ES@{D\+F\+T\+A\+B\+L\+ES}!dftables.\+c@{dftables.\+c}}
+\subsubsection[{\texorpdfstring{D\+F\+T\+A\+B\+L\+ES}{DFTABLES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+F\+T\+A\+B\+L\+ES~/$\ast$ {\bf pcre\+\_\+maketables.\+c} notices {\bf this} $\ast$/}\hypertarget{dftables_8c_a04b1605d521adebf40dece5c9f3fde71}{}\label{dftables_8c_a04b1605d521adebf40dece5c9f3fde71}
+
+
+\subsection{Function Documentation}
+\index{dftables.\+c@{dftables.\+c}!main@{main}}
+\index{main@{main}!dftables.\+c@{dftables.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{dftables_8c_a3c04138a5bfe5d72780bb7e82a18e627}{}\label{dftables_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+
+\begin{DoxyCode}
+62 \{
+63 FILE *\hyperlink{group__APACHE__CORE__DAEMON_ga588c778c1c1509e472f22dc36efb005e}{f};
+64 \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 1;
+65 \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *\hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables};
+66 \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *base\_of\_tables;
+67 
+68 \textcolor{comment}{/* By default, the default C locale is used rather than what the building user}
+69 \textcolor{comment}{happens to have set. However, if the -L option is given, set the locale from}
+70 \textcolor{comment}{the LC\_xxx environment variables. */}
+71 
+72 \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} > 1 && strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1], \textcolor{stringliteral}{"-L"}) == 0)
+73   \{
+74   setlocale(LC\_ALL, \textcolor{stringliteral}{""});        \textcolor{comment}{/* Set from environment variables */}
+75   i++;
+76   \}
+77 
+78 \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} < i + 1)
+79   \{
+80   fprintf(stderr, \textcolor{stringliteral}{"dftables: one filename argument is required\(\backslash\)n"});
+81   \textcolor{keywordflow}{return} 1;
+82   \}
+83 
+84 tables = \hyperlink{pcre_8txt_a8a33ce35ab2e6f9cb4f24697966c9a5e}{pcre\_maketables}();
+85 base\_of\_tables = \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables};
+86 
+87 f = fopen(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[i], \textcolor{stringliteral}{"wb"});
+88 \textcolor{keywordflow}{if} (f == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+89   \{
+90   fprintf(stderr, \textcolor{stringliteral}{"dftables: failed to open %s for writing\(\backslash\)n"}, \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1]);
+91   \textcolor{keywordflow}{return} 1;
+92   \}
+93 
+94 \textcolor{comment}{/* There are several fprintf() calls here, because gcc in pedantic mode}
+95 \textcolor{comment}{complains about the very long string otherwise. */}
+96 
+97 fprintf(f,
+98   \textcolor{stringliteral}{"/*************************************************\(\backslash\)n"}
+99   \textcolor{stringliteral}{"*      Perl-Compatible Regular Expressions       *\(\backslash\)n"}
+100   \textcolor{stringliteral}{"*************************************************/\(\backslash\)n\(\backslash\)n"}
+101   \textcolor{stringliteral}{"/* This file was automatically written by the dftables auxiliary\(\backslash\)n"}
+102   \textcolor{stringliteral}{"program. It contains character tables that are used when no external\(\backslash\)n"}
+103   \textcolor{stringliteral}{"tables are passed to PCRE by the application that calls it. The tables\(\backslash\)n"}
+104   \textcolor{stringliteral}{"are used only for characters whose code values are less than 256.\(\backslash\)n\(\backslash\)n"});
+105 fprintf(f,
+106   \textcolor{stringliteral}{"The following #includes are present because without them gcc 4.x may remove\(\backslash\)n"}
+107   \textcolor{stringliteral}{"the array definition from the final binary if PCRE is built into a static\(\backslash\)n"}
+108   \textcolor{stringliteral}{"library and dead code stripping is activated. This leads to link errors.\(\backslash\)n"}
+109   \textcolor{stringliteral}{"Pulling in the header ensures that the array gets flagged as \(\backslash\)"someone\(\backslash\)n"}
+110   \textcolor{stringliteral}{"outside this compilation unit might reference this\(\backslash\)" and so it will always\(\backslash\)n"}
+111   \textcolor{stringliteral}{"be supplied to the linker. */\(\backslash\)n\(\backslash\)n"});
+112 
+113 \textcolor{comment}{/* Force config.h in z/OS */}
+114 
+115 \textcolor{preprocessor}{#if defined NATIVE\_ZOS}
+116 fprintf(f,
+117   \textcolor{stringliteral}{"/* For z/OS, config.h is forced */\(\backslash\)n"}
+118   \textcolor{stringliteral}{"#ifndef HAVE\_CONFIG\_H\(\backslash\)n"}
+119   \textcolor{stringliteral}{"#define HAVE\_CONFIG\_H 1\(\backslash\)n"}
+120   \textcolor{stringliteral}{"#endif\(\backslash\)n\(\backslash\)n"});
+121 \textcolor{preprocessor}{#endif}
+122 
+123 fprintf(f,
+124   \textcolor{stringliteral}{"#ifdef HAVE\_CONFIG\_H\(\backslash\)n"}
+125   \textcolor{stringliteral}{"#include \(\backslash\)"config.h\(\backslash\)"\(\backslash\)n"}
+126   \textcolor{stringliteral}{"#endif\(\backslash\)n\(\backslash\)n"}
+127   \textcolor{stringliteral}{"#include \(\backslash\)"pcre\_internal.h\(\backslash\)"\(\backslash\)n\(\backslash\)n"});
+128 
+129 fprintf(f,
+130   \textcolor{stringliteral}{"const pcre\_uint8 PRIV(default\_tables)[] = \{\(\backslash\)n\(\backslash\)n"}
+131   \textcolor{stringliteral}{"/* This table is a lower casing table. */\(\backslash\)n\(\backslash\)n"});
+132 
+133 fprintf(f, \textcolor{stringliteral}{"  "});
+134 \textcolor{keywordflow}{for} (i = 0; i < 256; i++)
+135   \{
+136   \textcolor{keywordflow}{if} ((i & 7) == 0 && i != 0) fprintf(f, \textcolor{stringliteral}{"\(\backslash\)n  "});
+137   fprintf(f, \textcolor{stringliteral}{"%3d"}, *tables++);
+138   \textcolor{keywordflow}{if} (i != 255) fprintf(f, \textcolor{stringliteral}{","});
+139   \}
+140 fprintf(f, \textcolor{stringliteral}{",\(\backslash\)n\(\backslash\)n"});
+141 
+142 fprintf(f, \textcolor{stringliteral}{"/* This table is a case flipping table. */\(\backslash\)n\(\backslash\)n"});
+143 
+144 fprintf(f, \textcolor{stringliteral}{"  "});
+145 \textcolor{keywordflow}{for} (i = 0; i < 256; i++)
+146   \{
+147   \textcolor{keywordflow}{if} ((i & 7) == 0 && i != 0) fprintf(f, \textcolor{stringliteral}{"\(\backslash\)n  "});
+148   fprintf(f, \textcolor{stringliteral}{"%3d"}, *tables++);
+149   \textcolor{keywordflow}{if} (i != 255) fprintf(f, \textcolor{stringliteral}{","});
+150   \}
+151 fprintf(f, \textcolor{stringliteral}{",\(\backslash\)n\(\backslash\)n"});
+152 
+153 fprintf(f,
+154   \textcolor{stringliteral}{"/* This table contains bit maps for various character classes.\(\backslash\)n"}
+155   \textcolor{stringliteral}{"Each map is 32 bytes long and the bits run from the least\(\backslash\)n"}
+156   \textcolor{stringliteral}{"significant end of each byte. The classes that have their own\(\backslash\)n"}
+157   \textcolor{stringliteral}{"maps are: space, xdigit, digit, upper, lower, word, graph\(\backslash\)n"}
+158   \textcolor{stringliteral}{"print, punct, and cntrl. Other classes are built from combinations. */\(\backslash\)n\(\backslash\)n"});
+159 
+160 fprintf(f, \textcolor{stringliteral}{"  "});
+161 \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{pcre__internal_8h_aeca26eaa37dfd8f5f652365b2427f6c8}{cbit\_length}; i++)
+162   \{
+163   \textcolor{keywordflow}{if} ((i & 7) == 0 && i != 0)
+164     \{
+165     \textcolor{keywordflow}{if} ((i & 31) == 0) fprintf(f, \textcolor{stringliteral}{"\(\backslash\)n"});
+166     fprintf(f, \textcolor{stringliteral}{"\(\backslash\)n  "});
+167     \}
+168   fprintf(f, \textcolor{stringliteral}{"0x%02x"}, *tables++);
+169   \textcolor{keywordflow}{if} (i != cbit\_length - 1) fprintf(f, \textcolor{stringliteral}{","});
+170   \}
+171 fprintf(f, \textcolor{stringliteral}{",\(\backslash\)n\(\backslash\)n"});
+172 
+173 fprintf(f,
+174   \textcolor{stringliteral}{"/* This table identifies various classes of character by individual bits:\(\backslash\)n"}
+175   \textcolor{stringliteral}{"  0x%02x   white space character\(\backslash\)n"}
+176   \textcolor{stringliteral}{"  0x%02x   letter\(\backslash\)n"}
+177   \textcolor{stringliteral}{"  0x%02x   decimal digit\(\backslash\)n"}
+178   \textcolor{stringliteral}{"  0x%02x   hexadecimal digit\(\backslash\)n"}
+179   \textcolor{stringliteral}{"  0x%02x   alphanumeric or '\_'\(\backslash\)n"}
+180   \textcolor{stringliteral}{"  0x%02x   regular expression metacharacter or binary zero\(\backslash\)n*/\(\backslash\)n\(\backslash\)n"},
+181   \hyperlink{pcre__internal_8h_a65dc078d774490ba90c0d33d3fdece35}{ctype\_space}, \hyperlink{pcre__internal_8h_a2dd2a83bdb0c180d49a1f14f9fda9c1e}{ctype\_letter}, \hyperlink{pcre__internal_8h_a3d4364a50c8029c795b0e0a0e7ca7fbd}{ctype\_digit}, 
+      \hyperlink{pcre__internal_8h_a3664754fb10bf65932bf8f0c8ed543ce}{ctype\_xdigit}, \hyperlink{pcre__internal_8h_a442a60d2ab94f56f28e04ab175faf43f}{ctype\_word},
+182   \hyperlink{pcre__internal_8h_af254c479da59731eb98c178ba2db0430}{ctype\_meta});
+183 
+184 fprintf(f, \textcolor{stringliteral}{"  "});
+185 \textcolor{keywordflow}{for} (i = 0; i < 256; i++)
+186   \{
+187   \textcolor{keywordflow}{if} ((i & 7) == 0 && i != 0)
+188     \{
+189     fprintf(f, \textcolor{stringliteral}{" /* "});
+190     \textcolor{keywordflow}{if} (isprint(i-8)) fprintf(f, \textcolor{stringliteral}{" %c -"}, i-8);
+191       \textcolor{keywordflow}{else} fprintf(f, \textcolor{stringliteral}{"%3d-"}, i-8);
+192     \textcolor{keywordflow}{if} (isprint(i-1)) fprintf(f, \textcolor{stringliteral}{" %c "}, i-1);
+193       \textcolor{keywordflow}{else} fprintf(f, \textcolor{stringliteral}{"%3d"}, i-1);
+194     fprintf(f, \textcolor{stringliteral}{" */\(\backslash\)n  "});
+195     \}
+196   fprintf(f, \textcolor{stringliteral}{"0x%02x"}, *tables++);
+197   \textcolor{keywordflow}{if} (i != 255) fprintf(f, \textcolor{stringliteral}{","});
+198   \}
+199 
+200 fprintf(f, \textcolor{stringliteral}{"\};/* "});
+201 \textcolor{keywordflow}{if} (isprint(i-8)) fprintf(f, \textcolor{stringliteral}{" %c -"}, i-8);
+202   \textcolor{keywordflow}{else} fprintf(f, \textcolor{stringliteral}{"%3d-"}, i-8);
+203 \textcolor{keywordflow}{if} (isprint(i-1)) fprintf(f, \textcolor{stringliteral}{" %c "}, i-1);
+204   \textcolor{keywordflow}{else} fprintf(f, \textcolor{stringliteral}{"%3d"}, i-1);
+205 fprintf(f, \textcolor{stringliteral}{" */\(\backslash\)n\(\backslash\)n/* End of pcre\_chartables.c */\(\backslash\)n"});
+206 
+207 fclose(f);
+208 \hyperlink{util__expr__parse_8c_af07d89f5ceaea0c7c8252cc41fd75f37}{free}((\textcolor{keywordtype}{void} *)base\_of\_tables);
+209 \textcolor{keywordflow}{return} 0;
+210 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=245pt]{dftables_8c_a3c04138a5bfe5d72780bb7e82a18e627_cgraph}
+\end{center}
+\end{figure}
+
+

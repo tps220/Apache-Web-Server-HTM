@@ -1,0 +1,407 @@
+\hypertarget{mod__dav_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/dav/main/mod\+\_\+dav.c File Reference}
+\label{mod__dav_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/mod\+\_\+dav.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/dav/main/mod\+\_\+dav.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+script.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+dav.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+dav.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__dav_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdav__dir__conf}{dav\+\_\+dir\+\_\+conf}
+\item 
+struct \hyperlink{structdav__server__conf}{dav\+\_\+server\+\_\+conf}
+\item 
+struct \hyperlink{structdav__label__walker__ctx}{dav\+\_\+label\+\_\+walker\+\_\+ctx}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__dav_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__dav_8c_a15d3f810d0e1d2917061d537e44cbdee}{D\+A\+V\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+R\+O\+V\+I\+D\+ER}~\char`\"{}filesystem\char`\"{}
+\item 
+\#define \hyperlink{mod__dav_8c_ac5794a4954b80a630047d3c84a4262df}{D\+A\+V\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME}~\char`\"{}dav-\/\hyperlink{writing-handlers_8txt_a06375414bd03dc9c48eab0f361ada458}{handler}\char`\"{}
+\item 
+\#define \hyperlink{mod__dav_8c_a98ffb5d6c442467fd488b026057c399b}{D\+A\+V\+\_\+\+I\+N\+H\+E\+R\+I\+T\+\_\+\+V\+A\+L\+UE}(\hyperlink{group__apr__pools_ga3eb8c52002440da9a3eed11d54d08dd5}{parent},  child,  \hyperlink{group__APACHE__CORE__DAEMON_gae5c4b068a26ad890b3f11ac8dc993347}{field})~((child)-\/$>$\hyperlink{group__APACHE__CORE__DAEMON_gae5c4b068a26ad890b3f11ac8dc993347}{field} ? (child)-\/$>$\hyperlink{group__APACHE__CORE__DAEMON_gae5c4b068a26ad890b3f11ac8dc993347}{field} \+: (\hyperlink{group__apr__pools_ga3eb8c52002440da9a3eed11d54d08dd5}{parent})-\/$>$\hyperlink{group__APACHE__CORE__DAEMON_gae5c4b068a26ad890b3f11ac8dc993347}{field})
+\item 
+\#define \hyperlink{mod__dav_8c_ab346933d1823cc197d13dea5acb72db6}{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+A\+DD}~1
+\item 
+\#define \hyperlink{mod__dav_8c_a8d618fb8b3e7e40008d0bc0e90c8dc62}{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+S\+ET}~2
+\item 
+\#define \hyperlink{mod__dav_8c_a4017f116413cd3590599715931cd5424}{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+R\+E\+M\+O\+VE}~3
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structdav__label__walker__ctx}{dav\+\_\+label\+\_\+walker\+\_\+ctx} \hyperlink{mod__dav_8c_af5b2ec28a98f9e4df85379f178b0ea9c}{dav\+\_\+label\+\_\+walker\+\_\+ctx}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \hyperlink{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06ca25a335da80ffd113ec2354db5e0eac94}{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+U\+N\+S\+ET} = 0, 
+\hyperlink{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06ca9110a35646225b430d4e273f9d2afe41}{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+O\+FF}, 
+\hyperlink{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06caa594932e5f90e22d6ea9ce63a14eff5a}{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+ON}
+ \}
+\item 
+enum \{ \hyperlink{mod__dav_8c_a61dadd085c1777f559549e05962b2c9ea213887415600184343727adc29579665}{D\+A\+V\+\_\+\+M\+\_\+\+B\+I\+ND} = 0, 
+\hyperlink{mod__dav_8c_a61dadd085c1777f559549e05962b2c9eab728a91265036c4ec30923a29b30cba3}{D\+A\+V\+\_\+\+M\+\_\+\+S\+E\+A\+R\+CH}, 
+\hyperlink{mod__dav_8c_a61dadd085c1777f559549e05962b2c9ea9253bb6d49380a05288d3d67ee772047}{D\+A\+V\+\_\+\+M\+\_\+\+L\+A\+ST}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__dav_8c_a69d6c57c8f0568435ad44220639b5129}{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE} (dav)
+\item 
+\hyperlink{group__MOD__DAV_ga814f27f5b49e60ccbab42f6d7e9ec83b}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$)
+\item 
+\hyperlink{mod__dav_8c_a2434249368d7b7659be30e37e82de454}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__locks}{dav\+\_\+hooks\+\_\+locks} $\ast$)
+\item 
+\hyperlink{group__MOD__DAV_ga71ea2ae65144af3e1daee9f20185c465}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__propdb}{dav\+\_\+hooks\+\_\+propdb} $\ast$)
+\item 
+\hyperlink{group__MOD__DAV_ga1fa982be01e1bef76c768d1aadbfb1f2}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__vsn}{dav\+\_\+hooks\+\_\+vsn} $\ast$)
+\item 
+\hyperlink{group__MOD__DAV_gaaf5ac43ec716e8aff833437636eb9ed3}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__binding}{dav\+\_\+hooks\+\_\+binding} $\ast$)
+\item 
+\hyperlink{group__MOD__DAV_gaf8d98335d9e9b9707740b1b48cb7fcfa}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (const \hyperlink{structdav__hooks__search}{dav\+\_\+hooks\+\_\+search} $\ast$)
+\item 
+\hyperlink{mod__dav_8c_ab414dd1559a5a3e2d27c1120b55c2853}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{mod__dav_8c_a98b5b1b0d324bae3141b9c336b8118b7}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{mod__dav_8c_ga61f61992518a57060f4713a266bf3b97}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__text}{apr\+\_\+text} $\ast$)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{group__MOD__DAV_ga4ee05f777f6bd4a85895f39895980698}{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__dav_8c_af68c05cda018734a26eeee9142d6f0ec}{dav\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__dav_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__dav_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+R\+O\+V\+I\+D\+ER@{D\+A\+V\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+R\+O\+V\+I\+D\+ER}}
+\index{D\+A\+V\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+R\+O\+V\+I\+D\+ER@{D\+A\+V\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+R\+O\+V\+I\+D\+ER}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+R\+O\+V\+I\+D\+ER}{DAV_DEFAULT_PROVIDER}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+P\+R\+O\+V\+I\+D\+ER~\char`\"{}filesystem\char`\"{}}\hypertarget{mod__dav_8c_a15d3f810d0e1d2917061d537e44cbdee}{}\label{mod__dav_8c_a15d3f810d0e1d2917061d537e44cbdee}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME@{D\+A\+V\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME}}
+\index{D\+A\+V\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME@{D\+A\+V\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME}{DAV_HANDLER_NAME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+H\+A\+N\+D\+L\+E\+R\+\_\+\+N\+A\+ME~\char`\"{}dav-\/{\bf handler}\char`\"{}}\hypertarget{mod__dav_8c_ac5794a4954b80a630047d3c84a4262df}{}\label{mod__dav_8c_ac5794a4954b80a630047d3c84a4262df}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+I\+N\+H\+E\+R\+I\+T\+\_\+\+V\+A\+L\+UE@{D\+A\+V\+\_\+\+I\+N\+H\+E\+R\+I\+T\+\_\+\+V\+A\+L\+UE}}
+\index{D\+A\+V\+\_\+\+I\+N\+H\+E\+R\+I\+T\+\_\+\+V\+A\+L\+UE@{D\+A\+V\+\_\+\+I\+N\+H\+E\+R\+I\+T\+\_\+\+V\+A\+L\+UE}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+I\+N\+H\+E\+R\+I\+T\+\_\+\+V\+A\+L\+UE}{DAV_INHERIT_VALUE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+I\+N\+H\+E\+R\+I\+T\+\_\+\+V\+A\+L\+UE(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf parent}, }
+\item[{}]{child, }
+\item[{}]{{\bf field}}
+\end{DoxyParamCaption}
+)~((child)-\/$>${\bf field} ? (child)-\/$>${\bf field} \+: ({\bf parent})-\/$>${\bf field})}\hypertarget{mod__dav_8c_a98ffb5d6c442467fd488b026057c399b}{}\label{mod__dav_8c_a98ffb5d6c442467fd488b026057c399b}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+A\+DD@{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+A\+DD}}
+\index{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+A\+DD@{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+A\+DD}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+A\+DD}{DAV_LABEL_ADD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+A\+DD~1}\hypertarget{mod__dav_8c_ab346933d1823cc197d13dea5acb72db6}{}\label{mod__dav_8c_ab346933d1823cc197d13dea5acb72db6}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+R\+E\+M\+O\+VE@{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+R\+E\+M\+O\+VE}}
+\index{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+R\+E\+M\+O\+VE@{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+R\+E\+M\+O\+VE}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+R\+E\+M\+O\+VE}{DAV_LABEL_REMOVE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+R\+E\+M\+O\+VE~3}\hypertarget{mod__dav_8c_a4017f116413cd3590599715931cd5424}{}\label{mod__dav_8c_a4017f116413cd3590599715931cd5424}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+S\+ET@{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+S\+ET}}
+\index{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+S\+ET@{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+S\+ET}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+S\+ET}{DAV_LABEL_SET}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+A\+V\+\_\+\+L\+A\+B\+E\+L\+\_\+\+S\+ET~2}\hypertarget{mod__dav_8c_a8d618fb8b3e7e40008d0bc0e90c8dc62}{}\label{mod__dav_8c_a8d618fb8b3e7e40008d0bc0e90c8dc62}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!dav\+\_\+label\+\_\+walker\+\_\+ctx@{dav\+\_\+label\+\_\+walker\+\_\+ctx}}
+\index{dav\+\_\+label\+\_\+walker\+\_\+ctx@{dav\+\_\+label\+\_\+walker\+\_\+ctx}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+label\+\_\+walker\+\_\+ctx}{dav_label_walker_ctx}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf dav\+\_\+label\+\_\+walker\+\_\+ctx}  {\bf dav\+\_\+label\+\_\+walker\+\_\+ctx}}\hypertarget{mod__dav_8c_af5b2ec28a98f9e4df85379f178b0ea9c}{}\label{mod__dav_8c_af5b2ec28a98f9e4df85379f178b0ea9c}
+
+
+\subsection{Enumeration Type Documentation}
+\subsubsection[{\texorpdfstring{anonymous enum}{anonymous enum}}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\hypertarget{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06c}{}\label{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06c}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+U\+N\+S\+ET@{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+U\+N\+S\+ET}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+U\+N\+S\+ET@{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+U\+N\+S\+ET}}\item[{\em 
+D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+U\+N\+S\+ET\hypertarget{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06ca25a335da80ffd113ec2354db5e0eac94}{}\label{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06ca25a335da80ffd113ec2354db5e0eac94}
+}]\index{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+O\+FF@{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+O\+FF}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+O\+FF@{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+O\+FF}}\item[{\em 
+D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+O\+FF\hypertarget{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06ca9110a35646225b430d4e273f9d2afe41}{}\label{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06ca9110a35646225b430d4e273f9d2afe41}
+}]\index{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+ON@{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+ON}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+ON@{D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+ON}}\item[{\em 
+D\+A\+V\+\_\+\+E\+N\+A\+B\+L\+E\+D\+\_\+\+ON\hypertarget{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06caa594932e5f90e22d6ea9ce63a14eff5a}{}\label{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06caa594932e5f90e22d6ea9ce63a14eff5a}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+73      \{
+74     \hyperlink{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06ca25a335da80ffd113ec2354db5e0eac94}{DAV\_ENABLED\_UNSET} = 0,
+75     \hyperlink{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06ca9110a35646225b430d4e273f9d2afe41}{DAV\_ENABLED\_OFF},
+76     \hyperlink{mod__dav_8c_adc29c2ff13d900c2f185ee95427fb06caa594932e5f90e22d6ea9ce63a14eff5a}{DAV\_ENABLED\_ON}
+77 \};
+\end{DoxyCode}
+\subsubsection[{\texorpdfstring{anonymous enum}{anonymous enum}}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\hypertarget{mod__dav_8c_a61dadd085c1777f559549e05962b2c9e}{}\label{mod__dav_8c_a61dadd085c1777f559549e05962b2c9e}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{D\+A\+V\+\_\+\+M\+\_\+\+B\+I\+ND@{D\+A\+V\+\_\+\+M\+\_\+\+B\+I\+ND}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+M\+\_\+\+B\+I\+ND@{D\+A\+V\+\_\+\+M\+\_\+\+B\+I\+ND}}\item[{\em 
+D\+A\+V\+\_\+\+M\+\_\+\+B\+I\+ND\hypertarget{mod__dav_8c_a61dadd085c1777f559549e05962b2c9ea213887415600184343727adc29579665}{}\label{mod__dav_8c_a61dadd085c1777f559549e05962b2c9ea213887415600184343727adc29579665}
+}]\index{D\+A\+V\+\_\+\+M\+\_\+\+S\+E\+A\+R\+CH@{D\+A\+V\+\_\+\+M\+\_\+\+S\+E\+A\+R\+CH}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+M\+\_\+\+S\+E\+A\+R\+CH@{D\+A\+V\+\_\+\+M\+\_\+\+S\+E\+A\+R\+CH}}\item[{\em 
+D\+A\+V\+\_\+\+M\+\_\+\+S\+E\+A\+R\+CH\hypertarget{mod__dav_8c_a61dadd085c1777f559549e05962b2c9eab728a91265036c4ec30923a29b30cba3}{}\label{mod__dav_8c_a61dadd085c1777f559549e05962b2c9eab728a91265036c4ec30923a29b30cba3}
+}]\index{D\+A\+V\+\_\+\+M\+\_\+\+L\+A\+ST@{D\+A\+V\+\_\+\+M\+\_\+\+L\+A\+ST}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+M\+\_\+\+L\+A\+ST@{D\+A\+V\+\_\+\+M\+\_\+\+L\+A\+ST}}\item[{\em 
+D\+A\+V\+\_\+\+M\+\_\+\+L\+A\+ST\hypertarget{mod__dav_8c_a61dadd085c1777f559549e05962b2c9ea9253bb6d49380a05288d3d67ee772047}{}\label{mod__dav_8c_a61dadd085c1777f559549e05962b2c9ea9253bb6d49380a05288d3d67ee772047}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+103      \{
+104     \hyperlink{mod__dav_8c_a61dadd085c1777f559549e05962b2c9ea213887415600184343727adc29579665}{DAV\_M\_BIND} = 0,
+105     \hyperlink{mod__dav_8c_a61dadd085c1777f559549e05962b2c9eab728a91265036c4ec30923a29b30cba3}{DAV\_M\_SEARCH},
+106     \hyperlink{mod__dav_8c_a61dadd085c1777f559549e05962b2c9ea9253bb6d49380a05288d3d67ee772047}{DAV\_M\_LAST}
+107 \};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+L\+E(dav)}{APLOG_USE_MODULE(dav)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+L\+O\+G\+\_\+\+U\+S\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{dav}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__dav_8c_a69d6c57c8f0568435ad44220639b5129}{}\label{mod__dav_8c_a69d6c57c8f0568435ad44220639b5129}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(const dav\+\_\+hooks\+\_\+locks $\ast$)}{DAV_DECLARE(const dav_hooks_locks *)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const {\bf dav\+\_\+hooks\+\_\+locks} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__dav_8c_a2434249368d7b7659be30e37e82de454}{}\label{mod__dav_8c_a2434249368d7b7659be30e37e82de454}
+
+\begin{DoxyCode}
+224 \{
+225     \textcolor{keywordflow}{return} dav\_get\_provider(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r})->\hyperlink{structdav__provider_a25dbf8b437f20c68747156f045ccb9d0}{locks};
+226 \}
+\end{DoxyCode}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(void)}{DAV_DECLARE(void)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf void}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__dav_8c_ab414dd1559a5a3e2d27c1120b55c2853}{}\label{mod__dav_8c_ab414dd1559a5a3e2d27c1120b55c2853}
+
+\begin{DoxyCode}
+451 \{
+452     \hyperlink{structapr__text}{apr\_text} *\hyperlink{group__APACHE__CORE__DAEMON_gabfa74bb4f05f3b2de1a89160025e5400}{t} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+453 
+454     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}->propresult.xmlns == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+455       \hyperlink{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}{ap\_fputs}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, \textcolor{stringliteral}{"<D:response>"});
+456     \}
+457     \textcolor{keywordflow}{else} \{
+458       \hyperlink{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}{ap\_fputs}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, \textcolor{stringliteral}{"<D:response"});
+459       \textcolor{keywordflow}{for} (t = \hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}->propresult.xmlns; t; t = t->\hyperlink{structapr__text_aaf1b48e3f3085522fe7355e7d8893111}{next}) \{
+460         \hyperlink{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}{ap\_fputs}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, t->\hyperlink{structapr__text_a37a262695c36f740a7777ea9dd0b699d}{text});
+461       \}
+462       \hyperlink{group__APACHE__CORE__FILTER_ga75f41a49d4cc41263df38502abdce03b}{ap\_fputc}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, \textcolor{charliteral}{'>'});
+463     \}
+464 
+465     ap\_fputstrs(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb},
+466                 \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR} \textcolor{stringliteral}{"<D:href>"},
+467                 dav\_xml\_escape\_uri(\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool}, \hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}->href),
+468                 \textcolor{stringliteral}{"</D:href>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR},
+469                 \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+470 
+471     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}->propresult.propstats == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+472       \textcolor{comment}{/* use the Status-Line text from Apache.  Note, this will}
+473 \textcolor{comment}{       * default to 500 Internal Server Error if first->status}
+474 \textcolor{comment}{       * is not a known (or valid) status code.}
+475 \textcolor{comment}{       */}
+476       ap\_fputstrs(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb},
+477                   \textcolor{stringliteral}{"<D:status>HTTP/1.1 "},
+478                   ap\_get\_status\_line(\hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}->\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status}),
+479                   \textcolor{stringliteral}{"</D:status>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR},
+480                   \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+481     \}
+482     \textcolor{keywordflow}{else} \{
+483       \textcolor{comment}{/* assume this includes <propstat> and is quoted properly */}
+484       \textcolor{keywordflow}{for} (t = \hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}->propresult.propstats; t; t = t->\hyperlink{structapr__text_aaf1b48e3f3085522fe7355e7d8893111}{next}) \{
+485         \hyperlink{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}{ap\_fputs}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, t->\hyperlink{structapr__text_a37a262695c36f740a7777ea9dd0b699d}{text});
+486       \}
+487     \}
+488 
+489     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}->\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+490       \textcolor{comment}{/*}
+491 \textcolor{comment}{       * We supply the description, so we know it doesn't have to}
+492 \textcolor{comment}{       * have any escaping/encoding applied to it.}
+493 \textcolor{comment}{       */}
+494       ap\_fputstrs(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb},
+495                   \textcolor{stringliteral}{"<D:responsedescription>"},
+496                   \hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response}->\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc},
+497                   \textcolor{stringliteral}{"</D:responsedescription>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR},
+498                   \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+499     \}
+500 
+501     \hyperlink{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}{ap\_fputs}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, \textcolor{stringliteral}{"</D:response>"} 
+      \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+502 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{mod__dav_8c_ab414dd1559a5a3e2d27c1120b55c2853_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t)}{DAV_DECLARE(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__dav_8c_a98b5b1b0d324bae3141b9c336b8118b7}{}\label{mod__dav_8c_a98b5b1b0d324bae3141b9c336b8118b7}
+
+\begin{DoxyCode}
+536 \{
+537     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+538 
+539     \hyperlink{group__APACHE__CORE__FILTER_ga40e866c020cdbc18f0ad0a430d9231bb}{ap\_fputs}(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, \textcolor{stringliteral}{"</D:multistatus>"} 
+      \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+540 
+541     \textcolor{comment}{/* indicate the end of the response body */}
+542     b = apr\_bucket\_eos\_create(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a0924aae55826638314f76952ca5d60b1}{connection}->bucket\_alloc);
+543     \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(\hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb}, b);
+544 
+545     \textcolor{comment}{/* deliver whatever might be remaining in the brigade */}
+546     \textcolor{keywordflow}{return} ap\_pass\_brigade(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa02da9eb35e54fb4f12e49592414bc8e}{output\_filters}, \hyperlink{group__APACHE__CORE__PROTO_gaa3f67fb4e98cad3cf7b1633f8d7be67a}{bb});
+547 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{mod__dav_8c_a98b5b1b0d324bae3141b9c336b8118b7_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE@{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+text $\ast$)}{DAV_DECLARE(apr_text *)}}]{\setlength{\rightskip}{0pt plus 5cm}D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+text} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__dav_8c_ga61f61992518a57060f4713a266bf3b97}{}\label{mod__dav_8c_ga61f61992518a57060f4713a266bf3b97}
+
+\begin{DoxyCode}
+2172 \{
+2173     \hyperlink{structapr__text__header}{apr\_text\_header} \hyperlink{group__APR__Util__XML_gacbb04b51077cdb37e6a8cfa4c93acb07}{hdr} = \{ 0 \};
+2174     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = \hyperlink{group__MOD__DAV_ga558264c251695440cf0314f8fee98ee9}{prop\_ctx}->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts};
+2175     \hyperlink{structdav__prop__ctx}{dav\_prop\_ctx} *\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx} = (\hyperlink{structdav__prop__ctx}{dav\_prop\_ctx} *)\hyperlink{group__MOD__DAV_ga558264c251695440cf0314f8fee98ee9}{prop\_ctx}->
+      \hyperlink{structapr__array__header__t_af8462fa2a1ddf6406c66cd3dd441a269}{elts};
+2176     \hyperlink{structdav__error}{dav\_error} *err424\_set = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+2177     \hyperlink{structdav__error}{dav\_error} *err424\_delete = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+2178     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s};
+2179 
+2180     \textcolor{comment}{/* ### might be nice to sort by status code and description */}
+2181 
+2182     for ( ; i-- > 0; ++\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx} ) \{
+2183         apr\_text\_append(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, &hdr,
+2184                         \textcolor{stringliteral}{"<D:propstat>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR}
+2185                         \textcolor{stringliteral}{"<D:prop>"});
+2186         apr\_text\_append(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, &hdr, apr\_xml\_empty\_elem(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, ctx->\hyperlink{structdav__prop__ctx_a4284209a8b4c169bc388c079670d13ce}{prop}));
+2187         apr\_text\_append(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, &hdr, \textcolor{stringliteral}{"</D:prop>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+2188 
+2189         \textcolor{keywordflow}{if} (ctx->\hyperlink{structdav__prop__ctx_a3ca7a3c562221804cb1580ffe13770f8}{err} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+2190             \textcolor{comment}{/* nothing was assigned here yet, so make it a 424 */}
+2191 
+2192             \textcolor{keywordflow}{if} (ctx->\hyperlink{structdav__prop__ctx_aba3e83cb1c081e65f9b6834e055c782b}{operation} == \hyperlink{mod__dav_8h_af58dc57a374ca8cf5db3860de73e9f3f}{DAV\_PROP\_OP\_SET}) \{
+2193                 \textcolor{keywordflow}{if} (err424\_set == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+2194                     err424\_set = dav\_new\_error(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__HTTP__Status_ga786b81d7e7cb5c5ade4d914d10af4a17}{HTTP\_FAILED\_DEPENDENCY}, 0, 0,
+2195                                                \textcolor{stringliteral}{"Attempted DAV:set operation "}
+2196                                                \textcolor{stringliteral}{"could not be completed due "}
+2197                                                \textcolor{stringliteral}{"to other errors."});
+2198                 ctx->\hyperlink{structdav__prop__ctx_a3ca7a3c562221804cb1580ffe13770f8}{err} = err424\_set;
+2199             \}
+2200             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (ctx->\hyperlink{structdav__prop__ctx_aba3e83cb1c081e65f9b6834e055c782b}{operation} == \hyperlink{mod__dav_8h_a6ebefa1599c2d120837209790e0aabef}{DAV\_PROP\_OP\_DELETE}) \{
+2201                 \textcolor{keywordflow}{if} (err424\_delete == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+2202                     err424\_delete = dav\_new\_error(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__HTTP__Status_ga786b81d7e7cb5c5ade4d914d10af4a17}{HTTP\_FAILED\_DEPENDENCY}, 0, 0,
+2203                                                   \textcolor{stringliteral}{"Attempted DAV:remove "}
+2204                                                   \textcolor{stringliteral}{"operation could not be "}
+2205                                                   \textcolor{stringliteral}{"completed due to other "}
+2206                                                   \textcolor{stringliteral}{"errors."});
+2207                 ctx->\hyperlink{structdav__prop__ctx_a3ca7a3c562221804cb1580ffe13770f8}{err} = err424\_delete;
+2208             \}
+2209         \}
+2210 
+2211         \hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s} = apr\_psprintf(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p},
+2212                          \textcolor{stringliteral}{"<D:status>"}
+2213                          \textcolor{stringliteral}{"HTTP/1.1 %d (status)"}
+2214                          \textcolor{stringliteral}{"</D:status>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR},
+2215                          ctx->\hyperlink{structdav__prop__ctx_a3ca7a3c562221804cb1580ffe13770f8}{err}->\hyperlink{structdav__error_a128d24c8403fc5525e754f96700d4e41}{status});
+2216         apr\_text\_append(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, &hdr, \hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s});
+2217 
+2218         \textcolor{comment}{/* ### we should use compute\_desc if necessary... */}
+2219         \textcolor{keywordflow}{if} (ctx->\hyperlink{structdav__prop__ctx_a3ca7a3c562221804cb1580ffe13770f8}{err}->\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+2220             apr\_text\_append(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, &hdr, \textcolor{stringliteral}{"<D:responsedescription>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+2221             apr\_text\_append(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, &hdr, ctx->\hyperlink{structdav__prop__ctx_a3ca7a3c562221804cb1580ffe13770f8}{err}->\hyperlink{structdav__error_a9894d4e9640835e59e1d20b18c908b5b}{desc});
+2222             apr\_text\_append(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, &hdr, \textcolor{stringliteral}{"</D:responsedescription>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+2223         \}
+2224 
+2225         apr\_text\_append(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, &hdr, \textcolor{stringliteral}{"</D:propstat>"} \hyperlink{group__MOD__DAV_ga5a242a2983fe78462523e34b6d6e3628}{DEBUG\_CR});
+2226     \}
+2227 
+2228     \textcolor{keywordflow}{return} hdr.\hyperlink{structapr__text__header_a6db03d272f5e56058c84e10e49624c0b}{first};
+2229 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__dav_8c_ga61f61992518a57060f4713a266bf3b97_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}!dav\+\_\+module@{dav\+\_\+module}}
+\index{dav\+\_\+module@{dav\+\_\+module}!mod\+\_\+dav.\+c@{mod\+\_\+dav.\+c}}
+\subsubsection[{\texorpdfstring{dav\+\_\+module}{dav_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf D\+A\+V\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} dav\+\_\+module}\hypertarget{mod__dav_8c_af68c05cda018734a26eeee9142d6f0ec}{}\label{mod__dav_8c_af68c05cda018734a26eeee9142d6f0ec}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=
+\{
+    \hyperlink{group__ModuleInit_ga852c139212175cbc1e47a608a198da13}{STANDARD20\_MODULE\_STUFF},
+    dav\_create\_dir\_config,      
+    dav\_merge\_dir\_config,       
+    dav\_create\_server\_config,   
+    dav\_merge\_server\_config,    
+    dav\_cmds,                   
+    register\_hooks,             
+\}
+\end{DoxyCode}

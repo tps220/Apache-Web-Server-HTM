@@ -1,0 +1,64 @@
+\hypertarget{unix_2procsup_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/threadproc/unix/procsup.c File Reference}
+\label{unix_2procsup_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/threadproc/unix/procsup.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/threadproc/unix/procsup.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+threadproc.\+h\char`\"{}}\\*
+Include dependency graph for procsup.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{unix_2procsup_8c__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{unix_2procsup_8c__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__allocator_ga9cb19a118179bbd8625eacfec66a9ab8}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{unix_2procsup_8c_ac7a6489ac1c0c6ac76b0122a1bfe5588}{waitpid} (pid\+\_\+t pid, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$statusp, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_aefb1fa742c21909e746b978f6e1d7e17}{options})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{unix/procsup.\+c@{unix/procsup.\+c}!waitpid@{waitpid}}
+\index{waitpid@{waitpid}!unix/procsup.\+c@{unix/procsup.\+c}}
+\subsubsection[{\texorpdfstring{waitpid(pid\+\_\+t pid, int $\ast$statusp, int options)}{waitpid(pid_t pid, int *statusp, int options)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} waitpid (
+\begin{DoxyParamCaption}
+\item[{pid\+\_\+t}]{pid, }
+\item[{{\bf int} $\ast$}]{statusp, }
+\item[{{\bf int}}]{options}
+\end{DoxyParamCaption}
+)}\hypertarget{unix_2procsup_8c_ac7a6489ac1c0c6ac76b0122a1bfe5588}{}\label{unix_2procsup_8c_ac7a6489ac1c0c6ac76b0122a1bfe5588}
+
+\begin{DoxyCode}
+92 \{
+93     \textcolor{keywordtype}{int} tmp\_pid;
+94     \textcolor{keywordflow}{if} (kill(pid, 0) == -1) \{
+95         errno = ECHILD;
+96         \textcolor{keywordflow}{return} -1;
+97     \}
+98     \textcolor{keywordflow}{while} (((tmp\_pid = wait3(statusp, \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options}, 0)) != pid) &&
+99                 (tmp\_pid != -1) && (tmp\_pid != 0) && (pid != -1))
+100         ;
+101     \textcolor{keywordflow}{return} tmp\_pid;
+102 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{unix_2procsup_8c_ac7a6489ac1c0c6ac76b0122a1bfe5588_icgraph}
+\end{center}
+\end{figure}
+
+

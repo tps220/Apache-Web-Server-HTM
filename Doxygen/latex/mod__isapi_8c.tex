@@ -1,0 +1,252 @@
+\hypertarget{mod__isapi_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/arch/win32/mod\+\_\+isapi.c File Reference}
+\label{mod__isapi_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/arch/win32/mod\+\_\+isapi.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/arch/win32/mod\+\_\+isapi.\+c}}
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+script.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+buckets.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+rwlock.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+hash.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+isapi.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+isapi.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__isapi_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structisapi__dir__conf}{isapi\+\_\+dir\+\_\+conf}
+\item 
+struct {\bfseries isapi\+\_\+global\+\_\+conf}
+\item 
+struct \hyperlink{structisapi__loaded}{isapi\+\_\+loaded}
+\item 
+struct \hyperlink{structisapi__cid}{isapi\+\_\+cid}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__isapi_8c_ace858c7631f22ed5473cc12eac8da3c2}{I\+S\+A\+P\+I\+\_\+\+R\+E\+T\+RY}~\hyperlink{group__apr__time_gaec56c2c03299a750006bfcc08d64ec32}{apr\+\_\+time\+\_\+from\+\_\+sec}(30)
+\item 
+\#define \hyperlink{mod__isapi_8c_a8d1f2f6aa7c0923a15c67839cc90e16a}{I\+S\+A\+P\+I\+\_\+\+U\+N\+D\+EF}~-\/1
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structisapi__dir__conf}{isapi\+\_\+dir\+\_\+conf} \hyperlink{mod__isapi_8c_add0cabef7891b2a520cb2a203bfd9660}{isapi\+\_\+dir\+\_\+conf}
+\item 
+typedef struct \hyperlink{structisapi__loaded}{isapi\+\_\+loaded} \hyperlink{mod__isapi_8c_ac203655b919be87e7140085e3bc1c814}{isapi\+\_\+loaded}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{mod__isapi_8c_a7209a572d97da8d3adbe23612a8471e3}{isapi\+\_\+lookup} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, const char $\ast$fpath, \hyperlink{structisapi__loaded}{isapi\+\_\+loaded} $\ast$$\ast$isa)
+\item 
+\hyperlink{mod__isapi_8c_a893311493ebb4f6d982b3a1813635da5}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (isapi)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__isapi_8c_a5d0f9885a5a57790a017335dbbb9db26}{isapi\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}!I\+S\+A\+P\+I\+\_\+\+R\+E\+T\+RY@{I\+S\+A\+P\+I\+\_\+\+R\+E\+T\+RY}}
+\index{I\+S\+A\+P\+I\+\_\+\+R\+E\+T\+RY@{I\+S\+A\+P\+I\+\_\+\+R\+E\+T\+RY}!mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}}
+\subsubsection[{\texorpdfstring{I\+S\+A\+P\+I\+\_\+\+R\+E\+T\+RY}{ISAPI_RETRY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+S\+A\+P\+I\+\_\+\+R\+E\+T\+RY~{\bf apr\+\_\+time\+\_\+from\+\_\+sec}(30)}\hypertarget{mod__isapi_8c_ace858c7631f22ed5473cc12eac8da3c2}{}\label{mod__isapi_8c_ace858c7631f22ed5473cc12eac8da3c2}
+\index{mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}!I\+S\+A\+P\+I\+\_\+\+U\+N\+D\+EF@{I\+S\+A\+P\+I\+\_\+\+U\+N\+D\+EF}}
+\index{I\+S\+A\+P\+I\+\_\+\+U\+N\+D\+EF@{I\+S\+A\+P\+I\+\_\+\+U\+N\+D\+EF}!mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}}
+\subsubsection[{\texorpdfstring{I\+S\+A\+P\+I\+\_\+\+U\+N\+D\+EF}{ISAPI_UNDEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+S\+A\+P\+I\+\_\+\+U\+N\+D\+EF~-\/1}\hypertarget{mod__isapi_8c_a8d1f2f6aa7c0923a15c67839cc90e16a}{}\label{mod__isapi_8c_a8d1f2f6aa7c0923a15c67839cc90e16a}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}!isapi\+\_\+dir\+\_\+conf@{isapi\+\_\+dir\+\_\+conf}}
+\index{isapi\+\_\+dir\+\_\+conf@{isapi\+\_\+dir\+\_\+conf}!mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}}
+\subsubsection[{\texorpdfstring{isapi\+\_\+dir\+\_\+conf}{isapi_dir_conf}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf isapi\+\_\+dir\+\_\+conf}  {\bf isapi\+\_\+dir\+\_\+conf}}\hypertarget{mod__isapi_8c_add0cabef7891b2a520cb2a203bfd9660}{}\label{mod__isapi_8c_add0cabef7891b2a520cb2a203bfd9660}
+\index{mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}!isapi\+\_\+loaded@{isapi\+\_\+loaded}}
+\index{isapi\+\_\+loaded@{isapi\+\_\+loaded}!mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}}
+\subsubsection[{\texorpdfstring{isapi\+\_\+loaded}{isapi_loaded}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf isapi\+\_\+loaded} {\bf isapi\+\_\+loaded}}\hypertarget{mod__isapi_8c_ac203655b919be87e7140085e3bc1c814}{}\label{mod__isapi_8c_ac203655b919be87e7140085e3bc1c814}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(isapi)}{AP_DECLARE_MODULE(isapi)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{isapi}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__isapi_8c_a893311493ebb4f6d982b3a1813635da5}{}\label{mod__isapi_8c_a893311493ebb4f6d982b3a1813635da5}
+\index{mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}!isapi\+\_\+lookup@{isapi\+\_\+lookup}}
+\index{isapi\+\_\+lookup@{isapi\+\_\+lookup}!mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}}
+\subsubsection[{\texorpdfstring{isapi\+\_\+lookup(apr\+\_\+pool\+\_\+t $\ast$p, server\+\_\+rec $\ast$s, request\+\_\+rec $\ast$r, const char $\ast$fpath, isapi\+\_\+loaded $\ast$$\ast$isa)}{isapi_lookup(apr_pool_t *p, server_rec *s, request_rec *r, const char *fpath, isapi_loaded **isa)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} isapi\+\_\+lookup (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{{\bf server\+\_\+rec} $\ast$}]{s, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r, }
+\item[{const char $\ast$}]{fpath, }
+\item[{{\bf isapi\+\_\+loaded} $\ast$$\ast$}]{isa}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__isapi_8c_a7209a572d97da8d3adbe23612a8471e3}{}\label{mod__isapi_8c_a7209a572d97da8d3adbe23612a8471e3}
+
+\begin{DoxyCode}
+328 \{
+329     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+330     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__MOD__CACHE_ga11d8023381192746eb96be162398fe1c}{key};
+331 
+332     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(loaded.lock)) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+333         \textcolor{keywordflow}{return} rv;
+334     \}
+335 
+336     *isa = apr\_hash\_get(loaded.hash, fpath, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+337 
+338     \textcolor{keywordflow}{if} (*isa) \{
+339 
+340         \textcolor{comment}{/* If we find this lock exists, use a set-aside copy of gainlock}
+341 \textcolor{comment}{         * to avoid race conditions on NULLing the in\_progress variable}
+342 \textcolor{comment}{         * when the load has completed.  Release the global isapi hash}
+343 \textcolor{comment}{         * lock so other requests can proceed, then rdlock for completion}
+344 \textcolor{comment}{         * of loading our desired dll or wrlock if we would like to retry}
+345 \textcolor{comment}{         * loading the dll (because last\_load\_rv failed and retry is up.)}
+346 \textcolor{comment}{         */}
+347         \hyperlink{structapr__thread__rwlock__t}{apr\_thread\_rwlock\_t} *gainlock = (*isa)->in\_progress;
+348 
+349         \textcolor{comment}{/* gainlock is NULLed after the module loads successfully.}
+350 \textcolor{comment}{         * This free-threaded module can be used without any locking.}
+351 \textcolor{comment}{         */}
+352         \textcolor{keywordflow}{if} (!gainlock) \{
+353             rv = (*isa)->last\_load\_rv;
+354             apr\_thread\_mutex\_unlock(loaded.lock);
+355             \textcolor{keywordflow}{return} rv;
+356         \}
+357 
+358 
+359         \textcolor{keywordflow}{if} ((*isa)->last\_load\_rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+360             apr\_thread\_mutex\_unlock(loaded.lock);
+361             \textcolor{keywordflow}{if} ((rv = apr\_thread\_rwlock\_rdlock(gainlock))
+362                     != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+363                 \textcolor{keywordflow}{return} rv;
+364             \}
+365             rv = (*isa)->last\_load\_rv;
+366             apr\_thread\_rwlock\_unlock(gainlock);
+367             \textcolor{keywordflow}{return} rv;
+368         \}
+369 
+370         \textcolor{keywordflow}{if} (apr\_time\_now() > (*isa)->last\_load\_time + \hyperlink{mod__isapi_8c_ace858c7631f22ed5473cc12eac8da3c2}{ISAPI\_RETRY}) \{
+371 
+372             \textcolor{comment}{/* Remember last\_load\_time before releasing the global}
+373 \textcolor{comment}{             * hash lock to avoid colliding with another thread}
+374 \textcolor{comment}{             * that hit this exception at the same time as our}
+375 \textcolor{comment}{             * retry attempt, since we unlock the global mutex}
+376 \textcolor{comment}{             * before attempting a write lock for this module.}
+377 \textcolor{comment}{             */}
+378             \hyperlink{group__apr__time_gadb4bde16055748190eae190c55aa02bb}{apr\_time\_t} check\_time = (*isa)->last\_load\_time;
+379             apr\_thread\_mutex\_unlock(loaded.lock);
+380 
+381             \textcolor{keywordflow}{if} ((rv = apr\_thread\_rwlock\_wrlock(gainlock))
+382                     != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+383                 \textcolor{keywordflow}{return} rv;
+384             \}
+385 
+386             \textcolor{comment}{/* If last\_load\_time is unchanged, we still own this}
+387 \textcolor{comment}{             * retry, otherwise presume another thread provided}
+388 \textcolor{comment}{             * our retry (for good or ill).  Relock the global}
+389 \textcolor{comment}{             * hash for updating last\_load\_ vars, so their update}
+390 \textcolor{comment}{             * is always atomic to the global lock.}
+391 \textcolor{comment}{             */}
+392             \textcolor{keywordflow}{if} (check\_time == (*isa)->last\_load\_time) \{
+393 
+394                 rv = isapi\_load(loaded.pool, s, *isa);
+395 
+396                 apr\_thread\_mutex\_lock(loaded.lock);
+397                 (*isa)->last\_load\_rv = rv;
+398                 (*isa)->last\_load\_time = apr\_time\_now();
+399                 apr\_thread\_mutex\_unlock(loaded.lock);
+400             \}
+401             \textcolor{keywordflow}{else} \{
+402                 rv = (*isa)->last\_load\_rv;
+403             \}
+404             apr\_thread\_rwlock\_unlock(gainlock);
+405 
+406             \textcolor{keywordflow}{return} rv;
+407         \}
+408 
+409         \textcolor{comment}{/* We haven't hit timeup on retry, let's grab the last\_rv}
+410 \textcolor{comment}{         * within the hash mutex before unlocking.}
+411 \textcolor{comment}{         */}
+412         rv = (*isa)->last\_load\_rv;
+413         apr\_thread\_mutex\_unlock(loaded.lock);
+414 
+415         \textcolor{keywordflow}{return} rv;
+416     \}
+417 
+418     \textcolor{comment}{/* If the module was not found, it's time to create a hash key entry}
+419 \textcolor{comment}{     * before releasing the hash lock to avoid multiple threads from}
+420 \textcolor{comment}{     * loading the same module.}
+421 \textcolor{comment}{     */}
+422     key = apr\_pstrdup(loaded.pool, fpath);
+423     *isa = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(loaded.pool, \textcolor{keyword}{sizeof}(\hyperlink{structisapi__loaded}{isapi\_loaded}));
+424     (*isa)->filename = \hyperlink{group__MOD__CACHE_ga11d8023381192746eb96be162398fe1c}{key};
+425     \textcolor{keywordflow}{if} (r) \{
+426         \textcolor{comment}{/* A mutex that exists only long enough to attempt to}
+427 \textcolor{comment}{         * load this isapi dll, the release this module to all}
+428 \textcolor{comment}{         * other takers that came along during the one-time}
+429 \textcolor{comment}{         * load process.  Short lifetime for this lock would}
+430 \textcolor{comment}{         * be great, however, using r->pool is nasty if those}
+431 \textcolor{comment}{         * blocked on the lock haven't all unlocked before we}
+432 \textcolor{comment}{         * attempt to destroy.  A nastier race condition than}
+433 \textcolor{comment}{         * I want to deal with at this moment...}
+434 \textcolor{comment}{         */}
+435         apr\_thread\_rwlock\_create(&(*isa)->in\_progress, loaded.pool);
+436         apr\_thread\_rwlock\_wrlock((*isa)->in\_progress);
+437     \}
+438 
+439     apr\_hash\_set(loaded.hash, key, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING}, *isa);
+440 
+441     \textcolor{comment}{/* Now attempt to load the isapi on our own time,}
+442 \textcolor{comment}{     * allow other isapi processing to resume.}
+443 \textcolor{comment}{     */}
+444     apr\_thread\_mutex\_unlock(loaded.lock);
+445 
+446     rv = isapi\_load(loaded.pool, s, *isa);
+447     (*isa)->last\_load\_time = apr\_time\_now();
+448     (*isa)->last\_load\_rv = rv;
+449 
+450     \textcolor{keywordflow}{if} (r && (rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS})) \{
+451         \textcolor{comment}{/* Let others who are blocked on this particular}
+452 \textcolor{comment}{         * module resume their requests, for better or worse.}
+453 \textcolor{comment}{         */}
+454         \hyperlink{structapr__thread__rwlock__t}{apr\_thread\_rwlock\_t} *\hyperlink{group__MOD__DAV_gaffa9847fd05b455996e2dcd415f76a13}{unlock} = (*isa)->in\_progress;
+455         (*isa)->in\_progress = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+456         apr\_thread\_rwlock\_unlock(unlock);
+457     \}
+458     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!r && (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS})) \{
+459         \textcolor{comment}{/* We must leave a rwlock around for requests to retry}
+460 \textcolor{comment}{         * loading this dll after timeup... since we were in}
+461 \textcolor{comment}{         * the setup code we had avoided creating this lock.}
+462 \textcolor{comment}{         */}
+463         apr\_thread\_rwlock\_create(&(*isa)->in\_progress, loaded.pool);
+464     \}
+465 
+466     \textcolor{keywordflow}{return} (*isa)->last\_load\_rv;
+467 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}!isapi\+\_\+module@{isapi\+\_\+module}}
+\index{isapi\+\_\+module@{isapi\+\_\+module}!mod\+\_\+isapi.\+c@{mod\+\_\+isapi.\+c}}
+\subsubsection[{\texorpdfstring{isapi\+\_\+module}{isapi_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} isapi\+\_\+module}\hypertarget{mod__isapi_8c_a5d0f9885a5a57790a017335dbbb9db26}{}\label{mod__isapi_8c_a5d0f9885a5a57790a017335dbbb9db26}

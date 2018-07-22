@@ -1,0 +1,397 @@
+\hypertarget{passwd__common_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/passwd\+\_\+common.c File Reference}
+\label{passwd__common_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/passwd\+\_\+common.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/passwd\+\_\+common.\+c}}
+{\ttfamily \#include \char`\"{}passwd\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+errno.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+sha1.\+h\char`\"{}}\\*
+Include dependency graph for passwd\+\_\+common.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{passwd__common_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{passwd__common_8c_a3a5d10099bdc3aee765f7eae8f22c710}{abort\+\_\+on\+\_\+oom} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APR__Util__RC_ga38828c1c35a96d3d86edce1458ba991f}{rc})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{passwd__common_8c_ad569b14bb6259bdb981228f3d7be55e0}{putline} (\hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$\hyperlink{pcregrep_8txt_a588c778c1c1509e472f22dc36efb005e}{f}, const char $\ast$\hyperlink{pcregrep_8txt_a486d9936a8632c227772a15831f78e11}{l})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{passwd__common_8c_a115328175e2191b1fb1f48f8e66afa4a}{get\+\_\+password} (struct \hyperlink{structpasswd__ctx}{passwd\+\_\+ctx} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{passwd__common_8c_a4b5487061369e8f5054c1fa9eb5a30be}{mkhash} (struct \hyperlink{structpasswd__ctx}{passwd\+\_\+ctx} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{passwd__common_8c_aa4f65bebc9c808502a0173bfb5a3be83}{parse\+\_\+common\+\_\+options} (struct \hyperlink{structpasswd__ctx}{passwd\+\_\+ctx} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, char \hyperlink{group__APR__Util__DBM__SDBM_ga7dabf0be7fe6c0e41bab93d005632e83}{opt}, const char $\ast$opt\+\_\+arg)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$ \hyperlink{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}!abort\+\_\+on\+\_\+oom@{abort\+\_\+on\+\_\+oom}}
+\index{abort\+\_\+on\+\_\+oom@{abort\+\_\+on\+\_\+oom}!passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}}
+\subsubsection[{\texorpdfstring{abort\+\_\+on\+\_\+oom(int rc)}{abort_on_oom(int rc)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} abort\+\_\+on\+\_\+oom (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{rc}
+\end{DoxyParamCaption}
+)}\hypertarget{passwd__common_8c_a3a5d10099bdc3aee765f7eae8f22c710}{}\label{passwd__common_8c_a3a5d10099bdc3aee765f7eae8f22c710}
+
+\begin{DoxyCode}
+54 \{
+55     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf} = \textcolor{stringliteral}{"Error: out of memory\(\backslash\)n"};
+56     \textcolor{keywordtype}{int} written, \hyperlink{group__APR__MD5_ga16ff2d8e15ade4948398b0aeb80124a8}{count} = strlen(buf);
+57     \textcolor{keywordflow}{do} \{
+58         written = write(STDERR\_FILENO, buf, count);
+59         \textcolor{keywordflow}{if} (written == count)
+60             \textcolor{keywordflow}{break};
+61         \textcolor{keywordflow}{if} (written > 0) \{
+62             buf += written;
+63             count -= written;
+64         \}
+65     \} \textcolor{keywordflow}{while} (written >= 0 || errno == EINTR);
+66     abort();
+67     \textcolor{comment}{/* NOTREACHED */}
+68     \textcolor{keywordflow}{return} 0;
+69 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=232pt]{passwd__common_8c_a3a5d10099bdc3aee765f7eae8f22c710_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}!get\+\_\+password@{get\+\_\+password}}
+\index{get\+\_\+password@{get\+\_\+password}!passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}}
+\subsubsection[{\texorpdfstring{get\+\_\+password(struct passwd\+\_\+ctx $\ast$ctx)}{get_password(struct passwd_ctx *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} get\+\_\+password (
+\begin{DoxyParamCaption}
+\item[{struct {\bf passwd\+\_\+ctx} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{passwd__common_8c_a115328175e2191b1fb1f48f8e66afa4a}{}\label{passwd__common_8c_a115328175e2191b1fb1f48f8e66afa4a}
+
+\begin{DoxyCode}
+121 \{
+122     \textcolor{keywordtype}{char} \hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf}[\hyperlink{group__APACHE__CORE__DAEMON_ga4fa9aad0e9c7cc2e344b679cdbb2b67d}{MAX\_STRING\_LEN} + 1];
+123     \textcolor{keywordflow}{if} (ctx->\hyperlink{structpasswd__ctx_af434e862f6290b980533858aa7627c99}{passwd\_src} == \hyperlink{structpasswd__ctx_a1cb4b707f844b91078a8a07dfb95394fa83c2c0b1415768d01e85b2745ba49465}{PW\_STDIN}) \{
+124         \hyperlink{structapr__file__t}{apr\_file\_t} *file\_stdin;
+125         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} nread;
+126         \textcolor{keywordflow}{if} (apr\_file\_open\_stdin(&file\_stdin, ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+127             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = \textcolor{stringliteral}{"Unable to read from stdin."};
+128             \textcolor{keywordflow}{return} \hyperlink{lua__passwd_8h_a26fe5872acf12016f4524ada4cc8a83d}{ERR\_GENERAL};
+129         \}
+130         \textcolor{keywordflow}{if} (apr\_file\_read\_full(file\_stdin, buf, \textcolor{keyword}{sizeof}(buf) - 1,
+131                                &nread) != \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF}
+132             || nread == \textcolor{keyword}{sizeof}(buf) - 1) \{
+133             \textcolor{keywordflow}{goto} err\_too\_long;
+134         \}
+135         buf[nread] = \textcolor{charliteral}{'\(\backslash\)0'};
+136         \textcolor{keywordflow}{if} (nread >= 1 && buf[nread-1] == \textcolor{charliteral}{'\(\backslash\)n'}) \{
+137             buf[nread-1] = \textcolor{charliteral}{'\(\backslash\)0'};
+138             \textcolor{keywordflow}{if} (nread >= 2 && buf[nread-2] == \textcolor{charliteral}{'\(\backslash\)r'})
+139                 buf[nread-2] = \textcolor{charliteral}{'\(\backslash\)0'};
+140         \}
+141         apr\_file\_close(file\_stdin);
+142         ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd} = apr\_pstrdup(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, buf);
+143     \}
+144     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (ctx->\hyperlink{structpasswd__ctx_af434e862f6290b980533858aa7627c99}{passwd\_src} == \hyperlink{structpasswd__ctx_a1cb4b707f844b91078a8a07dfb95394faa94d10d17ee8fb9dad9a0aa0e56ae65a}{PW\_PROMPT\_VERIFY}) \{
+145         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__CONFIG_ga251f5b82593ed6f6b369185c5b220f82}{bufsize} = \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf});
+146         \textcolor{keywordflow}{if} (apr\_password\_get(\textcolor{stringliteral}{"Enter password: "}, buf, &bufsize) != 0)
+147             \textcolor{keywordflow}{goto} err\_too\_long;
+148         ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd} = apr\_pstrdup(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, buf);
+149     \}
+150     \textcolor{keywordflow}{else} \{
+151         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} bufsize = \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf});
+152         \textcolor{keywordflow}{if} (apr\_password\_get(\textcolor{stringliteral}{"New password: "}, buf, &bufsize) != 0)
+153             \textcolor{keywordflow}{goto} err\_too\_long;
+154         ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd} = apr\_pstrdup(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, buf);
+155         bufsize = \textcolor{keyword}{sizeof}(\hyperlink{group__APACHE__CORE__PROTO_ga17bc47ccf1b618ed082a4ff4f2cc7f7e}{buf});
+156         buf[0] = \textcolor{charliteral}{'\(\backslash\)0'};
+157         apr\_password\_get(\textcolor{stringliteral}{"Re-type new password: "}, buf, &bufsize);
+158         \textcolor{keywordflow}{if} (strcmp(ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd}, buf) != 0) \{
+159             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = \textcolor{stringliteral}{"password verification error"};
+160             memset(ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd}, \textcolor{charliteral}{'\(\backslash\)0'}, strlen(ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd}));
+161             memset(buf, \textcolor{charliteral}{'\(\backslash\)0'}, \textcolor{keyword}{sizeof}(buf));
+162             \textcolor{keywordflow}{return} \hyperlink{lua__passwd_8h_aa6b7701f200fc329d9e2cb8f869d4d5c}{ERR\_PWMISMATCH};
+163         \}
+164     \}
+165     memset(buf, \textcolor{charliteral}{'\(\backslash\)0'}, \textcolor{keyword}{sizeof}(buf));
+166     \textcolor{keywordflow}{return} 0;
+167 
+168 err\_too\_long:
+169     ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool},
+170                                \textcolor{stringliteral}{"password too long (>%"} \hyperlink{group__apr__platform_ga86928aa34fa77f8e7855d69050e3a27a}{APR\_SIZE\_T\_FMT} \textcolor{stringliteral}{")"},
+171                                ctx->\hyperlink{structpasswd__ctx_a0cf82260a607c15384cfd8a98aeace9b}{out\_len} - 1);
+172     \textcolor{keywordflow}{return} \hyperlink{lua__passwd_8h_ad10b7a726bfcfbac7f7c30586e8802d0}{ERR\_OVERFLOW};
+173 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{passwd__common_8c_a115328175e2191b1fb1f48f8e66afa4a_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}!mkhash@{mkhash}}
+\index{mkhash@{mkhash}!passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}}
+\subsubsection[{\texorpdfstring{mkhash(struct passwd\+\_\+ctx $\ast$ctx)}{mkhash(struct passwd_ctx *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} mkhash (
+\begin{DoxyParamCaption}
+\item[{struct {\bf passwd\+\_\+ctx} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{passwd__common_8c_a4b5487061369e8f5054c1fa9eb5a30be}{}\label{passwd__common_8c_a4b5487061369e8f5054c1fa9eb5a30be}
+
+\begin{DoxyCode}
+180 \{
+181     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__PROTO_ga4b22922ccb91d71d170bf2bbca3d241e}{pw};
+182     \textcolor{keywordtype}{char} \hyperlink{group__APR__MD5_ga0a678842764ed169d6a8527b30273b7d}{salt}[16];
+183     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+184     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret} = 0;
+185 \textcolor{preprocessor}{#if CRYPT\_ALGO\_SUPPORTED}
+186     \textcolor{keywordtype}{char} *cbuf;
+187 \textcolor{preprocessor}{#endif}
+188 
+189     \textcolor{keywordflow}{if} (ctx->\hyperlink{structpasswd__ctx_a54f34c48127cd3c115a7fa2fb23a089a}{cost} != 0 && ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg} != \hyperlink{lua__passwd_8h_a9a73df4a8fbd46da478b2cf6e2a184d8}{ALG\_BCRYPT}) \{
+190         apr\_file\_printf(\hyperlink{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile},
+191                         \textcolor{stringliteral}{"Warning: Ignoring -C argument for this algorithm."} \hyperlink{htcacheclean_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{NL});
+192     \}
+193 
+194     \textcolor{keywordflow}{if} (ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+195         \textcolor{keywordflow}{if} ((ret = \hyperlink{passwd__common_8c_a115328175e2191b1fb1f48f8e66afa4a}{get\_password}(ctx)) != 0)
+196             \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+197     \}
+198     pw = ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd};
+199 
+200     \textcolor{keywordflow}{switch} (ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg}) \{
+201     \textcolor{keywordflow}{case} \hyperlink{lua__passwd_8h_a59923cdafd25c02e27f78f027036aca6}{ALG\_APSHA}:
+202         \textcolor{comment}{/* XXX out >= 28 + strlen(sha1) chars - fixed len SHA */}
+203         apr\_sha1\_base64(pw, strlen(pw), ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out});
+204         \textcolor{keywordflow}{break};
+205 
+206     \textcolor{keywordflow}{case} \hyperlink{lua__passwd_8h_a9a6460186b091969c74996c0c4b32202}{ALG\_APMD5}:
+207         ret = generate\_salt(salt, 8, &ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr}, ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool});
+208         \textcolor{keywordflow}{if} (ret != 0)
+209             \textcolor{keywordflow}{break};
+210         rv = apr\_md5\_encode(pw, salt, ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, ctx->\hyperlink{structpasswd__ctx_a0cf82260a607c15384cfd8a98aeace9b}{out\_len});
+211         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+212             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool},
+213                                        \textcolor{stringliteral}{"could not encode password: %pm"}, &rv);
+214             ret = \hyperlink{lua__passwd_8h_a26fe5872acf12016f4524ada4cc8a83d}{ERR\_GENERAL};
+215         \}
+216         \textcolor{keywordflow}{break};
+217 
+218     \textcolor{keywordflow}{case} \hyperlink{passwd__common_8h_a84eb6306ed47c6e7b48058578927d9ab}{ALG\_PLAIN}:
+219         \textcolor{comment}{/* XXX this len limitation is not in sync with any HTTPd len. */}
+220         apr\_cpystrn(ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, pw, ctx->\hyperlink{structpasswd__ctx_a0cf82260a607c15384cfd8a98aeace9b}{out\_len});
+221         \textcolor{keywordflow}{break};
+222 
+223 \textcolor{preprocessor}{#if CRYPT\_ALGO\_SUPPORTED}
+224     \textcolor{keywordflow}{case} \hyperlink{lua__passwd_8h_ab334a04024f8605534f6c6bb94046fb3}{ALG\_CRYPT}:
+225         ret = generate\_salt(salt, 8, &ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr}, ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool});
+226         \textcolor{keywordflow}{if} (ret != 0)
+227             \textcolor{keywordflow}{break};
+228         cbuf = crypt(pw, salt);
+229         \textcolor{keywordflow}{if} (cbuf == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+230             rv = \hyperlink{group__apr__errno_ga2096daff578ef301e060b80c7a4525bf}{APR\_FROM\_OS\_ERROR}(errno);
+231             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, \textcolor{stringliteral}{"crypt() failed: %pm"}, &rv);
+232             ret = \hyperlink{lua__passwd_8h_aa6b7701f200fc329d9e2cb8f869d4d5c}{ERR\_PWMISMATCH};
+233             \textcolor{keywordflow}{break};
+234         \}
+235 
+236         apr\_cpystrn(ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, cbuf, ctx->\hyperlink{structpasswd__ctx_a0cf82260a607c15384cfd8a98aeace9b}{out\_len} - 1);
+237         \textcolor{keywordflow}{if} (strlen(pw) > 8) \{
+238             \textcolor{keywordtype}{char} *truncpw = apr\_pstrdup(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, pw);
+239             truncpw[8] = \textcolor{charliteral}{'\(\backslash\)0'};
+240             \textcolor{keywordflow}{if} (!strcmp(ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, crypt(truncpw, salt))) \{
+241                 apr\_file\_printf(\hyperlink{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"Warning: Password truncated to 8 "}
+242                                 \textcolor{stringliteral}{"characters by CRYPT algorithm."} \hyperlink{htcacheclean_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{NL});
+243             \}
+244             memset(truncpw, \textcolor{charliteral}{'\(\backslash\)0'}, strlen(pw));
+245         \}
+246         \textcolor{keywordflow}{break};
+247 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* CRYPT\_ALGO\_SUPPORTED */}\textcolor{preprocessor}{}
+248 
+249 \textcolor{preprocessor}{#if BCRYPT\_ALGO\_SUPPORTED}
+250     \textcolor{keywordflow}{case} \hyperlink{lua__passwd_8h_a9a73df4a8fbd46da478b2cf6e2a184d8}{ALG\_BCRYPT}:
+251         rv = apr\_generate\_random\_bytes((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)salt, 16);
+252         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+253             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, \textcolor{stringliteral}{"Unable to generate random "}
+254                                        \textcolor{stringliteral}{"bytes: %pm"}, &rv);
+255             ret = \hyperlink{lua__passwd_8h_aa876a4ff62386bf08159db06fb7d9777}{ERR\_RANDOM};
+256             \textcolor{keywordflow}{break};
+257         \}
+258 
+259         \textcolor{keywordflow}{if} (ctx->\hyperlink{structpasswd__ctx_a54f34c48127cd3c115a7fa2fb23a089a}{cost} == 0)
+260             ctx->\hyperlink{structpasswd__ctx_a54f34c48127cd3c115a7fa2fb23a089a}{cost} = \hyperlink{lua__passwd_8h_abf73efeab099a3cf38e0c3a8e987140e}{BCRYPT\_DEFAULT\_COST};
+261         rv = apr\_bcrypt\_encode(pw, ctx->\hyperlink{structpasswd__ctx_a54f34c48127cd3c115a7fa2fb23a089a}{cost}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)salt, 16,
+262                                ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, ctx->\hyperlink{structpasswd__ctx_a0cf82260a607c15384cfd8a98aeace9b}{out\_len});
+263         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+264             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, \textcolor{stringliteral}{"Unable to encode with "}
+265                                        \textcolor{stringliteral}{"bcrypt: %pm"}, &rv);
+266             ret = \hyperlink{lua__passwd_8h_aa6b7701f200fc329d9e2cb8f869d4d5c}{ERR\_PWMISMATCH};
+267             \textcolor{keywordflow}{break};
+268         \}
+269         \textcolor{keywordflow}{break};
+270 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* BCRYPT\_ALGO\_SUPPORTED */}\textcolor{preprocessor}{}
+271 
+272     \textcolor{keywordflow}{default}:
+273         apr\_file\_printf(\hyperlink{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"mkhash(): BUG: invalid algorithm %d"},
+274                         ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg});
+275         abort();
+276     \}
+277     memset(pw, \textcolor{charliteral}{'\(\backslash\)0'}, strlen(pw));
+278     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+279 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{passwd__common_8c_a4b5487061369e8f5054c1fa9eb5a30be_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}!parse\+\_\+common\+\_\+options@{parse\+\_\+common\+\_\+options}}
+\index{parse\+\_\+common\+\_\+options@{parse\+\_\+common\+\_\+options}!passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}}
+\subsubsection[{\texorpdfstring{parse\+\_\+common\+\_\+options(struct passwd\+\_\+ctx $\ast$ctx, char opt, const char $\ast$opt\+\_\+arg)}{parse_common_options(struct passwd_ctx *ctx, char opt, const char *opt_arg)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} parse\+\_\+common\+\_\+options (
+\begin{DoxyParamCaption}
+\item[{struct {\bf passwd\+\_\+ctx} $\ast$}]{ctx, }
+\item[{char}]{opt, }
+\item[{const char $\ast$}]{opt\+\_\+arg}
+\end{DoxyParamCaption}
+)}\hypertarget{passwd__common_8c_aa4f65bebc9c808502a0173bfb5a3be83}{}\label{passwd__common_8c_aa4f65bebc9c808502a0173bfb5a3be83}
+
+\begin{DoxyCode}
+283 \{
+284     \textcolor{keywordflow}{switch} (\hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt}) \{
+285     \textcolor{keywordflow}{case} \textcolor{charliteral}{'b'}:
+286         ctx->\hyperlink{structpasswd__ctx_af434e862f6290b980533858aa7627c99}{passwd\_src} = \hyperlink{structpasswd__ctx_a1cb4b707f844b91078a8a07dfb95394fa7e4f1eaf780b78b2e48f15fe2c30fc92}{PW\_ARG};
+287         \textcolor{keywordflow}{break};
+288     \textcolor{keywordflow}{case} \textcolor{charliteral}{'i'}:
+289         ctx->\hyperlink{structpasswd__ctx_af434e862f6290b980533858aa7627c99}{passwd\_src} = \hyperlink{structpasswd__ctx_a1cb4b707f844b91078a8a07dfb95394fa83c2c0b1415768d01e85b2745ba49465}{PW\_STDIN};
+290         \textcolor{keywordflow}{break};
+291     \textcolor{keywordflow}{case} \textcolor{charliteral}{'m'}:
+292         ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg} = \hyperlink{lua__passwd_8h_a9a6460186b091969c74996c0c4b32202}{ALG\_APMD5};
+293         \textcolor{keywordflow}{break};
+294     \textcolor{keywordflow}{case} \textcolor{charliteral}{'s'}:
+295         ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg} = \hyperlink{lua__passwd_8h_a59923cdafd25c02e27f78f027036aca6}{ALG\_APSHA};
+296         \textcolor{keywordflow}{break};
+297     \textcolor{keywordflow}{case} \textcolor{charliteral}{'p'}:
+298         ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg} = \hyperlink{passwd__common_8h_a84eb6306ed47c6e7b48058578927d9ab}{ALG\_PLAIN};
+299 \textcolor{preprocessor}{#if !PLAIN\_ALGO\_SUPPORTED}
+300         \textcolor{comment}{/* Backward compatible behavior: Just print a warning */}
+301         apr\_file\_printf(\hyperlink{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile},
+302                         \textcolor{stringliteral}{"Warning: storing passwords as plain text might just "}
+303                         \textcolor{stringliteral}{"not work on this platform."} \hyperlink{htcacheclean_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{NL});
+304 \textcolor{preprocessor}{#endif}
+305         \textcolor{keywordflow}{break};
+306     \textcolor{keywordflow}{case} \textcolor{charliteral}{'d'}:
+307 \textcolor{preprocessor}{#if CRYPT\_ALGO\_SUPPORTED}
+308         ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg} = \hyperlink{lua__passwd_8h_ab334a04024f8605534f6c6bb94046fb3}{ALG\_CRYPT};
+309 \textcolor{preprocessor}{#else}
+310         \textcolor{comment}{/* Backward compatible behavior: Use MD5. OK since MD5 is more secure */}
+311         apr\_file\_printf(\hyperlink{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile},
+312                         \textcolor{stringliteral}{"Warning: CRYPT algorithm not supported on this "}
+313                         \textcolor{stringliteral}{"platform."} \hyperlink{htcacheclean_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{NL}
+314                         \textcolor{stringliteral}{"Automatically using MD5 format."} \hyperlink{htcacheclean_8c_a4fc34b120ed3bd1120c1eb36abbcd6af}{NL});
+315         ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg} = \hyperlink{lua__passwd_8h_a9a6460186b091969c74996c0c4b32202}{ALG\_APMD5};
+316 \textcolor{preprocessor}{#endif}
+317         \textcolor{keywordflow}{break};
+318     \textcolor{keywordflow}{case} \textcolor{charliteral}{'B'}:
+319 \textcolor{preprocessor}{#if BCRYPT\_ALGO\_SUPPORTED}
+320         ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg} = \hyperlink{lua__passwd_8h_a9a73df4a8fbd46da478b2cf6e2a184d8}{ALG\_BCRYPT};
+321 \textcolor{preprocessor}{#else}
+322         \textcolor{comment}{/* Don't fall back to something less secure */}
+323         ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = \textcolor{stringliteral}{"BCRYPT algorithm not supported on this platform"};
+324         \textcolor{keywordflow}{return} \hyperlink{lua__passwd_8h_a095915f641e78bbf7ada8c906d0f323a}{ERR\_ALG\_NOT\_SUPP};
+325 \textcolor{preprocessor}{#endif}
+326         \textcolor{keywordflow}{break};
+327     \textcolor{keywordflow}{case} \textcolor{charliteral}{'C'}: \{
+328             \textcolor{keywordtype}{char} *endptr;
+329             \textcolor{keywordtype}{long} \hyperlink{group__APACHE__CORE__DAEMON_ga86cf672daa4e0ad11ad10efc894d19c8}{num} = strtol(opt\_arg, &endptr, 10);
+330             \textcolor{keywordflow}{if} (*endptr != \textcolor{charliteral}{'\(\backslash\)0'} || num <= 0) \{
+331                 ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = \textcolor{stringliteral}{"argument to -C must be a positive integer"};
+332                 \textcolor{keywordflow}{return} \hyperlink{lua__passwd_8h_a8cefbf9955ed0faf4a10cd8ea4947451}{ERR\_SYNTAX};
+333             \}
+334             ctx->\hyperlink{structpasswd__ctx_a54f34c48127cd3c115a7fa2fb23a089a}{cost} = \hyperlink{group__APACHE__CORE__DAEMON_ga86cf672daa4e0ad11ad10efc894d19c8}{num};
+335             \textcolor{keywordflow}{break};
+336         \}
+337     \textcolor{keywordflow}{default}:
+338         apr\_file\_printf(\hyperlink{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, 
+339                         \textcolor{stringliteral}{"parse\_common\_options(): BUG: invalid option %c"},
+340                         \hyperlink{group__apr__network__io_gac40a59a4a52d93ab3ec8dbbdf4d57e60}{opt});
+341         abort();
+342     \}
+343     \textcolor{keywordflow}{return} 0;
+344 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=274pt]{passwd__common_8c_aa4f65bebc9c808502a0173bfb5a3be83_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}!putline@{putline}}
+\index{putline@{putline}!passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}}
+\subsubsection[{\texorpdfstring{putline(apr\+\_\+file\+\_\+t $\ast$f, const char $\ast$l)}{putline(apr_file_t *f, const char *l)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} putline (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+file\+\_\+t} $\ast$}]{f, }
+\item[{const char $\ast$}]{l}
+\end{DoxyParamCaption}
+)}\hypertarget{passwd__common_8c_ad569b14bb6259bdb981228f3d7be55e0}{}\label{passwd__common_8c_ad569b14bb6259bdb981228f3d7be55e0}
+
+\begin{DoxyCode}
+108 \{
+109     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+110     \textcolor{keywordflow}{if} (f == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+111         \textcolor{keywordflow}{return};
+112     rv = apr\_file\_puts(\hyperlink{group__APACHE__CORE__CONFIG_ga325499caccf210ef36b605bae60930b7}{l}, f);
+113     \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+114         apr\_file\_printf(\hyperlink{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{errfile}, \textcolor{stringliteral}{"Error writing temp file: %pm"}, &rv);
+115         apr\_file\_close(f);
+116         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{lua__passwd_8h_aca1e63696ddadb011dde9ae55a71a360}{ERR\_FILEPERM});
+117     \}
+118 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{passwd__common_8c_ad569b14bb6259bdb981228f3d7be55e0_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}!errfile@{errfile}}
+\index{errfile@{errfile}!passwd\+\_\+common.\+c@{passwd\+\_\+common.\+c}}
+\subsubsection[{\texorpdfstring{errfile}{errfile}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+file\+\_\+t}$\ast$ errfile}\hypertarget{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}{}\label{passwd__common_8c_a350c84888ec1b76543bdd36d5638f5e4}

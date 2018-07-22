@@ -1,0 +1,138 @@
+\hypertarget{time-sem_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/test/time-\/sem.c File Reference}
+\label{time-sem_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/test/time-\/sem.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/test/time-\/sem.\+c}}
+{\ttfamily \#include $<$errno.\+h$>$}\\*
+{\ttfamily \#include $<$sys/time.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$sys/stat.\+h$>$}\\*
+{\ttfamily \#include $<$fcntl.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+{\ttfamily \#include $<$sys/mman.\+h$>$}\\*
+{\ttfamily \#include $<$signal.\+h$>$}\\*
+Include dependency graph for time-\/sem.c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{time-sem_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{time-sem_8c_a50d551776c26c1579754521287f0b0f0}{Y\+I\+E\+LD}~\hyperlink{pcregrep_8txt_a29df1716374a8e3439d34a27760970bd}{do} \{ struct timeval \hyperlink{pcre_8txt_a7aaf617d8e6fff870079bc583f7f8c22}{zero}; zero.\+tv\+\_\+sec = zero.\+tv\+\_\+usec = 0; \hyperlink{apr__arch__os2calls_8h_a2b406456012f9f74aeb33de6f3df053c}{select}(0,0,0,0,\&\hyperlink{pcre_8txt_a7aaf617d8e6fff870079bc583f7f8c22}{zero}); \} \hyperlink{tcpdumpscii_8txt_a4fdd7aa2abd5a87923ce470d2bdf6eb4}{while}(0)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{time-sem_8c_a70db8bd1d499619f7ff9c1ca2ff3c8df}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$$\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{time-\/sem.\+c@{time-\/sem.\+c}!Y\+I\+E\+LD@{Y\+I\+E\+LD}}
+\index{Y\+I\+E\+LD@{Y\+I\+E\+LD}!time-\/sem.\+c@{time-\/sem.\+c}}
+\subsubsection[{\texorpdfstring{Y\+I\+E\+LD}{YIELD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define Y\+I\+E\+LD~{\bf do} \{ struct timeval {\bf zero}; zero.\+tv\+\_\+sec = zero.\+tv\+\_\+usec = 0; {\bf select}(0,0,0,0,\&{\bf zero}); \} {\bf while}(0)}\hypertarget{time-sem_8c_a50d551776c26c1579754521287f0b0f0}{}\label{time-sem_8c_a50d551776c26c1579754521287f0b0f0}
+
+
+\subsection{Function Documentation}
+\index{time-\/sem.\+c@{time-\/sem.\+c}!main@{main}}
+\index{main@{main}!time-\/sem.\+c@{time-\/sem.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{time-sem_8c_a70db8bd1d499619f7ff9c1ca2ff3c8df}{}\label{time-sem_8c_a70db8bd1d499619f7ff9c1ca2ff3c8df}
+
+\begin{DoxyCode}
+505 \{
+506     \textcolor{keywordtype}{int} num\_iter;
+507     \textcolor{keywordtype}{int} num\_child;
+508     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+509     \textcolor{keyword}{struct }timeval \hyperlink{group__MOD__DAV_gae5e6e8bc4bfa800414992418716f96df}{first};
+510     \textcolor{keyword}{struct }timeval \hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+511     \textcolor{keywordtype}{long} \hyperlink{group__APR__Util__MC_gabcfc3d1de80e72f78d877d87639acdd2}{ms};
+512     \textcolor{keywordtype}{int} pid;
+513     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} *shared\_counter;
+514 
+515     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} != 3) \{
+516         fprintf (stderr, \textcolor{stringliteral}{"Usage: time-sem num-child num iter\(\backslash\)n"});
+517         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit} (1);
+518     \}
+519 
+520     num\_child = atoi (\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1]);
+521     num\_iter = atoi (\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2]);
+522 
+523     \textcolor{comment}{/* allocate shared memory for the shared\_counter */}
+524     shared\_counter = get\_shared\_mem(\textcolor{keyword}{sizeof}(*shared\_counter));
+525 
+526     \textcolor{comment}{/* initialize counter to 0 */}
+527     *shared\_counter = 0;
+528 
+529     accept\_mutex\_init ();
+530 
+531     \textcolor{comment}{/* parent grabs mutex until done spawning children */}
+532     accept\_mutex\_on ();
+533 
+534     \textcolor{keywordflow}{for} (i = 0; i < num\_child; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+535         pid = fork();
+536         \textcolor{keywordflow}{if} (pid == 0) \{
+537             \textcolor{comment}{/* child, do our thing */}
+538             accept\_mutex\_child\_init();
+539             \textcolor{keywordflow}{for} (i = 0; i < num\_iter; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+540                 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} tmp;
+541 
+542                 accept\_mutex\_on ();
+543                 tmp = *shared\_counter;
+544                 \hyperlink{time-sem_8c_a50d551776c26c1579754521287f0b0f0}{YIELD};
+545                 *shared\_counter = tmp + 1;
+546                 accept\_mutex\_off ();
+547             \}
+548             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit} (0);
+549         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (pid == -1) \{
+550             perror (\textcolor{stringliteral}{"fork"});
+551             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit} (1);
+552         \}
+553     \}
+554 
+555     \textcolor{comment}{/* a quick test to see that nothing is screwed up */}
+556     \textcolor{keywordflow}{if} (*shared\_counter != 0) \{
+557         puts (\textcolor{stringliteral}{"WTF! shared\_counter != 0 before the children have been started!"});
+558         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit} (1);
+559     \}
+560 
+561     gettimeofday (&\hyperlink{group__MOD__DAV_gae5e6e8bc4bfa800414992418716f96df}{first}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+562     \textcolor{comment}{/* launch children into action */}
+563     accept\_mutex\_off ();
+564     \textcolor{keywordflow}{for} (i = 0; i < num\_child; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+565         \textcolor{keywordflow}{if} (wait(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) == -1) \{
+566             perror (\textcolor{stringliteral}{"wait"});
+567         \}
+568     \}
+569     gettimeofday (&\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+570 
+571     \textcolor{keywordflow}{if} (*shared\_counter != num\_child * num\_iter) \{
+572         printf (\textcolor{stringliteral}{"WTF! shared\_counter != num\_child * num\_iter!\(\backslash\)n"}
+573                 \textcolor{stringliteral}{"shared\_counter = %lu\(\backslash\)nnum\_child = %d\(\backslash\)nnum\_iter=%d\(\backslash\)n"},
+574                 *shared\_counter,
+575                 num\_child, num\_iter);
+576     \}
+577 
+578     \hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}.tv\_sec -= \hyperlink{group__MOD__DAV_gae5e6e8bc4bfa800414992418716f96df}{first}.tv\_sec;
+579     ms = \hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}.tv\_usec - \hyperlink{group__MOD__DAV_gae5e6e8bc4bfa800414992418716f96df}{first}.tv\_usec;
+580     \textcolor{keywordflow}{if} (ms < 0) \{
+581         --\hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}.tv\_sec;
+582         ms += 1000000;
+583     \}
+584     \hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}.tv\_usec = \hyperlink{group__APR__Util__MC_gabcfc3d1de80e72f78d877d87639acdd2}{ms};
+585     printf (\textcolor{stringliteral}{"%8lu.%06lu\(\backslash\)n"}, \hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}.tv\_sec, \hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last}.tv\_usec);
+586 
+587     accept\_mutex\_cleanup();
+588 
+589     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(0);
+590 \}
+\end{DoxyCode}

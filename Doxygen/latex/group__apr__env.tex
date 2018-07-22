@@ -1,0 +1,82 @@
+\hypertarget{group__apr__env}{}\section{Functions for manipulating the environment}
+\label{group__apr__env}\index{Functions for manipulating the environment@{Functions for manipulating the environment}}
+Collaboration diagram for Functions for manipulating the environment\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=343pt]{group__apr__env}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__env_ga1fcd8910132f21f9fdee5797ebefa9d1}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) apr\+\_\+env\+\_\+get(char $\ast$$\ast$\hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{group__apr__env_ga933fca1db5dfcd5330db8ef170f35d4b}{envvar}
+\item 
+const char \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__apr__env_ga35230907c170df5d4d7f0ca99274c574}{pool}
+\item 
+const char $\ast$ \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function Documentation}
+\index{Functions for manipulating the environment@{Functions for manipulating the environment}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}!Functions for manipulating the environment@{Functions for manipulating the environment}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t) apr\+\_\+env\+\_\+get(char $\ast$$\ast$value}{APR_DECLARE(apr_status_t) apr_env_get(char **value}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__env_ga1fcd8910132f21f9fdee5797ebefa9d1}{}\label{group__apr__env_ga1fcd8910132f21f9fdee5797ebefa9d1}
+Get the value of an environment variable 
+\begin{DoxyParams}{Parameters}
+{\em value} & the returned value, allocated from {\itshape pool} \\
+\hline
+{\em envvar} & the name of the environment variable \\
+\hline
+{\em pool} & where to allocate {\itshape value} and any temporary storage from\\
+\hline
+\end{DoxyParams}
+Set the value of an environment variable 
+\begin{DoxyParams}{Parameters}
+{\em envvar} & the name of the environment variable \\
+\hline
+{\em value} & the value to set \\
+\hline
+{\em pool} & where to allocate temporary storage from\\
+\hline
+\end{DoxyParams}
+Delete a variable from the environment 
+\begin{DoxyParams}{Parameters}
+{\em envvar} & the name of the environment variable \\
+\hline
+{\em pool} & where to allocate temporary storage from \\
+\hline
+\end{DoxyParams}
+The problem with trying to output the entire iovec is that we cannot maintain the behaviour that a real writev would have. If we iterate over the iovec one at a time, we lose the atomic properties of \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}. The other option is to combine the entire iovec into one buffer that we could then send in one call to write(). This is not reasonable since we do not know how much data an iovec could contain.
+
+The only reasonable option, that maintains the semantics of a real \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}, is to only write the first iovec. Callers of file\+\_\+writev() must deal with partial writes as they normally would. If you want to ensure an entire iovec is written, use apr\+\_\+file\+\_\+writev\+\_\+full().
+\begin{DoxyCode}
+23 \{
+24     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+25 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\index{Functions for manipulating the environment@{Functions for manipulating the environment}!envvar@{envvar}}
+\index{envvar@{envvar}!Functions for manipulating the environment@{Functions for manipulating the environment}}
+\subsubsection[{\texorpdfstring{envvar}{envvar}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ envvar}\hypertarget{group__apr__env_ga933fca1db5dfcd5330db8ef170f35d4b}{}\label{group__apr__env_ga933fca1db5dfcd5330db8ef170f35d4b}
+\index{Functions for manipulating the environment@{Functions for manipulating the environment}!pool@{pool}}
+\index{pool@{pool}!Functions for manipulating the environment@{Functions for manipulating the environment}}
+\subsubsection[{\texorpdfstring{pool}{pool}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ pool}\hypertarget{group__apr__env_ga35230907c170df5d4d7f0ca99274c574}{}\label{group__apr__env_ga35230907c170df5d4d7f0ca99274c574}
+\index{Functions for manipulating the environment@{Functions for manipulating the environment}!value@{value}}
+\index{value@{value}!Functions for manipulating the environment@{Functions for manipulating the environment}}
+\subsubsection[{\texorpdfstring{value}{value}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+sdbm\+\_\+datum\+\_\+t} {\bf apr\+\_\+sdbm\+\_\+datum\+\_\+t} value}\hypertarget{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{}\label{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}

@@ -1,0 +1,94 @@
+\hypertarget{mod__dialup_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/test/mod\+\_\+dialup.c File Reference}
+\label{mod__dialup_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/test/mod\+\_\+dialup.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/test/mod\+\_\+dialup.\+c}}
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+filter.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+dialup.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__dialup_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdialup__dcfg__t}{dialup\+\_\+dcfg\+\_\+t}
+\item 
+struct \hyperlink{structdialup__baton__t}{dialup\+\_\+baton\+\_\+t}
+\item 
+struct \hyperlink{structmodem__speed__t}{modem\+\_\+speed\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__dialup_8c_a023605cb1842bf681c4585e914300254}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+A\+L\+M\+O\+S\+T\+\_\+\+L\+A\+ST}~(\hyperlink{group__APR__Util__Hook_gae3c7d2cf35e8c89828dfff7a85b0ed77}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+R\+E\+A\+L\+L\+Y\+\_\+\+L\+A\+ST} -\/ 1)
+\item 
+\#define \hyperlink{mod__dialup_8c_abbbefc1b0a4e7f5e3aa1aaa647b56513}{B\+I\+T\+R\+A\+T\+E\+\_\+\+T\+O\+\_\+\+B\+Y\+T\+ES}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})~((1000 $\ast$ \hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x})/8)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structdialup__dcfg__t}{dialup\+\_\+dcfg\+\_\+t} \hyperlink{mod__dialup_8c_a9a89c0e6017facb157384e1d363d40df}{dialup\+\_\+dcfg\+\_\+t}
+\item 
+typedef struct \hyperlink{structdialup__baton__t}{dialup\+\_\+baton\+\_\+t} \hyperlink{mod__dialup_8c_a01019fd6160fc18d2fe50185335cd9ad}{dialup\+\_\+baton\+\_\+t}
+\item 
+typedef struct \hyperlink{structmodem__speed__t}{modem\+\_\+speed\+\_\+t} \hyperlink{mod__dialup_8c_a153f9c0bcff9a325ec3422da84e4a438}{modem\+\_\+speed\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__dialup_8c_a1b10c567d9926c5169d3573889b11a22}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (dialup)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__dialup_8c_adde009ddae76f59692f09ffb3ad70b59}{dialup\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}!A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+A\+L\+M\+O\+S\+T\+\_\+\+L\+A\+ST@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+A\+L\+M\+O\+S\+T\+\_\+\+L\+A\+ST}}
+\index{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+A\+L\+M\+O\+S\+T\+\_\+\+L\+A\+ST@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+A\+L\+M\+O\+S\+T\+\_\+\+L\+A\+ST}!mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+A\+L\+M\+O\+S\+T\+\_\+\+L\+A\+ST}{APR_HOOK_ALMOST_LAST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+A\+L\+M\+O\+S\+T\+\_\+\+L\+A\+ST~({\bf A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+R\+E\+A\+L\+L\+Y\+\_\+\+L\+A\+ST} -\/ 1)}\hypertarget{mod__dialup_8c_a023605cb1842bf681c4585e914300254}{}\label{mod__dialup_8c_a023605cb1842bf681c4585e914300254}
+\index{mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}!B\+I\+T\+R\+A\+T\+E\+\_\+\+T\+O\+\_\+\+B\+Y\+T\+ES@{B\+I\+T\+R\+A\+T\+E\+\_\+\+T\+O\+\_\+\+B\+Y\+T\+ES}}
+\index{B\+I\+T\+R\+A\+T\+E\+\_\+\+T\+O\+\_\+\+B\+Y\+T\+ES@{B\+I\+T\+R\+A\+T\+E\+\_\+\+T\+O\+\_\+\+B\+Y\+T\+ES}!mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}}
+\subsubsection[{\texorpdfstring{B\+I\+T\+R\+A\+T\+E\+\_\+\+T\+O\+\_\+\+B\+Y\+T\+ES}{BITRATE_TO_BYTES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+I\+T\+R\+A\+T\+E\+\_\+\+T\+O\+\_\+\+B\+Y\+T\+ES(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}}
+\end{DoxyParamCaption}
+)~((1000 $\ast$ {\bf x})/8)}\hypertarget{mod__dialup_8c_abbbefc1b0a4e7f5e3aa1aaa647b56513}{}\label{mod__dialup_8c_abbbefc1b0a4e7f5e3aa1aaa647b56513}
+
+
+\subsection{Typedef Documentation}
+\index{mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}!dialup\+\_\+baton\+\_\+t@{dialup\+\_\+baton\+\_\+t}}
+\index{dialup\+\_\+baton\+\_\+t@{dialup\+\_\+baton\+\_\+t}!mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}}
+\subsubsection[{\texorpdfstring{dialup\+\_\+baton\+\_\+t}{dialup_baton_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf dialup\+\_\+baton\+\_\+t}  {\bf dialup\+\_\+baton\+\_\+t}}\hypertarget{mod__dialup_8c_a01019fd6160fc18d2fe50185335cd9ad}{}\label{mod__dialup_8c_a01019fd6160fc18d2fe50185335cd9ad}
+\index{mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}!dialup\+\_\+dcfg\+\_\+t@{dialup\+\_\+dcfg\+\_\+t}}
+\index{dialup\+\_\+dcfg\+\_\+t@{dialup\+\_\+dcfg\+\_\+t}!mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}}
+\subsubsection[{\texorpdfstring{dialup\+\_\+dcfg\+\_\+t}{dialup_dcfg_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf dialup\+\_\+dcfg\+\_\+t}  {\bf dialup\+\_\+dcfg\+\_\+t}}\hypertarget{mod__dialup_8c_a9a89c0e6017facb157384e1d363d40df}{}\label{mod__dialup_8c_a9a89c0e6017facb157384e1d363d40df}
+\index{mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}!modem\+\_\+speed\+\_\+t@{modem\+\_\+speed\+\_\+t}}
+\index{modem\+\_\+speed\+\_\+t@{modem\+\_\+speed\+\_\+t}!mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}}
+\subsubsection[{\texorpdfstring{modem\+\_\+speed\+\_\+t}{modem_speed_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf modem\+\_\+speed\+\_\+t}  {\bf modem\+\_\+speed\+\_\+t}}\hypertarget{mod__dialup_8c_a153f9c0bcff9a325ec3422da84e4a438}{}\label{mod__dialup_8c_a153f9c0bcff9a325ec3422da84e4a438}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(dialup)}{AP_DECLARE_MODULE(dialup)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{dialup}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__dialup_8c_a1b10c567d9926c5169d3573889b11a22}{}\label{mod__dialup_8c_a1b10c567d9926c5169d3573889b11a22}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}!dialup\+\_\+module@{dialup\+\_\+module}}
+\index{dialup\+\_\+module@{dialup\+\_\+module}!mod\+\_\+dialup.\+c@{mod\+\_\+dialup.\+c}}
+\subsubsection[{\texorpdfstring{dialup\+\_\+module}{dialup_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} dialup\+\_\+module}\hypertarget{mod__dialup_8c_adde009ddae76f59692f09ffb3ad70b59}{}\label{mod__dialup_8c_adde009ddae76f59692f09ffb3ad70b59}

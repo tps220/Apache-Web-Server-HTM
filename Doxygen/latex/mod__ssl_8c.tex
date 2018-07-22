@@ -1,0 +1,121 @@
+\hypertarget{mod__ssl_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/ssl/mod\+\_\+ssl.c File Reference}
+\label{mod__ssl_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/ssl/mod\+\_\+ssl.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/ssl/mod\+\_\+ssl.\+c}}
+{\ttfamily \#include \char`\"{}ssl\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+ssl.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+ssl\+\_\+openssl.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+Include dependency graph for mod\+\_\+ssl.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__ssl_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__ssl_8c_af6c1b2770473a68fd88d09a9d318ddbb}{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+A\+LL}(\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name},  \hyperlink{group__APR__Util__DBD_ga6b6dfca544bdc17e0e73e3ca56c2363d}{args},  \hyperlink{group__MOD__DAV_ga21c7b5d68e8da2320aba56644b2a5447}{desc})
+\item 
+\#define \hyperlink{mod__ssl_8c_a0e859d8880de75dd6712afc78a72c7ae}{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+S\+RV}(\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name},  \hyperlink{group__APR__Util__DBD_ga6b6dfca544bdc17e0e73e3ca56c2363d}{args},  \hyperlink{group__MOD__DAV_ga21c7b5d68e8da2320aba56644b2a5447}{desc})
+\item 
+\#define \hyperlink{mod__ssl_8c_a97a8a5df11eade5d12e9823cabc84f79}{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+D\+IR}(\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name},  \hyperlink{pcre_8txt_a2463fbbe8b0c90b90db12195e1edaa5d}{type},  \hyperlink{group__APR__Util__DBD_ga6b6dfca544bdc17e0e73e3ca56c2363d}{args},  \hyperlink{group__MOD__DAV_ga21c7b5d68e8da2320aba56644b2a5447}{desc})
+\item 
+\#define \hyperlink{mod__ssl_8c_a6e43cd4e6958c8a6d0dc511a8dbda238}{A\+P\+\_\+\+E\+N\+D\+\_\+\+C\+MD}~\{ \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL} \}
+\item 
+\#define \hyperlink{mod__ssl_8c_a6d07a19896e6e14b10aa965a269a371a}{S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX}~\char`\"{}S\+S\+Lv3$\vert$\char`\"{}
+\item 
+\#define \hyperlink{mod__ssl_8c_a0aa5bee90b6c20c9c5865b608c4c22ca}{S\+S\+L\+\_\+\+P\+R\+O\+T\+O\+C\+O\+LS}~\hyperlink{mod__ssl_8c_a6d07a19896e6e14b10aa965a269a371a}{S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX} \char`\"{}T\+L\+Sv1\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__ssl_8c_adee556b888c537625e221805088ca0b4}{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL} (\hyperlink{group__MOD__SSL_ga91d808d6c1c01029f9c9260b9b69a437}{ssl}, \hyperlink{group__MOD__SSL_gac05889312301718b3fc106564942ad68}{S\+SL}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, \hyperlink{group__MOD__SSL_gad489fb2d7495c0ac1b9381c2acde1801}{pre\+\_\+handshake},(\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{group__MOD__SSL_gac05889312301718b3fc106564942ad68}{S\+SL} $\ast$\hyperlink{group__MOD__SSL_ga91d808d6c1c01029f9c9260b9b69a437}{ssl}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} is\+\_\+proxy),(\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{group__MOD__SSL_ga91d808d6c1c01029f9c9260b9b69a437}{ssl}, is\+\_\+proxy), \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK}, \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{D\+E\+C\+L\+I\+N\+ED})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__SSL__PRIVATE_ga91da4675ca466046f81ee17bee79c10d}{ssl\+\_\+proxy\+\_\+enable} (\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__SSL__PRIVATE_ga9e7bf408b385a57ebf50196312adb023}{ssl\+\_\+engine\+\_\+disable} (\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__MOD__SSL__PRIVATE_ga41dd90c37aff54ebfb37071f8b6a3b46}{ssl\+\_\+init\+\_\+ssl\+\_\+connection} (\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{group__MOD__SSL__PRIVATE_ga18f8469259ccdd0630b1a606a72ad31b}{ssl\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}!A\+P\+\_\+\+E\+N\+D\+\_\+\+C\+MD@{A\+P\+\_\+\+E\+N\+D\+\_\+\+C\+MD}}
+\index{A\+P\+\_\+\+E\+N\+D\+\_\+\+C\+MD@{A\+P\+\_\+\+E\+N\+D\+\_\+\+C\+MD}!mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+E\+N\+D\+\_\+\+C\+MD}{AP_END_CMD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+E\+N\+D\+\_\+\+C\+MD~\{ {\bf N\+U\+LL} \}}\hypertarget{mod__ssl_8c_a6e43cd4e6958c8a6d0dc511a8dbda238}{}\label{mod__ssl_8c_a6e43cd4e6958c8a6d0dc511a8dbda238}
+\index{mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}!S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+A\+LL@{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+A\+LL}}
+\index{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+A\+LL@{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+A\+LL}!mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+A\+LL}{SSL_CMD_ALL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+A\+LL(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf name}, }
+\item[{}]{{\bf args}, }
+\item[{}]{{\bf desc}}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__ssl_8c_af6c1b2770473a68fd88d09a9d318ddbb}{}\label{mod__ssl_8c_af6c1b2770473a68fd88d09a9d318ddbb}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+AP\_INIT\_##\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}(\textcolor{stringliteral}{"SSL"}#\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, ssl\_cmd\_SSL##\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, \(\backslash\)
+                       \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__ConfigDirectives_ga2c51f4c7392fa5af1afe797470dc16e3}{RSRC\_CONF}|\hyperlink{group__ConfigDirectives_gad707d4eac4b22c5bc225b784ecb6c90e}{OR\_AUTHCFG}, \hyperlink{group__MOD__DAV_ga21c7b5d68e8da2320aba56644b2a5447}{desc}),
+\end{DoxyCode}
+\index{mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}!S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+D\+IR@{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+D\+IR}}
+\index{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+D\+IR@{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+D\+IR}!mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+D\+IR}{SSL_CMD_DIR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+D\+IR(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf name}, }
+\item[{}]{{\bf type}, }
+\item[{}]{{\bf args}, }
+\item[{}]{{\bf desc}}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__ssl_8c_a97a8a5df11eade5d12e9823cabc84f79}{}\label{mod__ssl_8c_a97a8a5df11eade5d12e9823cabc84f79}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+AP\_INIT\_##\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}(\textcolor{stringliteral}{"SSL"}#\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, ssl\_cmd\_SSL##\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, \(\backslash\)
+                       \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, OR\_##\hyperlink{group__APACHE__CORE__HTTPD_gaafc7089562892428c4fcae486f171f5a}{type}, \hyperlink{group__MOD__DAV_ga21c7b5d68e8da2320aba56644b2a5447}{desc}),
+\end{DoxyCode}
+\index{mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}!S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+S\+RV@{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+S\+RV}}
+\index{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+S\+RV@{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+S\+RV}!mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+S\+RV}{SSL_CMD_SRV}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+S\+L\+\_\+\+C\+M\+D\+\_\+\+S\+RV(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf name}, }
+\item[{}]{{\bf args}, }
+\item[{}]{{\bf desc}}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__ssl_8c_a0e859d8880de75dd6712afc78a72c7ae}{}\label{mod__ssl_8c_a0e859d8880de75dd6712afc78a72c7ae}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+AP\_INIT\_##\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}(\textcolor{stringliteral}{"SSL"}#\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, ssl\_cmd\_SSL##\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, \(\backslash\)
+                       \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__ConfigDirectives_ga2c51f4c7392fa5af1afe797470dc16e3}{RSRC\_CONF}, \hyperlink{group__MOD__DAV_ga21c7b5d68e8da2320aba56644b2a5447}{desc}),
+\end{DoxyCode}
+\index{mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}!S\+S\+L\+\_\+\+P\+R\+O\+T\+O\+C\+O\+LS@{S\+S\+L\+\_\+\+P\+R\+O\+T\+O\+C\+O\+LS}}
+\index{S\+S\+L\+\_\+\+P\+R\+O\+T\+O\+C\+O\+LS@{S\+S\+L\+\_\+\+P\+R\+O\+T\+O\+C\+O\+LS}!mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{S\+S\+L\+\_\+\+P\+R\+O\+T\+O\+C\+O\+LS}{SSL_PROTOCOLS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+S\+L\+\_\+\+P\+R\+O\+T\+O\+C\+O\+LS~{\bf S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX} \char`\"{}T\+L\+Sv1\char`\"{}}\hypertarget{mod__ssl_8c_a0aa5bee90b6c20c9c5865b608c4c22ca}{}\label{mod__ssl_8c_a0aa5bee90b6c20c9c5865b608c4c22ca}
+\index{mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}!S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX@{S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX}}
+\index{S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX@{S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX}!mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX}{SSLv3_PROTO_PREFIX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+S\+Lv3\+\_\+\+P\+R\+O\+T\+O\+\_\+\+P\+R\+E\+F\+IX~\char`\"{}S\+S\+Lv3$\vert$\char`\"{}}\hypertarget{mod__ssl_8c_a6d07a19896e6e14b10aa965a269a371a}{}\label{mod__ssl_8c_a6d07a19896e6e14b10aa965a269a371a}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}!A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL@{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL}}
+\index{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL@{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL}!mod\+\_\+ssl.\+c@{mod\+\_\+ssl.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+L\+L(ssl, S\+S\+L, int, pre\+\_\+handshake,(conn\+\_\+rec $\ast$c, S\+S\+L $\ast$ssl, int is\+\_\+proxy),(c, ssl, is\+\_\+proxy), O\+K, D\+E\+C\+L\+I\+N\+E\+D)}{APR_IMPLEMENT_OPTIONAL_HOOK_RUN_ALL(ssl, SSL, int, pre_handshake,(conn_rec *c, SSL *ssl, int is_proxy),(c, ssl, is_proxy), OK, DECLINED)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+I\+M\+P\+L\+E\+M\+E\+N\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+H\+O\+O\+K\+\_\+\+R\+U\+N\+\_\+\+A\+LL (
+\begin{DoxyParamCaption}
+\item[{{\bf ssl}}]{, }
+\item[{{\bf S\+SL}}]{, }
+\item[{{\bf int}}]{, }
+\item[{{\bf pre\+\_\+handshake}}]{, }
+\item[{({\bf conn\+\_\+rec} $\ast${\bf c}, {\bf S\+SL} $\ast${\bf ssl}, {\bf int} is\+\_\+proxy)}]{, }
+\item[{({\bf c}, {\bf ssl}, is\+\_\+proxy)}]{, }
+\item[{{\bf OK}}]{, }
+\item[{{\bf D\+E\+C\+L\+I\+N\+ED}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__ssl_8c_adee556b888c537625e221805088ca0b4}{}\label{mod__ssl_8c_adee556b888c537625e221805088ca0b4}

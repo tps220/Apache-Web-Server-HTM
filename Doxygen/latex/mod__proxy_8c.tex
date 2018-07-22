@@ -1,0 +1,676 @@
+\hypertarget{mod__proxy_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/proxy/mod\+\_\+proxy.c File Reference}
+\label{mod__proxy_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/proxy/mod\+\_\+proxy.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/proxy/mod\+\_\+proxy.\+c}}
+{\ttfamily \#include \char`\"{}mod\+\_\+proxy.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+optional.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+status.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}proxy\+\_\+util.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+proxy.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__proxy_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__proxy_8c_aacc3ee1a7f283f8ef65cea31f4436a95}{M\+AX}(\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x},  \hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y})~((\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) $>$= (\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}) ? (\hyperlink{pcregrep_8txt_a4242e9148f20c002763bf4ba53b26ad6}{x}) \+: (\hyperlink{group__MOD__CACHE_gad4d47f76a849e2c428e3dd7f8c4eab1f}{y}))
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__proxy_8c_a01a25e4dc2ff9db34bc735eca4ab1f42}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, \hyperlink{group__MOD__SSL__PRIVATE_ga91da4675ca466046f81ee17bee79c10d}{ssl\+\_\+proxy\+\_\+enable},(\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$))
+\item 
+\hyperlink{mod__proxy_8c_aff4c22d6b9c993f4d9f54bea16895182}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, \hyperlink{group__MOD__SSL__PRIVATE_ga9e7bf408b385a57ebf50196312adb023}{ssl\+\_\+engine\+\_\+disable},(\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$))
+\item 
+\hyperlink{mod__proxy_8c_a2fdb487292dbbe59e5a8470bf065d7e3}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int}, ssl\+\_\+is\+\_\+https,(\hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$))
+\item 
+\hyperlink{mod__proxy_8c_adad253b500d00cf4479342906c2aeda5}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN} (char $\ast$, \hyperlink{group__MOD__SSL__PRIVATE_ga42e6f981345c92e377fc830d91667fa5}{ssl\+\_\+var\+\_\+lookup},(\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$, char $\ast$))
+\item 
+\hyperlink{mod__proxy_8c_ga9f6e6c19ac57d15d326c5d80171f7c4f}{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int})
+\item 
+\hyperlink{mod__proxy_8c_ga45846d8c2168498ea908d2c8d6a9a320}{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$)
+\item 
+\hyperlink{mod__proxy_8c_a122e487b524139597fd23fa6921ff277}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (proxy)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structproxy__wstat__t}{proxy\+\_\+wstat\+\_\+t} \hyperlink{group__MOD__PROXY_ga0446e2d44d50898071a7dcb4fd9172b0}{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{group__MOD__PROXY_ga1077b97180eb36b606215d0625e0cfa0}{proxy\+\_\+wstat\+\_\+tbl} \mbox{[}$\,$\mbox{]}
+\item 
+\hyperlink{structapr__global__mutex__t}{apr\+\_\+global\+\_\+mutex\+\_\+t} $\ast$ \hyperlink{mod__proxy_8c_a93b0fcd14bd51e35876e3ed7ec589d85}{proxy\+\_\+mutex} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{N\+U\+LL}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!M\+AX@{M\+AX}}
+\index{M\+AX@{M\+AX}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{M\+AX}{MAX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+AX(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf x}, }
+\item[{}]{{\bf y}}
+\end{DoxyParamCaption}
+)~(({\bf x}) $>$= ({\bf y}) ? ({\bf x}) \+: ({\bf y}))}\hypertarget{mod__proxy_8c_aacc3ee1a7f283f8ef65cea31f4436a95}{}\label{mod__proxy_8c_aacc3ee1a7f283f8ef65cea31f4436a95}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(proxy)}{AP_DECLARE_MODULE(proxy)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{proxy}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__proxy_8c_a122e487b524139597fd23fa6921ff277}{}\label{mod__proxy_8c_a122e487b524139597fd23fa6921ff277}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__proxy_8c_a122e487b524139597fd23fa6921ff277_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N(int, ssl\+\_\+proxy\+\_\+enable,(conn\+\_\+rec $\ast$))}{APR_DECLARE_OPTIONAL_FN(int, ssl_proxy_enable,(conn_rec *))}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{, }
+\item[{{\bf ssl\+\_\+proxy\+\_\+enable}}]{, }
+\item[{({\bf conn\+\_\+rec} $\ast$)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__proxy_8c_a01a25e4dc2ff9db34bc735eca4ab1f42}{}\label{mod__proxy_8c_a01a25e4dc2ff9db34bc735eca4ab1f42}
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N(int, ssl\+\_\+engine\+\_\+disable,(conn\+\_\+rec $\ast$))}{APR_DECLARE_OPTIONAL_FN(int, ssl_engine_disable,(conn_rec *))}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{, }
+\item[{{\bf ssl\+\_\+engine\+\_\+disable}}]{, }
+\item[{({\bf conn\+\_\+rec} $\ast$)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__proxy_8c_aff4c22d6b9c993f4d9f54bea16895182}{}\label{mod__proxy_8c_aff4c22d6b9c993f4d9f54bea16895182}
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N(int, ssl\+\_\+is\+\_\+https,(conn\+\_\+rec $\ast$))}{APR_DECLARE_OPTIONAL_FN(int, ssl_is_https,(conn_rec *))}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{, }
+\item[{ssl\+\_\+is\+\_\+https}]{, }
+\item[{({\bf conn\+\_\+rec} $\ast$)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__proxy_8c_a2fdb487292dbbe59e5a8470bf065d7e3}{}\label{mod__proxy_8c_a2fdb487292dbbe59e5a8470bf065d7e3}
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+F\+N(char $\ast$, ssl\+\_\+var\+\_\+lookup,(apr\+\_\+pool\+\_\+t $\ast$, server\+\_\+rec $\ast$, conn\+\_\+rec $\ast$, request\+\_\+rec $\ast$, char $\ast$))}{APR_DECLARE_OPTIONAL_FN(char *, ssl_var_lookup,(apr_pool_t *, server_rec *, conn_rec *, request_rec *, char *))}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L\+\_\+\+FN (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{, }
+\item[{{\bf ssl\+\_\+var\+\_\+lookup}}]{, }
+\item[{({\bf apr\+\_\+pool\+\_\+t} $\ast$, {\bf server\+\_\+rec} $\ast$, {\bf conn\+\_\+rec} $\ast$, {\bf request\+\_\+rec} $\ast$, char $\ast$)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__proxy_8c_adad253b500d00cf4479342906c2aeda5}{}\label{mod__proxy_8c_adad253b500d00cf4479342906c2aeda5}
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE@{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE@{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+R\+E(int)}{PROXY_DECLARE(int)}}]{\setlength{\rightskip}{0pt plus 5cm}P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__proxy_8c_ga9f6e6c19ac57d15d326c5d80171f7c4f}{}\label{mod__proxy_8c_ga9f6e6c19ac57d15d326c5d80171f7c4f}
+Test whether the hostname/address of the request are blocked by the Proxy\+Block configuration. 
+\begin{DoxyParams}{Parameters}
+{\em r} & request \\
+\hline
+{\em conf} & server configuration \\
+\hline
+{\em hostname} & hostname from request U\+RI \\
+\hline
+{\em addr} & resolved address of hostname, or N\+U\+LL if not known \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK on success, or else an errro
+\end{DoxyReturn}
+Share a defined proxy worker via shm 
+\begin{DoxyParams}{Parameters}
+{\em worker} & worker to be shared \\
+\hline
+{\em shm} & location of shared info \\
+\hline
+{\em i} & index into shm \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+Initialize the worker by setting up worker connection pool and mutex 
+\begin{DoxyParams}{Parameters}
+{\em worker} & worker to initialize \\
+\hline
+{\em s} & current server record \\
+\hline
+{\em p} & memory pool used for mutex and connection pool \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+Verifies valid balancer name (eg\+: balancer\+://foo) 
+\begin{DoxyParams}{Parameters}
+{\em name} & name to test \\
+\hline
+{\em i} & number of chars to test; 0 for all. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true/false
+\end{DoxyReturn}
+Share a defined proxy balancer via shm 
+\begin{DoxyParams}{Parameters}
+{\em balancer} & balancer to be shared \\
+\hline
+{\em shm} & location of shared info \\
+\hline
+{\em i} & index into shm \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+Initialize the balancer as needed 
+\begin{DoxyParams}{Parameters}
+{\em balancer} & balancer to initialize \\
+\hline
+{\em s} & current server record \\
+\hline
+{\em p} & memory pool used for mutex and connection pool \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error code
+\end{DoxyReturn}
+Get the most suitable worker and/or balancer for the request 
+\begin{DoxyParams}{Parameters}
+{\em worker} & worker used for processing request \\
+\hline
+{\em balancer} & balancer used for processing request \\
+\hline
+{\em r} & current request \\
+\hline
+{\em conf} & current proxy server configuration \\
+\hline
+{\em url} & request url that balancer can rewrite. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or H\+T\+T\+P\+\_\+\+X\+XX error 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+It calls balancer pre\+\_\+request hook if the url starts with balancer\+:// The balancer then rewrites the url to particular worker, like \href{http://host:port}{\tt http\+://host\+:port}
+\end{DoxyNote}
+Post request worker and balancer cleanup 
+\begin{DoxyParams}{Parameters}
+{\em worker} & worker used for processing request \\
+\hline
+{\em balancer} & balancer used for processing request \\
+\hline
+{\em r} & current request \\
+\hline
+{\em conf} & current proxy server configuration \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or H\+T\+T\+P\+\_\+\+X\+XX error 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Whenever the pre\+\_\+request is called, the post\+\_\+request has to be called too.
+\end{DoxyNote}
+Determine backend hostname and port 
+\begin{DoxyParams}{Parameters}
+{\em p} & memory pool used for processing \\
+\hline
+{\em r} & current request \\
+\hline
+{\em conf} & current proxy server configuration \\
+\hline
+{\em worker} & worker used for processing request \\
+\hline
+{\em conn} & proxy connection struct \\
+\hline
+{\em uri} & processed uri \\
+\hline
+{\em url} & request url \\
+\hline
+{\em proxyname} & are we connecting directly or via a proxy \\
+\hline
+{\em proxyport} & proxy host port \\
+\hline
+{\em server\+\_\+portstr} & Via headers server port, must be non-\/\+N\+U\+LL \\
+\hline
+{\em server\+\_\+portstr\+\_\+size} & size of the server\+\_\+portstr buffer; must be at least one, even if the protocol doesn\textquotesingle{}t use this \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or H\+T\+T\+P\+\_\+\+X\+XX error
+\end{DoxyReturn}
+Acquire a connection from worker connection pool 
+\begin{DoxyParams}{Parameters}
+{\em proxy\+\_\+function} & calling proxy scheme (http, ajp, ...) \\
+\hline
+{\em conn} & acquired connection \\
+\hline
+{\em worker} & worker used for obtaining connection \\
+\hline
+{\em s} & current server record \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or H\+T\+T\+P\+\_\+\+X\+XX error 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+If the connection limit has been reached, the function will block until a connection becomes available or the timeout has elapsed.
+\end{DoxyNote}
+Release a connection back to worker connection pool 
+\begin{DoxyParams}{Parameters}
+{\em proxy\+\_\+function} & calling proxy scheme (http, ajp, ...) \\
+\hline
+{\em conn} & acquired connection \\
+\hline
+{\em s} & current server record \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or H\+T\+T\+P\+\_\+\+X\+XX error 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+The connection will be closed if conn-\/$>$close\+\_\+on\+\_\+release is set
+\end{DoxyNote}
+Check a connection to the backend 
+\begin{DoxyParams}{Parameters}
+{\em scheme} & calling proxy scheme (http, ajp, ...) \\
+\hline
+{\em conn} & acquired connection \\
+\hline
+{\em server} & current server record \\
+\hline
+{\em max\+\_\+blank\+\_\+lines} & how many blank lines to consume, or zero for none (considered data) \\
+\hline
+{\em flags} & P\+R\+O\+X\+Y\+\_\+\+C\+H\+E\+C\+K\+\_\+$\ast$ bitmask \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS\+: connection established, A\+P\+R\+\_\+\+E\+N\+O\+T\+E\+M\+P\+TY\+: connection established with data, A\+P\+R\+\_\+\+E\+N\+O\+S\+O\+C\+K\+ET\+: not connected, A\+P\+R\+\_\+\+E\+I\+N\+V\+AL\+: worker in error state (unusable), other\+: connection closed/aborted (remotely)
+\end{DoxyReturn}
+Make a connection to the backend 
+\begin{DoxyParams}{Parameters}
+{\em proxy\+\_\+function} & calling proxy scheme (http, ajp, ...) \\
+\hline
+{\em conn} & acquired connection \\
+\hline
+{\em worker} & connection worker \\
+\hline
+{\em s} & current server record \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or H\+T\+T\+P\+\_\+\+X\+XX error 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+In case the socket already exists for conn, just check the link status.
+\end{DoxyNote}
+Make a connection to a Unix Domain Socket (U\+DS) path 
+\begin{DoxyParams}{Parameters}
+{\em sock} & U\+DS to connect \\
+\hline
+{\em uds\+\_\+path} & U\+DS path to connect to \\
+\hline
+{\em p} & pool to make the sock addr \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS or error status
+\end{DoxyReturn}
+Make a connection record for backend connection 
+\begin{DoxyParams}{Parameters}
+{\em proxy\+\_\+function} & calling proxy scheme (http, ajp, ...) \\
+\hline
+{\em conn} & acquired connection \\
+\hline
+{\em c} & client connection record \\
+\hline
+{\em s} & current server record \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or H\+T\+T\+P\+\_\+\+X\+XX error 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+The function will return immediately if conn-\/$>$connection is already set,
+\end{DoxyNote}
+Determine if proxy connection can potentially be reused at the end of this request. 
+\begin{DoxyParams}{Parameters}
+{\em conn} & proxy connection \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+non-\/zero if reusable, 0 otherwise 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Even if this function returns non-\/zero, the connection may be subsequently marked for closure.
+\end{DoxyNote}
+Set/unset the worker status bitfield depending on flag 
+\begin{DoxyParams}{Parameters}
+{\em c} & flag \\
+\hline
+{\em set} & set or unset bit \\
+\hline
+{\em w} & worker to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS if valid flag
+\end{DoxyReturn}
+Sync balancer and workers based on any updates w/i shm 
+\begin{DoxyParams}{Parameters}
+{\em b} & balancer to check/update member list of \\
+\hline
+{\em s} & server rec \\
+\hline
+{\em conf} & config \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS if all goes well
+\end{DoxyReturn}
+Find the matched alias for this request and setup for proxy handler 
+\begin{DoxyParams}{Parameters}
+{\em r} & request \\
+\hline
+{\em ent} & \hyperlink{structproxy__alias}{proxy\+\_\+alias} record \\
+\hline
+{\em dconf} & per-\/dir config or N\+U\+LL \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+D\+E\+C\+L\+I\+N\+ED, D\+O\+NE or OK if matched
+\end{DoxyReturn}
+Create a H\+T\+TP request header brigade, old\+\_\+cl\+\_\+val and old\+\_\+te\+\_\+val as required. 
+\begin{DoxyParams}{Parameters}
+{\em p} & pool \\
+\hline
+{\em header\+\_\+brigade} & header brigade to use/fill \\
+\hline
+{\em r} & request \\
+\hline
+{\em p\+\_\+conn} & proxy connection rec \\
+\hline
+{\em worker} & selected worker \\
+\hline
+{\em conf} & per-\/server proxy config \\
+\hline
+{\em uri} & uri \\
+\hline
+{\em url} & url \\
+\hline
+{\em server\+\_\+portstr} & port as string \\
+\hline
+{\em old\+\_\+cl\+\_\+val} & stored old content-\/len val \\
+\hline
+{\em old\+\_\+te\+\_\+val} & stored old TE val \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK or H\+T\+T\+P\+\_\+\+E\+X\+P\+E\+C\+T\+A\+T\+I\+O\+N\+\_\+\+F\+A\+I\+L\+ED
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em bucket\+\_\+alloc} & bucket allocator \\
+\hline
+{\em r} & request \\
+\hline
+{\em p\+\_\+conn} & proxy connection \\
+\hline
+{\em origin} & connection rec of origin \\
+\hline
+{\em bb} & brigade to send to origin \\
+\hline
+{\em flush} & flush \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+status (OK)
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & socket to test \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+R\+UE if socket is connected/active 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+640 \{
+641     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+642     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *fake;
+643     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *real;
+644     \hyperlink{structap__regmatch__t}{ap\_regmatch\_t} regm[\hyperlink{group__APACHE__CORE__DAEMON_ga7cc324c99d14a68ba7c8d1aae306a8d8}{AP\_MAX\_REG\_MATCH}];
+645     \hyperlink{structap__regmatch__t}{ap\_regmatch\_t} reg1[\hyperlink{group__APACHE__CORE__DAEMON_ga7cc324c99d14a68ba7c8d1aae306a8d8}{AP\_MAX\_REG\_MATCH}];
+646     \textcolor{keywordtype}{char} *\hyperlink{pcregrep_8txt_a1fdac88190c7a3aca2735f0bf49094dd}{found} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+647     \textcolor{keywordtype}{int} mismatch = 0;
+648     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} nocanon = \hyperlink{structent}{ent}->flags & \hyperlink{group__MOD__PROXY_ga68eff5a895dcf8ab40078745e3160b6a}{PROXYPASS\_NOCANON};
+649     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *use\_uri = nocanon ? \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri} : \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri};
+650 
+651     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__PROXY_ga01226e8c588429d47a24e72bda63a5e3}{dconf} && (\hyperlink{group__MOD__PROXY_ga01226e8c588429d47a24e72bda63a5e3}{dconf}->interpolate\_env == 1) && (\hyperlink{structent}{ent}->flags & 
+      \hyperlink{group__MOD__PROXY_ga550ab16ae63601e6d0238a9051a07530}{PROXYPASS\_INTERPOLATE})) \{
+652         fake = proxy\_interpolate(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{structent}{ent}->fake);
+653         real = proxy\_interpolate(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{structent}{ent}->real);
+654     \}
+655     \textcolor{keywordflow}{else} \{
+656         fake = \hyperlink{structent}{ent}->fake;
+657         real = \hyperlink{structent}{ent}->real;
+658     \}
+659 
+660     \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03461)
+661                   \textcolor{stringliteral}{"attempting to match URI path '%s' against %s '%s' for "}
+662                   \textcolor{stringliteral}{"proxying"}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri}, (\hyperlink{structent}{ent}->regex ? \textcolor{stringliteral}{"pattern"} : \textcolor{stringliteral}{"prefix"}),
+663                   fake);
+664 
+665     \textcolor{keywordflow}{if} (\hyperlink{structent}{ent}->regex) \{
+666         \textcolor{keywordflow}{if} (!ap\_regexec(\hyperlink{structent}{ent}->regex, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri}, \hyperlink{group__APACHE__CORE__DAEMON_ga7cc324c99d14a68ba7c8d1aae306a8d8}{AP\_MAX\_REG\_MATCH}, regm, 0)) \{
+667             \textcolor{keywordflow}{if} ((real[0] == \textcolor{charliteral}{'!'}) && (real[1] == \textcolor{charliteral}{'\(\backslash\)0'})) \{
+668                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03462)
+669                               \textcolor{stringliteral}{"proxying is explicitly disabled for URI path "}
+670                               \textcolor{stringliteral}{"'%s'; declining"}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri});
+671                 \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{DECLINED};
+672             \}
+673             \textcolor{comment}{/* test that we haven't reduced the URI */}
+674             \textcolor{keywordflow}{if} (nocanon && ap\_regexec(\hyperlink{structent}{ent}->regex, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri},
+675                     \hyperlink{group__APACHE__CORE__DAEMON_ga7cc324c99d14a68ba7c8d1aae306a8d8}{AP\_MAX\_REG\_MATCH}, reg1, 0)) \{
+676                 mismatch = 1;
+677                 use\_uri = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri};
+678             \}
+679             found = ap\_pregsub(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, real, use\_uri, \hyperlink{group__APACHE__CORE__DAEMON_ga7cc324c99d14a68ba7c8d1aae306a8d8}{AP\_MAX\_REG\_MATCH},
+680                     (use\_uri == \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri}) ? regm : reg1);
+681             \textcolor{keywordflow}{if} (!found) \{
+682                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{APLOG\_CRIT}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(01135)
+683                               \textcolor{stringliteral}{"Substitution in regular expression failed. "}
+684                               \textcolor{stringliteral}{"Replacement too long?"});
+685                 \textcolor{keywordflow}{return} \hyperlink{group__HTTP__Status_ga5d9777e02c26063c2985e39ef71091d2}{HTTP\_INTERNAL\_SERVER\_ERROR};
+686             \}
+687 
+688             \textcolor{comment}{/* Note: The strcmp() below catches cases where there}
+689 \textcolor{comment}{             * was no regex substitution. This is so cases like:}
+690 \textcolor{comment}{             *}
+691 \textcolor{comment}{             *    ProxyPassMatch \(\backslash\).gif balancer://foo}
+692 \textcolor{comment}{             *}
+693 \textcolor{comment}{             * will work "as expected". The upshot is that the 2}
+694 \textcolor{comment}{             * directives below act the exact same way (ie: $1 is implied):}
+695 \textcolor{comment}{             *}
+696 \textcolor{comment}{             *    ProxyPassMatch ^(/.*\(\backslash\).gif)$ balancer://foo}
+697 \textcolor{comment}{             *    ProxyPassMatch ^(/.*\(\backslash\).gif)$ balancer://foo$1}
+698 \textcolor{comment}{             *}
+699 \textcolor{comment}{             * which may be confusing.}
+700 \textcolor{comment}{             */}
+701             \textcolor{keywordflow}{if} (strcmp(found, real) != 0) \{
+702                 found = apr\_pstrcat(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{stringliteral}{"proxy:"}, found, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+703             \}
+704             \textcolor{keywordflow}{else} \{
+705                 found = apr\_pstrcat(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{stringliteral}{"proxy:"}, real, use\_uri, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+706             \}
+707         \}
+708     \}
+709     \textcolor{keywordflow}{else} \{
+710         len = alias\_match(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri}, fake);
+711 
+712         \textcolor{keywordflow}{if} (len != 0) \{
+713             \textcolor{keywordflow}{if} ((real[0] == \textcolor{charliteral}{'!'}) && (real[1] == \textcolor{charliteral}{'\(\backslash\)0'})) \{
+714                 \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03463)
+715                               \textcolor{stringliteral}{"proxying is explicitly disabled for URI path "}
+716                               \textcolor{stringliteral}{"'%s'; declining"}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri});
+717                 \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_ga9eba11ca86461a3ae319311d64682dda}{DECLINED};
+718             \}
+719             \textcolor{keywordflow}{if} (nocanon && len != alias\_match(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a2c0077c30ea4446551ecee4e24ced868}{unparsed\_uri}, \hyperlink{structent}{ent}->fake)) \{
+720                 mismatch = 1;
+721                 use\_uri = \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri};
+722             \}
+723             found = apr\_pstrcat(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aa0a0c16f9a9ab3901cdb3f3c9c9d83d0}{pool}, \textcolor{stringliteral}{"proxy:"}, real, use\_uri + len, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+724         \}
+725     \}
+726     \textcolor{keywordflow}{if} (mismatch) \{
+727         \textcolor{comment}{/* We made a reducing transformation, so we can't safely use}
+728 \textcolor{comment}{         * unparsed\_uri.  Safe fallback is to ignore nocanon.}
+729 \textcolor{comment}{         */}
+730         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga73e14aeff380a8a01c66d528162026fe}{APLOG\_WARNING}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(01136)
+731                 \textcolor{stringliteral}{"Unescaped URL path matched ProxyPass; ignoring unsafe nocanon"});
+732     \}
+733 
+734     \textcolor{keywordflow}{if} (found) \{
+735         \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a655cb2b33cbb40bd95c8da4d0da55eab}{filename} = \hyperlink{pcregrep_8txt_a1fdac88190c7a3aca2735f0bf49094dd}{found};
+736         \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a5c5e286cfc2fd30860c1efcef7724516}{handler} = \textcolor{stringliteral}{"proxy-server"};
+737         \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a82ca03c6dcfcacbf7001ff85e462289d}{proxyreq} = \hyperlink{group__ProxyReq_gada87167650249c33339a5992ad199219}{PROXYREQ\_REVERSE};
+738         \textcolor{keywordflow}{if} (nocanon && !mismatch) \{
+739             \textcolor{comment}{/* mod\_proxy\_http needs to be told.  Different module. */}
+740             apr\_table\_setn(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a8be66d4328766cf1da8913c9b51e0e30}{notes}, \textcolor{stringliteral}{"proxy-nocanon"}, \textcolor{stringliteral}{"1"});
+741         \}
+742         \textcolor{keywordflow}{if} (\hyperlink{structent}{ent}->flags & \hyperlink{group__MOD__PROXY_gabe5fec84c97375731569cb19d336a98e}{PROXYPASS\_NOQUERY}) \{
+743             apr\_table\_setn(\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_a8be66d4328766cf1da8913c9b51e0e30}{notes}, \textcolor{stringliteral}{"proxy-noquery"}, \textcolor{stringliteral}{"1"});
+744         \}
+745 
+746         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03464)
+747                       \textcolor{stringliteral}{"URI path '%s' matches proxy handler '%s'"}, \hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r}->\hyperlink{structrequest__rec_aee240e90eac55c732891e9408543990b}{uri},
+748                       found);
+749 
+750         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gaba51915c87d64af47fb1cc59348961c9}{OK};
+751     \}
+752 
+753     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__DAEMON_gabe6b865c045f3e7c6892ef4f15ff5779}{DONE};
+754 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__proxy_8c_ga9f6e6c19ac57d15d326c5d80171f7c4f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{mod__proxy_8c_ga9f6e6c19ac57d15d326c5d80171f7c4f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE@{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE@{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+R\+E(const char $\ast$)}{PROXY_DECLARE(const char *)}}]{\setlength{\rightskip}{0pt plus 5cm}P\+R\+O\+X\+Y\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__proxy_8c_ga45846d8c2168498ea908d2c8d6a9a320}{}\label{mod__proxy_8c_ga45846d8c2168498ea908d2c8d6a9a320}
+Return the name of the health check method (eg\+: \char`\"{}\+O\+P\+T\+I\+O\+N\+S\char`\"{}). 
+\begin{DoxyParams}{Parameters}
+{\em method} & method enum \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+name of method
+\end{DoxyReturn}
+Strip a unix domain socket (U\+DS) prefix from the input U\+RL 
+\begin{DoxyParams}{Parameters}
+{\em p} & pool to allocate result from \\
+\hline
+{\em url} & a U\+RL potentially prefixed with a U\+DS path \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+U\+RL with the U\+DS prefix removed 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1572 \{
+1573     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr};
+1574     \textcolor{comment}{/*}
+1575 \textcolor{comment}{     * We could be passed a URL during the config stage that contains}
+1576 \textcolor{comment}{     * the UDS path... ignore it}
+1577 \textcolor{comment}{     */}
+1578     \textcolor{keywordflow}{if} (!\hyperlink{apr__cpystrn_8c_a8a019f6d84acf570175ecfc8b3382170}{strncasecmp}(\hyperlink{group__MOD__PROXY_ga05d2db9f2dd75d18170f192bd1cc9b4e}{url}, \textcolor{stringliteral}{"unix:"}, 5) &&
+1579         ((ptr = \hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\_strchr\_c}(\hyperlink{group__MOD__PROXY_ga05d2db9f2dd75d18170f192bd1cc9b4e}{url}, \textcolor{charliteral}{'|'})) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})) \{
+1580         \textcolor{comment}{/* move past the 'unix:...|' UDS path info */}
+1581         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret}, *\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+1582 
+1583         ret = ptr + 1;
+1584         \textcolor{comment}{/* special case: "unix:....|scheme:" is OK, expand}
+1585 \textcolor{comment}{         * to "unix:....|scheme://localhost"}
+1586 \textcolor{comment}{         * */}
+1587         c = \hyperlink{group__APACHE__CORE__DAEMON_ga6016b58857e4c0b11e39913bdf4ff910}{ap\_strchr\_c}(ret, \textcolor{charliteral}{':'});
+1588         \textcolor{keywordflow}{if} (c == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1589             \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1590         \}
+1591         \textcolor{keywordflow}{if} (c[1] == \textcolor{charliteral}{'\(\backslash\)0'}) \{
+1592             \textcolor{keywordflow}{return} apr\_pstrcat(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, ret, \textcolor{stringliteral}{"//localhost"}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1593         \}
+1594         \textcolor{keywordflow}{else} \{
+1595             \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+1596         \}
+1597     \}
+1598     \textcolor{keywordflow}{return} \hyperlink{group__MOD__PROXY_ga05d2db9f2dd75d18170f192bd1cc9b4e}{url};
+1599 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__proxy_8c_ga45846d8c2168498ea908d2c8d6a9a320_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}!proxy\+\_\+mutex@{proxy\+\_\+mutex}}
+\index{proxy\+\_\+mutex@{proxy\+\_\+mutex}!mod\+\_\+proxy.\+c@{mod\+\_\+proxy.\+c}}
+\subsubsection[{\texorpdfstring{proxy\+\_\+mutex}{proxy_mutex}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+global\+\_\+mutex\+\_\+t}$\ast$ proxy\+\_\+mutex = {\bf N\+U\+LL}}\hypertarget{mod__proxy_8c_a93b0fcd14bd51e35876e3ed7ec589d85}{}\label{mod__proxy_8c_a93b0fcd14bd51e35876e3ed7ec589d85}

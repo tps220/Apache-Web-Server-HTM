@@ -1,0 +1,414 @@
+\hypertarget{pcredemo_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/pcre/pcredemo.c File Reference}
+\label{pcredemo_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcredemo.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcredemo.\+c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$pcre.\+h$>$}\\*
+Include dependency graph for pcredemo.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{pcredemo_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{pcredemo_8c_a5c84cb453bd30140711e9635a91312b4}{O\+V\+E\+C\+C\+O\+U\+NT}~30    /$\ast$ should \hyperlink{NON-AUTOTOOLS-BUILD_8txt_ac08ce70cbd4f453457597ad15ecbebdd}{be} \hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a} multiple \hyperlink{pcre_8txt_a9d5b55a535a7d176d14b62d664b47b4d}{of} 3 $\ast$/
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcredemo_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$$\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{pcredemo.\+c@{pcredemo.\+c}!O\+V\+E\+C\+C\+O\+U\+NT@{O\+V\+E\+C\+C\+O\+U\+NT}}
+\index{O\+V\+E\+C\+C\+O\+U\+NT@{O\+V\+E\+C\+C\+O\+U\+NT}!pcredemo.\+c@{pcredemo.\+c}}
+\subsubsection[{\texorpdfstring{O\+V\+E\+C\+C\+O\+U\+NT}{OVECCOUNT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\+V\+E\+C\+C\+O\+U\+NT~30    /$\ast$ should {\bf be} {\bf a} multiple {\bf of} 3 $\ast$/}\hypertarget{pcredemo_8c_a5c84cb453bd30140711e9635a91312b4}{}\label{pcredemo_8c_a5c84cb453bd30140711e9635a91312b4}
+
+
+\subsection{Function Documentation}
+\index{pcredemo.\+c@{pcredemo.\+c}!main@{main}}
+\index{main@{main}!pcredemo.\+c@{pcredemo.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$$\ast$argv)}{main(int argc, char **argv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}\hypertarget{pcredemo_8c_a3c04138a5bfe5d72780bb7e82a18e627}{}\label{pcredemo_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+
+\begin{DoxyCode}
+47 \{
+48 \hyperlink{structreal__pcre8__or__16}{pcre} *\hyperlink{pcre_8txt_abd134207f74532a8b094676c4a2ca9ed}{re};
+49 \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__PROTO_ga11614f44ef4d939bdd984953346a7572}{error};
+50 \textcolor{keywordtype}{char} *\hyperlink{ap__regex_8h_a6e94763e2b1ed0b1fe86a58eb5e1eb73}{pattern};
+51 \textcolor{keywordtype}{char} *subject;
+52 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *name\_table;
+53 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} option\_bits;
+54 \textcolor{keywordtype}{int} erroffset;
+55 \textcolor{keywordtype}{int} find\_all;
+56 \textcolor{keywordtype}{int} crlf\_is\_newline;
+57 \textcolor{keywordtype}{int} namecount;
+58 \textcolor{keywordtype}{int} name\_entry\_size;
+59 \textcolor{keywordtype}{int} ovector[\hyperlink{pcredemo_8c_a5c84cb453bd30140711e9635a91312b4}{OVECCOUNT}];
+60 \textcolor{keywordtype}{int} subject\_length;
+61 \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc}, \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+62 \textcolor{keywordtype}{int} \hyperlink{perltest_8txt_a03be0a31857a405ef505b6ab4ff308a4}{utf8};
+63 
+64 
+65 \textcolor{comment}{/**************************************************************************}
+66 \textcolor{comment}{* First, sort out the command line. There is only one possible option at  *}
+67 \textcolor{comment}{* the moment, "-g" to request repeated matching to find all occurrences,  *}
+68 \textcolor{comment}{* like Perl's /g option. We set the variable find\_all to a non-zero value *}
+69 \textcolor{comment}{* if the -g option is present. Apart from that, there must be exactly two *}
+70 \textcolor{comment}{* arguments.                                                              *}
+71 \textcolor{comment}{**************************************************************************/}
+72 
+73 find\_all = 0;
+74 \textcolor{keywordflow}{for} (i = 1; i < \hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc}; i++)
+75   \{
+76   \textcolor{keywordflow}{if} (strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[i], \textcolor{stringliteral}{"-g"}) == 0) find\_all = 1;
+77     \textcolor{keywordflow}{else} \textcolor{keywordflow}{break};
+78   \}
+79 
+80 \textcolor{comment}{/* After the options, we require exactly two arguments, which are the pattern,}
+81 \textcolor{comment}{and the subject string. */}
+82 
+83 \textcolor{keywordflow}{if} (argc - i != 2)
+84   \{
+85   printf(\textcolor{stringliteral}{"Two arguments required: a regex and a subject string\(\backslash\)n"});
+86   \textcolor{keywordflow}{return} 1;
+87   \}
+88 
+89 pattern = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+90 subject = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[i+1];
+91 subject\_length = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})strlen(subject);
+92 
+93 
+94 \textcolor{comment}{/*************************************************************************}
+95 \textcolor{comment}{* Now we are going to compile the regular expression pattern, and handle *}
+96 \textcolor{comment}{* and errors that are detected.                                          *}
+97 \textcolor{comment}{*************************************************************************/}
+98 
+99 re = \hyperlink{README_8txt_ac2d9d7d1be621b48f6bb23146a342420}{pcre\_compile}(
+100   pattern,              \textcolor{comment}{/* the pattern */}
+101   0,                    \textcolor{comment}{/* default options */}
+102   &error,               \textcolor{comment}{/* for error message */}
+103   &erroffset,           \textcolor{comment}{/* for error offset */}
+104   \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});                \textcolor{comment}{/* use default character tables */}
+105 
+106 \textcolor{comment}{/* Compilation failed: print the error message and exit */}
+107 
+108 \textcolor{keywordflow}{if} (re == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+109   \{
+110   printf(\textcolor{stringliteral}{"PCRE compilation failed at offset %d: %s\(\backslash\)n"}, erroffset, error);
+111   \textcolor{keywordflow}{return} 1;
+112   \}
+113 
+114 
+115 \textcolor{comment}{/*************************************************************************}
+116 \textcolor{comment}{* If the compilation succeeded, we call PCRE again, in order to do a     *}
+117 \textcolor{comment}{* pattern match against the subject string. This does just ONE match. If *}
+118 \textcolor{comment}{* further matching is needed, it will be done below.                     *}
+119 \textcolor{comment}{*************************************************************************/}
+120 
+121 rc = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a02f48304b1edc74d7d9fa0698403a8d3}{pcre\_exec}(
+122   re,                   \textcolor{comment}{/* the compiled pattern */}
+123   \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},                 \textcolor{comment}{/* no extra data - we didn't study the pattern */}
+124   subject,              \textcolor{comment}{/* the subject string */}
+125   subject\_length,       \textcolor{comment}{/* the length of the subject */}
+126   0,                    \textcolor{comment}{/* start at offset 0 in the subject */}
+127   0,                    \textcolor{comment}{/* default options */}
+128   ovector,              \textcolor{comment}{/* output vector for substring information */}
+129   \hyperlink{pcredemo_8c_a5c84cb453bd30140711e9635a91312b4}{OVECCOUNT});           \textcolor{comment}{/* number of elements in the output vector */}
+130 
+131 \textcolor{comment}{/* Matching failed: handle error cases */}
+132 
+133 \textcolor{keywordflow}{if} (rc < 0)
+134   \{
+135   \textcolor{keywordflow}{switch}(rc)
+136     \{
+137     \textcolor{keywordflow}{case} \hyperlink{pcre_8h_ad39129723af6a7f9584c1c1cba089509}{PCRE\_ERROR\_NOMATCH}: printf(\textcolor{stringliteral}{"No match\(\backslash\)n"}); \textcolor{keywordflow}{break};
+138     \textcolor{comment}{/*}
+139 \textcolor{comment}{    Handle other special cases if you like}
+140 \textcolor{comment}{    */}
+141     \textcolor{keywordflow}{default}: printf(\textcolor{stringliteral}{"Matching error %d\(\backslash\)n"}, rc); \textcolor{keywordflow}{break};
+142     \}
+143   \hyperlink{pcre_8txt_a66386e89548846d604196dafdf57b0d7}{pcre\_free}(re);     \textcolor{comment}{/* Release memory used for the compiled pattern */}
+144   \textcolor{keywordflow}{return} 1;
+145   \}
+146 
+147 \textcolor{comment}{/* Match succeded */}
+148 
+149 printf(\textcolor{stringliteral}{"\(\backslash\)nMatch succeeded at offset %d\(\backslash\)n"}, ovector[0]);
+150 
+151 
+152 \textcolor{comment}{/*************************************************************************}
+153 \textcolor{comment}{* We have found the first match within the subject string. If the output *}
+154 \textcolor{comment}{* vector wasn't big enough, say so. Then output any substrings that were *}
+155 \textcolor{comment}{* captured.                                                              *}
+156 \textcolor{comment}{*************************************************************************/}
+157 
+158 \textcolor{comment}{/* The output vector wasn't big enough */}
+159 
+160 \textcolor{keywordflow}{if} (rc == 0)
+161   \{
+162   rc = \hyperlink{pcredemo_8c_a5c84cb453bd30140711e9635a91312b4}{OVECCOUNT}/3;
+163   printf(\textcolor{stringliteral}{"ovector only has room for %d captured substrings\(\backslash\)n"}, rc - 1);
+164   \}
+165 
+166 \textcolor{comment}{/* Show substrings stored in the output vector by number. Obviously, in a real}
+167 \textcolor{comment}{application you might want to do things other than print them. */}
+168 
+169 \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc}; i++)
+170   \{
+171   \textcolor{keywordtype}{char} *substring\_start = subject + ovector[2*\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+172   \textcolor{keywordtype}{int} substring\_length = ovector[2*i+1] - ovector[2*\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+173   printf(\textcolor{stringliteral}{"%2d: %.*s\(\backslash\)n"}, i, substring\_length, substring\_start);
+174   \}
+175 
+176 
+177 \textcolor{comment}{/**************************************************************************}
+178 \textcolor{comment}{* That concludes the basic part of this demonstration program. We have    *}
+179 \textcolor{comment}{* compiled a pattern, and performed a single match. The code that follows *}
+180 \textcolor{comment}{* shows first how to access named substrings, and then how to code for    *}
+181 \textcolor{comment}{* repeated matches on the same subject.                                   *}
+182 \textcolor{comment}{**************************************************************************/}
+183 
+184 \textcolor{comment}{/* See if there are any named substrings, and if so, show them by name. First}
+185 \textcolor{comment}{we have to extract the count of named parentheses from the pattern. */}
+186 
+187 (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})\hyperlink{pcre_8txt_ae1370b2007d7a7268aa3a16bdbda9921}{pcre\_fullinfo}(
+188   re,                   \textcolor{comment}{/* the compiled pattern */}
+189   \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},                 \textcolor{comment}{/* no extra data - we didn't study the pattern */}
+190   \hyperlink{pcre_8h_a65a1bccd2d8ae9390f58fbbd204604b4}{PCRE\_INFO\_NAMECOUNT},  \textcolor{comment}{/* number of named substrings */}
+191   &namecount);          \textcolor{comment}{/* where to put the answer */}
+192 
+193 \textcolor{keywordflow}{if} (namecount <= 0) printf(\textcolor{stringliteral}{"No named substrings\(\backslash\)n"}); \textcolor{keywordflow}{else}
+194   \{
+195   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *tabptr;
+196   printf(\textcolor{stringliteral}{"Named substrings\(\backslash\)n"});
+197 
+198   \textcolor{comment}{/* Before we can access the substrings, we must extract the table for}
+199 \textcolor{comment}{  translating names to numbers, and the size of each entry in the table. */}
+200 
+201   (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})\hyperlink{pcre_8txt_ae1370b2007d7a7268aa3a16bdbda9921}{pcre\_fullinfo}(
+202     re,                       \textcolor{comment}{/* the compiled pattern */}
+203     \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},                     \textcolor{comment}{/* no extra data - we didn't study the pattern */}
+204     \hyperlink{pcre_8h_a0268bee19c3c4f925dd10c320ad84dd2}{PCRE\_INFO\_NAMETABLE},      \textcolor{comment}{/* address of the table */}
+205     &name\_table);             \textcolor{comment}{/* where to put the answer */}
+206 
+207   (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})\hyperlink{pcre_8txt_ae1370b2007d7a7268aa3a16bdbda9921}{pcre\_fullinfo}(
+208     re,                       \textcolor{comment}{/* the compiled pattern */}
+209     \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},                     \textcolor{comment}{/* no extra data - we didn't study the pattern */}
+210     \hyperlink{pcre_8h_a0592f8d9db4d1d559ce7619b26dfe5f7}{PCRE\_INFO\_NAMEENTRYSIZE},  \textcolor{comment}{/* size of each entry in the table */}
+211     &name\_entry\_size);        \textcolor{comment}{/* where to put the answer */}
+212 
+213   \textcolor{comment}{/* Now we can scan the table and, for each entry, print the number, the name,}
+214 \textcolor{comment}{  and the substring itself. */}
+215 
+216   tabptr = name\_table;
+217   \textcolor{keywordflow}{for} (i = 0; i < namecount; i++)
+218     \{
+219     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = (tabptr[0] << 8) | tabptr[1];
+220     printf(\textcolor{stringliteral}{"(%d) %*s: %.*s\(\backslash\)n"}, n, name\_entry\_size - 3, tabptr + 2,
+221       ovector[2*n+1] - ovector[2*n], subject + ovector[2*n]);
+222     tabptr += name\_entry\_size;
+223     \}
+224   \}
+225 
+226 
+227 \textcolor{comment}{/*************************************************************************}
+228 \textcolor{comment}{* If the "-g" option was given on the command line, we want to continue  *}
+229 \textcolor{comment}{* to search for additional matches in the subject string, in a similar   *}
+230 \textcolor{comment}{* way to the /g option in Perl. This turns out to be trickier than you   *}
+231 \textcolor{comment}{* might think because of the possibility of matching an empty string.    *}
+232 \textcolor{comment}{* What happens is as follows:                                            *}
+233 \textcolor{comment}{*                                                                        *}
+234 \textcolor{comment}{* If the previous match was NOT for an empty string, we can just start   *}
+235 \textcolor{comment}{* the next match at the end of the previous one.                         *}
+236 \textcolor{comment}{*                                                                        *}
+237 \textcolor{comment}{* If the previous match WAS for an empty string, we can't do that, as it *}
+238 \textcolor{comment}{* would lead to an infinite loop. Instead, a special call of pcre\_exec() *}
+239 \textcolor{comment}{* is made with the PCRE\_NOTEMPTY\_ATSTART and PCRE\_ANCHORED flags set.    *}
+240 \textcolor{comment}{* The first of these tells PCRE that an empty string at the start of the *}
+241 \textcolor{comment}{* subject is not a valid match; other possibilities must be tried. The   *}
+242 \textcolor{comment}{* second flag restricts PCRE to one match attempt at the initial string  *}
+243 \textcolor{comment}{* position. If this match succeeds, an alternative to the empty string   *}
+244 \textcolor{comment}{* match has been found, and we can print it and proceed round the loop,  *}
+245 \textcolor{comment}{* advancing by the length of whatever was found. If this match does not  *}
+246 \textcolor{comment}{* succeed, we still stay in the loop, advancing by just one character.   *}
+247 \textcolor{comment}{* In UTF-8 mode, which can be set by (*UTF8) in the pattern, this may be *}
+248 \textcolor{comment}{* more than one byte.                                                    *}
+249 \textcolor{comment}{*                                                                        *}
+250 \textcolor{comment}{* However, there is a complication concerned with newlines. When the     *}
+251 \textcolor{comment}{* newline convention is such that CRLF is a valid newline, we must       *}
+252 \textcolor{comment}{* advance by two characters rather than one. The newline convention can  *}
+253 \textcolor{comment}{* be set in the regex by (*CR), etc.; if not, we must find the default.  *}
+254 \textcolor{comment}{*************************************************************************/}
+255 
+256 \textcolor{keywordflow}{if} (!find\_all)     \textcolor{comment}{/* Check for -g */}
+257   \{
+258   \hyperlink{pcre_8txt_a66386e89548846d604196dafdf57b0d7}{pcre\_free}(re);   \textcolor{comment}{/* Release the memory used for the compiled pattern */}
+259   \textcolor{keywordflow}{return} 0;        \textcolor{comment}{/* Finish unless -g was given */}
+260   \}
+261 
+262 \textcolor{comment}{/* Before running the loop, check for UTF-8 and whether CRLF is a valid newline}
+263 \textcolor{comment}{sequence. First, find the options with which the regex was compiled; extract}
+264 \textcolor{comment}{the UTF-8 state, and mask off all but the newline options. */}
+265 
+266 (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})\hyperlink{pcre_8txt_ae1370b2007d7a7268aa3a16bdbda9921}{pcre\_fullinfo}(re, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8h_a0e76bf1b51c1f8ab9dfd41981244e77e}{PCRE\_INFO\_OPTIONS}, &option\_bits);
+267 utf8 = option\_bits & \hyperlink{pcre_8h_a177ec66f9b06aab7b37965b77b2cf1b8}{PCRE\_UTF8};
+268 option\_bits &= \hyperlink{pcre_8h_ab55198e91574a143392a8dced9d5cf85}{PCRE\_NEWLINE\_CR}|\hyperlink{pcre_8h_a9d3e03ae881322fe05e72e7ad111bf4f}{PCRE\_NEWLINE\_LF}|
+      \hyperlink{pcre_8h_a6d5da3bae2692b4bc458f5638dcafd57}{PCRE\_NEWLINE\_CRLF}|
+269                \hyperlink{pcre_8h_a1c379cd4b51ea037dce7e8c79f9ee57d}{PCRE\_NEWLINE\_ANY}|\hyperlink{pcre_8h_af25f19586bec4187ca77e617ddc9b98b}{PCRE\_NEWLINE\_ANYCRLF};
+270 
+271 \textcolor{comment}{/* If no newline options were set, find the default newline convention from the}
+272 \textcolor{comment}{build configuration. */}
+273 
+274 \textcolor{keywordflow}{if} (option\_bits == 0)
+275   \{
+276   \textcolor{keywordtype}{int} \hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+277   (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})\hyperlink{pcre_8txt_a51b3560f37fc987a06062d09bbf84ef5}{pcre\_config}(\hyperlink{pcre_8h_ac9cd3aaf1d94ff1e846082b3c69b68f0}{PCRE\_CONFIG\_NEWLINE}, &d);
+278   \textcolor{comment}{/* Note that these values are always the ASCII ones, even in}
+279 \textcolor{comment}{  EBCDIC environments. CR = 13, NL = 10. */}
+280   option\_bits = (d == 13)? \hyperlink{pcre_8h_ab55198e91574a143392a8dced9d5cf85}{PCRE\_NEWLINE\_CR} :
+281           (d == 10)? \hyperlink{pcre_8h_a9d3e03ae881322fe05e72e7ad111bf4f}{PCRE\_NEWLINE\_LF} :
+282           (d == (13<<8 | 10))? \hyperlink{pcre_8h_a6d5da3bae2692b4bc458f5638dcafd57}{PCRE\_NEWLINE\_CRLF} :
+283           (d == -2)? \hyperlink{pcre_8h_af25f19586bec4187ca77e617ddc9b98b}{PCRE\_NEWLINE\_ANYCRLF} :
+284           (d == -1)? \hyperlink{pcre_8h_a1c379cd4b51ea037dce7e8c79f9ee57d}{PCRE\_NEWLINE\_ANY} : 0;
+285   \}
+286 
+287 \textcolor{comment}{/* See if CRLF is a valid newline sequence. */}
+288 
+289 crlf\_is\_newline =
+290      option\_bits == \hyperlink{pcre_8h_a1c379cd4b51ea037dce7e8c79f9ee57d}{PCRE\_NEWLINE\_ANY} ||
+291      option\_bits == \hyperlink{pcre_8h_a6d5da3bae2692b4bc458f5638dcafd57}{PCRE\_NEWLINE\_CRLF} ||
+292      option\_bits == \hyperlink{pcre_8h_af25f19586bec4187ca77e617ddc9b98b}{PCRE\_NEWLINE\_ANYCRLF};
+293 
+294 \textcolor{comment}{/* Loop for second and subsequent matches */}
+295 
+296 \textcolor{keywordflow}{for} (;;)
+297   \{
+298   \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__MUTEX_gaa6c9d809037676d22aceaf5517a33faf}{options} = 0;                 \textcolor{comment}{/* Normally no options */}
+299   \textcolor{keywordtype}{int} start\_offset = ovector[1];   \textcolor{comment}{/* Start at end of previous match */}
+300 
+301   \textcolor{comment}{/* If the previous match was for an empty string, we are finished if we are}
+302 \textcolor{comment}{  at the end of the subject. Otherwise, arrange to run another match at the}
+303 \textcolor{comment}{  same point to see if a non-empty match can be found. */}
+304 
+305   \textcolor{keywordflow}{if} (ovector[0] == ovector[1])
+306     \{
+307     \textcolor{keywordflow}{if} (ovector[0] == subject\_length) \textcolor{keywordflow}{break};
+308     options = \hyperlink{pcre_8h_afa0f634260adacc0902bf7db3d12c755}{PCRE\_NOTEMPTY\_ATSTART} | \hyperlink{pcre_8txt_a1a82c471ce7b7648a6bd5345a8514998}{PCRE\_ANCHORED};
+309     \}
+310 
+311   \textcolor{comment}{/* Run the next matching operation */}
+312 
+313   rc = \hyperlink{NON-AUTOTOOLS-BUILD_8txt_a02f48304b1edc74d7d9fa0698403a8d3}{pcre\_exec}(
+314     re,                   \textcolor{comment}{/* the compiled pattern */}
+315     \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},                 \textcolor{comment}{/* no extra data - we didn't study the pattern */}
+316     subject,              \textcolor{comment}{/* the subject string */}
+317     subject\_length,       \textcolor{comment}{/* the length of the subject */}
+318     start\_offset,         \textcolor{comment}{/* starting offset in the subject */}
+319     options,              \textcolor{comment}{/* options */}
+320     ovector,              \textcolor{comment}{/* output vector for substring information */}
+321     \hyperlink{pcredemo_8c_a5c84cb453bd30140711e9635a91312b4}{OVECCOUNT});           \textcolor{comment}{/* number of elements in the output vector */}
+322 
+323   \textcolor{comment}{/* This time, a result of NOMATCH isn't an error. If the value in "options"}
+324 \textcolor{comment}{  is zero, it just means we have found all possible matches, so the loop ends.}
+325 \textcolor{comment}{  Otherwise, it means we have failed to find a non-empty-string match at a}
+326 \textcolor{comment}{  point where there was a previous empty-string match. In this case, we do what}
+327 \textcolor{comment}{  Perl does: advance the matching position by one character, and continue. We}
+328 \textcolor{comment}{  do this by setting the "end of previous match" offset, because that is picked}
+329 \textcolor{comment}{  up at the top of the loop as the point at which to start again.}
+330 \textcolor{comment}{}
+331 \textcolor{comment}{  There are two complications: (a) When CRLF is a valid newline sequence, and}
+332 \textcolor{comment}{  the current position is just before it, advance by an extra byte. (b)}
+333 \textcolor{comment}{  Otherwise we must ensure that we skip an entire UTF-8 character if we are in}
+334 \textcolor{comment}{  UTF-8 mode. */}
+335 
+336   \textcolor{keywordflow}{if} (rc == \hyperlink{pcre_8h_ad39129723af6a7f9584c1c1cba089509}{PCRE\_ERROR\_NOMATCH})
+337     \{
+338     \textcolor{keywordflow}{if} (options == 0) \textcolor{keywordflow}{break};                    \textcolor{comment}{/* All matches found */}
+339     ovector[1] = start\_offset + 1;              \textcolor{comment}{/* Advance one byte */}
+340     \textcolor{keywordflow}{if} (crlf\_is\_newline &&                      \textcolor{comment}{/* If CRLF is newline & */}
+341         start\_offset < subject\_length - 1 &&    \textcolor{comment}{/* we are at CRLF, */}
+342         subject[start\_offset] == \textcolor{charliteral}{'\(\backslash\)r'} &&
+343         subject[start\_offset + 1] == \textcolor{charliteral}{'\(\backslash\)n'})
+344       ovector[1] += 1;                          \textcolor{comment}{/* Advance by one more. */}
+345     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (utf8)                              \textcolor{comment}{/* Otherwise, ensure we */}
+346       \{                                         \textcolor{comment}{/* advance a whole UTF-8 */}
+347       \textcolor{keywordflow}{while} (ovector[1] < subject\_length)       \textcolor{comment}{/* character. */}
+348         \{
+349         \textcolor{keywordflow}{if} ((subject[ovector[1]] & 0xc0) != 0x80) \textcolor{keywordflow}{break};
+350         ovector[1] += 1;
+351         \}
+352       \}
+353     \textcolor{keywordflow}{continue};    \textcolor{comment}{/* Go round the loop again */}
+354     \}
+355 
+356   \textcolor{comment}{/* Other matching errors are not recoverable. */}
+357 
+358   \textcolor{keywordflow}{if} (rc < 0)
+359     \{
+360     printf(\textcolor{stringliteral}{"Matching error %d\(\backslash\)n"}, rc);
+361     \hyperlink{pcre_8txt_a66386e89548846d604196dafdf57b0d7}{pcre\_free}(re);    \textcolor{comment}{/* Release memory used for the compiled pattern */}
+362     \textcolor{keywordflow}{return} 1;
+363     \}
+364 
+365   \textcolor{comment}{/* Match succeded */}
+366 
+367   printf(\textcolor{stringliteral}{"\(\backslash\)nMatch succeeded again at offset %d\(\backslash\)n"}, ovector[0]);
+368 
+369   \textcolor{comment}{/* The match succeeded, but the output vector wasn't big enough. */}
+370 
+371   \textcolor{keywordflow}{if} (rc == 0)
+372     \{
+373     rc = \hyperlink{pcredemo_8c_a5c84cb453bd30140711e9635a91312b4}{OVECCOUNT}/3;
+374     printf(\textcolor{stringliteral}{"ovector only has room for %d captured substrings\(\backslash\)n"}, rc - 1);
+375     \}
+376 
+377   \textcolor{comment}{/* As before, show substrings stored in the output vector by number, and then}
+378 \textcolor{comment}{  also any named substrings. */}
+379 
+380   \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc}; i++)
+381     \{
+382     \textcolor{keywordtype}{char} *substring\_start = subject + ovector[2*\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+383     \textcolor{keywordtype}{int} substring\_length = ovector[2*i+1] - ovector[2*\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+384     printf(\textcolor{stringliteral}{"%2d: %.*s\(\backslash\)n"}, i, substring\_length, substring\_start);
+385     \}
+386 
+387   \textcolor{keywordflow}{if} (namecount <= 0) printf(\textcolor{stringliteral}{"No named substrings\(\backslash\)n"}); \textcolor{keywordflow}{else}
+388     \{
+389     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *tabptr = name\_table;
+390     printf(\textcolor{stringliteral}{"Named substrings\(\backslash\)n"});
+391     \textcolor{keywordflow}{for} (i = 0; i < namecount; i++)
+392       \{
+393       \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = (tabptr[0] << 8) | tabptr[1];
+394       printf(\textcolor{stringliteral}{"(%d) %*s: %.*s\(\backslash\)n"}, n, name\_entry\_size - 3, tabptr + 2,
+395         ovector[2*n+1] - ovector[2*n], subject + ovector[2*n]);
+396       tabptr += name\_entry\_size;
+397       \}
+398     \}
+399   \}      \textcolor{comment}{/* End of loop to find second and subsequent matches */}
+400 
+401 printf(\textcolor{stringliteral}{"\(\backslash\)n"});
+402 \hyperlink{pcre_8txt_a66386e89548846d604196dafdf57b0d7}{pcre\_free}(re);       \textcolor{comment}{/* Release memory used for the compiled pattern */}
+403 \textcolor{keywordflow}{return} 0;
+404 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=228pt]{pcredemo_8c_a3c04138a5bfe5d72780bb7e82a18e627_cgraph}
+\end{center}
+\end{figure}
+
+

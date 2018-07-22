@@ -1,0 +1,748 @@
+\hypertarget{h2__ngn__shed_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http2/h2\+\_\+ngn\+\_\+shed.c File Reference}
+\label{h2__ngn__shed_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+ngn\+\_\+shed.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+ngn\+\_\+shed.\+c}}
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$stddef.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+mutex.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+cond.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+strings.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+time.\+h$>$}\\*
+{\ttfamily \#include $<$httpd.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+core.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+log.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+http2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+conn.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+ctx.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+mplx.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+task.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+util.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+ngn\+\_\+shed.\+h\char`\"{}}\\*
+Include dependency graph for h2\+\_\+ngn\+\_\+shed.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structh2__ngn__entry}{h2\+\_\+ngn\+\_\+entry}
+\item 
+struct \hyperlink{structh2__req__engine}{h2\+\_\+req\+\_\+engine}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_a2f9032a5135cc45b948be0d7badea882}{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+N\+E\+XT}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})~\hyperlink{group__apr__ring_gae42e4f7148719aa534bdbbc82be26a06}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+N\+E\+XT}((\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e}), link)
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_a1af0b5397c3080d8e64b2b95a28fa7bd}{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+P\+R\+EV}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})~\hyperlink{group__apr__ring_ga82d45623d505d59ea5619cf8f63d0ebb}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+P\+R\+EV}((\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e}), link)
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_af618a49998f5e13b1cc3f331bbe747d2}{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+R\+E\+M\+O\+VE}(\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})~\hyperlink{group__apr__ring_gaab4a57544bdb660ec1e306137387d9d7}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+R\+E\+M\+O\+VE}((\hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e}), link)
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_abc73a4e4f3e45e650e1aa0afba6bc763}{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+S\+E\+N\+T\+I\+N\+EL}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_ga54210090292ebafcd0a0d75d9ff1563d}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+S\+E\+N\+T\+I\+N\+EL}((\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}), \hyperlink{structh2__ngn__entry}{h2\+\_\+ngn\+\_\+entry}, link)
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_a1cfc316b91d996cba9329dfb4579f369}{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+E\+M\+P\+TY}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_ga9b64ad6eebea19f896d2aa90172b6b9a}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+E\+M\+P\+TY}((\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}), \hyperlink{structh2__ngn__entry}{h2\+\_\+ngn\+\_\+entry}, link)
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_ae930812e245be15ec5ccf4c8ad5bfc0c}{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+F\+I\+R\+ST}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_gacacd9cfca24feb7ff754d4008422efcb}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+F\+I\+R\+ST}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_aff2c307659335ec58f6d948b595d3c1c}{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+L\+A\+ST}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})~\hyperlink{group__apr__ring_ga8b927069ba9dc13defaf45a87267b5d3}{A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+L\+A\+ST}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b})
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_afc405236531683e4eec028f2dc76d7d1}{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})
+\item 
+\#define \hyperlink{h2__ngn__shed_8c_a8108a15e7afd940aa15c3179a759e36b}{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL}(\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b},  \hyperlink{pcregrep_8txt_acd90314acb2c2e5cd19681136c08efac}{e})
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structh2__ngn__entry}{h2\+\_\+ngn\+\_\+entry} \hyperlink{h2__ngn__shed_8c_a77f843aec97a4bbb786c6ba08080f856}{h2\+\_\+ngn\+\_\+entry}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{h2__ngn__shed_8c_ada765812a034e97825703145c11f5b03}{h2\+\_\+req\+\_\+engine\+\_\+get\+\_\+id} (\hyperlink{structh2__req__engine}{h2\+\_\+req\+\_\+engine} $\ast$engine)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__ngn__shed_8c_a159f2c952b1b9eec4b79dae8f6a94364}{h2\+\_\+req\+\_\+engine\+\_\+is\+\_\+shutdown} (\hyperlink{structh2__req__engine}{h2\+\_\+req\+\_\+engine} $\ast$engine)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__ngn__shed_8c_a38e6e88ce849aa8bb6d700e5bf2a02aa}{h2\+\_\+req\+\_\+engine\+\_\+out\+\_\+consumed} (\hyperlink{structh2__req__engine}{h2\+\_\+req\+\_\+engine} $\ast$engine, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__apr__random_ga393b167dab644f408202cbbcad070e6d}{bytes})
+\item 
+\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$ \hyperlink{h2__ngn__shed_8c_a6c8ff3ddf1ac3ddbac59ae65095e2b73}{h2\+\_\+ngn\+\_\+shed\+\_\+create} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{structconn__rec}{conn\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_aef720ae5f62fa015619d00171d917416}{c}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} default\+\_\+capacity, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} req\+\_\+buffer\+\_\+size)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__ngn__shed_8c_a88e30717d953a00815fa1acd60a5a74f}{h2\+\_\+ngn\+\_\+shed\+\_\+set\+\_\+ctx} (\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$shed, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$user\+\_\+ctx)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{h2__ngn__shed_8c_aaa422761ee11bef3236047b13d886c9c}{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+ctx} (\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$shed)
+\item 
+\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$ \hyperlink{h2__ngn__shed_8c_ae0bf9bfdf6ae608305be2c4905339734}{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+shed} (\hyperlink{structh2__req__engine}{h2\+\_\+req\+\_\+engine} $\ast$ngn)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__ngn__shed_8c_a62642a35c376dbb37bac12d78e253b24}{h2\+\_\+ngn\+\_\+shed\+\_\+abort} (\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$shed)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__ngn__shed_8c_a733dcc7a4e7fd256c6f340e592c525f0}{h2\+\_\+ngn\+\_\+shed\+\_\+push\+\_\+request} (\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$shed, const char $\ast$ngn\+\_\+type, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, \hyperlink{mod__http2_8h_a4536960c5d69af7cdea3dfd82129242e}{http2\+\_\+req\+\_\+engine\+\_\+init} $\ast$einit)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__ngn__shed_8c_a5ffba0f4f39a4034a6dc6a0920279d0f}{h2\+\_\+ngn\+\_\+shed\+\_\+pull\+\_\+request} (\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$shed, \hyperlink{structh2__req__engine}{h2\+\_\+req\+\_\+engine} $\ast$ngn, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} capacity, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} want\+\_\+shutdown, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$$\ast$pr)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__ngn__shed_8c_a0214ef5304677f2db1fd07e08a02d79d}{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+task} (\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$shed, struct \hyperlink{structh2__req__engine}{h2\+\_\+req\+\_\+engine} $\ast$ngn, \hyperlink{structh2__task}{h2\+\_\+task} $\ast$task)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__ngn__shed_8c_ac223b15a49f204c91c9fa767e5af377c}{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+ngn} (\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$shed, struct \hyperlink{structh2__req__engine}{h2\+\_\+req\+\_\+engine} $\ast$ngn)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__ngn__shed_8c_af9ff23e9852828fe5f3a273110c9f6c8}{h2\+\_\+ngn\+\_\+shed\+\_\+destroy} (\hyperlink{structh2__ngn__shed}{h2\+\_\+ngn\+\_\+shed} $\ast$shed)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+N\+E\+XT@{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+N\+E\+XT}}
+\index{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+N\+E\+XT@{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+N\+E\+XT}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+N\+E\+XT}{H2_NGN_ENTRY_NEXT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+N\+E\+XT(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+N\+E\+XT}(({\bf e}), link)}\hypertarget{h2__ngn__shed_8c_a2f9032a5135cc45b948be0d7badea882}{}\label{h2__ngn__shed_8c_a2f9032a5135cc45b948be0d7badea882}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+P\+R\+EV@{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+P\+R\+EV}}
+\index{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+P\+R\+EV@{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+P\+R\+EV}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+P\+R\+EV}{H2_NGN_ENTRY_PREV}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+P\+R\+EV(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+P\+R\+EV}(({\bf e}), link)}\hypertarget{h2__ngn__shed_8c_a1af0b5397c3080d8e64b2b95a28fa7bd}{}\label{h2__ngn__shed_8c_a1af0b5397c3080d8e64b2b95a28fa7bd}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+R\+E\+M\+O\+VE@{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+R\+E\+M\+O\+VE}}
+\index{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+R\+E\+M\+O\+VE@{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+R\+E\+M\+O\+VE}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+R\+E\+M\+O\+VE}{H2_NGN_ENTRY_REMOVE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+N\+G\+N\+\_\+\+E\+N\+T\+R\+Y\+\_\+\+R\+E\+M\+O\+VE(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+R\+E\+M\+O\+VE}(({\bf e}), link)}\hypertarget{h2__ngn__shed_8c_af618a49998f5e13b1cc3f331bbe747d2}{}\label{h2__ngn__shed_8c_af618a49998f5e13b1cc3f331bbe747d2}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+E\+M\+P\+TY@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+E\+M\+P\+TY}}
+\index{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+E\+M\+P\+TY@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+E\+M\+P\+TY}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+E\+M\+P\+TY}{H2_REQ_ENTRIES_EMPTY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+E\+M\+P\+TY(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+E\+M\+P\+TY}(({\bf b}), {\bf h2\+\_\+ngn\+\_\+entry}, link)}\hypertarget{h2__ngn__shed_8c_a1cfc316b91d996cba9329dfb4579f369}{}\label{h2__ngn__shed_8c_a1cfc316b91d996cba9329dfb4579f369}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+F\+I\+R\+ST@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+F\+I\+R\+ST}}
+\index{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+F\+I\+R\+ST@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+F\+I\+R\+ST}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+F\+I\+R\+ST}{H2_REQ_ENTRIES_FIRST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+F\+I\+R\+ST(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+F\+I\+R\+ST}({\bf b})}\hypertarget{h2__ngn__shed_8c_ae930812e245be15ec5ccf4c8ad5bfc0c}{}\label{h2__ngn__shed_8c_ae930812e245be15ec5ccf4c8ad5bfc0c}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD}}
+\index{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD}{H2_REQ_ENTRIES_INSERT_HEAD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+H\+E\+AD(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_afc405236531683e4eec028f2dc76d7d1}{}\label{h2__ngn__shed_8c_afc405236531683e4eec028f2dc76d7d1}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{                \hyperlink{h2__ngn__shed_8c_a77f843aec97a4bbb786c6ba08080f856}{\(\backslash\)}
+\hyperlink{h2__ngn__shed_8c_a77f843aec97a4bbb786c6ba08080f856}{h2\_ngn\_entry} *ap\_\_b = (\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e});                                        \hyperlink{group__apr__ring_gad59352546dc9253c0057ad43cf728a63}{\(\backslash\)}
+\hyperlink{group__apr__ring_gad59352546dc9253c0057ad43cf728a63}{APR\_RING\_INSERT\_HEAD}((\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}), ap\_\_b, \hyperlink{structh2__ngn__entry}{h2\_ngn\_entry}, link);  \(\backslash\)
+\} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL}}
+\index{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL}{H2_REQ_ENTRIES_INSERT_TAIL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+I\+N\+S\+E\+R\+T\+\_\+\+T\+A\+IL(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}, }
+\item[{}]{{\bf e}}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a8108a15e7afd940aa15c3179a759e36b}{}\label{h2__ngn__shed_8c_a8108a15e7afd940aa15c3179a759e36b}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{                \hyperlink{h2__ngn__shed_8c_a77f843aec97a4bbb786c6ba08080f856}{\(\backslash\)}
+\hyperlink{h2__ngn__shed_8c_a77f843aec97a4bbb786c6ba08080f856}{h2\_ngn\_entry} *ap\_\_b = (\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e});                 \hyperlink{group__apr__ring_ga235311035184125d72ce0689c9949a3e}{\(\backslash\)}
+\hyperlink{group__apr__ring_ga235311035184125d72ce0689c9949a3e}{APR\_RING\_INSERT\_TAIL}((\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}), ap\_\_b, \hyperlink{structh2__ngn__entry}{h2\_ngn\_entry}, link);  \(\backslash\)
+\} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+L\+A\+ST@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+L\+A\+ST}}
+\index{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+L\+A\+ST@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+L\+A\+ST}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+L\+A\+ST}{H2_REQ_ENTRIES_LAST}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+L\+A\+ST(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+L\+A\+ST}({\bf b})}\hypertarget{h2__ngn__shed_8c_aff2c307659335ec58f6d948b595d3c1c}{}\label{h2__ngn__shed_8c_aff2c307659335ec58f6d948b595d3c1c}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+S\+E\+N\+T\+I\+N\+EL@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+S\+E\+N\+T\+I\+N\+EL}}
+\index{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+S\+E\+N\+T\+I\+N\+EL@{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+S\+E\+N\+T\+I\+N\+EL}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+S\+E\+N\+T\+I\+N\+EL}{H2_REQ_ENTRIES_SENTINEL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+R\+E\+Q\+\_\+\+E\+N\+T\+R\+I\+E\+S\+\_\+\+S\+E\+N\+T\+I\+N\+EL(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf b}}
+\end{DoxyParamCaption}
+)~{\bf A\+P\+R\+\_\+\+R\+I\+N\+G\+\_\+\+S\+E\+N\+T\+I\+N\+EL}(({\bf b}), {\bf h2\+\_\+ngn\+\_\+entry}, link)}\hypertarget{h2__ngn__shed_8c_abc73a4e4f3e45e650e1aa0afba6bc763}{}\label{h2__ngn__shed_8c_abc73a4e4f3e45e650e1aa0afba6bc763}
+
+
+\subsection{Typedef Documentation}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+entry@{h2\+\_\+ngn\+\_\+entry}}
+\index{h2\+\_\+ngn\+\_\+entry@{h2\+\_\+ngn\+\_\+entry}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+entry}{h2_ngn_entry}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf h2\+\_\+ngn\+\_\+entry} {\bf h2\+\_\+ngn\+\_\+entry}}\hypertarget{h2__ngn__shed_8c_a77f843aec97a4bbb786c6ba08080f856}{}\label{h2__ngn__shed_8c_a77f843aec97a4bbb786c6ba08080f856}
+
+
+\subsection{Function Documentation}
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+abort@{h2\+\_\+ngn\+\_\+shed\+\_\+abort}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+abort@{h2\+\_\+ngn\+\_\+shed\+\_\+abort}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+abort(h2\+\_\+ngn\+\_\+shed $\ast$shed)}{h2_ngn_shed_abort(h2_ngn_shed *shed)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+ngn\+\_\+shed\+\_\+abort (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngn\+\_\+shed} $\ast$}]{shed}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a62642a35c376dbb37bac12d78e253b24}{}\label{h2__ngn__shed_8c_a62642a35c376dbb37bac12d78e253b24}
+
+\begin{DoxyCode}
+141 \{
+142     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03394)
+143                   \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): abort"}, shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id});
+144     shed->\hyperlink{structh2__ngn__shed_ac42cfce26642653a9d2c6a7d1cabf740}{aborted} = 1;
+145 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{h2__ngn__shed_8c_a62642a35c376dbb37bac12d78e253b24_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+create@{h2\+\_\+ngn\+\_\+shed\+\_\+create}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+create@{h2\+\_\+ngn\+\_\+shed\+\_\+create}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+create(apr\+\_\+pool\+\_\+t $\ast$pool, conn\+\_\+rec $\ast$c, int default\+\_\+capacity, apr\+\_\+size\+\_\+t req\+\_\+buffer\+\_\+size)}{h2_ngn_shed_create(apr_pool_t *pool, conn_rec *c, int default_capacity, apr_size_t req_buffer_size)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+ngn\+\_\+shed}$\ast$ h2\+\_\+ngn\+\_\+shed\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf conn\+\_\+rec} $\ast$}]{c, }
+\item[{{\bf int}}]{default\+\_\+capacity, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{req\+\_\+buffer\+\_\+size}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a6c8ff3ddf1ac3ddbac59ae65095e2b73}{}\label{h2__ngn__shed_8c_a6c8ff3ddf1ac3ddbac59ae65095e2b73}
+
+\begin{DoxyCode}
+112 \{
+113     \hyperlink{structh2__ngn__shed}{h2\_ngn\_shed} *shed;
+114     
+115     shed = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(*shed));
+116     shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c} = \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+117     shed->\hyperlink{structh2__ngn__shed_a311ac8440bbee51245759028dd5ea110}{pool} = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+118     shed->\hyperlink{structh2__ngn__shed_a894b85c523bfe32849ac3022658f7966}{default\_capacity} = default\_capacity;
+119     shed->\hyperlink{structh2__ngn__shed_a2458843bd55235ed2a09a56ee6ea6216}{req\_buffer\_size} = req\_buffer\_size;
+120     shed->\hyperlink{structh2__ngn__shed_acd125c46e85c3a80bddffe88cdfe55cf}{ngns} = apr\_hash\_make(pool);
+121     
+122     \textcolor{keywordflow}{return} shed;
+123 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=309pt]{h2__ngn__shed_8c_a6c8ff3ddf1ac3ddbac59ae65095e2b73_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+destroy@{h2\+\_\+ngn\+\_\+shed\+\_\+destroy}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+destroy@{h2\+\_\+ngn\+\_\+shed\+\_\+destroy}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+destroy(h2\+\_\+ngn\+\_\+shed $\ast$shed)}{h2_ngn_shed_destroy(h2_ngn_shed *shed)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+ngn\+\_\+shed\+\_\+destroy (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngn\+\_\+shed} $\ast$}]{shed}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_af9ff23e9852828fe5f3a273110c9f6c8}{}\label{h2__ngn__shed_8c_af9ff23e9852828fe5f3a273110c9f6c8}
+
+\begin{DoxyCode}
+388 \{
+389     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(apr\_hash\_count(shed->\hyperlink{structh2__ngn__shed_acd125c46e85c3a80bddffe88cdfe55cf}{ngns}) == 0);
+390 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_af9ff23e9852828fe5f3a273110c9f6c8_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+ngn@{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+ngn}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+ngn@{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+ngn}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+ngn(h2\+\_\+ngn\+\_\+shed $\ast$shed, struct h2\+\_\+req\+\_\+engine $\ast$ngn)}{h2_ngn_shed_done_ngn(h2_ngn_shed *shed, struct h2_req_engine *ngn)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+ngn (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngn\+\_\+shed} $\ast$}]{shed, }
+\item[{struct {\bf h2\+\_\+req\+\_\+engine} $\ast$}]{ngn}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_ac223b15a49f204c91c9fa767e5af377c}{}\label{h2__ngn__shed_8c_ac223b15a49f204c91c9fa767e5af377c}
+
+\begin{DoxyCode}
+342 \{
+343     \textcolor{keywordflow}{if} (ngn->\hyperlink{structh2__req__engine_a101d67c6f32892e8cb93114290901372}{done}) \{
+344         \textcolor{keywordflow}{return};
+345     \}
+346     
+347     \textcolor{keywordflow}{if} (!shed->\hyperlink{structh2__ngn__shed_ac42cfce26642653a9d2c6a7d1cabf740}{aborted} && !\hyperlink{h2__ngn__shed_8c_a1cfc316b91d996cba9329dfb4579f369}{H2\_REQ\_ENTRIES\_EMPTY}(&ngn->entries)) \{
+348         \hyperlink{structh2__ngn__entry}{h2\_ngn\_entry} *entry;
+349         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c},
+350                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): exit engine %s (%s), "}
+351                       \textcolor{stringliteral}{"has still requests queued, shutdown=%d,"}
+352                       \textcolor{stringliteral}{"assigned=%ld, live=%ld, finished=%ld"}, 
+353                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id}, ngn->\hyperlink{structh2__req__engine_aff1ecf309446554dfc0d1f5a83a3906c}{type},
+354                       ngn->\hyperlink{structh2__req__engine_a299d9d2ee463ed04588b9c3112a69e79}{shutdown}, 
+355                       (\textcolor{keywordtype}{long})ngn->no\_assigned, (\textcolor{keywordtype}{long})ngn->no\_live,
+356                       (\textcolor{keywordtype}{long})ngn->no\_finished);
+357         \textcolor{keywordflow}{for} (entry = \hyperlink{h2__ngn__shed_8c_ae930812e245be15ec5ccf4c8ad5bfc0c}{H2\_REQ\_ENTRIES\_FIRST}(&ngn->entries);
+358              entry != \hyperlink{h2__ngn__shed_8c_abc73a4e4f3e45e650e1aa0afba6bc763}{H2\_REQ\_ENTRIES\_SENTINEL}(&ngn->entries);
+359              entry = \hyperlink{h2__ngn__shed_8c_a2f9032a5135cc45b948be0d7badea882}{H2\_NGN\_ENTRY\_NEXT}(entry)) \{
+360             \hyperlink{structh2__task}{h2\_task} *task = entry->task;
+361             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c},
+362                           \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): engine %s has queued task %s, "}
+363                           \textcolor{stringliteral}{"frozen=%d, aborting"},
+364                           shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id}, task->\hyperlink{structh2__task_ad51ebc1a6948a168b5b8c0b589e3d3cd}{id}, task->\hyperlink{structh2__task_a9b609f6afd847458e9ebe0fd1dc2a6b4}{frozen});
+365             ngn\_done\_task(shed, ngn, task, 0, 1);
+366             task->\hyperlink{structh2__task_a79899299fec2d024b6d30c63af12daf9}{engine} = task->\hyperlink{structh2__task_afc8a45828ada4b6a8da5cf66bee1dffd}{assigned} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+367         \}
+368     \}
+369     \textcolor{keywordflow}{if} (!shed->\hyperlink{structh2__ngn__shed_ac42cfce26642653a9d2c6a7d1cabf740}{aborted} && (ngn->no\_assigned > 1 || ngn->no\_live > 1)) \{
+370         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c},
+371                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): exit engine %s (%s), "}
+372                       \textcolor{stringliteral}{"assigned=%ld, live=%ld, finished=%ld"}, 
+373                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id}, ngn->\hyperlink{structh2__req__engine_aff1ecf309446554dfc0d1f5a83a3906c}{type},
+374                       (\textcolor{keywordtype}{long})ngn->no\_assigned, (\textcolor{keywordtype}{long})ngn->no\_live,
+375                       (\textcolor{keywordtype}{long})ngn->no\_finished);
+376     \}
+377     \textcolor{keywordflow}{else} \{
+378         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c},
+379                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): exit engine %s"}, 
+380                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id});
+381     \}
+382     
+383     apr\_hash\_set(shed->\hyperlink{structh2__ngn__shed_acd125c46e85c3a80bddffe88cdfe55cf}{ngns}, ngn->\hyperlink{structh2__req__engine_aff1ecf309446554dfc0d1f5a83a3906c}{type}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+384     ngn->\hyperlink{structh2__req__engine_a101d67c6f32892e8cb93114290901372}{done} = 1;
+385 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=336pt]{h2__ngn__shed_8c_ac223b15a49f204c91c9fa767e5af377c_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+task@{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+task}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+task@{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+task}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+task(h2\+\_\+ngn\+\_\+shed $\ast$shed, struct h2\+\_\+req\+\_\+engine $\ast$ngn, h2\+\_\+task $\ast$task)}{h2_ngn_shed_done_task(h2_ngn_shed *shed, struct h2_req_engine *ngn, h2_task *task)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ngn\+\_\+shed\+\_\+done\+\_\+task (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngn\+\_\+shed} $\ast$}]{shed, }
+\item[{struct {\bf h2\+\_\+req\+\_\+engine} $\ast$}]{ngn, }
+\item[{{\bf h2\+\_\+task} $\ast$}]{task}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a0214ef5304677f2db1fd07e08a02d79d}{}\label{h2__ngn__shed_8c_a0214ef5304677f2db1fd07e08a02d79d}
+
+\begin{DoxyCode}
+337 \{
+338     \textcolor{keywordflow}{return} ngn\_done\_task(shed, ngn, task, 1, 0);
+339 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_a0214ef5304677f2db1fd07e08a02d79d_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+ctx@{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+ctx}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+ctx@{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+ctx}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+ctx(h2\+\_\+ngn\+\_\+shed $\ast$shed)}{h2_ngn_shed_get_ctx(h2_ngn_shed *shed)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void}$\ast$ h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+ctx (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngn\+\_\+shed} $\ast$}]{shed}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_aaa422761ee11bef3236047b13d886c9c}{}\label{h2__ngn__shed_8c_aaa422761ee11bef3236047b13d886c9c}
+
+\begin{DoxyCode}
+131 \{
+132     \textcolor{keywordflow}{return} shed->\hyperlink{structh2__ngn__shed_a1d88471a384d68e232b65ac42f105898}{user\_ctx};
+133 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_aaa422761ee11bef3236047b13d886c9c_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+shed@{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+shed}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+shed@{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+shed}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+shed(h2\+\_\+req\+\_\+engine $\ast$ngn)}{h2_ngn_shed_get_shed(h2_req_engine *ngn)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+ngn\+\_\+shed}$\ast$ h2\+\_\+ngn\+\_\+shed\+\_\+get\+\_\+shed (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+req\+\_\+engine} $\ast$}]{ngn}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_ae0bf9bfdf6ae608305be2c4905339734}{}\label{h2__ngn__shed_8c_ae0bf9bfdf6ae608305be2c4905339734}
+
+\begin{DoxyCode}
+136 \{
+137     \textcolor{keywordflow}{return} ngn->\hyperlink{structh2__req__engine_a83b172305c7d44670cda27f2dd742a66}{shed};
+138 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_ae0bf9bfdf6ae608305be2c4905339734_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+pull\+\_\+request@{h2\+\_\+ngn\+\_\+shed\+\_\+pull\+\_\+request}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+pull\+\_\+request@{h2\+\_\+ngn\+\_\+shed\+\_\+pull\+\_\+request}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+pull\+\_\+request(h2\+\_\+ngn\+\_\+shed $\ast$shed, h2\+\_\+req\+\_\+engine $\ast$ngn, int capacity, int want\+\_\+shutdown, request\+\_\+rec $\ast$$\ast$pr)}{h2_ngn_shed_pull_request(h2_ngn_shed *shed, h2_req_engine *ngn, int capacity, int want_shutdown, request_rec **pr)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ngn\+\_\+shed\+\_\+pull\+\_\+request (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngn\+\_\+shed} $\ast$}]{shed, }
+\item[{{\bf h2\+\_\+req\+\_\+engine} $\ast$}]{ngn, }
+\item[{{\bf int}}]{capacity, }
+\item[{{\bf int}}]{want\+\_\+shutdown, }
+\item[{{\bf request\+\_\+rec} $\ast$$\ast$}]{pr}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a5ffba0f4f39a4034a6dc6a0920279d0f}{}\label{h2__ngn__shed_8c_a5ffba0f4f39a4034a6dc6a0920279d0f}
+
+\begin{DoxyCode}
+263 \{   
+264     \hyperlink{structh2__ngn__entry}{h2\_ngn\_entry} *entry;
+265     
+266     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(ngn);
+267     *pr = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+268     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03396)
+269                   \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): pull task for engine %s, shutdown=%d"}, 
+270                   shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id}, want\_shutdown);
+271     \textcolor{keywordflow}{if} (shed->\hyperlink{structh2__ngn__shed_ac42cfce26642653a9d2c6a7d1cabf740}{aborted}) \{
+272         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03397)
+273                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): abort while pulling requests %s"}, 
+274                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id});
+275         ngn->\hyperlink{structh2__req__engine_a299d9d2ee463ed04588b9c3112a69e79}{shutdown} = 1;
+276         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga9458da18e0ee46a5d37c9cdfdc43efd2}{APR\_ECONNABORTED};
+277     \}
+278     
+279     ngn->capacity = capacity;
+280     \textcolor{keywordflow}{if} (\hyperlink{h2__ngn__shed_8c_a1cfc316b91d996cba9329dfb4579f369}{H2\_REQ\_ENTRIES\_EMPTY}(&ngn->entries)) \{
+281         \textcolor{keywordflow}{if} (want\_shutdown) \{
+282             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c},
+283                           \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): emtpy queue, shutdown engine %s"}, 
+284                           shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id});
+285             ngn->\hyperlink{structh2__req__engine_a299d9d2ee463ed04588b9c3112a69e79}{shutdown} = 1;
+286         \}
+287         \textcolor{keywordflow}{return} ngn->\hyperlink{structh2__req__engine_a299d9d2ee463ed04588b9c3112a69e79}{shutdown}? \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF} : \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+288     \}
+289     
+290     \textcolor{keywordflow}{if} ((entry = pop\_detached(ngn))) \{
+291         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, entry->task->c, 
+      \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03398)
+292                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): pulled request %s for engine %s"}, 
+293                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, entry->task->id, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id});
+294         ngn->no\_live++;
+295         *pr = entry->r;
+296         entry->task->assigned = ngn;
+297         \textcolor{comment}{/* task will now run in ngn's own thread. Modules like lua}
+298 \textcolor{comment}{         * seem to require the correct thread set in the conn\_rec.}
+299 \textcolor{comment}{         * See PR 59542. */}
+300         \textcolor{keywordflow}{if} (entry->task->c && ngn->\hyperlink{structh2__req__engine_a13758af1a2bbf5551ce2b9c9072b623b}{c}) \{
+301             entry->task->c->current\_thread = ngn->\hyperlink{structh2__req__engine_a13758af1a2bbf5551ce2b9c9072b623b}{c}->current\_thread;
+302         \}
+303         \textcolor{keywordflow}{if} (entry->task->engine == ngn) \{
+304             \textcolor{comment}{/* If an engine pushes its own base task, and then pulls}
+305 \textcolor{comment}{             * it back to itself again, it needs to be thawed.}
+306 \textcolor{comment}{             */}
+307             \hyperlink{h2__task_8c_ac271735ace7ded26cc2bc5abd4cdb5f7}{h2\_task\_thaw}(entry->task);
+308         \}
+309         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+310     \}
+311     
+312     \textcolor{keywordflow}{if} (1) \{
+313         \hyperlink{structh2__ngn__entry}{h2\_ngn\_entry} *entry = \hyperlink{h2__ngn__shed_8c_ae930812e245be15ec5ccf4c8ad5bfc0c}{H2\_REQ\_ENTRIES\_FIRST}(&ngn->entries);
+314         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03399)
+315                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): pull task, nothing, first task %s"}, 
+316                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, entry->task->id);
+317     \}
+318     \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+319 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=325pt]{h2__ngn__shed_8c_a5ffba0f4f39a4034a6dc6a0920279d0f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_a5ffba0f4f39a4034a6dc6a0920279d0f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+push\+\_\+request@{h2\+\_\+ngn\+\_\+shed\+\_\+push\+\_\+request}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+push\+\_\+request@{h2\+\_\+ngn\+\_\+shed\+\_\+push\+\_\+request}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+push\+\_\+request(h2\+\_\+ngn\+\_\+shed $\ast$shed, const char $\ast$ngn\+\_\+type, request\+\_\+rec $\ast$r, http2\+\_\+req\+\_\+engine\+\_\+init $\ast$einit)}{h2_ngn_shed_push_request(h2_ngn_shed *shed, const char *ngn_type, request_rec *r, http2_req_engine_init *einit)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ngn\+\_\+shed\+\_\+push\+\_\+request (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngn\+\_\+shed} $\ast$}]{shed, }
+\item[{const char $\ast$}]{ngn\+\_\+type, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r, }
+\item[{{\bf http2\+\_\+req\+\_\+engine\+\_\+init} $\ast$}]{einit}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a733dcc7a4e7fd256c6f340e592c525f0}{}\label{h2__ngn__shed_8c_a733dcc7a4e7fd256c6f340e592c525f0}
+
+\begin{DoxyCode}
+161 \{
+162     \hyperlink{structh2__req__engine}{h2\_req\_engine} *ngn;
+163     \hyperlink{structh2__task}{h2\_task} *task = \hyperlink{h2__ctx_8c_ac49063adb1fe588e8c4225660712e85b}{h2\_ctx\_rget\_task}(r);
+164 
+165     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(task);
+166     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, shed->
+      \hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c},
+167                   \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): PUSHing request (task=%s)"}, shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, 
+168                   task->\hyperlink{structh2__task_ad51ebc1a6948a168b5b8c0b589e3d3cd}{id});
+169     \textcolor{keywordflow}{if} (task->\hyperlink{structh2__task_a2b29ed50bdcfa0549416978b8048cb78}{request}->\hyperlink{structh2__request_acb093d2b49d76dc171a6796b59ba7fdb}{serialize}) \{
+170         \textcolor{comment}{/* Max compatibility, deny processing of this */}
+171         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF};
+172     \}
+173     
+174     \textcolor{keywordflow}{if} (task->\hyperlink{structh2__task_afc8a45828ada4b6a8da5cf66bee1dffd}{assigned}) \{
+175         --task->\hyperlink{structh2__task_afc8a45828ada4b6a8da5cf66bee1dffd}{assigned}->no\_assigned;
+176         --task->\hyperlink{structh2__task_afc8a45828ada4b6a8da5cf66bee1dffd}{assigned}->no\_live;
+177         task->\hyperlink{structh2__task_afc8a45828ada4b6a8da5cf66bee1dffd}{assigned} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+178     \}
+179     
+180     \textcolor{keywordflow}{if} (task->\hyperlink{structh2__task_a79899299fec2d024b6d30c63af12daf9}{engine}) \{
+181         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, task->
+      \hyperlink{structh2__task_a31da3014d93bc040c945182b35b2e573}{c}, 
+182                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): push task(%s) hosting engine %s "} 
+183                       \textcolor{stringliteral}{"already with %d tasks"}, 
+184                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, task->\hyperlink{structh2__task_ad51ebc1a6948a168b5b8c0b589e3d3cd}{id}, task->\hyperlink{structh2__task_a79899299fec2d024b6d30c63af12daf9}{engine}->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id},
+185                       task->\hyperlink{structh2__task_a79899299fec2d024b6d30c63af12daf9}{engine}->no\_assigned);
+186         task->\hyperlink{structh2__task_afc8a45828ada4b6a8da5cf66bee1dffd}{assigned} = task->\hyperlink{structh2__task_a79899299fec2d024b6d30c63af12daf9}{engine};
+187         ngn\_add\_task(task->\hyperlink{structh2__task_a79899299fec2d024b6d30c63af12daf9}{engine}, task, r);
+188         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+189     \}
+190     
+191     ngn = apr\_hash\_get(shed->\hyperlink{structh2__ngn__shed_acd125c46e85c3a80bddffe88cdfe55cf}{ngns}, ngn\_type, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING});
+192     \textcolor{keywordflow}{if} (ngn && !ngn->\hyperlink{structh2__req__engine_a299d9d2ee463ed04588b9c3112a69e79}{shutdown}) \{
+193         \textcolor{comment}{/* this task will be processed in another thread,}
+194 \textcolor{comment}{         * freeze any I/O for the time being. */}
+195         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, task->
+      \hyperlink{structh2__task_a31da3014d93bc040c945182b35b2e573}{c},
+196                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): pushing request %s to %s"}, 
+197                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, task->\hyperlink{structh2__task_ad51ebc1a6948a168b5b8c0b589e3d3cd}{id}, ngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id});
+198         \textcolor{keywordflow}{if} (!\hyperlink{h2__task_8c_a9d193d0549613d13db960961d371bbdf}{h2\_task\_has\_thawed}(task)) \{
+199             \hyperlink{h2__task_8c_a4226c76b03850608adeebbbb3085ed97}{h2\_task\_freeze}(task);
+200         \}
+201         ngn\_add\_task(ngn, task, r);
+202         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+203     \}
+204     
+205     \textcolor{comment}{/* no existing engine or being shut down, start a new one */}
+206     \textcolor{keywordflow}{if} (einit) \{
+207         \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+208         \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool} = task->\hyperlink{structh2__task_a49fad74f9497dd0ede7236b13a59f228}{pool};
+209         \hyperlink{structh2__req__engine}{h2\_req\_engine} *newngn;
+210         
+211         newngn = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(*ngn));
+212         newngn->\hyperlink{structh2__req__engine_a9df60573028fc93ee3802ce879aa2d17}{pool} = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+213         newngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id}   = apr\_psprintf(pool, \textcolor{stringliteral}{"ngn-%s"}, task->\hyperlink{structh2__task_ad51ebc1a6948a168b5b8c0b589e3d3cd}{id});
+214         newngn->\hyperlink{structh2__req__engine_aff1ecf309446554dfc0d1f5a83a3906c}{type} = apr\_pstrdup(pool, ngn\_type);
+215         newngn->\hyperlink{structh2__req__engine_a13758af1a2bbf5551ce2b9c9072b623b}{c}    = task->\hyperlink{structh2__task_a31da3014d93bc040c945182b35b2e573}{c};
+216         newngn->\hyperlink{structh2__req__engine_a83b172305c7d44670cda27f2dd742a66}{shed} = shed;
+217         newngn->capacity = shed->\hyperlink{structh2__ngn__shed_a894b85c523bfe32849ac3022658f7966}{default\_capacity};
+218         newngn->no\_assigned = 1;
+219         newngn->no\_live = 1;
+220         \hyperlink{group__apr__ring_ga245e1a73b162a4a68ebd54c84683729d}{APR\_RING\_INIT}(&newngn->entries, \hyperlink{structh2__ngn__entry}{h2\_ngn\_entry}, link);
+221         
+222         status = einit(newngn, newngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id}, newngn->\hyperlink{structh2__req__engine_aff1ecf309446554dfc0d1f5a83a3906c}{type}, newngn->\hyperlink{structh2__req__engine_a9df60573028fc93ee3802ce879aa2d17}{pool},
+223                        shed->\hyperlink{structh2__ngn__shed_a2458843bd55235ed2a09a56ee6ea6216}{req\_buffer\_size}, r,
+224                        &newngn->out\_consumed, &newngn->out\_consumed\_ctx);
+225         
+226         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, status, task->
+      \hyperlink{structh2__task_a31da3014d93bc040c945182b35b2e573}{c}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03395)
+227                       \textcolor{stringliteral}{"h2\_ngn\_shed(%ld): create engine %s (%s)"}, 
+228                       shed->\hyperlink{structh2__ngn__shed_a5d700a43549875730221f09162cb2a25}{c}->\hyperlink{structconn__rec_af90d018c333fca6f3ef0f29375b86dc1}{id}, newngn->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id}, newngn->\hyperlink{structh2__req__engine_aff1ecf309446554dfc0d1f5a83a3906c}{type});
+229         \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+230             newngn->\hyperlink{structh2__req__engine_ad4cb93af13328ad6a87f083545d1e990}{task} = task;
+231             task->\hyperlink{structh2__task_a79899299fec2d024b6d30c63af12daf9}{engine} = newngn;
+232             task->\hyperlink{structh2__task_afc8a45828ada4b6a8da5cf66bee1dffd}{assigned} = newngn;
+233             apr\_hash\_set(shed->\hyperlink{structh2__ngn__shed_acd125c46e85c3a80bddffe88cdfe55cf}{ngns}, newngn->\hyperlink{structh2__req__engine_aff1ecf309446554dfc0d1f5a83a3906c}{type}, \hyperlink{group__apr__hash_ga3ba32541f2717b394000f87f38c7e12d}{APR\_HASH\_KEY\_STRING}, newngn);
+234         \}
+235         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+236     \}
+237     \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF};
+238 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_a733dcc7a4e7fd256c6f340e592c525f0_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_a733dcc7a4e7fd256c6f340e592c525f0_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+ngn\+\_\+shed\+\_\+set\+\_\+ctx@{h2\+\_\+ngn\+\_\+shed\+\_\+set\+\_\+ctx}}
+\index{h2\+\_\+ngn\+\_\+shed\+\_\+set\+\_\+ctx@{h2\+\_\+ngn\+\_\+shed\+\_\+set\+\_\+ctx}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ngn\+\_\+shed\+\_\+set\+\_\+ctx(h2\+\_\+ngn\+\_\+shed $\ast$shed, void $\ast$user\+\_\+ctx)}{h2_ngn_shed_set_ctx(h2_ngn_shed *shed, void *user_ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+ngn\+\_\+shed\+\_\+set\+\_\+ctx (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngn\+\_\+shed} $\ast$}]{shed, }
+\item[{{\bf void} $\ast$}]{user\+\_\+ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a88e30717d953a00815fa1acd60a5a74f}{}\label{h2__ngn__shed_8c_a88e30717d953a00815fa1acd60a5a74f}
+
+\begin{DoxyCode}
+126 \{
+127     shed->\hyperlink{structh2__ngn__shed_a1d88471a384d68e232b65ac42f105898}{user\_ctx} = user\_ctx;
+128 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{h2__ngn__shed_8c_a88e30717d953a00815fa1acd60a5a74f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+req\+\_\+engine\+\_\+get\+\_\+id@{h2\+\_\+req\+\_\+engine\+\_\+get\+\_\+id}}
+\index{h2\+\_\+req\+\_\+engine\+\_\+get\+\_\+id@{h2\+\_\+req\+\_\+engine\+\_\+get\+\_\+id}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+req\+\_\+engine\+\_\+get\+\_\+id(h2\+\_\+req\+\_\+engine $\ast$engine)}{h2_req_engine_get_id(h2_req_engine *engine)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ h2\+\_\+req\+\_\+engine\+\_\+get\+\_\+id (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+req\+\_\+engine} $\ast$}]{engine}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_ada765812a034e97825703145c11f5b03}{}\label{h2__ngn__shed_8c_ada765812a034e97825703145c11f5b03}
+
+\begin{DoxyCode}
+92 \{
+93     \textcolor{keywordflow}{return} engine->\hyperlink{structh2__req__engine_a00b19b07dd301e0e3d0b4970070a4b3c}{id};
+94 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=325pt]{h2__ngn__shed_8c_ada765812a034e97825703145c11f5b03_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+req\+\_\+engine\+\_\+is\+\_\+shutdown@{h2\+\_\+req\+\_\+engine\+\_\+is\+\_\+shutdown}}
+\index{h2\+\_\+req\+\_\+engine\+\_\+is\+\_\+shutdown@{h2\+\_\+req\+\_\+engine\+\_\+is\+\_\+shutdown}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+req\+\_\+engine\+\_\+is\+\_\+shutdown(h2\+\_\+req\+\_\+engine $\ast$engine)}{h2_req_engine_is_shutdown(h2_req_engine *engine)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+req\+\_\+engine\+\_\+is\+\_\+shutdown (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+req\+\_\+engine} $\ast$}]{engine}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a159f2c952b1b9eec4b79dae8f6a94364}{}\label{h2__ngn__shed_8c_a159f2c952b1b9eec4b79dae8f6a94364}
+
+\begin{DoxyCode}
+97 \{
+98     \textcolor{keywordflow}{return} engine->\hyperlink{structh2__req__engine_a299d9d2ee463ed04588b9c3112a69e79}{shutdown};
+99 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_a159f2c952b1b9eec4b79dae8f6a94364_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}!h2\+\_\+req\+\_\+engine\+\_\+out\+\_\+consumed@{h2\+\_\+req\+\_\+engine\+\_\+out\+\_\+consumed}}
+\index{h2\+\_\+req\+\_\+engine\+\_\+out\+\_\+consumed@{h2\+\_\+req\+\_\+engine\+\_\+out\+\_\+consumed}!h2\+\_\+ngn\+\_\+shed.\+c@{h2\+\_\+ngn\+\_\+shed.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+req\+\_\+engine\+\_\+out\+\_\+consumed(h2\+\_\+req\+\_\+engine $\ast$engine, conn\+\_\+rec $\ast$c, apr\+\_\+off\+\_\+t bytes)}{h2_req_engine_out_consumed(h2_req_engine *engine, conn_rec *c, apr_off_t bytes)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+req\+\_\+engine\+\_\+out\+\_\+consumed (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+req\+\_\+engine} $\ast$}]{engine, }
+\item[{{\bf conn\+\_\+rec} $\ast$}]{c, }
+\item[{{\bf apr\+\_\+off\+\_\+t}}]{bytes}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__ngn__shed_8c_a38e6e88ce849aa8bb6d700e5bf2a02aa}{}\label{h2__ngn__shed_8c_a38e6e88ce849aa8bb6d700e5bf2a02aa}
+
+\begin{DoxyCode}
+103 \{
+104     \textcolor{keywordflow}{if} (engine->out\_consumed) \{
+105         engine->out\_consumed(engine->out\_consumed\_ctx, c, \hyperlink{group__APACHE__CORE__HTTPD_ga393b167dab644f408202cbbcad070e6d}{bytes});
+106     \}
+107 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__ngn__shed_8c_a38e6e88ce849aa8bb6d700e5bf2a02aa_icgraph}
+\end{center}
+\end{figure}
+
+

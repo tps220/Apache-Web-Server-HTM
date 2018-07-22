@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['icollect_5fctx',['icollect_ctx',['../structicollect__ctx.html',1,'']]],
+  ['ident_5fconfig_5frec',['ident_config_rec',['../structident__config__rec.html',1,'']]],
+  ['imap_5fconf_5frec',['imap_conf_rec',['../structimap__conf__rec.html',1,'']]],
+  ['include_5fctx_5ft',['include_ctx_t',['../structinclude__ctx__t.html',1,'']]],
+  ['include_5fdir_5fconfig',['include_dir_config',['../structinclude__dir__config.html',1,'']]],
+  ['include_5fserver_5fconfig',['include_server_config',['../structinclude__server__config.html',1,'']]],
+  ['indexes_5ft',['indexes_t',['../structindexes__t.html',1,'']]],
+  ['info_5fentry',['info_entry',['../structinfo__entry.html',1,'']]],
+  ['info_5fsvr_5fconf',['info_svr_conf',['../structinfo__svr__conf.html',1,'']]],
+  ['iosb',['IOSB',['../structIOSB.html',1,'']]],
+  ['ipaddr_5fchain',['ipaddr_chain',['../structipaddr__chain.html',1,'']]],
+  ['isapi_5fcid',['isapi_cid',['../structisapi__cid.html',1,'']]],
+  ['isapi_5fdir_5fconf',['isapi_dir_conf',['../structisapi__dir__conf.html',1,'']]],
+  ['isapi_5floaded',['isapi_loaded',['../structisapi__loaded.html',1,'']]],
+  ['item',['item',['../structitem.html',1,'']]],
+  ['iter_5fctx',['iter_ctx',['../structiter__ctx.html',1,'']]]
+];

@@ -1,0 +1,2967 @@
+\hypertarget{h2__util_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http2/h2\+\_\+util.c File Reference}
+\label{h2__util_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+util.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+util.\+c}}
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+strings.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+mutex.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+thread\+\_\+cond.\+h$>$}\\*
+{\ttfamily \#include $<$httpd.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+core.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+log.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+request.\+h$>$}\\*
+{\ttfamily \#include $<$nghttp2/nghttp2.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+util.\+h\char`\"{}}\\*
+Include dependency graph for h2\+\_\+util.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t}
+\item 
+struct \hyperlink{structiter__ctx}{iter\+\_\+ctx}
+\item 
+struct \hyperlink{structcollect__ctx}{collect\+\_\+ctx}
+\item 
+struct \hyperlink{structh2__fifo}{h2\+\_\+fifo}
+\item 
+struct \hyperlink{structh2__ififo}{h2\+\_\+ififo}
+\item 
+struct \hyperlink{structtable__bytes__ctx}{table\+\_\+bytes\+\_\+ctx}
+\item 
+struct \hyperlink{structngh__ctx}{ngh\+\_\+ctx}
+\item 
+struct \hyperlink{structliteral}{literal}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{h2__util_8c_a316848f0416152e52443debadd153428}{H2\+\_\+\+D\+E\+F\+\_\+\+L\+I\+T\+E\+R\+AL}(\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})~\{ (\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n}), (sizeof(\hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})-\/1) \}
+\item 
+\#define \hyperlink{h2__util_8c_afde5755cf351894049128e7e411a4710}{H2\+\_\+\+L\+I\+T\+\_\+\+A\+R\+GS}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})~(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a}),\hyperlink{h2__proxy__session_8h_a4aa41578f4da6e9f71d404633761cfb1}{H2\+\_\+\+A\+L\+EN}(\hyperlink{pcre_8txt_a841271aab70f5cda9412a19c7753f02c}{a})
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structngh__ctx}{ngh\+\_\+ctx} \hyperlink{h2__util_8c_a41e7d4ddc1261d14aa1df802bd511176}{ngh\+\_\+ctx}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned char \hyperlink{h2__util_8c_ac7bf0a13db732827b4236c0fe7fee87b}{h2\+\_\+log2} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcregrep_8txt_ab232d334efb9173a12ae2940d035f460}{n})
+\item 
+size\+\_\+t \hyperlink{h2__util_8c_a09bba2c9e1022c1f97ae1edf0a2e84f4}{h2\+\_\+util\+\_\+hex\+\_\+dump} (char $\ast$\hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer}, size\+\_\+t \hyperlink{group__APACHE__CORE__VARBUF_gacf9683dcc597aebf09865b0853b88438}{maxlen}, const char $\ast$\hyperlink{structdata}{data}, size\+\_\+t datalen)
+\item 
+size\+\_\+t \hyperlink{h2__util_8c_a9e3f6a69ccce24e855a8e117bf870308}{h2\+\_\+util\+\_\+header\+\_\+print} (char $\ast$\hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer}, size\+\_\+t \hyperlink{group__APACHE__CORE__VARBUF_gacf9683dcc597aebf09865b0853b88438}{maxlen}, const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, size\+\_\+t namelen, const char $\ast$\hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value}, size\+\_\+t valuelen)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__util_8c_a7711a423a3aaa843a2df6f6b37a33651}{h2\+\_\+util\+\_\+camel\+\_\+case\+\_\+header} (char $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s}, size\+\_\+t \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{h2__util_8c_ac5ef011a192124e3388bbcea2e1924e3}{h2\+\_\+util\+\_\+base64url\+\_\+decode} (const char $\ast$$\ast$decoded, const char $\ast$encoded, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool})
+\item 
+const char $\ast$ \hyperlink{h2__util_8c_ad7147b1483726a33b2091caddb542b84}{h2\+\_\+util\+\_\+base64url\+\_\+encode} (const char $\ast$\hyperlink{structdata}{data}, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{group__MOD__PROXY_ga63ef3f66045cd6e20f6ea5a82363580d}{dlen}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool})
+\item 
+\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ \hyperlink{h2__util_8c_a32c09d1fac1f02a6afc09fc57af5af2f}{h2\+\_\+ihash\+\_\+create} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, size\+\_\+t offset\+\_\+of\+\_\+int)
+\item 
+size\+\_\+t \hyperlink{h2__util_8c_a4348605c0734bb5b773c423f5a687f01}{h2\+\_\+ihash\+\_\+count} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_adca33ffb38ae50b885c3c95080068828}{h2\+\_\+ihash\+\_\+empty} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$ \hyperlink{h2__util_8c_a5d1f2bcbe360015aec7585bb030beffd}{h2\+\_\+ihash\+\_\+get} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_ab0cd94ef263e1753db17e4e1e420a18b}{h2\+\_\+ihash\+\_\+iter} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih, \hyperlink{h2__util_8h_aaa9a464db9ecc64801930a3b1a04efd4}{h2\+\_\+ihash\+\_\+iter\+\_\+t} $\ast$fn, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__util_8c_a0e8808cee68f42516bab06b01d8ebf16}{h2\+\_\+ihash\+\_\+add} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__apr__tables_ga4d708cd93abeca73400ed82977502830}{val})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__util_8c_a484925742af7f24ebace55ad9be3731a}{h2\+\_\+ihash\+\_\+remove} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__util_8c_a44c7ebba8d690ecdaccf908c9c9c9efb}{h2\+\_\+ihash\+\_\+remove\+\_\+val} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__apr__tables_ga4d708cd93abeca73400ed82977502830}{val})
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__util_8c_a049438bb4740ed32ba426cd746b7d8c3}{h2\+\_\+ihash\+\_\+clear} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih)
+\item 
+size\+\_\+t \hyperlink{h2__util_8c_abaadc1445c5689f8dfb1ddaa94b3f8ee}{h2\+\_\+ihash\+\_\+shift} (\hyperlink{structh2__ihash__t}{h2\+\_\+ihash\+\_\+t} $\ast$ih, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$$\ast$\hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer}, size\+\_\+t \hyperlink{group__APR__Util__RC_ga38e7d1fc94ad8c6709d5b2243d2fd94b}{max})
+\item 
+\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$ \hyperlink{h2__util_8c_ad6e1bc99310cfb346ba839f3cab33f7b}{h2\+\_\+iq\+\_\+create} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} capacity)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_a580b0aba0478fc88d0d930222978d5e7}{h2\+\_\+iq\+\_\+empty} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_af155ca0df68858b7a59389e74e43afa7}{h2\+\_\+iq\+\_\+count} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_a18c62b8d07b5c08ef7e9b142b09ad7d0}{h2\+\_\+iq\+\_\+add} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} sid, \hyperlink{h2__util_8h_a1a6713a2b4a8b618252b83714a6a43c7}{h2\+\_\+iq\+\_\+cmp} $\ast$\hyperlink{group__apr__atomic_ga337f72af8c74a9110f79160df3bba5e8}{cmp}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_a5fdef491f6e3a8e24bb03e11ce00acca}{h2\+\_\+iq\+\_\+append} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} sid)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_ab7aa63a9040710a2f24bb4de690a3310}{h2\+\_\+iq\+\_\+remove} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} sid)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__util_8c_adc7376b44e6aa98352ab8644c33db894}{h2\+\_\+iq\+\_\+clear} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__util_8c_a016e6f92f8adb95b5fc12b9394ce22ca}{h2\+\_\+iq\+\_\+sort} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q, \hyperlink{h2__util_8h_a1a6713a2b4a8b618252b83714a6a43c7}{h2\+\_\+iq\+\_\+cmp} $\ast$\hyperlink{group__apr__atomic_ga337f72af8c74a9110f79160df3bba5e8}{cmp}, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_ae4c244854d49bc3a4a3f4b5f14c1b696}{h2\+\_\+iq\+\_\+shift} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q)
+\item 
+size\+\_\+t \hyperlink{h2__util_8c_a450510b416b2d6a6f47bb38bea169ca6}{h2\+\_\+iq\+\_\+mshift} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$pint, size\+\_\+t \hyperlink{group__APR__Util__RC_ga38e7d1fc94ad8c6709d5b2243d2fd94b}{max})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_a4bf6bbee2be663a01e97be92bcfbab45}{h2\+\_\+iq\+\_\+contains} (\hyperlink{structh2__iqueue}{h2\+\_\+iqueue} $\ast$q, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} sid)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a5691fd0f7e04bff491141354c8314d96}{h2\+\_\+fifo\+\_\+create} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$$\ast$pfifo, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} capacity)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a6a22fe7d4848e7e83fb2ad9fb0886a48}{h2\+\_\+fifo\+\_\+set\+\_\+create} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$$\ast$pfifo, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} capacity)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_aa42817caec25200ad84ee88ddee8c9fb}{h2\+\_\+fifo\+\_\+term} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_ae796a1c39a877d2b5c04de6d3c2e4d2e}{h2\+\_\+fifo\+\_\+interrupt} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_aa26be7850e04c6844c11276567ceda36}{h2\+\_\+fifo\+\_\+count} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_ac4ea1ec7b996302732577ec411ac4451}{h2\+\_\+fifo\+\_\+push} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{structelem}{elem})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_af33a2aa5441c62343d7e4c2ebc300247}{h2\+\_\+fifo\+\_\+try\+\_\+push} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{structelem}{elem})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_ab69503e61a007e179185ce0fdf37291d}{h2\+\_\+fifo\+\_\+pull} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$$\ast$pelem)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a45652f5b426dc460f682483e8dabd7bb}{h2\+\_\+fifo\+\_\+try\+\_\+pull} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$$\ast$pelem)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a173c6a1e9fd01b2f83c0350ca8ea27cf}{h2\+\_\+fifo\+\_\+peek} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo, \hyperlink{h2__util_8h_afccc13864ff733885dcee7fabbfb0555}{h2\+\_\+fifo\+\_\+peek\+\_\+fn} $\ast$fn, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a85b79cf3da1b1899911bce6674de6e70}{h2\+\_\+fifo\+\_\+try\+\_\+peek} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo, \hyperlink{h2__util_8h_afccc13864ff733885dcee7fabbfb0555}{h2\+\_\+fifo\+\_\+peek\+\_\+fn} $\ast$fn, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_ac52573d613412f386e15412d8c5f53cd}{h2\+\_\+fifo\+\_\+remove} (\hyperlink{structh2__fifo}{h2\+\_\+fifo} $\ast$fifo, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{structelem}{elem})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a9d4243d676f83311815e755b9a89711a}{h2\+\_\+ififo\+\_\+create} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$$\ast$pfifo, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} capacity)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_ad395a9b4a439d3688cb94abda4b60259}{h2\+\_\+ififo\+\_\+set\+\_\+create} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$$\ast$pfifo, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} capacity)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a248a292c88306e808550453dcc73da01}{h2\+\_\+ififo\+\_\+term} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a585da6f0564432adc0544caabc868dd6}{h2\+\_\+ififo\+\_\+interrupt} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_ac040248d0e3bc8b33dcb27d96ad0147a}{h2\+\_\+ififo\+\_\+count} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_ad44c263771a733fc2c474eb48373d368}{h2\+\_\+ififo\+\_\+push} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a4d37a681bb6e76c501a07e3e4fa9450b}{h2\+\_\+ififo\+\_\+try\+\_\+push} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_af4c4c93347193d57e5a67ee6880fdf3d}{h2\+\_\+ififo\+\_\+pull} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$pi)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_ade611cbb8c202f0c969b7a60a16da4ea}{h2\+\_\+ififo\+\_\+try\+\_\+pull} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$pi)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a5d0b14a75442458696b71a0c98a638d2}{h2\+\_\+ififo\+\_\+peek} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo, \hyperlink{h2__util_8h_ae0b345f1f87858c65b573ccfac591b23}{h2\+\_\+ififo\+\_\+peek\+\_\+fn} $\ast$fn, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a1a0d926ab5740e1d17fc67703a389077}{h2\+\_\+ififo\+\_\+try\+\_\+peek} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo, \hyperlink{h2__util_8h_ae0b345f1f87858c65b573ccfac591b23}{h2\+\_\+ififo\+\_\+peek\+\_\+fn} $\ast$fn, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a8cfae46e01e22443214dac056e0ce265}{h2\+\_\+ififo\+\_\+remove} (\hyperlink{structh2__ififo}{h2\+\_\+ififo} $\ast$fifo, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id)
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{h2__util_8c_acf5a594160101659b1b61e2227f1e848}{h2\+\_\+util\+\_\+table\+\_\+bytes} (\hyperlink{structapr__table__t}{apr\+\_\+table\+\_\+t} $\ast$\hyperlink{pcretest_8txt_a9ffb27fb8e1f90c17b13303fee2fb883}{t}, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} pair\+\_\+extra)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a6a39c5ca11bad5eada495111613d5e88}{h2\+\_\+brigade\+\_\+concat\+\_\+length} (\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__apr__thread__proc_gaaf051c44ea7115367430b40d8fdd496e}{dest}, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{apr__siphash_8h_ab3b4066b211a3d1de8f72e90b2bca8ab}{src}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{pcregrep_8txt_ac76ee5ca1111cbb38887e0d698e8ea08}{length})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a1e85392ff9bcbcffcc9ae34aa48ad534}{h2\+\_\+brigade\+\_\+copy\+\_\+length} (\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__apr__thread__proc_gaaf051c44ea7115367430b40d8fdd496e}{dest}, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{apr__siphash_8h_ab3b4066b211a3d1de8f72e90b2bca8ab}{src}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{pcregrep_8txt_ac76ee5ca1111cbb38887e0d698e8ea08}{length})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_ac0bb487f27e88af17e5a15125da6721b}{h2\+\_\+util\+\_\+has\+\_\+eos} (\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a4ecfc7da7edc389137791d5d91fd801d}{h2\+\_\+util\+\_\+bb\+\_\+avail} (\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} $\ast$plen, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$peos)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_ae974e08b36e092082241bf4514aadfba}{h2\+\_\+util\+\_\+bb\+\_\+readx} (\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}, \hyperlink{h2__util_8h_aa1ed13af2153611cf62b6254ea42760c}{h2\+\_\+util\+\_\+pass\+\_\+cb} $\ast$cb, \hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} $\ast$plen, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$peos)
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{h2__util_8c_a685f858e3bb39d5c8cff31c0f80cf318}{h2\+\_\+util\+\_\+bucket\+\_\+print} (char $\ast$\hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer}, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} bmax, \hyperlink{structapr__bucket}{apr\+\_\+bucket} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga11dc1bdeac74315dbed17465c98879e9}{b}, const char $\ast$\hyperlink{group__apr__tables_ga37d96adf842aef6b03690e17874c9ed8}{sep})
+\item 
+\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} \hyperlink{h2__util_8c_af767d9ce0990e21d1f6c4b3e6b2022de}{h2\+\_\+util\+\_\+bb\+\_\+print} (char $\ast$\hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer}, \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\+\_\+size\+\_\+t} bmax, const char $\ast$\hyperlink{group__APACHE__CORE__HTTPD_ga7bb5e40c10df6a41df64bda1f4bb3e26}{tag}, const char $\ast$\hyperlink{group__apr__tables_ga37d96adf842aef6b03690e17874c9ed8}{sep}, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a15f3cc8f6c6453a39874a2d5c0e1cefa}{h2\+\_\+append\+\_\+brigade} (\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{pcretest_8txt_aa22c98f630e4b3fe86ee17ce5150c62f}{to}, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{pcregrep_8txt_a900bb06a4314d99c8ad08d1ceffd114e}{from}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} $\ast$plen, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$peos, \hyperlink{h2__util_8h_a6a6da5d0666ae6875078b14081cf99fb}{h2\+\_\+bucket\+\_\+gate} $\ast$should\+\_\+append)
+\item 
+\hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} \hyperlink{h2__util_8c_acc3586eb7679ec8f609cd5dd517faf27}{h2\+\_\+brigade\+\_\+mem\+\_\+size} (\hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_a42cd4c246229af756324609c12a217e4}{h2\+\_\+util\+\_\+ignore\+\_\+header} (const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a6b44f7b0518d2c540d313e528994d1f0}{h2\+\_\+res\+\_\+create\+\_\+ngtrailer} (\hyperlink{structh2__ngheader}{h2\+\_\+ngheader} $\ast$$\ast$ph, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structh2__headers}{h2\+\_\+headers} $\ast$\hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a1f8a1d013fda7e98be914213de199edf}{h2\+\_\+res\+\_\+create\+\_\+ngheader} (\hyperlink{structh2__ngheader}{h2\+\_\+ngheader} $\ast$$\ast$ph, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structh2__headers}{h2\+\_\+headers} $\ast$\hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_abfea8ee29c3a402209ad4f92b215b989}{h2\+\_\+req\+\_\+create\+\_\+ngheader} (\hyperlink{structh2__ngheader}{h2\+\_\+ngheader} $\ast$$\ast$ph, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, const struct \hyperlink{structh2__request}{h2\+\_\+request} $\ast$req)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_a0a78a074950597c5797e6b4d766b4b82}{h2\+\_\+req\+\_\+ignore\+\_\+header} (const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, size\+\_\+t \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_a68c2c0d580440747c17c19d3cfa5d186}{h2\+\_\+req\+\_\+ignore\+\_\+trailer} (const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, size\+\_\+t \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_a626d87c05ef132134ceaff1589ac51d0}{h2\+\_\+res\+\_\+ignore\+\_\+trailer} (const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, size\+\_\+t \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__util_8c_a411d190ee50bf03285ec1643482d5e53}{h2\+\_\+req\+\_\+add\+\_\+header} (\hyperlink{structapr__table__t}{apr\+\_\+table\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, size\+\_\+t nlen, const char $\ast$\hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value}, size\+\_\+t vlen)
+\item 
+\hyperlink{structh2__request}{h2\+\_\+request} $\ast$ \hyperlink{h2__util_8c_ac810c1727dd262912822c65b45f437a9}{h2\+\_\+req\+\_\+create} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, const char $\ast$\hyperlink{ab_8c_a77deaf9d3339f8d07d067fa3c685023e}{method}, const char $\ast$scheme, const char $\ast$authority, const char $\ast$\hyperlink{ab_8c_a3b02c6de5c049804444a246f7fdf46b4}{path}, \hyperlink{structapr__table__t}{apr\+\_\+table\+\_\+t} $\ast$header, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} serialize)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_aa86886d1d5dbebc1df9de9b7a9a84945}{h2\+\_\+util\+\_\+frame\+\_\+print} (const nghttp2\+\_\+frame $\ast$frame, char $\ast$\hyperlink{ab_8c_a8aa3bc3b63143f4e9d7136c7943fd74a}{buffer}, size\+\_\+t \hyperlink{group__APACHE__CORE__VARBUF_gacf9683dcc597aebf09865b0853b88438}{maxlen})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__util_8c_ac28f57757be5e96803c3300e2caf94f4}{h2\+\_\+push\+\_\+policy\+\_\+determine} (\hyperlink{structapr__table__t}{apr\+\_\+table\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__PROTO_gad27a8cead3a9e245c2e63cbf9a15f8c1}{headers}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} push\+\_\+enabled)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!H2\+\_\+\+D\+E\+F\+\_\+\+L\+I\+T\+E\+R\+AL@{H2\+\_\+\+D\+E\+F\+\_\+\+L\+I\+T\+E\+R\+AL}}
+\index{H2\+\_\+\+D\+E\+F\+\_\+\+L\+I\+T\+E\+R\+AL@{H2\+\_\+\+D\+E\+F\+\_\+\+L\+I\+T\+E\+R\+AL}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+D\+E\+F\+\_\+\+L\+I\+T\+E\+R\+AL}{H2_DEF_LITERAL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+D\+E\+F\+\_\+\+L\+I\+T\+E\+R\+AL(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf n}}
+\end{DoxyParamCaption}
+)~\{ ({\bf n}), (sizeof({\bf n})-\/1) \}}\hypertarget{h2__util_8c_a316848f0416152e52443debadd153428}{}\label{h2__util_8c_a316848f0416152e52443debadd153428}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!H2\+\_\+\+L\+I\+T\+\_\+\+A\+R\+GS@{H2\+\_\+\+L\+I\+T\+\_\+\+A\+R\+GS}}
+\index{H2\+\_\+\+L\+I\+T\+\_\+\+A\+R\+GS@{H2\+\_\+\+L\+I\+T\+\_\+\+A\+R\+GS}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{H2\+\_\+\+L\+I\+T\+\_\+\+A\+R\+GS}{H2_LIT_ARGS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H2\+\_\+\+L\+I\+T\+\_\+\+A\+R\+GS(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf a}}
+\end{DoxyParamCaption}
+)~({\bf a}),{\bf H2\+\_\+\+A\+L\+EN}({\bf a})}\hypertarget{h2__util_8c_afde5755cf351894049128e7e411a4710}{}\label{h2__util_8c_afde5755cf351894049128e7e411a4710}
+
+
+\subsection{Typedef Documentation}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!ngh\+\_\+ctx@{ngh\+\_\+ctx}}
+\index{ngh\+\_\+ctx@{ngh\+\_\+ctx}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{ngh\+\_\+ctx}{ngh_ctx}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf ngh\+\_\+ctx}  {\bf ngh\+\_\+ctx}}\hypertarget{h2__util_8c_a41e7d4ddc1261d14aa1df802bd511176}{}\label{h2__util_8c_a41e7d4ddc1261d14aa1df802bd511176}
+
+
+\subsection{Function Documentation}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+append\+\_\+brigade@{h2\+\_\+append\+\_\+brigade}}
+\index{h2\+\_\+append\+\_\+brigade@{h2\+\_\+append\+\_\+brigade}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+append\+\_\+brigade(apr\+\_\+bucket\+\_\+brigade $\ast$to, apr\+\_\+bucket\+\_\+brigade $\ast$from, apr\+\_\+off\+\_\+t $\ast$plen, int $\ast$peos, h2\+\_\+bucket\+\_\+gate $\ast$should\+\_\+append)}{h2_append_brigade(apr_bucket_brigade *to, apr_bucket_brigade *from, apr_off_t *plen, int *peos, h2_bucket_gate *should_append)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+append\+\_\+brigade (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{to, }
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{from, }
+\item[{{\bf apr\+\_\+off\+\_\+t} $\ast$}]{plen, }
+\item[{{\bf int} $\ast$}]{peos, }
+\item[{{\bf h2\+\_\+bucket\+\_\+gate} $\ast$}]{should\+\_\+append}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a15f3cc8f6c6453a39874a2d5c0e1cefa}{}\label{h2__util_8c_a15f3cc8f6c6453a39874a2d5c0e1cefa}
+Transfer buckets from one brigade to another with a limit on the maximum amount of bytes transferred. Does no setaside magic, lifetime of brigades must fit. 
+\begin{DoxyParams}{Parameters}
+{\em to} & brigade to transfer buckets to \\
+\hline
+{\em from} & brigades to remove buckets from \\
+\hline
+{\em plen} & maximum bytes to transfer, actual bytes transferred \\
+\hline
+{\em peos} & if an E\+OS bucket was transferred \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1521 \{
+1522     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+1523     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} = 0, remain = *plen;
+1524     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+1525 
+1526     *peos = 0;
+1527     
+1528     \textcolor{keywordflow}{while} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(from)) \{
+1529         e = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(from);
+1530         
+1531         \textcolor{keywordflow}{if} (!should\_append(e)) \{
+1532             \textcolor{keywordflow}{goto} leave;
+1533         \}
+1534         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga506cb29cc1ec1abeb487e01b122bd4d9}{APR\_BUCKET\_IS\_METADATA}(e)) \{
+1535             \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(e)) \{
+1536                 *peos = 1;
+1537                 \hyperlink{group__APR__Util__Bucket__Brigades_ga8925c02a7f95e8c1c3986294d4678797}{apr\_bucket\_delete}(e);
+1538                 \textcolor{keywordflow}{continue};
+1539             \}
+1540         \}
+1541         \textcolor{keywordflow}{else} \{        
+1542             \textcolor{keywordflow}{if} (remain > 0 && e->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == ((\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})-1)) \{
+1543                 \textcolor{keyword}{const} \textcolor{keywordtype}{char} *ign;
+1544                 \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} ilen;
+1545                 rv = \hyperlink{group__APR__Util__Bucket__Brigades_gae44ae938c6c60e148430fdb098dcf28f}{apr\_bucket\_read}(e, &ign, &ilen, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ});
+1546                 \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1547                     \textcolor{keywordflow}{return} rv;
+1548                 \}
+1549             \}
+1550             
+1551             \textcolor{keywordflow}{if} (remain < e->\hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length}) \{
+1552                 \textcolor{keywordflow}{if} (remain <= 0) \{
+1553                     \textcolor{keywordflow}{goto} leave;
+1554                 \}
+1555                 \hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{apr\_bucket\_split}(e, (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})remain);
+1556             \}
+1557         \}
+1558         
+1559         \hyperlink{group__APR__Util__Bucket__Brigades_ga2c46a1b717a87b68bd98b425e0c64977}{APR\_BUCKET\_REMOVE}(e);
+1560         \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(to, e);
+1561         len += e->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1562         remain -= e->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1563     \}
+1564 leave:
+1565     *plen = \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+1566     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1567 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a15f3cc8f6c6453a39874a2d5c0e1cefa_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+brigade\+\_\+concat\+\_\+length@{h2\+\_\+brigade\+\_\+concat\+\_\+length}}
+\index{h2\+\_\+brigade\+\_\+concat\+\_\+length@{h2\+\_\+brigade\+\_\+concat\+\_\+length}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+brigade\+\_\+concat\+\_\+length(apr\+\_\+bucket\+\_\+brigade $\ast$dest, apr\+\_\+bucket\+\_\+brigade $\ast$src, apr\+\_\+off\+\_\+t length)}{h2_brigade_concat_length(apr_bucket_brigade *dest, apr_bucket_brigade *src, apr_off_t length)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+brigade\+\_\+concat\+\_\+length (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{dest, }
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{src, }
+\item[{{\bf apr\+\_\+off\+\_\+t}}]{length}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a6a39c5ca11bad5eada495111613d5e88}{}\label{h2__util_8c_a6a39c5ca11bad5eada495111613d5e88}
+Concatenate at most length bytes from src to dest brigade, splitting buckets if necessary and reading buckets of indeterminate length. 
+\begin{DoxyCode}
+1250 \{
+1251     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+1252     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} remain = \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length};
+1253     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1254     
+1255     \textcolor{keywordflow}{while} (!\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(src)) \{
+1256         b = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(src); 
+1257         
+1258         \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga506cb29cc1ec1abeb487e01b122bd4d9}{APR\_BUCKET\_IS\_METADATA}(b)) \{
+1259             \hyperlink{group__APR__Util__Bucket__Brigades_ga2c46a1b717a87b68bd98b425e0c64977}{APR\_BUCKET\_REMOVE}(b);
+1260             \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(dest, b);
+1261         \}
+1262         \textcolor{keywordflow}{else} \{
+1263             \textcolor{keywordflow}{if} (remain == b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length}) \{
+1264                 \textcolor{comment}{/* fall through */}
+1265             \}
+1266             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (remain <= 0) \{
+1267                 \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1268             \}
+1269             \textcolor{keywordflow}{else} \{
+1270                 \textcolor{keywordflow}{if} (b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == ((\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})-1)) \{
+1271                     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *ign;
+1272                     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} ilen;
+1273                     status = \hyperlink{group__APR__Util__Bucket__Brigades_gae44ae938c6c60e148430fdb098dcf28f}{apr\_bucket\_read}(b, &ign, &ilen, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ});
+1274                     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1275                         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1276                     \}
+1277                 \}
+1278             
+1279                 \textcolor{keywordflow}{if} (remain < b->\hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length}) \{
+1280                     \hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{apr\_bucket\_split}(b, remain);
+1281                 \}
+1282             \}
+1283             \hyperlink{group__APR__Util__Bucket__Brigades_ga2c46a1b717a87b68bd98b425e0c64977}{APR\_BUCKET\_REMOVE}(b);
+1284             \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(dest, b);
+1285             remain -= b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1286         \}
+1287     \}
+1288     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1289 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a6a39c5ca11bad5eada495111613d5e88_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+brigade\+\_\+copy\+\_\+length@{h2\+\_\+brigade\+\_\+copy\+\_\+length}}
+\index{h2\+\_\+brigade\+\_\+copy\+\_\+length@{h2\+\_\+brigade\+\_\+copy\+\_\+length}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+brigade\+\_\+copy\+\_\+length(apr\+\_\+bucket\+\_\+brigade $\ast$dest, apr\+\_\+bucket\+\_\+brigade $\ast$src, apr\+\_\+off\+\_\+t length)}{h2_brigade_copy_length(apr_bucket_brigade *dest, apr_bucket_brigade *src, apr_off_t length)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+brigade\+\_\+copy\+\_\+length (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{dest, }
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{src, }
+\item[{{\bf apr\+\_\+off\+\_\+t}}]{length}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a1e85392ff9bcbcffcc9ae34aa48ad534}{}\label{h2__util_8c_a1e85392ff9bcbcffcc9ae34aa48ad534}
+Copy at most length bytes from src to dest brigade, splitting buckets if necessary and reading buckets of indeterminate length. 
+\begin{DoxyCode}
+1294 \{
+1295     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}, *next;
+1296     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} remain = \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length};
+1297     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1298     
+1299     \textcolor{keywordflow}{for} (b = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(src); 
+1300          b != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(src);
+1301          b = next) \{
+1302         next = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(b);
+1303         
+1304         \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga506cb29cc1ec1abeb487e01b122bd4d9}{APR\_BUCKET\_IS\_METADATA}(b)) \{
+1305             \textcolor{comment}{/* fall through */}
+1306         \}
+1307         \textcolor{keywordflow}{else} \{
+1308             \textcolor{keywordflow}{if} (remain == b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length}) \{
+1309                 \textcolor{comment}{/* fall through */}
+1310             \}
+1311             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (remain <= 0) \{
+1312                 \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1313             \}
+1314             \textcolor{keywordflow}{else} \{
+1315                 \textcolor{keywordflow}{if} (b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == ((\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})-1)) \{
+1316                     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *ign;
+1317                     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} ilen;
+1318                     status = \hyperlink{group__APR__Util__Bucket__Brigades_gae44ae938c6c60e148430fdb098dcf28f}{apr\_bucket\_read}(b, &ign, &ilen, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ});
+1319                     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1320                         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1321                     \}
+1322                 \}
+1323             
+1324                 \textcolor{keywordflow}{if} (remain < b->\hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length}) \{
+1325                     \hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{apr\_bucket\_split}(b, remain);
+1326                 \}
+1327             \}
+1328         \}
+1329         status = \hyperlink{group__APR__Util__Bucket__Brigades_gab33cc08b7f064d06397f312e427279c3}{apr\_bucket\_copy}(b, &b);
+1330         \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1331             \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1332         \}
+1333         \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(dest, b);
+1334         remain -= b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1335     \}
+1336     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1337 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a1e85392ff9bcbcffcc9ae34aa48ad534_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+brigade\+\_\+mem\+\_\+size@{h2\+\_\+brigade\+\_\+mem\+\_\+size}}
+\index{h2\+\_\+brigade\+\_\+mem\+\_\+size@{h2\+\_\+brigade\+\_\+mem\+\_\+size}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+brigade\+\_\+mem\+\_\+size(apr\+\_\+bucket\+\_\+brigade $\ast$bb)}{h2_brigade_mem_size(apr_bucket_brigade *bb)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+off\+\_\+t} h2\+\_\+brigade\+\_\+mem\+\_\+size (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{bb}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_acc3586eb7679ec8f609cd5dd517faf27}{}\label{h2__util_8c_acc3586eb7679ec8f609cd5dd517faf27}
+Get an approximnation of the memory footprint of the given brigade. This varies from apr\+\_\+brigade\+\_\+length as
+\begin{DoxyItemize}
+\item no buckets are ever read
+\item only buckets known to allocate memory (H\+E\+A\+P+\+P\+O\+OL) are counted
+\item the bucket struct itself is counted 
+\end{DoxyItemize}
+\begin{DoxyCode}
+1570 \{
+1571     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+1572     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} total = 0;
+1573 
+1574     \textcolor{keywordflow}{for} (b = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb);
+1575          b != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb);
+1576          b = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(b))
+1577     \{
+1578         total += \textcolor{keyword}{sizeof}(*b);
+1579         \textcolor{keywordflow}{if} (b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} > 0) \{
+1580             \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga3dee4fbd5b4e16e5188a6cfec40b6961}{APR\_BUCKET\_IS\_HEAP}(b)
+1581                 || \hyperlink{group__APR__Util__Bucket__Brigades_gadbe80a9016da6a06ab414ba61d6625d0}{APR\_BUCKET\_IS\_POOL}(b)) \{
+1582                 total += b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1583             \}
+1584         \}
+1585     \}
+1586     \textcolor{keywordflow}{return} total;
+1587 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_acc3586eb7679ec8f609cd5dd517faf27_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+count@{h2\+\_\+fifo\+\_\+count}}
+\index{h2\+\_\+fifo\+\_\+count@{h2\+\_\+fifo\+\_\+count}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+count(h2\+\_\+fifo $\ast$fifo)}{h2_fifo_count(h2_fifo *fifo)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+fifo\+\_\+count (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_aa26be7850e04c6844c11276567ceda36}{}\label{h2__util_8c_aa26be7850e04c6844c11276567ceda36}
+
+\begin{DoxyCode}
+653 \{
+654     \textcolor{keywordflow}{return} fifo->\hyperlink{structh2__fifo_a7c503d09143b00a776ce22ddc2899419}{count};
+655 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+create@{h2\+\_\+fifo\+\_\+create}}
+\index{h2\+\_\+fifo\+\_\+create@{h2\+\_\+fifo\+\_\+create}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+create(h2\+\_\+fifo $\ast$$\ast$pfifo, apr\+\_\+pool\+\_\+t $\ast$pool, int capacity)}{h2_fifo_create(h2_fifo **pfifo, apr_pool_t *pool, int capacity)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$$\ast$}]{pfifo, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{capacity}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a5691fd0f7e04bff491141354c8314d96}{}\label{h2__util_8c_a5691fd0f7e04bff491141354c8314d96}
+Create a F\+I\+FO queue that can hold up to capacity elements. Elements can appear several times. 
+\begin{DoxyCode}
+622 \{
+623     \textcolor{keywordflow}{return} create\_int(pfifo, pool, capacity, 0);
+624 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a5691fd0f7e04bff491141354c8314d96_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+interrupt@{h2\+\_\+fifo\+\_\+interrupt}}
+\index{h2\+\_\+fifo\+\_\+interrupt@{h2\+\_\+fifo\+\_\+interrupt}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+interrupt(h2\+\_\+fifo $\ast$fifo)}{h2_fifo_interrupt(h2_fifo *fifo)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+interrupt (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ae796a1c39a877d2b5c04de6d3c2e4d2e}{}\label{h2__util_8c_ae796a1c39a877d2b5c04de6d3c2e4d2e}
+
+\begin{DoxyCode}
+642 \{
+643     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+644     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(fifo->\hyperlink{structh2__fifo_a759203ede022cdcd60da89e7d49eb89b}{lock})) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+645         apr\_thread\_cond\_broadcast(fifo->\hyperlink{structh2__fifo_a5d00e617dd13e9873acc3f8460091e8e}{not\_empty});
+646         apr\_thread\_cond\_broadcast(fifo->\hyperlink{structh2__fifo_ae3a7e0e9693da10035a490e25c3da966}{not\_full});
+647         apr\_thread\_mutex\_unlock(fifo->\hyperlink{structh2__fifo_a759203ede022cdcd60da89e7d49eb89b}{lock});
+648     \}
+649     \textcolor{keywordflow}{return} rv;
+650 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+peek@{h2\+\_\+fifo\+\_\+peek}}
+\index{h2\+\_\+fifo\+\_\+peek@{h2\+\_\+fifo\+\_\+peek}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+peek(h2\+\_\+fifo $\ast$fifo, h2\+\_\+fifo\+\_\+peek\+\_\+fn $\ast$fn, void $\ast$ctx)}{h2_fifo_peek(h2_fifo *fifo, h2_fifo_peek_fn *fn, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+peek (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo, }
+\item[{{\bf h2\+\_\+fifo\+\_\+peek\+\_\+fn} $\ast$}]{fn, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a173c6a1e9fd01b2f83c0350ca8ea27cf}{}\label{h2__util_8c_a173c6a1e9fd01b2f83c0350ca8ea27cf}
+Call given function on the head of the queue, once it exists, and perform the returned operation on it. The queue will hold its lock during this time, so no other operations on the queue are possible. 
+\begin{DoxyParams}{Parameters}
+{\em fifo} & the queue to peek at \\
+\hline
+{\em fn} & the function to call on the head, once available \\
+\hline
+{\em ctx} & context to pass in call to function \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+798 \{
+799     \textcolor{keywordflow}{return} fifo\_peek(fifo, fn, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}, 1);
+800 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+pull@{h2\+\_\+fifo\+\_\+pull}}
+\index{h2\+\_\+fifo\+\_\+pull@{h2\+\_\+fifo\+\_\+pull}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+pull(h2\+\_\+fifo $\ast$fifo, void $\ast$$\ast$pelem)}{h2_fifo_pull(h2_fifo *fifo, void **pelem)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+pull (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo, }
+\item[{{\bf void} $\ast$$\ast$}]{pelem}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ab69503e61a007e179185ce0fdf37291d}{}\label{h2__util_8c_ab69503e61a007e179185ce0fdf37291d}
+
+\begin{DoxyCode}
+764 \{
+765     \textcolor{keywordflow}{return} fifo\_pull(fifo, pelem, 1);
+766 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+push@{h2\+\_\+fifo\+\_\+push}}
+\index{h2\+\_\+fifo\+\_\+push@{h2\+\_\+fifo\+\_\+push}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+push(h2\+\_\+fifo $\ast$fifo, void $\ast$elem)}{h2_fifo_push(h2_fifo *fifo, void *elem)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+push (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo, }
+\item[{{\bf void} $\ast$}]{elem}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ac4ea1ec7b996302732577ec411ac4451}{}\label{h2__util_8c_ac4ea1ec7b996302732577ec411ac4451}
+Push en element into the queue. Blocks if there is no capacity left.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fifo} & the F\+I\+FO queue \\
+\hline
+{\em elem} & the element to push \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS on push, A\+P\+R\+\_\+\+E\+A\+G\+A\+IN on try\+\_\+push on a full queue, A\+P\+R\+\_\+\+E\+E\+X\+I\+ST when in set mode and elem already there. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+720 \{
+721     \textcolor{keywordflow}{return} fifo\_push(fifo, \hyperlink{structelem}{elem}, 1);
+722 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ac4ea1ec7b996302732577ec411ac4451_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+remove@{h2\+\_\+fifo\+\_\+remove}}
+\index{h2\+\_\+fifo\+\_\+remove@{h2\+\_\+fifo\+\_\+remove}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+remove(h2\+\_\+fifo $\ast$fifo, void $\ast$elem)}{h2_fifo_remove(h2_fifo *fifo, void *elem)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+remove (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo, }
+\item[{{\bf void} $\ast$}]{elem}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ac52573d613412f386e15412d8c5f53cd}{}\label{h2__util_8c_ac52573d613412f386e15412d8c5f53cd}
+Remove the elem from the queue, will remove multiple appearances. 
+\begin{DoxyParams}{Parameters}
+{\em elem} & the element to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS iff $>$ 0 elems were removed, A\+P\+R\+\_\+\+E\+A\+G\+A\+IN otherwise. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+808 \{
+809     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+810     
+811     \textcolor{keywordflow}{if} (fifo->\hyperlink{structh2__fifo_a3d03a4fd2654db1d3da1cea3d711e381}{aborted}) \{
+812         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF};
+813     \}
+814 
+815     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(fifo->\hyperlink{structh2__fifo_a759203ede022cdcd60da89e7d49eb89b}{lock})) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+816         \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+817         \textcolor{keywordtype}{void} *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+818         
+819         rc = 0;
+820         \textcolor{keywordflow}{for} (i = 0; i < fifo->\hyperlink{structh2__fifo_a7c503d09143b00a776ce22ddc2899419}{count}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+821             e = fifo->\hyperlink{structh2__fifo_acc4bdceeab41c47735c7fa63b454cf70}{elems}[nth\_index(fifo, i)];
+822             \textcolor{keywordflow}{if} (e == \hyperlink{structelem}{elem}) \{
+823                 ++\hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+824             \}
+825             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (rc) \{
+826                 fifo->\hyperlink{structh2__fifo_acc4bdceeab41c47735c7fa63b454cf70}{elems}[nth\_index(fifo, i-rc)] = \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+827             \}
+828         \}
+829         \textcolor{keywordflow}{if} (rc) \{
+830             fifo->\hyperlink{structh2__fifo_a7c503d09143b00a776ce22ddc2899419}{count} -= \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+831             \textcolor{keywordflow}{if} (fifo->\hyperlink{structh2__fifo_a7c503d09143b00a776ce22ddc2899419}{count} + rc == fifo->\hyperlink{structh2__fifo_aad0836dd046d88fa564a96cd351178a0}{nelems}) \{
+832                 apr\_thread\_cond\_broadcast(fifo->\hyperlink{structh2__fifo_ae3a7e0e9693da10035a490e25c3da966}{not\_full});
+833             \}
+834             rv = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+835         \}
+836         \textcolor{keywordflow}{else} \{
+837             rv = \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+838         \}
+839         
+840         apr\_thread\_mutex\_unlock(fifo->\hyperlink{structh2__fifo_a759203ede022cdcd60da89e7d49eb89b}{lock});
+841     \}
+842     \textcolor{keywordflow}{return} rv;
+843 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ac52573d613412f386e15412d8c5f53cd_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+set\+\_\+create@{h2\+\_\+fifo\+\_\+set\+\_\+create}}
+\index{h2\+\_\+fifo\+\_\+set\+\_\+create@{h2\+\_\+fifo\+\_\+set\+\_\+create}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+set\+\_\+create(h2\+\_\+fifo $\ast$$\ast$pfifo, apr\+\_\+pool\+\_\+t $\ast$pool, int capacity)}{h2_fifo_set_create(h2_fifo **pfifo, apr_pool_t *pool, int capacity)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+set\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$$\ast$}]{pfifo, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{capacity}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a6a22fe7d4848e7e83fb2ad9fb0886a48}{}\label{h2__util_8c_a6a22fe7d4848e7e83fb2ad9fb0886a48}
+Create a F\+I\+FO set that can hold up to capacity elements. Elements only appear once. Pushing an element already present does not change the queue and is successful. 
+\begin{DoxyCode}
+627 \{
+628     \textcolor{keywordflow}{return} create\_int(pfifo, pool, capacity, 1);
+629 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+term@{h2\+\_\+fifo\+\_\+term}}
+\index{h2\+\_\+fifo\+\_\+term@{h2\+\_\+fifo\+\_\+term}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+term(h2\+\_\+fifo $\ast$fifo)}{h2_fifo_term(h2_fifo *fifo)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+term (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_aa42817caec25200ad84ee88ddee8c9fb}{}\label{h2__util_8c_aa42817caec25200ad84ee88ddee8c9fb}
+
+\begin{DoxyCode}
+632 \{
+633     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+634     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(fifo->\hyperlink{structh2__fifo_a759203ede022cdcd60da89e7d49eb89b}{lock})) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+635         fifo->\hyperlink{structh2__fifo_a3d03a4fd2654db1d3da1cea3d711e381}{aborted} = 1;
+636         apr\_thread\_mutex\_unlock(fifo->\hyperlink{structh2__fifo_a759203ede022cdcd60da89e7d49eb89b}{lock});
+637     \}
+638     \textcolor{keywordflow}{return} rv;
+639 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+try\+\_\+peek@{h2\+\_\+fifo\+\_\+try\+\_\+peek}}
+\index{h2\+\_\+fifo\+\_\+try\+\_\+peek@{h2\+\_\+fifo\+\_\+try\+\_\+peek}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+try\+\_\+peek(h2\+\_\+fifo $\ast$fifo, h2\+\_\+fifo\+\_\+peek\+\_\+fn $\ast$fn, void $\ast$ctx)}{h2_fifo_try_peek(h2_fifo *fifo, h2_fifo_peek_fn *fn, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+try\+\_\+peek (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo, }
+\item[{{\bf h2\+\_\+fifo\+\_\+peek\+\_\+fn} $\ast$}]{fn, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a85b79cf3da1b1899911bce6674de6e70}{}\label{h2__util_8c_a85b79cf3da1b1899911bce6674de6e70}
+Non-\/blocking version of h2\+\_\+fifo\+\_\+peek. 
+\begin{DoxyCode}
+803 \{
+804     \textcolor{keywordflow}{return} fifo\_peek(fifo, fn, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}, 0);
+805 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+try\+\_\+pull@{h2\+\_\+fifo\+\_\+try\+\_\+pull}}
+\index{h2\+\_\+fifo\+\_\+try\+\_\+pull@{h2\+\_\+fifo\+\_\+try\+\_\+pull}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+try\+\_\+pull(h2\+\_\+fifo $\ast$fifo, void $\ast$$\ast$pelem)}{h2_fifo_try_pull(h2_fifo *fifo, void **pelem)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+try\+\_\+pull (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo, }
+\item[{{\bf void} $\ast$$\ast$}]{pelem}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a45652f5b426dc460f682483e8dabd7bb}{}\label{h2__util_8c_a45652f5b426dc460f682483e8dabd7bb}
+
+\begin{DoxyCode}
+769 \{
+770     \textcolor{keywordflow}{return} fifo\_pull(fifo, pelem, 0);
+771 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+fifo\+\_\+try\+\_\+push@{h2\+\_\+fifo\+\_\+try\+\_\+push}}
+\index{h2\+\_\+fifo\+\_\+try\+\_\+push@{h2\+\_\+fifo\+\_\+try\+\_\+push}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+fifo\+\_\+try\+\_\+push(h2\+\_\+fifo $\ast$fifo, void $\ast$elem)}{h2_fifo_try_push(h2_fifo *fifo, void *elem)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+fifo\+\_\+try\+\_\+push (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+fifo} $\ast$}]{fifo, }
+\item[{{\bf void} $\ast$}]{elem}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_af33a2aa5441c62343d7e4c2ebc300247}{}\label{h2__util_8c_af33a2aa5441c62343d7e4c2ebc300247}
+
+\begin{DoxyCode}
+725 \{
+726     \textcolor{keywordflow}{return} fifo\_push(fifo, \hyperlink{structelem}{elem}, 0);
+727 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+count@{h2\+\_\+ififo\+\_\+count}}
+\index{h2\+\_\+ififo\+\_\+count@{h2\+\_\+ififo\+\_\+count}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+count(h2\+\_\+ififo $\ast$fifo)}{h2_ififo_count(h2_ififo *fifo)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+ififo\+\_\+count (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ac040248d0e3bc8b33dcb27d96ad0147a}{}\label{h2__util_8c_ac040248d0e3bc8b33dcb27d96ad0147a}
+
+\begin{DoxyCode}
+961 \{
+962     \textcolor{keywordflow}{return} fifo->\hyperlink{structh2__ififo_ad551f9f408b672be6e5a8be089655bea}{count};
+963 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ac040248d0e3bc8b33dcb27d96ad0147a_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+create@{h2\+\_\+ififo\+\_\+create}}
+\index{h2\+\_\+ififo\+\_\+create@{h2\+\_\+ififo\+\_\+create}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+create(h2\+\_\+ififo $\ast$$\ast$pfifo, apr\+\_\+pool\+\_\+t $\ast$pool, int capacity)}{h2_ififo_create(h2_ififo **pfifo, apr_pool_t *pool, int capacity)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$$\ast$}]{pfifo, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{capacity}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a9d4243d676f83311815e755b9a89711a}{}\label{h2__util_8c_a9d4243d676f83311815e755b9a89711a}
+Create a F\+I\+FO queue that can hold up to capacity int. ints can appear several times. 
+\begin{DoxyCode}
+930 \{
+931     \textcolor{keywordflow}{return} icreate\_int(pfifo, pool, capacity, 0);
+932 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+interrupt@{h2\+\_\+ififo\+\_\+interrupt}}
+\index{h2\+\_\+ififo\+\_\+interrupt@{h2\+\_\+ififo\+\_\+interrupt}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+interrupt(h2\+\_\+ififo $\ast$fifo)}{h2_ififo_interrupt(h2_ififo *fifo)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+interrupt (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a585da6f0564432adc0544caabc868dd6}{}\label{h2__util_8c_a585da6f0564432adc0544caabc868dd6}
+
+\begin{DoxyCode}
+950 \{
+951     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+952     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(fifo->\hyperlink{structh2__ififo_ab1bbd9b16fedc59f26b605db5812c1c3}{lock})) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+953         apr\_thread\_cond\_broadcast(fifo->\hyperlink{structh2__ififo_a650c1d0a16f1d9372174c9defcc69e22}{not\_empty});
+954         apr\_thread\_cond\_broadcast(fifo->\hyperlink{structh2__ififo_ab78e5e0f828a1ec7d0a26729812c9031}{not\_full});
+955         apr\_thread\_mutex\_unlock(fifo->\hyperlink{structh2__ififo_ab1bbd9b16fedc59f26b605db5812c1c3}{lock});
+956     \}
+957     \textcolor{keywordflow}{return} rv;
+958 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+peek@{h2\+\_\+ififo\+\_\+peek}}
+\index{h2\+\_\+ififo\+\_\+peek@{h2\+\_\+ififo\+\_\+peek}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+peek(h2\+\_\+ififo $\ast$fifo, h2\+\_\+ififo\+\_\+peek\+\_\+fn $\ast$fn, void $\ast$ctx)}{h2_ififo_peek(h2_ififo *fifo, h2_ififo_peek_fn *fn, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+peek (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo, }
+\item[{{\bf h2\+\_\+ififo\+\_\+peek\+\_\+fn} $\ast$}]{fn, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a5d0b14a75442458696b71a0c98a638d2}{}\label{h2__util_8c_a5d0b14a75442458696b71a0c98a638d2}
+Call given function on the head of the queue, once it exists, and perform the returned operation on it. The queue will hold its lock during this time, so no other operations on the queue are possible. 
+\begin{DoxyParams}{Parameters}
+{\em fifo} & the queue to peek at \\
+\hline
+{\em fn} & the function to call on the head, once available \\
+\hline
+{\em ctx} & context to pass in call to function \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1106 \{
+1107     \textcolor{keywordflow}{return} ififo\_peek(fifo, fn, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}, 1);
+1108 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+pull@{h2\+\_\+ififo\+\_\+pull}}
+\index{h2\+\_\+ififo\+\_\+pull@{h2\+\_\+ififo\+\_\+pull}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+pull(h2\+\_\+ififo $\ast$fifo, int $\ast$pi)}{h2_ififo_pull(h2_ififo *fifo, int *pi)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+pull (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo, }
+\item[{{\bf int} $\ast$}]{pi}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_af4c4c93347193d57e5a67ee6880fdf3d}{}\label{h2__util_8c_af4c4c93347193d57e5a67ee6880fdf3d}
+
+\begin{DoxyCode}
+1072 \{
+1073     \textcolor{keywordflow}{return} ififo\_pull(fifo, pi, 1);
+1074 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+push@{h2\+\_\+ififo\+\_\+push}}
+\index{h2\+\_\+ififo\+\_\+push@{h2\+\_\+ififo\+\_\+push}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+push(h2\+\_\+ififo $\ast$fifo, int id)}{h2_ififo_push(h2_ififo *fifo, int id)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+push (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo, }
+\item[{{\bf int}}]{id}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ad44c263771a733fc2c474eb48373d368}{}\label{h2__util_8c_ad44c263771a733fc2c474eb48373d368}
+Push an int into the queue. Blocks if there is no capacity left.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fifo} & the F\+I\+FO queue \\
+\hline
+{\em id} & the int to push \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS on push, A\+P\+R\+\_\+\+E\+A\+G\+A\+IN on try\+\_\+push on a full queue, A\+P\+R\+\_\+\+E\+E\+X\+I\+ST when in set mode and elem already there. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1028 \{
+1029     \textcolor{keywordflow}{return} ififo\_push(fifo, \textcolor{keywordtype}{id}, 1);
+1030 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ad44c263771a733fc2c474eb48373d368_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+remove@{h2\+\_\+ififo\+\_\+remove}}
+\index{h2\+\_\+ififo\+\_\+remove@{h2\+\_\+ififo\+\_\+remove}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+remove(h2\+\_\+ififo $\ast$fifo, int id)}{h2_ififo_remove(h2_ififo *fifo, int id)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+remove (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo, }
+\item[{{\bf int}}]{id}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a8cfae46e01e22443214dac056e0ce265}{}\label{h2__util_8c_a8cfae46e01e22443214dac056e0ce265}
+Remove the integer from the queue, will remove multiple appearances. 
+\begin{DoxyParams}{Parameters}
+{\em id} & the integer to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS iff $>$ 0 ints were removed, A\+P\+R\+\_\+\+E\+A\+G\+A\+IN otherwise. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1116 \{
+1117     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+1118     
+1119     \textcolor{keywordflow}{if} (fifo->\hyperlink{structh2__ififo_a6f1f68d3bcee57d1c8dab0e586584843}{aborted}) \{
+1120         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF};
+1121     \}
+1122 
+1123     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(fifo->\hyperlink{structh2__ififo_ab1bbd9b16fedc59f26b605db5812c1c3}{lock})) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1124         \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+1125         \textcolor{keywordtype}{int} \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+1126         
+1127         rc = 0;
+1128         \textcolor{keywordflow}{for} (i = 0; i < fifo->\hyperlink{structh2__ififo_ad551f9f408b672be6e5a8be089655bea}{count}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+1129             e = fifo->\hyperlink{structh2__ififo_ab57dc11eb31dffb2386086b0eeae41dc}{elems}[inth\_index(fifo, i)];
+1130             \textcolor{keywordflow}{if} (e == \textcolor{keywordtype}{id}) \{
+1131                 ++\hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+1132             \}
+1133             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (rc) \{
+1134                 fifo->\hyperlink{structh2__ififo_ab57dc11eb31dffb2386086b0eeae41dc}{elems}[inth\_index(fifo, i-rc)] = \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+1135             \}
+1136         \}
+1137         \textcolor{keywordflow}{if} (rc) \{
+1138             fifo->\hyperlink{structh2__ififo_ad551f9f408b672be6e5a8be089655bea}{count} -= \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+1139             \textcolor{keywordflow}{if} (fifo->\hyperlink{structh2__ififo_ad551f9f408b672be6e5a8be089655bea}{count} + rc == fifo->\hyperlink{structh2__ififo_a89e10335008993b88d6b6155aa390249}{nelems}) \{
+1140                 apr\_thread\_cond\_broadcast(fifo->\hyperlink{structh2__ififo_ab78e5e0f828a1ec7d0a26729812c9031}{not\_full});
+1141             \}
+1142             rv = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1143         \}
+1144         \textcolor{keywordflow}{else} \{
+1145             rv = \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+1146         \}
+1147         
+1148         apr\_thread\_mutex\_unlock(fifo->\hyperlink{structh2__ififo_ab1bbd9b16fedc59f26b605db5812c1c3}{lock});
+1149     \}
+1150     \textcolor{keywordflow}{return} rv;
+1151 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+set\+\_\+create@{h2\+\_\+ififo\+\_\+set\+\_\+create}}
+\index{h2\+\_\+ififo\+\_\+set\+\_\+create@{h2\+\_\+ififo\+\_\+set\+\_\+create}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+set\+\_\+create(h2\+\_\+ififo $\ast$$\ast$pfifo, apr\+\_\+pool\+\_\+t $\ast$pool, int capacity)}{h2_ififo_set_create(h2_ififo **pfifo, apr_pool_t *pool, int capacity)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+set\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$$\ast$}]{pfifo, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{capacity}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ad395a9b4a439d3688cb94abda4b60259}{}\label{h2__util_8c_ad395a9b4a439d3688cb94abda4b60259}
+Create a F\+I\+FO set that can hold up to capacity integers. Ints only appear once. Pushing an int already present does not change the queue and is successful. 
+\begin{DoxyCode}
+935 \{
+936     \textcolor{keywordflow}{return} icreate\_int(pfifo, pool, capacity, 1);
+937 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=301pt]{h2__util_8c_ad395a9b4a439d3688cb94abda4b60259_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+term@{h2\+\_\+ififo\+\_\+term}}
+\index{h2\+\_\+ififo\+\_\+term@{h2\+\_\+ififo\+\_\+term}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+term(h2\+\_\+ififo $\ast$fifo)}{h2_ififo_term(h2_ififo *fifo)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+term (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a248a292c88306e808550453dcc73da01}{}\label{h2__util_8c_a248a292c88306e808550453dcc73da01}
+
+\begin{DoxyCode}
+940 \{
+941     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+942     \textcolor{keywordflow}{if} ((rv = apr\_thread\_mutex\_lock(fifo->\hyperlink{structh2__ififo_ab1bbd9b16fedc59f26b605db5812c1c3}{lock})) == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+943         fifo->\hyperlink{structh2__ififo_a6f1f68d3bcee57d1c8dab0e586584843}{aborted} = 1;
+944         apr\_thread\_mutex\_unlock(fifo->\hyperlink{structh2__ififo_ab1bbd9b16fedc59f26b605db5812c1c3}{lock});
+945     \}
+946     \textcolor{keywordflow}{return} rv;
+947 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+try\+\_\+peek@{h2\+\_\+ififo\+\_\+try\+\_\+peek}}
+\index{h2\+\_\+ififo\+\_\+try\+\_\+peek@{h2\+\_\+ififo\+\_\+try\+\_\+peek}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+try\+\_\+peek(h2\+\_\+ififo $\ast$fifo, h2\+\_\+ififo\+\_\+peek\+\_\+fn $\ast$fn, void $\ast$ctx)}{h2_ififo_try_peek(h2_ififo *fifo, h2_ififo_peek_fn *fn, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+try\+\_\+peek (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo, }
+\item[{{\bf h2\+\_\+ififo\+\_\+peek\+\_\+fn} $\ast$}]{fn, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a1a0d926ab5740e1d17fc67703a389077}{}\label{h2__util_8c_a1a0d926ab5740e1d17fc67703a389077}
+Non-\/blocking version of h2\+\_\+fifo\+\_\+peek. 
+\begin{DoxyCode}
+1111 \{
+1112     \textcolor{keywordflow}{return} ififo\_peek(fifo, fn, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}, 0);
+1113 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+try\+\_\+pull@{h2\+\_\+ififo\+\_\+try\+\_\+pull}}
+\index{h2\+\_\+ififo\+\_\+try\+\_\+pull@{h2\+\_\+ififo\+\_\+try\+\_\+pull}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+try\+\_\+pull(h2\+\_\+ififo $\ast$fifo, int $\ast$pi)}{h2_ififo_try_pull(h2_ififo *fifo, int *pi)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+try\+\_\+pull (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo, }
+\item[{{\bf int} $\ast$}]{pi}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ade611cbb8c202f0c969b7a60a16da4ea}{}\label{h2__util_8c_ade611cbb8c202f0c969b7a60a16da4ea}
+
+\begin{DoxyCode}
+1077 \{
+1078     \textcolor{keywordflow}{return} ififo\_pull(fifo, pi, 0);
+1079 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ade611cbb8c202f0c969b7a60a16da4ea_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ififo\+\_\+try\+\_\+push@{h2\+\_\+ififo\+\_\+try\+\_\+push}}
+\index{h2\+\_\+ififo\+\_\+try\+\_\+push@{h2\+\_\+ififo\+\_\+try\+\_\+push}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ififo\+\_\+try\+\_\+push(h2\+\_\+ififo $\ast$fifo, int id)}{h2_ififo_try_push(h2_ififo *fifo, int id)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+ififo\+\_\+try\+\_\+push (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ififo} $\ast$}]{fifo, }
+\item[{{\bf int}}]{id}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a4d37a681bb6e76c501a07e3e4fa9450b}{}\label{h2__util_8c_a4d37a681bb6e76c501a07e3e4fa9450b}
+
+\begin{DoxyCode}
+1033 \{
+1034     \textcolor{keywordflow}{return} ififo\_push(fifo, \textcolor{keywordtype}{id}, 0);
+1035 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+add@{h2\+\_\+ihash\+\_\+add}}
+\index{h2\+\_\+ihash\+\_\+add@{h2\+\_\+ihash\+\_\+add}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+add(h2\+\_\+ihash\+\_\+t $\ast$ih, void $\ast$val)}{h2_ihash_add(h2_ihash_t *ih, void *val)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+ihash\+\_\+add (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih, }
+\item[{{\bf void} $\ast$}]{val}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a0e8808cee68f42516bab06b01d8ebf16}{}\label{h2__util_8c_a0e8808cee68f42516bab06b01d8ebf16}
+
+\begin{DoxyCode}
+282 \{
+283     apr\_hash\_set(ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash}, ((\textcolor{keywordtype}{char} *)\hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val} + ih->\hyperlink{structh2__ihash__t_a3acca54a6626295436daa085679863a7}{ioff}), \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), \hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val});
+284 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a0e8808cee68f42516bab06b01d8ebf16_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+clear@{h2\+\_\+ihash\+\_\+clear}}
+\index{h2\+\_\+ihash\+\_\+clear@{h2\+\_\+ihash\+\_\+clear}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+clear(h2\+\_\+ihash\+\_\+t $\ast$ih)}{h2_ihash_clear(h2_ihash_t *ih)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+ihash\+\_\+clear (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a049438bb4740ed32ba426cd746b7d8c3}{}\label{h2__util_8c_a049438bb4740ed32ba426cd746b7d8c3}
+
+\begin{DoxyCode}
+299 \{
+300     apr\_hash\_clear(ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash});
+301 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+count@{h2\+\_\+ihash\+\_\+count}}
+\index{h2\+\_\+ihash\+\_\+count@{h2\+\_\+ihash\+\_\+count}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+count(h2\+\_\+ihash\+\_\+t $\ast$ih)}{h2_ihash_count(h2_ihash_t *ih)}}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t h2\+\_\+ihash\+\_\+count (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a4348605c0734bb5b773c423f5a687f01}{}\label{h2__util_8c_a4348605c0734bb5b773c423f5a687f01}
+
+\begin{DoxyCode}
+247 \{
+248     \textcolor{keywordflow}{return} apr\_hash\_count(ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash});
+249 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a4348605c0734bb5b773c423f5a687f01_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+create@{h2\+\_\+ihash\+\_\+create}}
+\index{h2\+\_\+ihash\+\_\+create@{h2\+\_\+ihash\+\_\+create}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+create(apr\+\_\+pool\+\_\+t $\ast$pool, size\+\_\+t offset\+\_\+of\+\_\+int)}{h2_ihash_create(apr_pool_t *pool, size_t offset_of_int)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+ihash\+\_\+t}$\ast$ h2\+\_\+ihash\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{size\+\_\+t}]{offset\+\_\+of\+\_\+int}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a32c09d1fac1f02a6afc09fc57af5af2f}{}\label{h2__util_8c_a32c09d1fac1f02a6afc09fc57af5af2f}
+Create a hash for structures that have an identifying int member. 
+\begin{DoxyParams}{Parameters}
+{\em pool} & the pool to use \\
+\hline
+{\em offset\+\_\+of\+\_\+int} & the offsetof() the int member in the struct \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+239 \{
+240     \hyperlink{structh2__ihash__t}{h2\_ihash\_t} *ih = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(\hyperlink{structh2__ihash__t}{h2\_ihash\_t}));
+241     ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash} = apr\_hash\_make\_custom(pool, ihash);
+242     ih->\hyperlink{structh2__ihash__t_a3acca54a6626295436daa085679863a7}{ioff} = offset\_of\_int;
+243     \textcolor{keywordflow}{return} ih;
+244 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=290pt]{h2__util_8c_a32c09d1fac1f02a6afc09fc57af5af2f_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+empty@{h2\+\_\+ihash\+\_\+empty}}
+\index{h2\+\_\+ihash\+\_\+empty@{h2\+\_\+ihash\+\_\+empty}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+empty(h2\+\_\+ihash\+\_\+t $\ast$ih)}{h2_ihash_empty(h2_ihash_t *ih)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+ihash\+\_\+empty (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_adca33ffb38ae50b885c3c95080068828}{}\label{h2__util_8c_adca33ffb38ae50b885c3c95080068828}
+
+\begin{DoxyCode}
+252 \{
+253     \textcolor{keywordflow}{return} apr\_hash\_count(ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash}) == 0;
+254 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_adca33ffb38ae50b885c3c95080068828_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+get@{h2\+\_\+ihash\+\_\+get}}
+\index{h2\+\_\+ihash\+\_\+get@{h2\+\_\+ihash\+\_\+get}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+get(h2\+\_\+ihash\+\_\+t $\ast$ih, int id)}{h2_ihash_get(h2_ihash_t *ih, int id)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void}$\ast$ h2\+\_\+ihash\+\_\+get (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih, }
+\item[{{\bf int}}]{id}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a5d1f2bcbe360015aec7585bb030beffd}{}\label{h2__util_8c_a5d1f2bcbe360015aec7585bb030beffd}
+
+\begin{DoxyCode}
+257 \{
+258     \textcolor{keywordflow}{return} apr\_hash\_get(ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash}, &\textcolor{keywordtype}{id}, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{id}));
+259 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a5d1f2bcbe360015aec7585bb030beffd_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+iter@{h2\+\_\+ihash\+\_\+iter}}
+\index{h2\+\_\+ihash\+\_\+iter@{h2\+\_\+ihash\+\_\+iter}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+iter(h2\+\_\+ihash\+\_\+t $\ast$ih, h2\+\_\+ihash\+\_\+iter\+\_\+t $\ast$fn, void $\ast$ctx)}{h2_ihash_iter(h2_ihash_t *ih, h2_ihash_iter_t *fn, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+ihash\+\_\+iter (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih, }
+\item[{{\bf h2\+\_\+ihash\+\_\+iter\+\_\+t} $\ast$}]{fn, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ab0cd94ef263e1753db17e4e1e420a18b}{}\label{h2__util_8c_ab0cd94ef263e1753db17e4e1e420a18b}
+Iterate over the hash members (without defined order) and invoke fn for each member until 0 is returned. 
+\begin{DoxyParams}{Parameters}
+{\em ih} & the hash to iterate over \\
+\hline
+{\em fn} & the function to invoke on each member \\
+\hline
+{\em ctx} & user supplied data passed into each iteration call \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if one iteration returned 0, otherwise != 0 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+274 \{
+275     \hyperlink{structiter__ctx}{iter\_ctx} ictx;
+276     ictx.\hyperlink{structiter__ctx_a36b164d6f438a4b1c950147987cfbd46}{iter} = fn;
+277     ictx.\hyperlink{structiter__ctx_a0379c58f073e4e95a2ef7643333c8789}{ctx} = \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx};
+278     \textcolor{keywordflow}{return} apr\_hash\_do(ihash\_iter, &ictx, ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash});
+279 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ab0cd94ef263e1753db17e4e1e420a18b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+remove@{h2\+\_\+ihash\+\_\+remove}}
+\index{h2\+\_\+ihash\+\_\+remove@{h2\+\_\+ihash\+\_\+remove}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+remove(h2\+\_\+ihash\+\_\+t $\ast$ih, int id)}{h2_ihash_remove(h2_ihash_t *ih, int id)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+ihash\+\_\+remove (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih, }
+\item[{{\bf int}}]{id}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a484925742af7f24ebace55ad9be3731a}{}\label{h2__util_8c_a484925742af7f24ebace55ad9be3731a}
+
+\begin{DoxyCode}
+287 \{
+288     apr\_hash\_set(ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash}, &\textcolor{keywordtype}{id}, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{id}), \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+289 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=310pt]{h2__util_8c_a484925742af7f24ebace55ad9be3731a_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+remove\+\_\+val@{h2\+\_\+ihash\+\_\+remove\+\_\+val}}
+\index{h2\+\_\+ihash\+\_\+remove\+\_\+val@{h2\+\_\+ihash\+\_\+remove\+\_\+val}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+remove\+\_\+val(h2\+\_\+ihash\+\_\+t $\ast$ih, void $\ast$val)}{h2_ihash_remove_val(h2_ihash_t *ih, void *val)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+ihash\+\_\+remove\+\_\+val (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih, }
+\item[{{\bf void} $\ast$}]{val}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a44c7ebba8d690ecdaccf908c9c9c9efb}{}\label{h2__util_8c_a44c7ebba8d690ecdaccf908c9c9c9efb}
+
+\begin{DoxyCode}
+292 \{
+293     \textcolor{keywordtype}{int} \textcolor{keywordtype}{id} = *((\textcolor{keywordtype}{int}*)((\textcolor{keywordtype}{char} *)\hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val} + ih->\hyperlink{structh2__ihash__t_a3acca54a6626295436daa085679863a7}{ioff}));
+294     apr\_hash\_set(ih->\hyperlink{structh2__ihash__t_a547ab0121516e25467b5171a31c00101}{hash}, &\textcolor{keywordtype}{id}, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{id}), \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+295 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a44c7ebba8d690ecdaccf908c9c9c9efb_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+ihash\+\_\+shift@{h2\+\_\+ihash\+\_\+shift}}
+\index{h2\+\_\+ihash\+\_\+shift@{h2\+\_\+ihash\+\_\+shift}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+ihash\+\_\+shift(h2\+\_\+ihash\+\_\+t $\ast$ih, void $\ast$$\ast$buffer, size\+\_\+t max)}{h2_ihash_shift(h2_ihash_t *ih, void **buffer, size_t max)}}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t h2\+\_\+ihash\+\_\+shift (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ihash\+\_\+t} $\ast$}]{ih, }
+\item[{{\bf void} $\ast$$\ast$}]{buffer, }
+\item[{size\+\_\+t}]{max}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_abaadc1445c5689f8dfb1ddaa94b3f8ee}{}\label{h2__util_8c_abaadc1445c5689f8dfb1ddaa94b3f8ee}
+
+\begin{DoxyCode}
+321 \{
+322     \hyperlink{structcollect__ctx}{collect\_ctx} \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx};
+323     \textcolor{keywordtype}{size\_t} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+324     
+325     ctx.\hyperlink{structcollect__ctx_af6b7ab1af49eb18323936cb1c87c24af}{ih} = ih;
+326     ctx.\hyperlink{structcollect__ctx_a15f378c811d0f91565c1180917ab813c}{buffer} = \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer};
+327     ctx.\hyperlink{structcollect__ctx_a1460bf3cf076102a575314dccd9c2225}{max} = \hyperlink{group__APACHE__CORE__DAEMON_gac1b9c6a7bfbd9ec2444735d634d4a557}{max};
+328     ctx.\hyperlink{structcollect__ctx_ab02d7463f7bdb6f43f60180df467e844}{len} = 0;
+329     \hyperlink{h2__util_8c_ab0cd94ef263e1753db17e4e1e420a18b}{h2\_ihash\_iter}(ih, collect\_iter, &ctx);
+330     \textcolor{keywordflow}{for} (i = 0; i < ctx.\hyperlink{structcollect__ctx_ab02d7463f7bdb6f43f60180df467e844}{len}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+331         \hyperlink{h2__util_8c_a44c7ebba8d690ecdaccf908c9c9c9efb}{h2\_ihash\_remove\_val}(ih, \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}[i]);
+332     \}
+333     \textcolor{keywordflow}{return} ctx.\hyperlink{structcollect__ctx_ab02d7463f7bdb6f43f60180df467e844}{len};
+334 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=307pt]{h2__util_8c_abaadc1445c5689f8dfb1ddaa94b3f8ee_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_abaadc1445c5689f8dfb1ddaa94b3f8ee_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+add@{h2\+\_\+iq\+\_\+add}}
+\index{h2\+\_\+iq\+\_\+add@{h2\+\_\+iq\+\_\+add}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+add(h2\+\_\+iqueue $\ast$q, int sid, h2\+\_\+iq\+\_\+cmp $\ast$cmp, void $\ast$ctx)}{h2_iq_add(h2_iqueue *q, int sid, h2_iq_cmp *cmp, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+iq\+\_\+add (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q, }
+\item[{{\bf int}}]{sid, }
+\item[{{\bf h2\+\_\+iq\+\_\+cmp} $\ast$}]{cmp, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a18c62b8d07b5c08ef7e9b142b09ad7d0}{}\label{h2__util_8c_a18c62b8d07b5c08ef7e9b142b09ad7d0}
+Add a stream id to the queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & the queue to append the id to \\
+\hline
+{\em sid} & the stream id to add \\
+\hline
+{\em cmp} & the comparator for sorting \\
+\hline
+{\em ctx} & user data for comparator \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+!= 0 iff id was not already there 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+370 \{
+371     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+372     
+373     \textcolor{keywordflow}{if} (\hyperlink{h2__util_8c_a4bf6bbee2be663a01e97be92bcfbab45}{h2\_iq\_contains}(q, sid)) \{
+374         \textcolor{keywordflow}{return} 0;
+375     \}
+376     \textcolor{keywordflow}{if} (q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts} >= q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc}) \{
+377         iq\_grow(q, q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc} * 2);
+378     \}
+379     i = (q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head} + q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts}) % q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc};
+380     q->\hyperlink{structh2__iqueue_a8fcc1a7ee4f72bda8c6e5a34a388708e}{elts}[i] = sid;
+381     ++q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts};
+382     
+383     \hyperlink{util__expr__scan_8c_a33e91cd0cef6786e9e3a27ac67707207}{if} (\hyperlink{group__apr__atomic_ga337f72af8c74a9110f79160df3bba5e8}{cmp}) \{
+384         \textcolor{comment}{/* bubble it to the front of the queue */}
+385         iq\_bubble\_up(q, i, q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head}, \hyperlink{group__apr__atomic_ga337f72af8c74a9110f79160df3bba5e8}{cmp}, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx});
+386     \}
+387     \textcolor{keywordflow}{return} 1;
+388 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a18c62b8d07b5c08ef7e9b142b09ad7d0_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a18c62b8d07b5c08ef7e9b142b09ad7d0_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+append@{h2\+\_\+iq\+\_\+append}}
+\index{h2\+\_\+iq\+\_\+append@{h2\+\_\+iq\+\_\+append}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+append(h2\+\_\+iqueue $\ast$q, int sid)}{h2_iq_append(h2_iqueue *q, int sid)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+iq\+\_\+append (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q, }
+\item[{{\bf int}}]{sid}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a5fdef491f6e3a8e24bb03e11ce00acca}{}\label{h2__util_8c_a5fdef491f6e3a8e24bb03e11ce00acca}
+Append the id to the queue if not already present.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & the queue to append the id to \\
+\hline
+{\em sid} & the id to append \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+!= 0 iff id was not already there 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+391 \{
+392     \textcolor{keywordflow}{return} \hyperlink{h2__util_8c_a18c62b8d07b5c08ef7e9b142b09ad7d0}{h2\_iq\_add}(q, sid, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+393 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a5fdef491f6e3a8e24bb03e11ce00acca_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=303pt]{h2__util_8c_a5fdef491f6e3a8e24bb03e11ce00acca_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+clear@{h2\+\_\+iq\+\_\+clear}}
+\index{h2\+\_\+iq\+\_\+clear@{h2\+\_\+iq\+\_\+clear}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+clear(h2\+\_\+iqueue $\ast$q)}{h2_iq_clear(h2_iqueue *q)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+iq\+\_\+clear (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_adc7376b44e6aa98352ab8644c33db894}{}\label{h2__util_8c_adc7376b44e6aa98352ab8644c33db894}
+Remove all entries in the queue. 
+\begin{DoxyCode}
+416 \{
+417     q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts} = 0;
+418 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=283pt]{h2__util_8c_adc7376b44e6aa98352ab8644c33db894_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+contains@{h2\+\_\+iq\+\_\+contains}}
+\index{h2\+\_\+iq\+\_\+contains@{h2\+\_\+iq\+\_\+contains}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+contains(h2\+\_\+iqueue $\ast$q, int sid)}{h2_iq_contains(h2_iqueue *q, int sid)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+iq\+\_\+contains (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q, }
+\item[{{\bf int}}]{sid}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a4bf6bbee2be663a01e97be92bcfbab45}{}\label{h2__util_8c_a4bf6bbee2be663a01e97be92bcfbab45}
+Determine if int is in the queue already
+
+q the queue 
+\begin{DoxyParams}{Parameters}
+{\em sid} & the integer id to check for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+!= 0 iff sid is already in the queue 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+527 \{
+528     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+529     \textcolor{keywordflow}{for} (i = 0; i < q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+530         \textcolor{keywordflow}{if} (sid == q->\hyperlink{structh2__iqueue_a8fcc1a7ee4f72bda8c6e5a34a388708e}{elts}[(q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head} + i) % q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc}]) \{
+531             \textcolor{keywordflow}{return} 1;
+532         \}
+533     \}
+534     \textcolor{keywordflow}{return} 0;
+535 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a4bf6bbee2be663a01e97be92bcfbab45_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+count@{h2\+\_\+iq\+\_\+count}}
+\index{h2\+\_\+iq\+\_\+count@{h2\+\_\+iq\+\_\+count}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+count(h2\+\_\+iqueue $\ast$q)}{h2_iq_count(h2_iqueue *q)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+iq\+\_\+count (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_af155ca0df68858b7a59389e74e43afa7}{}\label{h2__util_8c_af155ca0df68858b7a59389e74e43afa7}
+Return the number of int in the queue. 
+\begin{DoxyParams}{Parameters}
+{\em q} & the queue to get size on \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+364 \{
+365     \textcolor{keywordflow}{return} q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts};
+366 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_af155ca0df68858b7a59389e74e43afa7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+create@{h2\+\_\+iq\+\_\+create}}
+\index{h2\+\_\+iq\+\_\+create@{h2\+\_\+iq\+\_\+create}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+create(apr\+\_\+pool\+\_\+t $\ast$pool, int capacity)}{h2_iq_create(apr_pool_t *pool, int capacity)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+iqueue}$\ast$ h2\+\_\+iq\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{{\bf int}}]{capacity}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ad6e1bc99310cfb346ba839f3cab33f7b}{}\label{h2__util_8c_ad6e1bc99310cfb346ba839f3cab33f7b}
+Allocate a new queue from the pool and initialize. 
+\begin{DoxyParams}{Parameters}
+{\em id} & the identifier of the queue \\
+\hline
+{\em pool} & the memory pool \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+348 \{
+349     \hyperlink{structh2__iqueue}{h2\_iqueue} *q = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(\hyperlink{structh2__iqueue}{h2\_iqueue}));
+350     \textcolor{keywordflow}{if} (q) \{
+351         q->\hyperlink{structh2__iqueue_a3116560ab576462ef903945181fd16c6}{pool} = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+352         iq\_grow(q, capacity);
+353         q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts} = 0;
+354     \}
+355     \textcolor{keywordflow}{return} q;
+356 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=274pt]{h2__util_8c_ad6e1bc99310cfb346ba839f3cab33f7b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+empty@{h2\+\_\+iq\+\_\+empty}}
+\index{h2\+\_\+iq\+\_\+empty@{h2\+\_\+iq\+\_\+empty}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+empty(h2\+\_\+iqueue $\ast$q)}{h2_iq_empty(h2_iqueue *q)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+iq\+\_\+empty (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a580b0aba0478fc88d0d930222978d5e7}{}\label{h2__util_8c_a580b0aba0478fc88d0d930222978d5e7}
+Return != 0 iff there are no tasks in the queue. 
+\begin{DoxyParams}{Parameters}
+{\em q} & the queue to check \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+359 \{
+360     \textcolor{keywordflow}{return} q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts} == 0;
+361 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a580b0aba0478fc88d0d930222978d5e7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+mshift@{h2\+\_\+iq\+\_\+mshift}}
+\index{h2\+\_\+iq\+\_\+mshift@{h2\+\_\+iq\+\_\+mshift}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+mshift(h2\+\_\+iqueue $\ast$q, int $\ast$pint, size\+\_\+t max)}{h2_iq_mshift(h2_iqueue *q, int *pint, size_t max)}}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t h2\+\_\+iq\+\_\+mshift (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q, }
+\item[{{\bf int} $\ast$}]{pint, }
+\item[{size\+\_\+t}]{max}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a450510b416b2d6a6f47bb38bea169ca6}{}\label{h2__util_8c_a450510b416b2d6a6f47bb38bea169ca6}
+Get the first max ids from the queue. All these ids will be removed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & the queue to get the first task from \\
+\hline
+{\em pint} & the int array to receive the values \\
+\hline
+{\em max} & the maximum number of ids to shift \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the actual number of ids shifted 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+464 \{
+465     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+466     \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{group__APACHE__CORE__DAEMON_gac1b9c6a7bfbd9ec2444735d634d4a557}{max}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+467         pint[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] = \hyperlink{h2__util_8c_ae4c244854d49bc3a4a3f4b5f14c1b696}{h2\_iq\_shift}(q);
+468         \textcolor{keywordflow}{if} (pint[i] == 0) \{
+469             \textcolor{keywordflow}{break};
+470         \}
+471     \}
+472     \textcolor{keywordflow}{return} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+473 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=252pt]{h2__util_8c_a450510b416b2d6a6f47bb38bea169ca6_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+remove@{h2\+\_\+iq\+\_\+remove}}
+\index{h2\+\_\+iq\+\_\+remove@{h2\+\_\+iq\+\_\+remove}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+remove(h2\+\_\+iqueue $\ast$q, int sid)}{h2_iq_remove(h2_iqueue *q, int sid)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+iq\+\_\+remove (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q, }
+\item[{{\bf int}}]{sid}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ab7aa63a9040710a2f24bb4de690a3310}{}\label{h2__util_8c_ab7aa63a9040710a2f24bb4de690a3310}
+Remove the stream id from the queue. Return != 0 iff task was found in queue. 
+\begin{DoxyParams}{Parameters}
+{\em q} & the task queue \\
+\hline
+{\em sid} & the stream id to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+!= 0 iff task was found in queue 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+396 \{
+397     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+398     \textcolor{keywordflow}{for} (i = 0; i < q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+399         \textcolor{keywordflow}{if} (sid == q->\hyperlink{structh2__iqueue_a8fcc1a7ee4f72bda8c6e5a34a388708e}{elts}[(q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head} + i) % q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc}]) \{
+400             \textcolor{keywordflow}{break};
+401         \}
+402     \}
+403     
+404     \textcolor{keywordflow}{if} (i < q->\hyperlink{group__APACHE__CORE__PROTO_ga3f892b271cc0564b2d8e9536a96abd7c}{nelts}) \{
+405         ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+406         \textcolor{keywordflow}{for} (; i < q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+407             q->\hyperlink{structh2__iqueue_a8fcc1a7ee4f72bda8c6e5a34a388708e}{elts}[(q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head}+i-1)%q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc}] = q->\hyperlink{structh2__iqueue_a8fcc1a7ee4f72bda8c6e5a34a388708e}{elts}[(q->
+      \hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head}+i)%q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc}];
+408         \}
+409         --q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts};
+410         \textcolor{keywordflow}{return} 1;
+411     \}
+412     \textcolor{keywordflow}{return} 0;
+413 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+shift@{h2\+\_\+iq\+\_\+shift}}
+\index{h2\+\_\+iq\+\_\+shift@{h2\+\_\+iq\+\_\+shift}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+shift(h2\+\_\+iqueue $\ast$q)}{h2_iq_shift(h2_iqueue *q)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+iq\+\_\+shift (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ae4c244854d49bc3a4a3f4b5f14c1b696}{}\label{h2__util_8c_ae4c244854d49bc3a4a3f4b5f14c1b696}
+Get the first id from the queue or 0 if the queue is empty. The id is being removed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & the queue to get the first id from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the first id of the queue, 0 if empty 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+449 \{
+450     \textcolor{keywordtype}{int} sid;
+451     
+452     \textcolor{keywordflow}{if} (q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts} <= 0) \{
+453         \textcolor{keywordflow}{return} 0;
+454     \}
+455     
+456     sid = q->\hyperlink{structh2__iqueue_a8fcc1a7ee4f72bda8c6e5a34a388708e}{elts}[q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head}];
+457     q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head} = (q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head} + 1) % q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc};
+458     q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts}--;
+459     
+460     \textcolor{keywordflow}{return} sid;
+461 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ae4c244854d49bc3a4a3f4b5f14c1b696_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+iq\+\_\+sort@{h2\+\_\+iq\+\_\+sort}}
+\index{h2\+\_\+iq\+\_\+sort@{h2\+\_\+iq\+\_\+sort}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+iq\+\_\+sort(h2\+\_\+iqueue $\ast$q, h2\+\_\+iq\+\_\+cmp $\ast$cmp, void $\ast$ctx)}{h2_iq_sort(h2_iqueue *q, h2_iq_cmp *cmp, void *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+iq\+\_\+sort (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+iqueue} $\ast$}]{q, }
+\item[{{\bf h2\+\_\+iq\+\_\+cmp} $\ast$}]{cmp, }
+\item[{{\bf void} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a016e6f92f8adb95b5fc12b9394ce22ca}{}\label{h2__util_8c_a016e6f92f8adb95b5fc12b9394ce22ca}
+Sort the stream idqueue again. Call if the task ordering has changed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & the queue to sort \\
+\hline
+{\em cmp} & the comparator for sorting \\
+\hline
+{\em ctx} & user data for the comparator \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+421 \{
+422     \textcolor{comment}{/* Assume that changes in ordering are minimal. This needs,}
+423 \textcolor{comment}{     * best case, q->nelts - 1 comparisions to check that nothing}
+424 \textcolor{comment}{     * changed.}
+425 \textcolor{comment}{     */}
+426     \textcolor{keywordflow}{if} (q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts} > 0) \{
+427         \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, ni, \hyperlink{group__MOD__DAV_gacc5462e7a268b365a64468a6cf83b727}{prev}, \hyperlink{group__apr__strings_ga882d08c2e3ad3004cdfc219601ebaac8}{last};
+428         
+429         \textcolor{comment}{/* Start at the end of the queue and create a tail of sorted}
+430 \textcolor{comment}{         * entries. Make that tail one element longer in each iteration.}
+431 \textcolor{comment}{         */}
+432         last = i = (q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head} + q->\hyperlink{structh2__iqueue_a1416b7b9170158f3bc75bee34f926e2d}{nelts} - 1) % q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc};
+433         \hyperlink{util__expr__scan_8c_a8fdafe3be7e00ce3d4f0cb50a9a5eb39}{while} (i != q->\hyperlink{structh2__iqueue_a1d90810fdddd2635042a27eab2f1c449}{head}) \{
+434             prev = (q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc} + i - 1) % q->\hyperlink{structh2__iqueue_ae1c200c70ebbcb1b64a77a608535966a}{nalloc};
+435             
+436             ni = iq\_bubble\_up(q, i, prev, \hyperlink{group__apr__atomic_ga337f72af8c74a9110f79160df3bba5e8}{cmp}, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx});
+437             \textcolor{keywordflow}{if} (ni == prev) \{
+438                 \textcolor{comment}{/* i bubbled one up, bubble the new i down, which}
+439 \textcolor{comment}{                 * keeps all tasks below i sorted. */}
+440                 iq\_bubble\_down(q, i, last, \hyperlink{group__apr__atomic_ga337f72af8c74a9110f79160df3bba5e8}{cmp}, \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx});
+441             \}
+442             i = \hyperlink{group__MOD__DAV_gacc5462e7a268b365a64468a6cf83b727}{prev};
+443         \};
+444     \}
+445 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a016e6f92f8adb95b5fc12b9394ce22ca_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a016e6f92f8adb95b5fc12b9394ce22ca_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+log2@{h2\+\_\+log2}}
+\index{h2\+\_\+log2@{h2\+\_\+log2}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+log2(int n)}{h2_log2(int n)}}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char h2\+\_\+log2 (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{n}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ac7bf0a13db732827b4236c0fe7fee87b}{}\label{h2__util_8c_ac7bf0a13db732827b4236c0fe7fee87b}
+
+\begin{DoxyCode}
+33 \{
+34     \textcolor{keywordtype}{int} lz = 0;
+35     \textcolor{keywordflow}{if} (!\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n}) \{
+36         \textcolor{keywordflow}{return} 0;
+37     \}
+38     \textcolor{keywordflow}{if} (!(\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} & 0xffff0000u)) \{
+39         lz += 16;
+40         \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = (\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} << 16);
+41     \}
+42     \textcolor{keywordflow}{if} (!(\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} & 0xff000000u)) \{
+43         lz += 8;
+44         \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = (\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} << 8);
+45     \}
+46     \textcolor{keywordflow}{if} (!(\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} & 0xf0000000u)) \{
+47         lz += 4;
+48         \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = (\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} << 4);
+49     \}
+50     \textcolor{keywordflow}{if} (!(\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} & 0xc0000000u)) \{
+51         lz += 2;
+52         \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = (\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} << 2);
+53     \}
+54     \textcolor{keywordflow}{if} (!(\hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} & 0x80000000u)) \{
+55         lz += 1;
+56     \}
+57     
+58     \textcolor{keywordflow}{return} 31 - lz;
+59 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=296pt]{h2__util_8c_ac7bf0a13db732827b4236c0fe7fee87b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+push\+\_\+policy\+\_\+determine@{h2\+\_\+push\+\_\+policy\+\_\+determine}}
+\index{h2\+\_\+push\+\_\+policy\+\_\+determine@{h2\+\_\+push\+\_\+policy\+\_\+determine}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+push\+\_\+policy\+\_\+determine(apr\+\_\+table\+\_\+t $\ast$headers, apr\+\_\+pool\+\_\+t $\ast$p, int push\+\_\+enabled)}{h2_push_policy_determine(apr_table_t *headers, apr_pool_t *p, int push_enabled)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+push\+\_\+policy\+\_\+determine (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+table\+\_\+t} $\ast$}]{headers, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{{\bf int}}]{push\+\_\+enabled}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ac28f57757be5e96803c3300e2caf94f4}{}\label{h2__util_8c_ac28f57757be5e96803c3300e2caf94f4}
+Set the push policy for the given request. Takes request headers into account, see draft \href{https://tools.ietf.org/html/draft-ruellan-http-accept-push-policy-00}{\tt https\+://tools.\+ietf.\+org/html/draft-\/ruellan-\/http-\/accept-\/push-\/policy-\/00} for details.
+
+
+\begin{DoxyParams}{Parameters}
+{\em headers} & the http headers to inspect \\
+\hline
+{\em p} & the pool to use \\
+\hline
+{\em push\+\_\+enabled} & if H\+T\+T\+P/2 server push is generally enabled for this request \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the push policy desired 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1982 \{
+1983     \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292ae}{h2\_push\_policy} policy = \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292aea358d7758179325814ce5d5560a2b2fe7}{H2\_PUSH\_NONE};
+1984     \textcolor{keywordflow}{if} (push\_enabled) \{
+1985         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val} = apr\_table\_get(headers, \textcolor{stringliteral}{"accept-push-policy"});
+1986         \textcolor{keywordflow}{if} (val) \{
+1987             \textcolor{keywordflow}{if} (ap\_find\_token(p, val, \textcolor{stringliteral}{"fast-load"})) \{
+1988                 policy = \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292aea25ef1aba7362b62f6a42d5bc6463a7a3}{H2\_PUSH\_FAST\_LOAD};
+1989             \}
+1990             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (ap\_find\_token(p, val, \textcolor{stringliteral}{"head"})) \{
+1991                 policy = \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292aeabb175a50016d8964ed599de90e22dc88}{H2\_PUSH\_HEAD};
+1992             \}
+1993             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (ap\_find\_token(p, val, \textcolor{stringliteral}{"default"})) \{
+1994                 policy = \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292aeafc9b484384c799dd46bffc7abbe8c049}{H2\_PUSH\_DEFAULT};
+1995             \}
+1996             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (ap\_find\_token(p, val, \textcolor{stringliteral}{"none"})) \{
+1997                 policy = \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292aea358d7758179325814ce5d5560a2b2fe7}{H2\_PUSH\_NONE};
+1998             \}
+1999             \textcolor{keywordflow}{else} \{
+2000                 \textcolor{comment}{/* nothing known found in this header, go by default */}
+2001                 policy = \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292aeafc9b484384c799dd46bffc7abbe8c049}{H2\_PUSH\_DEFAULT};
+2002             \}
+2003         \}
+2004         \textcolor{keywordflow}{else} \{
+2005             policy = \hyperlink{h2_8h_a1393bd9ccadb09484ec0305f8d1292aeafc9b484384c799dd46bffc7abbe8c049}{H2\_PUSH\_DEFAULT};
+2006         \}
+2007     \}
+2008     \textcolor{keywordflow}{return} policy;
+2009 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ac28f57757be5e96803c3300e2caf94f4_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+req\+\_\+add\+\_\+header@{h2\+\_\+req\+\_\+add\+\_\+header}}
+\index{h2\+\_\+req\+\_\+add\+\_\+header@{h2\+\_\+req\+\_\+add\+\_\+header}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+req\+\_\+add\+\_\+header(apr\+\_\+table\+\_\+t $\ast$headers, apr\+\_\+pool\+\_\+t $\ast$pool, const char $\ast$name, size\+\_\+t nlen, const char $\ast$value, size\+\_\+t vlen)}{h2_req_add_header(apr_table_t *headers, apr_pool_t *pool, const char *name, size_t nlen, const char *value, size_t vlen)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+req\+\_\+add\+\_\+header (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+table\+\_\+t} $\ast$}]{headers, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{const char $\ast$}]{name, }
+\item[{size\+\_\+t}]{nlen, }
+\item[{const char $\ast$}]{value, }
+\item[{size\+\_\+t}]{vlen}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a411d190ee50bf03285ec1643482d5e53}{}\label{h2__util_8c_a411d190ee50bf03285ec1643482d5e53}
+
+\begin{DoxyCode}
+1840 \{
+1841     \textcolor{keywordtype}{char} *hname, *hvalue;
+1842     
+1843     \textcolor{keywordflow}{if} (\hyperlink{h2__util_8c_a0a78a074950597c5797e6b4d766b4b82}{h2\_req\_ignore\_header}(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen)) \{
+1844         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1845     \}
+1846     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{h2__proxy__util_8c_a3c20dddb75770b26a9c0ce3c7ea4d3e7}{H2\_HD\_MATCH\_LIT}(\textcolor{stringliteral}{"cookie"}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen)) \{
+1847         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *existing = apr\_table\_get(headers, \textcolor{stringliteral}{"cookie"});
+1848         \textcolor{keywordflow}{if} (existing) \{
+1849             \textcolor{keywordtype}{char} *nval;
+1850             
+1851             \textcolor{comment}{/* Cookie header come separately in HTTP/2, but need}
+1852 \textcolor{comment}{             * to be merged by "; " (instead of default ", ")}
+1853 \textcolor{comment}{             */}
+1854             hvalue = apr\_pstrndup(pool, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+1855             nval = apr\_psprintf(pool, \textcolor{stringliteral}{"%s; %s"}, existing, hvalue);
+1856             apr\_table\_setn(headers, \textcolor{stringliteral}{"Cookie"}, nval);
+1857             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1858         \}
+1859     \}
+1860     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{h2__proxy__util_8c_a3c20dddb75770b26a9c0ce3c7ea4d3e7}{H2\_HD\_MATCH\_LIT}(\textcolor{stringliteral}{"host"}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen)) \{
+1861         \textcolor{keywordflow}{if} (apr\_table\_get(headers, \textcolor{stringliteral}{"Host"})) \{
+1862             \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}; \textcolor{comment}{/* ignore duplicate */}
+1863         \}
+1864     \}
+1865     
+1866     hname = apr\_pstrndup(pool, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen);
+1867     hvalue = apr\_pstrndup(pool, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+1868     \hyperlink{h2__util_8c_a7711a423a3aaa843a2df6f6b37a33651}{h2\_util\_camel\_case\_header}(hname, nlen);
+1869     apr\_table\_mergen(headers, hname, hvalue);
+1870     
+1871     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1872 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=329pt]{h2__util_8c_a411d190ee50bf03285ec1643482d5e53_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a411d190ee50bf03285ec1643482d5e53_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+req\+\_\+create@{h2\+\_\+req\+\_\+create}}
+\index{h2\+\_\+req\+\_\+create@{h2\+\_\+req\+\_\+create}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+req\+\_\+create(int id, apr\+\_\+pool\+\_\+t $\ast$pool, const char $\ast$method, const char $\ast$scheme, const char $\ast$authority, const char $\ast$path, apr\+\_\+table\+\_\+t $\ast$header, int serialize)}{h2_req_create(int id, apr_pool_t *pool, const char *method, const char *scheme, const char *authority, const char *path, apr_table_t *header, int serialize)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+request}$\ast$ h2\+\_\+req\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{id, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{const char $\ast$}]{method, }
+\item[{const char $\ast$}]{scheme, }
+\item[{const char $\ast$}]{authority, }
+\item[{const char $\ast$}]{path, }
+\item[{{\bf apr\+\_\+table\+\_\+t} $\ast$}]{header, }
+\item[{{\bf int}}]{serialize}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ac810c1727dd262912822c65b45f437a9}{}\label{h2__util_8c_ac810c1727dd262912822c65b45f437a9}
+
+\begin{DoxyCode}
+1881 \{
+1882     \hyperlink{structh2__request}{h2\_request} *req = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(\hyperlink{structh2__request}{h2\_request}));
+1883     
+1884     req->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method}         = \hyperlink{group__APACHE__CORE__CONFIG_ga6c1b16298acdfc2ca3cba871da0daa17}{method};
+1885     req->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme}         = scheme;
+1886     req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority}      = authority;
+1887     req->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path}           = \hyperlink{group__APACHE__CORE__CONFIG_gab559cff0ba49c0f92a0dc777d5730496}{path};
+1888     req->\hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers}        = header? header : apr\_table\_make(pool, 10);
+1889     req->\hyperlink{structh2__request_adaa05fcdc45ee82f557ae390d1e14f1a}{request\_time}   = apr\_time\_now();
+1890     req->\hyperlink{structh2__request_acb093d2b49d76dc171a6796b59ba7fdb}{serialize}      = serialize;
+1891     
+1892     \textcolor{keywordflow}{return} req;
+1893 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ac810c1727dd262912822c65b45f437a9_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+req\+\_\+create\+\_\+ngheader@{h2\+\_\+req\+\_\+create\+\_\+ngheader}}
+\index{h2\+\_\+req\+\_\+create\+\_\+ngheader@{h2\+\_\+req\+\_\+create\+\_\+ngheader}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+req\+\_\+create\+\_\+ngheader(h2\+\_\+ngheader $\ast$$\ast$ph, apr\+\_\+pool\+\_\+t $\ast$p, const struct h2\+\_\+request $\ast$req)}{h2_req_create_ngheader(h2_ngheader **ph, apr_pool_t *p, const struct h2_request *req)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+req\+\_\+create\+\_\+ngheader (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngheader} $\ast$$\ast$}]{ph, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{const struct {\bf h2\+\_\+request} $\ast$}]{req}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_abfea8ee29c3a402209ad4f92b215b989}{}\label{h2__util_8c_abfea8ee29c3a402209ad4f92b215b989}
+
+\begin{DoxyCode}
+1735 \{
+1736     
+1737     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *keys[] = \{
+1738         \textcolor{stringliteral}{":scheme"}, 
+1739         \textcolor{stringliteral}{":authority"}, 
+1740         \textcolor{stringliteral}{":path"}, 
+1741         \textcolor{stringliteral}{":method"}, 
+1742     \};
+1743     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APR__Util__MC_ga5aee14eb2e1149ea060d4fdccb50997d}{values}[] = \{
+1744         req->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme},
+1745         req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority}, 
+1746         req->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path}, 
+1747         req->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method}, 
+1748     \};
+1749     
+1750     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(req->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme});
+1751     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority});
+1752     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(req->\hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path});
+1753     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(req->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method});
+1754 
+1755     \textcolor{keywordflow}{return} ngheader\_create(ph, p, 0, \hyperlink{h2_8h_a4aa41578f4da6e9f71d404633761cfb1}{H2\_ALEN}(keys), keys, values, req->
+      \hyperlink{structh2__request_a9b340c8f203a87d7c599ced240a829ec}{headers});
+1756 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_abfea8ee29c3a402209ad4f92b215b989_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+req\+\_\+ignore\+\_\+header@{h2\+\_\+req\+\_\+ignore\+\_\+header}}
+\index{h2\+\_\+req\+\_\+ignore\+\_\+header@{h2\+\_\+req\+\_\+ignore\+\_\+header}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+req\+\_\+ignore\+\_\+header(const char $\ast$name, size\+\_\+t len)}{h2_req_ignore_header(const char *name, size_t len)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+req\+\_\+ignore\+\_\+header (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name, }
+\item[{size\+\_\+t}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a0a78a074950597c5797e6b4d766b4b82}{}\label{h2__util_8c_a0a78a074950597c5797e6b4d766b4b82}
+
+\begin{DoxyCode}
+1822 \{
+1823     \textcolor{keywordflow}{return} ignore\_header(\hyperlink{h2__util_8c_afde5755cf351894049128e7e411a4710}{H2\_LIT\_ARGS}(IgnoredRequestHeaders), \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, 
+      \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len});
+1824 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a0a78a074950597c5797e6b4d766b4b82_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+req\+\_\+ignore\+\_\+trailer@{h2\+\_\+req\+\_\+ignore\+\_\+trailer}}
+\index{h2\+\_\+req\+\_\+ignore\+\_\+trailer@{h2\+\_\+req\+\_\+ignore\+\_\+trailer}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+req\+\_\+ignore\+\_\+trailer(const char $\ast$name, size\+\_\+t len)}{h2_req_ignore_trailer(const char *name, size_t len)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+req\+\_\+ignore\+\_\+trailer (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name, }
+\item[{size\+\_\+t}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a68c2c0d580440747c17c19d3cfa5d186}{}\label{h2__util_8c_a68c2c0d580440747c17c19d3cfa5d186}
+
+\begin{DoxyCode}
+1827 \{
+1828     \textcolor{keywordflow}{return} (\hyperlink{h2__util_8c_a0a78a074950597c5797e6b4d766b4b82}{h2\_req\_ignore\_header}(\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}) 
+1829             || ignore\_header(\hyperlink{h2__util_8c_afde5755cf351894049128e7e411a4710}{H2\_LIT\_ARGS}(IgnoredRequestTrailers), 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}));
+1830 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=335pt]{h2__util_8c_a68c2c0d580440747c17c19d3cfa5d186_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a68c2c0d580440747c17c19d3cfa5d186_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+res\+\_\+create\+\_\+ngheader@{h2\+\_\+res\+\_\+create\+\_\+ngheader}}
+\index{h2\+\_\+res\+\_\+create\+\_\+ngheader@{h2\+\_\+res\+\_\+create\+\_\+ngheader}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+res\+\_\+create\+\_\+ngheader(h2\+\_\+ngheader $\ast$$\ast$ph, apr\+\_\+pool\+\_\+t $\ast$p, h2\+\_\+headers $\ast$headers)}{h2_res_create_ngheader(h2_ngheader **ph, apr_pool_t *p, h2_headers *headers)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+res\+\_\+create\+\_\+ngheader (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngheader} $\ast$$\ast$}]{ph, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{{\bf h2\+\_\+headers} $\ast$}]{headers}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a1f8a1d013fda7e98be914213de199edf}{}\label{h2__util_8c_a1f8a1d013fda7e98be914213de199edf}
+
+\begin{DoxyCode}
+1722 \{
+1723     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *keys[] = \{
+1724         \textcolor{stringliteral}{":status"}
+1725     \};
+1726     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__APR__Util__MC_ga5aee14eb2e1149ea060d4fdccb50997d}{values}[] = \{
+1727         apr\_psprintf(p, \textcolor{stringliteral}{"%d"}, headers->\hyperlink{structh2__headers_a70142770c78d4519277d43ba8902f03d}{status})
+1728     \};
+1729     \textcolor{keywordflow}{return} ngheader\_create(ph, p, is\_unsafe(headers),  
+1730                            \hyperlink{h2_8h_a4aa41578f4da6e9f71d404633761cfb1}{H2\_ALEN}(keys), keys, values, headers->\hyperlink{structh2__headers_a6b07b460b8fb9e98c8cfdeff2f9b116c}{headers});
+1731 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a1f8a1d013fda7e98be914213de199edf_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+res\+\_\+create\+\_\+ngtrailer@{h2\+\_\+res\+\_\+create\+\_\+ngtrailer}}
+\index{h2\+\_\+res\+\_\+create\+\_\+ngtrailer@{h2\+\_\+res\+\_\+create\+\_\+ngtrailer}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+res\+\_\+create\+\_\+ngtrailer(h2\+\_\+ngheader $\ast$$\ast$ph, apr\+\_\+pool\+\_\+t $\ast$p, h2\+\_\+headers $\ast$headers)}{h2_res_create_ngtrailer(h2_ngheader **ph, apr_pool_t *p, h2_headers *headers)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+res\+\_\+create\+\_\+ngtrailer (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+ngheader} $\ast$$\ast$}]{ph, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{p, }
+\item[{{\bf h2\+\_\+headers} $\ast$}]{headers}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a6b44f7b0518d2c540d313e528994d1f0}{}\label{h2__util_8c_a6b44f7b0518d2c540d313e528994d1f0}
+
+\begin{DoxyCode}
+1715 \{
+1716     \textcolor{keywordflow}{return} ngheader\_create(ph, p, is\_unsafe(headers), 
+1717                            0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, headers->\hyperlink{structh2__headers_a6b07b460b8fb9e98c8cfdeff2f9b116c}{headers});
+1718 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a6b44f7b0518d2c540d313e528994d1f0_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+res\+\_\+ignore\+\_\+trailer@{h2\+\_\+res\+\_\+ignore\+\_\+trailer}}
+\index{h2\+\_\+res\+\_\+ignore\+\_\+trailer@{h2\+\_\+res\+\_\+ignore\+\_\+trailer}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+res\+\_\+ignore\+\_\+trailer(const char $\ast$name, size\+\_\+t len)}{h2_res_ignore_trailer(const char *name, size_t len)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+res\+\_\+ignore\+\_\+trailer (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name, }
+\item[{size\+\_\+t}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a626d87c05ef132134ceaff1589ac51d0}{}\label{h2__util_8c_a626d87c05ef132134ceaff1589ac51d0}
+
+\begin{DoxyCode}
+1833 \{
+1834     \textcolor{keywordflow}{return} ignore\_header(\hyperlink{h2__util_8c_afde5755cf351894049128e7e411a4710}{H2\_LIT\_ARGS}(IgnoredResponseTrailers), \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, 
+      \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len});
+1835 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+base64url\+\_\+decode@{h2\+\_\+util\+\_\+base64url\+\_\+decode}}
+\index{h2\+\_\+util\+\_\+base64url\+\_\+decode@{h2\+\_\+util\+\_\+base64url\+\_\+decode}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+base64url\+\_\+decode(const char $\ast$$\ast$decoded, const char $\ast$encoded, apr\+\_\+pool\+\_\+t $\ast$pool)}{h2_util_base64url_decode(const char **decoded, const char *encoded, apr_pool_t *pool)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} h2\+\_\+util\+\_\+base64url\+\_\+decode (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$$\ast$}]{decoded, }
+\item[{const char $\ast$}]{encoded, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ac5ef011a192124e3388bbcea2e1924e3}{}\label{h2__util_8c_ac5ef011a192124e3388bbcea2e1924e3}
+I always wanted to write my own base64url decoder...not. See \href{https://tools.ietf.org/html/rfc4648#section-5}{\tt https\+://tools.\+ietf.\+org/html/rfc4648\#section-\/5} for description. 
+\begin{DoxyCode}
+148 \{
+149     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *\hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e} = (\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *)encoded;
+150     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p} = \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+151     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *\hyperlink{apr__siphash_8h_a105cb8ad09be3a7d9d15497ce529ccce}{d};
+152     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n};
+153     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}, mlen, remain, \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+154     
+155     \textcolor{keywordflow}{while} (*p && BASE64URL\_UINT6[ *p ] != -1) \{
+156         ++\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+157     \}
+158     len = p - \hyperlink{group__APR__Util__Bucket__Brigades_gacd90314acb2c2e5cd19681136c08efac}{e};
+159     mlen = (len/4)*4;
+160     *decoded = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, len+1);
+161     
+162     i = 0;
+163     d = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)*decoded;
+164     \textcolor{keywordflow}{for} (; i < mlen; i += 4) \{
+165         n = ((BASE64URL\_UINT6[ e[i+0] ] << 18) +
+166              (BASE64URL\_UINT6[ e[i+1] ] << 12) +
+167              (BASE64URL\_UINT6[ e[i+2] ] << 6) +
+168              (BASE64URL\_UINT6[ e[i+3] ]));
+169         *d++ = n >> 16;
+170         *d++ = n >> 8 & 0xff\hyperlink{pcregrep_8txt_a313eed54a0385c4d4c4c3ef54236123d}{u};
+171         *d++ = n & 0xff\hyperlink{pcregrep_8txt_a313eed54a0385c4d4c4c3ef54236123d}{u};
+172     \}
+173     remain = len - mlen;
+174     \textcolor{keywordflow}{switch} (remain) \{
+175         \textcolor{keywordflow}{case} 2:
+176             n = ((BASE64URL\_UINT6[ e[mlen+0] ] << 18) +
+177                  (BASE64URL\_UINT6[ e[mlen+1] ] << 12));
+178             *d++ = n >> 16;
+179             remain = 1;
+180             \textcolor{keywordflow}{break};
+181         \textcolor{keywordflow}{case} 3:
+182             n = ((BASE64URL\_UINT6[ e[mlen+0] ] << 18) +
+183                  (BASE64URL\_UINT6[ e[mlen+1] ] << 12) +
+184                  (BASE64URL\_UINT6[ e[mlen+2] ] << 6));
+185             *d++ = n >> 16;
+186             *d++ = n >> 8 & 0xff\hyperlink{pcregrep_8txt_a313eed54a0385c4d4c4c3ef54236123d}{u};
+187             remain = 2;
+188             \textcolor{keywordflow}{break};
+189         \textcolor{keywordflow}{default}: \textcolor{comment}{/* do nothing */}
+190             \textcolor{keywordflow}{break};
+191     \}
+192     \textcolor{keywordflow}{return} mlen/4*3 + remain;
+193 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_ac5ef011a192124e3388bbcea2e1924e3_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+base64url\+\_\+encode@{h2\+\_\+util\+\_\+base64url\+\_\+encode}}
+\index{h2\+\_\+util\+\_\+base64url\+\_\+encode@{h2\+\_\+util\+\_\+base64url\+\_\+encode}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+base64url\+\_\+encode(const char $\ast$data, apr\+\_\+size\+\_\+t dlen, apr\+\_\+pool\+\_\+t $\ast$pool)}{h2_util_base64url_encode(const char *data, apr_size_t dlen, apr_pool_t *pool)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ h2\+\_\+util\+\_\+base64url\+\_\+encode (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{data, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{dlen, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ad7147b1483726a33b2091caddb542b84}{}\label{h2__util_8c_ad7147b1483726a33b2091caddb542b84}
+
+\begin{DoxyCode}
+197 \{
+198     \textcolor{keywordtype}{long} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})\hyperlink{group__MOD__PROXY_ga63ef3f66045cd6e20f6ea5a82363580d}{dlen};
+199     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APR__Util__Escaping_ga00eba03f583932b8cdcec6e0847f08b3}{slen} = ((\hyperlink{group__MOD__PROXY_ga63ef3f66045cd6e20f6ea5a82363580d}{dlen}+2)/3)*4 + 1; \textcolor{comment}{/* 0 terminated */}
+200     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *udata = (\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)\hyperlink{structdata}{data};
+201     \textcolor{keywordtype}{char} *enc, *\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p} = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, slen);
+202     
+203     enc = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+204     \textcolor{keywordflow}{for} (i = 0; i < len-2; i+= 3) \{
+205         *p++ = BASE64URL\_CHARS[ (udata[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] >> 2) & 0x3fu ];
+206         *p++ = BASE64URL\_CHARS[ ((udata[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] << 4) + (udata[i+1] >> 4)) & 0x3fu ];
+207         *p++ = BASE64URL\_CHARS[ ((udata[i+1] << 2) + (udata[i+2] >> 6)) & 0x3fu ];
+208         *p++ = BASE64URL\_CHARS[ udata[i+2] & 0x3f\hyperlink{pcregrep_8txt_a313eed54a0385c4d4c4c3ef54236123d}{u} ];
+209     \}
+210     
+211     \textcolor{keywordflow}{if} (i < len) \{
+212         *p++ = BASE64URL\_CHARS[ (udata[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] >> 2) & 0x3fu ];
+213         \textcolor{keywordflow}{if} (i == (len - 1)) \{
+214             *p++ = BASE64URL\_CHARS[ (udata[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] << 4) & 0x3fu ];
+215         \}
+216         \textcolor{keywordflow}{else} \{
+217             *p++ = BASE64URL\_CHARS[ ((udata[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] << 4) + (udata[i+1] >> 4)) & 0x3fu ];
+218             *p++ = BASE64URL\_CHARS[ (udata[i+1] << 2) & 0x3fu ];
+219         \}
+220     \}
+221     *p++ = \textcolor{charliteral}{'\(\backslash\)0'};
+222     \textcolor{keywordflow}{return} enc;
+223 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+bb\+\_\+avail@{h2\+\_\+util\+\_\+bb\+\_\+avail}}
+\index{h2\+\_\+util\+\_\+bb\+\_\+avail@{h2\+\_\+util\+\_\+bb\+\_\+avail}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+bb\+\_\+avail(apr\+\_\+bucket\+\_\+brigade $\ast$bb, apr\+\_\+off\+\_\+t $\ast$plen, int $\ast$peos)}{h2_util_bb_avail(apr_bucket_brigade *bb, apr_off_t *plen, int *peos)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+util\+\_\+bb\+\_\+avail (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{bb, }
+\item[{{\bf apr\+\_\+off\+\_\+t} $\ast$}]{plen, }
+\item[{{\bf int} $\ast$}]{peos}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a4ecfc7da7edc389137791d5d91fd801d}{}\label{h2__util_8c_a4ecfc7da7edc389137791d5d91fd801d}
+Check how many bytes of the desired amount are available and if the end of stream is reached by that amount. 
+\begin{DoxyParams}{Parameters}
+{\em bb} & the brigade to check \\
+\hline
+{\em plen} & the desired length and, on return, the available length \\
+\hline
+{\em on} & return, if eos has been reached \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1361 \{
+1362     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1363     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} blen = 0;
+1364 
+1365     \textcolor{comment}{/* test read to determine available length */}
+1366     status = apr\_brigade\_length(bb, 1, &blen);
+1367     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1368         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1369     \}
+1370     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (blen == 0) \{
+1371         \textcolor{comment}{/* brigade without data, does it have an EOS bucket somwhere? */}
+1372         *plen = 0;
+1373         *peos = \hyperlink{h2__util_8c_ac0bb487f27e88af17e5a15125da6721b}{h2\_util\_has\_eos}(bb, -1);
+1374     \}
+1375     \textcolor{keywordflow}{else} \{
+1376         \textcolor{comment}{/* data in the brigade, limit the length returned. Check for EOS}
+1377 \textcolor{comment}{         * bucket only if we indicate data. This is required since plen == 0}
+1378 \textcolor{comment}{         * means "the whole brigade" for h2\_util\_hash\_eos()}
+1379 \textcolor{comment}{         */}
+1380         \textcolor{keywordflow}{if} (blen < *plen || *plen < 0) \{
+1381             *plen = blen;
+1382         \}
+1383         *peos = \hyperlink{h2__util_8c_ac0bb487f27e88af17e5a15125da6721b}{h2\_util\_has\_eos}(bb, *plen);
+1384     \}
+1385     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1386 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=289pt]{h2__util_8c_a4ecfc7da7edc389137791d5d91fd801d_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+bb\+\_\+print@{h2\+\_\+util\+\_\+bb\+\_\+print}}
+\index{h2\+\_\+util\+\_\+bb\+\_\+print@{h2\+\_\+util\+\_\+bb\+\_\+print}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+bb\+\_\+print(char $\ast$buffer, apr\+\_\+size\+\_\+t bmax, const char $\ast$tag, const char $\ast$sep, apr\+\_\+bucket\+\_\+brigade $\ast$bb)}{h2_util_bb_print(char *buffer, apr_size_t bmax, const char *tag, const char *sep, apr_bucket_brigade *bb)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} h2\+\_\+util\+\_\+bb\+\_\+print (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{buffer, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{bmax, }
+\item[{const char $\ast$}]{tag, }
+\item[{const char $\ast$}]{sep, }
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{bb}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_af767d9ce0990e21d1f6c4b3e6b2022de}{}\label{h2__util_8c_af767d9ce0990e21d1f6c4b3e6b2022de}
+Prints the brigade bucket types and lengths into the given buffer up to bmax. \begin{DoxyReturn}{Returns}
+number of characters printed 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1489 \{
+1490     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} off = 0;
+1491     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *sp = \textcolor{stringliteral}{""};
+1492     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+1493     
+1494     \textcolor{keywordflow}{if} (bmax > 1) \{
+1495         \textcolor{keywordflow}{if} (bb) \{
+1496             memset(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, 0, bmax--);
+1497             off += apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+off, bmax-off, \textcolor{stringliteral}{"%s("}, \hyperlink{group__APACHE__CORE__HTTPD_ga7bb5e40c10df6a41df64bda1f4bb3e26}{tag});
+1498             \textcolor{keywordflow}{for} (b = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb); 
+1499                  (bmax > off) && (b != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb));
+1500                  b = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(b)) \{
+1501                 
+1502                 off += \hyperlink{h2__util_8c_a685f858e3bb39d5c8cff31c0f80cf318}{h2\_util\_bucket\_print}(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+off, bmax-off, b, sp);
+1503                 sp = \textcolor{stringliteral}{" "};
+1504             \}
+1505             \textcolor{keywordflow}{if} (bmax > off) \{
+1506                 off += apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+off, bmax-off, \textcolor{stringliteral}{")%s"}, \hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep});
+1507             \}
+1508         \}
+1509         \textcolor{keywordflow}{else} \{
+1510             off += apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+off, bmax-off, \textcolor{stringliteral}{"%s(null)%s"}, \hyperlink{group__APACHE__CORE__HTTPD_ga7bb5e40c10df6a41df64bda1f4bb3e26}{tag}, 
+      \hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep});
+1511         \}
+1512     \}
+1513     \textcolor{keywordflow}{return} off;
+1514 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=305pt]{h2__util_8c_af767d9ce0990e21d1f6c4b3e6b2022de_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+bb\+\_\+readx@{h2\+\_\+util\+\_\+bb\+\_\+readx}}
+\index{h2\+\_\+util\+\_\+bb\+\_\+readx@{h2\+\_\+util\+\_\+bb\+\_\+readx}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+bb\+\_\+readx(apr\+\_\+bucket\+\_\+brigade $\ast$bb, h2\+\_\+util\+\_\+pass\+\_\+cb $\ast$cb, void $\ast$ctx, apr\+\_\+off\+\_\+t $\ast$plen, int $\ast$peos)}{h2_util_bb_readx(apr_bucket_brigade *bb, h2_util_pass_cb *cb, void *ctx, apr_off_t *plen, int *peos)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+util\+\_\+bb\+\_\+readx (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{bb, }
+\item[{{\bf h2\+\_\+util\+\_\+pass\+\_\+cb} $\ast$}]{cb, }
+\item[{{\bf void} $\ast$}]{ctx, }
+\item[{{\bf apr\+\_\+off\+\_\+t} $\ast$}]{plen, }
+\item[{{\bf int} $\ast$}]{peos}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ae974e08b36e092082241bf4514aadfba}{}\label{h2__util_8c_ae974e08b36e092082241bf4514aadfba}
+Read at most $\ast$plen bytes from the brigade and pass them into the given callback. If cb is N\+U\+LL, just return the amount of data that could have been read. If an E\+OS was/would be encountered, set $\ast$peos != 0. 
+\begin{DoxyParams}{Parameters}
+{\em bb} & the brigade to read from \\
+\hline
+{\em cb} & the callback to invoke for the read data \\
+\hline
+{\em ctx} & optional data passed to callback \\
+\hline
+{\em plen} & inout, as input gives the maximum number of bytes to read, on return specifies the actual/would be number of bytes \\
+\hline
+{\em peos} & != 0 iff an E\+OS bucket was/would be encountered. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1391 \{
+1392     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+1393     \textcolor{keywordtype}{int} consume = (cb != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1394     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} written = 0;
+1395     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} avail = *plen;
+1396     \hyperlink{structapr__bucket}{apr\_bucket} *next, *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b};
+1397     
+1398     \textcolor{comment}{/* Pass data in our brigade through the callback until the length}
+1399 \textcolor{comment}{     * is satisfied or we encounter an EOS.}
+1400 \textcolor{comment}{     */}
+1401     *peos = 0;
+1402     \textcolor{keywordflow}{for} (b = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb);
+1403          (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) && (b != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb));
+1404          b = next) \{
+1405         
+1406         \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga506cb29cc1ec1abeb487e01b122bd4d9}{APR\_BUCKET\_IS\_METADATA}(b)) \{
+1407             \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(b)) \{
+1408                 *peos = 1;
+1409             \}
+1410             \textcolor{keywordflow}{else} \{
+1411                 \textcolor{comment}{/* ignore */}
+1412             \}
+1413         \}
+1414         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (avail <= 0) \{
+1415             \textcolor{keywordflow}{break};
+1416         \} 
+1417         \textcolor{keywordflow}{else} \{
+1418             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{structdata}{data} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1419             \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APR__Util__MC_ga371e964d98d4000f4bc080fa4ad81902}{data\_len};
+1420             
+1421             \textcolor{keywordflow}{if} (b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == ((\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})-1)) \{
+1422                 \textcolor{comment}{/* read to determine length */}
+1423                 status = \hyperlink{group__APR__Util__Bucket__Brigades_gae44ae938c6c60e148430fdb098dcf28f}{apr\_bucket\_read}(b, &data, &data\_len, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da42b97663ca71fbbf2e2af7c8192e5dd8}{APR\_NONBLOCK\_READ});
+1424             \}
+1425             \textcolor{keywordflow}{else} \{
+1426                 data\_len = b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1427             \}
+1428             
+1429             \textcolor{keywordflow}{if} (data\_len > avail) \{
+1430                 \hyperlink{group__APR__Util__Bucket__Brigades_ga5bb8827a8dd1baa6ac32682e13e9d8c2}{apr\_bucket\_split}(b, avail);
+1431                 data\_len = (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})avail;
+1432             \}
+1433             
+1434             \textcolor{keywordflow}{if} (consume) \{
+1435                 \textcolor{keywordflow}{if} (!data) \{
+1436                     status = \hyperlink{group__APR__Util__Bucket__Brigades_gae44ae938c6c60e148430fdb098dcf28f}{apr\_bucket\_read}(b, &data, &data\_len, 
+1437                                              \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da42b97663ca71fbbf2e2af7c8192e5dd8}{APR\_NONBLOCK\_READ});
+1438                 \}
+1439                 \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1440                     status = cb(\hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx}, data, data\_len);
+1441                 \}
+1442             \}
+1443             \textcolor{keywordflow}{else} \{
+1444                 data\_len = b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length};
+1445             \}
+1446             avail -= \hyperlink{group__APR__Util__MC_ga371e964d98d4000f4bc080fa4ad81902}{data\_len};
+1447             written += \hyperlink{group__APR__Util__MC_ga371e964d98d4000f4bc080fa4ad81902}{data\_len};
+1448         \}
+1449         
+1450         next = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(b);
+1451         \textcolor{keywordflow}{if} (consume) \{
+1452             \hyperlink{group__APR__Util__Bucket__Brigades_ga8925c02a7f95e8c1c3986294d4678797}{apr\_bucket\_delete}(b);
+1453         \}
+1454     \}
+1455     
+1456     *plen = written;
+1457     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && !*peos && !*plen) \{
+1458         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+1459     \}
+1460     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1461 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+bucket\+\_\+print@{h2\+\_\+util\+\_\+bucket\+\_\+print}}
+\index{h2\+\_\+util\+\_\+bucket\+\_\+print@{h2\+\_\+util\+\_\+bucket\+\_\+print}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+bucket\+\_\+print(char $\ast$buffer, apr\+\_\+size\+\_\+t bmax, apr\+\_\+bucket $\ast$b, const char $\ast$sep)}{h2_util_bucket_print(char *buffer, apr_size_t bmax, apr_bucket *b, const char *sep)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} h2\+\_\+util\+\_\+bucket\+\_\+print (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{buffer, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{bmax, }
+\item[{{\bf apr\+\_\+bucket} $\ast$}]{b, }
+\item[{const char $\ast$}]{sep}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a685f858e3bb39d5c8cff31c0f80cf318}{}\label{h2__util_8c_a685f858e3bb39d5c8cff31c0f80cf318}
+Print a bucket\textquotesingle{}s meta data (type and length) to the buffer. \begin{DoxyReturn}{Returns}
+number of characters printed 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1465 \{
+1466     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} off = 0;
+1467     \textcolor{keywordflow}{if} (\hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep} && *\hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep}) \{
+1468         off += apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+off, bmax-off, \textcolor{stringliteral}{"%s"}, \hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep});
+1469     \}
+1470     
+1471     \textcolor{keywordflow}{if} (bmax <= off) \{
+1472         \textcolor{keywordflow}{return} off;
+1473     \}
+1474     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga506cb29cc1ec1abeb487e01b122bd4d9}{APR\_BUCKET\_IS\_METADATA}(b)) \{
+1475         off += apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+off, bmax-off, \textcolor{stringliteral}{"%s"}, b->\hyperlink{structapr__bucket_ac27fa5ce798e688ad243ebe1615937fc}{type}->\hyperlink{structapr__bucket__type__t_ac6d779be45de214c6abd2cc205c48901}{name});
+1476     \}
+1477     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bmax > off) \{
+1478         off += apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+off, bmax-off, \textcolor{stringliteral}{"%s[%ld]"}, 
+1479                             b->\hyperlink{structapr__bucket_ac27fa5ce798e688ad243ebe1615937fc}{type}->\hyperlink{structapr__bucket__type__t_ac6d779be45de214c6abd2cc205c48901}{name}, 
+1480                             (\textcolor{keywordtype}{long})(b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length} == ((\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})-1)? 
+1481                                    -1 : b->\hyperlink{structapr__bucket_a0898dfc78d9275187189b9a745e619bf}{length}));
+1482     \}
+1483     \textcolor{keywordflow}{return} off;
+1484 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=305pt]{h2__util_8c_a685f858e3bb39d5c8cff31c0f80cf318_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+camel\+\_\+case\+\_\+header@{h2\+\_\+util\+\_\+camel\+\_\+case\+\_\+header}}
+\index{h2\+\_\+util\+\_\+camel\+\_\+case\+\_\+header@{h2\+\_\+util\+\_\+camel\+\_\+case\+\_\+header}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+camel\+\_\+case\+\_\+header(char $\ast$s, size\+\_\+t len)}{h2_util_camel_case_header(char *s, size_t len)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+util\+\_\+camel\+\_\+case\+\_\+header (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s, }
+\item[{size\+\_\+t}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a7711a423a3aaa843a2df6f6b37a33651}{}\label{h2__util_8c_a7711a423a3aaa843a2df6f6b37a33651}
+
+\begin{DoxyCode}
+98 \{
+99     \textcolor{keywordtype}{size\_t} \hyperlink{group__APACHE__CORE__DAEMON_ga6d3a995932cd00f6b3473898aa90d596}{start} = 1;
+100     \textcolor{keywordtype}{size\_t} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+101     \textcolor{keywordflow}{for} (i = 0; i < \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+102         \textcolor{keywordflow}{if} (start) \{
+103             \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}[i] >= \textcolor{charliteral}{'a'} && \hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}[i] <= \textcolor{charliteral}{'z'}) \{
+104                 \hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}] -= \textcolor{charliteral}{'a'} - \textcolor{charliteral}{'A'};
+105             \}
+106             
+107             start = 0;
+108         \}
+109         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s}[i] == \textcolor{charliteral}{'-'}) \{
+110             start = 1;
+111         \}
+112     \}
+113 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a7711a423a3aaa843a2df6f6b37a33651_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+frame\+\_\+print@{h2\+\_\+util\+\_\+frame\+\_\+print}}
+\index{h2\+\_\+util\+\_\+frame\+\_\+print@{h2\+\_\+util\+\_\+frame\+\_\+print}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+frame\+\_\+print(const nghttp2\+\_\+frame $\ast$frame, char $\ast$buffer, size\+\_\+t maxlen)}{h2_util_frame_print(const nghttp2_frame *frame, char *buffer, size_t maxlen)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+util\+\_\+frame\+\_\+print (
+\begin{DoxyParamCaption}
+\item[{const nghttp2\+\_\+frame $\ast$}]{frame, }
+\item[{char $\ast$}]{buffer, }
+\item[{size\+\_\+t}]{maxlen}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_aa86886d1d5dbebc1df9de9b7a9a84945}{}\label{h2__util_8c_aa86886d1d5dbebc1df9de9b7a9a84945}
+
+\begin{DoxyCode}
+1900 \{
+1901     \textcolor{keywordtype}{char} scratch[128];
+1902     \textcolor{keywordtype}{size\_t} s\_len = \textcolor{keyword}{sizeof}(scratch)/\textcolor{keyword}{sizeof}(scratch[0]);
+1903     
+1904     \textcolor{keywordflow}{switch} (frame->hd.type) \{
+1905         \textcolor{keywordflow}{case} NGHTTP2\_DATA: \{
+1906             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1907                                 \textcolor{stringliteral}{"DATA[length=%d, flags=%d, stream=%d, padlen=%d]"},
+1908                                 (\textcolor{keywordtype}{int})frame->hd.length, frame->hd.flags,
+1909                                 frame->hd.stream\_id, (\textcolor{keywordtype}{int})frame->data.padlen);
+1910         \}
+1911         \textcolor{keywordflow}{case} NGHTTP2\_HEADERS: \{
+1912             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1913                                 \textcolor{stringliteral}{"HEADERS[length=%d, hend=%d, stream=%d, eos=%d]"},
+1914                                 (\textcolor{keywordtype}{int})frame->hd.length,
+1915                                 !!(frame->hd.flags & NGHTTP2\_FLAG\_END\_HEADERS),
+1916                                 frame->hd.stream\_id,
+1917                                 !!(frame->hd.flags & NGHTTP2\_FLAG\_END\_STREAM));
+1918         \}
+1919         \textcolor{keywordflow}{case} NGHTTP2\_PRIORITY: \{
+1920             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1921                                 \textcolor{stringliteral}{"PRIORITY[length=%d, flags=%d, stream=%d]"},
+1922                                 (\textcolor{keywordtype}{int})frame->hd.length,
+1923                                 frame->hd.flags, frame->hd.stream\_id);
+1924         \}
+1925         \textcolor{keywordflow}{case} NGHTTP2\_RST\_STREAM: \{
+1926             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1927                                 \textcolor{stringliteral}{"RST\_STREAM[length=%d, flags=%d, stream=%d]"},
+1928                                 (\textcolor{keywordtype}{int})frame->hd.length,
+1929                                 frame->hd.flags, frame->hd.stream\_id);
+1930         \}
+1931         \textcolor{keywordflow}{case} NGHTTP2\_SETTINGS: \{
+1932             \textcolor{keywordflow}{if} (frame->hd.flags & NGHTTP2\_FLAG\_ACK) \{
+1933                 \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1934                                     \textcolor{stringliteral}{"SETTINGS[ack=1, stream=%d]"},
+1935                                     frame->hd.stream\_id);
+1936             \}
+1937             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1938                                 \textcolor{stringliteral}{"SETTINGS[length=%d, stream=%d]"},
+1939                                 (\textcolor{keywordtype}{int})frame->hd.length, frame->hd.stream\_id);
+1940         \}
+1941         \textcolor{keywordflow}{case} NGHTTP2\_PUSH\_PROMISE: \{
+1942             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1943                                 \textcolor{stringliteral}{"PUSH\_PROMISE[length=%d, hend=%d, stream=%d]"},
+1944                                 (\textcolor{keywordtype}{int})frame->hd.length,
+1945                                 !!(frame->hd.flags & NGHTTP2\_FLAG\_END\_HEADERS),
+1946                                 frame->hd.stream\_id);
+1947         \}
+1948         \textcolor{keywordflow}{case} NGHTTP2\_PING: \{
+1949             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1950                                 \textcolor{stringliteral}{"PING[length=%d, ack=%d, stream=%d]"},
+1951                                 (\textcolor{keywordtype}{int})frame->hd.length,
+1952                                 frame->hd.flags&NGHTTP2\_FLAG\_ACK,
+1953                                 frame->hd.stream\_id);
+1954         \}
+1955         \textcolor{keywordflow}{case} NGHTTP2\_GOAWAY: \{
+1956             \textcolor{keywordtype}{size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} = (frame->goaway.opaque\_data\_len < s\_len)?
+1957                 frame->goaway.opaque\_data\_len : s\_len-1;
+1958             memcpy(scratch, frame->goaway.opaque\_data, len);
+1959             scratch[\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}] = \textcolor{charliteral}{'\(\backslash\)0'};
+1960             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen}, \textcolor{stringliteral}{"GOAWAY[error=%d, reason='%s', "}
+1961                                 \textcolor{stringliteral}{"last\_stream=%d]"}, frame->goaway.error\_code, 
+1962                                 scratch, frame->goaway.last\_stream\_id);
+1963         \}
+1964         \textcolor{keywordflow}{case} NGHTTP2\_WINDOW\_UPDATE: \{
+1965             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1966                                 \textcolor{stringliteral}{"WINDOW\_UPDATE[stream=%d, incr=%d]"},
+1967                                 frame->hd.stream\_id, 
+1968                                 frame->window\_update.window\_size\_increment);
+1969         \}
+1970         \textcolor{keywordflow}{default}:
+1971             \textcolor{keywordflow}{return} apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}, \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen},
+1972                                 \textcolor{stringliteral}{"type=%d[length=%d, flags=%d, stream=%d]"},
+1973                                 frame->hd.type, (\textcolor{keywordtype}{int})frame->hd.length,
+1974                                 frame->hd.flags, frame->hd.stream\_id);
+1975     \}
+1976 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=310pt]{h2__util_8c_aa86886d1d5dbebc1df9de9b7a9a84945_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+has\+\_\+eos@{h2\+\_\+util\+\_\+has\+\_\+eos}}
+\index{h2\+\_\+util\+\_\+has\+\_\+eos@{h2\+\_\+util\+\_\+has\+\_\+eos}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+has\+\_\+eos(apr\+\_\+bucket\+\_\+brigade $\ast$bb, apr\+\_\+off\+\_\+t len)}{h2_util_has_eos(apr_bucket_brigade *bb, apr_off_t len)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+util\+\_\+has\+\_\+eos (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{bb, }
+\item[{{\bf apr\+\_\+off\+\_\+t}}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_ac0bb487f27e88af17e5a15125da6721b}{}\label{h2__util_8c_ac0bb487f27e88af17e5a15125da6721b}
+Return != 0 iff there is a F\+L\+U\+SH or E\+OS bucket in the brigade. 
+\begin{DoxyParams}{Parameters}
+{\em bb} & the brigade to check on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+!= 0 iff brigade holds F\+L\+U\+SH or E\+OS bucket (or both) 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1340 \{
+1341     \hyperlink{structapr__bucket}{apr\_bucket} *\hyperlink{group__APACHE__CORE__PROTO_ga7fa09c5c80a7d25b74511944f5949e31}{b}, *\hyperlink{group__apr__strings_ga87c7e3f3f70b6e7de10e3f56e3f4d7a4}{end};
+1342     
+1343     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = last\_not\_included(bb, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}, 0, 0, &end);
+1344     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1345         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+1346     \}
+1347     
+1348     \textcolor{keywordflow}{for} (b = \hyperlink{group__APR__Util__Bucket__Brigades_gab5826a11eb6ba90786a94282f806c230}{APR\_BRIGADE\_FIRST}(bb);
+1349          b != \hyperlink{group__APR__Util__Bucket__Brigades_ga858da66dccab1e063415678bb115788a}{APR\_BRIGADE\_SENTINEL}(bb) && b != \hyperlink{group__apr__strings_ga87c7e3f3f70b6e7de10e3f56e3f4d7a4}{end};
+1350          b = \hyperlink{group__APR__Util__Bucket__Brigades_ga7171f690b203d548a5b6ae0b079068d8}{APR\_BUCKET\_NEXT}(b))
+1351     \{
+1352         \textcolor{keywordflow}{if} (\hyperlink{group__APR__Util__Bucket__Brigades_ga89b225e1c08473766eec719b985ca0d6}{APR\_BUCKET\_IS\_EOS}(b)) \{
+1353             \textcolor{keywordflow}{return} 1;
+1354         \}
+1355     \}
+1356     \textcolor{keywordflow}{return} 0;
+1357 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=289pt]{h2__util_8c_ac0bb487f27e88af17e5a15125da6721b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+header\+\_\+print@{h2\+\_\+util\+\_\+header\+\_\+print}}
+\index{h2\+\_\+util\+\_\+header\+\_\+print@{h2\+\_\+util\+\_\+header\+\_\+print}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+header\+\_\+print(char $\ast$buffer, size\+\_\+t maxlen, const char $\ast$name, size\+\_\+t namelen, const char $\ast$value, size\+\_\+t valuelen)}{h2_util_header_print(char *buffer, size_t maxlen, const char *name, size_t namelen, const char *value, size_t valuelen)}}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t h2\+\_\+util\+\_\+header\+\_\+print (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{buffer, }
+\item[{size\+\_\+t}]{maxlen, }
+\item[{const char $\ast$}]{name, }
+\item[{size\+\_\+t}]{namelen, }
+\item[{const char $\ast$}]{value, }
+\item[{size\+\_\+t}]{valuelen}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a9e3f6a69ccce24e855a8e117bf870308}{}\label{h2__util_8c_a9e3f6a69ccce24e855a8e117bf870308}
+
+\begin{DoxyCode}
+80 \{
+81     \textcolor{keywordtype}{size\_t} \hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset} = 0;
+82     \textcolor{keywordtype}{size\_t} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+83     \textcolor{keywordflow}{for} (i = 0; i < namelen && offset < \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, ++\hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}) \{
+84         \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}[\hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}] = \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+85     \}
+86     \textcolor{keywordflow}{for} (i = 0; i < 2 && offset < \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, ++\hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}) \{
+87         \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}[\hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}] = \textcolor{stringliteral}{": "}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+88     \}
+89     \textcolor{keywordflow}{for} (i = 0; i < valuelen && offset < \hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}, ++\hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}) \{
+90         \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}[\hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}] = \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+91     \}
+92     \hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}[\hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset}] = \textcolor{charliteral}{'\(\backslash\)0'};
+93     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset};
+94 \}
+\end{DoxyCode}
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+hex\+\_\+dump@{h2\+\_\+util\+\_\+hex\+\_\+dump}}
+\index{h2\+\_\+util\+\_\+hex\+\_\+dump@{h2\+\_\+util\+\_\+hex\+\_\+dump}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+hex\+\_\+dump(char $\ast$buffer, size\+\_\+t maxlen, const char $\ast$data, size\+\_\+t datalen)}{h2_util_hex_dump(char *buffer, size_t maxlen, const char *data, size_t datalen)}}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t h2\+\_\+util\+\_\+hex\+\_\+dump (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{buffer, }
+\item[{size\+\_\+t}]{maxlen, }
+\item[{const char $\ast$}]{data, }
+\item[{size\+\_\+t}]{datalen}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a09bba2c9e1022c1f97ae1edf0a2e84f4}{}\label{h2__util_8c_a09bba2c9e1022c1f97ae1edf0a2e84f4}
+
+\begin{DoxyCode}
+63 \{
+64     \textcolor{keywordtype}{size\_t} \hyperlink{group__APACHE__CORE__PROTO_ga0feae9f93d4bc5dca392194c513e0921}{offset} = 0;
+65     \textcolor{keywordtype}{size\_t} maxoffset = (\hyperlink{group__APACHE__CORE__DAEMON_ga396b50964961e17784202ccbefcbf25d}{maxlen}-4);
+66     \textcolor{keywordtype}{size\_t} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+67     \textcolor{keywordflow}{for} (i = 0; i < datalen && offset < maxoffset; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+68         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{group__apr__strings_ga0234c8660bac5d4b5e016b1e715aed77}{sep} = (i && i % 16 == 0)? \textcolor{stringliteral}{"\(\backslash\)n"} : \textcolor{stringliteral}{" "};
+69         \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n} = apr\_snprintf(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+offset, maxoffset-offset,
+70                              \textcolor{stringliteral}{"%2x%s"}, ((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})\hyperlink{structdata}{data}[i]&0xff), sep);
+71         offset += \hyperlink{group__APACHE__CORE__PROTO_gad484edfd58b9127caa8f0f59b4004d09}{n};
+72     \}
+73     strcpy(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer}+offset, (i<datalen)? \textcolor{stringliteral}{"..."} : \textcolor{stringliteral}{""});
+74     \textcolor{keywordflow}{return} strlen(\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer});
+75 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__util_8c_a09bba2c9e1022c1f97ae1edf0a2e84f4_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+ignore\+\_\+header@{h2\+\_\+util\+\_\+ignore\+\_\+header}}
+\index{h2\+\_\+util\+\_\+ignore\+\_\+header@{h2\+\_\+util\+\_\+ignore\+\_\+header}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+ignore\+\_\+header(const char $\ast$name)}{h2_util_ignore_header(const char *name)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+util\+\_\+ignore\+\_\+header (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_a42cd4c246229af756324609c12a217e4}{}\label{h2__util_8c_a42cd4c246229af756324609c12a217e4}
+
+\begin{DoxyCode}
+1595 \{
+1596     \textcolor{comment}{/* never forward, ch. 8.1.2.2 */}
+1597     \textcolor{keywordflow}{return} (\hyperlink{h2__proxy__util_8c_acb1ad8c4c65bf0299eecb3abe84b8eed}{H2\_HD\_MATCH\_LIT\_CS}(\textcolor{stringliteral}{"connection"}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name})
+1598             || \hyperlink{h2__proxy__util_8c_acb1ad8c4c65bf0299eecb3abe84b8eed}{H2\_HD\_MATCH\_LIT\_CS}(\textcolor{stringliteral}{"proxy-connection"}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name})
+1599             || \hyperlink{h2__proxy__util_8c_acb1ad8c4c65bf0299eecb3abe84b8eed}{H2\_HD\_MATCH\_LIT\_CS}(\textcolor{stringliteral}{"upgrade"}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name})
+1600             || \hyperlink{h2__proxy__util_8c_acb1ad8c4c65bf0299eecb3abe84b8eed}{H2\_HD\_MATCH\_LIT\_CS}(\textcolor{stringliteral}{"keep-alive"}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name})
+1601             || \hyperlink{h2__proxy__util_8c_acb1ad8c4c65bf0299eecb3abe84b8eed}{H2\_HD\_MATCH\_LIT\_CS}(\textcolor{stringliteral}{"transfer-encoding"}, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}));
+1602 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=191pt]{h2__util_8c_a42cd4c246229af756324609c12a217e4_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=338pt]{h2__util_8c_a42cd4c246229af756324609c12a217e4_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+util.\+c@{h2\+\_\+util.\+c}!h2\+\_\+util\+\_\+table\+\_\+bytes@{h2\+\_\+util\+\_\+table\+\_\+bytes}}
+\index{h2\+\_\+util\+\_\+table\+\_\+bytes@{h2\+\_\+util\+\_\+table\+\_\+bytes}!h2\+\_\+util.\+c@{h2\+\_\+util.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+util\+\_\+table\+\_\+bytes(apr\+\_\+table\+\_\+t $\ast$t, apr\+\_\+size\+\_\+t pair\+\_\+extra)}{h2_util_table_bytes(apr_table_t *t, apr_size_t pair_extra)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+size\+\_\+t} h2\+\_\+util\+\_\+table\+\_\+bytes (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+table\+\_\+t} $\ast$}]{t, }
+\item[{{\bf apr\+\_\+size\+\_\+t}}]{pair\+\_\+extra}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__util_8c_acf5a594160101659b1b61e2227f1e848}{}\label{h2__util_8c_acf5a594160101659b1b61e2227f1e848}
+Count the bytes that all key/value pairs in a table have in length (exlucding terminating 0s), plus additional extra per pair.
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & the table to inspect \\
+\hline
+{\em pair\+\_\+extra} & the extra amount to add per pair \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the number of bytes all key/value pairs have 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1176 \{
+1177     \hyperlink{structtable__bytes__ctx}{table\_bytes\_ctx} \hyperlink{group__APACHE__CORE__FILTER_ga94af791485570bea922969fef12d6259}{ctx};
+1178     
+1179     ctx.\hyperlink{structtable__bytes__ctx_a07ca17a602ff54b54350190e0bdb436d}{bytes} = 0;
+1180     ctx.\hyperlink{structtable__bytes__ctx_aff0bfe205b290c5d868434fd791c9041}{pair\_extra} = pair\_extra;
+1181     apr\_table\_do(count\_bytes, &ctx, t, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+1182     \textcolor{keywordflow}{return} ctx.\hyperlink{structtable__bytes__ctx_a07ca17a602ff54b54350190e0bdb436d}{bytes};
+1183 \}
+\end{DoxyCode}

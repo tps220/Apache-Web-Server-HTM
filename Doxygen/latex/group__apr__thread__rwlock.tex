@@ -1,0 +1,107 @@
+\hypertarget{group__apr__thread__rwlock}{}\section{Reader/\+Writer Lock Routines}
+\label{group__apr__thread__rwlock}\index{Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}}
+Collaboration diagram for Reader/\+Writer Lock Routines\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=313pt]{group__apr__thread__rwlock}
+\end{center}
+\end{figure}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structapr__thread__rwlock__t}{apr\+\_\+thread\+\_\+rwlock\+\_\+t} \hyperlink{group__apr__thread__rwlock_gaede9b908e3d9e6a8aed7bd10d0ae0498}{apr\+\_\+thread\+\_\+rwlock\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__apr__thread__rwlock_ga788cd55d3e3936d9dc876b3425fe20a6}{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t}) apr\+\_\+thread\+\_\+rwlock\+\_\+create(\hyperlink{structapr__thread__rwlock__t}{apr\+\_\+thread\+\_\+rwlock\+\_\+t} $\ast$$\ast$rwlock
+\item 
+\hyperlink{group__apr__thread__rwlock_ga4e4f18c32ba07b99ab8ab28cb5ba2df4}{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR} (thread\+\_\+rwlock)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{group__apr__thread__rwlock_ga35230907c170df5d4d7f0ca99274c574}{pool}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Typedef Documentation}
+\index{Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}!apr\+\_\+thread\+\_\+rwlock\+\_\+t@{apr\+\_\+thread\+\_\+rwlock\+\_\+t}}
+\index{apr\+\_\+thread\+\_\+rwlock\+\_\+t@{apr\+\_\+thread\+\_\+rwlock\+\_\+t}!Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}}
+\subsubsection[{\texorpdfstring{apr\+\_\+thread\+\_\+rwlock\+\_\+t}{apr_thread_rwlock_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf apr\+\_\+thread\+\_\+rwlock\+\_\+t} {\bf apr\+\_\+thread\+\_\+rwlock\+\_\+t}}\hypertarget{group__apr__thread__rwlock_gaede9b908e3d9e6a8aed7bd10d0ae0498}{}\label{group__apr__thread__rwlock_gaede9b908e3d9e6a8aed7bd10d0ae0498}
+Opaque read-\/write thread-\/safe lock. 
+
+\subsection{Function Documentation}
+\index{Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}!A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE}!Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t) apr\+\_\+thread\+\_\+rwlock\+\_\+create(apr\+\_\+thread\+\_\+rwlock\+\_\+t $\ast$$\ast$rwlock}{APR_DECLARE(apr_status_t) apr_thread_rwlock_create(apr_thread_rwlock_t **rwlock}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__thread__rwlock_ga788cd55d3e3936d9dc876b3425fe20a6}{}\label{group__apr__thread__rwlock_ga788cd55d3e3936d9dc876b3425fe20a6}
+Note\+: The following operations have undefined results\+: unlocking a read-\/write lock which is not locked in the calling thread; write locking a read-\/write lock which is already locked by the calling thread; destroying a read-\/write lock more than once; clearing or destroying the pool from which a {\bfseries locked} read-\/write lock is allocated. Create and initialize a read-\/write lock that can be used to synchronize threads. 
+\begin{DoxyParams}{Parameters}
+{\em rwlock} & the memory address where the newly created readwrite lock will be stored. \\
+\hline
+{\em pool} & the pool from which to allocate the mutex.\\
+\hline
+\end{DoxyParams}
+Acquire a shared-\/read lock on the given read-\/write lock. This will allow multiple threads to enter the same critical section while they have acquired the read lock. 
+\begin{DoxyParams}{Parameters}
+{\em rwlock} & the read-\/write lock on which to acquire the shared read.\\
+\hline
+\end{DoxyParams}
+Attempt to acquire the shared-\/read lock on the given read-\/write lock. This is the same as apr\+\_\+thread\+\_\+rwlock\+\_\+rdlock(), only that the function fails if there is another thread holding the write lock, or if there are any write threads blocking on the lock. If the function fails for this case, A\+P\+R\+\_\+\+E\+B\+U\+SY will be returned. Note\+: it is important that the \hyperlink{group__APR__STATUS__IS_gabb92ad7b6ef304132de70e9e5cbaa896}{A\+P\+R\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+I\+S\+\_\+\+E\+B\+U\+S\+Y(s)} macro be used to determine if the return value was A\+P\+R\+\_\+\+E\+B\+U\+SY, for portability reasons. 
+\begin{DoxyParams}{Parameters}
+{\em rwlock} & the rwlock on which to attempt the shared read.\\
+\hline
+\end{DoxyParams}
+Acquire an exclusive-\/write lock on the given read-\/write lock. This will allow only one single thread to enter the critical sections. If there are any threads currently holding the read-\/lock, this thread is put to sleep until it can have exclusive access to the lock. 
+\begin{DoxyParams}{Parameters}
+{\em rwlock} & the read-\/write lock on which to acquire the exclusive write.\\
+\hline
+\end{DoxyParams}
+Attempt to acquire the exclusive-\/write lock on the given read-\/write lock. This is the same as apr\+\_\+thread\+\_\+rwlock\+\_\+wrlock(), only that the function fails if there is any other thread holding the lock (for reading or writing), in which case the function will return A\+P\+R\+\_\+\+E\+B\+U\+SY. Note\+: it is important that the \hyperlink{group__APR__STATUS__IS_gabb92ad7b6ef304132de70e9e5cbaa896}{A\+P\+R\+\_\+\+S\+T\+A\+T\+U\+S\+\_\+\+I\+S\+\_\+\+E\+B\+U\+S\+Y(s)} macro be used to determine if the return value was A\+P\+R\+\_\+\+E\+B\+U\+SY, for portability reasons. 
+\begin{DoxyParams}{Parameters}
+{\em rwlock} & the rwlock on which to attempt the exclusive write.\\
+\hline
+\end{DoxyParams}
+Release either the read or write lock currently held by the calling thread associated with the given read-\/write lock. 
+\begin{DoxyParams}{Parameters}
+{\em rwlock} & the read-\/write lock to be released (unlocked).\\
+\hline
+\end{DoxyParams}
+Destroy the read-\/write lock and free the associated memory. 
+\begin{DoxyParams}{Parameters}
+{\em rwlock} & the rwlock to destroy. \\
+\hline
+\end{DoxyParams}
+The problem with trying to output the entire iovec is that we cannot maintain the behaviour that a real writev would have. If we iterate over the iovec one at a time, we lose the atomic properties of \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}. The other option is to combine the entire iovec into one buffer that we could then send in one call to write(). This is not reasonable since we do not know how much data an iovec could contain.
+
+The only reasonable option, that maintains the semantics of a real \hyperlink{apr__arch__os2calls_8h_a3d0f3996136a9b5ab46431c60c746efd}{writev()}, is to only write the first iovec. Callers of file\+\_\+writev() must deal with partial writes as they normally would. If you want to ensure an entire iovec is written, use apr\+\_\+file\+\_\+writev\+\_\+full().
+\begin{DoxyCode}
+23 \{
+24     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+25 \}
+\end{DoxyCode}
+\index{Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}!A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR@{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR}}
+\index{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR@{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR}!Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+O\+R(thread\+\_\+rwlock)}{APR_POOL_DECLARE_ACCESSOR(thread_rwlock)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+P\+O\+O\+L\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+A\+C\+C\+E\+S\+S\+OR (
+\begin{DoxyParamCaption}
+\item[{thread\+\_\+rwlock}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__apr__thread__rwlock_ga4e4f18c32ba07b99ab8ab28cb5ba2df4}{}\label{group__apr__thread__rwlock_ga4e4f18c32ba07b99ab8ab28cb5ba2df4}
+Get the pool used by this thread\+\_\+rwlock. \begin{DoxyReturn}{Returns}
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} the pool 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\index{Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}!pool@{pool}}
+\index{pool@{pool}!Reader/\+Writer Lock Routines@{Reader/\+Writer Lock Routines}}
+\subsubsection[{\texorpdfstring{pool}{pool}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ pool}\hypertarget{group__apr__thread__rwlock_ga35230907c170df5d4d7f0ca99274c574}{}\label{group__apr__thread__rwlock_ga35230907c170df5d4d7f0ca99274c574}

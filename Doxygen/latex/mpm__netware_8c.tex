@@ -1,0 +1,432 @@
+\hypertarget{mpm__netware_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/mpm/netware/mpm\+\_\+netware.c File Reference}
+\label{mpm__netware_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/mpm/netware/mpm\+\_\+netware.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/mpm/netware/mpm\+\_\+netware.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+tables.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+getopt.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+mutex.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$sys/select.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+default.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+connection.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+listen.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mmn.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$signal.\+h$>$}\\*
+{\ttfamily \#include $<$netware.\+h$>$}\\*
+{\ttfamily \#include $<$nks/netware.\+h$>$}\\*
+{\ttfamily \#include $<$library.\+h$>$}\\*
+{\ttfamily \#include $<$screen.\+h$>$}\\*
+Include dependency graph for mpm\+\_\+netware.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mpm__netware_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mpm__netware_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}
+\item 
+\#define \hyperlink{mpm__netware_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mpm__netware_8c_a285760d54e8e9036c955fe4952e0b9e4}{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}~1
+\item 
+\#define \hyperlink{mpm__netware_8c_aec702385a652ef27c7af668807158764}{W\+O\+R\+K\+E\+R\+\_\+\+D\+E\+AD}~\hyperlink{scoreboard_8h_ab6cefcd56aeb086764463b8ee2f68be4}{S\+E\+R\+V\+E\+R\+\_\+\+D\+E\+AD}
+\item 
+\#define \hyperlink{mpm__netware_8c_a1e8e55307f41ee861fe86760195b6430}{W\+O\+R\+K\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG}~\hyperlink{scoreboard_8h_a18322b7c25a289d96c19bd5db7496285}{S\+E\+R\+V\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG}
+\item 
+\#define \hyperlink{mpm__netware_8c_af4afc0eba89ff663311093ba333a8b8f}{W\+O\+R\+K\+E\+R\+\_\+\+R\+E\+A\+DY}~\hyperlink{scoreboard_8h_af015ec3a4451080811d753fcda6c7b4c}{S\+E\+R\+V\+E\+R\+\_\+\+R\+E\+A\+DY}
+\item 
+\#define \hyperlink{mpm__netware_8c_a4819f251d848846ee8095b70a31c6491}{W\+O\+R\+K\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL}~\hyperlink{scoreboard_8h_ac2b26d727f872d5972b12e4be92fa4b3}{S\+E\+R\+V\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL}
+\item 
+\#define \hyperlink{mpm__netware_8c_a7b98a90c46261e9dcf7622e1352d1414}{M\+P\+M\+\_\+\+H\+A\+R\+D\+\_\+\+L\+I\+M\+I\+T\+S\+\_\+\+F\+I\+LE}~\char`\"{}/mpm\+\_\+default.\+h\char`\"{}
+\item 
+\#define \hyperlink{mpm__netware_8c_acd459bc4912a37bf70c8a6f0745f0a13}{H\+A\+N\+D\+L\+E\+D\+C\+O\+M\+M\+A\+ND}~0
+\item 
+\#define \hyperlink{mpm__netware_8c_a2e4e59fe890606c3e928f9f65573ef27}{N\+O\+T\+M\+Y\+C\+O\+M\+M\+A\+ND}~1
+\item 
+\#define \hyperlink{mpm__netware_8c_ac8949d94ea6f20bc599c48b2a7e269d5}{D\+B\+P\+R\+I\+N\+T0}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\#define \hyperlink{mpm__netware_8c_a2776a802d59a8cd8d6253e74477d440a}{D\+B\+P\+R\+I\+N\+T1}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  v1)
+\item 
+\#define \hyperlink{mpm__netware_8c_af6459ddfc556b692ff960f84e6c89fe1}{D\+B\+P\+R\+I\+N\+T2}(\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s},  v1,  v2)
+\item 
+\#define \hyperlink{mpm__netware_8c_a28ab4d8dc7982bb2ff5fe31479b2bef6}{M\+A\+X\+\_\+\+W\+B\+\_\+\+R\+E\+T\+R\+I\+ES}~3
+\item 
+\#define \hyperlink{mpm__netware_8c_a14a45634d0bbc9454c117ac918a5cd17}{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE}~(64)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{mpm__netware_8c_a00ffd3ffbf61d278046cd30348ffe471}{nlm\+Unload\+Signaled} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} wait)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{mpm__netware_8c_a63187530609ff9ff16ef245790702c79}{worker\+\_\+main} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} $\ast$\hyperlink{group__APACHE__CORE__MUTEX_gaf6517210150d97cd5cb8a17e3768770d}{arg})
+\item 
+\hyperlink{mpm__netware_8c_a9e707a8c5267cd2c78187ead83326349}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (mpm\+\_\+netware)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__OS__NETWARE_ga8cb457878fc498ef805d17ebc17c9429}{hold\+\_\+screen\+\_\+on\+\_\+exit} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}{APR_WANT_STDIO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}\hypertarget{mpm__netware_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{}\label{mpm__netware_8c_a4f3ace9204c571a34c0b2b9bd23b1133}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mpm__netware_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mpm__netware_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!D\+B\+P\+R\+I\+N\+T0@{D\+B\+P\+R\+I\+N\+T0}}
+\index{D\+B\+P\+R\+I\+N\+T0@{D\+B\+P\+R\+I\+N\+T0}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{D\+B\+P\+R\+I\+N\+T0}{DBPRINT0}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+B\+P\+R\+I\+N\+T0(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf s}}
+\end{DoxyParamCaption}
+)}\hypertarget{mpm__netware_8c_ac8949d94ea6f20bc599c48b2a7e269d5}{}\label{mpm__netware_8c_ac8949d94ea6f20bc599c48b2a7e269d5}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!D\+B\+P\+R\+I\+N\+T1@{D\+B\+P\+R\+I\+N\+T1}}
+\index{D\+B\+P\+R\+I\+N\+T1@{D\+B\+P\+R\+I\+N\+T1}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{D\+B\+P\+R\+I\+N\+T1}{DBPRINT1}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+B\+P\+R\+I\+N\+T1(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf s}, }
+\item[{}]{v1}
+\end{DoxyParamCaption}
+)}\hypertarget{mpm__netware_8c_a2776a802d59a8cd8d6253e74477d440a}{}\label{mpm__netware_8c_a2776a802d59a8cd8d6253e74477d440a}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!D\+B\+P\+R\+I\+N\+T2@{D\+B\+P\+R\+I\+N\+T2}}
+\index{D\+B\+P\+R\+I\+N\+T2@{D\+B\+P\+R\+I\+N\+T2}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{D\+B\+P\+R\+I\+N\+T2}{DBPRINT2}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+B\+P\+R\+I\+N\+T2(
+\begin{DoxyParamCaption}
+\item[{}]{{\bf s}, }
+\item[{}]{v1, }
+\item[{}]{v2}
+\end{DoxyParamCaption}
+)}\hypertarget{mpm__netware_8c_af6459ddfc556b692ff960f84e6c89fe1}{}\label{mpm__netware_8c_af6459ddfc556b692ff960f84e6c89fe1}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!H\+A\+N\+D\+L\+E\+D\+C\+O\+M\+M\+A\+ND@{H\+A\+N\+D\+L\+E\+D\+C\+O\+M\+M\+A\+ND}}
+\index{H\+A\+N\+D\+L\+E\+D\+C\+O\+M\+M\+A\+ND@{H\+A\+N\+D\+L\+E\+D\+C\+O\+M\+M\+A\+ND}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{H\+A\+N\+D\+L\+E\+D\+C\+O\+M\+M\+A\+ND}{HANDLEDCOMMAND}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+A\+N\+D\+L\+E\+D\+C\+O\+M\+M\+A\+ND~0}\hypertarget{mpm__netware_8c_acd459bc4912a37bf70c8a6f0745f0a13}{}\label{mpm__netware_8c_acd459bc4912a37bf70c8a6f0745f0a13}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT@{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}}
+\index{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT@{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}{HARD_SERVER_LIMIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT~1}\hypertarget{mpm__netware_8c_a285760d54e8e9036c955fe4952e0b9e4}{}\label{mpm__netware_8c_a285760d54e8e9036c955fe4952e0b9e4}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE@{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE}}
+\index{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE@{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE}{MAX_SPAWN_RATE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+S\+P\+A\+W\+N\+\_\+\+R\+A\+TE~(64)}\hypertarget{mpm__netware_8c_a14a45634d0bbc9454c117ac918a5cd17}{}\label{mpm__netware_8c_a14a45634d0bbc9454c117ac918a5cd17}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!M\+A\+X\+\_\+\+W\+B\+\_\+\+R\+E\+T\+R\+I\+ES@{M\+A\+X\+\_\+\+W\+B\+\_\+\+R\+E\+T\+R\+I\+ES}}
+\index{M\+A\+X\+\_\+\+W\+B\+\_\+\+R\+E\+T\+R\+I\+ES@{M\+A\+X\+\_\+\+W\+B\+\_\+\+R\+E\+T\+R\+I\+ES}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{M\+A\+X\+\_\+\+W\+B\+\_\+\+R\+E\+T\+R\+I\+ES}{MAX_WB_RETRIES}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X\+\_\+\+W\+B\+\_\+\+R\+E\+T\+R\+I\+ES~3}\hypertarget{mpm__netware_8c_a28ab4d8dc7982bb2ff5fe31479b2bef6}{}\label{mpm__netware_8c_a28ab4d8dc7982bb2ff5fe31479b2bef6}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!M\+P\+M\+\_\+\+H\+A\+R\+D\+\_\+\+L\+I\+M\+I\+T\+S\+\_\+\+F\+I\+LE@{M\+P\+M\+\_\+\+H\+A\+R\+D\+\_\+\+L\+I\+M\+I\+T\+S\+\_\+\+F\+I\+LE}}
+\index{M\+P\+M\+\_\+\+H\+A\+R\+D\+\_\+\+L\+I\+M\+I\+T\+S\+\_\+\+F\+I\+LE@{M\+P\+M\+\_\+\+H\+A\+R\+D\+\_\+\+L\+I\+M\+I\+T\+S\+\_\+\+F\+I\+LE}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{M\+P\+M\+\_\+\+H\+A\+R\+D\+\_\+\+L\+I\+M\+I\+T\+S\+\_\+\+F\+I\+LE}{MPM_HARD_LIMITS_FILE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+P\+M\+\_\+\+H\+A\+R\+D\+\_\+\+L\+I\+M\+I\+T\+S\+\_\+\+F\+I\+LE~\char`\"{}/mpm\+\_\+default.\+h\char`\"{}}\hypertarget{mpm__netware_8c_a7b98a90c46261e9dcf7622e1352d1414}{}\label{mpm__netware_8c_a7b98a90c46261e9dcf7622e1352d1414}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!N\+O\+T\+M\+Y\+C\+O\+M\+M\+A\+ND@{N\+O\+T\+M\+Y\+C\+O\+M\+M\+A\+ND}}
+\index{N\+O\+T\+M\+Y\+C\+O\+M\+M\+A\+ND@{N\+O\+T\+M\+Y\+C\+O\+M\+M\+A\+ND}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{N\+O\+T\+M\+Y\+C\+O\+M\+M\+A\+ND}{NOTMYCOMMAND}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+O\+T\+M\+Y\+C\+O\+M\+M\+A\+ND~1}\hypertarget{mpm__netware_8c_a2e4e59fe890606c3e928f9f65573ef27}{}\label{mpm__netware_8c_a2e4e59fe890606c3e928f9f65573ef27}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!W\+O\+R\+K\+E\+R\+\_\+\+D\+E\+AD@{W\+O\+R\+K\+E\+R\+\_\+\+D\+E\+AD}}
+\index{W\+O\+R\+K\+E\+R\+\_\+\+D\+E\+AD@{W\+O\+R\+K\+E\+R\+\_\+\+D\+E\+AD}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{W\+O\+R\+K\+E\+R\+\_\+\+D\+E\+AD}{WORKER_DEAD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+O\+R\+K\+E\+R\+\_\+\+D\+E\+AD~{\bf S\+E\+R\+V\+E\+R\+\_\+\+D\+E\+AD}}\hypertarget{mpm__netware_8c_aec702385a652ef27c7af668807158764}{}\label{mpm__netware_8c_aec702385a652ef27c7af668807158764}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!W\+O\+R\+K\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL@{W\+O\+R\+K\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL}}
+\index{W\+O\+R\+K\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL@{W\+O\+R\+K\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{W\+O\+R\+K\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL}{WORKER_IDLE_KILL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+O\+R\+K\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL~{\bf S\+E\+R\+V\+E\+R\+\_\+\+I\+D\+L\+E\+\_\+\+K\+I\+LL}}\hypertarget{mpm__netware_8c_a4819f251d848846ee8095b70a31c6491}{}\label{mpm__netware_8c_a4819f251d848846ee8095b70a31c6491}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!W\+O\+R\+K\+E\+R\+\_\+\+R\+E\+A\+DY@{W\+O\+R\+K\+E\+R\+\_\+\+R\+E\+A\+DY}}
+\index{W\+O\+R\+K\+E\+R\+\_\+\+R\+E\+A\+DY@{W\+O\+R\+K\+E\+R\+\_\+\+R\+E\+A\+DY}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{W\+O\+R\+K\+E\+R\+\_\+\+R\+E\+A\+DY}{WORKER_READY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+O\+R\+K\+E\+R\+\_\+\+R\+E\+A\+DY~{\bf S\+E\+R\+V\+E\+R\+\_\+\+R\+E\+A\+DY}}\hypertarget{mpm__netware_8c_af4afc0eba89ff663311093ba333a8b8f}{}\label{mpm__netware_8c_af4afc0eba89ff663311093ba333a8b8f}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!W\+O\+R\+K\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG@{W\+O\+R\+K\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG}}
+\index{W\+O\+R\+K\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG@{W\+O\+R\+K\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{W\+O\+R\+K\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG}{WORKER_STARTING}}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\+O\+R\+K\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG~{\bf S\+E\+R\+V\+E\+R\+\_\+\+S\+T\+A\+R\+T\+I\+NG}}\hypertarget{mpm__netware_8c_a1e8e55307f41ee861fe86760195b6430}{}\label{mpm__netware_8c_a1e8e55307f41ee861fe86760195b6430}
+
+
+\subsection{Function Documentation}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(mpm\+\_\+netware)}{AP_DECLARE_MODULE(mpm_netware)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{mpm\+\_\+netware}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mpm__netware_8c_a9e707a8c5267cd2c78187ead83326349}{}\label{mpm__netware_8c_a9e707a8c5267cd2c78187ead83326349}
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!nlm\+Unload\+Signaled@{nlm\+Unload\+Signaled}}
+\index{nlm\+Unload\+Signaled@{nlm\+Unload\+Signaled}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{nlm\+Unload\+Signaled(int wait)}{nlmUnloadSignaled(int wait)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} nlm\+Unload\+Signaled (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{wait}
+\end{DoxyParamCaption}
+)}\hypertarget{mpm__netware_8c_a00ffd3ffbf61d278046cd30348ffe471}{}\label{mpm__netware_8c_a00ffd3ffbf61d278046cd30348ffe471}
+
+\begin{DoxyCode}
+308 \{
+309     shutdown\_pending = 1;
+310 
+311     \textcolor{keywordflow}{if} (wait) \{
+312         \textcolor{keywordflow}{while} (wait\_to\_finish) \{
+313             NXThreadYield();
+314         \}
+315     \}
+316 
+317     \textcolor{keywordflow}{return} 0;
+318 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mpm__netware_8c_a00ffd3ffbf61d278046cd30348ffe471_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}!worker\+\_\+main@{worker\+\_\+main}}
+\index{worker\+\_\+main@{worker\+\_\+main}!mpm\+\_\+netware.\+c@{mpm\+\_\+netware.\+c}}
+\subsubsection[{\texorpdfstring{worker\+\_\+main(void $\ast$arg)}{worker_main(void *arg)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} worker\+\_\+main (
+\begin{DoxyParamCaption}
+\item[{{\bf void} $\ast$}]{arg}
+\end{DoxyParamCaption}
+)}\hypertarget{mpm__netware_8c_a63187530609ff9ff16ef245790702c79}{}\label{mpm__netware_8c_a63187530609ff9ff16ef245790702c79}
+
+\begin{DoxyCode}
+337 \{
+338     \hyperlink{structap__listen__rec}{ap\_listen\_rec} *\hyperlink{group__APACHE__OS__UNIX_gad86a53a31ae797d73195f2f01d5e84bd}{lr}, *first\_lr, *last\_lr = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+339     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__OS__UNIX_gad4c037f30d9f5c212a5cb6116556aae5}{ptrans};
+340     \hyperlink{structapr__allocator__t}{apr\_allocator\_t} *\hyperlink{group__apr__pools_ga3d4c7b6ba19a3b46b6fecdee3d867787}{allocator};
+341     \hyperlink{structapr__bucket__alloc__t}{apr\_bucket\_alloc\_t} *bucket\_alloc;
+342     \hyperlink{structconn__rec}{conn\_rec} *current\_conn;
+343     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} stat = \hyperlink{group__APR__Error_gaacd087793c97a3493eafc14075775b82}{APR\_EINIT};
+344     \hyperlink{scoreboard_8h_ae3d1f4c9b0fc0e40983a8de9905b5eed}{ap\_sb\_handle\_t} *sbh;
+345     \hyperlink{structapr__thread__t}{apr\_thread\_t} *\hyperlink{group__apr__os__thread_ga9abc6c7c01b67b5c7fb8a13fb333f126}{thd} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+346     \hyperlink{group__apr__portabile_ga4ccd9519af148ccf9cff850dd58f00b6}{apr\_os\_thread\_t} osthd;
+347 
+348     \textcolor{keywordtype}{int} my\_worker\_num = (\hyperlink{group__MOD__WATCHDOG_gaf0b5a943e734de7ea24142e2c81d82ef}{int})\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+349     \hyperlink{structapr__socket__t}{apr\_socket\_t} *\hyperlink{group__APACHE__CORE__CONNECTION_ga37491385bd0907d7a64ed8a3ec309aaa}{csd} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+350     \textcolor{keywordtype}{int} requests\_this\_child = 0;
+351     \hyperlink{structapr__socket__t}{apr\_socket\_t} *sd = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+352     fd\_set main\_fds;
+353 
+354     \textcolor{keywordtype}{int} sockdes;
+355     \textcolor{keywordtype}{int} srv;
+356     \textcolor{keyword}{struct }timeval tv;
+357     \textcolor{keywordtype}{int} wouldblock\_retry;
+358 
+359     osthd = \hyperlink{netware_2thread_8c_a152eb403e0c0b973d18b452a5a86f705}{apr\_os\_thread\_current}();
+360     apr\_os\_thread\_put(&thd, &osthd, pmain);
+361 
+362     tv.tv\_sec = 1;
+363     tv.tv\_usec = 0;
+364 
+365     apr\_allocator\_create(&allocator);
+366     apr\_allocator\_max\_free\_set(allocator, \hyperlink{group__APACHE__MPM_gaaa1d8831ca72b470dd2b7d43fa8393d6}{ap\_max\_mem\_free});
+367 
+368     apr\_pool\_create\_ex(&ptrans, pmain, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, allocator);
+369     apr\_allocator\_owner\_set(allocator, ptrans);
+370     apr\_pool\_tag(ptrans, \textcolor{stringliteral}{"transaction"});
+371 
+372     bucket\_alloc = apr\_bucket\_alloc\_create\_ex(allocator);
+373 
+374     atomic\_inc (&worker\_thread\_count);
+375 
+376     \textcolor{keywordflow}{while} (!die\_now) \{
+377         \textcolor{comment}{/*}
+378 \textcolor{comment}{        * (Re)initialize this child to a pre-connection state.}
+379 \textcolor{comment}{        */}
+380         current\_conn = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+381         apr\_pool\_clear(ptrans);
+382 
+383         \textcolor{keywordflow}{if} ((\hyperlink{group__APACHE__MPM_gaf4270d01cbd55f46555b0c04325bb7d0}{ap\_max\_requests\_per\_child} > 0
+384             && requests\_this\_child++ >= \hyperlink{group__APACHE__MPM_gaf4270d01cbd55f46555b0c04325bb7d0}{ap\_max\_requests\_per\_child})) \{
+385             \hyperlink{mpm__netware_8c_a2776a802d59a8cd8d6253e74477d440a}{DBPRINT1} (\textcolor{stringliteral}{"\(\backslash\)n**Thread slot %d is shutting down"}, my\_worker\_num);
+386             \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(0, my\_worker\_num, ptrans, bucket\_alloc);
+387         \}
+388 
+389         ap\_update\_child\_status\_from\_indexes(0, my\_worker\_num, \hyperlink{mpm__netware_8c_af4afc0eba89ff663311093ba333a8b8f}{WORKER\_READY},
+390                                             (\hyperlink{structrequest__rec}{request\_rec} *) \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+391 
+392         \textcolor{comment}{/*}
+393 \textcolor{comment}{        * Wait for an acceptable connection to arrive.}
+394 \textcolor{comment}{        */}
+395 
+396         \textcolor{keywordflow}{for} (;;) \{
+397             \textcolor{keywordflow}{if} (shutdown\_pending || restart\_pending || (\hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->
+      \hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[0][my\_worker\_num].\hyperlink{structworker__score_a00d08351762a2d7d79cfde18a95956fa}{status} == \hyperlink{mpm__netware_8c_a4819f251d848846ee8095b70a31c6491}{WORKER\_IDLE\_KILL})) \{
+398                 \hyperlink{mpm__netware_8c_a2776a802d59a8cd8d6253e74477d440a}{DBPRINT1} (\textcolor{stringliteral}{"\(\backslash\)nThread slot %d is shutting down\(\backslash\)n"}, my\_worker\_num);
+399                 \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(0, my\_worker\_num, ptrans, bucket\_alloc);
+400             \}
+401 
+402             \textcolor{comment}{/* Check the listen queue on all sockets for requests */}
+403             memcpy(&main\_fds, &listenfds, \textcolor{keyword}{sizeof}(fd\_set));
+404             srv = \hyperlink{apr__arch__os2calls_8h_a2b406456012f9f74aeb33de6f3df053c}{select}(listenmaxfd + 1, &main\_fds, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, &tv);
+405 
+406             \textcolor{keywordflow}{if} (srv <= 0) \{
+407                 \textcolor{keywordflow}{if} (srv < 0) \{
+408                     \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga23239084d07266623cf5f5830fd28c8c}{APLOG\_NOTICE}, 0, 
+      \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00217)
+409                         \textcolor{stringliteral}{"select() failed on listen socket"});
+410                     \hyperlink{beos_2thread_8c_a2cb133ebee45c76ad9a22e23c2449a15}{apr\_thread\_yield}();
+411                 \}
+412                 \textcolor{keywordflow}{continue};
+413             \}
+414 
+415             \textcolor{comment}{/* remember the last\_lr we searched last time around so that}
+416 \textcolor{comment}{            we don't end up starving any particular listening socket */}
+417             \textcolor{keywordflow}{if} (last\_lr == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+418                 lr = \hyperlink{group__APACHE__CORE__LISTEN_ga56c54ed44b1a272142d9fe4dd5a81a82}{ap\_listeners};
+419             \}
+420             \textcolor{keywordflow}{else} \{
+421                 lr = last\_lr->\hyperlink{structap__listen__rec_a4240c0e22e20ef521ba64dc91dbaba10}{next};
+422                 \textcolor{keywordflow}{if} (!lr)
+423                     lr = \hyperlink{group__APACHE__CORE__LISTEN_ga56c54ed44b1a272142d9fe4dd5a81a82}{ap\_listeners};
+424             \}
+425             first\_lr = \hyperlink{group__APACHE__OS__UNIX_gad86a53a31ae797d73195f2f01d5e84bd}{lr};
+426             \textcolor{keywordflow}{do} \{
+427                 \hyperlink{unix_2sockets_8c_a07ec79bbb5243596933cd2caf2d428df}{apr\_os\_sock\_get}(&sockdes, lr->\hyperlink{structap__listen__rec_af3eece1c155de1c17e4cdaa5c28873f9}{sd});
+428                 \textcolor{keywordflow}{if} (FD\_ISSET(sockdes, &main\_fds))
+429                     \textcolor{keywordflow}{goto} got\_listener;
+430                 lr = lr->\hyperlink{structap__listen__rec_a4240c0e22e20ef521ba64dc91dbaba10}{next};
+431                 \textcolor{keywordflow}{if} (!lr)
+432                     lr = \hyperlink{group__APACHE__CORE__LISTEN_ga56c54ed44b1a272142d9fe4dd5a81a82}{ap\_listeners};
+433             \} \textcolor{keywordflow}{while} (lr != first\_lr);
+434             \textcolor{comment}{/* if we get here, something unexpected happened. Go back}
+435 \textcolor{comment}{            into the select state and try again.}
+436 \textcolor{comment}{            */}
+437             \textcolor{keywordflow}{continue};
+438         got\_listener:
+439             last\_lr = \hyperlink{group__APACHE__OS__UNIX_gad86a53a31ae797d73195f2f01d5e84bd}{lr};
+440             sd = lr->\hyperlink{structap__listen__rec_af3eece1c155de1c17e4cdaa5c28873f9}{sd};
+441 
+442             wouldblock\_retry = \hyperlink{mpm__netware_8c_a28ab4d8dc7982bb2ff5fe31479b2bef6}{MAX\_WB\_RETRIES};
+443 
+444             \textcolor{keywordflow}{while} (wouldblock\_retry) \{
+445                 \textcolor{keywordflow}{if} ((stat = \hyperlink{unix_2sockets_8c_a0c6a5d4f9de19f14390dc412717b89f2}{apr\_socket\_accept}(&csd, sd, ptrans)) == 
+      \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+446                     \textcolor{keywordflow}{break};
+447                 \}
+448                 \textcolor{keywordflow}{else} \{
+449                     \textcolor{comment}{/* if the error is a wouldblock then maybe we were too}
+450 \textcolor{comment}{                        quick try to pull the next request from the listen}
+451 \textcolor{comment}{                        queue.  Try a few more times then return to our idle}
+452 \textcolor{comment}{                        listen state. */}
+453                     \textcolor{keywordflow}{if} (!\hyperlink{group__APR__STATUS__IS_ga9dd578bfcd76a2d997395608ae5b3a4e}{APR\_STATUS\_IS\_EAGAIN}(stat)) \{
+454                         \textcolor{keywordflow}{break};
+455                     \}
+456 
+457                     \textcolor{keywordflow}{if} (wouldblock\_retry--) \{
+458                         \hyperlink{beos_2thread_8c_a2cb133ebee45c76ad9a22e23c2449a15}{apr\_thread\_yield}();
+459                     \}
+460                 \}
+461             \}
+462 
+463             \textcolor{comment}{/* If we got a new socket, set it to non-blocking mode and process}
+464 \textcolor{comment}{                it.  Otherwise handle the error. */}
+465             \textcolor{keywordflow}{if} (stat == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+466                 \hyperlink{unix_2sockopt_8c_a08f5e505fa611005f56c12783269ffa9}{apr\_socket\_opt\_set}(csd, \hyperlink{group__apr__sockopt_gac3bf19cc28b43da9b9dc396c84914a0f}{APR\_SO\_NONBLOCK}, 0);
+467 \textcolor{preprocessor}{#ifdef DBINFO\_ON}
+468                 \textcolor{keywordflow}{if} (wouldblock\_retry < \hyperlink{mpm__netware_8c_a28ab4d8dc7982bb2ff5fe31479b2bef6}{MAX\_WB\_RETRIES}) \{
+469                     retry\_success++;
+470                     avg\_retries += (\hyperlink{mpm__netware_8c_a28ab4d8dc7982bb2ff5fe31479b2bef6}{MAX\_WB\_RETRIES}-wouldblock\_retry);
+471                 \}
+472 \textcolor{preprocessor}{#endif}
+473                 \textcolor{keywordflow}{break};       \textcolor{comment}{/* We have a socket ready for reading */}
+474             \}
+475             \textcolor{keywordflow}{else} \{
+476 \textcolor{preprocessor}{#ifdef DBINFO\_ON}
+477                 \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga9dd578bfcd76a2d997395608ae5b3a4e}{APR\_STATUS\_IS\_EAGAIN}(stat)) \{
+478                         would\_block++;
+479                         retry\_fail++;
+480                 \}
+481                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (
+482 #\textcolor{keywordflow}{else}
+483                 \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga9dd578bfcd76a2d997395608ae5b3a4e}{APR\_STATUS\_IS\_EAGAIN}(stat) ||
+484 #endif
+485                     \hyperlink{group__APR__STATUS__IS_ga85e2cb1b4c904a9edfbc0d94203f76b6}{APR\_STATUS\_IS\_ECONNRESET}(stat) ||
+486                     \hyperlink{group__APR__STATUS__IS_ga6adc2f539eabedb504294458be4f6251}{APR\_STATUS\_IS\_ETIMEDOUT}(stat) ||
+487                     \hyperlink{group__APR__STATUS__IS_gad9307ff02e50296c528b79a670dc80bb}{APR\_STATUS\_IS\_EHOSTUNREACH}(stat) ||
+488                     \hyperlink{group__APR__STATUS__IS_ga19911958b3dd62559fb6c245ec579c27}{APR\_STATUS\_IS\_ENETUNREACH}(stat)) \{
+489                         ;
+490                 \}
+491 \textcolor{preprocessor}{#ifdef USE\_WINSOCK}
+492                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (APR\_STATUS\_IS\_ENETDOWN(stat)) \{
+493                        \textcolor{comment}{/*}
+494 \textcolor{comment}{                        * When the network layer has been shut down, there}
+495 \textcolor{comment}{                        * is not much use in simply exiting: the parent}
+496 \textcolor{comment}{                        * would simply re-create us (and we'd fail again).}
+497 \textcolor{comment}{                        * Use the CHILDFATAL code to tear the server down.}
+498 \textcolor{comment}{                        * @@@ Martin's idea for possible improvement:}
+499 \textcolor{comment}{                        * A different approach would be to define}
+500 \textcolor{comment}{                        * a new APEXIT\_NETDOWN exit code, the reception}
+501 \textcolor{comment}{                        * of which would make the parent shutdown all}
+502 \textcolor{comment}{                        * children, then idle-loop until it detected that}
+503 \textcolor{comment}{                        * the network is up again, and restart the children.}
+504 \textcolor{comment}{                        * Ben Hyde noted that temporary ENETDOWN situations}
+505 \textcolor{comment}{                        * occur in mobile IP.}
+506 \textcolor{comment}{                        */}
+507                         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, 
+      \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{APLOG\_EMERG}, stat, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00218)
+508                             \textcolor{stringliteral}{"apr\_socket\_accept: giving up."});
+509                         \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(\hyperlink{group__APACHE__CORE__DAEMON_gaded5da364cad9d77f9c3dae73bd1d4bf}{APEXIT\_CHILDFATAL}, my\_worker\_num,
+       ptrans,
+510                                          bucket\_alloc);
+511                 \}
+512 \textcolor{preprocessor}{#endif}
+513                 \textcolor{keywordflow}{else} \{
+514                         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, stat, 
+      \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00219)
+515                             \textcolor{stringliteral}{"apr\_socket\_accept: (client socket)"});
+516                         \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(1, my\_worker\_num, ptrans, bucket\_alloc);
+517                 \}
+518             \}
+519         \}
+520 
+521         ap\_create\_sb\_handle(&sbh, ptrans, 0, my\_worker\_num);
+522         \textcolor{comment}{/*}
+523 \textcolor{comment}{        * We now have a connection, so set it up with the appropriate}
+524 \textcolor{comment}{        * socket options, file descriptors, and read/write buffers.}
+525 \textcolor{comment}{        */}
+526         current\_conn = ap\_run\_create\_connection(ptrans, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, csd,
+527                                                 my\_worker\_num, sbh,
+528                                                 bucket\_alloc);
+529         \textcolor{keywordflow}{if} (current\_conn) \{
+530             current\_conn->current\_thread = \hyperlink{group__apr__os__thread_ga9abc6c7c01b67b5c7fb8a13fb333f126}{thd};
+531             ap\_process\_connection(current\_conn, csd);
+532             ap\_lingering\_close(current\_conn);
+533         \}
+534         request\_count++;
+535     \}
+536     \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(0, my\_worker\_num, ptrans, bucket\_alloc);
+537 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mpm__netware_8c_a63187530609ff9ff16ef245790702c79_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mpm__netware_8c_a63187530609ff9ff16ef245790702c79_icgraph}
+\end{center}
+\end{figure}
+
+

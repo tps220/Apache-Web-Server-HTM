@@ -1,0 +1,349 @@
+\hypertarget{mpmt__os2_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/mpm/mpmt\+\_\+os2/mpmt\+\_\+os2.c File Reference}
+\label{mpmt__os2_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/mpm/mpmt\+\_\+os2/mpmt\+\_\+os2.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/mpm/mpmt\+\_\+os2/mpmt\+\_\+os2.\+c}}
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+default.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+connection.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+listen.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mpm\+\_\+common.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}scoreboard.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$os2.\+h$>$}\\*
+{\ttfamily \#include $<$process.\+h$>$}\\*
+Include dependency graph for mpmt\+\_\+os2.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mpmt__os2_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structlisten__socket__t}{listen\+\_\+socket\+\_\+t}
+\item 
+struct \hyperlink{structparent__info__t}{parent\+\_\+info\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mpmt__os2_8c_a9280b4859685d30da5cf75f7c65494de}{I\+N\+C\+L\+\_\+\+N\+O\+P\+M\+A\+PI}
+\item 
+\#define \hyperlink{mpmt__os2_8c_a279849fd38ce284440d823ddda1d3f09}{I\+N\+C\+L\+\_\+\+D\+OS}
+\item 
+\#define \hyperlink{mpmt__os2_8c_a1b449a38515d56c12e52b1c4306df9fd}{I\+N\+C\+L\+\_\+\+D\+O\+S\+E\+R\+R\+O\+RS}
+\item 
+\#define \hyperlink{mpmt__os2_8c_a285760d54e8e9036c955fe4952e0b9e4}{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}~10
+\item 
+\#define \hyperlink{mpmt__os2_8c_acd4caf27098c6207ccb7103d0862ccc1}{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT}~256
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{mpmt__os2_8c_a9903db1decc140ee282554001a672b1b}{ap\+\_\+mpm\+\_\+child\+\_\+main} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_gade454c9a3dc13ac389d15bf30f6c92b2}{pconf})
+\item 
+\hyperlink{mpmt__os2_8c_a05885d7d7ee8aa888600ddf7d4ead987}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (mpm\+\_\+mpmt\+\_\+os2)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structserver__rec}{server\+\_\+rec} $\ast$ \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\+\_\+server\+\_\+conf}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{mpmt__os2_8c_a474099f250d9a8fa2a4c0408524b88e0}{ap\+\_\+min\+\_\+spare\+\_\+threads} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{mpmt__os2_8c_a2e9159f4f7803699f5cd5989d373b494}{ap\+\_\+max\+\_\+spare\+\_\+threads} = 0
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{mpmt__os2_8c_a6a82ba7bf9acd08bfb0c1c13ca09b344}{ap\+\_\+max\+\_\+daemons\+\_\+limit} = -\/1
+\item 
+\hyperlink{scoreboard_8h_a36af569e52dd926cc530df071af3d939}{ap\+\_\+generation\+\_\+t} volatile \hyperlink{mpmt__os2_8c_a096169d80fe6eb25c1206b180af1d496}{ap\+\_\+my\+\_\+generation} =0
+\item 
+H\+M\+TX \hyperlink{mpmt__os2_8c_a92d338279598e4b09078ab7d9611ee52}{ap\+\_\+mpm\+\_\+accept\+\_\+mutex} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT@{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}}
+\index{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT@{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT}{HARD_SERVER_LIMIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+A\+R\+D\+\_\+\+S\+E\+R\+V\+E\+R\+\_\+\+L\+I\+M\+IT~10}\hypertarget{mpmt__os2_8c_a285760d54e8e9036c955fe4952e0b9e4}{}\label{mpmt__os2_8c_a285760d54e8e9036c955fe4952e0b9e4}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT@{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT}}
+\index{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT@{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT}{HARD_THREAD_LIMIT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define H\+A\+R\+D\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+L\+I\+M\+IT~256}\hypertarget{mpmt__os2_8c_acd4caf27098c6207ccb7103d0862ccc1}{}\label{mpmt__os2_8c_acd4caf27098c6207ccb7103d0862ccc1}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!I\+N\+C\+L\+\_\+\+D\+OS@{I\+N\+C\+L\+\_\+\+D\+OS}}
+\index{I\+N\+C\+L\+\_\+\+D\+OS@{I\+N\+C\+L\+\_\+\+D\+OS}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{I\+N\+C\+L\+\_\+\+D\+OS}{INCL_DOS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+N\+C\+L\+\_\+\+D\+OS}\hypertarget{mpmt__os2_8c_a279849fd38ce284440d823ddda1d3f09}{}\label{mpmt__os2_8c_a279849fd38ce284440d823ddda1d3f09}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!I\+N\+C\+L\+\_\+\+D\+O\+S\+E\+R\+R\+O\+RS@{I\+N\+C\+L\+\_\+\+D\+O\+S\+E\+R\+R\+O\+RS}}
+\index{I\+N\+C\+L\+\_\+\+D\+O\+S\+E\+R\+R\+O\+RS@{I\+N\+C\+L\+\_\+\+D\+O\+S\+E\+R\+R\+O\+RS}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{I\+N\+C\+L\+\_\+\+D\+O\+S\+E\+R\+R\+O\+RS}{INCL_DOSERRORS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+N\+C\+L\+\_\+\+D\+O\+S\+E\+R\+R\+O\+RS}\hypertarget{mpmt__os2_8c_a1b449a38515d56c12e52b1c4306df9fd}{}\label{mpmt__os2_8c_a1b449a38515d56c12e52b1c4306df9fd}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!I\+N\+C\+L\+\_\+\+N\+O\+P\+M\+A\+PI@{I\+N\+C\+L\+\_\+\+N\+O\+P\+M\+A\+PI}}
+\index{I\+N\+C\+L\+\_\+\+N\+O\+P\+M\+A\+PI@{I\+N\+C\+L\+\_\+\+N\+O\+P\+M\+A\+PI}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{I\+N\+C\+L\+\_\+\+N\+O\+P\+M\+A\+PI}{INCL_NOPMAPI}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+N\+C\+L\+\_\+\+N\+O\+P\+M\+A\+PI}\hypertarget{mpmt__os2_8c_a9280b4859685d30da5cf75f7c65494de}{}\label{mpmt__os2_8c_a9280b4859685d30da5cf75f7c65494de}
+
+
+\subsection{Function Documentation}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(mpm\+\_\+mpmt\+\_\+os2)}{AP_DECLARE_MODULE(mpm_mpmt_os2)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{mpm\+\_\+mpmt\+\_\+os2}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mpmt__os2_8c_a05885d7d7ee8aa888600ddf7d4ead987}{}\label{mpmt__os2_8c_a05885d7d7ee8aa888600ddf7d4ead987}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!ap\+\_\+mpm\+\_\+child\+\_\+main@{ap\+\_\+mpm\+\_\+child\+\_\+main}}
+\index{ap\+\_\+mpm\+\_\+child\+\_\+main@{ap\+\_\+mpm\+\_\+child\+\_\+main}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+mpm\+\_\+child\+\_\+main(apr\+\_\+pool\+\_\+t $\ast$pconf)}{ap_mpm_child_main(apr_pool_t *pconf)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} ap\+\_\+mpm\+\_\+child\+\_\+main (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pconf}
+\end{DoxyParamCaption}
+)}\hypertarget{mpmt__os2_8c_a9903db1decc140ee282554001a672b1b}{}\label{mpmt__os2_8c_a9903db1decc140ee282554001a672b1b}
+
+\begin{DoxyCode}
+94 \{
+95     \hyperlink{structap__listen__rec}{ap\_listen\_rec} *\hyperlink{group__APACHE__OS__UNIX_gad86a53a31ae797d73195f2f01d5e84bd}{lr} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+96     \textcolor{keywordtype}{int} requests\_this\_child = 0;
+97     \textcolor{keywordtype}{int} rv = 0;
+98     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} ulTimes;
+99     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__MPM__WINNT_gaaa35aa7c755ceade0834ec1a0a12844b}{my\_pid} = \hyperlink{group__APACHE__OS__NETWARE_gacf2940fe9f29eb438f40629fd4fbb2b6}{getpid}();
+100     ULONG \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc}, \hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+101     HQUEUE workq;
+102     \hyperlink{structapr__pollset__t}{apr\_pollset\_t} *pollset;
+103     \textcolor{keywordtype}{int} num\_listeners;
+104     TID server\_maint\_tid;
+105     \textcolor{keywordtype}{void} *sb\_mem;
+106 
+107     \textcolor{comment}{/* Stop Ctrl-C/Ctrl-Break signals going to child processes */}
+108     DosSetSignalExceptionFocus(0, &ulTimes);
+109     set\_signals();
+110 
+111     \textcolor{comment}{/* Create pool for child */}
+112     \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pchild, pconf);
+113 
+114     ap\_run\_child\_init(pchild, \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf});
+115 
+116     \textcolor{comment}{/* Create an event semaphore used to trigger other threads to shutdown */}
+117     rc = DosCreateEventSem(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, &\hyperlink{mpmt__os2__child_8c_a87d66f992ad4103c94c5af9b748421fb}{shutdown\_event}, 0, \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE});
+118 
+119     \textcolor{keywordflow}{if} (rc) \{
+120         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 
+      \hyperlink{group__apr__errno_ga2096daff578ef301e060b80c7a4525bf}{APR\_FROM\_OS\_ERROR}(rc), \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00189)
+121                      \textcolor{stringliteral}{"unable to create shutdown semaphore, exiting"});
+122         \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(\hyperlink{group__APACHE__CORE__DAEMON_gaded5da364cad9d77f9c3dae73bd1d4bf}{APEXIT\_CHILDFATAL});
+123     \}
+124 
+125     \textcolor{comment}{/* Gain access to the scoreboard. */}
+126     rc = DosGetNamedSharedMem(&sb\_mem, \hyperlink{scoreboard_8h_a81b2cececded474fb5fe871f8e64009b}{ap\_scoreboard\_fname},
+127                               PAG\_READ|PAG\_WRITE);
+128 
+129     \textcolor{keywordflow}{if} (rc) \{
+130         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 
+      \hyperlink{group__apr__errno_ga2096daff578ef301e060b80c7a4525bf}{APR\_FROM\_OS\_ERROR}(rc), \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00190)
+131                      \textcolor{stringliteral}{"scoreboard not readable in child, exiting"});
+132         \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(\hyperlink{group__APACHE__CORE__DAEMON_gaded5da364cad9d77f9c3dae73bd1d4bf}{APEXIT\_CHILDFATAL});
+133     \}
+134 
+135     ap\_calc\_scoreboard\_size();
+136     ap\_init\_scoreboard(sb\_mem);
+137 
+138     \textcolor{comment}{/* Gain access to the accpet mutex */}
+139     rc = DosOpenMutexSem(\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, &\hyperlink{mpmt__os2__child_8c_a92d338279598e4b09078ab7d9611ee52}{ap\_mpm\_accept\_mutex});
+140 
+141     \textcolor{keywordflow}{if} (rc) \{
+142         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 
+      \hyperlink{group__apr__errno_ga2096daff578ef301e060b80c7a4525bf}{APR\_FROM\_OS\_ERROR}(rc), \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00191)
+143                      \textcolor{stringliteral}{"accept mutex couldn't be accessed in child, exiting"});
+144         \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(\hyperlink{group__APACHE__CORE__DAEMON_gaded5da364cad9d77f9c3dae73bd1d4bf}{APEXIT\_CHILDFATAL});
+145     \}
+146 
+147     \textcolor{comment}{/* Find our pid in the scoreboard so we know what slot our parent allocated us */}
+148     \textcolor{keywordflow}{for} (child\_slot = 0; \hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa6f6cac3fd4d9881efaf5a2e0b0a98c7}{parent}[child\_slot].
+      \hyperlink{structprocess__score_a77fe9c1f37296cd514a1592800848be0}{pid} != my\_pid && child\_slot < \hyperlink{mpmt__os2__child_8c_a285760d54e8e9036c955fe4952e0b9e4}{HARD\_SERVER\_LIMIT}; child\_slot++);
+149 
+150     \textcolor{keywordflow}{if} (child\_slot == HARD\_SERVER\_LIMIT) \{
+151         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 0, 
+      \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00192)
+152                      \textcolor{stringliteral}{"child pid not found in scoreboard, exiting"});
+153         \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(\hyperlink{group__APACHE__CORE__DAEMON_gaded5da364cad9d77f9c3dae73bd1d4bf}{APEXIT\_CHILDFATAL});
+154     \}
+155 
+156     \hyperlink{mpmt__os2__child_8c_a87c8291a3a616fc0ce9d17cb1caf4335}{ap\_my\_generation} = \hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->
+      \hyperlink{structscoreboard_aa6f6cac3fd4d9881efaf5a2e0b0a98c7}{parent}[child\_slot].\hyperlink{structprocess__score_ab1a585c99d5031aa219b77bede251bcd}{generation};
+157     memset(\hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[child\_slot], 0, \textcolor{keyword}{sizeof}(
+      \hyperlink{structworker__score}{worker\_score}) * \hyperlink{mpmt__os2__child_8c_acd4caf27098c6207ccb7103d0862ccc1}{HARD\_THREAD\_LIMIT});
+158 
+159     \textcolor{comment}{/* Set up an OS/2 queue for passing connections & termination requests}
+160 \textcolor{comment}{     * to worker threads}
+161 \textcolor{comment}{     */}
+162     rc = DosCreateQueue(&workq, QUE\_FIFO, apr\_psprintf(pchild, \textcolor{stringliteral}{"/queues/httpd/work.%d"}, my\_pid));
+163 
+164     \textcolor{keywordflow}{if} (rc) \{
+165         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, 
+      \hyperlink{group__apr__errno_ga2096daff578ef301e060b80c7a4525bf}{APR\_FROM\_OS\_ERROR}(rc), \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00193)
+166                      \textcolor{stringliteral}{"unable to create work queue, exiting"});
+167         \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(\hyperlink{group__APACHE__CORE__DAEMON_gaded5da364cad9d77f9c3dae73bd1d4bf}{APEXIT\_CHILDFATAL});
+168     \}
+169 
+170     \textcolor{comment}{/* Create initial pool of worker threads */}
+171     \textcolor{keywordflow}{for} (c = 0; c < \hyperlink{mpmt__os2__child_8c_a474099f250d9a8fa2a4c0408524b88e0}{ap\_min\_spare\_threads}; c++) \{
+172 \textcolor{comment}{//        ap\_scoreboard\_image->servers[child\_slot][c].tid = \_beginthread(worker\_main, NULL, 128*1024, (void
+       *)c);}
+173     \}
+174 
+175     \textcolor{comment}{/* Start maintenance thread */}
+176     server\_maint\_tid = \hyperlink{apr__dbg__win32__handles_8h_a21ba25b4c8e9d04b65644245f1321170}{\_beginthread}(server\_maintenance, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 32768, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+177 
+178     \textcolor{comment}{/* Set up poll */}
+179     \textcolor{keywordflow}{for} (num\_listeners = 0, lr = \hyperlink{group__APACHE__CORE__LISTEN_ga56c54ed44b1a272142d9fe4dd5a81a82}{ap\_listeners}; \hyperlink{group__APACHE__OS__UNIX_gad86a53a31ae797d73195f2f01d5e84bd}{lr}; lr = lr->\hyperlink{structap__listen__rec_a4240c0e22e20ef521ba64dc91dbaba10}{next}) \{
+180         num\_listeners++;
+181     \}
+182 
+183     apr\_pollset\_create(&pollset, num\_listeners, pchild, 0);
+184 
+185     \textcolor{keywordflow}{for} (lr = \hyperlink{group__APACHE__CORE__LISTEN_ga56c54ed44b1a272142d9fe4dd5a81a82}{ap\_listeners}; lr != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}; lr = lr->\hyperlink{structap__listen__rec_a4240c0e22e20ef521ba64dc91dbaba10}{next}) \{
+186         \hyperlink{structapr__pollfd__t}{apr\_pollfd\_t} pfd = \{ 0 \};
+187 
+188         pfd.\hyperlink{structapr__pollfd__t_acfafd260241a874745f49ba2df246c53}{desc\_type} = \hyperlink{group__apr__poll_gga0a8549d84c1721788b102a4cc8b4b0f0a3629c5b3166fde91792f2f913fbd72f0}{APR\_POLL\_SOCKET};
+189         pfd.\hyperlink{structapr__pollfd__t_ad63baa71bb91f80513d33482e28fb967}{desc}.\hyperlink{unionapr__descriptor_a39a15be8be084afadfa173810b346f6c}{s} = lr->\hyperlink{structap__listen__rec_af3eece1c155de1c17e4cdaa5c28873f9}{sd};
+190         pfd.\hyperlink{structapr__pollfd__t_abcedac7097a97823a38ece6e47f4ea9f}{reqevents} = \hyperlink{group__pollopts_ga746222e6b858bc2fc77328d59f78e788}{APR\_POLLIN};
+191         pfd.\hyperlink{structapr__pollfd__t_a01220e7a71963456461baa40b2a05716}{client\_data} = \hyperlink{group__APACHE__OS__UNIX_gad86a53a31ae797d73195f2f01d5e84bd}{lr};
+192         apr\_pollset\_add(pollset, &pfd);
+193     \}
+194 
+195     \textcolor{comment}{/* Main connection accept loop */}
+196     \textcolor{keywordflow}{do} \{
+197         \hyperlink{structapr__pool__t}{apr\_pool\_t} *pconn;
+198         \hyperlink{structworker__args__t}{worker\_args\_t} *worker\_args;
+199         \textcolor{keywordtype}{int} last\_poll\_idx = 0;
+200 
+201         \hyperlink{group__apr__pools_gaa7c40921aae156b665e82b0a66991a39}{apr\_pool\_create}(&pconn, pchild);
+202         worker\_args = apr\_palloc(pconn, \textcolor{keyword}{sizeof}(\hyperlink{structworker__args__t}{worker\_args\_t}));
+203         worker\_args->\hyperlink{structworker__args__t_a6f72d346f84cadc4a59adadd0d18cf9b}{pconn} = pconn;
+204 
+205         \textcolor{keywordflow}{if} (num\_listeners == 1) \{
+206             rv = \hyperlink{unix_2sockets_8c_a0c6a5d4f9de19f14390dc412717b89f2}{apr\_socket\_accept}(&worker\_args->\hyperlink{structworker__args__t_afeb0abf3febce8e8f6e794be55b8a0b2}{conn\_sd}, 
+      \hyperlink{group__APACHE__CORE__LISTEN_ga56c54ed44b1a272142d9fe4dd5a81a82}{ap\_listeners}->\hyperlink{structap__listen__rec_af3eece1c155de1c17e4cdaa5c28873f9}{sd}, pconn);
+207         \} \textcolor{keywordflow}{else} \{
+208             \textcolor{keyword}{const} \hyperlink{structapr__pollfd__t}{apr\_pollfd\_t} *poll\_results;
+209             \hyperlink{group__apr__platform_ga21ef1e35fd3ff9be386f3cb20164ff02}{apr\_int32\_t} num\_poll\_results;
+210 
+211             rc = DosRequestMutexSem(\hyperlink{mpmt__os2__child_8c_a92d338279598e4b09078ab7d9611ee52}{ap\_mpm\_accept\_mutex}, SEM\_INDEFINITE\_WAIT);
+212 
+213             \textcolor{keywordflow}{if} (shutdown\_pending) \{
+214                 DosReleaseMutexSem(\hyperlink{mpmt__os2__child_8c_a92d338279598e4b09078ab7d9611ee52}{ap\_mpm\_accept\_mutex});
+215                 \textcolor{keywordflow}{break};
+216             \}
+217 
+218             rv = \hyperlink{group__apr__errno_ga2096daff578ef301e060b80c7a4525bf}{APR\_FROM\_OS\_ERROR}(rc);
+219 
+220             \textcolor{keywordflow}{if} (rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+221                 rv = apr\_pollset\_poll(pollset, -1, &num\_poll\_results, &poll\_results);
+222                 DosReleaseMutexSem(\hyperlink{mpmt__os2__child_8c_a92d338279598e4b09078ab7d9611ee52}{ap\_mpm\_accept\_mutex});
+223             \}
+224 
+225             \textcolor{keywordflow}{if} (rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+226                 \textcolor{keywordflow}{if} (last\_poll\_idx >= num\_listeners) \{
+227                     last\_poll\_idx = 0;
+228                 \}
+229 
+230                 lr = poll\_results[last\_poll\_idx++].\hyperlink{structapr__pollfd__t_a01220e7a71963456461baa40b2a05716}{client\_data};
+231                 rv = \hyperlink{unix_2sockets_8c_a0c6a5d4f9de19f14390dc412717b89f2}{apr\_socket\_accept}(&worker\_args->\hyperlink{structworker__args__t_afeb0abf3febce8e8f6e794be55b8a0b2}{conn\_sd}, lr->
+      \hyperlink{structap__listen__rec_af3eece1c155de1c17e4cdaa5c28873f9}{sd}, pconn);
+232                 last\_poll\_idx++;
+233             \}
+234         \}
+235 
+236         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+237             \textcolor{keywordflow}{if} (!\hyperlink{group__APR__STATUS__IS_ga30615baf6479221e44870c620e372b5b}{APR\_STATUS\_IS\_EINTR}(rv)) \{
+238                 \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}, rv, 
+      \hyperlink{group__APACHE__CORE__MAIN_ga86736bfc3688ce1b25b1455f24fe740f}{ap\_server\_conf}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00194)
+239                              \textcolor{stringliteral}{"apr\_socket\_accept"});
+240                 \hyperlink{group__APACHE__MPM__WINNT_ga0c853525f284a08a7805d36e6eac77ce}{clean\_child\_exit}(\hyperlink{group__APACHE__CORE__DAEMON_gaded5da364cad9d77f9c3dae73bd1d4bf}{APEXIT\_CHILDFATAL});
+241             \}
+242         \} \textcolor{keywordflow}{else} \{
+243             DosWriteQueue(workq, \hyperlink{mpmt__os2__child_8c_a54525bc0c7892f84054bca3a6e4d4289}{WORKTYPE\_CONN}, \textcolor{keyword}{sizeof}(
+      \hyperlink{structworker__args__t}{worker\_args\_t}), worker\_args, 0);
+244             requests\_this\_child++;
+245         \}
+246 
+247         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__MPM_gaf4270d01cbd55f46555b0c04325bb7d0}{ap\_max\_requests\_per\_child} != 0 && requests\_this\_child >= 
+      \hyperlink{group__APACHE__MPM_gaf4270d01cbd55f46555b0c04325bb7d0}{ap\_max\_requests\_per\_child})
+248             \textcolor{keywordflow}{break};
+249     \} \textcolor{keywordflow}{while} (!shutdown\_pending && \hyperlink{mpmt__os2__child_8c_a87c8291a3a616fc0ce9d17cb1caf4335}{ap\_my\_generation} == 
+      \hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_adf777c5f1639e4d91bcf1a21bdc573ae}{global}->\hyperlink{structglobal__score_a2d68d2a23841cbc2d727acf3ff1ad5d2}{running\_generation});
+250 
+251     \hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa6f6cac3fd4d9881efaf5a2e0b0a98c7}{parent}[child\_slot].\hyperlink{structprocess__score_ad6990194283e5d8fe862bc2becd6d99d}{quiescing} = 1;
+252     DosPostEventSem(\hyperlink{mpmt__os2__child_8c_a87d66f992ad4103c94c5af9b748421fb}{shutdown\_event});
+253     DosWaitThread(&server\_maint\_tid, DCWW\_WAIT);
+254 
+255     \textcolor{keywordflow}{if} (is\_graceful) \{
+256         \textcolor{keywordtype}{char} someleft;
+257 
+258         \textcolor{comment}{/* tell our worker threads to exit */}
+259         \textcolor{keywordflow}{for} (c=0; c<\hyperlink{mpmt__os2__child_8c_acd4caf27098c6207ccb7103d0862ccc1}{HARD\_THREAD\_LIMIT}; c++) \{
+260             \textcolor{keywordflow}{if} (\hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[child\_slot][c].
+      \hyperlink{structworker__score_a00d08351762a2d7d79cfde18a95956fa}{status} != \hyperlink{scoreboard_8h_ab6cefcd56aeb086764463b8ee2f68be4}{SERVER\_DEAD}) \{
+261                 DosWriteQueue(workq, \hyperlink{mpmt__os2__child_8c_ac61782590639872358bbadd2729737d5}{WORKTYPE\_EXIT}, 0, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 0);
+262             \}
+263         \}
+264 
+265         \textcolor{keywordflow}{do} \{
+266             someleft = 0;
+267 
+268             \textcolor{keywordflow}{for} (c=0; c<\hyperlink{mpmt__os2__child_8c_acd4caf27098c6207ccb7103d0862ccc1}{HARD\_THREAD\_LIMIT}; c++) \{
+269                 \textcolor{keywordflow}{if} (\hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[child\_slot][c].
+      \hyperlink{structworker__score_a00d08351762a2d7d79cfde18a95956fa}{status} != \hyperlink{scoreboard_8h_ab6cefcd56aeb086764463b8ee2f68be4}{SERVER\_DEAD}) \{
+270                     someleft = 1;
+271                     DosSleep(1000);
+272                     \textcolor{keywordflow}{break};
+273                 \}
+274             \}
+275         \} \textcolor{keywordflow}{while} (someleft);
+276     \} \textcolor{keywordflow}{else} \{
+277         DosPurgeQueue(workq);
+278 
+279         \textcolor{keywordflow}{for} (c=0; c<\hyperlink{mpmt__os2__child_8c_acd4caf27098c6207ccb7103d0862ccc1}{HARD\_THREAD\_LIMIT}; c++) \{
+280             \textcolor{keywordflow}{if} (\hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[child\_slot][c].
+      \hyperlink{structworker__score_a00d08351762a2d7d79cfde18a95956fa}{status} != \hyperlink{scoreboard_8h_ab6cefcd56aeb086764463b8ee2f68be4}{SERVER\_DEAD}) \{
+281                 DosKillThread(\hyperlink{scoreboard_8h_a102e0a64bb8d9106854cf97302d8e52d}{ap\_scoreboard\_image}->\hyperlink{structscoreboard_aa37676240ced7c7542111b26d040e4c0}{servers}[child\_slot][c].tid);
+282             \}
+283         \}
+284     \}
+285 
+286     apr\_pool\_destroy(pchild);
+287 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mpmt__os2_8c_a9903db1decc140ee282554001a672b1b_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!ap\+\_\+max\+\_\+daemons\+\_\+limit@{ap\+\_\+max\+\_\+daemons\+\_\+limit}}
+\index{ap\+\_\+max\+\_\+daemons\+\_\+limit@{ap\+\_\+max\+\_\+daemons\+\_\+limit}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+max\+\_\+daemons\+\_\+limit}{ap_max_daemons_limit}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ap\+\_\+max\+\_\+daemons\+\_\+limit = -\/1}\hypertarget{mpmt__os2_8c_a6a82ba7bf9acd08bfb0c1c13ca09b344}{}\label{mpmt__os2_8c_a6a82ba7bf9acd08bfb0c1c13ca09b344}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!ap\+\_\+max\+\_\+spare\+\_\+threads@{ap\+\_\+max\+\_\+spare\+\_\+threads}}
+\index{ap\+\_\+max\+\_\+spare\+\_\+threads@{ap\+\_\+max\+\_\+spare\+\_\+threads}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+max\+\_\+spare\+\_\+threads}{ap_max_spare_threads}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ap\+\_\+max\+\_\+spare\+\_\+threads = 0}\hypertarget{mpmt__os2_8c_a2e9159f4f7803699f5cd5989d373b494}{}\label{mpmt__os2_8c_a2e9159f4f7803699f5cd5989d373b494}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!ap\+\_\+min\+\_\+spare\+\_\+threads@{ap\+\_\+min\+\_\+spare\+\_\+threads}}
+\index{ap\+\_\+min\+\_\+spare\+\_\+threads@{ap\+\_\+min\+\_\+spare\+\_\+threads}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+min\+\_\+spare\+\_\+threads}{ap_min_spare_threads}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} ap\+\_\+min\+\_\+spare\+\_\+threads = 0}\hypertarget{mpmt__os2_8c_a474099f250d9a8fa2a4c0408524b88e0}{}\label{mpmt__os2_8c_a474099f250d9a8fa2a4c0408524b88e0}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!ap\+\_\+mpm\+\_\+accept\+\_\+mutex@{ap\+\_\+mpm\+\_\+accept\+\_\+mutex}}
+\index{ap\+\_\+mpm\+\_\+accept\+\_\+mutex@{ap\+\_\+mpm\+\_\+accept\+\_\+mutex}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+mpm\+\_\+accept\+\_\+mutex}{ap_mpm_accept_mutex}}]{\setlength{\rightskip}{0pt plus 5cm}H\+M\+TX ap\+\_\+mpm\+\_\+accept\+\_\+mutex = 0}\hypertarget{mpmt__os2_8c_a92d338279598e4b09078ab7d9611ee52}{}\label{mpmt__os2_8c_a92d338279598e4b09078ab7d9611ee52}
+\index{mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}!ap\+\_\+my\+\_\+generation@{ap\+\_\+my\+\_\+generation}}
+\index{ap\+\_\+my\+\_\+generation@{ap\+\_\+my\+\_\+generation}!mpmt\+\_\+os2.\+c@{mpmt\+\_\+os2.\+c}}
+\subsubsection[{\texorpdfstring{ap\+\_\+my\+\_\+generation}{ap_my_generation}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ap\+\_\+generation\+\_\+t} volatile ap\+\_\+my\+\_\+generation =0}\hypertarget{mpmt__os2_8c_a096169d80fe6eb25c1206b180af1d496}{}\label{mpmt__os2_8c_a096169d80fe6eb25c1206b180af1d496}

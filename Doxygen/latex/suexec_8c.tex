@@ -1,0 +1,483 @@
+\hypertarget{suexec_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/support/suexec.c File Reference}
+\label{suexec_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/suexec.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/support/suexec.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}suexec.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$sys/param.\+h$>$}\\*
+{\ttfamily \#include $<$sys/stat.\+h$>$}\\*
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdarg.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+Include dependency graph for suexec.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{suexec_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{suexec_8c_ab653cf22c99ca5af86c45dbb5092739c}{A\+P\+\_\+\+M\+A\+X\+P\+A\+TH}~8192
+\item 
+\#define \hyperlink{suexec_8c_a10bffde03876e58fae23810174e77cb5}{A\+P\+\_\+\+E\+N\+V\+B\+UF}~256
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{suexec_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$$\ast$ \hyperlink{suexec_8c_aa006daaf11f1e2e45a6ababaf463212b}{environ}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{suexec.\+c@{suexec.\+c}!A\+P\+\_\+\+E\+N\+V\+B\+UF@{A\+P\+\_\+\+E\+N\+V\+B\+UF}}
+\index{A\+P\+\_\+\+E\+N\+V\+B\+UF@{A\+P\+\_\+\+E\+N\+V\+B\+UF}!suexec.\+c@{suexec.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+E\+N\+V\+B\+UF}{AP_ENVBUF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+E\+N\+V\+B\+UF~256}\hypertarget{suexec_8c_a10bffde03876e58fae23810174e77cb5}{}\label{suexec_8c_a10bffde03876e58fae23810174e77cb5}
+\index{suexec.\+c@{suexec.\+c}!A\+P\+\_\+\+M\+A\+X\+P\+A\+TH@{A\+P\+\_\+\+M\+A\+X\+P\+A\+TH}}
+\index{A\+P\+\_\+\+M\+A\+X\+P\+A\+TH@{A\+P\+\_\+\+M\+A\+X\+P\+A\+TH}!suexec.\+c@{suexec.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+M\+A\+X\+P\+A\+TH}{AP_MAXPATH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+\_\+\+M\+A\+X\+P\+A\+TH~8192}\hypertarget{suexec_8c_ab653cf22c99ca5af86c45dbb5092739c}{}\label{suexec_8c_ab653cf22c99ca5af86c45dbb5092739c}
+
+
+\subsection{Function Documentation}
+\index{suexec.\+c@{suexec.\+c}!main@{main}}
+\index{main@{main}!suexec.\+c@{suexec.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{suexec_8c_a0ddf1224851353fc92bfbff6f499fa97}{}\label{suexec_8c_a0ddf1224851353fc92bfbff6f499fa97}
+
+\begin{DoxyCode}
+249 \{
+250     \textcolor{keywordtype}{int} userdir = 0;        \textcolor{comment}{/* ~userdir flag             */}
+251     uid\_t uid;              \textcolor{comment}{/* user information          */}
+252     gid\_t gid;              \textcolor{comment}{/* target group placeholder  */}
+253     \textcolor{keywordtype}{char} *target\_uname;     \textcolor{comment}{/* target user name          */}
+254     \textcolor{keywordtype}{char} *target\_gname;     \textcolor{comment}{/* target group name         */}
+255     \textcolor{keywordtype}{char} *target\_homedir;   \textcolor{comment}{/* target home directory     */}
+256     \textcolor{keywordtype}{char} *actual\_uname;     \textcolor{comment}{/* actual user name          */}
+257     \textcolor{keywordtype}{char} *actual\_gname;     \textcolor{comment}{/* actual group name         */}
+258     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__DAEMON_ga504a7f40c3261db3e10e1d2776642dd6}{cmd};              \textcolor{comment}{/* command to be executed    */}
+259     \textcolor{keywordtype}{char} cwd[\hyperlink{suexec_8c_ab653cf22c99ca5af86c45dbb5092739c}{AP\_MAXPATH}];   \textcolor{comment}{/* current working directory */}
+260     \textcolor{keywordtype}{char} dwd[\hyperlink{suexec_8c_ab653cf22c99ca5af86c45dbb5092739c}{AP\_MAXPATH}];   \textcolor{comment}{/* docroot working directory */}
+261     \textcolor{keyword}{struct }passwd *\hyperlink{group__APACHE__CORE__PROTO_ga4b22922ccb91d71d170bf2bbca3d241e}{pw};      \textcolor{comment}{/* password entry holder     */}
+262     \textcolor{keyword}{struct }\hyperlink{group__MOD__DAV_gadc3add9d56a1a732c371606682db4c4e}{group} *gr;       \textcolor{comment}{/* group entry holder        */}
+263     \textcolor{keyword}{struct }stat dir\_info;   \textcolor{comment}{/* directory info holder     */}
+264     \textcolor{keyword}{struct }stat prg\_info;   \textcolor{comment}{/* program info holder       */}
+265 
+266     \textcolor{comment}{/*}
+267 \textcolor{comment}{     * Start with a "clean" environment}
+268 \textcolor{comment}{     */}
+269     clean\_env();
+270 
+271     \textcolor{comment}{/*}
+272 \textcolor{comment}{     * Check existence/validity of the UID of the user}
+273 \textcolor{comment}{     * running this program.  Error out if invalid.}
+274 \textcolor{comment}{     */}
+275     uid = getuid();
+276     \textcolor{keywordflow}{if} ((pw = getpwuid(uid)) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+277         log\_err(\textcolor{stringliteral}{"crit: invalid uid: (%lu)\(\backslash\)n"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})uid);
+278         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(102);
+279     \}
+280     \textcolor{comment}{/*}
+281 \textcolor{comment}{     * See if this is a 'how were you compiled' request, and}
+282 \textcolor{comment}{     * comply if so.}
+283 \textcolor{comment}{     */}
+284     \textcolor{keywordflow}{if} ((\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} > 1)
+285         && (! strcmp(\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1], \textcolor{stringliteral}{"-V"}))
+286         && ((uid == 0)
+287 #ifdef \_OSD\_POSIX
+288         \textcolor{comment}{/* User name comparisons are case insensitive on BS2000/OSD */}
+289             || (! \hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(\hyperlink{ap__config__auto_8h_a95c1eda6cd1845a60b1c4640dc2f4f2f}{AP\_HTTPD\_USER}, pw->pw\_name)))
+290 #\textcolor{keywordflow}{else}  \textcolor{comment}{/* \_OSD\_POSIX */}
+291             || (! strcmp(\hyperlink{ap__config__auto_8h_a95c1eda6cd1845a60b1c4640dc2f4f2f}{AP\_HTTPD\_USER}, pw->pw\_name)))
+292 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* \_OSD\_POSIX */}\textcolor{preprocessor}{}
+293         ) \{
+294 \textcolor{preprocessor}{#ifdef AP\_DOC\_ROOT}
+295         fprintf(stderr, \textcolor{stringliteral}{" -D AP\_DOC\_ROOT=\(\backslash\)"%s\(\backslash\)"\(\backslash\)n"}, \hyperlink{ap__config__auto_8h_ae9ee23915278e90e15f4849d1d559aef}{AP\_DOC\_ROOT});
+296 \textcolor{preprocessor}{#endif}
+297 \textcolor{preprocessor}{#ifdef AP\_GID\_MIN}
+298         fprintf(stderr, \textcolor{stringliteral}{" -D AP\_GID\_MIN=%d\(\backslash\)n"}, \hyperlink{suexec_8h_ab9fbc9f5869393f7e31d639b6bbfdef9}{AP\_GID\_MIN});
+299 \textcolor{preprocessor}{#endif}
+300 \textcolor{preprocessor}{#ifdef AP\_HTTPD\_USER}
+301         fprintf(stderr, \textcolor{stringliteral}{" -D AP\_HTTPD\_USER=\(\backslash\)"%s\(\backslash\)"\(\backslash\)n"}, \hyperlink{ap__config__auto_8h_a95c1eda6cd1845a60b1c4640dc2f4f2f}{AP\_HTTPD\_USER});
+302 \textcolor{preprocessor}{#endif}
+303 \textcolor{preprocessor}{#ifdef AP\_LOG\_EXEC}
+304         fprintf(stderr, \textcolor{stringliteral}{" -D AP\_LOG\_EXEC=\(\backslash\)"%s\(\backslash\)"\(\backslash\)n"}, \hyperlink{ap__config__auto_8h_a64642668abdaa652e5b4c2eedfc064ec}{AP\_LOG\_EXEC});
+305 \textcolor{preprocessor}{#endif}
+306 \textcolor{preprocessor}{#ifdef AP\_SAFE\_PATH}
+307         fprintf(stderr, \textcolor{stringliteral}{" -D AP\_SAFE\_PATH=\(\backslash\)"%s\(\backslash\)"\(\backslash\)n"}, \hyperlink{suexec_8h_ab8b260a0c132f7f07fe5a5416c00177d}{AP\_SAFE\_PATH});
+308 \textcolor{preprocessor}{#endif}
+309 \textcolor{preprocessor}{#ifdef AP\_SUEXEC\_UMASK}
+310         fprintf(stderr, \textcolor{stringliteral}{" -D AP\_SUEXEC\_UMASK=%03o\(\backslash\)n"}, AP\_SUEXEC\_UMASK);
+311 \textcolor{preprocessor}{#endif}
+312 \textcolor{preprocessor}{#ifdef AP\_UID\_MIN}
+313         fprintf(stderr, \textcolor{stringliteral}{" -D AP\_UID\_MIN=%d\(\backslash\)n"}, \hyperlink{ap__config__auto_8h_a602c67a11bece1b53a3dc12211d38c6b}{AP\_UID\_MIN});
+314 \textcolor{preprocessor}{#endif}
+315 \textcolor{preprocessor}{#ifdef AP\_USERDIR\_SUFFIX}
+316         fprintf(stderr, \textcolor{stringliteral}{" -D AP\_USERDIR\_SUFFIX=\(\backslash\)"%s\(\backslash\)"\(\backslash\)n"}, \hyperlink{ap__config__auto_8h_a20dca2e528003299f7b3e69bfd3e9b6e}{AP\_USERDIR\_SUFFIX});
+317 \textcolor{preprocessor}{#endif}
+318         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(0);
+319     \}
+320     \textcolor{comment}{/*}
+321 \textcolor{comment}{     * If there are a proper number of arguments, set}
+322 \textcolor{comment}{     * all of them to variables.  Otherwise, error out.}
+323 \textcolor{comment}{     */}
+324     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} < 4) \{
+325         log\_err(\textcolor{stringliteral}{"too few arguments\(\backslash\)n"});
+326         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(101);
+327     \}
+328     target\_uname = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1];
+329     target\_gname = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2];
+330     cmd = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[3];
+331 
+332     \textcolor{comment}{/*}
+333 \textcolor{comment}{     * Check to see if the user running this program}
+334 \textcolor{comment}{     * is the user allowed to do so as defined in}
+335 \textcolor{comment}{     * suexec.h.  If not the allowed user, error out.}
+336 \textcolor{comment}{     */}
+337 \textcolor{preprocessor}{#ifdef \_OSD\_POSIX}
+338     \textcolor{comment}{/* User name comparisons are case insensitive on BS2000/OSD */}
+339     \textcolor{keywordflow}{if} (\hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(\hyperlink{ap__config__auto_8h_a95c1eda6cd1845a60b1c4640dc2f4f2f}{AP\_HTTPD\_USER}, pw->pw\_name)) \{
+340         log\_err(\textcolor{stringliteral}{"user mismatch (%s instead of %s)\(\backslash\)n"}, pw->pw\_name, \hyperlink{ap__config__auto_8h_a95c1eda6cd1845a60b1c4640dc2f4f2f}{AP\_HTTPD\_USER});
+341         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(103);
+342     \}
+343 \textcolor{preprocessor}{#else  }\textcolor{comment}{/*\_OSD\_POSIX*/}\textcolor{preprocessor}{}
+344     \textcolor{keywordflow}{if} (strcmp(\hyperlink{ap__config__auto_8h_a95c1eda6cd1845a60b1c4640dc2f4f2f}{AP\_HTTPD\_USER}, pw->pw\_name)) \{
+345         log\_err(\textcolor{stringliteral}{"user mismatch (%s instead of %s)\(\backslash\)n"}, pw->pw\_name, \hyperlink{ap__config__auto_8h_a95c1eda6cd1845a60b1c4640dc2f4f2f}{AP\_HTTPD\_USER});
+346         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(103);
+347     \}
+348 \textcolor{preprocessor}{#endif }\textcolor{comment}{/*\_OSD\_POSIX*/}\textcolor{preprocessor}{}
+349 
+350     \textcolor{comment}{/*}
+351 \textcolor{comment}{     * Check for a leading '/' (absolute path) in the command to be executed,}
+352 \textcolor{comment}{     * or attempts to back up out of the current directory,}
+353 \textcolor{comment}{     * to protect against attacks.  If any are}
+354 \textcolor{comment}{     * found, error out.  Naughty naughty crackers.}
+355 \textcolor{comment}{     */}
+356     \textcolor{keywordflow}{if} ((cmd[0] == \textcolor{charliteral}{'/'}) || (!strncmp(cmd, \textcolor{stringliteral}{"../"}, 3))
+357         || (\hyperlink{apr__cpystrn_8c_a230063e3f4d6c1324129ea552e026c27}{strstr}(cmd, \textcolor{stringliteral}{"/../"}) != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})) \{
+358         log\_err(\textcolor{stringliteral}{"invalid command (%s)\(\backslash\)n"}, cmd);
+359         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(104);
+360     \}
+361 
+362     \textcolor{comment}{/*}
+363 \textcolor{comment}{     * Check to see if this is a ~userdir request.  If}
+364 \textcolor{comment}{     * so, set the flag, and remove the '~' from the}
+365 \textcolor{comment}{     * target username.}
+366 \textcolor{comment}{     */}
+367     \textcolor{keywordflow}{if} (!strncmp(\textcolor{stringliteral}{"~"}, target\_uname, 1)) \{
+368         target\_uname++;
+369         userdir = 1;
+370     \}
+371 
+372     \textcolor{comment}{/*}
+373 \textcolor{comment}{     * Error out if the target username is invalid.}
+374 \textcolor{comment}{     */}
+375     \textcolor{keywordflow}{if} (strspn(target\_uname, \textcolor{stringliteral}{"1234567890"}) != strlen(target\_uname)) \{
+376         \textcolor{keywordflow}{if} ((pw = getpwnam(target\_uname)) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+377             log\_err(\textcolor{stringliteral}{"invalid target user name: (%s)\(\backslash\)n"}, target\_uname);
+378             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(105);
+379         \}
+380     \}
+381     \textcolor{keywordflow}{else} \{
+382         \textcolor{keywordflow}{if} ((pw = getpwuid(atoi(target\_uname))) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+383             log\_err(\textcolor{stringliteral}{"invalid target user id: (%s)\(\backslash\)n"}, target\_uname);
+384             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(121);
+385         \}
+386     \}
+387 
+388     \textcolor{comment}{/*}
+389 \textcolor{comment}{     * Error out if the target group name is invalid.}
+390 \textcolor{comment}{     */}
+391     \textcolor{keywordflow}{if} (strspn(target\_gname, \textcolor{stringliteral}{"1234567890"}) != strlen(target\_gname)) \{
+392         \textcolor{keywordflow}{if} ((gr = getgrnam(target\_gname)) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+393             log\_err(\textcolor{stringliteral}{"invalid target group name: (%s)\(\backslash\)n"}, target\_gname);
+394             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(106);
+395         \}
+396     \}
+397     \textcolor{keywordflow}{else} \{
+398         \textcolor{keywordflow}{if} ((gr = getgrgid(atoi(target\_gname))) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+399             log\_err(\textcolor{stringliteral}{"invalid target group id: (%s)\(\backslash\)n"}, target\_gname);
+400             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(106);
+401         \}
+402     \}
+403     gid = gr->gr\_gid;
+404     \textcolor{keywordflow}{if} ((actual\_gname = \hyperlink{apr__cpystrn_8c_a2c4f14c424a31db9c57fd046c3b9f0df}{strdup}(gr->gr\_name)) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+405         log\_err(\textcolor{stringliteral}{"failed to alloc memory\(\backslash\)n"});
+406         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(125);
+407     \}
+408 
+409 \textcolor{preprocessor}{#ifdef \_OSD\_POSIX}
+410     \textcolor{comment}{/*}
+411 \textcolor{comment}{     * Initialize BS2000 user environment}
+412 \textcolor{comment}{     */}
+413     \{
+414         pid\_t pid;
+415         \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+416 
+417         \textcolor{keywordflow}{switch} (pid = ufork(target\_uname)) \{
+418         \textcolor{keywordflow}{case} -1:    \textcolor{comment}{/* Error */}
+419             log\_err(\textcolor{stringliteral}{"failed to setup bs2000 environment for user %s: %s\(\backslash\)n"},
+420                     target\_uname, \hyperlink{pcregrep_8c_a5d6ffddd86bd0d0ead58247b1a80e486}{strerror}(errno));
+421             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(150);
+422         \textcolor{keywordflow}{case} 0:     \textcolor{comment}{/* Child */}
+423             \textcolor{keywordflow}{break};
+424         \textcolor{keywordflow}{default}:    \textcolor{comment}{/* Father */}
+425             \textcolor{keywordflow}{while} (pid != \hyperlink{unix_2procsup_8c_ac7a6489ac1c0c6ac76b0122a1bfe5588}{waitpid}(pid, &status, 0))
+426                 ;
+427             \textcolor{comment}{/* @@@ FIXME: should we deal with STOP signals as well? */}
+428             \textcolor{keywordflow}{if} (WIFSIGNALED(status)) \{
+429                 kill (\hyperlink{group__APACHE__OS__NETWARE_gacf2940fe9f29eb438f40629fd4fbb2b6}{getpid}(), \hyperlink{group__apr__platform_ga94ec02a12424092a8391069adcd2ff73}{WTERMSIG}(status));
+430             \}
+431             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(\hyperlink{group__apr__platform_ga77f17ed4771a558a0f16e5f3aecee222}{WEXITSTATUS}(status));
+432         \}
+433     \}
+434 \textcolor{preprocessor}{#endif }\textcolor{comment}{/*\_OSD\_POSIX*/}\textcolor{preprocessor}{}
+435 
+436     \textcolor{comment}{/*}
+437 \textcolor{comment}{     * Save these for later since initgroups will hose the struct}
+438 \textcolor{comment}{     */}
+439     uid = pw->pw\_uid;
+440     actual\_uname = \hyperlink{apr__cpystrn_8c_a2c4f14c424a31db9c57fd046c3b9f0df}{strdup}(pw->pw\_name);
+441     target\_homedir = \hyperlink{apr__cpystrn_8c_a2c4f14c424a31db9c57fd046c3b9f0df}{strdup}(pw->pw\_dir);
+442     \textcolor{keywordflow}{if} (actual\_uname == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} || target\_homedir == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+443         log\_err(\textcolor{stringliteral}{"failed to alloc memory\(\backslash\)n"});
+444         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(126);
+445     \}
+446 
+447     \textcolor{comment}{/*}
+448 \textcolor{comment}{     * Log the transaction here to be sure we have an open log}
+449 \textcolor{comment}{     * before we setuid().}
+450 \textcolor{comment}{     */}
+451     log\_no\_err(\textcolor{stringliteral}{"uid: (%s/%s) gid: (%s/%s) cmd: %s\(\backslash\)n"},
+452                target\_uname, actual\_uname,
+453                target\_gname, actual\_gname,
+454                cmd);
+455 
+456     \textcolor{comment}{/*}
+457 \textcolor{comment}{     * Error out if attempt is made to execute as root or as}
+458 \textcolor{comment}{     * a UID less than AP\_UID\_MIN.  Tsk tsk.}
+459 \textcolor{comment}{     */}
+460     \textcolor{keywordflow}{if} ((uid == 0) || (uid < \hyperlink{ap__config__auto_8h_a602c67a11bece1b53a3dc12211d38c6b}{AP\_UID\_MIN})) \{
+461         log\_err(\textcolor{stringliteral}{"cannot run as forbidden uid (%lu/%s)\(\backslash\)n"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})uid, cmd);
+462         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(107);
+463     \}
+464 
+465     \textcolor{comment}{/*}
+466 \textcolor{comment}{     * Error out if attempt is made to execute as root group}
+467 \textcolor{comment}{     * or as a GID less than AP\_GID\_MIN.  Tsk tsk.}
+468 \textcolor{comment}{     */}
+469     \textcolor{keywordflow}{if} ((gid == 0) || (gid < \hyperlink{suexec_8h_ab9fbc9f5869393f7e31d639b6bbfdef9}{AP\_GID\_MIN})) \{
+470         log\_err(\textcolor{stringliteral}{"cannot run as forbidden gid (%lu/%s)\(\backslash\)n"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})gid, cmd);
+471         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(108);
+472     \}
+473 
+474     \textcolor{comment}{/*}
+475 \textcolor{comment}{     * Change UID/GID here so that the following tests work over NFS.}
+476 \textcolor{comment}{     *}
+477 \textcolor{comment}{     * Initialize the group access list for the target user,}
+478 \textcolor{comment}{     * and setgid() to the target group. If unsuccessful, error out.}
+479 \textcolor{comment}{     */}
+480     \textcolor{keywordflow}{if} (((setgid(gid)) != 0) || (\hyperlink{mpm__common_8c_a9c6178c435287e685ff3df23c5a3c0db}{initgroups}(actual\_uname, gid) != 0)) \{
+481         log\_err(\textcolor{stringliteral}{"failed to setgid (%lu: %s)\(\backslash\)n"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})gid, cmd);
+482         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(109);
+483     \}
+484 
+485     \textcolor{comment}{/*}
+486 \textcolor{comment}{     * setuid() to the target user.  Error out on fail.}
+487 \textcolor{comment}{     */}
+488     \textcolor{keywordflow}{if} ((setuid(uid)) != 0) \{
+489         log\_err(\textcolor{stringliteral}{"failed to setuid (%lu: %s)\(\backslash\)n"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})uid, cmd);
+490         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(110);
+491     \}
+492 
+493     \textcolor{comment}{/*}
+494 \textcolor{comment}{     * Get the current working directory, as well as the proper}
+495 \textcolor{comment}{     * document root (dependant upon whether or not it is a}
+496 \textcolor{comment}{     * ~userdir request).  Error out if we cannot get either one,}
+497 \textcolor{comment}{     * or if the current working directory is not in the docroot.}
+498 \textcolor{comment}{     * Use chdir()s and getcwd()s to avoid problems with symlinked}
+499 \textcolor{comment}{     * directories.  Yuck.}
+500 \textcolor{comment}{     */}
+501     \textcolor{keywordflow}{if} (getcwd(cwd, \hyperlink{suexec_8c_ab653cf22c99ca5af86c45dbb5092739c}{AP\_MAXPATH}) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+502         log\_err(\textcolor{stringliteral}{"cannot get current working directory\(\backslash\)n"});
+503         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(111);
+504     \}
+505 
+506     \textcolor{keywordflow}{if} (userdir) \{
+507         \textcolor{keywordflow}{if} (((chdir(target\_homedir)) != 0) ||
+508             ((chdir(\hyperlink{ap__config__auto_8h_a20dca2e528003299f7b3e69bfd3e9b6e}{AP\_USERDIR\_SUFFIX})) != 0) ||
+509             ((getcwd(dwd, \hyperlink{suexec_8c_ab653cf22c99ca5af86c45dbb5092739c}{AP\_MAXPATH})) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) ||
+510             ((chdir(cwd)) != 0)) \{
+511             log\_err(\textcolor{stringliteral}{"cannot get docroot information (%s)\(\backslash\)n"}, target\_homedir);
+512             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(112);
+513         \}
+514     \}
+515     \textcolor{keywordflow}{else} \{
+516         \textcolor{keywordflow}{if} (((chdir(\hyperlink{ap__config__auto_8h_ae9ee23915278e90e15f4849d1d559aef}{AP\_DOC\_ROOT})) != 0) ||
+517             ((getcwd(dwd, \hyperlink{suexec_8c_ab653cf22c99ca5af86c45dbb5092739c}{AP\_MAXPATH})) == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) ||
+518             ((chdir(cwd)) != 0)) \{
+519             log\_err(\textcolor{stringliteral}{"cannot get docroot information (%s)\(\backslash\)n"}, \hyperlink{ap__config__auto_8h_ae9ee23915278e90e15f4849d1d559aef}{AP\_DOC\_ROOT});
+520             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(113);
+521         \}
+522     \}
+523 
+524     \textcolor{keywordflow}{if} ((strncmp(cwd, dwd, strlen(dwd))) != 0) \{
+525         log\_err(\textcolor{stringliteral}{"command not in docroot (%s/%s)\(\backslash\)n"}, cwd, cmd);
+526         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(114);
+527     \}
+528 
+529     \textcolor{comment}{/*}
+530 \textcolor{comment}{     * Stat the cwd and verify it is a directory, or error out.}
+531 \textcolor{comment}{     */}
+532     \textcolor{keywordflow}{if} (((lstat(cwd, &dir\_info)) != 0) || !(S\_ISDIR(dir\_info.st\_mode))) \{
+533         log\_err(\textcolor{stringliteral}{"cannot stat directory: (%s)\(\backslash\)n"}, cwd);
+534         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(115);
+535     \}
+536 
+537     \textcolor{comment}{/*}
+538 \textcolor{comment}{     * Error out if cwd is writable by others.}
+539 \textcolor{comment}{     */}
+540     \textcolor{keywordflow}{if} ((dir\_info.st\_mode & S\_IWOTH) || (dir\_info.st\_mode & S\_IWGRP)) \{
+541         log\_err(\textcolor{stringliteral}{"directory is writable by others: (%s)\(\backslash\)n"}, cwd);
+542         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(116);
+543     \}
+544 
+545     \textcolor{comment}{/*}
+546 \textcolor{comment}{     * Error out if we cannot stat the program.}
+547 \textcolor{comment}{     */}
+548     \textcolor{keywordflow}{if} (((lstat(cmd, &prg\_info)) != 0) || (S\_ISLNK(prg\_info.st\_mode))) \{
+549         log\_err(\textcolor{stringliteral}{"cannot stat program: (%s)\(\backslash\)n"}, cmd);
+550         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(117);
+551     \}
+552 
+553     \textcolor{comment}{/*}
+554 \textcolor{comment}{     * Error out if the program is writable by others.}
+555 \textcolor{comment}{     */}
+556     \textcolor{keywordflow}{if} ((prg\_info.st\_mode & S\_IWOTH) || (prg\_info.st\_mode & S\_IWGRP)) \{
+557         log\_err(\textcolor{stringliteral}{"file is writable by others: (%s/%s)\(\backslash\)n"}, cwd, cmd);
+558         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(118);
+559     \}
+560 
+561     \textcolor{comment}{/*}
+562 \textcolor{comment}{     * Error out if the file is setuid or setgid.}
+563 \textcolor{comment}{     */}
+564     \textcolor{keywordflow}{if} ((prg\_info.st\_mode & S\_ISUID) || (prg\_info.st\_mode & S\_ISGID)) \{
+565         log\_err(\textcolor{stringliteral}{"file is either setuid or setgid: (%s/%s)\(\backslash\)n"}, cwd, cmd);
+566         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(119);
+567     \}
+568 
+569     \textcolor{comment}{/*}
+570 \textcolor{comment}{     * Error out if the target name/group is different from}
+571 \textcolor{comment}{     * the name/group of the cwd or the program.}
+572 \textcolor{comment}{     */}
+573     \textcolor{keywordflow}{if} ((uid != dir\_info.st\_uid) ||
+574         (gid != dir\_info.st\_gid) ||
+575         (uid != prg\_info.st\_uid) ||
+576         (gid != prg\_info.st\_gid)) \{
+577         log\_err(\textcolor{stringliteral}{"target uid/gid (%lu/%lu) mismatch "}
+578                 \textcolor{stringliteral}{"with directory (%lu/%lu) or program (%lu/%lu)\(\backslash\)n"},
+579                 (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})uid, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})gid,
+580                 (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})dir\_info.st\_uid, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})dir\_info.st\_gid,
+581                 (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})prg\_info.st\_uid, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})prg\_info.st\_gid);
+582         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(120);
+583     \}
+584     \textcolor{comment}{/*}
+585 \textcolor{comment}{     * Error out if the program is not executable for the user.}
+586 \textcolor{comment}{     * Otherwise, she won't find any error in the logs except for}
+587 \textcolor{comment}{     * "[error] Premature end of script headers: ..."}
+588 \textcolor{comment}{     */}
+589     \textcolor{keywordflow}{if} (!(prg\_info.st\_mode & S\_IXUSR)) \{
+590         log\_err(\textcolor{stringliteral}{"file has no execute permission: (%s/%s)\(\backslash\)n"}, cwd, cmd);
+591         \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(121);
+592     \}
+593 
+594 \textcolor{preprocessor}{#ifdef AP\_SUEXEC\_UMASK}
+595     \textcolor{comment}{/*}
+596 \textcolor{comment}{     * umask() uses inverse logic; bits are CLEAR for allowed access.}
+597 \textcolor{comment}{     */}
+598     \textcolor{keywordflow}{if} ((~AP\_SUEXEC\_UMASK) & 0022) \{
+599         log\_err(\textcolor{stringliteral}{"notice: AP\_SUEXEC\_UMASK of %03o allows "}
+600                 \textcolor{stringliteral}{"write permission to group and/or other\(\backslash\)n"}, AP\_SUEXEC\_UMASK);
+601     \}
+602     umask(AP\_SUEXEC\_UMASK);
+603 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* AP\_SUEXEC\_UMASK */}\textcolor{preprocessor}{}
+604 
+605     \textcolor{comment}{/* Be sure to close the log file so the CGI can't mess with it. */}
+606     \textcolor{keywordflow}{if} (log != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+607 \textcolor{preprocessor}{#if APR\_HAVE\_FCNTL\_H}
+608         \textcolor{comment}{/*}
+609 \textcolor{comment}{         * ask fcntl(2) to set the FD\_CLOEXEC flag on the log file,}
+610 \textcolor{comment}{         * so it'll be automagically closed if the exec() call succeeds.}
+611 \textcolor{comment}{         */}
+612         fflush(log);
+613         setbuf(log, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+614         \textcolor{keywordflow}{if} ((fcntl(fileno(log), F\_SETFD, FD\_CLOEXEC) == -1)) \{
+615             log\_err(\textcolor{stringliteral}{"error: can't set close-on-exec flag"});
+616             \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(122);
+617         \}
+618 \textcolor{preprocessor}{#else}
+619         \textcolor{comment}{/*}
+620 \textcolor{comment}{         * In this case, exec() errors won't be logged because we have already}
+621 \textcolor{comment}{         * dropped privileges and won't be able to reopen the log file.}
+622 \textcolor{comment}{         */}
+623         fclose(log);
+624         log = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+625 \textcolor{preprocessor}{#endif}
+626     \}
+627 
+628     \textcolor{comment}{/*}
+629 \textcolor{comment}{     * Execute the command, replacing our image with its own.}
+630 \textcolor{comment}{     */}
+631 \textcolor{preprocessor}{#ifdef NEED\_HASHBANG\_EMUL}
+632     \textcolor{comment}{/* We need the #! emulation when we want to execute scripts */}
+633     \{
+634         \textcolor{keyword}{extern} \textcolor{keywordtype}{char} **\hyperlink{suexec_8c_aa006daaf11f1e2e45a6ababaf463212b}{environ};
+635 
+636         ap\_execve(cmd, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[3], environ);
+637     \}
+638 \textcolor{preprocessor}{#else }\textcolor{comment}{/*NEED\_HASHBANG\_EMUL*/}\textcolor{preprocessor}{}
+639     execv(cmd, &\hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[3]);
+640 \textcolor{preprocessor}{#endif }\textcolor{comment}{/*NEED\_HASHBANG\_EMUL*/}\textcolor{preprocessor}{}
+641 
+642     \textcolor{comment}{/*}
+643 \textcolor{comment}{     * (I can't help myself...sorry.)}
+644 \textcolor{comment}{     *}
+645 \textcolor{comment}{     * Uh oh.  Still here.  Where's the kaboom?  There was supposed to be an}
+646 \textcolor{comment}{     * EARTH-shattering kaboom!}
+647 \textcolor{comment}{     *}
+648 \textcolor{comment}{     * Oh well, log the failure and error out.}
+649 \textcolor{comment}{     */}
+650     log\_err(\textcolor{stringliteral}{"(%d)%s: exec failed (%s)\(\backslash\)n"}, errno, \hyperlink{pcregrep_8c_a5d6ffddd86bd0d0ead58247b1a80e486}{strerror}(errno), cmd);
+651     \hyperlink{group__APACHE__OS__NETWARE_gaac7f3a566d7243651a356db3fcfef6b1}{exit}(255);
+652 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=335pt]{suexec_8c_a0ddf1224851353fc92bfbff6f499fa97_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\index{suexec.\+c@{suexec.\+c}!environ@{environ}}
+\index{environ@{environ}!suexec.\+c@{suexec.\+c}}
+\subsubsection[{\texorpdfstring{environ}{environ}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$$\ast$ environ}\hypertarget{suexec_8c_aa006daaf11f1e2e45a6ababaf463212b}{}\label{suexec_8c_aa006daaf11f1e2e45a6ababaf463212b}

@@ -1,0 +1,348 @@
+\hypertarget{log_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/server/log.c File Reference}
+\label{log_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/log.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/server/log.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+general.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+errno.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+thread\+\_\+proc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+signal.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+portable.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+base64.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+time.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+mpm.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ap\+\_\+listen.\+h\char`\"{}}\\*
+Include dependency graph for log.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{log_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structTRANS}{T\+R\+A\+NS}
+\item 
+struct \hyperlink{structread__handle__t}{read\+\_\+handle\+\_\+t}
+\item 
+struct \hyperlink{structpiped__log}{piped\+\_\+log}
+\begin{DoxyCompactList}\small\item\em The piped logging structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{log_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}
+\item 
+\#define \hyperlink{log_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{log_8c_ae75325996d1b2cf6120dded4cb153a22}{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}~\hyperlink{group__APACHE__CORE__HTTPD_gaf1cdaac5f4562d9d20bae417471ad422}{A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}
+\item 
+\#define \hyperlink{log_8c_a05d9e85ca6c6f2d354e0ff7d66ad1279}{N\+U\+L\+L\+\_\+\+D\+E\+V\+I\+CE}~\char`\"{}/dev/null\char`\"{}
+\item 
+\#define \hyperlink{log_8c_a37b5365b041260745f7dc4c607014d2c}{B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE}~16
+\item 
+\#define \hyperlink{log_8c_a8d908a3e089470fd56f0bd4c3787f3b2}{L\+O\+G\+\_\+\+B\+Y\+T\+E\+S\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE}~(\hyperlink{log_8c_a37b5365b041260745f7dc4c607014d2c}{B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE} $\ast$ 3 + 2)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structread__handle__t}{read\+\_\+handle\+\_\+t} \hyperlink{log_8c_a4e4b505c695a5af7265f89f58883e38b}{read\+\_\+handle\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{log_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT} ()
+\item 
+\hyperlink{group__APACHE__CORE__LOG_gad014b80672b9da1e4aa67ec46b6e594d}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structapr__file__t}{apr\+\_\+file\+\_\+t} $\ast$)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{group__APACHE__CORE__LOG_gaafc5404fc9f6c5750de9ec57b8223b1d}{ap\+\_\+logs\+\_\+child\+\_\+init} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$\hyperlink{pcretest_8txt_a062597889ba244b72877454b1d3adecf}{s})
+\item 
+\hyperlink{group__hooks_ga2991c49e63464ffbc0a6d82f1878f0cd}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})
+\item 
+\hyperlink{log_8c_ad4e49a371518f348d13b2d4e83b79b9e}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__LOG_gac08123bb03c21f9c22d93856b0063393}{ap\+\_\+open\+\_\+logs} (\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_gade454c9a3dc13ac389d15bf30f6c92b2}{pconf}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APACHE__CORE__CONFIG_ga276c3069e6bb618213a277e21f6f269e}{ptemp}, \hyperlink{structserver__rec}{server\+\_\+rec} $\ast$s\+\_\+main)
+\item 
+\hyperlink{log_8c_a7e087d6b2fa5c45b356bc41c9c3bbb93}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (\hyperlink{structpiped__log}{piped\+\_\+log} $\ast$)
+\item 
+\hyperlink{log_8c_aba7dd4312f41eb2eb750f6377c89e4c0}{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE} (const char $\ast$)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{log.\+c@{log.\+c}!A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}
+\index{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX@{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}{APLOG_MODULE_INDEX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+L\+O\+G\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX~{\bf A\+P\+\_\+\+C\+O\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+I\+N\+D\+EX}}\hypertarget{log_8c_ae75325996d1b2cf6120dded4cb153a22}{}\label{log_8c_ae75325996d1b2cf6120dded4cb153a22}
+\index{log.\+c@{log.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}{APR_WANT_STDIO}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+D\+IO}\hypertarget{log_8c_a4f3ace9204c571a34c0b2b9bd23b1133}{}\label{log_8c_a4f3ace9204c571a34c0b2b9bd23b1133}
+\index{log.\+c@{log.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{log_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{log_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{log.\+c@{log.\+c}!B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE@{B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE}}
+\index{B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE@{B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE}{BYTES_LOGGED_PER_LINE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE~16}\hypertarget{log_8c_a37b5365b041260745f7dc4c607014d2c}{}\label{log_8c_a37b5365b041260745f7dc4c607014d2c}
+\index{log.\+c@{log.\+c}!L\+O\+G\+\_\+\+B\+Y\+T\+E\+S\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE@{L\+O\+G\+\_\+\+B\+Y\+T\+E\+S\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE}}
+\index{L\+O\+G\+\_\+\+B\+Y\+T\+E\+S\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE@{L\+O\+G\+\_\+\+B\+Y\+T\+E\+S\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{L\+O\+G\+\_\+\+B\+Y\+T\+E\+S\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE}{LOG_BYTES_BUFFER_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define L\+O\+G\+\_\+\+B\+Y\+T\+E\+S\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE~({\bf B\+Y\+T\+E\+S\+\_\+\+L\+O\+G\+G\+E\+D\+\_\+\+P\+E\+R\+\_\+\+L\+I\+NE} $\ast$ 3 + 2)}\hypertarget{log_8c_a8d908a3e089470fd56f0bd4c3787f3b2}{}\label{log_8c_a8d908a3e089470fd56f0bd4c3787f3b2}
+\index{log.\+c@{log.\+c}!N\+U\+L\+L\+\_\+\+D\+E\+V\+I\+CE@{N\+U\+L\+L\+\_\+\+D\+E\+V\+I\+CE}}
+\index{N\+U\+L\+L\+\_\+\+D\+E\+V\+I\+CE@{N\+U\+L\+L\+\_\+\+D\+E\+V\+I\+CE}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{N\+U\+L\+L\+\_\+\+D\+E\+V\+I\+CE}{NULL_DEVICE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+U\+L\+L\+\_\+\+D\+E\+V\+I\+CE~\char`\"{}/dev/null\char`\"{}}\hypertarget{log_8c_a05d9e85ca6c6f2d354e0ff7d66ad1279}{}\label{log_8c_a05d9e85ca6c6f2d354e0ff7d66ad1279}
+
+
+\subsection{Typedef Documentation}
+\index{log.\+c@{log.\+c}!read\+\_\+handle\+\_\+t@{read\+\_\+handle\+\_\+t}}
+\index{read\+\_\+handle\+\_\+t@{read\+\_\+handle\+\_\+t}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{read\+\_\+handle\+\_\+t}{read_handle_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf read\+\_\+handle\+\_\+t}  {\bf read\+\_\+handle\+\_\+t}}\hypertarget{log_8c_a4e4b505c695a5af7265f89f58883e38b}{}\label{log_8c_a4e4b505c695a5af7265f89f58883e38b}
+
+
+\subsection{Function Documentation}
+\index{log.\+c@{log.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(apr\+\_\+status\+\_\+t)}{AP_DECLARE(apr_status_t)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf apr\+\_\+status\+\_\+t}}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{log_8c_ad4e49a371518f348d13b2d4e83b79b9e}{}\label{log_8c_ad4e49a371518f348d13b2d4e83b79b9e}
+
+\begin{DoxyCode}
+246 \{
+247     \hyperlink{structapr__file__t}{apr\_file\_t} *stderr\_file;
+248     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+249     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__LOG_ga28849770c8bfeb04039d7dd29d4dfa35}{filename} = ap\_server\_root\_relative(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__APACHE__CORE__CONFIG_gad427d00dcac2689669452fb7728f8617}{fname});
+250     \textcolor{keywordflow}{if} (!filename) \{
+251         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP}|
+      \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{APLOG\_CRIT},
+252                      \hyperlink{group__APR__Error_ga1731292eb3e3cdc801d3bf0b09cd8da7}{APR\_EBADPATH}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00085) \textcolor{stringliteral}{"Invalid -E error log file
+       %s"},
+253                      \hyperlink{group__APACHE__CORE__CONFIG_gad427d00dcac2689669452fb7728f8617}{fname});
+254         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga1731292eb3e3cdc801d3bf0b09cd8da7}{APR\_EBADPATH};
+255     \}
+256     \textcolor{keywordflow}{if} ((rc = apr\_file\_open(&stderr\_file, filename,
+257                             \hyperlink{group__apr__file__open__flags_ga26d3de2bae5c90e5124869f56c141c2e}{APR\_APPEND} | \hyperlink{group__apr__file__open__flags_ga3e427e53aceb1ccdb078d9a03cd63d01}{APR\_WRITE} | 
+      \hyperlink{group__apr__file__open__flags_gac210e96bc821dbaa83c326e775dad028}{APR\_CREATE} | \hyperlink{group__apr__file__open__flags_gaafa04fd4ec71910a5d7af1c7f5596bad}{APR\_LARGEFILE},
+258                             \hyperlink{group__apr__file__permissions_ga8552adb50d545d5fc7faeabb4f4a388f}{APR\_OS\_DEFAULT}, \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})) != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+259         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP}, rc, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00086)
+260                      \textcolor{stringliteral}{"%s: could not open error log file %s."},
+261                      \hyperlink{group__APACHE__CORE__MAIN_ga3b9f35b41e580b91b496512555d1f3b6}{ap\_server\_argv0}, \hyperlink{group__APACHE__CORE__CONFIG_gad427d00dcac2689669452fb7728f8617}{fname});
+262         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+263     \}
+264     \textcolor{keywordflow}{if} (!stderr\_pool) \{
+265         \textcolor{comment}{/* This is safe provided we revert it when we are finished.}
+266 \textcolor{comment}{         * We don't manager the callers pool!}
+267 \textcolor{comment}{         */}
+268         stderr\_pool = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+269     \}
+270     \textcolor{keywordflow}{if} ((rc = apr\_file\_open\_stderr(&stderr\_log, stderr\_pool))
+271             == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+272         apr\_file\_flush(stderr\_log);
+273         \textcolor{keywordflow}{if} ((rc = apr\_file\_dup2(stderr\_log, stderr\_file, stderr\_pool))
+274                 == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+275             apr\_file\_close(stderr\_file);
+276             \textcolor{comment}{/*}
+277 \textcolor{comment}{             * You might ponder why stderr\_pool should survive?}
+278 \textcolor{comment}{             * The trouble is, stderr\_pool may have s\_main->error\_log,}
+279 \textcolor{comment}{             * so we aren't in a position to destory stderr\_pool until}
+280 \textcolor{comment}{             * the next recycle.  There's also an apparent bug which}
+281 \textcolor{comment}{             * is not; if some folk decided to call this function before}
+282 \textcolor{comment}{             * the core open error logs hook, this pool won't survive.}
+283 \textcolor{comment}{             * Neither does the stderr logger, so this isn't a problem.}
+284 \textcolor{comment}{             */}
+285         \}
+286     \}
+287     \textcolor{comment}{/* Revert, see above */}
+288     \textcolor{keywordflow}{if} (stderr\_pool == \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p})
+289         stderr\_pool = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+290 
+291     \textcolor{keywordflow}{if} (rc != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+292         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{APLOG\_CRIT}, rc, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00087)
+293                      \textcolor{stringliteral}{"unable to replace stderr with error log file"});
+294     \}
+295     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+296 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=272pt]{log_8c_ad4e49a371518f348d13b2d4e83b79b9e_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{log.\+c@{log.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(piped\+\_\+log $\ast$)}{AP_DECLARE(piped_log *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{{\bf piped\+\_\+log} $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{log_8c_a7e087d6b2fa5c45b356bc41c9c3bbb93}{}\label{log_8c_a7e087d6b2fa5c45b356bc41c9c3bbb93}
+
+\begin{DoxyCode}
+1881 \{
+1882     \hyperlink{structpiped__log}{piped\_log} *\hyperlink{perltest_8txt_a841c59daab01e1f609fdd4547afbe6e6}{pl};
+1883     \hyperlink{structapr__file__t}{apr\_file\_t} *\hyperlink{group__APACHE__CORE__LISTEN_gafd856f29d11272d954fe05b9c1ca84dd}{dummy} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1884     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__CONFIG_ga2e051c0ce9ee165170cd7973f2464512}{rc};
+1885 
+1886     rc = log\_child(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \hyperlink{group__APACHE__CORE__LOG_gac21a604824a10f311a4fad1d701f5115}{program}, &dummy, \hyperlink{group__APACHE__CORE__LOG_gab4c4e8081a1019039c687d48fa0a54ee}{cmdtype}, 0);
+1887     \textcolor{keywordflow}{if} (rc != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+1888         \hyperlink{group__APACHE__CORE__LOG_ga5e6676c87418af7a1d323a116c78ecb4}{ap\_log\_error}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga39efd19b052fb6f39d8f263c16cc82b7}{APLOG\_STARTUP}, rc, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(00108)
+1889                      \textcolor{stringliteral}{"Couldn't start piped log process '%s'."},
+1890                      (\hyperlink{group__APACHE__CORE__LOG_gac21a604824a10f311a4fad1d701f5115}{program} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) ? \textcolor{stringliteral}{"NULL"} : \hyperlink{group__APACHE__CORE__LOG_gac21a604824a10f311a4fad1d701f5115}{program});
+1891         \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1892     \}
+1893 
+1894     pl = apr\_palloc(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, \textcolor{keyword}{sizeof} (*pl));
+1895     pl->\hyperlink{structpiped__log_a9435653f8fa72502a33f80b49a779921}{p} = \hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p};
+1896     pl->\hyperlink{structpiped__log_aa193ff18ec135bf198fb611a1d93e049}{read\_fd} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1897     pl->\hyperlink{structpiped__log_a1c3a44a4343ad621d424d28f3ae31a4a}{write\_fd} = \hyperlink{group__APACHE__CORE__LISTEN_gafd856f29d11272d954fe05b9c1ca84dd}{dummy};
+1898     apr\_pool\_cleanup\_register(\hyperlink{group__APACHE__CORE__MPM_ga5cd91701e5c167f2b1a38e70ab57817e}{p}, pl, piped\_log\_cleanup, piped\_log\_cleanup);
+1899 
+1900     \textcolor{keywordflow}{return} \hyperlink{perltest_8txt_a841c59daab01e1f609fdd4547afbe6e6}{pl};
+1901 \}
+\end{DoxyCode}
+\index{log.\+c@{log.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+RE}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E(const char $\ast$)}{AP_DECLARE(const char *)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+RE (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{log_8c_aba7dd4312f41eb2eb750f6377c89e4c0}{}\label{log_8c_aba7dd4312f41eb2eb750f6377c89e4c0}
+
+\begin{DoxyCode}
+1931 \{
+1932     \textcolor{keywordtype}{char} *\hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err} = \textcolor{stringliteral}{"Log level keyword must be one of emerg/alert/crit/error/warn/"}
+1933                 \textcolor{stringliteral}{"notice/info/debug/trace1/.../trace8"};
+1934     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0;
+1935 
+1936     \textcolor{keywordflow}{if} (\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+1937         \textcolor{keywordflow}{return} \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+1938 
+1939     \textcolor{keywordflow}{while} (priorities[i].t\_name != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+1940         \textcolor{keywordflow}{if} (!\hyperlink{apr__cpystrn_8c_a4a00fc29b96a953fed9e0107a9c4548a}{strcasecmp}(\hyperlink{group__MOD__DAV_gaab9226fe8f632e1f998e24276d478f30}{str}, priorities[i].t\_name)) \{
+1941             *\hyperlink{group__APACHE__CORE__CONFIG_gae553dcb033cb5c1e269683855e4f676a}{val} = priorities[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}].t\_val;
+1942             \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+1943         \}
+1944         i++;
+1945     \}
+1946     \textcolor{keywordflow}{return} \hyperlink{group__AP__EXPR_gaccebe6c638c552d2845014cf8bdea8d8}{err};
+1947 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=267pt]{log_8c_aba7dd4312f41eb2eb750f6377c89e4c0_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{log.\+c@{log.\+c}!A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}}
+\index{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT@{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT}!log.\+c@{log.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+C\+T()}{APR_HOOK_STRUCT()}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+R\+\_\+\+H\+O\+O\+K\+\_\+\+S\+T\+R\+U\+CT (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{log_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}{}\label{log_8c_a7be86665d9cf471d2cc24c9f6a4b63fc}
+
+\begin{DoxyCode}
+81                                   \{
+82     \{\textcolor{stringliteral}{"auth"},    LOG\_AUTH\},
+83 \textcolor{preprocessor}{#ifdef LOG\_AUTHPRIV}
+84     \{\textcolor{stringliteral}{"authpriv"},LOG\_AUTHPRIV\},
+85 \textcolor{preprocessor}{#endif}
+86 \textcolor{preprocessor}{#ifdef LOG\_CRON}
+87     \{\textcolor{stringliteral}{"cron"},    LOG\_CRON\},
+88 \textcolor{preprocessor}{#endif}
+89 \textcolor{preprocessor}{#ifdef LOG\_DAEMON}
+90     \{\textcolor{stringliteral}{"daemon"},  LOG\_DAEMON\},
+91 \textcolor{preprocessor}{#endif}
+92 \textcolor{preprocessor}{#ifdef LOG\_FTP}
+93     \{\textcolor{stringliteral}{"ftp"}, LOG\_FTP\},
+94 \textcolor{preprocessor}{#endif}
+95 \textcolor{preprocessor}{#ifdef LOG\_KERN}
+96     \{\textcolor{stringliteral}{"kern"},    LOG\_KERN\},
+97 \textcolor{preprocessor}{#endif}
+98 \textcolor{preprocessor}{#ifdef LOG\_LPR}
+99     \{\textcolor{stringliteral}{"lpr"}, LOG\_LPR\},
+100 \textcolor{preprocessor}{#endif}
+101 \textcolor{preprocessor}{#ifdef LOG\_MAIL}
+102     \{\textcolor{stringliteral}{"mail"},    LOG\_MAIL\},
+103 \textcolor{preprocessor}{#endif}
+104 \textcolor{preprocessor}{#ifdef LOG\_NEWS}
+105     \{\textcolor{stringliteral}{"news"},    LOG\_NEWS\},
+106 \textcolor{preprocessor}{#endif}
+107 \textcolor{preprocessor}{#ifdef LOG\_SYSLOG}
+108     \{\textcolor{stringliteral}{"syslog"},  LOG\_SYSLOG\},
+109 \textcolor{preprocessor}{#endif}
+110 \textcolor{preprocessor}{#ifdef LOG\_USER}
+111     \{\textcolor{stringliteral}{"user"},    LOG\_USER\},
+112 \textcolor{preprocessor}{#endif}
+113 \textcolor{preprocessor}{#ifdef LOG\_UUCP}
+114     \{\textcolor{stringliteral}{"uucp"},    LOG\_UUCP\},
+115 \textcolor{preprocessor}{#endif}
+116 \textcolor{preprocessor}{#ifdef LOG\_LOCAL0}
+117     \{\textcolor{stringliteral}{"local0"},  LOG\_LOCAL0\},
+118 \textcolor{preprocessor}{#endif}
+119 \textcolor{preprocessor}{#ifdef LOG\_LOCAL1}
+120     \{\textcolor{stringliteral}{"local1"},  LOG\_LOCAL1\},
+121 \textcolor{preprocessor}{#endif}
+122 \textcolor{preprocessor}{#ifdef LOG\_LOCAL2}
+123     \{\textcolor{stringliteral}{"local2"},  LOG\_LOCAL2\},
+124 \textcolor{preprocessor}{#endif}
+125 \textcolor{preprocessor}{#ifdef LOG\_LOCAL3}
+126     \{\textcolor{stringliteral}{"local3"},  LOG\_LOCAL3\},
+127 \textcolor{preprocessor}{#endif}
+128 \textcolor{preprocessor}{#ifdef LOG\_LOCAL4}
+129     \{\textcolor{stringliteral}{"local4"},  LOG\_LOCAL4\},
+130 \textcolor{preprocessor}{#endif}
+131 \textcolor{preprocessor}{#ifdef LOG\_LOCAL5}
+132     \{\textcolor{stringliteral}{"local5"},  LOG\_LOCAL5\},
+133 \textcolor{preprocessor}{#endif}
+134 \textcolor{preprocessor}{#ifdef LOG\_LOCAL6}
+135     \{\textcolor{stringliteral}{"local6"},  LOG\_LOCAL6\},
+136 \textcolor{preprocessor}{#endif}
+137 \textcolor{preprocessor}{#ifdef LOG\_LOCAL7}
+138     \{\textcolor{stringliteral}{"local7"},  LOG\_LOCAL7\},
+139 \textcolor{preprocessor}{#endif}
+140     \{\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},      -1\},
+141 \};
+142 \textcolor{preprocessor}{#endif}
+143 
+144 \textcolor{keyword}{static} \textcolor{keyword}{const} \hyperlink{structTRANS}{TRANS} priorities[] = \{
+145     \{\textcolor{stringliteral}{"emerg"},   \hyperlink{group__APACHE__CORE__LOG_gaa3d7894cd601f48a041689fc21de303d}{APLOG\_EMERG}\},
+146     \{\textcolor{stringliteral}{"alert"},   \hyperlink{group__APACHE__CORE__LOG_ga80a3f6767c5810b74c36ab52abff7d87}{APLOG\_ALERT}\},
+147     \{\textcolor{stringliteral}{"crit"},    \hyperlink{group__APACHE__CORE__LOG_ga9f0686ea770c44e205d1c12be74fc21f}{APLOG\_CRIT}\},
+148     \{\textcolor{stringliteral}{"error"},   \hyperlink{group__APACHE__CORE__LOG_ga57ad94ed8c92c4306de90479251a5d58}{APLOG\_ERR}\},
+149     \{\textcolor{stringliteral}{"warn"},    \hyperlink{group__APACHE__CORE__LOG_ga73e14aeff380a8a01c66d528162026fe}{APLOG\_WARNING}\},
+150     \{\textcolor{stringliteral}{"notice"},  \hyperlink{group__APACHE__CORE__LOG_ga23239084d07266623cf5f5830fd28c8c}{APLOG\_NOTICE}\},
+151     \{\textcolor{stringliteral}{"info"},    \hyperlink{group__APACHE__CORE__LOG_ga47fafbef7e478babdd92e90407f95b19}{APLOG\_INFO}\},
+152     \{\textcolor{stringliteral}{"debug"},   \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}\},
+153     \{\textcolor{stringliteral}{"trace1"},  \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}\},
+154     \{\textcolor{stringliteral}{"trace2"},  \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}\},
+155     \{\textcolor{stringliteral}{"trace3"},  \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}\},
+156     \{\textcolor{stringliteral}{"trace4"},  \hyperlink{group__APACHE__CORE__LOG_ga479289550d998526187ff78880378f9c}{APLOG\_TRACE4}\},
+157     \{\textcolor{stringliteral}{"trace5"},  \hyperlink{group__APACHE__CORE__LOG_gab1a4bc833fc60cfbb6bc89eaa6550a2c}{APLOG\_TRACE5}\},
+158     \{\textcolor{stringliteral}{"trace6"},  \hyperlink{group__APACHE__CORE__LOG_gad067edc2e8853edaa2a1b54792b62f87}{APLOG\_TRACE6}\},
+159     \{\textcolor{stringliteral}{"trace7"},  \hyperlink{group__APACHE__CORE__LOG_ga90c9ee0877e812054113ea3c9385a231}{APLOG\_TRACE7}\},
+160     \{\textcolor{stringliteral}{"trace8"},  \hyperlink{group__APACHE__CORE__LOG_ga08fc65b391ff4c007f69cd46f4423ac3}{APLOG\_TRACE8}\},
+161     \{\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},      -1\},
+162 \};
+\end{DoxyCode}

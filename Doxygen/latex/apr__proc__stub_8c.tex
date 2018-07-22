@@ -1,0 +1,99 @@
+\hypertarget{apr__proc__stub_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/threadproc/beos/apr\+\_\+proc\+\_\+stub.c File Reference}
+\label{apr__proc__stub_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/threadproc/beos/apr\+\_\+proc\+\_\+stub.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/threadproc/beos/apr\+\_\+proc\+\_\+stub.\+c}}
+{\ttfamily \#include $<$kernel/\+O\+S.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+Include dependency graph for apr\+\_\+proc\+\_\+stub.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{apr__proc__stub_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structpipefd}{pipefd}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{apr__proc__stub_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__apr__getopt_ga6bdebf9385dc069c90aa21989641be02}{argc}, char $\ast$\hyperlink{group__apr__getopt_ga675a108e956f4e2ea74dae8d26e6273e}{argv}\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{apr\+\_\+proc\+\_\+stub.\+c@{apr\+\_\+proc\+\_\+stub.\+c}!main@{main}}
+\index{main@{main}!apr\+\_\+proc\+\_\+stub.\+c@{apr\+\_\+proc\+\_\+stub.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} main (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{apr__proc__stub_8c_a0ddf1224851353fc92bfbff6f499fa97}{}\label{apr__proc__stub_8c_a0ddf1224851353fc92bfbff6f499fa97}
+
+\begin{DoxyCode}
+28                                  \{
+29 \textcolor{comment}{/* we expect the following...}
+30 \textcolor{comment}{ * }
+31 \textcolor{comment}{ * argv[0] = this stub}
+32 \textcolor{comment}{ * argv[1] = directory to run in...}
+33 \textcolor{comment}{ * argv[2] = progname to execute}
+34 \textcolor{comment}{ * rest of arguments to be passed to program}
+35 \textcolor{comment}{ */}
+36     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__MPM_ga754795253280be76a58e8b21fbac11dc}{progname} = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[2];
+37     \textcolor{keywordtype}{char} *\hyperlink{NON-AUTOTOOLS-BUILD_8txt_a272b2b9e51e7eb44066aac5effd11fa8}{directory} = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[1];
+38     \textcolor{keyword}{struct }\hyperlink{structpipefd}{pipefd} *pfd;
+39     thread\_id sender;
+40     \textcolor{keywordtype}{void} *\hyperlink{group__APACHE__CORE__PROTO_gabd91b1aab0a10c5027ca2eb5577f759f}{buffer};
+41     \textcolor{keywordtype}{char} ** newargs;
+42     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i} = 0;
+43     
+44     newargs = (\textcolor{keywordtype}{char}**)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}*) * (\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc} - 1));
+45   
+46     buffer = (\textcolor{keywordtype}{void}*)\hyperlink{util__expr__parse_8c_a5faf6a2d99f50a4655dd390199a8db7b}{malloc}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} \hyperlink{structpipefd}{pipefd}));
+47     \textcolor{comment}{/* this will block until we get the data */}
+48     receive\_data(&sender, buffer, \textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} \hyperlink{structpipefd}{pipefd}));
+49     pfd = (\textcolor{keyword}{struct }\hyperlink{structpipefd}{pipefd}*)buffer;
+50     
+51     \textcolor{keywordflow}{if} (pfd->\hyperlink{structpipefd_ac7f1d8a24c8ee8b7a5e5cc0e58aede56}{in} > STDERR\_FILENO) \{
+52         \textcolor{keywordflow}{if} (dup2(pfd->\hyperlink{structpipefd_ac7f1d8a24c8ee8b7a5e5cc0e58aede56}{in}, STDIN\_FILENO) != STDIN\_FILENO) \textcolor{keywordflow}{return} (-1);
+53         close (pfd->\hyperlink{structpipefd_ac7f1d8a24c8ee8b7a5e5cc0e58aede56}{in});
+54     \}
+55     \textcolor{keywordflow}{if} (pfd->\hyperlink{structpipefd_a169c0b58f8cf8b02db6b6ce2eb89b002}{out} > STDERR\_FILENO) \{
+56         \textcolor{keywordflow}{if} (dup2(pfd->\hyperlink{structpipefd_a169c0b58f8cf8b02db6b6ce2eb89b002}{out}, STDOUT\_FILENO) != STDOUT\_FILENO) \textcolor{keywordflow}{return} (-1);
+57         close (pfd->\hyperlink{structpipefd_a169c0b58f8cf8b02db6b6ce2eb89b002}{out});
+58     \}
+59     \textcolor{keywordflow}{if} (pfd->\hyperlink{structpipefd_a684fff145aa2403feafb87e551a8fba7}{err} > STDERR\_FILENO) \{
+60         \textcolor{keywordflow}{if} (dup2(pfd->\hyperlink{structpipefd_a684fff145aa2403feafb87e551a8fba7}{err}, STDERR\_FILENO) != STDERR\_FILENO) \textcolor{keywordflow}{return} (-1);
+61         close (pfd->\hyperlink{structpipefd_a684fff145aa2403feafb87e551a8fba7}{err});
+62     \}
+63 
+64     \textcolor{keywordflow}{for} (i=3;i<=\hyperlink{group__APACHE__CORE__LISTEN_ga073cc653debb351b563a84ac72c49614}{argc};i++)\{
+65         newargs[i-3] = \hyperlink{group__APACHE__CORE__LISTEN_ga7af4ef3a08f923773e59081c357d9adf}{argv}[\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}];
+66     \}
+67     
+68     \textcolor{comment}{/* tell the caller we're OK to start */}
+69     send\_data(sender,1,\hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL},0);
+70 
+71     \textcolor{keywordflow}{if} (directory != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL})
+72         chdir(directory);
+73     execve (progname, newargs, \hyperlink{suexec_8c_aa006daaf11f1e2e45a6ababaf463212b}{environ});
+74 
+75     \textcolor{keywordflow}{return} (-1);
+76 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{apr__proc__stub_8c_a0ddf1224851353fc92bfbff6f499fa97_cgraph}
+\end{center}
+\end{figure}
+
+

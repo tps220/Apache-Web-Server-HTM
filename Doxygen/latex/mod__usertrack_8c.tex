@@ -1,0 +1,110 @@
+\hypertarget{mod__usertrack_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/metadata/mod\+\_\+usertrack.c File Reference}
+\label{mod__usertrack_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/metadata/mod\+\_\+usertrack.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/metadata/mod\+\_\+usertrack.\+c}}
+{\ttfamily \#include \char`\"{}apr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+Include dependency graph for mod\+\_\+usertrack.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__usertrack_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcookie__log__state}{cookie\+\_\+log\+\_\+state}
+\item 
+struct \hyperlink{structcookie__dir__rec}{cookie\+\_\+dir\+\_\+rec}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__usertrack_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__usertrack_8c_a8f78ca952dc46add50862ed7c65c1969}{C\+O\+O\+K\+I\+E\+\_\+\+N\+A\+ME}~\char`\"{}Apache\char`\"{}
+\item 
+\#define \hyperlink{mod__usertrack_8c_a33882b64fa2a8c47b6fa3f436b78476a}{N\+U\+M\+\_\+\+S\+U\+BS}~3
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3}{cookie\+\_\+type\+\_\+e} \{ \hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3a80916d20a4d13f7153fc372abf9690fd}{C\+T\+\_\+\+U\+N\+S\+ET}, 
+\hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3a169fd5dc45789356b3b0c43042be58b1}{C\+T\+\_\+\+N\+E\+T\+S\+C\+A\+PE}, 
+\hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3aed1aa22d2b8d3e6892a3424565c19fe5}{C\+T\+\_\+\+C\+O\+O\+K\+IE}, 
+\hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3aa4935bd1ee88dfd400eb653cbf593b0c}{C\+T\+\_\+\+C\+O\+O\+K\+I\+E2}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__usertrack_8c_a1048535202a795330ad7ab9fb2e2915d}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (usertrack)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__usertrack_8c_ae7651b44740119d4075624aef3e4a309}{usertrack\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__usertrack_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__usertrack_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!C\+O\+O\+K\+I\+E\+\_\+\+N\+A\+ME@{C\+O\+O\+K\+I\+E\+\_\+\+N\+A\+ME}}
+\index{C\+O\+O\+K\+I\+E\+\_\+\+N\+A\+ME@{C\+O\+O\+K\+I\+E\+\_\+\+N\+A\+ME}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}
+\subsubsection[{\texorpdfstring{C\+O\+O\+K\+I\+E\+\_\+\+N\+A\+ME}{COOKIE_NAME}}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\+O\+O\+K\+I\+E\+\_\+\+N\+A\+ME~\char`\"{}Apache\char`\"{}}\hypertarget{mod__usertrack_8c_a8f78ca952dc46add50862ed7c65c1969}{}\label{mod__usertrack_8c_a8f78ca952dc46add50862ed7c65c1969}
+\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!N\+U\+M\+\_\+\+S\+U\+BS@{N\+U\+M\+\_\+\+S\+U\+BS}}
+\index{N\+U\+M\+\_\+\+S\+U\+BS@{N\+U\+M\+\_\+\+S\+U\+BS}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}
+\subsubsection[{\texorpdfstring{N\+U\+M\+\_\+\+S\+U\+BS}{NUM_SUBS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+U\+M\+\_\+\+S\+U\+BS~3}\hypertarget{mod__usertrack_8c_a33882b64fa2a8c47b6fa3f436b78476a}{}\label{mod__usertrack_8c_a33882b64fa2a8c47b6fa3f436b78476a}
+
+
+\subsection{Enumeration Type Documentation}
+\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!cookie\+\_\+type\+\_\+e@{cookie\+\_\+type\+\_\+e}}
+\index{cookie\+\_\+type\+\_\+e@{cookie\+\_\+type\+\_\+e}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}
+\subsubsection[{\texorpdfstring{cookie\+\_\+type\+\_\+e}{cookie_type_e}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf cookie\+\_\+type\+\_\+e}}\hypertarget{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3}{}\label{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{C\+T\+\_\+\+U\+N\+S\+ET@{C\+T\+\_\+\+U\+N\+S\+ET}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!C\+T\+\_\+\+U\+N\+S\+ET@{C\+T\+\_\+\+U\+N\+S\+ET}}\item[{\em 
+C\+T\+\_\+\+U\+N\+S\+ET\hypertarget{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3a80916d20a4d13f7153fc372abf9690fd}{}\label{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3a80916d20a4d13f7153fc372abf9690fd}
+}]\index{C\+T\+\_\+\+N\+E\+T\+S\+C\+A\+PE@{C\+T\+\_\+\+N\+E\+T\+S\+C\+A\+PE}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!C\+T\+\_\+\+N\+E\+T\+S\+C\+A\+PE@{C\+T\+\_\+\+N\+E\+T\+S\+C\+A\+PE}}\item[{\em 
+C\+T\+\_\+\+N\+E\+T\+S\+C\+A\+PE\hypertarget{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3a169fd5dc45789356b3b0c43042be58b1}{}\label{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3a169fd5dc45789356b3b0c43042be58b1}
+}]\index{C\+T\+\_\+\+C\+O\+O\+K\+IE@{C\+T\+\_\+\+C\+O\+O\+K\+IE}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!C\+T\+\_\+\+C\+O\+O\+K\+IE@{C\+T\+\_\+\+C\+O\+O\+K\+IE}}\item[{\em 
+C\+T\+\_\+\+C\+O\+O\+K\+IE\hypertarget{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3aed1aa22d2b8d3e6892a3424565c19fe5}{}\label{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3aed1aa22d2b8d3e6892a3424565c19fe5}
+}]\index{C\+T\+\_\+\+C\+O\+O\+K\+I\+E2@{C\+T\+\_\+\+C\+O\+O\+K\+I\+E2}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!C\+T\+\_\+\+C\+O\+O\+K\+I\+E2@{C\+T\+\_\+\+C\+O\+O\+K\+I\+E2}}\item[{\em 
+C\+T\+\_\+\+C\+O\+O\+K\+I\+E2\hypertarget{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3aa4935bd1ee88dfd400eb653cbf593b0c}{}\label{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3aa4935bd1ee88dfd400eb653cbf593b0c}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+75              \{
+76     \hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3a80916d20a4d13f7153fc372abf9690fd}{CT\_UNSET},
+77     \hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3a169fd5dc45789356b3b0c43042be58b1}{CT\_NETSCAPE},
+78     \hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3aed1aa22d2b8d3e6892a3424565c19fe5}{CT\_COOKIE},
+79     \hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3aa4935bd1ee88dfd400eb653cbf593b0c}{CT\_COOKIE2}
+80 \} \hyperlink{mod__usertrack_8c_a575f5a0003fe6499ef133e2f3e5102e3}{cookie\_type\_e};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(usertrack)}{AP_DECLARE_MODULE(usertrack)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{usertrack}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__usertrack_8c_a1048535202a795330ad7ab9fb2e2915d}{}\label{mod__usertrack_8c_a1048535202a795330ad7ab9fb2e2915d}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}!usertrack\+\_\+module@{usertrack\+\_\+module}}
+\index{usertrack\+\_\+module@{usertrack\+\_\+module}!mod\+\_\+usertrack.\+c@{mod\+\_\+usertrack.\+c}}
+\subsubsection[{\texorpdfstring{usertrack\+\_\+module}{usertrack_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} usertrack\+\_\+module}\hypertarget{mod__usertrack_8c_ae7651b44740119d4075624aef3e4a309}{}\label{mod__usertrack_8c_ae7651b44740119d4075624aef3e4a309}

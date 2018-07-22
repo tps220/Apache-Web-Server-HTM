@@ -1,0 +1,134 @@
+\hypertarget{lua__passwd_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/lua/lua\+\_\+passwd.c File Reference}
+\label{lua__passwd_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/lua/lua\+\_\+passwd.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/lua/lua\+\_\+passwd.\+c}}
+{\ttfamily \#include \char`\"{}lua\+\_\+passwd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+errno.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+md5.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+sha1.\+h\char`\"{}}\\*
+Include dependency graph for lua\+\_\+passwd.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{lua__passwd_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{lua__passwd_8c_a8d568d378f42609f5ddfef340c5befb9}{mk\+\_\+password\+\_\+hash} (\hyperlink{structpasswd__ctx}{passwd\+\_\+ctx} $\ast$\hyperlink{group__APR__Util__Bucket__Brigades_ga0525238c5b09cb4ac5067ddec654d09c}{ctx})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{lua\+\_\+passwd.\+c@{lua\+\_\+passwd.\+c}!mk\+\_\+password\+\_\+hash@{mk\+\_\+password\+\_\+hash}}
+\index{mk\+\_\+password\+\_\+hash@{mk\+\_\+password\+\_\+hash}!lua\+\_\+passwd.\+c@{lua\+\_\+passwd.\+c}}
+\subsubsection[{\texorpdfstring{mk\+\_\+password\+\_\+hash(passwd\+\_\+ctx $\ast$ctx)}{mk_password_hash(passwd_ctx *ctx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} mk\+\_\+password\+\_\+hash (
+\begin{DoxyParamCaption}
+\item[{{\bf passwd\+\_\+ctx} $\ast$}]{ctx}
+\end{DoxyParamCaption}
+)}\hypertarget{lua__passwd_8c_a8d568d378f42609f5ddfef340c5befb9}{}\label{lua__passwd_8c_a8d568d378f42609f5ddfef340c5befb9}
+
+\begin{DoxyCode}
+88 \{
+89     \textcolor{keywordtype}{char} *\hyperlink{group__APACHE__CORE__PROTO_ga4b22922ccb91d71d170bf2bbca3d241e}{pw};
+90     \textcolor{keywordtype}{char} \hyperlink{group__APR__MD5_ga0a678842764ed169d6a8527b30273b7d}{salt}[16];
+91     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv;
+92     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret} = 0;
+93 \textcolor{preprocessor}{#if CRYPT\_ALGO\_SUPPORTED}
+94     \textcolor{keywordtype}{char} *cbuf;
+95 \textcolor{preprocessor}{#endif}
+96 
+97     pw = ctx->\hyperlink{structpasswd__ctx_a6be10f01e77b32b5a28c2fb08604c46c}{passwd};
+98     \textcolor{keywordflow}{switch} (ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg}) \{
+99     \textcolor{keywordflow}{case} \hyperlink{lua__passwd_8h_a59923cdafd25c02e27f78f027036aca6}{ALG\_APSHA}:
+100         \textcolor{comment}{/* XXX out >= 28 + strlen(sha1) chars - fixed len SHA */}
+101         apr\_sha1\_base64(pw, strlen(pw), ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out});
+102         \textcolor{keywordflow}{break};
+103 
+104     \textcolor{keywordflow}{case} \hyperlink{lua__passwd_8h_a9a6460186b091969c74996c0c4b32202}{ALG\_APMD5}:
+105         ret = generate\_salt(salt, 8, &ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr}, ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool});
+106         \textcolor{keywordflow}{if} (ret != 0) \{
+107             ret = \hyperlink{lua__passwd_8h_a26fe5872acf12016f4524ada4cc8a83d}{ERR\_GENERAL};
+108             \textcolor{keywordflow}{break};
+109         \}
+110         rv = apr\_md5\_encode(pw, salt, ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, ctx->\hyperlink{structpasswd__ctx_a0cf82260a607c15384cfd8a98aeace9b}{out\_len});
+111         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+112             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool},
+113                                        \textcolor{stringliteral}{"could not encode password: %pm"}, &rv);
+114             ret = \hyperlink{lua__passwd_8h_a26fe5872acf12016f4524ada4cc8a83d}{ERR\_GENERAL};
+115         \}
+116         \textcolor{keywordflow}{break};
+117 
+118 \textcolor{preprocessor}{#if CRYPT\_ALGO\_SUPPORTED}
+119     \textcolor{keywordflow}{case} \hyperlink{lua__passwd_8h_ab334a04024f8605534f6c6bb94046fb3}{ALG\_CRYPT}:
+120         ret = generate\_salt(salt, 8, &ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr}, ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool});
+121         \textcolor{keywordflow}{if} (ret != 0)
+122             \textcolor{keywordflow}{break};
+123         cbuf = crypt(pw, salt);
+124         \textcolor{keywordflow}{if} (cbuf == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+125             rv = \hyperlink{group__apr__errno_ga2096daff578ef301e060b80c7a4525bf}{APR\_FROM\_OS\_ERROR}(errno);
+126             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, \textcolor{stringliteral}{"crypt() failed: %pm"}, &rv);
+127             ret = \hyperlink{lua__passwd_8h_aa6b7701f200fc329d9e2cb8f869d4d5c}{ERR\_PWMISMATCH};
+128             \textcolor{keywordflow}{break};
+129         \}
+130 
+131         apr\_cpystrn(ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, cbuf, ctx->\hyperlink{structpasswd__ctx_a0cf82260a607c15384cfd8a98aeace9b}{out\_len} - 1);
+132         \textcolor{keywordflow}{if} (strlen(pw) > 8) \{
+133             \textcolor{keywordtype}{char} *truncpw = apr\_pstrdup(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, pw);
+134             truncpw[8] = \textcolor{charliteral}{'\(\backslash\)0'};
+135             \textcolor{keywordflow}{if} (!strcmp(ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, crypt(truncpw, salt))) \{
+136                 ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool},
+137                                            \textcolor{stringliteral}{"Warning: Password truncated to 8 "}
+138                                            \textcolor{stringliteral}{"characters by CRYPT algorithm."});
+139             \}
+140             memset(truncpw, \textcolor{charliteral}{'\(\backslash\)0'}, strlen(pw));
+141         \}
+142         \textcolor{keywordflow}{break};
+143 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* CRYPT\_ALGO\_SUPPORTED */}\textcolor{preprocessor}{}
+144 
+145 \textcolor{preprocessor}{#if BCRYPT\_ALGO\_SUPPORTED}
+146     \textcolor{keywordflow}{case} \hyperlink{lua__passwd_8h_a9a73df4a8fbd46da478b2cf6e2a184d8}{ALG\_BCRYPT}:
+147         rv = apr\_generate\_random\_bytes((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)salt, 16);
+148         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+149             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, \textcolor{stringliteral}{"Unable to generate random "}
+150                                        \textcolor{stringliteral}{"bytes: %pm"}, &rv);
+151             ret = \hyperlink{lua__passwd_8h_aa876a4ff62386bf08159db06fb7d9777}{ERR\_RANDOM};
+152             \textcolor{keywordflow}{break};
+153         \}
+154 
+155         \textcolor{keywordflow}{if} (ctx->\hyperlink{structpasswd__ctx_a54f34c48127cd3c115a7fa2fb23a089a}{cost} == 0)
+156             ctx->\hyperlink{structpasswd__ctx_a54f34c48127cd3c115a7fa2fb23a089a}{cost} = \hyperlink{lua__passwd_8h_abf73efeab099a3cf38e0c3a8e987140e}{BCRYPT\_DEFAULT\_COST};
+157         rv = apr\_bcrypt\_encode(pw, ctx->\hyperlink{structpasswd__ctx_a54f34c48127cd3c115a7fa2fb23a089a}{cost}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*)salt, 16,
+158                                ctx->\hyperlink{structpasswd__ctx_a08a570cfa3f0a660479b64ec4a08d4b7}{out}, ctx->\hyperlink{structpasswd__ctx_a0cf82260a607c15384cfd8a98aeace9b}{out\_len});
+159         \textcolor{keywordflow}{if} (rv != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+160             ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool}, \textcolor{stringliteral}{"Unable to encode with "}
+161                                        \textcolor{stringliteral}{"bcrypt: %pm"}, &rv);
+162             ret = \hyperlink{lua__passwd_8h_aa6b7701f200fc329d9e2cb8f869d4d5c}{ERR\_PWMISMATCH};
+163             \textcolor{keywordflow}{break};
+164         \}
+165         \textcolor{keywordflow}{break};
+166 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* BCRYPT\_ALGO\_SUPPORTED */}\textcolor{preprocessor}{}
+167 
+168     \textcolor{keywordflow}{default}:
+169         ctx->\hyperlink{structpasswd__ctx_ac138b422f243f942d99385910e813777}{errstr} = apr\_psprintf(ctx->\hyperlink{structpasswd__ctx_abdb187a35f5be5af2bf82ef3363dc11b}{pool},
+170                                   \textcolor{stringliteral}{"mk\_password\_hash(): unsupported algorithm %d"},
+171                                   ctx->\hyperlink{structpasswd__ctx_a6f535584596964c51f398f1728b25c71}{alg});
+172         ret = \hyperlink{lua__passwd_8h_a26fe5872acf12016f4524ada4cc8a83d}{ERR\_GENERAL};
+173     \}
+174     memset(pw, \textcolor{charliteral}{'\(\backslash\)0'}, strlen(pw));
+175     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__MPM_ga794c48ec324a4d85a40f38fe264d2a41}{ret};
+176 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{lua__passwd_8c_a8d568d378f42609f5ddfef340c5befb9_icgraph}
+\end{center}
+\end{figure}
+
+

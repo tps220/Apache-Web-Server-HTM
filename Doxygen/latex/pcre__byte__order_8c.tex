@@ -1,0 +1,251 @@
+\hypertarget{pcre__byte__order_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/pcre/pcre\+\_\+byte\+\_\+order.c File Reference}
+\label{pcre__byte__order_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+byte\+\_\+order.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/pcre/pcre\+\_\+byte\+\_\+order.\+c}}
+{\ttfamily \#include \char`\"{}pcre\+\_\+internal.\+h\char`\"{}}\\*
+Include dependency graph for pcre\+\_\+byte\+\_\+order.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{pcre__byte__order_8c__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=340pt]{pcre__byte__order_8c__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre__internal_8h_a7ce91e15b5a6a32257937d929bc31296}{P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+CL} \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre__byte__order_8c_add8ba4766b7b3ef9f4a2768137d30dda}{pcre\+\_\+pattern\+\_\+to\+\_\+host\+\_\+byte\+\_\+order} (\hyperlink{pcre_8h_a2bc1b88cfd3d453b96bdc5411a22484f}{pcre} $\ast$argument\+\_\+re, \hyperlink{structpcre__extra}{pcre\+\_\+extra} $\ast$extra\+\_\+data, const unsigned char $\ast$\hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{pcre\+\_\+byte\+\_\+order.\+c@{pcre\+\_\+byte\+\_\+order.\+c}!pcre\+\_\+pattern\+\_\+to\+\_\+host\+\_\+byte\+\_\+order@{pcre\+\_\+pattern\+\_\+to\+\_\+host\+\_\+byte\+\_\+order}}
+\index{pcre\+\_\+pattern\+\_\+to\+\_\+host\+\_\+byte\+\_\+order@{pcre\+\_\+pattern\+\_\+to\+\_\+host\+\_\+byte\+\_\+order}!pcre\+\_\+byte\+\_\+order.\+c@{pcre\+\_\+byte\+\_\+order.\+c}}
+\subsubsection[{\texorpdfstring{pcre\+\_\+pattern\+\_\+to\+\_\+host\+\_\+byte\+\_\+order(pcre $\ast$argument\+\_\+re, pcre\+\_\+extra $\ast$extra\+\_\+data, const unsigned char $\ast$tables)}{pcre_pattern_to_host_byte_order(pcre *argument_re, pcre_extra *extra_data, const unsigned char *tables)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\+C\+R\+E\+\_\+\+E\+X\+P\+\_\+\+D\+E\+CL} {\bf int} pcre\+\_\+pattern\+\_\+to\+\_\+host\+\_\+byte\+\_\+order (
+\begin{DoxyParamCaption}
+\item[{{\bf pcre} $\ast$}]{argument\+\_\+re, }
+\item[{{\bf pcre\+\_\+extra} $\ast$}]{extra\+\_\+data, }
+\item[{const unsigned char $\ast$}]{tables}
+\end{DoxyParamCaption}
+)}\hypertarget{pcre__byte__order_8c_add8ba4766b7b3ef9f4a2768137d30dda}{}\label{pcre__byte__order_8c_add8ba4766b7b3ef9f4a2768137d30dda}
+
+\begin{DoxyCode}
+108 \{
+109 \hyperlink{pcre__internal_8h_a2984f4df28d081d53978318a28d0c665}{REAL\_PCRE} *\hyperlink{pcre_8txt_abd134207f74532a8b094676c4a2ca9ed}{re} = (\hyperlink{pcre__internal_8h_a2984f4df28d081d53978318a28d0c665}{REAL\_PCRE} *)argument\_re;
+110 \hyperlink{structpcre__study__data}{pcre\_study\_data} *\hyperlink{pcretest_8txt_ad3e0d03c4531f529451b54c48ee48bb6}{study};
+111 \textcolor{preprocessor}{#ifndef COMPILE\_PCRE8}
+112 \hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr};
+113 \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_gae8609cee12b4a979fa07fe431b3ee0fb}{length};
+114 \textcolor{preprocessor}{#if defined SUPPORT\_UTF && defined COMPILE\_PCRE16}
+115 \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{BOOL} utf;
+116 \hyperlink{pcre__internal_8h_a050c65e107f0c828f856a231f4b4e788}{BOOL} utf16\_char;
+117 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* SUPPORT\_UTF && COMPILE\_PCRE16 */}\textcolor{preprocessor}{}
+118 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* !COMPILE\_PCRE8 */}\textcolor{preprocessor}{}
+119 
+120 \textcolor{keywordflow}{if} (re == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \textcolor{keywordflow}{return} \hyperlink{pcre_8h_aa47d1a178fb529fed1b1f999ea98b0b9}{PCRE\_ERROR\_NULL};
+121 \textcolor{keywordflow}{if} (re->magic\_number == \hyperlink{pcre__internal_8h_a54061e5993a5517320d425f44408cc86}{MAGIC\_NUMBER})
+122   \{
+123   \textcolor{keywordflow}{if} ((re->flags & \hyperlink{pcre__internal_8h_a0c980b9bdb3361277209921d22db216e}{PCRE\_MODE}) == 0) \textcolor{keywordflow}{return} \hyperlink{pcre_8h_a1a3d95e2973925e87be01c3d1f9d2ebd}{PCRE\_ERROR\_BADMODE};
+124   re->tables = \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables};
+125   \textcolor{keywordflow}{return} 0;
+126   \}
+127 
+128 \textcolor{keywordflow}{if} (re->magic\_number != \hyperlink{pcre__internal_8h_a643e1239d7bdc6c4ab855e7633c30575}{REVERSED\_MAGIC\_NUMBER}) \textcolor{keywordflow}{return} 
+      \hyperlink{pcre_8h_a5c86cbd13e6c2770246f6da8a310f160}{PCRE\_ERROR\_BADMAGIC};
+129 \textcolor{keywordflow}{if} ((swap\_uint32(re->flags) & \hyperlink{pcre__internal_8h_a0c980b9bdb3361277209921d22db216e}{PCRE\_MODE}) == 0) \textcolor{keywordflow}{return} 
+      \hyperlink{pcre_8h_a1a3d95e2973925e87be01c3d1f9d2ebd}{PCRE\_ERROR\_BADMODE};
+130 
+131 re->magic\_number = \hyperlink{pcre__internal_8h_a54061e5993a5517320d425f44408cc86}{MAGIC\_NUMBER};
+132 re->size = swap\_uint32(re->size);
+133 re->options = swap\_uint32(re->options);
+134 re->flags = swap\_uint32(re->flags);
+135 re->limit\_match = swap\_uint32(re->limit\_match);
+136 re->limit\_recursion = swap\_uint32(re->limit\_recursion);
+137 
+138 \textcolor{preprocessor}{#if defined COMPILE\_PCRE8 || defined COMPILE\_PCRE16}
+139 re->first\_char = swap\_uint16(re->first\_char);
+140 re->req\_char = swap\_uint16(re->req\_char);
+141 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+142 re->first\_char = swap\_uint32(re->first\_char);
+143 re->req\_char = swap\_uint32(re->req\_char);
+144 \textcolor{preprocessor}{#endif}
+145 
+146 re->max\_lookbehind = swap\_uint16(re->max\_lookbehind);
+147 re->top\_bracket = swap\_uint16(re->top\_bracket);
+148 re->top\_backref = swap\_uint16(re->top\_backref);
+149 re->name\_table\_offset = swap\_uint16(re->name\_table\_offset);
+150 re->name\_entry\_size = swap\_uint16(re->name\_entry\_size);
+151 re->name\_count = swap\_uint16(re->name\_count);
+152 re->ref\_count = swap\_uint16(re->ref\_count);
+153 re->tables = \hyperlink{pcre_8txt_a0a3ce7ba2875673af4ff52c60636a7cb}{tables};
+154 
+155 \textcolor{keywordflow}{if} (extra\_data != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL} && (extra\_data->\hyperlink{structpcre__extra_a2a7957f7f9d15b3b69f8652b2f50ecb3}{flags} & \hyperlink{pcre_8h_a2349a3ef318b1472ea1e862dea0e5d5f}{PCRE\_EXTRA\_STUDY\_DATA}) != 0)
+156   \{
+157   study = (\hyperlink{structpcre__study__data}{pcre\_study\_data} *)extra\_data->\hyperlink{structpcre__extra_a27f29bdf9c4526d5bb3fb8ee514ee8e8}{study\_data};
+158   study->\hyperlink{structpcre__study__data_ac994347d3d729eaf14eba590b65867a6}{size} = swap\_uint32(study->\hyperlink{structpcre__study__data_ac994347d3d729eaf14eba590b65867a6}{size});
+159   study->\hyperlink{structpcre__study__data_aa7f0cd71352343074202364478c25a4d}{flags} = swap\_uint32(study->\hyperlink{structpcre__study__data_aa7f0cd71352343074202364478c25a4d}{flags});
+160   study->\hyperlink{structpcre__study__data_a50cb4fc8a227db9bfe3568764aca3274}{minlength} = swap\_uint32(study->\hyperlink{structpcre__study__data_a50cb4fc8a227db9bfe3568764aca3274}{minlength});
+161   \}
+162 
+163 \textcolor{preprocessor}{#ifndef COMPILE\_PCRE8}
+164 ptr = (\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar} *)re + re->name\_table\_offset;
+165 length = re->name\_count * re->name\_entry\_size;
+166 #\textcolor{keywordflow}{if} \hyperlink{pcregrep_8txt_ab69dfbed7b22a45ae37a17aae2686509}{defined} \hyperlink{config_8h_ac9cf172c19c6be2292d6ef92c2230689}{SUPPORT\_UTF} && \hyperlink{pcregrep_8txt_ab69dfbed7b22a45ae37a17aae2686509}{defined} \hyperlink{pcre16__byte__order_8c_a02bc8e73c5841f3f4bc3bd09cd54e9d9}{COMPILE\_PCRE16}
+167 utf = (re->options & \hyperlink{pcre_8h_a272d3113af637a7be28ee27695da49fa}{PCRE\_UTF16}) != 0;
+168 utf16\_char = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+169 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* SUPPORT\_UTF && COMPILE\_PCRE16 */}\textcolor{preprocessor}{}
+170 
+171 \textcolor{keywordflow}{while}(\hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE})
+172   \{
+173   \textcolor{comment}{/* Swap previous characters. */}
+174   \textcolor{keywordflow}{while} (length-- > 0)
+175     \{
+176 \textcolor{preprocessor}{#if defined COMPILE\_PCRE16}
+177     *ptr = swap\_uint16(*ptr);
+178 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+179     *ptr = swap\_uint32(*ptr);
+180 \textcolor{preprocessor}{#endif}
+181     ptr++;
+182     \}
+183 \textcolor{preprocessor}{#if defined SUPPORT\_UTF && defined COMPILE\_PCRE16}
+184   \textcolor{keywordflow}{if} (utf16\_char)
+185     \{
+186     \textcolor{keywordflow}{if} (HAS\_EXTRALEN(ptr[-1]))
+187       \{
+188       \textcolor{comment}{/* We know that there is only one extra character in UTF-16. */}
+189       *ptr = swap\_uint16(*ptr);
+190       ptr++;
+191       \}
+192     \}
+193   utf16\_char = \hyperlink{group__MOD__SSL__PRIVATE_gaa93f0eb578d23995850d61f7d61c55c1}{FALSE};
+194 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* SUPPORT\_UTF */}\textcolor{preprocessor}{}
+195 
+196   \textcolor{comment}{/* Get next opcode. */}
+197   length = 0;
+198 \textcolor{preprocessor}{#if defined COMPILE\_PCRE16}
+199   *ptr = swap\_uint16(*ptr);
+200 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+201   *ptr = swap\_uint32(*ptr);
+202 \textcolor{preprocessor}{#endif}
+203   \textcolor{keywordflow}{switch} (*ptr)
+204     \{
+205     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da010acee11f1e0ca0026e20c2f36bfdb7}{OP\_END}:
+206     \textcolor{keywordflow}{return} 0;
+207 
+208 \textcolor{preprocessor}{#if defined SUPPORT\_UTF && defined COMPILE\_PCRE16}
+209     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da050d16bc0c6a222898d6a0b390d941cf}{OP\_CHAR}:
+210     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa16d54c663eb7f03322bd85396b1d58c}{OP\_CHARI}:
+211     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da36a6b73cc4823f54891a013e2cc760d1}{OP\_NOT}:
+212     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dae116d6789268c64c977712b1db7a1b9f}{OP\_NOTI}:
+213     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dabbac82509d3e6ec4e48888a58a65fea0}{OP\_STAR}:
+214     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dab76952c741418e37c7cca2fd5143e0fc}{OP\_MINSTAR}:
+215     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da5a7e60a084df9c5e6530038757b412e7}{OP\_PLUS}:
+216     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da79fa28dc4f1c9a45d3a0bb8372f5b70a}{OP\_MINPLUS}:
+217     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da9026f8e43659827c81499cb779f2a580}{OP\_QUERY}:
+218     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da7c0e7b19d7f9e002a1d916c7a0381c4d}{OP\_MINQUERY}:
+219     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da901fa38b2789592c62864196546c1f40}{OP\_UPTO}:
+220     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daaedd676e6d3581adbcde869c050bc25b}{OP\_MINUPTO}:
+221     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da55af8032fdb0011108d358184d065090}{OP\_EXACT}:
+222     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da3d707075c9fc986dd75283dcf43602b5}{OP\_POSSTAR}:
+223     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac5477f48e04e5742645a010f1f0a0bb6}{OP\_POSPLUS}:
+224     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dab2bd21819f67d9a8de41a9fff9c29aad}{OP\_POSQUERY}:
+225     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da6f80145741d9621bc3d7051cebb42fd2}{OP\_POSUPTO}:
+226     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da00bda83cdaf008748c3dbd3f4e7181ca}{OP\_STARI}:
+227     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da27b252a29c94e5370cda1978dd1b0cbc}{OP\_MINSTARI}:
+228     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da95237beb80b204de16c5a18cb6e78a3f}{OP\_PLUSI}:
+229     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dadc44abf0d72ae3c07f4ba8191501a9fa}{OP\_MINPLUSI}:
+230     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da99a53895e8df236a4fad7fd70a9612bc}{OP\_QUERYI}:
+231     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dadbd4a67d0ab6ce6c143a700ec81e8361}{OP\_MINQUERYI}:
+232     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da86bff34f7a6765d3ea8030bb1420efd9}{OP\_UPTOI}:
+233     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da6fd6615bd9ce5f08bc09c2deafa977d2}{OP\_MINUPTOI}:
+234     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da42b04477ebf653b70bee3eb7156bd79f}{OP\_EXACTI}:
+235     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dacf23e475dbce0c00d9fdcdfbff7fbd74}{OP\_POSSTARI}:
+236     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da9dd90e620292fb9c58b24e76bfee9b41}{OP\_POSPLUSI}:
+237     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da91db9c86b93ec3b481538b477499a036}{OP\_POSQUERYI}:
+238     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dae30ee55ec9d5363df315f3b8a6ea3136}{OP\_POSUPTOI}:
+239     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa6487aefb16e0f5dcad93fdce1e3f373}{OP\_NOTSTAR}:
+240     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa5ec71555d5ac4042a95ac280f75e394}{OP\_NOTMINSTAR}:
+241     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da13cdebdbc084ee1dd01425be339effda}{OP\_NOTPLUS}:
+242     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da977ac204fe430a34ad51f9207cd12838}{OP\_NOTMINPLUS}:
+243     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dae1e18938521bff596d493a927571e23c}{OP\_NOTQUERY}:
+244     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac2c9b3a8f17d9bc060872b9279d23da0}{OP\_NOTMINQUERY}:
+245     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da3ebb928e44fd590059c04b9eba983365}{OP\_NOTUPTO}:
+246     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac28146c312bd1249029404d473f6be4e}{OP\_NOTMINUPTO}:
+247     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daf86dda71ee43c5bffffeb5334bffbeed}{OP\_NOTEXACT}:
+248     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da94581d3d5b2bebc9b85e718026b8e335}{OP\_NOTPOSSTAR}:
+249     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dafbcfa09fe11e6b50626ea47a3609488a}{OP\_NOTPOSPLUS}:
+250     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dac9bd027ba175584ea72bd033160de8e7}{OP\_NOTPOSQUERY}:
+251     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da716c014b118ca6c3bec583b22958166d}{OP\_NOTPOSUPTO}:
+252     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da364728d2cc19d7c8c64ccf09871e73e4}{OP\_NOTSTARI}:
+253     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da03cdefc542a325bde004db23bd813c19}{OP\_NOTMINSTARI}:
+254     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da44f4b6786e3c80320ec8637aefbce1c0}{OP\_NOTPLUSI}:
+255     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da39f568548a1554851fc0f3a98be95fb3}{OP\_NOTMINPLUSI}:
+256     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da4ace46fbde497ecf6ada4065952fc2f0}{OP\_NOTQUERYI}:
+257     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daa1ab303e42d4cbc5d22f21d63df1db09}{OP\_NOTMINQUERYI}:
+258     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daedeafdde2b142ceb2761173ac159156f}{OP\_NOTUPTOI}:
+259     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dadff7b0574f9292d26474a6bf3a0aadde}{OP\_NOTMINUPTOI}:
+260     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daf4f5261271274ffd2d7f98e42c60860d}{OP\_NOTEXACTI}:
+261     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da92337fcc24275bdf6fa49e7438d0baa1}{OP\_NOTPOSSTARI}:
+262     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da620621bee3c0d2bebd44c28142f75dec}{OP\_NOTPOSPLUSI}:
+263     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77daafd7d720917d833b533c50c6ee03c79b}{OP\_NOTPOSQUERYI}:
+264     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da07f4e3cf4a1d7556ee3ef2a41220723b}{OP\_NOTPOSUPTOI}:
+265     \textcolor{keywordflow}{if} (utf) utf16\_char = \hyperlink{group__MOD__SSL__PRIVATE_gaa8cecfc5c5c054d2875c03e77b7be15d}{TRUE};
+266 \textcolor{preprocessor}{#endif}
+267     \textcolor{comment}{/* Fall through. */}
+268 
+269     \textcolor{keywordflow}{default}:
+270     length = \hyperlink{pcre__internal_8h_ae497efaa9e3ed86a5dd1ffc13991e81d}{PRIV}(OP\_lengths)[*\hyperlink{group__APACHE__CORE__DAEMON_gaad7fdd8e91a6edc850f20f2fede630a9}{ptr}] - 1;
+271     \textcolor{keywordflow}{break};
+272 
+273     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da1f99e671caee687d352cce89c95e04c9}{OP\_CLASS}:
+274     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77da73f1f5998cb564a4df3d4424f44fa974}{OP\_NCLASS}:
+275     \textcolor{comment}{/* Skip the character bit map. */}
+276     ptr += 32/\textcolor{keyword}{sizeof}(\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar});
+277     length = 0;
+278     \textcolor{keywordflow}{break};
+279 
+280     \textcolor{keywordflow}{case} \hyperlink{pcre__internal_8h_a157d5577a5b2f5986037d0d09c7dc77dacd62821c239c3917560a909bb19bceb3}{OP\_XCLASS}:
+281     \textcolor{comment}{/* Reverse the size of the XCLASS instance. */}
+282     ptr++;
+283 \textcolor{preprocessor}{#if defined COMPILE\_PCRE16}
+284     *ptr = swap\_uint16(*ptr);
+285 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+286     *ptr = swap\_uint32(*ptr);
+287 \textcolor{preprocessor}{#endif}
+288 \textcolor{preprocessor}{#ifndef COMPILE\_PCRE32}
+289     \textcolor{keywordflow}{if} (\hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{LINK\_SIZE} > 1)
+290       \{
+291       \textcolor{comment}{/* LINK\_SIZE can be 1 or 2 in 16 bit mode. */}
+292       ptr++;
+293       *ptr = swap\_uint16(*ptr);
+294       \}
+295 \textcolor{preprocessor}{#endif}
+296     ptr++;
+297     length = (\hyperlink{group__MOD__PROXY_gga4e8622ade6bde29385df7b89c9b94e71a12a8dcf59c16b5aadfda3a08ba67d529}{GET}(ptr, -\hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{LINK\_SIZE})) - (1 + \hyperlink{config_8h_a563fd7a205c425b3d546639ee71070ce}{LINK\_SIZE} + 1);
+298 \textcolor{preprocessor}{#if defined COMPILE\_PCRE16}
+299     *ptr = swap\_uint16(*ptr);
+300 \textcolor{preprocessor}{#elif defined COMPILE\_PCRE32}
+301     *ptr = swap\_uint32(*ptr);
+302 \textcolor{preprocessor}{#endif}
+303     \textcolor{keywordflow}{if} ((*ptr & \hyperlink{pcre__internal_8h_ae1fdbc9124ca5c922fe49dbcb07ac9c0}{XCL\_MAP}) != 0)
+304       \{
+305       \textcolor{comment}{/* Skip the character bit map. */}
+306       ptr += 32/\textcolor{keyword}{sizeof}(\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar});
+307       length -= 32/\textcolor{keyword}{sizeof}(\hyperlink{pcre__internal_8h_a9d8efd0ad5b191db2a1793268600deb9}{pcre\_uchar});
+308       \}
+309     \textcolor{keywordflow}{break};
+310     \}
+311   ptr++;
+312   \}
+313 \textcolor{comment}{/* Control should never reach here in 16/32 bit mode. */}
+314 \textcolor{preprocessor}{#else  }\textcolor{comment}{/* In 8-bit mode, the pattern does not need to be processed. */}\textcolor{preprocessor}{}
+315 \textcolor{keywordflow}{return} 0;
+316 \textcolor{preprocessor}{#endif }\textcolor{comment}{/* !COMPILE\_PCRE8 */}\textcolor{preprocessor}{}
+317 \}
+\end{DoxyCode}

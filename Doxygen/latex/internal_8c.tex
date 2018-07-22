@@ -1,0 +1,118 @@
+\hypertarget{internal_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/srclib/apr/misc/win32/internal.c File Reference}
+\label{internal_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/misc/win32/internal.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/srclib/apr/misc/win32/internal.\+c}}
+{\ttfamily \#include \char`\"{}apr\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+misc.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+arch\+\_\+file\+\_\+io.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+Include dependency graph for internal.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{internal_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{internal_8c_ad92b8dfa0b48cb0be21216b7a25343f1}{apr\+\_\+wastrtoastr} (char const $\ast$const $\ast$$\ast$retarr, wchar\+\_\+t const $\ast$const $\ast$\hyperlink{group__apr__tables_ga1e3f66bfb173c9a913ef3bb37842e273}{arr}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APR__Util__DBD_ga6b6dfca544bdc17e0e73e3ca56c2363d}{args})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{internal.\+c@{internal.\+c}!apr\+\_\+wastrtoastr@{apr\+\_\+wastrtoastr}}
+\index{apr\+\_\+wastrtoastr@{apr\+\_\+wastrtoastr}!internal.\+c@{internal.\+c}}
+\subsubsection[{\texorpdfstring{apr\+\_\+wastrtoastr(char const $\ast$const $\ast$$\ast$retarr, wchar\+\_\+t const $\ast$const $\ast$arr, int args)}{apr_wastrtoastr(char const *const **retarr, wchar_t const *const *arr, int args)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} apr\+\_\+wastrtoastr (
+\begin{DoxyParamCaption}
+\item[{char const $\ast$const $\ast$$\ast$}]{retarr, }
+\item[{wchar\+\_\+t const $\ast$const $\ast$}]{arr, }
+\item[{{\bf int}}]{args}
+\end{DoxyParamCaption}
+)}\hypertarget{internal_8c_ad92b8dfa0b48cb0be21216b7a25343f1}{}\label{internal_8c_ad92b8dfa0b48cb0be21216b7a25343f1}
+
+\begin{DoxyCode}
+42 \{
+43     \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} elesize = 0;
+44     \textcolor{keywordtype}{char} **newarr;
+45     \textcolor{keywordtype}{char} *elements;
+46     \textcolor{keywordtype}{char} *ele;
+47     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg};
+48 
+49     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args} < 0) \{
+50         \textcolor{keywordflow}{for} (\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args} = 0; \hyperlink{group__apr__tables_ga1e3f66bfb173c9a913ef3bb37842e273}{arr}[\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}]; ++\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args})
+51             ;
+52     \}
+53 
+54     newarr = apr\_malloc\_dbg((\hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args} + 1) * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char} *),
+55                             \_\_FILE\_\_, \_\_LINE\_\_);
+56 
+57     \textcolor{keywordflow}{for} (arg = 0; arg < \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}; ++\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}) \{
+58         newarr[\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}] = (\textcolor{keywordtype}{void}*)(wcslen(\hyperlink{group__apr__tables_ga1e3f66bfb173c9a913ef3bb37842e273}{arr}[arg]) + 1);
+59         elesize += (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})newarr[arg];
+60     \}
+61 
+62     \textcolor{comment}{/* This is a safe max allocation, we will realloc after}
+63 \textcolor{comment}{     * processing and return the excess to the free store.}
+64 \textcolor{comment}{     * 3 ucs bytes hold any single wchar\_t value (16 bits)}
+65 \textcolor{comment}{     * 4 ucs bytes will hold a wchar\_t pair value (20 bits)}
+66 \textcolor{comment}{     */}
+67     elesize = elesize * 3 + 1;
+68     ele = elements = apr\_malloc\_dbg(elesize * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}),
+69                                     \_\_FILE\_\_, \_\_LINE\_\_);
+70 
+71     \textcolor{keywordflow}{for} (arg = 0; arg < \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}; ++\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}) \{
+72         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} = (\hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t})newarr[arg];
+73         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} newlen = elesize;
+74 
+75         newarr[\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}] = ele;
+76         (\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void})apr\_conv\_ucs2\_to\_utf8(\hyperlink{group__apr__tables_ga1e3f66bfb173c9a913ef3bb37842e273}{arr}[arg], &len,
+77                                     newarr[arg], &elesize);
+78 
+79         newlen -= elesize;
+80         ele += newlen;
+81         assert(elesize && (len == 0));
+82     \}
+83 
+84     newarr[\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}] = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+85     *(ele++) = \textcolor{charliteral}{'\(\backslash\)0'};
+86 
+87     \textcolor{comment}{/* Return to the free store if the heap realloc is the least bit optimized}
+88 \textcolor{comment}{     */}
+89     ele = apr\_realloc\_dbg(elements, ele - elements,
+90                           \_\_FILE\_\_, \_\_LINE\_\_);
+91 
+92     \textcolor{keywordflow}{if} (ele != elements) \{
+93         \hyperlink{group__apr__platform_gaaa72b2253f6f3032cefea5712a27540e}{apr\_size\_t} diff = ele - elements;
+94         \textcolor{keywordflow}{for} (arg = 0; arg < \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args}; ++\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}) \{
+95             newarr[\hyperlink{group__APACHE__CORE__LISTEN_ga71f9d4c76ff7cd8f3db5697a5cfa7b08}{arg}] += diff;
+96         \}
+97     \}
+98 
+99     *retarr = (\textcolor{keywordtype}{char} \textcolor{keyword}{const} * \textcolor{keyword}{const} *)newarr;
+100     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MPM_gaa72bdc340ae9df68cd6f4afa28f1fd81}{args};
+101 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=235pt]{internal_8c_ad92b8dfa0b48cb0be21216b7a25343f1_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=291pt]{internal_8c_ad92b8dfa0b48cb0be21216b7a25343f1_icgraph}
+\end{center}
+\end{figure}
+
+

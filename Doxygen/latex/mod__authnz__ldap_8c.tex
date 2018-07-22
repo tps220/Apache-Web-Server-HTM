@@ -1,0 +1,132 @@
+\hypertarget{mod__authnz__ldap_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/aaa/mod\+\_\+authnz\+\_\+ldap.c File Reference}
+\label{mod__authnz__ldap_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/aaa/mod\+\_\+authnz\+\_\+ldap.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/aaa/mod\+\_\+authnz\+\_\+ldap.\+c}}
+{\ttfamily \#include \char`\"{}ap\+\_\+provider.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}httpd.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+log.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+protocol.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}http\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}util\+\_\+ldap.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}mod\+\_\+auth.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+strings.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+xlate.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+want.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}apr\+\_\+lib.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$ctype.\+h$>$}\\*
+Include dependency graph for mod\+\_\+authnz\+\_\+ldap.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mod__authnz__ldap_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structauthn__ldap__config__t}{authn\+\_\+ldap\+\_\+config\+\_\+t}
+\item 
+struct \hyperlink{structauthn__ldap__request__t}{authn\+\_\+ldap\+\_\+request\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mod__authnz__ldap_8c_a88a4bf7f483aad3f3945773f3383e713}{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}
+\item 
+\#define \hyperlink{mod__authnz__ldap_8c_aaad551a2a4b99d7068d43510385622c2}{G\+R\+O\+U\+P\+A\+T\+T\+R\+\_\+\+M\+A\+X\+\_\+\+E\+L\+TS}~10
+\item 
+\#define \hyperlink{mod__authnz__ldap_8c_af98440298ca6f79175164d5b5d341a6e}{F\+I\+L\+T\+E\+R\+\_\+\+L\+E\+N\+G\+TH}~\hyperlink{passwd__common_8h_a4fa9aad0e9c7cc2e344b679cdbb2b67d}{M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468}{auth\+\_\+ldap\+\_\+phase} \{ \hyperlink{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468a41fc44cd6b85a4ae18bdb5c8ebe9b926}{L\+D\+A\+P\+\_\+\+A\+U\+T\+HN}, 
+\hyperlink{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468a35a2a203438ed6f7d6c05b9949c2f897}{L\+D\+A\+P\+\_\+\+A\+U\+T\+HZ}
+ \}
+\item 
+enum \hyperlink{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2}{auth\+\_\+ldap\+\_\+optype} \{ \hyperlink{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2af790378ed30a8ecf0f0aac3fdcb23fab}{L\+D\+A\+P\+\_\+\+S\+E\+A\+R\+CH}, 
+\hyperlink{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2a145c87c949db0be38eb26965e27f8d9b}{L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+RE}, 
+\hyperlink{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2a1e7f9ce4aca41baa4aa853807c6b74d0}{L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+R\+E\+\_\+\+A\+N\+D\+\_\+\+S\+E\+A\+R\+CH}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mod__authnz__ldap_8c_abdd77fd99a3e50a6fcb48e6507f3850a}{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE} (authnz\+\_\+ldap)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__APACHE__CORE__CONFIG_ga0ea4f633a5f9f88e1603aaeb1f2b2e69}{module} \hyperlink{ap__config_8h_ae2cb2b956e7f274f8d91581331debbe0}{A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} \hyperlink{mod__authnz__ldap_8c_af33b7cc7e73faedf211f81d6939e58e9}{authnz\+\_\+ldap\+\_\+module}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}}
+\index{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC@{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}{APR_WANT_STRFUNC}}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+P\+R\+\_\+\+W\+A\+N\+T\+\_\+\+S\+T\+R\+F\+U\+NC}\hypertarget{mod__authnz__ldap_8c_a88a4bf7f483aad3f3945773f3383e713}{}\label{mod__authnz__ldap_8c_a88a4bf7f483aad3f3945773f3383e713}
+\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!F\+I\+L\+T\+E\+R\+\_\+\+L\+E\+N\+G\+TH@{F\+I\+L\+T\+E\+R\+\_\+\+L\+E\+N\+G\+TH}}
+\index{F\+I\+L\+T\+E\+R\+\_\+\+L\+E\+N\+G\+TH@{F\+I\+L\+T\+E\+R\+\_\+\+L\+E\+N\+G\+TH}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}
+\subsubsection[{\texorpdfstring{F\+I\+L\+T\+E\+R\+\_\+\+L\+E\+N\+G\+TH}{FILTER_LENGTH}}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\+I\+L\+T\+E\+R\+\_\+\+L\+E\+N\+G\+TH~{\bf M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}}\hypertarget{mod__authnz__ldap_8c_af98440298ca6f79175164d5b5d341a6e}{}\label{mod__authnz__ldap_8c_af98440298ca6f79175164d5b5d341a6e}
+\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!G\+R\+O\+U\+P\+A\+T\+T\+R\+\_\+\+M\+A\+X\+\_\+\+E\+L\+TS@{G\+R\+O\+U\+P\+A\+T\+T\+R\+\_\+\+M\+A\+X\+\_\+\+E\+L\+TS}}
+\index{G\+R\+O\+U\+P\+A\+T\+T\+R\+\_\+\+M\+A\+X\+\_\+\+E\+L\+TS@{G\+R\+O\+U\+P\+A\+T\+T\+R\+\_\+\+M\+A\+X\+\_\+\+E\+L\+TS}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}
+\subsubsection[{\texorpdfstring{G\+R\+O\+U\+P\+A\+T\+T\+R\+\_\+\+M\+A\+X\+\_\+\+E\+L\+TS}{GROUPATTR_MAX_ELTS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\+R\+O\+U\+P\+A\+T\+T\+R\+\_\+\+M\+A\+X\+\_\+\+E\+L\+TS~10}\hypertarget{mod__authnz__ldap_8c_aaad551a2a4b99d7068d43510385622c2}{}\label{mod__authnz__ldap_8c_aaad551a2a4b99d7068d43510385622c2}
+
+
+\subsection{Enumeration Type Documentation}
+\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!auth\+\_\+ldap\+\_\+optype@{auth\+\_\+ldap\+\_\+optype}}
+\index{auth\+\_\+ldap\+\_\+optype@{auth\+\_\+ldap\+\_\+optype}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}
+\subsubsection[{\texorpdfstring{auth\+\_\+ldap\+\_\+optype}{auth_ldap_optype}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf auth\+\_\+ldap\+\_\+optype}}\hypertarget{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2}{}\label{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{L\+D\+A\+P\+\_\+\+S\+E\+A\+R\+CH@{L\+D\+A\+P\+\_\+\+S\+E\+A\+R\+CH}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!L\+D\+A\+P\+\_\+\+S\+E\+A\+R\+CH@{L\+D\+A\+P\+\_\+\+S\+E\+A\+R\+CH}}\item[{\em 
+L\+D\+A\+P\+\_\+\+S\+E\+A\+R\+CH\hypertarget{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2af790378ed30a8ecf0f0aac3fdcb23fab}{}\label{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2af790378ed30a8ecf0f0aac3fdcb23fab}
+}]\index{L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+RE@{L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+RE}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+RE@{L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+RE}}\item[{\em 
+L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+RE\hypertarget{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2a145c87c949db0be38eb26965e27f8d9b}{}\label{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2a145c87c949db0be38eb26965e27f8d9b}
+}]\index{L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+R\+E\+\_\+\+A\+N\+D\+\_\+\+S\+E\+A\+R\+CH@{L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+R\+E\+\_\+\+A\+N\+D\+\_\+\+S\+E\+A\+R\+CH}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+R\+E\+\_\+\+A\+N\+D\+\_\+\+S\+E\+A\+R\+CH@{L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+R\+E\+\_\+\+A\+N\+D\+\_\+\+S\+E\+A\+R\+CH}}\item[{\em 
+L\+D\+A\+P\+\_\+\+C\+O\+M\+P\+A\+R\+E\+\_\+\+A\+N\+D\+\_\+\+S\+E\+A\+R\+CH\hypertarget{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2a1e7f9ce4aca41baa4aa853807c6b74d0}{}\label{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2a1e7f9ce4aca41baa4aa853807c6b74d0}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+97                       \{
+98     \hyperlink{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2af790378ed30a8ecf0f0aac3fdcb23fab}{LDAP\_SEARCH}, \hyperlink{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2a145c87c949db0be38eb26965e27f8d9b}{LDAP\_COMPARE}, \hyperlink{mod__authnz__ldap_8c_a4368e6af3e55f359ec9f0d8e9e9515a2a1e7f9ce4aca41baa4aa853807c6b74d0}{LDAP\_COMPARE\_AND\_SEARCH} \textcolor{comment}{/*
+       nested groups */}
+99 \};
+\end{DoxyCode}
+\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!auth\+\_\+ldap\+\_\+phase@{auth\+\_\+ldap\+\_\+phase}}
+\index{auth\+\_\+ldap\+\_\+phase@{auth\+\_\+ldap\+\_\+phase}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}
+\subsubsection[{\texorpdfstring{auth\+\_\+ldap\+\_\+phase}{auth_ldap_phase}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf auth\+\_\+ldap\+\_\+phase}}\hypertarget{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468}{}\label{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{L\+D\+A\+P\+\_\+\+A\+U\+T\+HN@{L\+D\+A\+P\+\_\+\+A\+U\+T\+HN}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!L\+D\+A\+P\+\_\+\+A\+U\+T\+HN@{L\+D\+A\+P\+\_\+\+A\+U\+T\+HN}}\item[{\em 
+L\+D\+A\+P\+\_\+\+A\+U\+T\+HN\hypertarget{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468a41fc44cd6b85a4ae18bdb5c8ebe9b926}{}\label{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468a41fc44cd6b85a4ae18bdb5c8ebe9b926}
+}]\index{L\+D\+A\+P\+\_\+\+A\+U\+T\+HZ@{L\+D\+A\+P\+\_\+\+A\+U\+T\+HZ}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!L\+D\+A\+P\+\_\+\+A\+U\+T\+HZ@{L\+D\+A\+P\+\_\+\+A\+U\+T\+HZ}}\item[{\em 
+L\+D\+A\+P\+\_\+\+A\+U\+T\+HZ\hypertarget{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468a35a2a203438ed6f7d6c05b9949c2f897}{}\label{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468a35a2a203438ed6f7d6c05b9949c2f897}
+}]\end{description}
+\end{Desc}
+
+\begin{DoxyCode}
+93                      \{
+94     \hyperlink{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468a41fc44cd6b85a4ae18bdb5c8ebe9b926}{LDAP\_AUTHN}, \hyperlink{mod__authnz__ldap_8c_a70449ab4cbfac59a334445f6d8d72468a35a2a203438ed6f7d6c05b9949c2f897}{LDAP\_AUTHZ}
+95 \};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}}
+\index{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE@{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}
+\subsubsection[{\texorpdfstring{A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+L\+E(authnz\+\_\+ldap)}{AP_DECLARE_MODULE(authnz_ldap)}}]{\setlength{\rightskip}{0pt plus 5cm}A\+P\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+M\+O\+D\+U\+LE (
+\begin{DoxyParamCaption}
+\item[{authnz\+\_\+ldap}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{mod__authnz__ldap_8c_abdd77fd99a3e50a6fcb48e6507f3850a}{}\label{mod__authnz__ldap_8c_abdd77fd99a3e50a6fcb48e6507f3850a}
+
+
+\subsection{Variable Documentation}
+\index{mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}!authnz\+\_\+ldap\+\_\+module@{authnz\+\_\+ldap\+\_\+module}}
+\index{authnz\+\_\+ldap\+\_\+module@{authnz\+\_\+ldap\+\_\+module}!mod\+\_\+authnz\+\_\+ldap.\+c@{mod\+\_\+authnz\+\_\+ldap.\+c}}
+\subsubsection[{\texorpdfstring{authnz\+\_\+ldap\+\_\+module}{authnz_ldap_module}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf module} {\bf A\+P\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+D\+A\+TA} authnz\+\_\+ldap\+\_\+module}\hypertarget{mod__authnz__ldap_8c_af33b7cc7e73faedf211f81d6939e58e9}{}\label{mod__authnz__ldap_8c_af33b7cc7e73faedf211f81d6939e58e9}

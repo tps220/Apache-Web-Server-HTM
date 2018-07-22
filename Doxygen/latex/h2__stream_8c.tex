@@ -1,0 +1,1567 @@
+\hypertarget{h2__stream_8c}{}\section{/usr/local/src/github/\+Codebase/httpd-\/2.4.29/modules/http2/h2\+\_\+stream.c File Reference}
+\label{h2__stream_8c}\index{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+stream.\+c@{/usr/local/src/github/\+Codebase/httpd-\/2.\+4.\+29/modules/http2/h2\+\_\+stream.\+c}}
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$stddef.\+h$>$}\\*
+{\ttfamily \#include $<$apr\+\_\+strings.\+h$>$}\\*
+{\ttfamily \#include $<$httpd.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+core.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+connection.\+h$>$}\\*
+{\ttfamily \#include $<$http\+\_\+log.\+h$>$}\\*
+{\ttfamily \#include $<$nghttp2/nghttp2.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+private.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+bucket\+\_\+beam.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+conn.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+config.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+h2.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+mplx.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+push.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+request.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+headers.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+session.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+stream.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+task.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+ctx.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}h2\+\_\+util.\+h\char`\"{}}\\*
+Include dependency graph for h2\+\_\+stream.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{h2__stream_8c_a496eca1993fe22a913c10dd81e1ce57e}{S\+\_\+\+X\+XX}~(-\/2)                      /$\ast$ Programming Error $\ast$/
+\item 
+\#define \hyperlink{h2__stream_8c_a53b50dddf0ffe2eb0a9aadabffcb1b7d}{S\+\_\+\+E\+RR}~(-\/1)                      /$\ast$ Protocol Error $\ast$/
+\item 
+\#define \hyperlink{h2__stream_8c_acae7d861bef52c5a654cf42377d4fcd2}{S\+\_\+\+N\+OP}~(0)                       /$\ast$ No Change $\ast$/
+\item 
+\#define \hyperlink{h2__stream_8c_a7ae6427fef1201d5d134950519cfc761}{S\+\_\+\+I\+DL}~(H2\+\_\+\+S\+S\+\_\+\+I\+DL + 1)
+\item 
+\#define \hyperlink{h2__stream_8c_a639b1be69e4ffa7f314d36edad91782f}{S\+\_\+\+R\+S\+\_\+L}~(\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafa00c392f5fb5c6339961fd644b3b60d13}{H2\+\_\+\+S\+S\+\_\+\+R\+S\+V\+D\+\_\+L} + 1)
+\item 
+\#define \hyperlink{h2__stream_8c_a12e5c5d743583ec3c2c5d7eafa3b9f8a}{S\+\_\+\+R\+S\+\_\+R}~(\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafaf9a02ec4bc4f23c2f3972fec7869960b}{H2\+\_\+\+S\+S\+\_\+\+R\+S\+V\+D\+\_\+R} + 1)
+\item 
+\#define \hyperlink{h2__stream_8c_ac713080495650e43b54da47fe741215d}{S\+\_\+\+O\+P\+EN}~(\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafaeb712985f1085870fe39ad6c09ba9eba}{H2\+\_\+\+S\+S\+\_\+\+O\+P\+EN} + 1)
+\item 
+\#define \hyperlink{h2__stream_8c_af18d60db6720b216afbb49b398ee5eed}{S\+\_\+\+C\+L\+\_\+L}~(\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafa5c4270105ed1919f48d5eb818787e158}{H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+E\+D\+\_\+L} + 1)
+\item 
+\#define \hyperlink{h2__stream_8c_a9dfc2d3fe412f0e6b8cf1b5c81900f94}{S\+\_\+\+C\+L\+\_\+R}~(\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafa3c4c39ef4d6f32593245170177e3b5ac}{H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+E\+D\+\_\+R} + 1)
+\item 
+\#define \hyperlink{h2__stream_8c_aed7c4192d56de64517042315c8738ca0}{S\+\_\+\+C\+LS}~(\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafa1db48ee8a94b8fc17072d98306d9f4b4}{H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+ED} + 1)
+\item 
+\#define \hyperlink{h2__stream_8c_a8231e17d03620cf70681546cbfb6e2c7}{S\+\_\+\+C\+LN}~(\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafafbbb7655789e6a060ed4d3aeff4f1931}{H2\+\_\+\+S\+S\+\_\+\+C\+L\+E\+A\+N\+UP} + 1)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{h2__stream_8c_ac5913357027a3f5b2f6465b5e6b4f632}{h2\+\_\+stream\+\_\+state\+\_\+str} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__stream_8c_a72e8d2062416e6e7f289eca09126f2e3}{h2\+\_\+stream\+\_\+set\+\_\+monitor} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{structh2__stream__monitor}{h2\+\_\+stream\+\_\+monitor} $\ast$monitor)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__stream_8c_a22d5c24fab201d82288c066488fc4151}{h2\+\_\+stream\+\_\+dispatch} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{h2_8h_a6b01832c04f33db86ab4969cc9f97a1a}{h2\+\_\+stream\+\_\+event\+\_\+t} ev)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_a1f03d52ba4d8385ae68e569b24750577}{h2\+\_\+stream\+\_\+send\+\_\+frame} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_ad7a10cd81a384ff727296d05bb827806}{flags})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_af677ccda05cf3d555f0a553fbcd319c7}{h2\+\_\+stream\+\_\+recv\+\_\+frame} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{pcre_8txt_ad7a10cd81a384ff727296d05bb827806}{flags})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_abe2b7cf31575b9058feb0abb4f19f657}{h2\+\_\+stream\+\_\+flush\+\_\+input} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_a42713cfedfecf1de5ede4387ca0ccfc7}{h2\+\_\+stream\+\_\+recv\+\_\+\+D\+A\+TA} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, uint8\+\_\+t \hyperlink{pcre_8txt_ad7a10cd81a384ff727296d05bb827806}{flags}, const uint8\+\_\+t $\ast$\hyperlink{structdata}{data}, size\+\_\+t \hyperlink{group__APR__Util__XML_ga1e9401816e3a1cf930f448db46978ea7}{len})
+\item 
+\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$ \hyperlink{h2__stream_8c_aaa815324e2d332c53518ac95a84aa3cb}{h2\+\_\+stream\+\_\+create} (\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} id, \hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$\hyperlink{group__APR__XLATE_gabb3cd978f04c73d0b763c391e9bfde73}{pool}, \hyperlink{structh2__session}{h2\+\_\+session} $\ast$session, \hyperlink{structh2__stream__monitor}{h2\+\_\+stream\+\_\+monitor} $\ast$monitor, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} initiated\+\_\+on)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__stream_8c_a75f2a01c69e2ebe216193014a2689903}{h2\+\_\+stream\+\_\+cleanup} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__stream_8c_a6d1a3cc7c3b12d0754d3c53633898768}{h2\+\_\+stream\+\_\+destroy} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+\hyperlink{structapr__pool__t}{apr\+\_\+pool\+\_\+t} $\ast$ \hyperlink{h2__stream_8c_aa34fc93610d4864cbb0b8e229498c43e}{h2\+\_\+stream\+\_\+detach\+\_\+pool} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_a15066acf068a7b151f01f384d517ebdc}{h2\+\_\+stream\+\_\+prep\+\_\+processing} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__stream_8c_a94fdcb6bf200da876a894ac3433fc7ee}{h2\+\_\+stream\+\_\+rst} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} error\+\_\+code)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_a1f93a26960d203f9c03f1e2de7908697}{h2\+\_\+stream\+\_\+set\+\_\+request\+\_\+rec} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{structrequest__rec}{request\+\_\+rec} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r}, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} eos)
+\item 
+\hyperlink{group__MOD__ISAPI_gacd6cdbf73df3d9eed42fa493d9b621a6}{void} \hyperlink{h2__stream_8c_a2c7058536130c66cfa5f104cd2e27ccc}{h2\+\_\+stream\+\_\+set\+\_\+request} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, const \hyperlink{structh2__request}{h2\+\_\+request} $\ast$\hyperlink{pcregrep_8txt_a2e9e9438b26c0bb4425367a7e4f75eb3}{r})
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_a1813e84cdb5f9e9fa8834b03f0a7bc22}{h2\+\_\+stream\+\_\+add\+\_\+header} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, const char $\ast$\hyperlink{pcre_8txt_a5a15d68aadb41c771fe50a27c400d49b}{name}, size\+\_\+t nlen, const char $\ast$\hyperlink{pcretest_8txt_a262ad32c75be9b93a7a77b045ed14fe0}{value}, size\+\_\+t vlen)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_ab0939d34133abdcf905f5e8879e63cc1}{h2\+\_\+stream\+\_\+out\+\_\+prepare} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} $\ast$plen, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$peos, \hyperlink{structh2__headers}{h2\+\_\+headers} $\ast$$\ast$pheaders)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_abab64354e5a1840484a5120355ad2c65}{h2\+\_\+stream\+\_\+read\+\_\+to} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{structapr__bucket__brigade}{apr\+\_\+bucket\+\_\+brigade} $\ast$\hyperlink{group__MOD__PROXY_ga9313a8a2814cff280d5d780c723def3c}{bb}, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} $\ast$plen, \hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} $\ast$peos)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_ad399f3b4e86a01910ee4b0e39de95509}{h2\+\_\+stream\+\_\+submit\+\_\+pushes} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{structh2__headers}{h2\+\_\+headers} $\ast$\hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response})
+\item 
+\hyperlink{structapr__table__t}{apr\+\_\+table\+\_\+t} $\ast$ \hyperlink{h2__stream_8c_a1cefc15124e63956e6c47bbff60068ea}{h2\+\_\+stream\+\_\+get\+\_\+trailers} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+const \hyperlink{structh2__priority}{h2\+\_\+priority} $\ast$ \hyperlink{h2__stream_8c_aa12615c37d60f4cbc50ef3455eb4b77b}{h2\+\_\+stream\+\_\+get\+\_\+priority} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{structh2__headers}{h2\+\_\+headers} $\ast$\hyperlink{group__MOD__DAV_ga61a23706db0e2c726e15a7a081345de7}{response})
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__stream_8c_aaf384cb883a4e857802183c81dc501bf}{h2\+\_\+stream\+\_\+is\+\_\+ready} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+\hyperlink{pcre_8txt_a42dfa4ff673c82d8efe7144098fbc198}{int} \hyperlink{h2__stream_8c_a4effdcd018979447d61fc105a8812419}{h2\+\_\+stream\+\_\+was\+\_\+closed} (const \hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream)
+\item 
+\hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\+\_\+status\+\_\+t} \hyperlink{h2__stream_8c_a5afe5fc461430e90b61439227ff6de89}{h2\+\_\+stream\+\_\+in\+\_\+consumed} (\hyperlink{structh2__stream}{h2\+\_\+stream} $\ast$stream, \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\+\_\+off\+\_\+t} amount)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+C\+L\+\_\+L@{S\+\_\+\+C\+L\+\_\+L}}
+\index{S\+\_\+\+C\+L\+\_\+L@{S\+\_\+\+C\+L\+\_\+L}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+C\+L\+\_\+L}{S_CL_L}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+C\+L\+\_\+L~({\bf H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+E\+D\+\_\+L} + 1)}\hypertarget{h2__stream_8c_af18d60db6720b216afbb49b398ee5eed}{}\label{h2__stream_8c_af18d60db6720b216afbb49b398ee5eed}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+C\+L\+\_\+R@{S\+\_\+\+C\+L\+\_\+R}}
+\index{S\+\_\+\+C\+L\+\_\+R@{S\+\_\+\+C\+L\+\_\+R}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+C\+L\+\_\+R}{S_CL_R}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+C\+L\+\_\+R~({\bf H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+E\+D\+\_\+R} + 1)}\hypertarget{h2__stream_8c_a9dfc2d3fe412f0e6b8cf1b5c81900f94}{}\label{h2__stream_8c_a9dfc2d3fe412f0e6b8cf1b5c81900f94}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+C\+LN@{S\+\_\+\+C\+LN}}
+\index{S\+\_\+\+C\+LN@{S\+\_\+\+C\+LN}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+C\+LN}{S_CLN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+C\+LN~({\bf H2\+\_\+\+S\+S\+\_\+\+C\+L\+E\+A\+N\+UP} + 1)}\hypertarget{h2__stream_8c_a8231e17d03620cf70681546cbfb6e2c7}{}\label{h2__stream_8c_a8231e17d03620cf70681546cbfb6e2c7}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+C\+LS@{S\+\_\+\+C\+LS}}
+\index{S\+\_\+\+C\+LS@{S\+\_\+\+C\+LS}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+C\+LS}{S_CLS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+C\+LS~({\bf H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+ED} + 1)}\hypertarget{h2__stream_8c_aed7c4192d56de64517042315c8738ca0}{}\label{h2__stream_8c_aed7c4192d56de64517042315c8738ca0}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+E\+RR@{S\+\_\+\+E\+RR}}
+\index{S\+\_\+\+E\+RR@{S\+\_\+\+E\+RR}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+E\+RR}{S_ERR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+E\+RR~(-\/1)                      /$\ast$ Protocol Error $\ast$/}\hypertarget{h2__stream_8c_a53b50dddf0ffe2eb0a9aadabffcb1b7d}{}\label{h2__stream_8c_a53b50dddf0ffe2eb0a9aadabffcb1b7d}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+I\+DL@{S\+\_\+\+I\+DL}}
+\index{S\+\_\+\+I\+DL@{S\+\_\+\+I\+DL}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+I\+DL}{S_IDL}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+I\+DL~(H2\+\_\+\+S\+S\+\_\+\+I\+DL + 1)}\hypertarget{h2__stream_8c_a7ae6427fef1201d5d134950519cfc761}{}\label{h2__stream_8c_a7ae6427fef1201d5d134950519cfc761}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+N\+OP@{S\+\_\+\+N\+OP}}
+\index{S\+\_\+\+N\+OP@{S\+\_\+\+N\+OP}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+N\+OP}{S_NOP}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+N\+OP~(0)                       /$\ast$ No Change $\ast$/}\hypertarget{h2__stream_8c_acae7d861bef52c5a654cf42377d4fcd2}{}\label{h2__stream_8c_acae7d861bef52c5a654cf42377d4fcd2}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+O\+P\+EN@{S\+\_\+\+O\+P\+EN}}
+\index{S\+\_\+\+O\+P\+EN@{S\+\_\+\+O\+P\+EN}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+O\+P\+EN}{S_OPEN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+O\+P\+EN~({\bf H2\+\_\+\+S\+S\+\_\+\+O\+P\+EN} + 1)}\hypertarget{h2__stream_8c_ac713080495650e43b54da47fe741215d}{}\label{h2__stream_8c_ac713080495650e43b54da47fe741215d}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+R\+S\+\_\+L@{S\+\_\+\+R\+S\+\_\+L}}
+\index{S\+\_\+\+R\+S\+\_\+L@{S\+\_\+\+R\+S\+\_\+L}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+R\+S\+\_\+L}{S_RS_L}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+R\+S\+\_\+L~({\bf H2\+\_\+\+S\+S\+\_\+\+R\+S\+V\+D\+\_\+L} + 1)}\hypertarget{h2__stream_8c_a639b1be69e4ffa7f314d36edad91782f}{}\label{h2__stream_8c_a639b1be69e4ffa7f314d36edad91782f}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+R\+S\+\_\+R@{S\+\_\+\+R\+S\+\_\+R}}
+\index{S\+\_\+\+R\+S\+\_\+R@{S\+\_\+\+R\+S\+\_\+R}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+R\+S\+\_\+R}{S_RS_R}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+R\+S\+\_\+R~({\bf H2\+\_\+\+S\+S\+\_\+\+R\+S\+V\+D\+\_\+R} + 1)}\hypertarget{h2__stream_8c_a12e5c5d743583ec3c2c5d7eafa3b9f8a}{}\label{h2__stream_8c_a12e5c5d743583ec3c2c5d7eafa3b9f8a}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!S\+\_\+\+X\+XX@{S\+\_\+\+X\+XX}}
+\index{S\+\_\+\+X\+XX@{S\+\_\+\+X\+XX}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{S\+\_\+\+X\+XX}{S_XXX}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+\_\+\+X\+XX~(-\/2)                      /$\ast$ Programming Error $\ast$/}\hypertarget{h2__stream_8c_a496eca1993fe22a913c10dd81e1ce57e}{}\label{h2__stream_8c_a496eca1993fe22a913c10dd81e1ce57e}
+
+
+\subsection{Function Documentation}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+add\+\_\+header@{h2\+\_\+stream\+\_\+add\+\_\+header}}
+\index{h2\+\_\+stream\+\_\+add\+\_\+header@{h2\+\_\+stream\+\_\+add\+\_\+header}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+add\+\_\+header(h2\+\_\+stream $\ast$stream, const char $\ast$name, size\+\_\+t nlen, const char $\ast$value, size\+\_\+t vlen)}{h2_stream_add_header(h2_stream *stream, const char *name, size_t nlen, const char *value, size_t vlen)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+add\+\_\+header (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{const char $\ast$}]{name, }
+\item[{size\+\_\+t}]{nlen, }
+\item[{const char $\ast$}]{value, }
+\item[{size\+\_\+t}]{vlen}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a1813e84cdb5f9e9fa8834b03f0a7bc22}{}\label{h2__stream_8c_a1813e84cdb5f9e9fa8834b03f0a7bc22}
+
+\begin{DoxyCode}
+699 \{
+700     \hyperlink{structh2__session}{h2\_session} *session = stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session};
+701     \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__PROTO_ga11614f44ef4d939bdd984953346a7572}{error} = 0;
+702     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+703     
+704     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a565eb406d2ebe6d4cf630553a169c466}{has\_response}) \{
+705         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL};    
+706     \}
+707     ++stream->\hyperlink{structh2__stream_a9dadd07a7b46ff14ec602ae469b78ab2}{request\_headers\_added};
+708     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}[0] == \textcolor{charliteral}{':'}) \{
+709         \textcolor{keywordflow}{if} ((vlen) > session->\hyperlink{structh2__session_ad1d64aadf7d723fce3f895b708fb8e8e}{s}->\hyperlink{structserver__rec_a40a887a3321667e38cfbaf7d683bcbcf}{limit\_req\_line}) \{
+710             \textcolor{comment}{/* pseudo header: approximation of request line size check */}
+711             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+712                           \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"pseudo %s too long"}), 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name});
+713             error = \hyperlink{group__HTTP__Status_ga4a24fc2734c1665d39672a81ee2a45a6}{HTTP\_REQUEST\_URI\_TOO\_LARGE};
+714         \}
+715     \}
+716     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((nlen + 2 + vlen) > session->\hyperlink{structh2__session_ad1d64aadf7d723fce3f895b708fb8e8e}{s}->\hyperlink{structserver__rec_a81f271941b6f7c1adb696cbe878d4884}{limit\_req\_fieldsize}) \{
+717         \textcolor{comment}{/* header too long */}
+718         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+719                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"header %s too long"}), \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name});
+720         error = \hyperlink{group__HTTP__Status_ga5f8382d54057ed1be5318a3ca3140e20}{HTTP\_REQUEST\_HEADER\_FIELDS\_TOO\_LARGE};
+721     \}
+722     
+723     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a9dadd07a7b46ff14ec602ae469b78ab2}{request\_headers\_added} > session->\hyperlink{structh2__session_ad1d64aadf7d723fce3f895b708fb8e8e}{s}->
+      \hyperlink{structserver__rec_a8488a7e27a3c634bf53c1e50513d002e}{limit\_req\_fields} + 4) \{
+724         \textcolor{comment}{/* too many header lines, include 4 pseudo headers */}
+725         \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a9dadd07a7b46ff14ec602ae469b78ab2}{request\_headers\_added} 
+726             > session->\hyperlink{structh2__session_ad1d64aadf7d723fce3f895b708fb8e8e}{s}->\hyperlink{structserver__rec_a8488a7e27a3c634bf53c1e50513d002e}{limit\_req\_fields} + 4 + 100) \{
+727             \textcolor{comment}{/* yeah, right */}
+728             \hyperlink{h2__stream_8c_a94fdcb6bf200da876a894ac3433fc7ee}{h2\_stream\_rst}(stream, \hyperlink{h2_8h_acb37a714e7d3b6d5f3206d06663ea0f9}{H2\_ERR\_ENHANCE\_YOUR\_CALM});
+729             \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga264bfe2056e917728e9ed060b58869c2}{APR\_ECONNRESET};
+730         \}
+731         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+732                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"too many header lines"})); 
+733         error = \hyperlink{group__HTTP__Status_ga5f8382d54057ed1be5318a3ca3140e20}{HTTP\_REQUEST\_HEADER\_FIELDS\_TOO\_LARGE};
+734     \}
+735     
+736     \textcolor{keywordflow}{if} (error) \{
+737         set\_error\_response(stream, error);
+738         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL}; 
+739     \}
+740     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafa7b35d76c44f57475a4f788f0fdc0a127}{H2\_SS\_IDLE} == stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state}) \{
+741         \textcolor{keywordflow}{if} (!stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp}) \{
+742             stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} = \hyperlink{h2__util_8c_ac810c1727dd262912822c65b45f437a9}{h2\_req\_create}(stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id}, stream->
+      \hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, 
+743                                          \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 
+      \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, 0);
+744         \}
+745         status = \hyperlink{h2__request_8c_a4e6c539529b00fe81973a1a79d300a90}{h2\_request\_add\_header}(stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp}, stream->
+      \hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool},
+746                                        \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+747     \}
+748     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafaeb712985f1085870fe39ad6c09ba9eba}{H2\_SS\_OPEN} == stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state}) \{
+749         status = add\_trailer(stream, \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name}, nlen, \hyperlink{group__apr__env_ga711ebc0efad43aba10f32ded4a28cf17}{value}, vlen);
+750     \}
+751     \textcolor{keywordflow}{else} \{
+752         status = \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL};
+753     \}
+754     
+755     \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+756         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+757                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"header %s not accepted"}), 
+      \hyperlink{group__APACHE__CORE__CONFIG_ga06e97fb366205b8f170da3c7562a8677}{name});
+758         \hyperlink{h2__stream_8c_a22d5c24fab201d82288c066488fc4151}{h2\_stream\_dispatch}(stream, \hyperlink{h2_8h_a6b01832c04f33db86ab4969cc9f97a1aad8c1ba5922cf42366526dff1826d9177}{H2\_SEV\_CANCELLED});
+759     \}
+760     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+761 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a1813e84cdb5f9e9fa8834b03f0a7bc22_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=329pt]{h2__stream_8c_a1813e84cdb5f9e9fa8834b03f0a7bc22_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+cleanup@{h2\+\_\+stream\+\_\+cleanup}}
+\index{h2\+\_\+stream\+\_\+cleanup@{h2\+\_\+stream\+\_\+cleanup}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+cleanup(h2\+\_\+stream $\ast$stream)}{h2_stream_cleanup(h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+stream\+\_\+cleanup (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a75f2a01c69e2ebe216193014a2689903}{}\label{h2__stream_8c_a75f2a01c69e2ebe216193014a2689903}
+Cleanup references into requst processing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream to cleanup \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+553 \{
+554     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+555     
+556     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream);
+557     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a85b927d348a1a7b531d2edd0513c7dba}{out\_buffer}) \{
+558         \textcolor{comment}{/* remove any left over output buckets that may still have}
+559 \textcolor{comment}{         * references into request pools */}
+560         apr\_brigade\_cleanup(stream->\hyperlink{structh2__stream_a85b927d348a1a7b531d2edd0513c7dba}{out\_buffer});
+561     \}
+562     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input}) \{
+563         \hyperlink{h2__bucket__beam_8c_a18fcdf460f20b412ce76dd68c93cdbe2}{h2\_beam\_abort}(stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input});
+564         status = \hyperlink{h2__bucket__beam_8c_a0162b08290c4fe9f7d6e3283636e9c17}{h2\_beam\_wait\_empty}(stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input}, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da42b97663ca71fbbf2e2af7c8192e5dd8}{APR\_NONBLOCK\_READ});
+565         \textcolor{keywordflow}{if} (status == \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN}) \{
+566             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+567                           \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"wait on input drain"}));
+568             status = \hyperlink{h2__bucket__beam_8c_a0162b08290c4fe9f7d6e3283636e9c17}{h2\_beam\_wait\_empty}(stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input}, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ});
+569             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, status, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+570                           \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"input drain returned"}));
+571         \}
+572     \}
+573 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=329pt]{h2__stream_8c_a75f2a01c69e2ebe216193014a2689903_cgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+create@{h2\+\_\+stream\+\_\+create}}
+\index{h2\+\_\+stream\+\_\+create@{h2\+\_\+stream\+\_\+create}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+create(int id, apr\+\_\+pool\+\_\+t $\ast$pool, h2\+\_\+session $\ast$session, h2\+\_\+stream\+\_\+monitor $\ast$monitor, int initiated\+\_\+on)}{h2_stream_create(int id, apr_pool_t *pool, h2_session *session, h2_stream_monitor *monitor, int initiated_on)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf h2\+\_\+stream}$\ast$ h2\+\_\+stream\+\_\+create (
+\begin{DoxyParamCaption}
+\item[{{\bf int}}]{id, }
+\item[{{\bf apr\+\_\+pool\+\_\+t} $\ast$}]{pool, }
+\item[{struct {\bf h2\+\_\+session} $\ast$}]{session, }
+\item[{{\bf h2\+\_\+stream\+\_\+monitor} $\ast$}]{monitor, }
+\item[{{\bf int}}]{initiated\+\_\+on}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_aaa815324e2d332c53518ac95a84aa3cb}{}\label{h2__stream_8c_aaa815324e2d332c53518ac95a84aa3cb}
+Create a stream in H2\+\_\+\+S\+S\+\_\+\+I\+D\+LE state. 
+\begin{DoxyParams}{Parameters}
+{\em id} & the stream identifier \\
+\hline
+{\em pool} & the memory pool to use for this stream \\
+\hline
+{\em session} & the session this stream belongs to \\
+\hline
+{\em monitor} & an optional monitor to be called for events and state transisitions \\
+\hline
+{\em initiated\+\_\+on} & the id of the stream this one was initiated on (P\+U\+SH)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the newly opened stream 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+528 \{
+529     \hyperlink{structh2__stream}{h2\_stream} *stream = \hyperlink{group__apr__pools_gad214fc0160de3c22b6435e29ea20fce8}{apr\_pcalloc}(pool, \textcolor{keyword}{sizeof}(\hyperlink{structh2__stream}{h2\_stream}));
+530     
+531     stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id}           = id;
+532     stream->\hyperlink{structh2__stream_a9b71d06237201b5603165ee2cc827c4f}{initiated\_on} = initiated\_on;
+533     stream->\hyperlink{structh2__stream_a99db8afbff0bea2e9a4bcf2e1e212dae}{created}      = apr\_time\_now();
+534     stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state}        = \hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafa7b35d76c44f57475a4f788f0fdc0a127}{H2\_SS\_IDLE};
+535     stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}         = \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+536     stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}      = session;
+537     stream->\hyperlink{structh2__stream_a514a1a96e1416de34f21c25fa2306ad7}{monitor}      = monitor;
+538     stream->\hyperlink{structh2__stream_a43ec3b136d05606812ab8ffbf5b405e7}{max\_mem}      = session->\hyperlink{structh2__session_abecafc57e4ac2320b1310e5e8506d152}{max\_stream\_mem};
+539     
+540 \textcolor{preprocessor}{#ifdef H2\_NG2\_LOCAL\_WIN\_SIZE}
+541     stream->\hyperlink{structh2__stream_a702761712de1c2906b446dd01313b813}{in\_window\_size} = 
+542         nghttp2\_session\_get\_stream\_local\_window\_size(
+543             stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id});
+544 \textcolor{preprocessor}{#endif}
+545 
+546     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+547                   \hyperlink{h2__stream_8h_a7dfae6c324bcb99d7925e34edc7696e4}{H2\_STRM\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03082), stream, \textcolor{stringliteral}{"created"}));
+548     on\_state\_enter(stream);
+549     \textcolor{keywordflow}{return} stream;
+550 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=306pt]{h2__stream_8c_aaa815324e2d332c53518ac95a84aa3cb_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+destroy@{h2\+\_\+stream\+\_\+destroy}}
+\index{h2\+\_\+stream\+\_\+destroy@{h2\+\_\+stream\+\_\+destroy}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+destroy(h2\+\_\+stream $\ast$stream)}{h2_stream_destroy(h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+stream\+\_\+destroy (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a6d1a3cc7c3b12d0754d3c53633898768}{}\label{h2__stream_8c_a6d1a3cc7c3b12d0754d3c53633898768}
+Destroy memory pool if still owned by the stream. 
+\begin{DoxyCode}
+576 \{
+577     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream);
+578     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+579                   \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"destroy"}));
+580     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}) \{
+581         apr\_pool\_destroy(stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool});
+582         stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+583     \}
+584 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=317pt]{h2__stream_8c_a6d1a3cc7c3b12d0754d3c53633898768_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+detach\+\_\+pool@{h2\+\_\+stream\+\_\+detach\+\_\+pool}}
+\index{h2\+\_\+stream\+\_\+detach\+\_\+pool@{h2\+\_\+stream\+\_\+detach\+\_\+pool}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+detach\+\_\+pool(h2\+\_\+stream $\ast$stream)}{h2_stream_detach_pool(h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+pool\+\_\+t}$\ast$ h2\+\_\+stream\+\_\+detach\+\_\+pool (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_aa34fc93610d4864cbb0b8e229498c43e}{}\label{h2__stream_8c_aa34fc93610d4864cbb0b8e229498c43e}
+Detach the memory pool from the stream. Will prevent stream destruction to take the pool with it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream to detach the pool from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the detached memory pool or N\+U\+LL if stream no longer has one 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+587 \{
+588     \hyperlink{structapr__pool__t}{apr\_pool\_t} *\hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool} = stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool};
+589     stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+590     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__MUTEX_ga8fea43b485988aa6df5dced9dddbe733}{pool};
+591 \}
+\end{DoxyCode}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+dispatch@{h2\+\_\+stream\+\_\+dispatch}}
+\index{h2\+\_\+stream\+\_\+dispatch@{h2\+\_\+stream\+\_\+dispatch}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+dispatch(h2\+\_\+stream $\ast$stream, h2\+\_\+stream\+\_\+event\+\_\+t ev)}{h2_stream_dispatch(h2_stream *stream, h2_stream_event_t ev)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+stream\+\_\+dispatch (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf h2\+\_\+stream\+\_\+event\+\_\+t}}]{ev}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a22d5c24fab201d82288c066488fc4151}{}\label{h2__stream_8c_a22d5c24fab201d82288c066488fc4151}
+Dispatch (handle) an event on the given stream. 
+\begin{DoxyParams}{Parameters}
+{\em stream} & the streama the event happened on \\
+\hline
+{\em ev} & the type of event \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+338 \{
+339     \textcolor{keywordtype}{int} new\_state;
+340     
+341     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+342                   \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"dispatch event %d"}), ev);
+343     new\_state = on\_event(stream, ev);
+344     \textcolor{keywordflow}{if} (new\_state < 0) \{
+345         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga73e14aeff380a8a01c66d528162026fe}{APLOG\_WARNING}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+346                       \hyperlink{h2__stream_8h_a7dfae6c324bcb99d7925e34edc7696e4}{H2\_STRM\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(10002), stream, \textcolor{stringliteral}{"invalid event %d"}), ev);
+347         on\_state\_invalid(stream);
+348         \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(new\_state > \hyperlink{h2__stream_8c_a496eca1993fe22a913c10dd81e1ce57e}{S\_XXX});
+349         \textcolor{keywordflow}{return};
+350     \}
+351     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (new\_state == stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state}) \{
+352         \textcolor{comment}{/* nop */}
+353         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+354                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"non-state event %d"}), ev);
+355         \textcolor{keywordflow}{return};
+356     \}
+357     \textcolor{keywordflow}{else} \{
+358         on\_state\_event(stream, ev);
+359         transit(stream, new\_state);
+360     \}
+361 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a22d5c24fab201d82288c066488fc4151_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a22d5c24fab201d82288c066488fc4151_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+flush\+\_\+input@{h2\+\_\+stream\+\_\+flush\+\_\+input}}
+\index{h2\+\_\+stream\+\_\+flush\+\_\+input@{h2\+\_\+stream\+\_\+flush\+\_\+input}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+flush\+\_\+input(h2\+\_\+stream $\ast$stream)}{h2_stream_flush_input(h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+flush\+\_\+input (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_abe2b7cf31575b9058feb0abb4f19f657}{}\label{h2__stream_8c_abe2b7cf31575b9058feb0abb4f19f657}
+
+\begin{DoxyCode}
+475 \{
+476     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+477     
+478     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_ac1d83345e454d8b879818d3dd7624780}{in\_buffer} && !\hyperlink{group__APR__Util__Bucket__Brigades_ga836f61da6cce15074eff257ce4b6fc0f}{APR\_BRIGADE\_EMPTY}(stream->
+      \hyperlink{structh2__stream_ac1d83345e454d8b879818d3dd7624780}{in\_buffer})) \{
+479         setup\_input(stream);
+480         status = \hyperlink{h2__bucket__beam_8c_abd0e8829e808a93cccdec17e06448a80}{h2\_beam\_send}(stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input}, stream->\hyperlink{structh2__stream_ac1d83345e454d8b879818d3dd7624780}{in\_buffer}, 
+      \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da2d983f5b7fd996434e0dded171c261d8}{APR\_BLOCK\_READ});
+481         stream->\hyperlink{structh2__stream_af55e17060db580b261f4edfc26ec1734}{in\_last\_write} = apr\_time\_now();
+482     \}
+483     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a4a55e2520c19164b660bd93dc3f549ea}{input\_eof} 
+484         && stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input} && !\hyperlink{h2__bucket__beam_8c_a1eb7e877b1b6addd67a8d3556728b304}{h2\_beam\_is\_closed}(stream->
+      \hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input})) \{
+485         status = \hyperlink{h2__bucket__beam_8c_a756a84813d57b4df12deb88314374277}{h2\_beam\_close}(stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input});
+486     \}
+487     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+488 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{h2__stream_8c_abe2b7cf31575b9058feb0abb4f19f657_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_abe2b7cf31575b9058feb0abb4f19f657_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+get\+\_\+priority@{h2\+\_\+stream\+\_\+get\+\_\+priority}}
+\index{h2\+\_\+stream\+\_\+get\+\_\+priority@{h2\+\_\+stream\+\_\+get\+\_\+priority}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+get\+\_\+priority(h2\+\_\+stream $\ast$stream, h2\+\_\+headers $\ast$response)}{h2_stream_get_priority(h2_stream *stream, h2_headers *response)}}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf h2\+\_\+priority}$\ast$ h2\+\_\+stream\+\_\+get\+\_\+priority (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf h2\+\_\+headers} $\ast$}]{response}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_aa12615c37d60f4cbc50ef3455eb4b77b}{}\label{h2__stream_8c_aa12615c37d60f4cbc50ef3455eb4b77b}
+Get priority information set for this stream. 
+\begin{DoxyCode}
+990 \{
+991     \textcolor{keywordflow}{if} (response && stream->\hyperlink{structh2__stream_a9b71d06237201b5603165ee2cc827c4f}{initiated\_on}) \{
+992         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *ctype = apr\_table\_get(response->\hyperlink{structh2__headers_a6b07b460b8fb9e98c8cfdeff2f9b116c}{headers}, \textcolor{stringliteral}{"content-type"});
+993         \textcolor{keywordflow}{if} (ctype) \{
+994             \textcolor{comment}{/* FIXME: Not good enough, config needs to come from request->server */}
+995             \textcolor{keywordflow}{return} \hyperlink{h2__config_8c_a0c867c8f46306da65aab3a5112f27c4a}{h2\_config\_get\_priority}(stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->
+      \hyperlink{structh2__session_a6a834c27d772bd80f1837723e3ef04b8}{config}, ctype);
+996         \}
+997     \}
+998     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+999 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_aa12615c37d60f4cbc50ef3455eb4b77b_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_aa12615c37d60f4cbc50ef3455eb4b77b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+get\+\_\+trailers@{h2\+\_\+stream\+\_\+get\+\_\+trailers}}
+\index{h2\+\_\+stream\+\_\+get\+\_\+trailers@{h2\+\_\+stream\+\_\+get\+\_\+trailers}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+get\+\_\+trailers(h2\+\_\+stream $\ast$stream)}{h2_stream_get_trailers(h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+table\+\_\+t}$\ast$ h2\+\_\+stream\+\_\+get\+\_\+trailers (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a1cefc15124e63956e6c47bbff60068ea}{}\label{h2__stream_8c_a1cefc15124e63956e6c47bbff60068ea}
+Get optional trailers for this stream, may be N\+U\+LL. Meaningful results can only be expected when the end of the response body has been reached.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & to ask for trailers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+trailers for N\+U\+LL 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+984 \{
+985     \textcolor{keywordflow}{return} \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+986 \}
+\end{DoxyCode}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+in\+\_\+consumed@{h2\+\_\+stream\+\_\+in\+\_\+consumed}}
+\index{h2\+\_\+stream\+\_\+in\+\_\+consumed@{h2\+\_\+stream\+\_\+in\+\_\+consumed}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+in\+\_\+consumed(h2\+\_\+stream $\ast$stream, apr\+\_\+off\+\_\+t amount)}{h2_stream_in_consumed(h2_stream *stream, apr_off_t amount)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+in\+\_\+consumed (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf apr\+\_\+off\+\_\+t}}]{amount}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a5afe5fc461430e90b61439227ff6de89}{}\label{h2__stream_8c_a5afe5fc461430e90b61439227ff6de89}
+Notify the stream that amount bytes have been consumed of its input since the last invocation of this method (delta amount). 
+\begin{DoxyCode}
+1024 \{
+1025     \hyperlink{structh2__session}{h2\_session} *session = stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session};
+1026     
+1027     \textcolor{keywordflow}{if} (amount > 0) \{
+1028         \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} consumed = amount;
+1029         
+1030         \textcolor{keywordflow}{while} (consumed > 0) \{
+1031             \textcolor{keywordtype}{int} \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} = (consumed > INT\_MAX)? INT\_MAX : (\textcolor{keywordtype}{int})consumed;
+1032             nghttp2\_session\_consume(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id}, len);
+1033             consumed -= \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+1034         \}
+1035 
+1036 \textcolor{preprocessor}{#ifdef H2\_NG2\_LOCAL\_WIN\_SIZE}
+1037         \textcolor{keywordflow}{if} (1) \{
+1038             \textcolor{keywordtype}{int} cur\_size = nghttp2\_session\_get\_stream\_local\_window\_size(
+1039                 session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id});
+1040             \textcolor{keywordtype}{int} win = stream->\hyperlink{structh2__stream_a702761712de1c2906b446dd01313b813}{in\_window\_size};
+1041             \textcolor{keywordtype}{int} thigh = win * 8/10;
+1042             \textcolor{keywordtype}{int} tlow = win * 2/10;
+1043             \textcolor{keyword}{const} \textcolor{keywordtype}{int} win\_max = 2*1024*1024;
+1044             \textcolor{keyword}{const} \textcolor{keywordtype}{int} win\_min = 32*1024;
+1045             
+1046             \textcolor{comment}{/* Work in progress, probably should add directives for these}
+1047 \textcolor{comment}{             * values once this stabilizes somewhat. The general idea is}
+1048 \textcolor{comment}{             * to adapt stream window sizes if the input window changes}
+1049 \textcolor{comment}{             * a) very quickly (< good RTT) from full to empty}
+1050 \textcolor{comment}{             * b) only a little bit (> bad RTT)}
+1051 \textcolor{comment}{             * where in a) it grows and in b) it shrinks again.}
+1052 \textcolor{comment}{             */}
+1053             \textcolor{keywordflow}{if} (cur\_size > thigh && amount > thigh && win < win\_max) \{
+1054                 \textcolor{comment}{/* almost empty again with one reported consumption, how}
+1055 \textcolor{comment}{                 * long did this take? */}
+1056                 \textcolor{keywordtype}{long} \hyperlink{group__APR__Util__MC_gabcfc3d1de80e72f78d877d87639acdd2}{ms} = \hyperlink{group__apr__time_ga05d6c6ea507b74605aa2149a4410076f}{apr\_time\_msec}(apr\_time\_now() - stream->
+      \hyperlink{structh2__stream_af55e17060db580b261f4edfc26ec1734}{in\_last\_write});
+1057                 \textcolor{keywordflow}{if} (ms < 40) \{
+1058                     win = \hyperlink{h2_8h_acd3215da569b00c8a029a4810bd48f50}{H2MIN}(win\_max, win + (64*1024));
+1059                 \}
+1060             \}
+1061             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (cur\_size < tlow && amount < tlow && win > win\_min) \{
+1062                 \textcolor{comment}{/* staying full, for how long already? */}
+1063                 \textcolor{keywordtype}{long} ms = \hyperlink{group__apr__time_ga05d6c6ea507b74605aa2149a4410076f}{apr\_time\_msec}(apr\_time\_now() - stream->
+      \hyperlink{structh2__stream_af55e17060db580b261f4edfc26ec1734}{in\_last\_write});
+1064                 \textcolor{keywordflow}{if} (ms > 700) \{
+1065                     win = \hyperlink{h2_8h_a2a958f7e028c93d4bd205cf6cd3d96ae}{H2MAX}(win\_min, win - (32*1024));
+1066                 \}
+1067             \}
+1068             
+1069             \textcolor{keywordflow}{if} (win != stream->\hyperlink{structh2__stream_a702761712de1c2906b446dd01313b813}{in\_window\_size}) \{
+1070                 stream->\hyperlink{structh2__stream_a702761712de1c2906b446dd01313b813}{in\_window\_size} = win;
+1071                 nghttp2\_session\_set\_local\_window\_size(session->\hyperlink{structh2__session_add0721875b1a24e581d276149984af8f}{ngh2}, 
+1072                         NGHTTP2\_FLAG\_NONE, stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id}, win);
+1073             \} 
+1074             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+1075                           \textcolor{stringliteral}{"h2\_stream(%ld-%d): consumed %ld bytes, window now %d/%d"},
+1076                           session->\hyperlink{structh2__session_a00e5945662f1e1b72b9d22c384f5a46f}{id}, stream->\hyperlink{structh2__stream_a83ccde49eb87a47e7ad897e4a6d86968}{id}, (\textcolor{keywordtype}{long})amount, 
+1077                           cur\_size, stream->\hyperlink{structh2__stream_a702761712de1c2906b446dd01313b813}{in\_window\_size});
+1078         \}
+1079 \textcolor{preprocessor}{#endif}
+1080     \}
+1081     \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};   
+1082 \}
+\end{DoxyCode}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+is\+\_\+ready@{h2\+\_\+stream\+\_\+is\+\_\+ready}}
+\index{h2\+\_\+stream\+\_\+is\+\_\+ready@{h2\+\_\+stream\+\_\+is\+\_\+ready}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+is\+\_\+ready(h2\+\_\+stream $\ast$stream)}{h2_stream_is_ready(h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+stream\+\_\+is\+\_\+ready (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_aaf384cb883a4e857802183c81dc501bf}{}\label{h2__stream_8c_aaf384cb883a4e857802183c81dc501bf}
+Determine if stream is ready for submitting a response or a R\+ST 
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream to check \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+1002 \{
+1003     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a565eb406d2ebe6d4cf630553a169c466}{has\_response}) \{
+1004         \textcolor{keywordflow}{return} 1;
+1005     \}
+1006     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a85b927d348a1a7b531d2edd0513c7dba}{out\_buffer} && get\_first\_headers\_bucket(stream->
+      \hyperlink{structh2__stream_a85b927d348a1a7b531d2edd0513c7dba}{out\_buffer})) \{
+1007         \textcolor{keywordflow}{return} 1;
+1008     \}
+1009     \textcolor{keywordflow}{return} 0;
+1010 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_aaf384cb883a4e857802183c81dc501bf_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+out\+\_\+prepare@{h2\+\_\+stream\+\_\+out\+\_\+prepare}}
+\index{h2\+\_\+stream\+\_\+out\+\_\+prepare@{h2\+\_\+stream\+\_\+out\+\_\+prepare}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+out\+\_\+prepare(h2\+\_\+stream $\ast$stream, apr\+\_\+off\+\_\+t $\ast$plen, int $\ast$peos, h2\+\_\+headers $\ast$$\ast$pheaders)}{h2_stream_out_prepare(h2_stream *stream, apr_off_t *plen, int *peos, h2_headers **pheaders)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+out\+\_\+prepare (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf apr\+\_\+off\+\_\+t} $\ast$}]{plen, }
+\item[{{\bf int} $\ast$}]{peos, }
+\item[{{\bf h2\+\_\+headers} $\ast$$\ast$}]{presponse}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_ab0939d34133abdcf905f5e8879e63cc1}{}\label{h2__stream_8c_ab0939d34133abdcf905f5e8879e63cc1}
+Do a speculative read on the stream output to determine the amount of data that can be read.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream to speculatively read from \\
+\hline
+{\em plen} & (in-\//out) number of bytes requested and on return amount of bytes that may be read without blocking \\
+\hline
+{\em peos} & (out) != 0 iff end of stream will be reached when reading plen bytes (out value). \\
+\hline
+{\em presponse} & (out) the response of one became available \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS if out information was computed successfully. A\+P\+R\+\_\+\+E\+A\+G\+A\+IN if not data is available and end of stream has not been reached yet. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+842 \{
+843     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+844     \hyperlink{group__apr__platform_ga6938af9075cec15c88299109381aa984}{apr\_off\_t} requested, missing, max\_chunk = \hyperlink{h2_8h_a30ab3ac476d71aa5b0f7e2cedf5d46ca}{H2\_DATA\_CHUNK\_SIZE};
+845     \hyperlink{structconn__rec}{conn\_rec} *\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c};
+846     \textcolor{keywordtype}{int} complete;
+847 
+848     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream);
+849     
+850     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a52b726b7930b89b1be74c46543816d0c}{rst\_error}) \{
+851         *plen = 0;
+852         *peos = 1;
+853         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga264bfe2056e917728e9ed060b58869c2}{APR\_ECONNRESET};
+854     \}
+855     
+856     c = stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c};
+857     prep\_output(stream);
+858 
+859     \textcolor{comment}{/* determine how much we'd like to send. We cannot send more than}
+860 \textcolor{comment}{     * is requested. But we can reduce the size in case the master}
+861 \textcolor{comment}{     * connection operates in smaller chunks. (TSL warmup) */}
+862     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_a04388fcbed566fdfc1b39df649b9b171}{io}.\hyperlink{structh2__conn__io_adfe7bdb6ec828f01eb2a3199d0bdcdb4}{write\_size} > 0) \{
+863         max\_chunk = stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_a04388fcbed566fdfc1b39df649b9b171}{io}.\hyperlink{structh2__conn__io_adfe7bdb6ec828f01eb2a3199d0bdcdb4}{write\_size} - 9; \textcolor{comment}{/* header bits */} 
+864     \}
+865     requested = (*plen > 0)? \hyperlink{h2_8h_acd3215da569b00c8a029a4810bd48f50}{H2MIN}(*plen, max\_chunk) : max\_chunk;
+866     
+867     \textcolor{comment}{/* count the buffered data until eos or a headers bucket */}
+868     status = add\_buffered\_data(stream, requested, plen, peos, &complete, pheaders);
+869     
+870     \textcolor{keywordflow}{if} (status == \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN}) \{
+871         \textcolor{comment}{/* TODO: ugly, someone needs to retrieve the response first */}
+872         \hyperlink{h2__mplx_8c_a2635034633242ada1070ca3e4fab411f}{h2\_mplx\_keep\_active}(stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_a79ed4d816ae7efbb0f109875350c7b42}{mplx}, stream);
+873         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, c,
+874                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"prep, response eagain"}));
+875         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+876     \}
+877     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+878         \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+879     \}
+880     
+881     \textcolor{keywordflow}{if} (pheaders && *pheaders) \{
+882         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+883     \}
+884     
+885     \textcolor{comment}{/* If there we do not have enough buffered data to satisfy the requested}
+886 \textcolor{comment}{     * length *and* we counted the \_complete\_ buffer (and did not stop in the middle}
+887 \textcolor{comment}{     * because of meta data there), lets see if we can read more from the}
+888 \textcolor{comment}{     * output beam */}
+889     missing = \hyperlink{h2_8h_acd3215da569b00c8a029a4810bd48f50}{H2MIN}(requested, stream->\hyperlink{structh2__stream_a43ec3b136d05606812ab8ffbf5b405e7}{max\_mem}) - *plen;
+890     \textcolor{keywordflow}{if} (complete && !*peos && missing > 0) \{
+891         \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} rv = \hyperlink{group__APR__Error_ga35d9dca2514c522a2840aca0f3e2ebd3}{APR\_EOF};
+892         
+893         \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a1fa0b533ea35ef70065c40ea0b8e93e8}{output}) \{
+894             H2\_STREAM\_OUT\_LOG(\hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, stream, \textcolor{stringliteral}{"pre"});
+895             rv = \hyperlink{h2__bucket__beam_8c_afb11867e565237b6b2e7797444e445d7}{h2\_beam\_receive}(stream->\hyperlink{structh2__stream_a1fa0b533ea35ef70065c40ea0b8e93e8}{output}, stream->
+      \hyperlink{structh2__stream_a85b927d348a1a7b531d2edd0513c7dba}{out\_buffer}, 
+896                                  \hyperlink{group__APR__Util__Bucket__Brigades_gga756973fb6392bd1026c3d96b4519776da42b97663ca71fbbf2e2af7c8192e5dd8}{APR\_NONBLOCK\_READ}, stream->
+      \hyperlink{structh2__stream_a43ec3b136d05606812ab8ffbf5b405e7}{max\_mem} - *plen);
+897             H2\_STREAM\_OUT\_LOG(\hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, stream, \textcolor{stringliteral}{"post"});
+898         \}
+899         
+900         \textcolor{keywordflow}{if} (rv == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+901             \textcolor{comment}{/* count the buffer again, now that we have read output */}
+902             status = add\_buffered\_data(stream, requested, plen, peos, &complete, pheaders);
+903         \}
+904         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_gaf4232cd96b47b76aec9607b1a78e694f}{APR\_STATUS\_IS\_EOF}(rv)) \{
+905             \hyperlink{structapr__bucket}{apr\_bucket} *eos = apr\_bucket\_eos\_create(c->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+906             \hyperlink{group__APR__Util__Bucket__Brigades_ga5447595f8374296c5ffe208db39b2f5d}{APR\_BRIGADE\_INSERT\_TAIL}(stream->\hyperlink{structh2__stream_a85b927d348a1a7b531d2edd0513c7dba}{out\_buffer}, eos);
+907             *peos = 1;
+908         \}
+909         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\hyperlink{group__APR__STATUS__IS_ga9dd578bfcd76a2d997395608ae5b3a4e}{APR\_STATUS\_IS\_EAGAIN}(rv)) \{
+910             \textcolor{comment}{/* we set this is the status of this call only if there}
+911 \textcolor{comment}{             * is no buffered data, see check below */}
+912         \}
+913         \textcolor{keywordflow}{else} \{
+914             \textcolor{comment}{/* real error reading. Give this back directly, even though}
+915 \textcolor{comment}{             * we may have something buffered. */}
+916             status = rv;
+917         \}
+918     \}
+919     
+920     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+921         \textcolor{keywordflow}{if} (*peos || *plen) \{
+922             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, c,
+923                           \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"prepare, len=%ld eos=%d"}),
+924                           (\textcolor{keywordtype}{long})*plen, *peos);
+925         \}
+926         \textcolor{keywordflow}{else} \{
+927             status = \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+928             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, c,
+929                           \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"prepare, no data"}));
+930         \}
+931     \}
+932     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+933 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=346pt]{h2__stream_8c_ab0939d34133abdcf905f5e8879e63cc1_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_ab0939d34133abdcf905f5e8879e63cc1_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+prep\+\_\+processing@{h2\+\_\+stream\+\_\+prep\+\_\+processing}}
+\index{h2\+\_\+stream\+\_\+prep\+\_\+processing@{h2\+\_\+stream\+\_\+prep\+\_\+processing}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+prep\+\_\+processing(h2\+\_\+stream $\ast$stream)}{h2_stream_prep_processing(h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+prep\+\_\+processing (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a15066acf068a7b151f01f384d517ebdc}{}\label{h2__stream_8c_a15066acf068a7b151f01f384d517ebdc}
+Prepare the stream so that processing may start.
+
+This is the time to allocated resources not needed before.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream to prep \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+594 \{
+595     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request}) \{
+596         \textcolor{keyword}{const} \hyperlink{structh2__request}{h2\_request} *\hyperlink{group__APACHE__CORE__CONFIG_ga091cdd45984e865a888a4f8bb8fe107a}{r} = stream->\hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request};
+597         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+598                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"schedule %s %s://%s%s chunked=%d"}),
+599                       r->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method}, r->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme}, r->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority}, r->
+      \hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path}, r->\hyperlink{structh2__request_a3dde46ef74e22353622855f1fda1f6ef}{chunked});
+600         setup\_input(stream);
+601         stream->\hyperlink{structh2__stream_a5a7262a99d8ed1ce20e05d048be66186}{scheduled} = 1;
+602         \textcolor{keywordflow}{return} \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+603     \}
+604     \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL};
+605 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a15066acf068a7b151f01f384d517ebdc_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+read\+\_\+to@{h2\+\_\+stream\+\_\+read\+\_\+to}}
+\index{h2\+\_\+stream\+\_\+read\+\_\+to@{h2\+\_\+stream\+\_\+read\+\_\+to}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+read\+\_\+to(h2\+\_\+stream $\ast$stream, apr\+\_\+bucket\+\_\+brigade $\ast$bb, apr\+\_\+off\+\_\+t $\ast$plen, int $\ast$peos)}{h2_stream_read_to(h2_stream *stream, apr_bucket_brigade *bb, apr_off_t *plen, int *peos)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+read\+\_\+to (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf apr\+\_\+bucket\+\_\+brigade} $\ast$}]{bb, }
+\item[{{\bf apr\+\_\+off\+\_\+t} $\ast$}]{plen, }
+\item[{{\bf int} $\ast$}]{peos}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_abab64354e5a1840484a5120355ad2c65}{}\label{h2__stream_8c_abab64354e5a1840484a5120355ad2c65}
+Read a maximum number of bytes into the bucket brigade.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream to read from \\
+\hline
+{\em bb} & the brigade to append output to \\
+\hline
+{\em plen} & (in-\//out) max. number of bytes to append and on return actual number of bytes appended to brigade \\
+\hline
+{\em peos} & (out) != 0 iff end of stream has been reached while reading \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\+P\+R\+\_\+\+S\+U\+C\+C\+E\+SS if out information was computed successfully. A\+P\+R\+\_\+\+E\+A\+G\+A\+IN if not data is available and end of stream has not been reached yet. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+942 \{
+943     \hyperlink{structconn__rec}{conn\_rec} *\hyperlink{group__APACHE__CORE__HTTPD_ga7cce37ef8558e46f408cb4d0f555605b}{c} = stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c};
+944     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+945 
+946     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a52b726b7930b89b1be74c46543816d0c}{rst\_error}) \{
+947         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga264bfe2056e917728e9ed060b58869c2}{APR\_ECONNRESET};
+948     \}
+949     status = \hyperlink{h2__util_8c_a15f3cc8f6c6453a39874a2d5c0e1cefa}{h2\_append\_brigade}(bb, stream->\hyperlink{structh2__stream_a85b927d348a1a7b531d2edd0513c7dba}{out\_buffer}, plen, peos, 
+      is\_not\_headers);
+950     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && !*peos && !*plen) \{
+951         status = \hyperlink{group__APR__Error_ga0b2a5ebb819de5ce93d326939b586578}{APR\_EAGAIN};
+952     \}
+953     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, status, c,
+954                   \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"read\_to, len=%ld eos=%d"}),
+955                   (\textcolor{keywordtype}{long})*plen, *peos);
+956     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+957 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=317pt]{h2__stream_8c_abab64354e5a1840484a5120355ad2c65_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=311pt]{h2__stream_8c_abab64354e5a1840484a5120355ad2c65_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+recv\+\_\+\+D\+A\+TA@{h2\+\_\+stream\+\_\+recv\+\_\+\+D\+A\+TA}}
+\index{h2\+\_\+stream\+\_\+recv\+\_\+\+D\+A\+TA@{h2\+\_\+stream\+\_\+recv\+\_\+\+D\+A\+TA}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+recv\+\_\+\+D\+A\+T\+A(h2\+\_\+stream $\ast$stream, uint8\+\_\+t flags, const uint8\+\_\+t $\ast$data, size\+\_\+t len)}{h2_stream_recv_DATA(h2_stream *stream, uint8_t flags, const uint8_t *data, size_t len)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+recv\+\_\+\+D\+A\+TA (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{uint8\+\_\+t}]{flags, }
+\item[{const uint8\+\_\+t $\ast$}]{data, }
+\item[{size\+\_\+t}]{len}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a42713cfedfecf1de5ede4387ca0ccfc7}{}\label{h2__stream_8c_a42713cfedfecf1de5ede4387ca0ccfc7}
+
+\begin{DoxyCode}
+492 \{
+493     \hyperlink{structh2__session}{h2\_session} *session = stream->\hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session};
+494     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+495     
+496     stream->\hyperlink{structh2__stream_a0db67940c308f4133b2c820e12cc720f}{in\_data\_frames}++;
+497     \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len} > 0) \{
+498         \textcolor{keywordflow}{if} (\hyperlink{group__APACHE__CORE__LOG_gaaaa8ecc04f897a759c5125e4a3b3ddf8}{APLOGctrace3}(session->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c})) \{
+499             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\hyperlink{pcre_8txt_a5182f7f3381ce52a3a38e862480fd5d4}{load} = apr\_pstrndup(stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, (\textcolor{keyword}{const} \textcolor{keywordtype}{char} *)
+      \hyperlink{structdata}{data}, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len});
+500             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_ga5e4f134ae2203dd339774d9549d814db}{APLOG\_TRACE3}, 0, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+501                           \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"recv DATA, len=%d: -->%s<--"}), 
+502                           (\textcolor{keywordtype}{int})\hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len}, load);
+503         \}
+504         \textcolor{keywordflow}{else} \{
+505             \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gaaa69603638ba4a5d83b8727a1ca5b76a}{APLOG\_TRACE2}, status, session->
+      \hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+506                           \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"recv DATA, len=%d"}), (\textcolor{keywordtype}{int})
+      \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len});
+507         \}
+508         stream->\hyperlink{structh2__stream_adc3d70d40b1edfd2055013880ff3d206}{in\_data\_octets} += \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len};
+509         \textcolor{keywordflow}{if} (!stream->\hyperlink{structh2__stream_ac1d83345e454d8b879818d3dd7624780}{in\_buffer}) \{
+510             stream->\hyperlink{structh2__stream_ac1d83345e454d8b879818d3dd7624780}{in\_buffer} = apr\_brigade\_create(stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, 
+511                                                    session->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}->\hyperlink{structconn__rec_a5a9ee4911c5a655131f76a04036fb4c0}{bucket\_alloc});
+512         \}
+513         apr\_brigade\_write(stream->\hyperlink{structh2__stream_ac1d83345e454d8b879818d3dd7624780}{in\_buffer}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}, (\textcolor{keyword}{const} \textcolor{keywordtype}{char} *)
+      \hyperlink{structdata}{data}, \hyperlink{group__APACHE__CORE__LOG_gab5a43233d60ef05c5b5bf5cba3d74468}{len});
+514         \hyperlink{h2__stream_8c_a22d5c24fab201d82288c066488fc4151}{h2\_stream\_dispatch}(stream, \hyperlink{h2_8h_a6b01832c04f33db86ab4969cc9f97a1aa7a48984643efdb2e3786a36a2dd99fb5}{H2\_SEV\_IN\_DATA\_PENDING});
+515     \}
+516     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+517 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a42713cfedfecf1de5ede4387ca0ccfc7_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{h2__stream_8c_a42713cfedfecf1de5ede4387ca0ccfc7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+recv\+\_\+frame@{h2\+\_\+stream\+\_\+recv\+\_\+frame}}
+\index{h2\+\_\+stream\+\_\+recv\+\_\+frame@{h2\+\_\+stream\+\_\+recv\+\_\+frame}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+recv\+\_\+frame(h2\+\_\+stream $\ast$stream, int ftype, int flags)}{h2_stream_recv_frame(h2_stream *stream, int ftype, int flags)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+recv\+\_\+frame (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf int}}]{ftype, }
+\item[{{\bf int}}]{flags}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_af677ccda05cf3d555f0a553fbcd319c7}{}\label{h2__stream_8c_af677ccda05cf3d555f0a553fbcd319c7}
+
+\begin{DoxyCode}
+419 \{
+420     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+421     \textcolor{keywordtype}{int} new\_state, eos = 0;
+422 
+423     new\_state = on\_frame\_recv(stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state}, \hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype});
+424     \textcolor{keywordflow}{if} (new\_state < 0) \{
+425         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+426                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"invalid frame %d recv"}), 
+      \hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype});
+427         \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(new\_state > \hyperlink{h2__stream_8c_a496eca1993fe22a913c10dd81e1ce57e}{S\_XXX});
+428         \textcolor{keywordflow}{return} transit(stream, new\_state);
+429     \}
+430     
+431     \textcolor{keywordflow}{switch} (\hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype}) \{
+432         \textcolor{keywordflow}{case} NGHTTP2\_DATA:
+433             eos = (\hyperlink{group__AP__EXPR_gad7a10cd81a384ff727296d05bb827806}{flags} & NGHTTP2\_FLAG\_END\_STREAM);
+434             \textcolor{keywordflow}{break};
+435             
+436         \textcolor{keywordflow}{case} NGHTTP2\_HEADERS:
+437             eos = (\hyperlink{group__AP__EXPR_gad7a10cd81a384ff727296d05bb827806}{flags} & NGHTTP2\_FLAG\_END\_STREAM);
+438             \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state} == \hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafaeb712985f1085870fe39ad6c09ba9eba}{H2\_SS\_OPEN}) \{
+439                 \textcolor{comment}{/* trailer HEADER */}
+440                 \textcolor{keywordflow}{if} (!eos) \{
+441                     \hyperlink{h2__stream_8c_a94fdcb6bf200da876a894ac3433fc7ee}{h2\_stream\_rst}(stream, \hyperlink{h2_8h_adf70da742697f4cb45d64a3fa287c303}{H2\_ERR\_PROTOCOL\_ERROR});
+442                 \}
+443             \}
+444             \textcolor{keywordflow}{else} \{
+445                 \textcolor{comment}{/* request HEADER */}
+446                 \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream->\hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+447                 \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL}) \{
+448                     \textcolor{comment}{/* This can only happen, if the stream has received no header}
+449 \textcolor{comment}{                     * name/value pairs at all. The lastest nghttp2 version have become}
+450 \textcolor{comment}{                     * pretty good at detecting this early. In any case, we have}
+451 \textcolor{comment}{                     * to abort the connection here, since this is clearly a protocol error */}
+452                     \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_gae3ffc41994444e71ce522c036ca1d9a4}{APR\_EINVAL};
+453                 \}
+454                 status = \hyperlink{h2__request_8c_a293f05d6f5a2c7aa4221468c7723a237}{h2\_request\_end\_headers}(stream->
+      \hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp}, stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, eos);
+455                 \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+456                     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+457                 \}
+458                 set\_policy\_for(stream, stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp});
+459                 stream->\hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request} = stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp};
+460                 stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+461             \}
+462             \textcolor{keywordflow}{break};
+463             
+464         \textcolor{keywordflow}{default}:
+465             \textcolor{keywordflow}{break};
+466     \}
+467     status = transit(stream, new\_state);
+468     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && eos) \{
+469         status = transit(stream, on\_event(stream, \hyperlink{h2_8h_a6b01832c04f33db86ab4969cc9f97a1aa69b34167c19cc415318035a94158266c}{H2\_SEV\_CLOSED\_R}));
+470     \}
+471     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+472 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_af677ccda05cf3d555f0a553fbcd319c7_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_af677ccda05cf3d555f0a553fbcd319c7_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+rst@{h2\+\_\+stream\+\_\+rst}}
+\index{h2\+\_\+stream\+\_\+rst@{h2\+\_\+stream\+\_\+rst}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+rst(h2\+\_\+stream $\ast$stream, int error\+\_\+code)}{h2_stream_rst(h2_stream *stream, int error_code)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+stream\+\_\+rst (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf int}}]{error\+\_\+code}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a94fdcb6bf200da876a894ac3433fc7ee}{}\label{h2__stream_8c_a94fdcb6bf200da876a894ac3433fc7ee}
+Reset the stream. Stream write/reads will return errors afterwards.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream to reset \\
+\hline
+{\em error\+\_\+code} & the H\+T\+T\+P/2 error code \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+608 \{
+609     stream->\hyperlink{structh2__stream_a52b726b7930b89b1be74c46543816d0c}{rst\_error} = error\_code;
+610     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input}) \{
+611         \hyperlink{h2__bucket__beam_8c_a18fcdf460f20b412ce76dd68c93cdbe2}{h2\_beam\_abort}(stream->\hyperlink{structh2__stream_a59a070444bb2dc9b5c8964ddf0eb8844}{input});
+612     \}
+613     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a1fa0b533ea35ef70065c40ea0b8e93e8}{output}) \{
+614         \hyperlink{h2__bucket__beam_8c_a9c8148804ab779b45238332b594d8de8}{h2\_beam\_leave}(stream->\hyperlink{structh2__stream_a1fa0b533ea35ef70065c40ea0b8e93e8}{output});
+615     \}
+616     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+617                   \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"reset, error=%d"}), error\_code);
+618     \hyperlink{h2__stream_8c_a22d5c24fab201d82288c066488fc4151}{h2\_stream\_dispatch}(stream, \hyperlink{h2_8h_a6b01832c04f33db86ab4969cc9f97a1aad8c1ba5922cf42366526dff1826d9177}{H2\_SEV\_CANCELLED});
+619 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a94fdcb6bf200da876a894ac3433fc7ee_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a94fdcb6bf200da876a894ac3433fc7ee_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+send\+\_\+frame@{h2\+\_\+stream\+\_\+send\+\_\+frame}}
+\index{h2\+\_\+stream\+\_\+send\+\_\+frame@{h2\+\_\+stream\+\_\+send\+\_\+frame}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+send\+\_\+frame(h2\+\_\+stream $\ast$stream, int ftype, int flags)}{h2_stream_send_frame(h2_stream *stream, int ftype, int flags)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+send\+\_\+frame (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf int}}]{ftype, }
+\item[{{\bf int}}]{flags}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a1f03d52ba4d8385ae68e569b24750577}{}\label{h2__stream_8c_a1f03d52ba4d8385ae68e569b24750577}
+
+\begin{DoxyCode}
+372 \{
+373     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+374     \textcolor{keywordtype}{int} new\_state, eos = 0;
+375 
+376     new\_state = on\_frame\_send(stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state}, \hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype});
+377     \textcolor{keywordflow}{if} (new\_state < 0) \{
+378         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+379                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"invalid frame %d send"}), 
+      \hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype});
+380         \hyperlink{group__APACHE__CORE__DAEMON_ga85dbc1e4d9600422461f815193f8ace8}{AP\_DEBUG\_ASSERT}(new\_state > \hyperlink{h2__stream_8c_a496eca1993fe22a913c10dd81e1ce57e}{S\_XXX});
+381         \textcolor{keywordflow}{return} transit(stream, new\_state);
+382     \}
+383     
+384     \textcolor{keywordflow}{switch} (\hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype}) \{
+385         \textcolor{keywordflow}{case} NGHTTP2\_DATA:
+386             eos = (\hyperlink{group__AP__EXPR_gad7a10cd81a384ff727296d05bb827806}{flags} & NGHTTP2\_FLAG\_END\_STREAM);
+387             \textcolor{keywordflow}{break};
+388             
+389         \textcolor{keywordflow}{case} NGHTTP2\_HEADERS:
+390             eos = (\hyperlink{group__AP__EXPR_gad7a10cd81a384ff727296d05bb827806}{flags} & NGHTTP2\_FLAG\_END\_STREAM);
+391             \textcolor{keywordflow}{break};
+392             
+393         \textcolor{keywordflow}{case} NGHTTP2\_PUSH\_PROMISE:
+394                 \textcolor{comment}{/* start pushed stream */}
+395                 \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream->\hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+396                 \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} != \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+397                 status = \hyperlink{h2__request_8c_a293f05d6f5a2c7aa4221468c7723a237}{h2\_request\_end\_headers}(stream->
+      \hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp}, stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, 1);
+398                 \textcolor{keywordflow}{if} (status != \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+399                     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+400                 \}
+401                 set\_policy\_for(stream, stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp});
+402                 stream->\hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request} = stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp};
+403                 stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} = \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL};
+404             \textcolor{keywordflow}{break};
+405             
+406         \textcolor{keywordflow}{default}:
+407             \textcolor{keywordflow}{break};
+408     \}
+409     \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c}, 
+410                   \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"send frame %d, eos=%d"}), \hyperlink{group__APACHE__CORE__FILTER_gaeab66420f0bf5d08ac6c6604830fb243}{ftype}, eos);
+411     status = transit(stream, new\_state);
+412     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS} && eos) \{
+413         status = transit(stream, on\_event(stream, \hyperlink{h2_8h_a6b01832c04f33db86ab4969cc9f97a1aa248c1ed4eb7bd0449e0e6a75faa741b4}{H2\_SEV\_CLOSED\_L}));
+414     \}
+415     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+416 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a1f03d52ba4d8385ae68e569b24750577_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{h2__stream_8c_a1f03d52ba4d8385ae68e569b24750577_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+set\+\_\+monitor@{h2\+\_\+stream\+\_\+set\+\_\+monitor}}
+\index{h2\+\_\+stream\+\_\+set\+\_\+monitor@{h2\+\_\+stream\+\_\+set\+\_\+monitor}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+set\+\_\+monitor(h2\+\_\+stream $\ast$stream, h2\+\_\+stream\+\_\+monitor $\ast$monitor)}{h2_stream_set_monitor(h2_stream *stream, h2_stream_monitor *monitor)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+stream\+\_\+set\+\_\+monitor (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf h2\+\_\+stream\+\_\+monitor} $\ast$}]{monitor}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a72e8d2062416e6e7f289eca09126f2e3}{}\label{h2__stream_8c_a72e8d2062416e6e7f289eca09126f2e3}
+
+\begin{DoxyCode}
+333 \{
+334     stream->\hyperlink{structh2__stream_a514a1a96e1416de34f21c25fa2306ad7}{monitor} = monitor;
+335 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a72e8d2062416e6e7f289eca09126f2e3_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+set\+\_\+request@{h2\+\_\+stream\+\_\+set\+\_\+request}}
+\index{h2\+\_\+stream\+\_\+set\+\_\+request@{h2\+\_\+stream\+\_\+set\+\_\+request}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+set\+\_\+request(h2\+\_\+stream $\ast$stream, const h2\+\_\+request $\ast$r)}{h2_stream_set_request(h2_stream *stream, const h2_request *r)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf void} h2\+\_\+stream\+\_\+set\+\_\+request (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{const {\bf h2\+\_\+request} $\ast$}]{r}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a2c7058536130c66cfa5f104cd2e27ccc}{}\label{h2__stream_8c_a2c7058536130c66cfa5f104cd2e27ccc}
+Set complete stream headers from given \hyperlink{structh2__request}{h2\+\_\+request}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & stream to write request to \\
+\hline
+{\em r} & the request with all the meta data \\
+\hline
+{\em eos} & != 0 iff stream input is closed \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+647 \{
+648     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream->\hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+649     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+650     stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} = \hyperlink{h2__request_8c_abd1a394d05040898a973507a59831aa8}{h2\_request\_clone}(stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, r);
+651 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a2c7058536130c66cfa5f104cd2e27ccc_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a2c7058536130c66cfa5f104cd2e27ccc_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+set\+\_\+request\+\_\+rec@{h2\+\_\+stream\+\_\+set\+\_\+request\+\_\+rec}}
+\index{h2\+\_\+stream\+\_\+set\+\_\+request\+\_\+rec@{h2\+\_\+stream\+\_\+set\+\_\+request\+\_\+rec}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+set\+\_\+request\+\_\+rec(h2\+\_\+stream $\ast$stream, request\+\_\+rec $\ast$r, int eos)}{h2_stream_set_request_rec(h2_stream *stream, request_rec *r, int eos)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+set\+\_\+request\+\_\+rec (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf request\+\_\+rec} $\ast$}]{r, }
+\item[{{\bf int}}]{eos}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a1f93a26960d203f9c03f1e2de7908697}{}\label{h2__stream_8c_a1f93a26960d203f9c03f1e2de7908697}
+Set complete stream header from given \hyperlink{structrequest__rec}{request\+\_\+rec}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & stream to write request to \\
+\hline
+{\em r} & the request with all the meta data \\
+\hline
+{\em eos} & != 0 iff stream input is closed \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+623 \{
+624     \hyperlink{structh2__request}{h2\_request} *req;
+625     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+626 
+627     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream->\hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+628     \hyperlink{group__APACHE__CORE__DAEMON_gace52c7d9cc135b00b6e686236c0095a7}{ap\_assert}(stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} == \hyperlink{pcre_8txt_ad7f989d16aa8ca809a36bc392c07fba1}{NULL});
+629     \textcolor{keywordflow}{if} (stream->\hyperlink{structh2__stream_a52b726b7930b89b1be74c46543816d0c}{rst\_error}) \{
+630         \textcolor{keywordflow}{return} \hyperlink{group__APR__Error_ga264bfe2056e917728e9ed060b58869c2}{APR\_ECONNRESET};
+631     \}
+632     status = \hyperlink{h2__request_8c_a1d35290fb0e699147310e780183e2626}{h2\_request\_rcreate}(&req, stream->\hyperlink{structh2__stream_abbb079f0128ec6d60268f1944b0fa910}{pool}, r);
+633     \textcolor{keywordflow}{if} (status == \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS}) \{
+634         \hyperlink{group__APACHE__CORE__LOG_ga4c112558ccffd6b363da102b2052d2a6}{ap\_log\_rerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gadfcef90537539cf2b7d35cfbbbafeb93}{APLOG\_DEBUG}, status, r, 
+635                       \hyperlink{h2__stream_8h_a7dfae6c324bcb99d7925e34edc7696e4}{H2\_STRM\_LOG}(\hyperlink{group__APACHE__CORE__LOG_ga1dee8a07e06bc5b3de8b89662c2cd666}{APLOGNO}(03058), stream, 
+636                       \textcolor{stringliteral}{"set\_request\_rec %s host=%s://%s%s"}),
+637                       req->\hyperlink{structh2__request_a1f2c96a3b6f846ebb17355b6bb17a70c}{method}, req->\hyperlink{structh2__request_a601afd08b5f27bf7920ea62e8d97ffd7}{scheme}, req->\hyperlink{structh2__request_a372a346fdb9b50c1c3cde7e7e6a24f99}{authority}, req->
+      \hyperlink{structh2__request_a96eb1a82bf08e7d6b0320fd96bc80ca4}{path});
+638         stream->\hyperlink{structh2__stream_a4ae771785b1c05398ebeebaaf42e8643}{rtmp} = req;
+639         \textcolor{comment}{/* simulate the frames that led to this */}
+640         \textcolor{keywordflow}{return} \hyperlink{h2__stream_8c_af677ccda05cf3d555f0a553fbcd319c7}{h2\_stream\_recv\_frame}(stream, NGHTTP2\_HEADERS, 
+641                                     NGHTTP2\_FLAG\_END\_STREAM);
+642     \}
+643     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+644 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a1f93a26960d203f9c03f1e2de7908697_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_a1f93a26960d203f9c03f1e2de7908697_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+state\+\_\+str@{h2\+\_\+stream\+\_\+state\+\_\+str}}
+\index{h2\+\_\+stream\+\_\+state\+\_\+str@{h2\+\_\+stream\+\_\+state\+\_\+str}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+state\+\_\+str(h2\+\_\+stream $\ast$stream)}{h2_stream_state_str(h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ h2\+\_\+stream\+\_\+state\+\_\+str (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_ac5913357027a3f5b2f6465b5e6b4f632}{}\label{h2__stream_8c_ac5913357027a3f5b2f6465b5e6b4f632}
+Return a textual representation of the stream state as in R\+FC 7540 nomenclator, all caps, underscores. 
+\begin{DoxyCode}
+71 \{
+72     \textcolor{keywordflow}{return} h2\_ss\_str(stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state});
+73 \}
+\end{DoxyCode}
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+submit\+\_\+pushes@{h2\+\_\+stream\+\_\+submit\+\_\+pushes}}
+\index{h2\+\_\+stream\+\_\+submit\+\_\+pushes@{h2\+\_\+stream\+\_\+submit\+\_\+pushes}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+submit\+\_\+pushes(h2\+\_\+stream $\ast$stream, h2\+\_\+headers $\ast$response)}{h2_stream_submit_pushes(h2_stream *stream, h2_headers *response)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf apr\+\_\+status\+\_\+t} h2\+\_\+stream\+\_\+submit\+\_\+pushes (
+\begin{DoxyParamCaption}
+\item[{{\bf h2\+\_\+stream} $\ast$}]{stream, }
+\item[{{\bf h2\+\_\+headers} $\ast$}]{response}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_ad399f3b4e86a01910ee4b0e39de95509}{}\label{h2__stream_8c_ad399f3b4e86a01910ee4b0e39de95509}
+Submit any server push promises on this stream and schedule the tasks connection with these.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream for which to submit \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+961 \{
+962     \hyperlink{group__apr__errno_gaa5105fa83cc322f09382292db8b47593}{apr\_status\_t} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status} = \hyperlink{group__apr__errno_ga9ee311b7bf1c691dc521d721339ee2a6}{APR\_SUCCESS};
+963     \hyperlink{structapr__array__header__t}{apr\_array\_header\_t} *pushes;
+964     \textcolor{keywordtype}{int} \hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i};
+965     
+966     pushes = \hyperlink{h2__push_8c_a472b2fcc2974feb81969d04dd1aa07cf}{h2\_push\_collect\_update}(stream, stream->
+      \hyperlink{structh2__stream_ab9f07c71f46f18fe69138765075ba88c}{request}, response);
+967     \textcolor{keywordflow}{if} (pushes && !apr\_is\_empty\_array(pushes)) \{
+968         \hyperlink{group__APACHE__CORE__LOG_ga60ef6919b8e1b691b0c1ac4d67c9449f}{ap\_log\_cerror}(\hyperlink{group__APACHE__CORE__LOG_ga655e126996849bcb82e4e5a14c616f4a}{APLOG\_MARK}, \hyperlink{group__APACHE__CORE__LOG_gab08ab6d0e9ab24707ce7baeaecf1f551}{APLOG\_TRACE1}, 0, stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}->\hyperlink{structh2__session_abeacbf3e093a3fc5d67609497c82daba}{c},
+969                       \hyperlink{h2__stream_8h_a5d2429e78d1a9c910f654300062147be}{H2\_STRM\_MSG}(stream, \textcolor{stringliteral}{"found %d push candidates"}),
+970                       pushes->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts});
+971         \textcolor{keywordflow}{for} (i = 0; i < pushes->\hyperlink{structapr__array__header__t_ab11b88220885c5a0920a06ac85680055}{nelts}; ++\hyperlink{group__MOD__PROXY_ga38403a0592eb8018a3ad61aef0f7ca2c}{i}) \{
+972             \hyperlink{structh2__push}{h2\_push} *push = \hyperlink{group__apr__tables_ga84066caaa4c7632671af18c229809fc4}{APR\_ARRAY\_IDX}(pushes, i, \hyperlink{structh2__push}{h2\_push}*);
+973             \hyperlink{structh2__stream}{h2\_stream} *\hyperlink{group__APACHE__CORE__LISTEN_ga9359ed159c8b295541e3770172d34550}{s} = \hyperlink{h2__session_8c_a963d3784514be3ea425a0cc87cf3aa42}{h2\_session\_push}(stream->
+      \hyperlink{structh2__stream_ada5aa5b5cfb85fbb1023c1891b226b47}{session}, stream, push);
+974             \textcolor{keywordflow}{if} (!s) \{
+975                 status = \hyperlink{group__APR__Error_ga264bfe2056e917728e9ed060b58869c2}{APR\_ECONNRESET};
+976                 \textcolor{keywordflow}{break};
+977             \}
+978         \}
+979     \}
+980     \textcolor{keywordflow}{return} \hyperlink{group__APACHE__CORE__HTTPD_ga6e27f49150e9a14580fb313cc2777e00}{status};
+981 \}
+\end{DoxyCode}
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_ad399f3b4e86a01910ee4b0e39de95509_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{h2__stream_8c_ad399f3b4e86a01910ee4b0e39de95509_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}!h2\+\_\+stream\+\_\+was\+\_\+closed@{h2\+\_\+stream\+\_\+was\+\_\+closed}}
+\index{h2\+\_\+stream\+\_\+was\+\_\+closed@{h2\+\_\+stream\+\_\+was\+\_\+closed}!h2\+\_\+stream.\+c@{h2\+\_\+stream.\+c}}
+\subsubsection[{\texorpdfstring{h2\+\_\+stream\+\_\+was\+\_\+closed(const h2\+\_\+stream $\ast$stream)}{h2_stream_was_closed(const h2_stream *stream)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf int} h2\+\_\+stream\+\_\+was\+\_\+closed (
+\begin{DoxyParamCaption}
+\item[{const {\bf h2\+\_\+stream} $\ast$}]{stream}
+\end{DoxyParamCaption}
+)}\hypertarget{h2__stream_8c_a4effdcd018979447d61fc105a8812419}{}\label{h2__stream_8c_a4effdcd018979447d61fc105a8812419}
+Determine if stream was closed already. This is true for states H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+ED, H2\+\_\+\+S\+S\+\_\+\+C\+L\+E\+A\+N\+UP. But not true for H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+E\+D\+\_\+L and H2\+\_\+\+S\+S\+\_\+\+C\+L\+O\+S\+E\+D\+\_\+R.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & the stream to check on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+!= 0 iff stream has been closed 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+1013 \{
+1014     \textcolor{keywordflow}{switch} (stream->\hyperlink{structh2__stream_a7efd6de540c234955a7cd92f64e788bc}{state}) \{
+1015         \textcolor{keywordflow}{case} \hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafa1db48ee8a94b8fc17072d98306d9f4b4}{H2\_SS\_CLOSED}:
+1016         \textcolor{keywordflow}{case} \hyperlink{h2_8h_a11ead6d11a09b57da2ee00db88b19bafafbbb7655789e6a060ed4d3aeff4f1931}{H2\_SS\_CLEANUP}:
+1017             \textcolor{keywordflow}{return} 1;
+1018         \textcolor{keywordflow}{default}:
+1019             \textcolor{keywordflow}{return} 0;
+1020     \}
+1021 \}
+\end{DoxyCode}
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{h2__stream_8c_a4effdcd018979447d61fc105a8812419_icgraph}
+\end{center}
+\end{figure}
+
+
