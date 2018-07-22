@@ -42,66 +42,6 @@
 #include "transactions.h"
 
 
-
-/*//HTM MACRO
-extern int capacity_abort;
-extern int conflict_abort;
-extern int other_abort;
-extern int gl_abort;
-extern int gl_count;
-extern int htm_count;
-
-#define THREAD_MUTEX_T pthread_mutex_t
-extern THREAD_MUTEX_T plock;
-
-#define IS_LOCKED(plock) *((volatile int*)(&plock)) != 0
-#define THREAD_MUTEX_INIT(plock) pthread_mutex_init(&(plock), NULL)
-#define THREAD_MUTEX_LOCK(plock) pthread_mutex_lock(&(plock))
-#define THREAD_MUTEX_UNLOCK(plock) pthread_mutex_unlock(&(plock))
-
-
-#define TM_BEGIN {\
-        int tries = 50;\
-        while(1){									\
-            while(IS_LOCKED(plock)){					\
-                __asm__ ( "pause;" );				\
-            } 										\
-            int status = _xbegin();					\
-            if(status == _XBEGIN_STARTED){			\
-                if(IS_LOCKED(plock)){				\
-                    _xabort(30);					\
-                }									\
-                break;								\
-            }										\
-            if(status & _XABORT_CODE(30)){			\
-                gl_abort++;							\
-            } else if(status & _XABORT_CAPACITY){	\
-                capacity_abort++;					\
-            } else if(status & _XABORT_CONFLICT){	\
-                conflict_abort++;					\
-            } else{									\
-                other_abort++;						\
-            }										\
-            tries--;								\
-            if(tries <= 0){							\
-                pthread_mutex_lock(&plock);			\
-                break;								\
-            }										\
-        }
-
-#define TM_END										\
-        if(tries > 0){								\
-            _xend();								\
-            htm_count++;							\
-        } else {									\
-            pthread_mutex_unlock(&plock);			\
-            gl_count++;								\
-        }											\
-	};
-
-
-*/
-
 /*
  * mod_cache_socache: Shared Object Cache Based HTTP 1.1 Cache.
  *
@@ -129,9 +69,9 @@ extern THREAD_MUTEX_T plock;
 
 module AP_MODULE_DECLARE_DATA cache_socache_module;
 
-//Definiton for plock
+//Definition of plock
 THREAD_MUTEX_T plock;
-//Definitions for lock counts
+//Definitions for lock count
 int capacity_abort;
 int conflict_abort;
 int other_abort;
@@ -139,8 +79,8 @@ int gl_abort;
 int gl_count;
 int htm_count;
 
-//dummy global variable for testing HTM works and this module
-//is being called properly
+//dummy varialbe for testing whether HTM works, and that the module
+//is being called under proper parameters
 int dummy = 0;
 
 #define bit_RTM (1 << 11)
@@ -216,7 +156,7 @@ typedef struct cache_socache_dir_conf
 
 /* Shared object cache and mutex */
 static const char * const cache_socache_id = "cache-socache";
-static apr_global_mutex_t *socache_mutex = NULL;
+//static apr_global_mutex_t *socache_mutex = NULL;
 
 /*
  * Local static functions
@@ -548,7 +488,7 @@ static int open_entity(cache_handle_t *h, request_rec *r, const char *key)
     sobj = apr_pcalloc(r->pool, sizeof(cache_socache_object_t));
 
     info = &(obj->info);
-    int ret;
+
     /* Create a temporary pool for the buffer, and destroy it if something
      * goes wrong so we don't have large buffers of unused memory hanging
      * about for the lifetime of the response.
@@ -558,55 +498,15 @@ static int open_entity(cache_handle_t *h, request_rec *r, const char *key)
     sobj->buffer = apr_palloc(sobj->pool, dconf->max);
     sobj->buffer_len = dconf->max;
 
-	//creating a dummy transaction to see whether or not HTM actually works
-	TM_BEGIN
-		dummy++;
-	TM_END
-	TM_BEGIN
-		
-	TM_END
-	ap_log_error(APLOG_MARK, APLOG_CRIT, 0, r -> server, "DUMMY VAR %d", dummy); 
     /* attempt to retrieve the cached entry */
-    //unsigned char* format_key = (unsigned char*) key;
-    //size_t key_length = strlen(format_key);
     TM_BEGIN
-        buffer_len = sobj->buffer_len;
-        rc = conf->provider->socache_provider->retrieve(
-            conf->provider->socache_instance, r->server, (unsigned char*) key,
-            strlen(key), sobj->buffer, &buffer_len, r->pool);
-    TM_END
-
-    ap_log_error(APLOG_MARK, APLOG_CRIT, 0, r -> server, "%d %d %d %d %d %d LOCK STATISTICS", capacity_abort, conflict_abort, other_abort, gl_abort, gl_count, htm_count);	
-    // fallback
-    if (!rc) {
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_lock(socache_mutex); //lock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02350)
-                    "could not acquire lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }
     buffer_len = sobj->buffer_len;
-        rc = conf->provider->socache_provider->retrieve(
-            conf->provider->socache_instance, r->server, (unsigned char*) key,
+    rc = conf->provider->socache_provider->retrieve(
+            conf->provider->socache_instance, r->server, (unsigned char *) key,
             strlen(key), sobj->buffer, &buffer_len, r->pool);
-
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_unlock(socache_mutex);   //unlock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02351)
-                    "could not release lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }
-    }
-
-
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, rc, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
+    TM_END
 
     if (rc != APR_SUCCESS) {
         ap_log_rerror(APLOG_MARK, APLOG_DEBUG, rc, r, APLOGNO(02352)
@@ -647,62 +547,16 @@ static int open_entity(cache_handle_t *h, request_rec *r, const char *key)
         nkey = regen_key(r->pool, r->headers_in, varray, key, &len);
 
         /* attempt to retrieve the cached entry */
-        /*if (socache_mutex) {
-            apr_status_t status = apr_global_mutex_lock(socache_mutex); //lock
-            if (status != APR_SUCCESS) {
-                ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02355)
-                        "could not acquire lock, ignoring: %s", obj->key);
-                apr_pool_destroy(sobj->pool);
-                sobj->pool = NULL;
-                return DECLINED;
-            }
-        }*/
-        rc = 0;
-	//unsigned char* nkey_format = (unsigned char*) nkey;
-        TM_BEGIN
-            buffer_len = sobj->buffer_len;
-            rc = conf->provider->socache_provider->retrieve(
-                conf->provider->socache_instance, r->server,
-                (unsigned char*) nkey, len, sobj->buffer,
-                &buffer_len, r->pool);
-        TM_END
-	        
-    ap_log_error(APLOG_MARK, APLOG_CRIT, 0, r -> server, "%d %d %d %d %d %d LOCK STATISTICS", capacity_abort, conflict_abort, other_abort, gl_abort, gl_count, htm_count);	
-
-// fallback
-    if (!rc) {
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_lock(socache_mutex); //lock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02350)
-                    "could not acquire lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }
-	//ts
-    buffer_len = sobj->buffer_len;
+	TM_BEGIN
+        buffer_len = sobj->buffer_len;
         rc = conf->provider->socache_provider->retrieve(
-            conf->provider->socache_instance, r->server, (unsigned char*)key,
-            strlen(key), sobj->buffer, &buffer_len, r->pool);
+                conf->provider->socache_instance, r->server,
+                (unsigned char *) nkey, len, sobj->buffer,
+                &buffer_len, r->pool);
 
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_unlock(socache_mutex);   //unlock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02351)
-                    "could not release lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }
-    }
-
-
-
-
-        
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, rc, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
+	TM_END
         if (rc != APR_SUCCESS) {
             ap_log_rerror(APLOG_MARK, APLOG_DEBUG, rc, r, APLOGNO(02357)
                     "Key not found in cache: %s", key);
@@ -833,62 +687,14 @@ static int open_entity(cache_handle_t *h, request_rec *r, const char *key)
     return OK;
 
 fail:
-    /*if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_lock(socache_mutex); //lock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02366)
-                    "could not acquire lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }*/
-    rc = 0;
-    //unsigned char* nkey_format = (unsigned char*) nkey;
-    //size_t nkey_length = strlen(nkey_format);
     TM_BEGIN
-        rc = conf->provider->socache_provider->remove(
+    conf->provider->socache_provider->remove(
             conf->provider->socache_instance, r->server,
-            (unsigned char*)nkey, strlen(nkey), r->pool);
+            (unsigned char *) nkey, strlen(nkey), r->pool);
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     TM_END
 
-    ap_log_error(APLOG_MARK, APLOG_CRIT, 0, r -> server, "%d %d %d %d %d %d LOCK STATISTICS", capacity_abort, conflict_abort, other_abort, gl_abort, gl_count, htm_count);	
-// fallback
-    if (!rc) {
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_lock(socache_mutex); //lock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02350)
-                    "could not acquire lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }
-//ts
-    buffer_len = sobj->buffer_len;
-        rc = conf->provider->socache_provider->remove(
-            conf->provider->socache_instance, r->server, (unsigned char*) key,
-            strlen(key), r->pool);
-
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_unlock(socache_mutex);   //unlock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02351)
-                    "could not release lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }
-    }
-    /*if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_unlock(socache_mutex);// unlock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02367)
-                    "could not release lock, ignoring: %s", obj->key);
-        }
-    }*/
     apr_pool_destroy(sobj->pool);
     sobj->pool = NULL;
     return DECLINED;
@@ -911,41 +717,17 @@ static int remove_url(cache_handle_t *h, request_rec *r)
     if (!sobj) {
         return DECLINED;
     }
-    apr_status_t rc = 0;
-    //unsigned char* format_key = (unsigned char*) sobj -> key;
-    //size_t key_length = strlen(format_key);
-    TM_BEGIN
-            rc = conf->provider->socache_provider->remove(conf->provider->socache_instance,
-            r->server, sobj->key, strlen(sobj -> key), r->pool);
-    TM_END
-    ap_log_error(APLOG_MARK, APLOG_CRIT, 0, r -> server, "%d %d %d %d %d %d LOCK STATISTICS", capacity_abort, conflict_abort, other_abort, gl_abort, gl_count, htm_count);	
+
     /* Remove the key from the cache */
-    if (!rc) {
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_lock(socache_mutex); //lock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02368)
-                    "could not acquire lock, ignoring: %s", sobj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }
+    TM_BEGIN
     conf->provider->socache_provider->remove(conf->provider->socache_instance,
-            r->server, sobj->key, strlen(sobj->key), r->pool);
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_unlock(socache_mutex);   //unlock
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02369)
-                    "could not release lock, ignoring: %s", sobj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return DECLINED;
-        }
-    }
-    }
+            r->server, (unsigned char *) sobj->key, strlen(sobj->key), r->pool);
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
+    TM_END
+
     return OK;
-} //end open-entity
+}
 
 static apr_status_t recall_headers(cache_handle_t *h, request_rec *r)
 {
@@ -1031,41 +813,15 @@ static apr_status_t store_headers(cache_handle_t *h, request_rec *r,
                 sobj->pool = NULL;
                 return rv;
             }
-            rv = 0;
-            //unsigned char* object_key = (unsigned char*) obj -> key;
-            //size_t key_length = strlen(object_key);
-            TM_BEGIN
-                rv = conf->provider->socache_provider->store(
-                    conf->provider->socache_instance, r->server,
-                    obj->key, strlen(obj->key), sobj->expire,
-                    (unsigned char *) sobj->buffer, (unsigned int) slider,
-                    sobj->pool);
-            TM_END
-    	    ap_log_error(APLOG_MARK, APLOG_CRIT, 0, r -> server, "%d %d %d %d %d %d LOCK STATISTICS", capacity_abort, conflict_abort, other_abort, gl_abort, gl_count, htm_count);	
-            if 
-            (!rv) {
-            if (socache_mutex) {
-                apr_status_t status = apr_global_mutex_lock(socache_mutex);
-                if (status != APR_SUCCESS) {
-                    ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02371)
-                            "could not acquire lock, ignoring: %s", obj->key);
-                    apr_pool_destroy(sobj->pool);
-                    sobj->pool = NULL;
-                    return status;
-                }
-            }
+	    TM_BEGIN	
             rv = conf->provider->socache_provider->store(
                     conf->provider->socache_instance, r->server,
-                    obj->key, strlen(obj->key), sobj->expire,
+                    (unsigned char *) obj->key, strlen(obj->key), sobj->expire,
                     (unsigned char *) sobj->buffer, (unsigned int) slider,
                     sobj->pool);
-            if (socache_mutex) {
-                apr_status_t status = apr_global_mutex_unlock(socache_mutex);
-                if (status != APR_SUCCESS) {
-                    ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02372)
-                            "could not release lock, ignoring: %s", obj->key);
-                }
-            }
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
+	    TM_END
             if (rv != APR_SUCCESS) {
                 ap_log_rerror(APLOG_MARK, APLOG_DEBUG, rv, r, APLOGNO(02373)
                         "Vary not written to cache, ignoring: %s", obj->key);
@@ -1073,7 +829,7 @@ static apr_status_t store_headers(cache_handle_t *h, request_rec *r,
                 sobj->pool = NULL;
                 return rv;
             }
-            }
+
             obj->key = sobj->key = regen_key(r->pool, sobj->headers_in, varray,
                                              sobj->name, NULL);
         }
@@ -1294,41 +1050,15 @@ static apr_status_t commit_entity(cache_handle_t *h, request_rec *r)
     cache_object_t *obj = h->cache_obj;
     cache_socache_object_t *sobj = (cache_socache_object_t *) obj->vobj;
     apr_status_t rv;
-    //unsigned char* format_key = (unsigned char*) sobj -> key;
-    //size_t key_length = strlen(format_key);
+
     TM_BEGIN
-        rv = conf->provider->socache_provider->store(
-            conf->provider->socache_instance, r->server,
-            sobj->key, strlen(sobj->key), sobj->expire,
-            sobj->buffer, sobj->body_offset + sobj->body_length, sobj->pool);
-    TM_END 
-    ap_log_error(APLOG_MARK, APLOG_CRIT, 0, r -> server, "%d %d %d %d %d %d LOCK STATISTICS", capacity_abort, conflict_abort, other_abort, gl_abort, gl_count, htm_count);	
-    if (!rv) {
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_lock(socache_mutex);
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02384)
-                    "could not acquire lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return status;
-        }
-    }
     rv = conf->provider->socache_provider->store(
             conf->provider->socache_instance, r->server,
-            sobj -> key, strlen(sobj->key), sobj->expire,
+            (unsigned char *) sobj->key, strlen(sobj->key), sobj->expire,
             sobj->buffer, sobj->body_offset + sobj->body_length, sobj->pool);
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_unlock(socache_mutex);
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02385)
-                    "could not release lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return status;
-        }
-    }
-    }
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
+    TM_END
     if (rv != APR_SUCCESS) {
         ap_log_rerror(APLOG_MARK, APLOG_WARNING, rv, r, APLOGNO(02386)
                 "could not write to cache, ignoring: %s", sobj->key);
@@ -1348,33 +1078,12 @@ fail:
     /* For safety, remove any existing entry on failure, just in case it could not
      * be revalidated successfully.
      */
-    conf = 0;
     TM_BEGIN
     conf->provider->socache_provider->remove(conf->provider->socache_instance,
-            r->server, sobj->key, strlen(sobj->key), r->pool);
+            r->server, (unsigned char *) sobj->key, strlen(sobj->key), r->pool);
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     TM_END
-    ap_log_error(APLOG_MARK, APLOG_CRIT, 0, r -> server, "%d %d %d %d %d %d LOCK STATISTICS", capacity_abort, conflict_abort, other_abort, gl_abort, gl_count, htm_count);	
-    if (!conf) {
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_lock(socache_mutex);
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02388)
-                    "could not acquire lock, ignoring: %s", obj->key);
-            apr_pool_destroy(sobj->pool);
-            sobj->pool = NULL;
-            return rv;
-        }
-    }
-    conf->provider->socache_provider->remove(conf->provider->socache_instance,
-            r->server, sobj->key, strlen(sobj->key), r->pool);
-    if (socache_mutex) {
-        apr_status_t status = apr_global_mutex_unlock(socache_mutex);
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02389)
-                    "could not release lock, ignoring: %s", obj->key);
-        }
-    }
-    }
     apr_pool_destroy(sobj->pool);
     sobj->pool = NULL;
     return rv;
@@ -1548,7 +1257,7 @@ static const char *set_cache_readtime(cmd_parms *parms, void *in_struct_ptr,
     dconf->readtime_set = 1;
     return NULL;
 }
-
+/*
 static apr_status_t remove_lock(void *data)
 {
     if (socache_mutex) {
@@ -1557,7 +1266,7 @@ static apr_status_t remove_lock(void *data)
     }
     return APR_SUCCESS;
 }
-
+*/
 static apr_status_t destroy_cache(void *data)
 {
     server_rec *s = data;
@@ -1594,14 +1303,7 @@ static int socache_status_hook(request_rec *r, int flags)
         ap_rputs("ModCacheSocacheStatus\n", r);
     }
 
-    if (socache_mutex) {
-        status = apr_global_mutex_lock(socache_mutex);
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02816)
-                    "could not acquire lock for cache status");
-        }
-    }
-
+    TM_BEGIN
     if (status != APR_SUCCESS) {
         if (!(flags & AP_STATUS_SHORT)) {
             ap_rputs("No cache status data available\n", r);
@@ -1614,13 +1316,9 @@ static int socache_status_hook(request_rec *r, int flags)
                                                  r, flags);
     }
 
-    if (socache_mutex && status == APR_SUCCESS) {
-        status = apr_global_mutex_unlock(socache_mutex);
-        if (status != APR_SUCCESS) {
-            ap_log_rerror(APLOG_MARK, APLOG_ERR, status, r, APLOGNO(02817)
-                    "could not release lock for cache status");
-        }
-    }
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
+    TM_END
 
     if (!(flags & AP_STATUS_SHORT)) {
         ap_rputs("</td></tr>\n</table>\n", r);
@@ -1665,7 +1363,7 @@ static int socache_post_config(apr_pool_t *pconf, apr_pool_t *plog,
         if (!conf->provider) {
             continue;
         }
-
+	/*
         if (!socache_mutex && conf->provider->socache_provider->flags
                 & AP_SOCACHE_FLAG_NOTMPSAFE) {
 
@@ -1674,12 +1372,12 @@ static int socache_post_config(apr_pool_t *pconf, apr_pool_t *plog,
             if (rv != APR_SUCCESS) {
                 ap_log_perror(APLOG_MARK, APLOG_CRIT, rv, plog, APLOGNO(02391)
                         "failed to create %s mutex", cache_socache_id);
-                return 500; /* An HTTP status would be a misnomer! */
+                return 500; 
             }
             apr_pool_cleanup_register(pconf, NULL, remove_lock,
                     apr_pool_cleanup_null);
         }
-
+	*/
         errmsg = conf->provider->socache_provider->create(
                 &conf->provider->socache_instance, conf->provider->args, ptmp,
                 pconf);
@@ -1699,7 +1397,6 @@ static int socache_post_config(apr_pool_t *pconf, apr_pool_t *plog,
         }
         apr_pool_cleanup_register(pconf, (void *) s, destroy_cache,
                 apr_pool_cleanup_null);
-
     }
 
     return OK;
@@ -1707,17 +1404,21 @@ static int socache_post_config(apr_pool_t *pconf, apr_pool_t *plog,
 
 static void socache_child_init(apr_pool_t *p, server_rec *s)
 {
+/*
     const char *lock;
     apr_status_t rv;
     if (!socache_mutex) {
-        return; /* don't waste the overhead of creating mutex & cache */
+        return;
     }
+*/
+/*
     lock = apr_global_mutex_lockfile(socache_mutex);
     rv = apr_global_mutex_child_init(&socache_mutex, lock, p);
     if (rv != APR_SUCCESS) {
         ap_log_error(APLOG_MARK, APLOG_CRIT, rv, s, APLOGNO(02394)
                 "failed to initialise mutex in child_init");
     }
+*/
 }
 
 static const command_rec cache_socache_cmds[] =

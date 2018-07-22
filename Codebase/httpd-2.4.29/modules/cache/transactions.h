@@ -23,7 +23,7 @@ extern THREAD_MUTEX_T plock;
 
 # define TM_BEGIN									\
     {												\
-        int tries = 50;      						\
+        int tries = 5;      						\
         while(1){									\
             while(IS_LOCKED(plock)){					\
                 __asm__ ( "pause;" );				\
