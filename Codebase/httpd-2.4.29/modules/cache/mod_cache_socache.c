@@ -504,9 +504,11 @@ static int open_entity(cache_handle_t *h, request_rec *r, const char *key)
     rc = conf->provider->socache_provider->retrieve(
             conf->provider->socache_instance, r->server, (unsigned char *) key,
             strlen(key), sobj->buffer, &buffer_len, r->pool);
-        ap_log_rerror(APLOG_MARK, APLOG_ERR, rc, r, APLOGNO(99999)
-                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     TM_END
+
+
+    ap_log_rerror(APLOG_MARK, APLOG_ERR, rc, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
 
     if (rc != APR_SUCCESS) {
         ap_log_rerror(APLOG_MARK, APLOG_DEBUG, rc, r, APLOGNO(02352)
@@ -553,10 +555,11 @@ static int open_entity(cache_handle_t *h, request_rec *r, const char *key)
                 conf->provider->socache_instance, r->server,
                 (unsigned char *) nkey, len, sobj->buffer,
                 &buffer_len, r->pool);
+	TM_END
+
 
         ap_log_rerror(APLOG_MARK, APLOG_ERR, rc, r, APLOGNO(99999)
                 "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
-	TM_END
         if (rc != APR_SUCCESS) {
             ap_log_rerror(APLOG_MARK, APLOG_DEBUG, rc, r, APLOGNO(02357)
                     "Key not found in cache: %s", key);
@@ -691,12 +694,13 @@ fail:
     conf->provider->socache_provider->remove(
             conf->provider->socache_instance, r->server,
             (unsigned char *) nkey, strlen(nkey), r->pool);
-        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
-                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     TM_END
 
     apr_pool_destroy(sobj->pool);
     sobj->pool = NULL;
+
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     return DECLINED;
 }
 
@@ -722,9 +726,11 @@ static int remove_url(cache_handle_t *h, request_rec *r)
     TM_BEGIN
     conf->provider->socache_provider->remove(conf->provider->socache_instance,
             r->server, (unsigned char *) sobj->key, strlen(sobj->key), r->pool);
+    TM_END
+
+
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
                 "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
-    TM_END
 
     return OK;
 }
@@ -819,9 +825,9 @@ static apr_status_t store_headers(cache_handle_t *h, request_rec *r,
                     (unsigned char *) obj->key, strlen(obj->key), sobj->expire,
                     (unsigned char *) sobj->buffer, (unsigned int) slider,
                     sobj->pool);
-        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
-                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
 	    TM_END
+
+/*
             if (rv != APR_SUCCESS) {
                 ap_log_rerror(APLOG_MARK, APLOG_DEBUG, rv, r, APLOGNO(02373)
                         "Vary not written to cache, ignoring: %s", obj->key);
@@ -829,7 +835,10 @@ static apr_status_t store_headers(cache_handle_t *h, request_rec *r,
                 sobj->pool = NULL;
                 return rv;
             }
+*/
 
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
             obj->key = sobj->key = regen_key(r->pool, sobj->headers_in, varray,
                                              sobj->name, NULL);
         }
@@ -1056,8 +1065,6 @@ static apr_status_t commit_entity(cache_handle_t *h, request_rec *r)
             conf->provider->socache_instance, r->server,
             (unsigned char *) sobj->key, strlen(sobj->key), sobj->expire,
             sobj->buffer, sobj->body_offset + sobj->body_length, sobj->pool);
-        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
-                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     TM_END
     if (rv != APR_SUCCESS) {
         ap_log_rerror(APLOG_MARK, APLOG_WARNING, rv, r, APLOGNO(02386)
@@ -1071,6 +1078,10 @@ static apr_status_t commit_entity(cache_handle_t *h, request_rec *r)
 
     apr_pool_destroy(sobj->pool);
     sobj->pool = NULL;
+
+
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
 
     return APR_SUCCESS;
 
@@ -1086,6 +1097,9 @@ fail:
     TM_END
     apr_pool_destroy(sobj->pool);
     sobj->pool = NULL;
+
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     return rv;
 }
 
@@ -1315,14 +1329,15 @@ static int socache_status_hook(request_rec *r, int flags)
         conf->provider->socache_provider->status(conf->provider->socache_instance,
                                                  r, flags);
     }
-
-        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
-                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     TM_END
 
     if (!(flags & AP_STATUS_SHORT)) {
         ap_rputs("</td></tr>\n</table>\n", r);
     }
+
+
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(99999)
+                "%d %d %d %d %d %d", htm_count, capacity_abort, conflict_abort, other_abort, gl_count, gl_abort);
     return OK;
 }
 
